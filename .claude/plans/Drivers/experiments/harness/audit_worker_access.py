@@ -25,7 +25,9 @@ import sys
 _HERE = os.path.dirname(os.path.abspath(__file__))
 WRAPPER = os.path.realpath(os.path.join(
     _HERE, "..", "keys", "K-fields", "drafting_wrapper.md"))
-CONTRACT = os.path.realpath(os.path.join(_HERE, "exp5_item_contract.md"))
+# STEP 3 REPOINT: the drafting worker receives the DRAFTER role prompt built
+# by the one Step-2 builder. The retired contract card is deleted.
+CONTRACT = os.path.realpath(os.path.join(_HERE, "exp5_prompt_drafter.md"))
 _INPUT_RE = re.compile(r"(/[^\s]*?/keys/K-fields/draft_inputs/[^\s]+?\.json)")
 
 

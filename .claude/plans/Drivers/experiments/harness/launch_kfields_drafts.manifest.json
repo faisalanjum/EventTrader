@@ -6,6 +6,8 @@
   "total_cap": 100
  },
  "date": "2026-07-24",
+ "door": "gold",
+ "enforced_by": "kf_lint (after raw_transport exact parse)",
  "events": [
   {
    "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000031.json",
@@ -22,6 +24,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "94a8c5d8f9ef277365c860ff58ada8b04afba4dcc68a7f9871e2746b7f7baea1",
    "source_id": "0000006201-26-000031",
    "ticker": "AAL"
   },
@@ -40,6 +43,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "c1e84b8bbedddd9d9c0a7ecdbce36e7fdfbd66a300267c47529d9b63240f802b",
    "source_id": "0000006201-26-000032",
    "ticker": "AAL"
   },
@@ -58,6 +62,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "e2e31a602c199f3cb5b0c8926a2c6abf8d788caffff950a5866a5af4e69fb7e6",
    "source_id": "0000027904-26-000013",
    "ticker": "DAL"
   },
@@ -76,6 +81,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "72b0cb5768431739b71e7cd9763db04ec550392069bd7ed7b5e89177e1a0910b",
    "source_id": "0000027904-26-000020",
    "ticker": "DAL"
   },
@@ -94,6 +100,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "0168689b7765ae98b14446df61b3dc80885ce500354a79ad853f562b8838e9e9",
    "source_id": "0000027904-26-000022",
    "ticker": "DAL"
   },
@@ -112,6 +119,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "568283f56cacfce097f3a5b6d9c463ecc49d3d757eb26c03e67ab80cf165e619",
    "source_id": "0000063908-26-000032",
    "ticker": "MCD"
   },
@@ -130,6 +138,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "b879e3a39b7a11d60b217facd015ab40eb99afa48f7dbaacc99066578c8f9650",
    "source_id": "0000092380-26-000044",
    "ticker": "LUV"
   },
@@ -148,6 +157,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "5892e8b2f30ef903440449f870cdfb36f05a3a3a60b764a05b4355d9687b8d5c",
    "source_id": "0000764478-25-000057",
    "ticker": "BBY"
   },
@@ -166,6 +176,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "a7d363e9e1e90725dd8f91588fd169a870b086bb00bc58ad85ec1d1c2c8e9e93",
    "source_id": "0000764478-26-000005",
    "ticker": "BBY"
   },
@@ -184,6 +195,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "627a05832e7942e2a0c78f96fb0f9ab6699c5e603667e21fe5b71332818d2f39",
    "source_id": "0000898173-26-000006",
    "ticker": "ORLY"
   },
@@ -202,6 +214,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "b410e2674710b450409d99e221124275180f7f3890dc2c5d96b7df4be969f192",
    "source_id": "0000940944-25-000038",
    "ticker": "DRI"
   },
@@ -220,6 +233,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "a47b26961c44c25954381bdb7fbfe974d9d2e19f823fa273bfeb31973fff3d0e",
    "source_id": "0000940944-26-000005",
    "ticker": "DRI"
   },
@@ -238,6 +252,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "1c6839a77fca4c19214134c56daa20d6613143059c41f13b56def2def735c3c6",
    "source_id": "0000940944-26-000009",
    "ticker": "DRI"
   },
@@ -256,6 +271,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "f264ef265dcaa08347cca5af28255acb62e1711b5f6674105e73f990087f97b9",
    "source_id": "0001041061-25-000109",
    "ticker": "YUM"
   },
@@ -274,6 +290,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "b8be00cbb9b5db69e3aa6f8a958daca8f6ff78b0e0761ab238dbc0a9bc12f4bb",
    "source_id": "0001041061-26-000003",
    "ticker": "YUM"
   },
@@ -292,6 +309,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "2020ac7e39488c25bdaa777cf15fc6a43cfcb32cef95f6a8086a941b18a08dfa",
    "source_id": "0001041061-26-000084",
    "ticker": "YUM"
   },
@@ -310,6 +328,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "8e16446f9f521de6b804f51d2b0c8d713772a110deee8d5478fff38a01f82423",
    "source_id": "0001058090-26-000007",
    "ticker": "CMG"
   },
@@ -328,6 +347,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "d3c386289ab4aef8f028805576afe5eada1909ae4e17abeefe76b7fe9e78a6ef",
    "source_id": "0001104659-25-102611",
    "ticker": "AZO"
   },
@@ -346,6 +366,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "047b6c9a9d8436cffee2c7aa5dade28daff7513054b6289e5fceebb7b64bf784",
    "source_id": "0001104659-25-105631",
    "ticker": "CAKE"
   },
@@ -364,6 +385,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "154db9e9531165706d8657fefb2d8a1513b817587a6383836056a7d3fe87a2b8",
    "source_id": "0001104659-25-118458",
    "ticker": "ULTA"
   },
@@ -382,6 +404,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "04554478ded7dbac0ce70739276da85c747582e47e6f738d2ab644423d3199b0",
    "source_id": "0001104659-26-017090",
    "ticker": "CAKE"
   },
@@ -400,6 +423,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "4b4a89a01f47c5711c24aa9e37519062a60b5517e7c1b2dd2dff341724d91ca2",
    "source_id": "0001104659-26-027061",
    "ticker": "ULTA"
   },
@@ -418,6 +442,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "00c1009c23ca3cefa5c970a122f76c04fe505411bbf4ad098aeb4202dbede0c8",
    "source_id": "0001104659-26-032757",
    "ticker": "AZO"
   },
@@ -436,6 +461,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "2cf0ac822b442b3faf475f69a0e341c168b537cc9708d20ed0665b809d033c46",
    "source_id": "0001171843-26-001288",
    "ticker": "AZO"
   },
@@ -454,6 +480,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "c2b875068191c26facbea5d890fc1bde525745035393e73136d149573ba4b5b2",
    "source_id": "AAL_2026-04-23T08.30",
    "ticker": "AAL"
   },
@@ -472,6 +499,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "6eaff4fa9540098d44aa51e2e82cfe323ccb7a26522f28f79975cfcd53324528",
    "source_id": "BBY_2026-03-03T08.00",
    "ticker": "BBY"
   },
@@ -490,6 +518,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "b0b2b1d7bb6a970fd1f6ddcffa10c88fa4cea31ccf9cffdeff1cbd8c0fe609a1",
    "source_id": "CMG_2026-02-03T16.30",
    "ticker": "CMG"
   },
@@ -508,6 +537,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "61773d6bc63dcb2bc5a34ff064e9c178be6376fb4540b674f7908d8fb42cb1f5",
    "source_id": "DAL_2026-04-08T10.00",
    "ticker": "DAL"
   },
@@ -526,6 +556,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "a8dd76c9e2b4e2881c66fcce5cc776d57c6f3d1b1af82142dc4f92112fb62e7d",
    "source_id": "DRI_2026-03-19T08.30",
    "ticker": "DRI"
   },
@@ -544,6 +575,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "f22f97edee1fc34181a7445bc1138dfee68b11bb2e03bcc29c14f43308dd7194",
    "source_id": "MCD_2026-02-11T16.30",
    "ticker": "MCD"
   },
@@ -562,6 +594,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "788ae0ec6d21f84f2fa32c076c13fb0065ba633df7b1bd61a997cd570b2f93f3",
    "source_id": "ULTA_2026-03-12T16.30",
    "ticker": "ULTA"
   },
@@ -580,6 +613,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "84df8c45256069c9e0fc3213164d0912ff94a4f56168f5894a7b2eebf9e812b1",
    "source_id": "YUM_2026-02-04T08.15",
    "ticker": "YUM"
   },
@@ -598,6 +632,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "2e68e566cb2668bf5acad7bb8b2e7d0d623418cb3670fbb65bf805c8024b16e2",
    "source_id": "bzNews_42014391",
    "ticker": "MCD"
   },
@@ -616,6 +651,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "09d8f665e268f41f54e3d8aa13351470d47809aa24b152cbe6b42284c59d92a8",
    "source_id": "bzNews_49256211",
    "ticker": "CMG"
   },
@@ -634,6 +670,7 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "80c5d7a55f6dcd481800cf476d5b9b8fdae8b0f61bd8e4d4aaf26fd157fe8db5",
    "source_id": "bzNews_50877032",
    "ticker": "AAL"
   },
@@ -652,15 +689,24 @@
      "model": "opus"
     }
    ],
+   "prompt_sha256": "3e76b21988d397b70f8e66b1a6e829fb49d5aff71888976b03f05efc26a75685",
    "source_id": "bzNews_51962983",
    "ticker": "BBY"
   }
  ],
+ "made_calls": 0,
  "n_events": 36,
  "n_workers": 72,
+ "od11_contingency": {
+  "enabled": false,
+  "id": "OD-11 ULTA -> LUV replacement",
+  "may_be_proposed_only_if": "later drafting finds FEWER than the official number of sequential-basis facts",
+  "substitution_engine": null,
+  "then_requires": "a new versioned record and review"
+ },
  "pins": {
-  "contract": "55903b729b74515e10d78352eea72fdc459712dfbdb038c1925dd2f7d1322179",
-  "contract_manifest": "2b108d70e2d2ac38b4cf97ea460c3f6717b2e3f48bf0f11068ff33658eba4033",
+  "contract": "f4c556960bbb191147b7a7d6d9cffb8dee32dd790f7654ce5c8bfe486275927f",
+  "contract_manifest": "1cf043f9d202766399b2b4bde6d23cf3a50faa91e429f156e509d8f025be6264",
   "inputs_manifest": "e083cd6a72ff2a79e51b99935c79978ef16c9042e507e21ae47ab4ca3d12b386",
   "protocol": "00a9e65271c7707d6de02b77d74020487263a5148fa187feca02b645a1b250ef",
   "wrapper": "b50b7ab887ec71b372585c2dd8537769c1c296f8ea29e6704d339bd2511187cf"
@@ -671,10 +717,5 @@
   "agentType lean-probe = Read-only (Bash/Glob/Grep impossible)",
   "post-run: audit_worker_access.py --expect 72 + per-event-per-lane coverage",
   "no Qwen, no EXP-5 under GO #1"
- ],
- "schema": {
-  "enforced_by": "kf_lint (after raw_transport exact parse)",
-  "model_owned_fields": 37,
-  "quote": "verbatim non-blank substring; no length limit"
- }
+ ]
 }

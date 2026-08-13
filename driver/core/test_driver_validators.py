@@ -285,6 +285,22 @@ def test_compose_surprise_scope_all_valid_mappings_P6():
     assert compose_surprise_scope("guidance", "consensus") == "guidance_vs_consensus"
 
 
+def test_F5_actual_vs_prior_year_is_not_a_lawful_surprise_pair():
+    """PRESERVED FROM THE RETIRED HARNESS ENGINE (Codex SEQ 1137).
+
+    `fact16_checks` is deleted; six of its seven behaviours already had stronger
+    production-owner coverage, but this pair had none. A comparison against the
+    PRIOR YEAR is a growth/change reading, not a surprise against an
+    expectation, so `(actual, prior_year)` is outside the composer's lawful
+    range. Asked of the ONE owner and never respelled here — the pair simply is
+    not in `SURPRISE_SCOPE_BY_PAIR`.
+    """
+    from driver.core.driver_ids import SURPRISE_SCOPE_BY_PAIR
+    assert ("actual", "prior_year") not in SURPRISE_SCOPE_BY_PAIR
+    with pytest.raises(ValueError):
+        compose_surprise_scope("actual", "prior_year")
+
+
 def test_F5_guide_vs_own_prior_is_movement_not_surprise():
     with pytest.raises(ValueError, match="movement"):
         compose_surprise_scope("guidance", "previous_guidance")

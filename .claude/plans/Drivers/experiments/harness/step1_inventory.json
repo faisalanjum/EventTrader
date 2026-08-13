@@ -1,0 +1,4729 @@
+{
+ "authorities": {
+  ".claude/plans/Drivers/FinalDesign/15_CandidateFactPacket.md": {
+   "role": "immutable authority byte",
+   "sha256": "aa7239edf069dec611678dc9981cebfa6760dedbc79faada95d4bc5c66b7e98c"
+  },
+  ".claude/plans/Drivers/FinalDesign/BUILD_AND_OPERATIONS.md": {
+   "role": "immutable authority byte",
+   "sha256": "b23e225a711a947091c2c64efd501a863dfb05fbb8e668c3e03eb837606f52d5"
+  },
+  ".claude/plans/Drivers/FinalDesign/ChannelContract.md": {
+   "role": "immutable authority byte",
+   "sha256": "1062e0fb1b58b4311bb4a03d0a4a42274288c460d22f74a8f75cc803bb04b0dd"
+  },
+  ".claude/plans/Drivers/FinalDesign/ChannelContractV2.md": {
+   "role": "immutable authority byte",
+   "sha256": "d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b"
+  },
+  ".claude/plans/Drivers/FinalDesign/FINAL_DESIGN.md": {
+   "role": "immutable authority byte",
+   "sha256": "4218d73abe6b98ef2ecd325aef8b5e49985101b122e457b39784dee677f32a0b"
+  },
+  ".claude/plans/Drivers/FinalDesign/FableExperimentPlan.md": {
+   "role": "immutable authority byte",
+   "sha256": "7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592"
+  },
+  ".claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md": {
+   "role": "immutable authority byte",
+   "sha256": "e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410"
+  },
+  ".claude/plans/Drivers/FinalDesign/LeftOverSteps/step1.md": {
+   "role": "immutable authority byte",
+   "sha256": "c93be4713649a0656804b87f9ca02eba1eb47fa423efa30057e723e7ad529cb7"
+  },
+  ".claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md": {
+   "role": "immutable authority byte",
+   "sha256": "b1aabfdc83ec4b9629468a57bc3754bbb5287a26c6dc169be8f3dc72bc6a0068"
+  },
+  ".claude/plans/Drivers/WIP/Fiscal_Core_Review_Guardrails_2026-07-24.md": {
+   "role": "immutable authority byte",
+   "sha256": "e71212cf3b2a6e56643c1f570cd9605f2256f8d2f0a9fb3c089e02f772bef736"
+  },
+  "AGENTS.md": {
+   "role": "immutable authority byte",
+   "sha256": "a2cff82f7f59ae5ce1447491ae82548f704c7adaed1c070aebceab3fece81f54"
+  }
+ },
+ "behavior_families": {
+  "by_action": {
+   "CHANGE": 14,
+   "DELETE": 3,
+   "KEEP": 4,
+   "OUTSIDE": 1,
+   "PROTECT": 2
+  },
+  "by_step": {
+   "outside_no_step": 1,
+   "step2": 14,
+   "step3": 6,
+   "step4": 3
+  },
+  "count": 24,
+  "rows": [
+   {
+    "action": "CHANGE",
+    "authority": "ChannelContractV2 \u00a75 model boundary",
+    "behavior_or_artifact": "V2 top-level reply envelope: source_id, facts, abstentions",
+    "completion_proof": "the checker accepts exactly these three keys and rejects any other",
+    "current_evidence": "envelope owned by Core; the exam checker still declares its own doc keys",
+    "id": "B-01",
+    "later_step": 2,
+    "one_code_owner": "driver/core/driver_write_cli.py::V2_REPLY_KEYS",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "driver_write_cli._run_event_v2 reading a reader reply"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "ChannelContractV2 fact_keys; FINAL_DESIGN \u00a77.1",
+    "behavior_or_artifact": "fact-level keys fact_type, part_ref, occurrence_in_part, per_x, item",
+    "completion_proof": "no fixture or checker path accepts the old key; five keys required",
+    "current_evidence": "five keys present at fact level; exam fixtures still carry the old produced-fact key",
+    "id": "B-02",
+    "later_step": 2,
+    "one_code_owner": "driver/core/prepared_fact_v2.py::PreparedFactV2._FACT_KEYS",
+    "raw_identities": [
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "lane",
+      225,
+      30
+     ]
+    ],
+    "raw_rollup": 1,
+    "real_caller": "PreparedFactV2.from_dict on every model fact"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "ChannelContractV2 slot_keys",
+    "behavior_or_artifact": "numeric slot STRUCTURE: value, scale_multiplier, unit_scale_evidence",
+    "completion_proof": "a flat-numeric mutation fails the Step-2 checker",
+    "current_evidence": "structure owned by slot_convert; WHICH item fields are numeric is a separate rule owned by driver_validators.NUMERIC_FIELDS and is not merged here",
+    "id": "B-03",
+    "later_step": 2,
+    "one_code_owner": "driver/core/slot_convert.py::SLOT_KEYS/_structure",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "slot_convert._structure via validate_slot"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "NAME-13 per-X spell-out; FINAL_DESIGN \u00a73",
+    "behavior_or_artifact": "explicit fact-level per_x rather than a name suffix",
+    "completion_proof": "the contract instructs per_x explicitly and the checker requires it",
+    "current_evidence": "present at fact level, not in the item",
+    "id": "B-04",
+    "later_step": 2,
+    "one_code_owner": "driver/core/prepared_fact_v2.py::PreparedFactV2._FACT_KEYS",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "PreparedFactV2.from_dict"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "step2.md \u00a7\u00a71,2,5,8,9; ChannelContractV2 \u00a75",
+    "behavior_or_artifact": "the text door REFUSES source-owned XBRL fields",
+    "completion_proof": "a reply asserting a source-owned field is rejected by the exam checker",
+    "current_evidence": "Core refuses them today; the exam instructions and checker do not yet require or prove the refusal",
+    "id": "B-05",
+    "later_step": 2,
+    "one_code_owner": "driver/core/prepared_fact_v2.py::SOURCE_OWNED_FIELDS",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "PreparedFactV2.from_dict on a text/model reply"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "ChannelContractV2 fact_keys; FINAL_DESIGN \u00a75.1",
+    "behavior_or_artifact": "exact named-part quote occurrence",
+    "completion_proof": "a wrong occurrence index is rejected",
+    "current_evidence": "sole executable owner of the occurrence rule; inline_html supplies source representation only",
+    "id": "B-06a",
+    "later_step": 2,
+    "one_code_owner": "driver/core/prepared_fact_v2.py::verify_occurrence",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "PreparedFactV2.from_dict occurrence check"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "ChannelContractV2 \u00a78 scale proof",
+    "behavior_or_artifact": "quote-local text scale evidence",
+    "completion_proof": "scale evidence outside the quote is rejected",
+    "current_evidence": "sole executable owner; shape keys remain SLOT_KEYS; inline_html owns neither rule",
+    "id": "B-06b",
+    "later_step": 2,
+    "one_code_owner": "driver/core/slot_convert.py::validate_slot",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "slot_convert.validate_slot on a text-backed slot"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "step2.md goal",
+    "behavior_or_artifact": "ONE prompt-contract builder and its generated contract/protocol",
+    "completion_proof": "generated contract hashes match its manifest and state the V2 envelope",
+    "current_evidence": "builder emits the item contract and its manifest",
+    "id": "B-07",
+    "later_step": 2,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "build_exp5_contract main"
+   },
+   {
+    "action": "DELETE",
+    "authority": "step1.md: archived plans are leads only",
+    "behavior_or_artifact": "the contract builder's dependency on archived authority",
+    "completion_proof": "no archived path is read; each input resolves to a live authority",
+    "current_evidence": "six archived documents are read by the live builder",
+    "id": "B-08",
+    "later_step": 2,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "build_exp5_contract reading pre-consolidation documents"
+   },
+   {
+    "action": "KEEP",
+    "authority": "step2.md gold-only retention; kf_lint declared FACT_KEYS",
+    "behavior_or_artifact": "gold-only review fields kept SEPARATE from model reply fields",
+    "completion_proof": "a model reply carrying a gold-only field is rejected, and the converse",
+    "current_evidence": "gold-only additions declared and distinct from the reply envelope",
+    "id": "B-09",
+    "later_step": 2,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/kf_lint.py::FACT_KEYS",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "kf_lint.lint_doc validating a gold document"
+   },
+   {
+    "action": "DELETE",
+    "authority": "FableExperimentWorkOrder rev-4 scoring clause (fact16_checks/_NUMY retire at rev-4); step3.md",
+    "behavior_or_artifact": "mechanical checker reuse; duplicated FACT-16 logic deleted",
+    "completion_proof": "the duplicate engine is gone and Core validators are the sole owner",
+    "current_evidence": "the retained shared owner is validate_via_production; the duplicate to be deleted is .claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py, still imported by the scorer. The in-code debt note there is a lead, not the authority",
+    "id": "B-10",
+    "later_step": 3,
+    "one_code_owner": "driver/core/prepared_fact_v2.py::validate_via_production",
+    "raw_identities": [
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py",
+      "change_unit_raw",
+      77,
+      22
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py",
+      "level_unit_raw",
+      73,
+      42
+     ]
+    ],
+    "raw_rollup": 2,
+    "real_caller": "score_exp5 importing check_item"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "step3.md launch section; WORKORDER_STATUS K-fields row holds GO",
+    "behavior_or_artifact": "the ONE complete kit manifest and the two launch plans, rebuilt V2-correct while STAYING disabled",
+    "completion_proof": "one manifest binds every kit artifact including checker, scorer, replay seam and plan; the plans declare the V2 envelope; a launch without owner GO still fails closed",
+    "current_evidence": "the live launch manifest is K-fields-only: its plan field reads 'K-fields dual blind drafts (GO #1)' and its five pins bind only contract, contract manifest, inputs manifest, protocol and wrapper; it binds no checker, scorer, Core replay or EXP-5 plan artifact",
+    "id": "B-11",
+    "later_step": 3,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/build_launch_manifest.py",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "build_launch_manifest main"
+   },
+   {
+    "action": "PROTECT",
+    "authority": "FableExperimentWorkOrder frozen corpus; the inputs hash manifest",
+    "behavior_or_artifact": "the 36-event population and its pins stay byte-identical",
+    "completion_proof": "the existing read-only check reports zero problems at freeze",
+    "current_evidence": "36 inputs verified present and hash-exact by their own owner",
+    "id": "B-12",
+    "later_step": 4,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/build_kfields_inputs.py",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "build_kfields_inputs check"
+   },
+   {
+    "action": "KEEP",
+    "authority": "step3.md raw-reply section",
+    "behavior_or_artifact": "raw reply preservation, reconciliation and exact parsing",
+    "completion_proof": "a tampered raw reply fails reconciliation against its stored bytes",
+    "current_evidence": "transport owner exists with an exact parser",
+    "id": "B-13",
+    "later_step": 3,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/raw_transport.py",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "raw_transport.save_raw / ingest_workflow_result / parse_exact"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "step3.md \u00a77",
+    "behavior_or_artifact": "a recorded-answer replay seam through the existing Core V2 dry-run, writes off",
+    "completion_proof": "a recorded answer replays end to end with zero graph writes and Core production behavior unchanged",
+    "current_evidence": "the Core route exists but no scorer or harness caller reaches it today",
+    "id": "B-14",
+    "later_step": 3,
+    "one_code_owner": "driver/core/driver_write_cli.py::_run_event_v2",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "the Step-3 replay caller to be created"
+   },
+   {
+    "action": "DELETE",
+    "authority": "step3.md names driver/core/fact_match.py",
+    "behavior_or_artifact": "the existing fact matcher is reused; scorer-side duplicate matching deleted",
+    "completion_proof": "the scorer calls the Core matcher and holds no matching rule of its own",
+    "current_evidence": "a matcher exists in Core; the scorer carries its own de-duplicator",
+    "id": "B-15",
+    "later_step": 3,
+    "one_code_owner": "driver/core/fact_match.py",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "score_exp5 matching answers to gold"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "FableExperimentPlan EXP-5 bars and Addendum A",
+    "behavior_or_artifact": "honest abstention, grader and official score/union/bar accounting",
+    "completion_proof": "scores recompute from recorded artifacts and an inflated count fails",
+    "current_evidence": "scorer and grader exist; bars declared in the Plan",
+    "id": "B-16",
+    "later_step": 3,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+    "raw_identities": [
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_money_mode_hint",
+      54,
+      16
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_money_mode_hint",
+      155,
+      12
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_money_mode_hint",
+      155,
+      45
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_money_mode_hint",
+      685,
+      9
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_unit_kind_hint",
+      53,
+      41
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_unit_kind_hint",
+      154,
+      12
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_unit_kind_hint",
+      154,
+      44
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_unit_kind_hint",
+      684,
+      52
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_unit_raw",
+      153,
+      29
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_unit_raw",
+      153,
+      55
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "change_unit_raw",
+      683,
+      53
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_money_mode_hint",
+      53,
+      16
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_money_mode_hint",
+      151,
+      12
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_money_mode_hint",
+      151,
+      44
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_money_mode_hint",
+      684,
+      30
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_money_mode_hint",
+      694,
+      21
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_kind_hint",
+      52,
+      16
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_kind_hint",
+      150,
+      12
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_kind_hint",
+      150,
+      43
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_kind_hint",
+      684,
+      9
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_kind_hint",
+      693,
+      21
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_raw",
+      149,
+      29
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_raw",
+      149,
+      54
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_raw",
+      683,
+      38
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_raw",
+      692,
+      21
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "level_unit_raw",
+      704,
+      48
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      383,
+      27
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      383,
+      41
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      412,
+      29
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      472,
+      48
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      478,
+      38
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      496,
+      22
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      496,
+      39
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      551,
+      23
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      699,
+      21
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      702,
+      31
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+      "lane",
+      706,
+      30
+     ]
+    ],
+    "raw_rollup": 37,
+    "real_caller": "score_exp5.score_arm and the grader queue"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "the gate's own per-site freeze contract; step2.md requires the gate green",
+    "behavior_or_artifact": "the no-semantic-pattern gate green with its four sites separately classified",
+    "completion_proof": "gate green with all four classified separately and a red-first mutation killing each",
+    "current_evidence": "gate red at this commit. FOUR DISTINCT DISPOSITIONS, not one: (a) CSS whitespace mechanics; (b) shared SEC CIK law already frozen under driver_ids; (c) digit-heading retained FAIL-CLOSED semantic debt; (d) ASCII label-word owner-supported scope",
+    "id": "B-17",
+    "later_step": 2,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py::FROZEN_PATTERNS",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "test_no_semantic_patterns over the production closure"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "step2.md proof/gate requirements (the gate must be green with each site classified)",
+    "behavior_or_artifact": "the two missing recall citations that support the Step-2 pattern classifications",
+    "completion_proof": "that owner, minimally extended, emits one locatable hash-bound receipt reporting the two populations SEPARATELY, each with its finite count and its accepted/withheld categories; no new proof framework is added",
+    "current_evidence": "the two cited identities are g2_evid_recall_EU-094.txt and g2_evid_recall_EU-150.txt, named at the two inline_html sites as leads; a live-tree scan finds 16 cited g2_evid_recall_* names and 0 present. Only these two enter because they alone support the two newly reached Step-2 pattern classifications; the other 14 support classifications not newly reached and stay closed. The assigned owner already pins a 1769-row whole-corpus manifest traversal, but its census question is document readability, so it cannot derive either population TODAY \u2014 hence CHANGE, not KEEP",
+    "id": "B-18",
+    "later_step": 2,
+    "one_code_owner": ".claude/plans/Drivers/experiments/harness/receipts_827/two_view_census.py",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "the two inline_html sites that cite them"
+   },
+   {
+    "action": "KEEP",
+    "authority": "step4.md freeze goal",
+    "behavior_or_artifact": "deterministic rebuild: the kit regenerates to identical bytes",
+    "completion_proof": "a rebuild reproduces every artifact hash bound by the B-11-corrected manifest",
+    "current_evidence": "consumes the complete kit manifest as corrected by B-11; today's manifest is NOT yet final",
+    "id": "B-19",
+    "later_step": 4,
+    "one_code_owner": "N/A \u2014 proof row",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "the launch manifest builder rerun against its own manifest"
+   },
+   {
+    "action": "PROTECT",
+    "authority": "step1.md \u00a71 protected baseline; ChannelContract.md itself",
+    "behavior_or_artifact": "protected identities: live V1 contract, the authority set, the XBRL tree",
+    "completion_proof": "identical hashes at Step-4 freeze",
+    "current_evidence": "protected subjects: ChannelContract.md, the 12 hashed authorities, XBRL/** (tree recorded, clean)",
+    "id": "B-20",
+    "later_step": 4,
+    "one_code_owner": "N/A \u2014 protection row",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "read-only reference by every step"
+   },
+   {
+    "action": "OUTSIDE",
+    "authority": "WORKORDER_STATUS owner-ruled order: the V1 to V2 switch follows these four steps",
+    "behavior_or_artifact": "the live V1 conversion/write route is untouched by this job",
+    "completion_proof": "those bytes are unchanged at Step-4 freeze",
+    "current_evidence": "real V1 route: the driver_write_cli caller that reads retired fields off the V1 fact object and never touches the V2 fact key; plus the guidance and graph write owners",
+    "id": "B-21",
+    "later_step": null,
+    "one_code_owner": "N/A \u2014 outside row",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "the derived V1-route caller in driver_write_cli and the guidance/write owners"
+   },
+   {
+    "action": "KEEP",
+    "authority": "ChannelContractV2: retired at the Fiscal input door, retained as reader output",
+    "behavior_or_artifact": "the door-scoped field preserved as lawful reader output",
+    "completion_proof": "an input-door mutation is rejected while reader output still carries it",
+    "current_evidence": "present in the V2 item; forbidden only at the public input door",
+    "id": "B-22",
+    "later_step": 2,
+    "one_code_owner": "driver/core/prepared_fact_v2.py::ITEM_FIELDS",
+    "raw_identities": [],
+    "raw_rollup": 0,
+    "real_caller": "the checker, the scorer and the shape checker"
+   },
+   {
+    "action": "CHANGE",
+    "authority": "step2.md goal: one mechanical answer checker; ChannelContractV2 item_fields",
+    "behavior_or_artifact": "the checker's item schema derived from the V2 item field set, not a hand-copied V1 list",
+    "completion_proof": "the checker derives its item schema from ITEM_FIELDS; a retired name cannot reappear by hand-editing the checker",
+    "current_evidence": "the checker declares retired V1 item names of its own instead of deriving them from the V2 owner",
+    "id": "B-23",
+    "later_step": 2,
+    "one_code_owner": "driver/core/prepared_fact_v2.py::ITEM_FIELDS",
+    "raw_identities": [
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "change_money_mode_hint",
+      71,
+      5
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "change_unit_kind_hint",
+      69,
+      5
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "change_unit_raw",
+      76,
+      30
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "level_money_mode_hint",
+      70,
+      5
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "level_unit_kind_hint",
+      68,
+      5
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "level_unit_raw",
+      76,
+      12
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "sequential_evidence",
+      134,
+      30
+     ],
+     [
+      ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+      "sequential_evidence",
+      135,
+      29
+     ]
+    ],
+    "raw_rollup": 8,
+    "real_caller": "kf_lint module-level declarations and _types"
+   }
+  ]
+ },
+ "board_pointer_owner": {
+  ".claude/plans/Drivers/experiments/WORKORDER_STATUS.md": {
+   "pre_final_note": "the board byte as it stood while this receipt was being written; the FINAL board hash cannot appear here without a cycle, because the board pins this receipt. The final board hash is reported in the packet, not stored here.",
+   "pre_final_pointer_sha256": "6fe829874862043fde213f1282709574238e6b1b4abe193badd7f0342413a726",
+   "role": "MUTABLE pointer-owner baseline, not an immutable authority byte; its one permitted change is this receipt pointer",
+   "step1_starting_baseline_sha256": "981fd2d28bddfa21ecc90564413495c56224659f5aae5c0b15d7d1518a9f43ed",
+   "superseded_intermediate_sha256": "59b6e89b53a501848d8d9dadc07ca71205bb5ff512bff38e55282ecf29347fec",
+   "superseded_note": "an intermediate rejected pointer state, NOT the baseline"
+  }
+ },
+ "events": {
+  "declared": 36,
+  "od11_contingency": {
+   "authority": "FableExperimentWorkOrder PINNED OD-11 CONTINGENCY clause (owner 2026-07-08)",
+   "disabled_replacement": {
+    "note": "the replacement input is NOT present in this tree; path and hash are null by fact, not omission",
+    "path": null,
+    "present_locally": false,
+    "sha256": null,
+    "source_id": "0000092380-26-000047",
+    "source_type": "10q",
+    "ticker": "LUV"
+   },
+   "standing_primary": {
+    "note": "one of the 36 primary events, listed above",
+    "source_id": "0001104659-25-118458",
+    "source_type": "10q",
+    "ticker": "ULTA"
+   },
+   "state": "DISABLED \u2014 not activated in Step 1",
+   "trigger": "fires iff K-fields gold drafting yields fewer than 5 sequential-basis facts, then ULTA is swapped OUT and LUV IN"
+  },
+  "per_event": [
+   {
+    "event_date": "2026-04-23",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "43c5fdedfbb3822d7b5d800c0ad18437bcb37e379d4e3cb2e11ad9594ac79af5",
+    "input_source_id": "0000006201-26-000031",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "43c5fdedfbb3822d7b5d800c0ad18437bcb37e379d4e3cb2e11ad9594ac79af5",
+    "manifest_source_id": "0000006201-26-000031",
+    "menu_logs_n": 0,
+    "menu_n_raw": 94,
+    "menu_tokens_sha256": "06bffeee78f2b2f6c09f1d4368f15d810472083e56e8f0769eb75bc5a66c9063",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 154,
+      "part": "items",
+      "sha256": "9e7ba27a5a5d45e5bb7cd61643c505a004b92354b43fd056a732537b23b3d543"
+     },
+     {
+      "bytes": 63,
+      "part": "description",
+      "sha256": "3b94b0d4a9bd63dd1a08b679a1e8bff31b275027b6fcb1f5656d4df7591c1330"
+     },
+     {
+      "bytes": 38463,
+      "part": "exhibit_99_1",
+      "sha256": "6248e10c8f04f921ccc069ab21f933e5375519dee3aea154cc572ee45148be6d"
+     }
+    ],
+    "packet_sha256": "86e107b1a8ff88255f9c0f4ba201fa14edd48e21f90b0059a5bf9cba780c86b9",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000031.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "AAL"
+   },
+   {
+    "event_date": "2026-04-23",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "d3419e9d12c51d4fd1409fb90a00482e711a1392ffe393e87a77d907b00e1031",
+    "input_source_id": "0000006201-26-000032",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "d3419e9d12c51d4fd1409fb90a00482e711a1392ffe393e87a77d907b00e1031",
+    "manifest_source_id": "0000006201-26-000032",
+    "menu_logs_n": 0,
+    "menu_n_raw": 94,
+    "menu_tokens_sha256": "06bffeee78f2b2f6c09f1d4368f15d810472083e56e8f0769eb75bc5a66c9063",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 9,
+      "part": "items",
+      "sha256": "f0cba5bbe6589050b61a3aa6a45a077a2ee8c5abb153a3be71ed3ef3310de736"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 47589,
+      "part": "mdna",
+      "sha256": "ca9c62a5c65e62278583b21ce1e74a7acb6c19eb5dd45a0c34f82a356a07860b"
+     },
+     {
+      "bytes": 441,
+      "part": "risk",
+      "sha256": "d253ca093d9981644bd15c3dac901f4268f66e6a4bd2ef80d8d5f3fcc651b0ff"
+     }
+    ],
+    "packet_sha256": "1f397c4d57bb36bbc9123f68be120f4441e7912121756ae503ef608e60a81d9e",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000032.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "AAL"
+   },
+   {
+    "event_date": "2026-02-10",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "03e28d879ba51a59b2be2bf1f750e52db10377b43e7393cb8178c7937944708d",
+    "input_source_id": "0000027904-26-000013",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "03e28d879ba51a59b2be2bf1f750e52db10377b43e7393cb8178c7937944708d",
+    "manifest_source_id": "0000027904-26-000013",
+    "menu_logs_n": 0,
+    "menu_n_raw": 865,
+    "menu_tokens_sha256": "fb8e3f6fe089367168b998f44d06b37ce81d291ff218cac8cb60da28dcd6d543",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "00b4d9b4b3927093f57af1e5f6c386d1c4be5106ab67e4f2a732dd86456ce522"
+     },
+     {
+      "bytes": 7,
+      "part": "items",
+      "sha256": "424086ddf92bda3e9e30ddfd4ed7d070a0d1a46f84f164364cad8f9996fe0c01"
+     },
+     {
+      "bytes": 72,
+      "part": "description",
+      "sha256": "0123aad12ef5db8935c2520e99e5f65f205345d0522a3b13ff640bf9be961b0b"
+     },
+     {
+      "bytes": 61738,
+      "part": "business",
+      "sha256": "c72c2c9c4dbc0dae7daf3ba47988eeb83efd57c3ecd6fe25f328980e05eca24e"
+     },
+     {
+      "bytes": 63228,
+      "part": "mdna",
+      "sha256": "f61c10f7cf2e122b1a1745c81d7a34a9a8d9c1f7ab3915459e535195ef1435be"
+     },
+     {
+      "bytes": 51678,
+      "part": "risk",
+      "sha256": "eebbe86d30ea93999b38ca257db47650e561c5bb747b49d8b45e6955851c1370"
+     }
+    ],
+    "packet_sha256": "ebfdd77f25072c36da3592d9fac1c903b01b00ae9960d663cc26f84115a13fe5",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000013.json",
+    "sha_matches": true,
+    "source_type": "10k",
+    "ticker": "DAL"
+   },
+   {
+    "event_date": "2026-04-08",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "bf821a3a0180d4ee2b42fef5200da85fc325c55c349cd71d900af33baf2079e4",
+    "input_source_id": "0000027904-26-000020",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "bf821a3a0180d4ee2b42fef5200da85fc325c55c349cd71d900af33baf2079e4",
+    "manifest_source_id": "0000027904-26-000020",
+    "menu_logs_n": 0,
+    "menu_n_raw": 964,
+    "menu_tokens_sha256": "fe691cd5fcece79cf13ffd7b1f1c4759d4c992b617d4d1b1cf3874eb1e39cc18",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 41550,
+      "part": "exhibit_99_1",
+      "sha256": "835b3782a88c7502a710ac3d0157ad91c021547655894fe70490eeaeba475cf1"
+     }
+    ],
+    "packet_sha256": "f0af6070519d150e3f07ae4c9e04ec11df54134e2ec705ad26dbb31051b753c7",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000020.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "DAL"
+   },
+   {
+    "event_date": "2026-04-08",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "b00c4251483fa1b0fd89130022b123980249c5c798091bfbbd6f7a0e7afb29e7",
+    "input_source_id": "0000027904-26-000022",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "b00c4251483fa1b0fd89130022b123980249c5c798091bfbbd6f7a0e7afb29e7",
+    "manifest_source_id": "0000027904-26-000022",
+    "menu_logs_n": 0,
+    "menu_n_raw": 964,
+    "menu_tokens_sha256": "fe691cd5fcece79cf13ffd7b1f1c4759d4c992b617d4d1b1cf3874eb1e39cc18",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 7,
+      "part": "items",
+      "sha256": "424086ddf92bda3e9e30ddfd4ed7d070a0d1a46f84f164364cad8f9996fe0c01"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 30529,
+      "part": "mdna",
+      "sha256": "95be87aa8837f35ffdfbfda66453b60499ccde5e983981f978c00cf989282c22"
+     },
+     {
+      "bytes": 291,
+      "part": "risk",
+      "sha256": "ba90e546a6298b2a62e4f39ccc628685b66d9f911703450bb3d73f65f6e700b0"
+     }
+    ],
+    "packet_sha256": "22330c9e366346f9c17fd477eee3dcdb9968b522f03255a5012de34eaa3ed52b",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000022.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "DAL"
+   },
+   {
+    "event_date": "2026-02-11",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "cd2d7660e31042c45a7a6f2ea90d75ff546a224331cb1a9ef8423ae869eab6f6",
+    "input_source_id": "0000063908-26-000032",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "cd2d7660e31042c45a7a6f2ea90d75ff546a224331cb1a9ef8423ae869eab6f6",
+    "manifest_source_id": "0000063908-26-000032",
+    "menu_logs_n": 0,
+    "menu_n_raw": 423,
+    "menu_tokens_sha256": "028b9ff2a5137c0cc096614efb05ea8b3f67f8c77f226ade3424e1b5e7f671c9",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 16032,
+      "part": "exhibit_99_1",
+      "sha256": "f698f1d4f6e8f6112564db2c9e1fd031f03962f96b583f43dec6422af24bc113"
+     }
+    ],
+    "packet_sha256": "1a5085434a1a27bc884bdf438917428eeca8e996bca027c08bd5375c9968acd7",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000063908-26-000032.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "MCD"
+   },
+   {
+    "event_date": "2026-04-22",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "97085fd9139810967c3bf155d921c166ccc47190a35313a558b744e68a15bff3",
+    "input_source_id": "0000092380-26-000044",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "97085fd9139810967c3bf155d921c166ccc47190a35313a558b744e68a15bff3",
+    "manifest_source_id": "0000092380-26-000044",
+    "menu_logs_n": 0,
+    "menu_n_raw": 870,
+    "menu_tokens_sha256": "6d471aacb26f11275903a6e01ad64612ab374c6150934982092de4fad02a9ef4",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 32164,
+      "part": "exhibit_99_1",
+      "sha256": "b0c47050919ca59526505208b3c77a4955f6890187fab2ca99652808b8f931fd"
+     }
+    ],
+    "packet_sha256": "3c6b4266e75faca57699f6ebc908a8b56ecc37ec2a228c48dac902f923a070d1",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000092380-26-000044.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "LUV"
+   },
+   {
+    "event_date": "2025-12-05",
+    "fye_month": 1,
+    "ids_equal": true,
+    "input_sha256": "63c16c3603f98a2b9f095d4fb6e18ab8e3c0691a208dde749f1c236a49d8525f",
+    "input_source_id": "0000764478-25-000057",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "63c16c3603f98a2b9f095d4fb6e18ab8e3c0691a208dde749f1c236a49d8525f",
+    "manifest_source_id": "0000764478-25-000057",
+    "menu_logs_n": 0,
+    "menu_n_raw": 430,
+    "menu_tokens_sha256": "afecd011768ab8322bda0b18f07432c8658361bbbafe550e55375d2d435ce7b3",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 7,
+      "part": "items",
+      "sha256": "424086ddf92bda3e9e30ddfd4ed7d070a0d1a46f84f164364cad8f9996fe0c01"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 44417,
+      "part": "mdna",
+      "sha256": "dbac58d3ebb2e5f2ab648317e173721569b489eac512d6cf377980e5615280ce"
+     }
+    ],
+    "packet_sha256": "74e5ef1fd2734acbf9441444f65c42190129d83e14ae99f19e25c1f978bf443a",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000764478-25-000057.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "BBY"
+   },
+   {
+    "event_date": "2026-03-03",
+    "fye_month": 1,
+    "ids_equal": true,
+    "input_sha256": "4c11045b3124146f30ee9cf50876a864628e1c958b91076a5da5a7410e5b5a19",
+    "input_source_id": "0000764478-26-000005",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "4c11045b3124146f30ee9cf50876a864628e1c958b91076a5da5a7410e5b5a19",
+    "manifest_source_id": "0000764478-26-000005",
+    "menu_logs_n": 0,
+    "menu_n_raw": 462,
+    "menu_tokens_sha256": "4236cfefb59d56959b127c9b64499ce6b8f58625ebcc25ad0f9a83cdc142928a",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     }
+    ],
+    "packet_sha256": "a0fc69f830868adbee03b6c8bdbcf5c07c9ac7ee297fbfce4bdb812b12c5daab",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000764478-26-000005.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "BBY"
+   },
+   {
+    "event_date": "2026-02-04",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "2bfa6415283eb67a43d72661bcffe50414e82ac1d284ff544073f87ec6e53bd7",
+    "input_source_id": "0000898173-26-000006",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "2bfa6415283eb67a43d72661bcffe50414e82ac1d284ff544073f87ec6e53bd7",
+    "manifest_source_id": "0000898173-26-000006",
+    "menu_logs_n": 0,
+    "menu_n_raw": 407,
+    "menu_tokens_sha256": "79dd8534c2ef4f8ff8f08793129919000e32bd09dce7168393dcbb5247fd7265",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 28157,
+      "part": "exhibit_99_1",
+      "sha256": "f09491bf95f2b0ccdd63e0e4bb601c3b7ca12705dc9e5fa78fa21b25d3b69bc2"
+     }
+    ],
+    "packet_sha256": "a48214c50f16b08f3c64482fbdcb66956d4980b1f39a6b7cc02ff5fcca025dfc",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000898173-26-000006.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "ORLY"
+   },
+   {
+    "event_date": "2025-07-18",
+    "fye_month": 5,
+    "ids_equal": true,
+    "input_sha256": "3adc88b55af128ffec2e68ae08752923a1b9fe95f4b1b7179f26e8b742d9e4ad",
+    "input_source_id": "0000940944-25-000038",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "3adc88b55af128ffec2e68ae08752923a1b9fe95f4b1b7179f26e8b742d9e4ad",
+    "manifest_source_id": "0000940944-25-000038",
+    "menu_logs_n": 3,
+    "menu_n_raw": 379,
+    "menu_tokens_sha256": "df472f8487228c0376882aaa4c59691322ad6415830d302abf4f08426ac13d63",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "00b4d9b4b3927093f57af1e5f6c386d1c4be5106ab67e4f2a732dd86456ce522"
+     },
+     {
+      "bytes": 9,
+      "part": "items",
+      "sha256": "f0cba5bbe6589050b61a3aa6a45a077a2ee8c5abb153a3be71ed3ef3310de736"
+     },
+     {
+      "bytes": 72,
+      "part": "description",
+      "sha256": "0123aad12ef5db8935c2520e99e5f65f205345d0522a3b13ff640bf9be961b0b"
+     },
+     {
+      "bytes": 64810,
+      "part": "business",
+      "sha256": "eb16f7d255f612ed77c37e46bc52b740bed566468f71a2bf6268a3958383084f"
+     },
+     {
+      "bytes": 40580,
+      "part": "mdna",
+      "sha256": "a340767ab29be9dd4838df8675401868b018cb33ba9aaf0932affd368c7f7189"
+     },
+     {
+      "bytes": 66413,
+      "part": "risk",
+      "sha256": "1cf932f39c28c7a7e7560a3729ae4a33c50a954a8cdc27a47d61fd060c2b7abd"
+     }
+    ],
+    "packet_sha256": "20c599d6fc4f65ee3772accefa4f90145186f27949e37d39d039eb5ee195f8c1",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-25-000038.json",
+    "sha_matches": true,
+    "source_type": "10k",
+    "ticker": "DRI"
+   },
+   {
+    "event_date": "2026-03-19",
+    "fye_month": 5,
+    "ids_equal": true,
+    "input_sha256": "c023ae44c895a602d8bc7e1218b7eb2e54d253154a4793116d38cd343786d3e7",
+    "input_source_id": "0000940944-26-000005",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "c023ae44c895a602d8bc7e1218b7eb2e54d253154a4793116d38cd343786d3e7",
+    "manifest_source_id": "0000940944-26-000005",
+    "menu_logs_n": 4,
+    "menu_n_raw": 513,
+    "menu_tokens_sha256": "c84d271abd8cbfc40913df4d5d14c0655276dbc0f74ac2e55f528360f8ff20ee",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 18615,
+      "part": "exhibit_99_1",
+      "sha256": "5d5188563c00ee5f3b682211a00c785f447517ab74482af3297c03dbf5ca98d6"
+     }
+    ],
+    "packet_sha256": "3853210b4faeb670c910bb48ab3672007fde9374db472f536cb52b51ff9dbb96",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-26-000005.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "DRI"
+   },
+   {
+    "event_date": "2026-03-27",
+    "fye_month": 5,
+    "ids_equal": true,
+    "input_sha256": "2ec8c45061ef2ce17e0d903d3ec9a8043e602cf10be2133f65fd387ebf0e8cc6",
+    "input_source_id": "0000940944-26-000009",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "2ec8c45061ef2ce17e0d903d3ec9a8043e602cf10be2133f65fd387ebf0e8cc6",
+    "manifest_source_id": "0000940944-26-000009",
+    "menu_logs_n": 4,
+    "menu_n_raw": 513,
+    "menu_tokens_sha256": "c84d271abd8cbfc40913df4d5d14c0655276dbc0f74ac2e55f528360f8ff20ee",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 9,
+      "part": "items",
+      "sha256": "f0cba5bbe6589050b61a3aa6a45a077a2ee8c5abb153a3be71ed3ef3310de736"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 41350,
+      "part": "mdna",
+      "sha256": "7c40db0be0eed2ff64f79e34e906c804c8b8b163b4d86a80317aa33f5d08b0d8"
+     },
+     {
+      "bytes": 185,
+      "part": "risk",
+      "sha256": "bb7c472691cc64f186f3067752d243c7efaa4d1c938cda8b814074420d09e9a7"
+     }
+    ],
+    "packet_sha256": "357dcf9369de89e41489f3eb21927ff9314f5cecce9db9c21f72ef02fd838227",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-26-000009.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "DRI"
+   },
+   {
+    "event_date": "2025-11-07",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "fd73532e42f82a2787f86ec11f9777d2ac57c835fa04cc85571b0bc89db91f8b",
+    "input_source_id": "0001041061-25-000109",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "fd73532e42f82a2787f86ec11f9777d2ac57c835fa04cc85571b0bc89db91f8b",
+    "manifest_source_id": "0001041061-25-000109",
+    "menu_logs_n": 7,
+    "menu_n_raw": 713,
+    "menu_tokens_sha256": "dbd9439f58f8250d019f8494e295054881dd338c8941a2aa36c8b99e62e8ac7d",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 7,
+      "part": "items",
+      "sha256": "424086ddf92bda3e9e30ddfd4ed7d070a0d1a46f84f164364cad8f9996fe0c01"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 49821,
+      "part": "mdna",
+      "sha256": "40116c452cdfee5fda1b66680753f6e1fc429a3533e3580c9180acab14b8843a"
+     },
+     {
+      "bytes": 494,
+      "part": "risk",
+      "sha256": "636e178f096e026b1308834915ad560700d7ab89e15b1ef6fbe3a48b6c524dc5"
+     }
+    ],
+    "packet_sha256": "deb16ddccb2478bca5b5c5a39c2813e5c5899c0f26707a0805ce5edaadcbac62",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-25-000109.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "YUM"
+   },
+   {
+    "event_date": "2026-02-04",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "e798a6fe730da70551a96f364066f589628e8b2534aa2222de6de2ae676c3000",
+    "input_source_id": "0001041061-26-000003",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "e798a6fe730da70551a96f364066f589628e8b2534aa2222de6de2ae676c3000",
+    "manifest_source_id": "0001041061-26-000003",
+    "menu_logs_n": 8,
+    "menu_n_raw": 759,
+    "menu_tokens_sha256": "6a831be5aea386311926ee4c7383d97306b45e957ff6dde396da2fc82e4e259c",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 52606,
+      "part": "exhibit_99_1",
+      "sha256": "c5c1dcec3446db26b749483224ad41c563564c5f426d1384c4cd95f381f5800c"
+     }
+    ],
+    "packet_sha256": "f30530fbe13b93b8f5c82935baeadfcae9fe7851f902a9b186aa3ba246c653e2",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-26-000003.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "YUM"
+   },
+   {
+    "event_date": "2026-02-20",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "10bd696ff8a19c7b3fa83d0e474dccb44bd6326b4c3a2ce1b1383c3678f42f40",
+    "input_source_id": "0001041061-26-000084",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "10bd696ff8a19c7b3fa83d0e474dccb44bd6326b4c3a2ce1b1383c3678f42f40",
+    "manifest_source_id": "0001041061-26-000084",
+    "menu_logs_n": 8,
+    "menu_n_raw": 759,
+    "menu_tokens_sha256": "6a831be5aea386311926ee4c7383d97306b45e957ff6dde396da2fc82e4e259c",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "00b4d9b4b3927093f57af1e5f6c386d1c4be5106ab67e4f2a732dd86456ce522"
+     },
+     {
+      "bytes": 9,
+      "part": "items",
+      "sha256": "f0cba5bbe6589050b61a3aa6a45a077a2ee8c5abb153a3be71ed3ef3310de736"
+     },
+     {
+      "bytes": 72,
+      "part": "description",
+      "sha256": "0123aad12ef5db8935c2520e99e5f65f205345d0522a3b13ff640bf9be961b0b"
+     },
+     {
+      "bytes": 26310,
+      "part": "business",
+      "sha256": "46eda9d5d1145044393f69b5510d935d440fe4592a0c5670d68d5d51ca57228e"
+     },
+     {
+      "bytes": 80366,
+      "part": "mdna",
+      "sha256": "621f3a8dcee0589dd9ad5ca03a37b6716bcee836e0e54e493b609a2345f43adc"
+     },
+     {
+      "bytes": 86960,
+      "part": "risk",
+      "sha256": "d28b030762c691e58d178377fe1afe5f1c0ffc380778a01435fbd2d6b663ac4e"
+     }
+    ],
+    "packet_sha256": "4b9a92f5dc9d35f70618db28e9c9b1669dff633581be3adc75d07a77511f4892",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-26-000084.json",
+    "sha_matches": true,
+    "source_type": "10k",
+    "ticker": "YUM"
+   },
+   {
+    "event_date": "2026-02-03",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "e30f1e059c2e96bea1a5a517dac9aead35d1d335e1c184caab24ed4f3ee249db",
+    "input_source_id": "0001058090-26-000007",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "e30f1e059c2e96bea1a5a517dac9aead35d1d335e1c184caab24ed4f3ee249db",
+    "manifest_source_id": "0001058090-26-000007",
+    "menu_logs_n": 0,
+    "menu_n_raw": 365,
+    "menu_tokens_sha256": "fd4edd73e6c6c1581efd71f8f55c13f4be26a7d345d2cabfa317141b9fe58cf5",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 33351,
+      "part": "exhibit_99_1",
+      "sha256": "7fac2e8390d1539034a34dca65e3ec80fc0bc03adec6556c30635ffefbe1686e"
+     }
+    ],
+    "packet_sha256": "86bf9d8ec9e3e0e26192032a99269c73dcde587109f12b10f5aaabbd241cb08f",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001058090-26-000007.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "CMG"
+   },
+   {
+    "event_date": "2025-10-27",
+    "fye_month": 8,
+    "ids_equal": true,
+    "input_sha256": "2e5e141b4c0a53a939cdb057676f70990071ee299784bba9e548b7de39fd6aab",
+    "input_source_id": "0001104659-25-102611",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "2e5e141b4c0a53a939cdb057676f70990071ee299784bba9e548b7de39fd6aab",
+    "manifest_source_id": "0001104659-25-102611",
+    "menu_logs_n": 4,
+    "menu_n_raw": 382,
+    "menu_tokens_sha256": "19cbcc13db6aa5cc6bebd958cc21eaf272fc7c143a1cd687953692b3a39e2f63",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "00b4d9b4b3927093f57af1e5f6c386d1c4be5106ab67e4f2a732dd86456ce522"
+     },
+     {
+      "bytes": 9,
+      "part": "items",
+      "sha256": "f0cba5bbe6589050b61a3aa6a45a077a2ee8c5abb153a3be71ed3ef3310de736"
+     },
+     {
+      "bytes": 72,
+      "part": "description",
+      "sha256": "0123aad12ef5db8935c2520e99e5f65f205345d0522a3b13ff640bf9be961b0b"
+     },
+     {
+      "bytes": 34648,
+      "part": "business",
+      "sha256": "3c9dc0fea4c48d64d0e6cbb84e589015eb5939aa15d317f020e05994ebe8ea6b"
+     },
+     {
+      "bytes": 55523,
+      "part": "mdna",
+      "sha256": "a4e6477713e39d5cfdbfab68bd67dd5870b7d8c51cdda23a135f367e465910f9"
+     },
+     {
+      "bytes": 48623,
+      "part": "risk",
+      "sha256": "618b4b1fb02a9f516cf898d66f97956e272c0cf9a4c57246fb876051f352535c"
+     }
+    ],
+    "packet_sha256": "434018716417a1599b34f754712a92efc852721bd69729fe54d7b0e2bb24ae44",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-102611.json",
+    "sha_matches": true,
+    "source_type": "10k",
+    "ticker": "AZO"
+   },
+   {
+    "event_date": "2025-11-03",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "cc12af33fd346dcbfd56f3167bf79ca642057ac2d8c340181bce591666675482",
+    "input_source_id": "0001104659-25-105631",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "cc12af33fd346dcbfd56f3167bf79ca642057ac2d8c340181bce591666675482",
+    "manifest_source_id": "0001104659-25-105631",
+    "menu_logs_n": 4,
+    "menu_n_raw": 286,
+    "menu_tokens_sha256": "0649792db84447da43720db854ad0299471c71673442ef40f26a5e63609e2f5e",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 7,
+      "part": "items",
+      "sha256": "424086ddf92bda3e9e30ddfd4ed7d070a0d1a46f84f164364cad8f9996fe0c01"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 49687,
+      "part": "mdna",
+      "sha256": "6f9cf952e6c5e16f8221937056abe947b12c9bc0c5e877d6d17c1237c7101081"
+     },
+     {
+      "bytes": 820,
+      "part": "risk",
+      "sha256": "72eabc1d731e4c6f66ded77cb235d77de9a24b83117cc0c58d68ac7cf5adb1e3"
+     }
+    ],
+    "packet_sha256": "05d3ae59fa93c30ce0c24f5df602406469bc92d46f353223f9b1e547a9f37d9e",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-105631.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "CAKE"
+   },
+   {
+    "event_date": "2025-12-04",
+    "fye_month": 1,
+    "ids_equal": true,
+    "input_sha256": "04b098a12812a829ffbcd5c5a278b5c9c222ee9cf81b1a4ffa9cb553624c110b",
+    "input_source_id": "0001104659-25-118458",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "04b098a12812a829ffbcd5c5a278b5c9c222ee9cf81b1a4ffa9cb553624c110b",
+    "manifest_source_id": "0001104659-25-118458",
+    "menu_logs_n": 0,
+    "menu_n_raw": 398,
+    "menu_tokens_sha256": "d053a470933164bdcfb75c19ec1ee5676c77a30fcfbab4c0a227329d06551235",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 7,
+      "part": "items",
+      "sha256": "424086ddf92bda3e9e30ddfd4ed7d070a0d1a46f84f164364cad8f9996fe0c01"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 37970,
+      "part": "mdna",
+      "sha256": "b1ed5b09d693294bf29246b7ff5720ed50ac1751b5473c0fbce2e0044827ece3"
+     },
+     {
+      "bytes": 522,
+      "part": "risk",
+      "sha256": "68535d7f3343702650e7cb3afb8c874c14ebcf7d90ebda9331a04e21cb9c9692"
+     }
+    ],
+    "packet_sha256": "bb8f33fec9607bb36483a179cd78005b0359db04ecd080a45ef78e353f0ebddf",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-118458.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "ULTA"
+   },
+   {
+    "event_date": "2026-02-18",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "40d2babcdafd8b3b58b767656bad9a706d34250f07138ca5203e6355fac45e79",
+    "input_source_id": "0001104659-26-017090",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "40d2babcdafd8b3b58b767656bad9a706d34250f07138ca5203e6355fac45e79",
+    "manifest_source_id": "0001104659-26-017090",
+    "menu_logs_n": 4,
+    "menu_n_raw": 302,
+    "menu_tokens_sha256": "cf7da51770471f24df633d6f691f4b4751895ea54533a2139d4c48c041c71060",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 181,
+      "part": "items",
+      "sha256": "26ec0d791829be0b2338bb2e9d24247f84e1905832e15de10f9d074476ac0b7b"
+     },
+     {
+      "bytes": 73,
+      "part": "description",
+      "sha256": "640b1f6b07806bbfb5f95ef8a48ee00b9c941f53f422bd691147d5c4bc2cd5ab"
+     },
+     {
+      "bytes": 22895,
+      "part": "exhibit_99_1",
+      "sha256": "fc7c756b3b8139d8ba4eb88b9cb2adf8dd955bb0b188cf78d8c5c17b04ccf94a"
+     }
+    ],
+    "packet_sha256": "4a6fc05ab089b32b4e03462c4a88589eaaafd03fe38ce1ade1bb6339dda28661",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-017090.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "CAKE"
+   },
+   {
+    "event_date": "2026-03-12",
+    "fye_month": 1,
+    "ids_equal": true,
+    "input_sha256": "9621a03f10e98e72c47d9b24553df47cacf13d943e771afbf386c231dc9fd628",
+    "input_source_id": "0001104659-26-027061",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "9621a03f10e98e72c47d9b24553df47cacf13d943e771afbf386c231dc9fd628",
+    "manifest_source_id": "0001104659-26-027061",
+    "menu_logs_n": 0,
+    "menu_n_raw": 477,
+    "menu_tokens_sha256": "94e86529869aaae37e7803c0aa72504312ec1077ffc0cec1a3da463a91d9cf79",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 22676,
+      "part": "exhibit_99_1",
+      "sha256": "91685ffae40b9ff3b7554ac5089150e06d7ff8960eb78ce83d80bb1caa4041c9"
+     }
+    ],
+    "packet_sha256": "999a35b111b2270b55e7d4820c34fd314af140046ad1dbff3ab0ac21407a65ef",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-027061.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "ULTA"
+   },
+   {
+    "event_date": "2026-03-20",
+    "fye_month": 8,
+    "ids_equal": true,
+    "input_sha256": "8c62714b71800cabf77158d30b30f174f142e9b508b08052388a648f47d33f87",
+    "input_source_id": "0001104659-26-032757",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "8c62714b71800cabf77158d30b30f174f142e9b508b08052388a648f47d33f87",
+    "manifest_source_id": "0001104659-26-032757",
+    "menu_logs_n": 4,
+    "menu_n_raw": 487,
+    "menu_tokens_sha256": "46b4d36566f8de12857617ea48fc5f1d459a55675bf67665628adffcb39f33cf",
+    "ordered_parts": [
+     {
+      "bytes": 10,
+      "part": "form",
+      "sha256": "5733c036aa9cc130fb91d085e00b6287f8abeedc1d39edc341ebcd1a1f768361"
+     },
+     {
+      "bytes": 7,
+      "part": "items",
+      "sha256": "424086ddf92bda3e9e30ddfd4ed7d070a0d1a46f84f164364cad8f9996fe0c01"
+     },
+     {
+      "bytes": 57,
+      "part": "description",
+      "sha256": "42e5f0e3802610f1ec0b78bebdd104e6aa120467ea2c56b6a64f57a95d0a302f"
+     },
+     {
+      "bytes": 36849,
+      "part": "mdna",
+      "sha256": "93958b7e65da0b979b18371f7efa17bc70e76e0030eb149c61f0b1c16425d2ab"
+     },
+     {
+      "bytes": 244,
+      "part": "risk",
+      "sha256": "da9c6f61c7b243551e11779ff5f7515c6194256707fa2aab7d023e436b02344e"
+     }
+    ],
+    "packet_sha256": "dc697017f5fe70591d7657a4da52b64e6d2694e59b93e04081a9ae12aa7c671b",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-032757.json",
+    "sha_matches": true,
+    "source_type": "10q",
+    "ticker": "AZO"
+   },
+   {
+    "event_date": "2026-03-03",
+    "fye_month": 8,
+    "ids_equal": true,
+    "input_sha256": "6954ee19dff1bb0bbc26425539c32bccd0a8bfc61bdce530607e4c62fe69aca8",
+    "input_source_id": "0001171843-26-001288",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "6954ee19dff1bb0bbc26425539c32bccd0a8bfc61bdce530607e4c62fe69aca8",
+    "manifest_source_id": "0001171843-26-001288",
+    "menu_logs_n": 4,
+    "menu_n_raw": 487,
+    "menu_tokens_sha256": "46b4d36566f8de12857617ea48fc5f1d459a55675bf67665628adffcb39f33cf",
+    "ordered_parts": [
+     {
+      "bytes": 9,
+      "part": "form",
+      "sha256": "14c460daf96ec367b95fc6ec3d7c9e7057b9420dc544da88045b2bd4e7c590f1"
+     },
+     {
+      "bytes": 115,
+      "part": "items",
+      "sha256": "dff227732912d0a843977c135093b7a9824c3b1228ea1ab59d6872e1ad5293c8"
+     },
+     {
+      "bytes": 53,
+      "part": "description",
+      "sha256": "3f140aa57996fcb5cd96401b9ccc730f38807fd7e3c2542dd1f91f633d88f434"
+     },
+     {
+      "bytes": 16819,
+      "part": "exhibit_99_1",
+      "sha256": "bc9d184fc3d310089afdfd70393a134cf805c6b9f777ee5bfd825d2edf653eb9"
+     }
+    ],
+    "packet_sha256": "a3cb47ba7c0e836185f9bac9504cd7d6fc6e936aa46a50144cdb3d6f0d634b13",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001171843-26-001288.json",
+    "sha_matches": true,
+    "source_type": "8k",
+    "ticker": "AZO"
+   },
+   {
+    "event_date": "2026-04-23",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "3e071a611d043c8b9588736d3bb9d16884d2b51e6db17bc54f0c1854757bb7d8",
+    "input_source_id": "AAL_2026-04-23T08.30",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "3e071a611d043c8b9588736d3bb9d16884d2b51e6db17bc54f0c1854757bb7d8",
+    "manifest_source_id": "AAL_2026-04-23T08.30",
+    "menu_logs_n": 0,
+    "menu_n_raw": 94,
+    "menu_tokens_sha256": "06bffeee78f2b2f6c09f1d4368f15d810472083e56e8f0769eb75bc5a66c9063",
+    "ordered_parts": [
+     {
+      "bytes": 17865,
+      "part": "prepared_remarks",
+      "sha256": "ded6f3129bd58d92989c1e3747a4eb6dd8f7be463f1427c905c549be9a98065a"
+     },
+     {
+      "bytes": 39231,
+      "part": "qa",
+      "sha256": "1b1b4097f88630f98fbd0d9549167ab147e9e43a2b8e30e5adb3c26fa253d740"
+     }
+    ],
+    "packet_sha256": "294e7fa819bb3b48e2c451da7fa1ec0282e2e456155e6b0a45037d721b9c48f5",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/AAL_2026-04-23T08.30.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "AAL"
+   },
+   {
+    "event_date": "2026-03-03",
+    "fye_month": 1,
+    "ids_equal": true,
+    "input_sha256": "02470e26765aa9a3a68358d87af6fa4bf2f8bcc6cd9d0795029be1d202ee439d",
+    "input_source_id": "BBY_2026-03-03T08.00",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "02470e26765aa9a3a68358d87af6fa4bf2f8bcc6cd9d0795029be1d202ee439d",
+    "manifest_source_id": "BBY_2026-03-03T08.00",
+    "menu_logs_n": 0,
+    "menu_n_raw": 462,
+    "menu_tokens_sha256": "4236cfefb59d56959b127c9b64499ce6b8f58625ebcc25ad0f9a83cdc142928a",
+    "ordered_parts": [
+     {
+      "bytes": 25278,
+      "part": "prepared_remarks",
+      "sha256": "93ee31680e59783388f70882599d7e16dc1a20683b78587f6e4d62522b885891"
+     },
+     {
+      "bytes": 33540,
+      "part": "qa",
+      "sha256": "7d59ee9c43e6037963f973a8ff305120297d900330e5ee4d2a72b784464ed88e"
+     }
+    ],
+    "packet_sha256": "d9853008dd45e91c4e25e3102c5b82a75e9873fcb788d626fa74e2b9b6608eb7",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/BBY_2026-03-03T08.00.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "BBY"
+   },
+   {
+    "event_date": "2026-02-03",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "6079fe9cfc7cabea4ef5fc36d471f55022d7b25f21a7f6878cf58f4b5e33b705",
+    "input_source_id": "CMG_2026-02-03T16.30",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "6079fe9cfc7cabea4ef5fc36d471f55022d7b25f21a7f6878cf58f4b5e33b705",
+    "manifest_source_id": "CMG_2026-02-03T16.30",
+    "menu_logs_n": 0,
+    "menu_n_raw": 365,
+    "menu_tokens_sha256": "fd4edd73e6c6c1581efd71f8f55c13f4be26a7d345d2cabfa317141b9fe58cf5",
+    "ordered_parts": [
+     {
+      "bytes": 25023,
+      "part": "prepared_remarks",
+      "sha256": "c059e1033fc0fe14c4a3b88454773432e375c9f36f85606f9df9bf53fb371f1c"
+     },
+     {
+      "bytes": 36823,
+      "part": "qa",
+      "sha256": "23397a9e503f0cdbe59f6926f657d5aa08e7317992f39469970921bb22d223bc"
+     }
+    ],
+    "packet_sha256": "a217b35ae36f88f17b38bab07887397a0056e687b074d700aa2a4f8950c94cf8",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/CMG_2026-02-03T16.30.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "CMG"
+   },
+   {
+    "event_date": "2026-04-08",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "6d71edec78ef0271817646b47b93193ef2c86fc41908c4b155362ae472864fb5",
+    "input_source_id": "DAL_2026-04-08T10.00",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "6d71edec78ef0271817646b47b93193ef2c86fc41908c4b155362ae472864fb5",
+    "manifest_source_id": "DAL_2026-04-08T10.00",
+    "menu_logs_n": 0,
+    "menu_n_raw": 964,
+    "menu_tokens_sha256": "fe691cd5fcece79cf13ffd7b1f1c4759d4c992b617d4d1b1cf3874eb1e39cc18",
+    "ordered_parts": [
+     {
+      "bytes": 17190,
+      "part": "prepared_remarks",
+      "sha256": "fcf3da609862e9d7bbb887e7ba321ea2f7ae72d2ec35e8c30d7718b9f80197e0"
+     },
+     {
+      "bytes": 35066,
+      "part": "qa",
+      "sha256": "27a16f3299c9648770cb0385256090564435b74ffcc059ff8903bbb996c0a3aa"
+     }
+    ],
+    "packet_sha256": "81f309e10115e939d78493cf74e3ef87233d15c2ee7f69c65802593d431f7c09",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/DAL_2026-04-08T10.00.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "DAL"
+   },
+   {
+    "event_date": "2026-03-19",
+    "fye_month": 5,
+    "ids_equal": true,
+    "input_sha256": "d564b2f08e71196a7d90041d9cb351b3c0bfa82cac91d99fd413a0c98b874d17",
+    "input_source_id": "DRI_2026-03-19T08.30",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "d564b2f08e71196a7d90041d9cb351b3c0bfa82cac91d99fd413a0c98b874d17",
+    "manifest_source_id": "DRI_2026-03-19T08.30",
+    "menu_logs_n": 4,
+    "menu_n_raw": 513,
+    "menu_tokens_sha256": "c84d271abd8cbfc40913df4d5d14c0655276dbc0f74ac2e55f528360f8ff20ee",
+    "ordered_parts": [
+     {
+      "bytes": 16327,
+      "part": "prepared_remarks",
+      "sha256": "c5a27e47379110bbbe659322cb27c62228b805e430ab79916f69452d11045f08"
+     },
+     {
+      "bytes": 60283,
+      "part": "qa",
+      "sha256": "bfe811b41dca273ab6f6eddb81ae7a34f0bb73abaabaeb04b2e6079a232d2ab4"
+     }
+    ],
+    "packet_sha256": "251ada179e6efde4a3540fdc4214bee12ec2cfb49049abafc4d9c48e41370d3b",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/DRI_2026-03-19T08.30.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "DRI"
+   },
+   {
+    "event_date": "2026-02-11",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "db101e6221d3b43d9e1cb33a27bc5924d039632666fcacded309823b92e10fcf",
+    "input_source_id": "MCD_2026-02-11T16.30",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "db101e6221d3b43d9e1cb33a27bc5924d039632666fcacded309823b92e10fcf",
+    "manifest_source_id": "MCD_2026-02-11T16.30",
+    "menu_logs_n": 0,
+    "menu_n_raw": 423,
+    "menu_tokens_sha256": "028b9ff2a5137c0cc096614efb05ea8b3f67f8c77f226ade3424e1b5e7f671c9",
+    "ordered_parts": [
+     {
+      "bytes": 24361,
+      "part": "prepared_remarks",
+      "sha256": "d79b4245ca3aea3c49c5567f401780831b8159f3237b9d039bbe2564c21b96a3"
+     },
+     {
+      "bytes": 34636,
+      "part": "qa",
+      "sha256": "3dc57369036558e558c7736a9adee79b78076b4dce7ac1d61d053108511bc133"
+     }
+    ],
+    "packet_sha256": "e2677e1a3d71876ab94265bb630c767870432c1efa8ea92749da3dd34fefd3c3",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/MCD_2026-02-11T16.30.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "MCD"
+   },
+   {
+    "event_date": "2026-03-12",
+    "fye_month": 1,
+    "ids_equal": true,
+    "input_sha256": "f3f13f61b444dde44de238b36110d2681941df80207eccce65116faf3e92825a",
+    "input_source_id": "ULTA_2026-03-12T16.30",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "f3f13f61b444dde44de238b36110d2681941df80207eccce65116faf3e92825a",
+    "manifest_source_id": "ULTA_2026-03-12T16.30",
+    "menu_logs_n": 0,
+    "menu_n_raw": 477,
+    "menu_tokens_sha256": "94e86529869aaae37e7803c0aa72504312ec1077ffc0cec1a3da463a91d9cf79",
+    "ordered_parts": [
+     {
+      "bytes": 28778,
+      "part": "prepared_remarks",
+      "sha256": "f484e9f92d405a91524e11f36f063daf368ea2d9adfe29b61e9607223266e9df"
+     },
+     {
+      "bytes": 27600,
+      "part": "qa",
+      "sha256": "ea803bf8d1c1db638a91528a52f98617bd3fead437332d05d33598ca92f9b09c"
+     }
+    ],
+    "packet_sha256": "853f6ebda222796e3a9e3f2a1440f2580412afe2fd61e5bb52c26bfd3fcc41a8",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/ULTA_2026-03-12T16.30.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "ULTA"
+   },
+   {
+    "event_date": "2026-02-04",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "60e70e7e667c480511d8c5f3eed748af27fcd628486b3f38fc30e058dda5e7e7",
+    "input_source_id": "YUM_2026-02-04T08.15",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "60e70e7e667c480511d8c5f3eed748af27fcd628486b3f38fc30e058dda5e7e7",
+    "manifest_source_id": "YUM_2026-02-04T08.15",
+    "menu_logs_n": 8,
+    "menu_n_raw": 759,
+    "menu_tokens_sha256": "6a831be5aea386311926ee4c7383d97306b45e957ff6dde396da2fc82e4e259c",
+    "ordered_parts": [
+     {
+      "bytes": 24576,
+      "part": "prepared_remarks",
+      "sha256": "06f2a48e4d029516332c7726847c21404da3d59ba1f73103a2a1d12022dd3d29"
+     },
+     {
+      "bytes": 22631,
+      "part": "qa",
+      "sha256": "ec019c1ec2f1e633f13851723076a805ca38f1084b24672d55df42fc60bd42d8"
+     }
+    ],
+    "packet_sha256": "f2a39e0e3ac81a4ea0657709d447a43afcb4780a90d7cd0cf2f061032259eb92",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/YUM_2026-02-04T08.15.json",
+    "sha_matches": true,
+    "source_type": "transcript",
+    "ticker": "YUM"
+   },
+   {
+    "event_date": "2024-11-15",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "f51c6b723d933a960deb1f2f52fe7ba6cda82c967bb06d5a392a4dc69fdd92d3",
+    "input_source_id": "bzNews_42014391",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "f51c6b723d933a960deb1f2f52fe7ba6cda82c967bb06d5a392a4dc69fdd92d3",
+    "manifest_source_id": "bzNews_42014391",
+    "menu_logs_n": 0,
+    "menu_n_raw": 300,
+    "menu_tokens_sha256": "ad1aa70b6524d165cb84e74b50070634557393668cf8a9a332cfc81e8f3f6c83",
+    "ordered_parts": [
+     {
+      "bytes": 192,
+      "part": "title",
+      "sha256": "5b5e02c8d550cccb0b76783261d5dcc703335f897a9408c947c1f4d9a6634bef"
+     },
+     {
+      "bytes": 224,
+      "part": "teaser",
+      "sha256": "83a1067119c3a92925b6519e6e5789a7f1c21c19a947a111935b19b7c596ec1c"
+     },
+     {
+      "bytes": 259,
+      "part": "body",
+      "sha256": "260d57eecfa18a813d3d2c49b90f93b00a7dc3593a705c6d85899a2b4d32fdff"
+     }
+    ],
+    "packet_sha256": "361957aeff39b4e7ce2bef9e5505a8dffda1f9e6a26161ab303c70026c0b0b73",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_42014391.json",
+    "sha_matches": true,
+    "source_type": "news",
+    "ticker": "MCD"
+   },
+   {
+    "event_date": "2025-12-08",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "55540c168d53e871c6895fd4ead4de8bb213889dd9764319ed747542cfd8eafc",
+    "input_source_id": "bzNews_49256211",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "55540c168d53e871c6895fd4ead4de8bb213889dd9764319ed747542cfd8eafc",
+    "manifest_source_id": "bzNews_49256211",
+    "menu_logs_n": 0,
+    "menu_n_raw": 365,
+    "menu_tokens_sha256": "fd4edd73e6c6c1581efd71f8f55c13f4be26a7d345d2cabfa317141b9fe58cf5",
+    "ordered_parts": [
+     {
+      "bytes": 72,
+      "part": "title",
+      "sha256": "d4ffe5a36e2778f1897a6b124a43a3164e6e0e31803c49e1418b966dcdbaf4c8"
+     }
+    ],
+    "packet_sha256": "d4ffe5a36e2778f1897a6b124a43a3164e6e0e31803c49e1418b966dcdbaf4c8",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_49256211.json",
+    "sha_matches": true,
+    "source_type": "news",
+    "ticker": "CMG"
+   },
+   {
+    "event_date": "2026-02-26",
+    "fye_month": 12,
+    "ids_equal": true,
+    "input_sha256": "c4d99d2547d10814459fd7612773622554fea9f61868f47d55323433b5712ca9",
+    "input_source_id": "bzNews_50877032",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "c4d99d2547d10814459fd7612773622554fea9f61868f47d55323433b5712ca9",
+    "manifest_source_id": "bzNews_50877032",
+    "menu_logs_n": 0,
+    "menu_n_raw": 94,
+    "menu_tokens_sha256": "06bffeee78f2b2f6c09f1d4368f15d810472083e56e8f0769eb75bc5a66c9063",
+    "ordered_parts": [
+     {
+      "bytes": 96,
+      "part": "title",
+      "sha256": "a8eade8f86c6791d4f72fdc0c93d636088da00f11e308edc795ae35a46bf9d32"
+     },
+     {
+      "bytes": 134,
+      "part": "teaser",
+      "sha256": "ae7ca2b33ab85dcbbd841692b35fe14217b6e67e9aa22d636944fcca7d3aaf13"
+     },
+     {
+      "bytes": 2158,
+      "part": "body",
+      "sha256": "6a477e7faa7c423be2638634161ae550736fa228cb3c753bf5349f1843a8019e"
+     }
+    ],
+    "packet_sha256": "5988f9fe78f40280109d7baee7dde9511f5719c4ee932e897ec38063297f630d",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_50877032.json",
+    "sha_matches": true,
+    "source_type": "news",
+    "ticker": "AAL"
+   },
+   {
+    "event_date": "2026-04-22",
+    "fye_month": 1,
+    "ids_equal": true,
+    "input_sha256": "3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca",
+    "input_source_id": "bzNews_51962983",
+    "internal_id_field": "ABSENT \u2014 the input's own source_id IS the internal id",
+    "lanes": [
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "sonnet"
+     },
+     {
+      "agentType": "lean-probe",
+      "effort": "high",
+      "model": "opus"
+     }
+    ],
+    "manifest_sha256": "3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca",
+    "manifest_source_id": "bzNews_51962983",
+    "menu_logs_n": 0,
+    "menu_n_raw": 540,
+    "menu_tokens_sha256": "08322f02a27ab4d17a24e5ab78580175e80d27f359750ed461d3543ef5850297",
+    "ordered_parts": [
+     {
+      "bytes": 61,
+      "part": "title",
+      "sha256": "4e2ff9e40b958e83d2c085384d703d2ca1b722cea7a377dcd77f2c06a6217432"
+     }
+    ],
+    "packet_sha256": "4e2ff9e40b958e83d2c085384d703d2ca1b722cea7a377dcd77f2c06a6217432",
+    "path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_51962983.json",
+    "sha_matches": true,
+    "source_type": "news",
+    "ticker": "BBY"
+   }
+  ],
+  "pins": {
+   "contract": "55903b729b74515e10d78352eea72fdc459712dfbdb038c1925dd2f7d1322179",
+   "contract_manifest": "2b108d70e2d2ac38b4cf97ea460c3f6717b2e3f48bf0f11068ff33658eba4033",
+   "inputs_manifest": "e083cd6a72ff2a79e51b99935c79978ef16c9042e507e21ae47ab4ca3d12b386",
+   "protocol": "00a9e65271c7707d6de02b77d74020487263a5148fa187feca02b645a1b250ef",
+   "wrapper": "b50b7ab887ec71b372585c2dd8537769c1c296f8ea29e6704d339bd2511187cf"
+  },
+  "verified": 36
+ },
+ "identity": {
+  "after_porcelain_nul_sha256": "421b6b6d140051de9ca2b6b23a5fe4d8addb39ed724cb3adcbdcd524bfe95823",
+  "branch": "main",
+  "bridge_commit": "0edb1be860524556134ecdedab248279590b23b9",
+  "bridge_is_ancestor": true,
+  "commits_after_bridge": 0,
+  "frozen_start_porcelain_nul_sha256": "cb2763d5b1ddc16fcdca7459278788bb6620dc4b2356ed65efbcde5862a57662",
+  "harness_versions": {
+   "arelle-release": "2.38.20",
+   "beautifulsoup4": "4.13.3",
+   "lxml": "6.0.2",
+   "neo4j": "5.28.1",
+   "pytest": "9.0.2",
+   "python": "3.11.10",
+   "python-dotenv": "1.1.0",
+   "tinycss2": "1.4.0"
+  },
+  "head": "0edb1be860524556134ecdedab248279590b23b9",
+  "head_tree": "d806365c41def2108f04cfa7ec6cef8559415638",
+  "index_tree": "d806365c41def2108f04cfa7ec6cef8559415638",
+  "origin_main_local": "0edb1be860524556134ecdedab248279590b23b9",
+  "path_delta": {
+   "added": [
+    "?? .claude/plans/Drivers/experiments/harness/step1_inventory.json"
+   ],
+   "after_entries": 919,
+   "before_entries": 918,
+   "note": "the board was ' M' before and remains ' M'; only the receipt path is new",
+   "removed": []
+  },
+  "paths": {
+   "granular_untracked_after": 16562,
+   "ignored_in_scope": [
+    ".claude/plans/Drivers/experiments/harness/__pycache__/",
+    ".claude/plans/Drivers/experiments/harness/receipts_827/__pycache__/",
+    ".claude/plans/Drivers/experiments/harness/scorers/__pycache__/",
+    "driver/__pycache__/",
+    "driver/channels/__pycache__/",
+    "driver/channels/fiscal_ai/__pycache__/",
+    "driver/core/__pycache__/",
+    "driver/relocation/__pycache__/"
+   ],
+   "staged": [],
+   "start_counts": {
+    "granular_untracked": 16561,
+    "staged": 0,
+    "unstaged_deletions": 135,
+    "unstaged_modifications": 4,
+    "untracked_collapsed": 779
+   },
+   "unstaged_deleted": [
+    " D .claude/agents/test-bg-fm-tasktools.md",
+    " D .claude/agents/test-bg-fm-vs-runtime.md",
+    " D .claude/agents/test-bg-frontmatter.md",
+    " D .claude/agents/test-bg-isolation-worktree.md",
+    " D .claude/agents/test-bg-mcp-access.md",
+    " D .claude/agents/test-bg-memory-combo.md",
+    " D .claude/agents/test-bg-skill-invoke.md",
+    " D .claude/agents/test-bg-tools-inventory.md",
+    " D .claude/agents/test-hook-agent-type.md",
+    " D .claude/agents/test-hook-inject-check.md",
+    " D .claude/agents/test-hook-post-failure.md",
+    " D .claude/agents/test-hook-prompt-type.md",
+    " D .claude/agents/test-hook-stop-block.md",
+    " D .claude/agents/test-hook-subagent-inject.md",
+    " D .claude/agents/test-mem-same-agent-verify.md",
+    " D .claude/agents/test-memory-autopreload-verify.md",
+    " D .claude/agents/test-memory-autopreload.md",
+    " D .claude/agents/test-memory-local-v250.md",
+    " D .claude/agents/test-memory-user-scope.md",
+    " D .claude/agents/test-parallel-ping.md",
+    " D .claude/agents/test-re-agent-hooks.md",
+    " D .claude/agents/test-re-disallow-agent.md",
+    " D .claude/agents/test-re-memory-agent.md",
+    " D .claude/agents/test-re-memory-verify.md",
+    " D .claude/agents/test-re-skills-agent.md",
+    " D .claude/agents/test-re-tools-agent.md",
+    " D .claude/agents/test-task-agent.md",
+    " D .claude/agents/test-v176-stop-on-agent.md",
+    " D .claude/agents/test_agent_type_restrict.md",
+    " D .claude/agents/test_memory_local.md",
+    " D .claude/agents/test_memory_local_verify.md",
+    " D .claude/skills/test-3layer-bottom/SKILL.md",
+    " D .claude/skills/test-3layer-mid/SKILL.md",
+    " D .claude/skills/test-3layer-top/SKILL.md",
+    " D .claude/skills/test-agent-field-2026/SKILL.md",
+    " D .claude/skills/test-agent-field/SKILL.md",
+    " D .claude/skills/test-all-datasubagents-fork/SKILL.md",
+    " D .claude/skills/test-allowed-mcp/SKILL.md",
+    " D .claude/skills/test-arguments/SKILL.md",
+    " D .claude/skills/test-at-positional-args/SKILL.md",
+    " D .claude/skills/test-at-session-id/SKILL.md",
+    " D .claude/skills/test-child-thinking/SKILL.md",
+    " D .claude/skills/test-context-child/SKILL.md",
+    " D .claude/skills/test-context-parent/SKILL.md",
+    " D .claude/skills/test-disallow-2026/SKILL.md",
+    " D .claude/skills/test-disallowed-mcp/SKILL.md",
+    " D .claude/skills/test-error-child/SKILL.md",
+    " D .claude/skills/test-error-parent/SKILL.md",
+    " D .claude/skills/test-inherit-child/SKILL.md",
+    " D .claude/skills/test-inherit-child2/SKILL.md",
+    " D .claude/skills/test-inherit-parent/SKILL.md",
+    " D .claude/skills/test-inherit-parent2/SKILL.md",
+    " D .claude/skills/test-manifest-gate/SKILL.md",
+    " D .claude/skills/test-mcp-in-fork/SKILL.md",
+    " D .claude/skills/test-mcp-wildcard/SKILL.md",
+    " D .claude/skills/test-model-2026/SKILL.md",
+    " D .claude/skills/test-model-field/SKILL.md",
+    " D .claude/skills/test-nest3-bot/SKILL.md",
+    " D .claude/skills/test-nest3-mid/SKILL.md",
+    " D .claude/skills/test-nest3-top/SKILL.md",
+    " D .claude/skills/test-nested-child/SKILL.md",
+    " D .claude/skills/test-nested-grandparent/SKILL.md",
+    " D .claude/skills/test-nested-parent/SKILL.md",
+    " D .claude/skills/test-orchestrator-thinking/SKILL.md",
+    " D .claude/skills/test-parallel-a/SKILL.md",
+    " D .claude/skills/test-parallel-b/SKILL.md",
+    " D .claude/skills/test-parallel-child-a/SKILL.md",
+    " D .claude/skills/test-parallel-child-b/SKILL.md",
+    " D .claude/skills/test-parallel-max/SKILL.md",
+    " D .claude/skills/test-parallel-parent/SKILL.md",
+    " D .claude/skills/test-parallel-sdk/SKILL.md",
+    " D .claude/skills/test-parallel-teams-dual-sub.md",
+    " D .claude/skills/test-parallel-teams-split.md",
+    " D .claude/skills/test-parallel-teams-subagent.md",
+    " D .claude/skills/test-parallel-teams.md",
+    " D .claude/skills/test-re-3layer-bot/SKILL.md",
+    " D .claude/skills/test-re-3layer-mid/SKILL.md",
+    " D .claude/skills/test-re-3layer-top/SKILL.md",
+    " D .claude/skills/test-re-agent-field/SKILL.md",
+    " D .claude/skills/test-re-arguments/SKILL.md",
+    " D .claude/skills/test-re-disallow/SKILL.md",
+    " D .claude/skills/test-re-error-child/SKILL.md",
+    " D .claude/skills/test-re-error-parent/SKILL.md",
+    " D .claude/skills/test-re-inherit-child/SKILL.md",
+    " D .claude/skills/test-re-inherit-child2/SKILL.md",
+    " D .claude/skills/test-re-inherit-parent/SKILL.md",
+    " D .claude/skills/test-re-inherit-parent2/SKILL.md",
+    " D .claude/skills/test-re-mcp-preload/SKILL.md",
+    " D .claude/skills/test-re-mcp-wildcard/SKILL.md",
+    " D .claude/skills/test-re-model-field/SKILL.md",
+    " D .claude/skills/test-re-parallel-a/SKILL.md",
+    " D .claude/skills/test-re-parallel-b/SKILL.md",
+    " D .claude/skills/test-re-parallel-parent/SKILL.md",
+    " D .claude/skills/test-re-restrict/SKILL.md",
+    " D .claude/skills/test-re-sibling-a/SKILL.md",
+    " D .claude/skills/test-re-sibling-b/SKILL.md",
+    " D .claude/skills/test-re-skill-nests-task/SKILL.md",
+    " D .claude/skills/test-re-skill-tries-task/SKILL.md",
+    " D .claude/skills/test-re-task-in-fork/SKILL.md",
+    " D .claude/skills/test-re-tasks-in-fork/SKILL.md",
+    " D .claude/skills/test-re-workflow-child/SKILL.md",
+    " D .claude/skills/test-re-workflow/SKILL.md",
+    " D .claude/skills/test-restrict-2026/SKILL.md",
+    " D .claude/skills/test-restricted-tools/SKILL.md",
+    " D .claude/skills/test-resume/SKILL.md",
+    " D .claude/skills/test-resume/subagent-history.csv",
+    " D .claude/skills/test-sdk-task-tools/SKILL.md",
+    " D .claude/skills/test-sibling-a/SKILL.md",
+    " D .claude/skills/test-sibling-b/SKILL.md",
+    " D .claude/skills/test-subagent-team-leader.md",
+    " D .claude/skills/test-task-basic/SKILL.md",
+    " D .claude/skills/test-task-create-from-fork/SKILL.md",
+    " D .claude/skills/test-task-direct/SKILL.md",
+    " D .claude/skills/test-task-dynamic-id/SKILL.md",
+    " D .claude/skills/test-task-env-check/SKILL.md",
+    " D .claude/skills/test-task-in-fork/SKILL.md",
+    " D .claude/skills/test-task-visibility/SKILL.md",
+    " D .claude/skills/test-teams-launch/SKILL.md",
+    " D .claude/skills/test-trade-earnings-pattern/SKILL.md",
+    " D .claude/skills/test-v1105-long-desc/SKILL.md",
+    " D .claude/skills/test-v1107-nest-child/SKILL.md",
+    " D .claude/skills/test-v1107-nest-parent/SKILL.md",
+    " D .claude/skills/test-v1107-parallel-a/SKILL.md",
+    " D .claude/skills/test-v1107-parallel-b/SKILL.md",
+    " D .claude/skills/test-v1107-parallel-parent/SKILL.md",
+    " D .claude/skills/test-v174-hook-count/SKILL.md",
+    " D .claude/skills/test-v176-stop-on-skill/SKILL.md",
+    " D .claude/skills/test-v180-effort-high/SKILL.md",
+    " D .claude/skills/test-v180-effort-low/SKILL.md",
+    " D .claude/skills/test-v183-deep-link/SKILL.md",
+    " D .claude/skills/test-v185-thinking-skill/SKILL.md",
+    " D .claude/skills/test-wildcard-2026/SKILL.md",
+    " D .claude/skills/test-workflow-child/SKILL.md",
+    " D .claude/skills/test-workflow-multi/SKILL.md",
+    " D .claude/skills/test-workflow-parent/SKILL.md"
+   ],
+   "unstaged_deleted_count": 135,
+   "unstaged_modified": [
+    " M .claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md",
+    " M .claude/plans/Drivers/experiments/WORKORDER_STATUS.md",
+    " M .claude/settings.json",
+    " M data/MARKET_DATA_SOURCES.md"
+   ],
+   "untracked_collapsed_count": 780
+  },
+  "porcelain_note": "raw NUL-separated entries with the Git XY bytes preserved; the first entry is ' D .claude/agents/test-bg-fm-tasktools.md' and nothing is trimmed",
+  "starting_entries": [
+   " D .claude/agents/test-bg-fm-tasktools.md",
+   " D .claude/agents/test-bg-fm-vs-runtime.md",
+   " D .claude/agents/test-bg-frontmatter.md",
+   " D .claude/agents/test-bg-isolation-worktree.md",
+   " D .claude/agents/test-bg-mcp-access.md",
+   " D .claude/agents/test-bg-memory-combo.md",
+   " D .claude/agents/test-bg-skill-invoke.md",
+   " D .claude/agents/test-bg-tools-inventory.md",
+   " D .claude/agents/test-hook-agent-type.md",
+   " D .claude/agents/test-hook-inject-check.md",
+   " D .claude/agents/test-hook-post-failure.md",
+   " D .claude/agents/test-hook-prompt-type.md",
+   " D .claude/agents/test-hook-stop-block.md",
+   " D .claude/agents/test-hook-subagent-inject.md",
+   " D .claude/agents/test-mem-same-agent-verify.md",
+   " D .claude/agents/test-memory-autopreload-verify.md",
+   " D .claude/agents/test-memory-autopreload.md",
+   " D .claude/agents/test-memory-local-v250.md",
+   " D .claude/agents/test-memory-user-scope.md",
+   " D .claude/agents/test-parallel-ping.md",
+   " D .claude/agents/test-re-agent-hooks.md",
+   " D .claude/agents/test-re-disallow-agent.md",
+   " D .claude/agents/test-re-memory-agent.md",
+   " D .claude/agents/test-re-memory-verify.md",
+   " D .claude/agents/test-re-skills-agent.md",
+   " D .claude/agents/test-re-tools-agent.md",
+   " D .claude/agents/test-task-agent.md",
+   " D .claude/agents/test-v176-stop-on-agent.md",
+   " D .claude/agents/test_agent_type_restrict.md",
+   " D .claude/agents/test_memory_local.md",
+   " D .claude/agents/test_memory_local_verify.md",
+   " M .claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md",
+   " M .claude/plans/Drivers/experiments/WORKORDER_STATUS.md",
+   " M .claude/settings.json",
+   " D .claude/skills/test-3layer-bottom/SKILL.md",
+   " D .claude/skills/test-3layer-mid/SKILL.md",
+   " D .claude/skills/test-3layer-top/SKILL.md",
+   " D .claude/skills/test-agent-field-2026/SKILL.md",
+   " D .claude/skills/test-agent-field/SKILL.md",
+   " D .claude/skills/test-all-datasubagents-fork/SKILL.md",
+   " D .claude/skills/test-allowed-mcp/SKILL.md",
+   " D .claude/skills/test-arguments/SKILL.md",
+   " D .claude/skills/test-at-positional-args/SKILL.md",
+   " D .claude/skills/test-at-session-id/SKILL.md",
+   " D .claude/skills/test-child-thinking/SKILL.md",
+   " D .claude/skills/test-context-child/SKILL.md",
+   " D .claude/skills/test-context-parent/SKILL.md",
+   " D .claude/skills/test-disallow-2026/SKILL.md",
+   " D .claude/skills/test-disallowed-mcp/SKILL.md",
+   " D .claude/skills/test-error-child/SKILL.md",
+   " D .claude/skills/test-error-parent/SKILL.md",
+   " D .claude/skills/test-inherit-child/SKILL.md",
+   " D .claude/skills/test-inherit-child2/SKILL.md",
+   " D .claude/skills/test-inherit-parent/SKILL.md",
+   " D .claude/skills/test-inherit-parent2/SKILL.md",
+   " D .claude/skills/test-manifest-gate/SKILL.md",
+   " D .claude/skills/test-mcp-in-fork/SKILL.md",
+   " D .claude/skills/test-mcp-wildcard/SKILL.md",
+   " D .claude/skills/test-model-2026/SKILL.md",
+   " D .claude/skills/test-model-field/SKILL.md",
+   " D .claude/skills/test-nest3-bot/SKILL.md",
+   " D .claude/skills/test-nest3-mid/SKILL.md",
+   " D .claude/skills/test-nest3-top/SKILL.md",
+   " D .claude/skills/test-nested-child/SKILL.md",
+   " D .claude/skills/test-nested-grandparent/SKILL.md",
+   " D .claude/skills/test-nested-parent/SKILL.md",
+   " D .claude/skills/test-orchestrator-thinking/SKILL.md",
+   " D .claude/skills/test-parallel-a/SKILL.md",
+   " D .claude/skills/test-parallel-b/SKILL.md",
+   " D .claude/skills/test-parallel-child-a/SKILL.md",
+   " D .claude/skills/test-parallel-child-b/SKILL.md",
+   " D .claude/skills/test-parallel-max/SKILL.md",
+   " D .claude/skills/test-parallel-parent/SKILL.md",
+   " D .claude/skills/test-parallel-sdk/SKILL.md",
+   " D .claude/skills/test-parallel-teams-dual-sub.md",
+   " D .claude/skills/test-parallel-teams-split.md",
+   " D .claude/skills/test-parallel-teams-subagent.md",
+   " D .claude/skills/test-parallel-teams.md",
+   " D .claude/skills/test-re-3layer-bot/SKILL.md",
+   " D .claude/skills/test-re-3layer-mid/SKILL.md",
+   " D .claude/skills/test-re-3layer-top/SKILL.md",
+   " D .claude/skills/test-re-agent-field/SKILL.md",
+   " D .claude/skills/test-re-arguments/SKILL.md",
+   " D .claude/skills/test-re-disallow/SKILL.md",
+   " D .claude/skills/test-re-error-child/SKILL.md",
+   " D .claude/skills/test-re-error-parent/SKILL.md",
+   " D .claude/skills/test-re-inherit-child/SKILL.md",
+   " D .claude/skills/test-re-inherit-child2/SKILL.md",
+   " D .claude/skills/test-re-inherit-parent/SKILL.md",
+   " D .claude/skills/test-re-inherit-parent2/SKILL.md",
+   " D .claude/skills/test-re-mcp-preload/SKILL.md",
+   " D .claude/skills/test-re-mcp-wildcard/SKILL.md",
+   " D .claude/skills/test-re-model-field/SKILL.md",
+   " D .claude/skills/test-re-parallel-a/SKILL.md",
+   " D .claude/skills/test-re-parallel-b/SKILL.md",
+   " D .claude/skills/test-re-parallel-parent/SKILL.md",
+   " D .claude/skills/test-re-restrict/SKILL.md",
+   " D .claude/skills/test-re-sibling-a/SKILL.md",
+   " D .claude/skills/test-re-sibling-b/SKILL.md",
+   " D .claude/skills/test-re-skill-nests-task/SKILL.md",
+   " D .claude/skills/test-re-skill-tries-task/SKILL.md",
+   " D .claude/skills/test-re-task-in-fork/SKILL.md",
+   " D .claude/skills/test-re-tasks-in-fork/SKILL.md",
+   " D .claude/skills/test-re-workflow-child/SKILL.md",
+   " D .claude/skills/test-re-workflow/SKILL.md",
+   " D .claude/skills/test-restrict-2026/SKILL.md",
+   " D .claude/skills/test-restricted-tools/SKILL.md",
+   " D .claude/skills/test-resume/SKILL.md",
+   " D .claude/skills/test-resume/subagent-history.csv",
+   " D .claude/skills/test-sdk-task-tools/SKILL.md",
+   " D .claude/skills/test-sibling-a/SKILL.md",
+   " D .claude/skills/test-sibling-b/SKILL.md",
+   " D .claude/skills/test-subagent-team-leader.md",
+   " D .claude/skills/test-task-basic/SKILL.md",
+   " D .claude/skills/test-task-create-from-fork/SKILL.md",
+   " D .claude/skills/test-task-direct/SKILL.md",
+   " D .claude/skills/test-task-dynamic-id/SKILL.md",
+   " D .claude/skills/test-task-env-check/SKILL.md",
+   " D .claude/skills/test-task-in-fork/SKILL.md",
+   " D .claude/skills/test-task-visibility/SKILL.md",
+   " D .claude/skills/test-teams-launch/SKILL.md",
+   " D .claude/skills/test-trade-earnings-pattern/SKILL.md",
+   " D .claude/skills/test-v1105-long-desc/SKILL.md",
+   " D .claude/skills/test-v1107-nest-child/SKILL.md",
+   " D .claude/skills/test-v1107-nest-parent/SKILL.md",
+   " D .claude/skills/test-v1107-parallel-a/SKILL.md",
+   " D .claude/skills/test-v1107-parallel-b/SKILL.md",
+   " D .claude/skills/test-v1107-parallel-parent/SKILL.md",
+   " D .claude/skills/test-v174-hook-count/SKILL.md",
+   " D .claude/skills/test-v176-stop-on-skill/SKILL.md",
+   " D .claude/skills/test-v180-effort-high/SKILL.md",
+   " D .claude/skills/test-v180-effort-low/SKILL.md",
+   " D .claude/skills/test-v183-deep-link/SKILL.md",
+   " D .claude/skills/test-v185-thinking-skill/SKILL.md",
+   " D .claude/skills/test-wildcard-2026/SKILL.md",
+   " D .claude/skills/test-workflow-child/SKILL.md",
+   " D .claude/skills/test-workflow-multi/SKILL.md",
+   " D .claude/skills/test-workflow-parent/SKILL.md",
+   " M data/MARKET_DATA_SOURCES.md",
+   "?? .claude/archive/test-agents/",
+   "?? .claude/archive/test-skills/",
+   "?? .claude/hooks/comm_style_post_compact.sh",
+   "?? .claude/hooks/core827_keep_going.py",
+   "?? .claude/hooks/rereview_before_reply.sh",
+   "?? .claude/plans/CLAUDE-CHATGPT-COMMS/",
+   "?? .claude/plans/CLAUDE_PEAK_PERFORMANCE.md",
+   "?? .claude/plans/Drivers/FinalDesign/FINAL_DESIGN_Aug_6th.md",
+   "?? .claude/plans/Drivers/FinalDesign/LeftOverSteps/",
+   "?? .claude/plans/Drivers/FinalDesign/NewsChannel.md",
+   "?? .claude/plans/Drivers/FinalDesign/QwenTests/",
+   "?? .claude/plans/Drivers/FinalDesign/ReasoningTraceQuestions.md",
+   "?? .claude/plans/Drivers/WIP/Core_827_DecisionLog_2026-08-02.md",
+   "?? .claude/plans/Drivers/WIP/Fiscal_CoreV2_ChangeAndTestList_2026-08-10.md",
+   "?? .claude/plans/Drivers/WIP/Fiscal_Core_Review_Guardrails_2026-07-24.md",
+   "?? .claude/plans/Drivers/WIP/Fiscal_UnitScale_RouteAudit_2026-07-26.md",
+   "?? .claude/plans/Drivers/WIP/NAME13_OptionC_WorkOrder_v3_2026-07-31.md",
+   "?? .claude/plans/Drivers/WIP/Truth5x50_PreCall_Package_2026-07-24.md",
+   "?? .claude/plans/Drivers/WIP/pre_r20_audit_evidence/",
+   "?? .claude/plans/Drivers/WIP/qf01_calls_manifest.jsonl",
+   "?? .claude/plans/Drivers/WIP/qf01_score.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_bind.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_build.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_candidates_8k_prose.jsonl",
+   "?? .claude/plans/Drivers/WIP/truth5x50_candidates_8k_tables.jsonl",
+   "?? .claude/plans/Drivers/WIP/truth5x50_candidates_manifest.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_candidates_numberless.jsonl",
+   "?? .claude/plans/Drivers/WIP/truth5x50_candidates_prepared_remarks.jsonl",
+   "?? .claude/plans/Drivers/WIP/truth5x50_candidates_qa.jsonl",
+   "?? .claude/plans/Drivers/WIP/truth5x50_codex_caller.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_e2e.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_grade.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_pilot_manifest.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_qf01_preflight.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_rehearsal.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_request_manifest.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_run.py",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_001.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_002.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_003.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_004.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_005.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_006.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_007.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_008.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_009.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_010.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_011.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_012.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_013.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_014.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_015.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_016.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_017.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_018.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_019.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_020.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_021.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_022.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_023.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_024.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_025.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_026.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_027.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_028.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_029.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_030.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_031.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_032.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_033.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_034.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_035.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_001.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_002.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_003.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_004.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_005.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_006.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_007.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_008.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_009.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_010.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_011.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_012.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_013.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_014.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_015.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_016.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_017.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_018.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_019.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_020.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_021.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_022.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_023.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_024.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_025.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_026.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_027.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_028.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_029.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_030.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_031.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_032.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_033.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_034.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_035.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_036.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_037.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_038.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_039.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_040.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_041.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_042.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_043.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_044.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_045.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_046.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_047.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_048.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_049.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_050.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_051.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_052.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_053.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_054.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_055.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_056.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_057.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_058.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_059.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s1_K1_tbl_060.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_001.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_002.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_003.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_004.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_005.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_006.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_007.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_008.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_009.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_010.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_011.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_012.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_013.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_014.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_015.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_016.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_017.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_018.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_019.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_020.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_021.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_022.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_023.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_024.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_025.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_026.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_027.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_028.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_029.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_030.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_031.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_032.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_033.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_034.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_035.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_001.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_002.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_003.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_004.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_005.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_006.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_007.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_008.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_009.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_010.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_011.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_012.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_013.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_014.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_015.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_016.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_017.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_018.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_019.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_020.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_021.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_022.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_023.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_024.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_025.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_026.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_027.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_028.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_029.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_030.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_031.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_032.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_033.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_034.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_035.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_036.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_037.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_038.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_039.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_040.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_041.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_042.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_043.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_044.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_045.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_046.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_047.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_048.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_049.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_050.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_051.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_052.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_053.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_054.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_055.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_056.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_057.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_058.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_059.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K2_tbl_060.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_001.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_002.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_003.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_004.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_005.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_006.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_007.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_008.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_009.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_010.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_011.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_012.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_013.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_014.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_015.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_016.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_017.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_018.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_019.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_020.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_021.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_022.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_023.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_024.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_025.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_026.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_027.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_028.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_029.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_030.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_031.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_032.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_033.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_034.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_035.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_001.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_002.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_003.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_004.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_005.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_006.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_007.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_008.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_009.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_010.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_011.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_012.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_013.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_014.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_015.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_016.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_017.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_018.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_019.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_020.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_021.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_022.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_023.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_024.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_025.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_026.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_027.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_028.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_029.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_030.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_031.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_032.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_033.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_034.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_035.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_036.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_037.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_038.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_039.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_040.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_041.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_042.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_043.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_044.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_045.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_046.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_047.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_048.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_049.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_050.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_051.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_052.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_053.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_054.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_055.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_056.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_057.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_058.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_059.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_s2real_K3_tbl_060.json",
+   "?? .claude/plans/Drivers/WIP/truth5x50_schema.py",
+   "?? .claude/plans/Drivers/experiments/ALIGNMENT_REVIEW_2026-07-24.md",
+   "?? .claude/plans/Drivers/experiments/exhibits/ra_0009.json",
+   "?? .claude/plans/Drivers/experiments/exp2_reader/runs/2026-07-11T19-40-47Z_exp2/local_artifacts/",
+   "?? .claude/plans/Drivers/experiments/harness/DESIGN_minimal_exam_2026-07-24.md",
+   "?? .claude/plans/Drivers/experiments/harness/DESIGN_v2_2026-07-24.md",
+   "?? .claude/plans/Drivers/experiments/harness/DESIGN_v3_diff_2026-07-24.md",
+   "?? .claude/plans/Drivers/experiments/harness/FableExperimentPlan_v2_DELTA.md",
+   "?? .claude/plans/Drivers/experiments/harness/PROPOSAL_prompt_and_scoring_2026-07-24.md",
+   "?? .claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_law_crosswalk_v3.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_literal_patch_v3.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_menu_mapping_v2.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_ownership_checklist_v2.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_ownership_checklist_v3.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_prompt_and_schema_v2.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_prompt_and_schema_v3.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_proposed_diffs_v3.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_scoring_spec_v2.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_v2.0.patch",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_v2.1.patch",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_v2.2_package.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_v2.2b_package.md",
+   "?? .claude/plans/Drivers/experiments/harness/exp5_workorder_amendments_v3.md",
+   "?? .claude/plans/Drivers/experiments/harness/field34_audit.md",
+   "?? .claude/plans/Drivers/experiments/harness/frozen_proof_r14.txt",
+   "?? .claude/plans/Extractions/news_deep_taxonomy_audit.md",
+   "?? .claude/plans/FinancialFilings/",
+   "?? .claude/plans/Infra_Bugs/archive/Neo4jMCPImproved.md",
+   "?? .claude/plans/PredictorLearner/",
+   "?? .claude/plans/ReasoningTraces.md",
+   "?? .claude/plans/archive/",
+   "?? .claude/plans/earningsOrchestrator&Builder/",
+   "?? .claude/plans/fiscal-period-node-plan.md",
+   "?? .claude/references/fiscal_ai_kpi_inventory.md",
+   "?? .claude/references/prediction_context_bundle.md",
+   "?? .claude/review/",
+   "?? .claude/settings.json.bak.v140-retest",
+   "?? .claude/settings.local.json.bak.before-g3-hook-removal-20260811-002915",
+   "?? .claude/settings.local.json.bak.v140-retest",
+   "?? .claude/skills/test-v140-effort-sub/",
+   "?? .claude/skills/test-v140-parallel-child-a/",
+   "?? .claude/skills/test-v140-parallel-child-b/",
+   "?? .claude/skills/test-v140-parallel-parent/",
+   "?? .claude/skills/test-v140-restrict/",
+   "?? .claude/skills/test-v172-disallow/",
+   "?? .codex_gpt_judges/",
+   "?? .dockerignore.canary",
+   "?? .hermes.md",
+   "?? .hermes/",
+   "?? AGENTS.md",
+   "?? archive/drivers/8K_XBRL_Linking/output/",
+   "?? archive/drivers/8K_XBRL_Linking/sample_data/",
+   "?? archive/drivers/ARCHIVED.md",
+   "?? config/local_llm.py",
+   "?? config/local_llm.py.bak.20260724-074657",
+   "?? config/preflight.py",
+   "?? config/run_qwen.py",
+   "?? data/driver_catalog_seed/p4diff/abstain.jsonl",
+   "?? data/driver_catalog_seed/p4diff/code_resolved.jsonl",
+   "?? data/driver_catalog_seed/p4diff/code_summary.json",
+   "?? data/driver_catalog_seed/p4diff/park_ledger.jsonl",
+   "?? data/driver_catalog_seed/p4diff/residual.jsonl",
+   "?? data/driver_catalog_seed/p4diff/skip_ledger.jsonl",
+   "?? data/driver_catalog_seed/p4diff/sources_ledger.jsonl",
+   "?? data/driver_catalog_seed/p4diff2/",
+   "?? data/driver_catalog_seed/p4diff3/abstain.jsonl",
+   "?? data/driver_catalog_seed/p4diff3/code_resolved.jsonl",
+   "?? data/driver_catalog_seed/p4diff3/code_summary.json",
+   "?? data/driver_catalog_seed/p4diff3/park_ledger.jsonl",
+   "?? data/driver_catalog_seed/p4diff3/residual.jsonl",
+   "?? data/driver_catalog_seed/p4diff3/skip_ledger.jsonl",
+   "?? data/driver_catalog_seed/p4diff3/sources_ledger.jsonl",
+   "?? data/driver_catalog_seed/part1/code_resolved.jsonl",
+   "?? data/driver_catalog_seed/part1/gate_dropped.jsonl",
+   "?? data/driver_catalog_seed/part1/pending_llm.jsonl",
+   "?? data/driver_catalog_seed/part1/test_batches/",
+   "?? data/driver_catalog_seed/part2/",
+   "?? data/driver_catalog_seed/part3/",
+   "?? data/driver_catalog_seed/part4/",
+   "?? data/driver_catalog_seed/smoke/abstain.jsonl",
+   "?? data/driver_catalog_seed/smoke/code_resolved.jsonl",
+   "?? data/driver_catalog_seed/smoke/code_summary.json",
+   "?? data/driver_catalog_seed/smoke/park_ledger.jsonl",
+   "?? data/driver_catalog_seed/smoke/residual.jsonl",
+   "?? data/driver_catalog_seed/smoke/skip_ledger.jsonl",
+   "?? data/driver_catalog_seed/thebrain_driver_manifest.json",
+   "?? data/driver_catalog_seed/thebrain_pilot_cleanup_backup.json",
+   "?? data/driver_catalog_seed/wp3_aci_dryrun/abstain.jsonl",
+   "?? data/driver_catalog_seed/wp3_aci_dryrun/code_resolved.jsonl",
+   "?? data/driver_catalog_seed/wp3_aci_dryrun/code_summary.json",
+   "?? data/driver_catalog_seed/wp3_aci_dryrun/park_ledger.jsonl",
+   "?? data/driver_catalog_seed/wp3_aci_dryrun/residual.jsonl",
+   "?? data/driver_catalog_seed/wp3_aci_dryrun/skip_ledger.jsonl",
+   "?? data/driver_catalog_seed/wp3_aci_dryrun/sources_ledger.jsonl",
+   "?? data/lse_massive_replacement/.gitignore",
+   "?? data/lse_massive_replacement/config/",
+   "?? data/lse_massive_replacement/docs/ALL63_REPLACEMENT_MATRIX.md",
+   "?? data/lse_massive_replacement/docs/LOCAL_ARTIFACTS.md",
+   "?? data/lse_massive_replacement/docs/PRODUCTION_ETF_COVERAGE.md",
+   "?? data/lse_massive_replacement/inventory/all60_top20_ticker_map_draft_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/all60_top20_ticker_map_v2_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/all60_top20_ticker_map_v3_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/all63_replacement_matrix_2026-07-19.csv",
+   "?? data/lse_massive_replacement/inventory/all63_sec_fund_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/amplify_hack_gamr_top20_ticker_map_draft_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/amplify_hack_gamr_top20_ticker_map_v2_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/amplify_sec_fund_transitions.json",
+   "?? data/lse_massive_replacement/inventory/industry_13_top50_ticker_map_draft_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_13_top50_ticker_map_v2_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_historical_ticker_overrides.json",
+   "?? data/lse_massive_replacement/inventory/industry_non_strong_top50_lse_name_suggestions_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_non_strong_top50_ticker_map_draft_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_non_strong_top50_ticker_map_v2_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_non_strong_top50_ticker_map_v3_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_remaining3_top50_ticker_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_remaining3_top50_ticker_map_draft_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_remaining5_top50_ticker_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/industry_remaining5_top50_ticker_map_draft_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/production_etf_coverage_2026-07-19.csv",
+   "?? data/lse_massive_replacement/inventory/proxy_pilot_holdings_2026-07-17.json",
+   "?? data/lse_massive_replacement/inventory/proxy_pilot_sec_ticker_map.json",
+   "?? data/lse_massive_replacement/inventory/sector_all9_top50_ticker_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/sector_all9_top50_ticker_map_draft_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/sector_holding_ticker_overrides.json",
+   "?? data/lse_massive_replacement/inventory/sector_top20_ticker_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/sector_xli_xlp_xlre_xlv_top50_ticker_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/sector_xli_xlp_xlv_top50_ticker_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/inventory/sector_xlre_top50_ticker_map_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/all63_long_market_regular_close_screen_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/all63_replacement_matrix_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/amplify_hack_gamr_recent_baskets_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/event_basket_comparison_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/event_basket_lse_minutes_manifest_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/exact_etf_daily_overlap_2026-04-28_to_2026-07-17.csv.gz",
+   "?? data/lse_massive_replacement/results/exact_etf_daily_overlap_2026-04-28_to_2026-07-17.json",
+   "?? data/lse_massive_replacement/results/exact_etf_intraday_pilot_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/exact_etf_regular_close_overlap_2026-04-28_to_2026-07-17.json",
+   "?? data/lse_massive_replacement/results/historical_lse_split_adjustments_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/ibkr_contract_universe_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/ibkr_live_gap_coverage_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/ibkr_live_tick_by_tick_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/ibkr_massive_closed_market_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/ibkr_massive_daily_atr_pilot_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/ibkr_massive_hourly_pilot_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/ibkr_massive_late_afterhours_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/industry_non_strong_recent_close_coverage_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/industry_remaining3_recent_baskets_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/industry_remaining5_recent_baskets_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/lse_live_tick_fields_and_universe_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/lse_split_adjustment_summary_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/lse_trade_quote_depth_probe_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/lse_us_premarket_live_probe_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/macro_websocket_smoke_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/neo4j_etf_inventory_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/production_etf_coverage_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/proxy_pilot_daily_results_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/proxy_pilot_lse_deep_DDOG_1h_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/proxy_pilot_lse_deep_DDOG_tick_2025-01-03.json",
+   "?? data/lse_massive_replacement/results/proxy_pilot_lse_manifest_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/proxy_pilot_targets_2023-01-03_to_2026-04-27.json",
+   "?? data/lse_massive_replacement/results/proxy_pilot_targets_2026-04-27_to_2026-07-18.json",
+   "?? data/lse_massive_replacement/results/recent_lse_split_adjustments_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/redis_etf_mapping_check_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/return_timing_storage_reaudit_2026-07-20.json",
+   "?? data/lse_massive_replacement/results/sector_all9_recent_baskets_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/sector_xlre_recent_hourly_manifest_2026-07-19.json",
+   "?? data/lse_massive_replacement/results/xlre_recent_massive_target_2026-04-28_to_2026-07-17.json",
+   "?? data/lse_massive_replacement/results/xlre_recent_top50_basket_2026-04-28_to_2026-07-17.json",
+   "?? data/lse_massive_replacement/scripts/analyze_hourly_close_coverage.py",
+   "?? data/lse_massive_replacement/scripts/audit_lse_split_adjustments.py",
+   "?? data/lse_massive_replacement/scripts/audit_production_etf_coverage.py",
+   "?? data/lse_massive_replacement/scripts/audit_return_timing_storage.py",
+   "?? data/lse_massive_replacement/scripts/benchmark_proxy_core.py",
+   "?? data/lse_massive_replacement/scripts/build_all63_replacement_matrix.py",
+   "?? data/lse_massive_replacement/scripts/build_holding_ticker_map.py",
+   "?? data/lse_massive_replacement/scripts/compare_event_baskets.py",
+   "?? data/lse_massive_replacement/scripts/compare_exact_etf_intraday.py",
+   "?? data/lse_massive_replacement/scripts/compare_exact_etf_regular_close.py",
+   "?? data/lse_massive_replacement/scripts/event_basket_core.py",
+   "?? data/lse_massive_replacement/scripts/export_lse_history.py",
+   "?? data/lse_massive_replacement/scripts/extract_benchmark_prices_readonly.py",
+   "?? data/lse_massive_replacement/scripts/fetch_lse_event_basket_minutes.py",
+   "?? data/lse_massive_replacement/scripts/fetch_lse_hourly_constituents.py",
+   "?? data/lse_massive_replacement/scripts/fetch_lse_market_catalog.py",
+   "?? data/lse_massive_replacement/scripts/fetch_lse_proxy_pilot.py",
+   "?? data/lse_massive_replacement/scripts/fetch_massive_benchmark_targets.py",
+   "?? data/lse_massive_replacement/scripts/fetch_sec_pilot_holdings.py",
+   "?? data/lse_massive_replacement/scripts/macro_stream_switch.py",
+   "?? data/lse_massive_replacement/scripts/map_openfigi_holdings.py",
+   "?? data/lse_massive_replacement/scripts/map_sec_funds.py",
+   "?? data/lse_massive_replacement/scripts/run_historical_baskets.py",
+   "?? data/lse_massive_replacement/scripts/run_proxy_pilot.py",
+   "?? data/lse_massive_replacement/scripts/screen_all_market_series.py",
+   "?? data/lse_massive_replacement/scripts/screen_long_market_regular_close.py",
+   "?? data/lse_massive_replacement/scripts/suggest_lse_name_matches.py",
+   "?? data/lse_massive_replacement/tests/test_analyze_hourly_close_coverage.py",
+   "?? data/lse_massive_replacement/tests/test_audit_lse_split_adjustments.py",
+   "?? data/lse_massive_replacement/tests/test_audit_return_timing_storage.py",
+   "?? data/lse_massive_replacement/tests/test_benchmark_proxy_core.py",
+   "?? data/lse_massive_replacement/tests/test_build_all63_replacement_matrix.py",
+   "?? data/lse_massive_replacement/tests/test_build_holding_ticker_map.py",
+   "?? data/lse_massive_replacement/tests/test_compare_daily_api_dataset.py",
+   "?? data/lse_massive_replacement/tests/test_compare_event_baskets.py",
+   "?? data/lse_massive_replacement/tests/test_compare_exact_etf_intraday.py",
+   "?? data/lse_massive_replacement/tests/test_compare_exact_etf_regular_close.py",
+   "?? data/lse_massive_replacement/tests/test_event_basket_core.py",
+   "?? data/lse_massive_replacement/tests/test_export_lse_history.py",
+   "?? data/lse_massive_replacement/tests/test_fetch_lse_event_basket_minutes.py",
+   "?? data/lse_massive_replacement/tests/test_fetch_lse_hourly_constituents.py",
+   "?? data/lse_massive_replacement/tests/test_fetch_lse_market_catalog.py",
+   "?? data/lse_massive_replacement/tests/test_fetch_lse_proxy_pilot.py",
+   "?? data/lse_massive_replacement/tests/test_fetch_massive_benchmark_targets.py",
+   "?? data/lse_massive_replacement/tests/test_fetch_sec_pilot_holdings.py",
+   "?? data/lse_massive_replacement/tests/test_ibkr_replacement_audit.py",
+   "?? data/lse_massive_replacement/tests/test_macro_stream_switch.py",
+   "?? data/lse_massive_replacement/tests/test_map_openfigi_holdings.py",
+   "?? data/lse_massive_replacement/tests/test_map_sec_funds.py",
+   "?? data/lse_massive_replacement/tests/test_production_etf_coverage.py",
+   "?? data/lse_massive_replacement/tests/test_run_historical_baskets.py",
+   "?? data/lse_massive_replacement/tests/test_run_proxy_pilot.py",
+   "?? data/lse_massive_replacement/tests/test_screen_all_market_series.py",
+   "?? data/lse_massive_replacement/tests/test_screen_long_market_regular_close.py",
+   "?? data/lse_massive_replacement/tests/test_suggest_lse_name_matches.py",
+   "?? docs/LOCAL_LLM.md",
+   "?? docs/Tutorials_Transcripts/",
+   "?? docs/openrouter-deepseek.md",
+   "?? drivers_harness/pass4/_wf10_proxy_blind.json",
+   "?? drivers_harness/pass4/_wf10_proxy_decision.json",
+   "?? drivers_harness/pass4/_wf10_proxy_ext.json",
+   "?? drivers_harness/pass4/_wf10_proxy_gold.json",
+   "?? drivers_harness/pass4/_wf10_proxy_state.json",
+   "?? drivers_harness/pass4/_wf10b_proxy_decision.json",
+   "?? drivers_harness/pass4/_wf10b_proxy_ext.json",
+   "?? drivers_harness/pass4/_wf10b_proxy_state.json",
+   "?? drivers_harness/pass4/_wf11_61_grader1.json",
+   "?? drivers_harness/pass4/_wf11_61_grader2.json",
+   "?? drivers_harness/pass4/_wf11_61_grader3.json",
+   "?? drivers_harness/pass4/_wf11_gate.py",
+   "?? drivers_harness/pass4/_wf11_grader1.json",
+   "?? drivers_harness/pass4/_wf11_grader2.json",
+   "?? drivers_harness/pass4/_wf11_grader3.json",
+   "?? drivers_harness/pass4/_wf12_proxy_decision.json",
+   "?? drivers_harness/pass4/_wf12_proxy_enriched_blind.json",
+   "?? drivers_harness/pass4/_wf12_proxy_ext.json",
+   "?? drivers_harness/pass4/_wf12_proxy_state.json",
+   "?? drivers_harness/pass4/_wf13_reject_blind.json",
+   "?? drivers_harness/pass4/_wf13_reject_decision.json",
+   "?? drivers_harness/pass4/_wf13_reject_state.json",
+   "?? drivers_harness/pass4/_wf14_blind.json",
+   "?? drivers_harness/pass4/_wf14_build_ext.py",
+   "?? drivers_harness/pass4/_wf14_build_gold.py",
+   "?? drivers_harness/pass4/_wf14_decisions_log.jsonl",
+   "?? drivers_harness/pass4/_wf14_enrich.py",
+   "?? drivers_harness/pass4/_wf14_enrich_cache.json",
+   "?? drivers_harness/pass4/_wf14_ext.json",
+   "?? drivers_harness/pass4/_wf14_floor.py",
+   "?? drivers_harness/pass4/_wf14_g1_cache.json",
+   "?? drivers_harness/pass4/_wf14_g1_claude_1.json",
+   "?? drivers_harness/pass4/_wf14_g1_claude_2.json",
+   "?? drivers_harness/pass4/_wf14_g1_claude_3.json",
+   "?? drivers_harness/pass4/_wf14_g1_gpt.json",
+   "?? drivers_harness/pass4/_wf14_g1_grade.py",
+   "?? drivers_harness/pass4/_wf14_g1_panel_input.json",
+   "?? drivers_harness/pass4/_wf14_gold.json",
+   "?? drivers_harness/pass4/_wf14_gold_adversarial.json",
+   "?? drivers_harness/pass4/_wf14_gpt_labels.json",
+   "?? drivers_harness/pass4/_wf14_heldout_raw.json",
+   "?? drivers_harness/pass4/_wf14_label.py",
+   "?? drivers_harness/pass4/_wf14_label_cache.json",
+   "?? drivers_harness/pass4/_wf14_leak_report.json",
+   "?? drivers_harness/pass4/_wf14_pit.py",
+   "?? drivers_harness/pass4/_wf14_state.json",
+   "?? drivers_harness/pass4/_wf15_blind.json",
+   "?? drivers_harness/pass4/_wf15_build_ext.py",
+   "?? drivers_harness/pass4/_wf15_build_gold.py",
+   "?? drivers_harness/pass4/_wf15_decisions_log.jsonl",
+   "?? drivers_harness/pass4/_wf15_enrich.py",
+   "?? drivers_harness/pass4/_wf15_enrich_cache.json",
+   "?? drivers_harness/pass4/_wf15_ext.json",
+   "?? drivers_harness/pass4/_wf15_floor.py",
+   "?? drivers_harness/pass4/_wf15_g1_cache.json",
+   "?? drivers_harness/pass4/_wf15_g1_claude_1.json",
+   "?? drivers_harness/pass4/_wf15_g1_claude_2.json",
+   "?? drivers_harness/pass4/_wf15_g1_claude_3.json",
+   "?? drivers_harness/pass4/_wf15_g1_gpt.json",
+   "?? drivers_harness/pass4/_wf15_g1_grade.py",
+   "?? drivers_harness/pass4/_wf15_g1_panel_input.json",
+   "?? drivers_harness/pass4/_wf15_gold.json",
+   "?? drivers_harness/pass4/_wf15_gold_adversarial.json",
+   "?? drivers_harness/pass4/_wf15_gpt_labels.json",
+   "?? drivers_harness/pass4/_wf15_heldout_raw.json",
+   "?? drivers_harness/pass4/_wf15_label.py",
+   "?? drivers_harness/pass4/_wf15_label_cache.json",
+   "?? drivers_harness/pass4/_wf15_leak_report.json",
+   "?? drivers_harness/pass4/_wf15_pit.py",
+   "?? drivers_harness/pass4/_wf15_state.json",
+   "?? drivers_harness/pass4/_wf2_A_sh0.json",
+   "?? drivers_harness/pass4/_wf2_A_sh1.json",
+   "?? drivers_harness/pass4/_wf2_A_sh2.json",
+   "?? drivers_harness/pass4/_wf2_A_sh3.json",
+   "?? drivers_harness/pass4/_wf2_B_sh0.json",
+   "?? drivers_harness/pass4/_wf2_B_sh1.json",
+   "?? drivers_harness/pass4/_wf2_B_sh2.json",
+   "?? drivers_harness/pass4/_wf2_B_sh3.json",
+   "?? drivers_harness/pass4/_wf2_P_sh0.json",
+   "?? drivers_harness/pass4/_wf2_P_sh1.json",
+   "?? drivers_harness/pass4/_wf2_P_sh2.json",
+   "?? drivers_harness/pass4/_wf2_P_sh3.json",
+   "?? drivers_harness/pass4/_wf2_merge_score.py",
+   "?? drivers_harness/pass4/_wf2_runA.json",
+   "?? drivers_harness/pass4/_wf2_runB.json",
+   "?? drivers_harness/pass4/_wf2_runG.json",
+   "?? drivers_harness/pass4/_wf2_runP.json",
+   "?? drivers_harness/pass4/_wf2_scoreC_out.json",
+   "?? drivers_harness/pass4/_wf2_scoreG.json",
+   "?? drivers_harness/pass4/_wf2_scoreP.json",
+   "?? drivers_harness/pass4/_wf2_score_out.json",
+   "?? drivers_harness/pass4/_wf3_registry_v0.json",
+   "?? drivers_harness/pass4/_wf3_registry_v1.json",
+   "?? drivers_harness/pass4/_wf3_registry_v2.json",
+   "?? drivers_harness/pass4/_wf3_runBv0.json",
+   "?? drivers_harness/pass4/_wf3_runBv1.json",
+   "?? drivers_harness/pass4/_wf3_runBv2.json",
+   "?? drivers_harness/pass4/_wf3_score_out.json",
+   "?? drivers_harness/pass4/_wf3_score_v1.json",
+   "?? drivers_harness/pass4/_wf3_score_v2.json",
+   "?? drivers_harness/pass4/_wf4_emb_cache.json",
+   "?? drivers_harness/pass4/_wf4_emb_cache.json.bak.corrupt",
+   "?? drivers_harness/pass4/_wf4_emb_cache.json.bak_corrupt_20260531_010203",
+   "?? drivers_harness/pass4/_wf4_retrieval.py",
+   "?? drivers_harness/pass4/_wf5_judge_cache.json",
+   "?? drivers_harness/pass4/_wf5_pipeline.py",
+   "?? drivers_harness/pass4/_wf5_runA_split.json",
+   "?? drivers_harness/pass4/_wf5_runG_split.json",
+   "?? drivers_harness/pass4/_wf5_runP_split.json",
+   "?? drivers_harness/pass4/_wf5_score.json",
+   "?? drivers_harness/pass4/_wf5_scoreG54.json",
+   "?? drivers_harness/pass4/_wf5_scoreP.json",
+   "?? drivers_harness/pass4/_wf6_cache.json",
+   "?? drivers_harness/pass4/_wf6_catalogfed.py",
+   "?? drivers_harness/pass4/_wf6_fused_split.json",
+   "?? drivers_harness/pass4/_wf6_score54.json",
+   "?? drivers_harness/pass4/_wf7_cache.json",
+   "?? drivers_harness/pass4/_wf7_producer.py",
+   "?? drivers_harness/pass4/_wf8_admit.py",
+   "?? drivers_harness/pass4/_wf8_decision.json",
+   "?? drivers_harness/pass4/_wf8_fused.json",
+   "?? drivers_harness/pass4/_wf8_rejectgate.json",
+   "?? drivers_harness/pass4/_wf8_retrieve.py",
+   "?? drivers_harness/pass4/_wf8_score.json",
+   "?? drivers_harness/pass4/_wf8_state.json",
+   "?? drivers_harness/pass4/_wf8b_decision.json",
+   "?? drivers_harness/pass4/_wf8b_rejectgate.json",
+   "?? drivers_harness/pass4/_wf8b_score.json",
+   "?? drivers_harness/pass4/_wf8b_state.json",
+   "?? drivers_harness/pass4/_wf9_formal_scorer.py",
+   "?? drivers_harness/pass4/_wf_blind_input.json",
+   "?? drivers_harness/pass4/_wf_runA.json",
+   "?? drivers_harness/pass4/_wf_runB.json",
+   "?? drivers_harness/pass4/_wf_runC.json",
+   "?? drivers_harness/pass4/_wf_score.py",
+   "?? drivers_harness/pass4/build_catalog_fed_input.py",
+   "?? drivers_harness/pass4/eval_report.json",
+   "?? drivers_harness/pass4/producer_extractions_blind.json",
+   "?? drivers_harness/pass4/producer_input.json",
+   "?? drivers_harness/pass4/producer_input_catalog_fed.json",
+   "?? drivers_harness/pass4/rescore_bracket.py",
+   "?? drivers_harness/pass4/score_eval.py",
+   "?? drivers_harness/pass5/ALGORITHM.md",
+   "?? drivers_harness/pass5/_indep_relcheck_heldout.py",
+   "?? drivers_harness/pass5/_indep_relcheck_heldout_cache_gemini-2.5-pro.json",
+   "?? drivers_harness/pass5/_indep_relcheck_heldout_scored_gemini-2.5-pro.json",
+   "?? drivers_harness/pass5/_indep_relcheck_judge_cache_gemini-2.5-pro.json",
+   "?? drivers_harness/pass5/_indep_relcheck_judge_gemini-2.5-pro.json",
+   "?? drivers_harness/pass5/_indep_relcheck_judge_gemini.py",
+   "?? drivers_harness/pass5/_indep_relcheck_pairs.json",
+   "?? drivers_harness/pass5/_indep_relcheck_prompts.json",
+   "?? drivers_harness/pass5/_indep_relcheck_sample.py",
+   "?? drivers_harness/pass5/_indep_relcheck_score.py",
+   "?? drivers_harness/pass5/_indep_relcheck_scored_gemini-2.5-pro.json",
+   "?? drivers_harness/pass5/_v2_decisions.jsonl",
+   "?? drivers_harness/pass5/_v2_decisions_anchor1.jsonl",
+   "?? drivers_harness/pass5/_v2_decisions_run2.jsonl",
+   "?? drivers_harness/pass5/_v2_decisions_run3.jsonl",
+   "?? drivers_harness/pass5/_v2_dev_clusters_labeled.bak.run2.json",
+   "?? drivers_harness/pass5/_v2_dev_clusters_raw.json",
+   "?? drivers_harness/pass5/_v2_heldout_build.py",
+   "?? drivers_harness/pass5/_v2_heldout_decisions.jsonl",
+   "?? drivers_harness/pass5/_v2_heldout_dev_exclusion.json",
+   "?? drivers_harness/pass5/_v2_heldout_grade.py",
+   "?? drivers_harness/pass5/_v2_heldout_label.py",
+   "?? drivers_harness/pass5/_v2_heldout_label_cache.json",
+   "?? drivers_harness/pass5/_v2_heldout_parts_menu_flat_OLD.json",
+   "?? drivers_harness/pass5/_v2_heldout_parts_menu_v2.json",
+   "?? drivers_harness/pass5/_v2_heldout_raw_metric_seg.json",
+   "?? drivers_harness/pass5/_v2_heldout_raw_object.json",
+   "?? drivers_harness/pass5/_v2_heldout_raw_object_price.json",
+   "?? drivers_harness/pass5/_v2_heldout_raw_peer.json",
+   "?? drivers_harness/pass5/_v2_heldout_raw_reject.json",
+   "?? drivers_harness/pass5/_v2_heldout_raw_seg.json",
+   "?? drivers_harness/pass5/_v2_heldout_scorecard.json",
+   "?? drivers_harness/pass5/_v2_heldout_seg_realprose.json",
+   "?? drivers_harness/pass5/_v2_heldout_seg_rollup_build.py",
+   "?? drivers_harness/pass5/_v2_heldout_state.json",
+   "?? drivers_harness/pass5/_v2_heldout_tickers.json",
+   "?? drivers_harness/pass5/_v2_judge_cache.json",
+   "?? drivers_harness/pass5/_v2_label_cache.json",
+   "?? drivers_harness/pass5/_v2_label_clusters.py",
+   "?? drivers_harness/pass5/_v2_merge_resource.py",
+   "?? drivers_harness/pass5/_v2_producer_contract_anchoring.md",
+   "?? drivers_harness/pass5/_v2_producer_contract_run3.md",
+   "?? drivers_harness/pass5/_v2_seg_source_events.json",
+   "?? drivers_harness/pass5/_v2_state.json",
+   "?? drivers_harness/pass5/_v2_state_anchor1.json",
+   "?? drivers_harness/pass5/_v2_state_grade_cache.json",
+   "?? drivers_harness/pass5/_v2_state_grade_cache_ni.json",
+   "?? drivers_harness/pass5/_v2_state_run1.json",
+   "?? drivers_harness/pass5/_v2_state_run2.json",
+   "?? drivers_harness/pass5/_v2_state_run3.json",
+   "?? drivers_harness/pass5/fetch_parts_menu.py",
+   "?? drivers_harness/pass5/v2_dev_clusters_SPEC.md",
+   "?? drivers_harness/pass5/v2_producer.py",
+   "?? drivers_harness/pass5/verify_seg_realprose.py",
+   "?? earnings-analysis/.pre-v3-cutover-backup/",
+   "?? earnings-analysis/learnings/",
+   "?? earnings-analysis/operations/run_ledger.jsonl",
+   "?? earnings-analysis/transcripts/subagent-7347a009.txt",
+   "?? event_trader.pid~Stashed changes",
+   "?? plans/",
+   "?? rp_caia.pdf",
+   "?? scratch_anki/",
+   "?? scripts/driver_seed/relocate_probe/batches_exam_annual_codex",
+   "?? scripts/driver_seed/relocate_probe/batches_exam_madrift_codex",
+   "?? scripts/driver_seed/relocate_probe/batches_exam_mafresh_codex",
+   "?? scripts/driver_seed/relocate_probe/batches_exam_transcript_codex",
+   "?? scripts/driver_seed/relocate_probe/codex_out_exam_annual/",
+   "?? scripts/driver_seed/relocate_probe/codex_out_exam_madrift/",
+   "?? scripts/driver_seed/relocate_probe/codex_out_exam_mafresh/",
+   "?? scripts/driver_seed/relocate_probe/codex_out_exam_transcript/",
+   "?? scripts/driver_seed/relocate_probe/exhibit_html_cache/",
+   "?? scripts/driver_seed/relocate_probe/gbatches_multiaxis/",
+   "?? scripts/driver_seed/relocate_probe/gbatches_quarterly/",
+   "?? scripts/driver_seed/relocate_probe/phase2/m2_body_cache/",
+   "?? scripts/earnings/tests/fixtures/golden_renders/full/NFLX_Q3_FY2025.txt",
+   "?? scripts/fiscal_ai_diff_runs.py",
+   "?? scripts/fiscal_ai_kpi_catalog.py",
+   "?? scripts/fiscal_ai_xbrl_link_audit.py",
+   "?? scripts/iv/output/_earnings_cache_2026-05-14.json",
+   "?? scripts/iv/output/iv_2026-05-14_opra.json",
+   "?? scripts/news_deep_audit.py",
+   "?? scripts/news_driver_source_audit.py",
+   "?? scripts/obsidian/",
+   "?? scripts/snapshot_xbrl_in_flight.py",
+   "?? scripts/thebrain/",
+   "?? tests/",
+   "?? value_forms.py"
+  ]
+ },
+ "kit_closure": {
+  "edges": [
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/import_inertness.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/isolated_manifest_check.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/make_g_ledger.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/make_pin_inventory.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/raw_transport.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/receipts_827/graph_census.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/rev4_build_patch.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    "driver/core/__init__.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    "driver/core/driver_validators.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    "driver/core/fact_match.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    "driver/core/prepared_fact_v2.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "import",
+    "driver/core/slot_convert.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/driver_neo4j_adapter.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/driver_write_cli.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/driver_writer.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/fact_match.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/graph_row_contract.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/prepared_fact.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/prepared_fact_v2.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/slice_menu.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/slot_convert.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/core/xbrl_attach.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/relocation/exact_numbers.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/relocation/inline_html.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "driver/relocation/locator.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "reads",
+    "ibkr-mcp-server/.envrc"
+   ],
+   [
+    "driver/relocation/locator.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/relocation/locator.py",
+    "import",
+    "driver/relocation/exact_numbers.py"
+   ],
+   [
+    "driver/relocation/locator.py",
+    "import",
+    "driver/relocation/inline_html.py"
+   ],
+   [
+    "driver/relocation/inline_html.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/relocation/inline_html.py",
+    "import",
+    "driver/relocation/exact_numbers.py"
+   ],
+   [
+    "driver/relocation/inline_html.py",
+    "import",
+    "driver/xml_names.py"
+   ],
+   [
+    "driver/core/driver_ids.py",
+    "import",
+    "driver/xml_names.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/core/graph_row_contract.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/core/outcome_codes.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/core/prepared_fact_v2.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/core/slice_menu.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/core/slot_convert.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/relocation/exact_numbers.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/relocation/inline_html.py"
+   ],
+   [
+    "driver/core/xbrl_attach.py",
+    "import",
+    "driver/xml_names.py"
+   ],
+   [
+    "driver/core/slot_convert.py",
+    "import",
+    "driver/relocation/exact_numbers.py"
+   ],
+   [
+    "driver/core/slice_menu.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/slice_menu.py",
+    "import",
+    "driver/core/driver_member_fold.py"
+   ],
+   [
+    "driver/core/slice_menu.py",
+    "import",
+    "driver/core/slice_axis_frozen.py"
+   ],
+   [
+    "driver/core/slice_menu.py",
+    "import",
+    "driver/relocation/exact_numbers.py"
+   ],
+   [
+    "driver/core/driver_member_fold.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/prepared_fact_v2.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/prepared_fact_v2.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    "driver/core/prepared_fact_v2.py",
+    "import",
+    "driver/core/driver_validators.py"
+   ],
+   [
+    "driver/core/prepared_fact_v2.py",
+    "import",
+    "driver/core/slice_menu.py"
+   ],
+   [
+    "driver/core/prepared_fact_v2.py",
+    "import",
+    "driver/core/slot_convert.py"
+   ],
+   [
+    "driver/core/driver_validators.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/driver_validators.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    "driver/core/driver_validators.py",
+    "import",
+    "driver/core/outcome_codes.py"
+   ],
+   [
+    "driver/core/driver_validators.py",
+    "import",
+    "driver/core/slot_convert.py"
+   ],
+   [
+    "driver/core/driver_period_resolver.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/driver_period_resolver.py",
+    "import",
+    "driver/core/outcome_codes.py"
+   ],
+   [
+    "driver/core/prepared_fact.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/prepared_fact.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    "driver/core/prepared_fact.py",
+    "import",
+    "driver/core/slice_menu.py"
+   ],
+   [
+    "driver/core/fact_match.py",
+    "import",
+    "driver/core/prepared_fact_v2.py"
+   ],
+   [
+    "driver/core/driver_writer.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/__init__.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/driver_fusion.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/driver_member_fold.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/driver_units.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/driver_validators.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/driver_writer.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/outcome_codes.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/prepared_fact.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/prepared_fact_v2.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/slice_menu.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/core/xbrl_attach.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/relocation/exact_numbers.py"
+   ],
+   [
+    "driver/core/driver_write_cli.py",
+    "import",
+    "driver/xml_names.py"
+   ],
+   [
+    "driver/core/driver_units.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/driver_units.py",
+    "import",
+    "driver/core/unit_resolver.py"
+   ],
+   [
+    "driver/core/driver_fusion.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/driver_fusion.py",
+    "import",
+    "driver/core/driver_writer.py"
+   ],
+   [
+    "driver/core/driver_neo4j_adapter.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    "driver/core/driver_neo4j_adapter.py",
+    "import",
+    "driver/core/driver_write_cli.py"
+   ],
+   [
+    "driver/core/driver_neo4j_adapter.py",
+    "import",
+    "driver/xml_names.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/raw_transport.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/kf_lint.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+    "import",
+    "driver/core/driver_validators.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+    "import",
+    "driver/core/prepared_fact.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+    "import",
+    "driver/core/unit_resolver.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/make_g_ledger.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/test_g_suite.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/import_inertness.py",
+    "reads",
+    "__init__.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/audit_worker_access.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/build_kfields_inputs.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/kf_lint.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/raw_transport.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+    "import",
+    "driver/core/driver_ids.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+    "import",
+    "driver/core/driver_units.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py",
+    "import",
+    "driver/core/driver_period_resolver.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/build_kfields_inputs.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/slice_menu_probe.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/slice_menu_probe.py",
+    "import",
+    "driver/core/driver_neo4j_adapter.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/slice_menu_probe.py",
+    "import",
+    "driver/core/slice_menu.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/sha_lock.py",
+    "import",
+    ".claude/plans/Drivers/experiments/harness/key_lint.py"
+   ],
+   [
+    ".claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+    "import",
+    "driver/core/unit_resolver.py"
+   ]
+  ],
+  "exclusions": {
+   "secret_paths": [
+    "ibkr-mcp-server/.envrc"
+   ],
+   "why": "mechanically detected secret-path reference inside a harness test fixture; excluded by a dotfile rule, never opened or hashed"
+  },
+  "files": [
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/audit_worker_access.py",
+    "sha256": "6b820d55ead115ede1569fda96ec0e136b628f1795b540b6504d8cc5801dc742",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+    "sha256": "4655af0bfc8b2a8cbd6494e7592e5c5a12024a740dd05e8cc86677a44aed6e80",
+    "tracked": false
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/build_kfields_inputs.py",
+    "sha256": "d879dd2b9325488a7985b966d53d5db7f065a1ae4a4a89dce480ed08c285ce12",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/build_launch_manifest.py",
+    "sha256": "54df228f752a5ce175e5dab1ff509bea13d7486d33299f1fcd437a1cc69c4da0",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/import_inertness.py",
+    "sha256": "aef1f28100da4d8d2caa93756e5938fadcb681e7408a4262fdf49bc5bdd0f184",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/isolated_manifest_check.py",
+    "sha256": "535ddbfd679e94fb5a37596632d82948b4d7bb449e55c73fb8f89fc609b353eb",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/key_lint.py",
+    "sha256": "ff4c3a06cbd534796d29f755531880641cb173697151af70ac892b64ad12cf78",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+    "sha256": "e8b55af8eed555a617ca8865a1564ac13df5d4cc16eb1fbe4a6576febcd1e5df",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/make_g_ledger.py",
+    "sha256": "1b18bc3b1bd03fb3a2156d540171c1069c28d8bb4e869febf0e7427aab8684b3",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/make_pin_inventory.py",
+    "sha256": "5734f6ecedcfa9aa1d06592ee2fd76a592ae1d9466f4415b6e58a14254c6bbe8",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/raw_transport.py",
+    "sha256": "2130ad0fba47cf872894bc99db5d917d8038b2b02073c91b6f45828a23eaa569",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/receipts_827/graph_census.py",
+    "sha256": "616467f510d008601d6b6d4cf02880c9daa18ba07d36c95933f606c28752c71d",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/rev4_build_patch.py",
+    "sha256": "332667b0b1ba686e91eeef83216e802ef6ddb8ec4d9d3357e3dfd9cd1fd4d045",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py",
+    "sha256": "5716295f0a6b97d5225a3c5e8434917dee715ce6099fa72539a8c337cf538473",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+    "sha256": "d70005c5d540a677fb5938132803979615863d31755ba88261fc05573d3974ec",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/sha_lock.py",
+    "sha256": "c71647b68071c5080ed56ec4eda8ed58eee7d436ecbe891c0eef87eb9b643148",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/slice_menu_probe.py",
+    "sha256": "9df995e9d3381d33d8584842ad9c4fc7bfc7e5b59bf78aa12532c7aadfcf08f3",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/test_g_suite.py",
+    "sha256": "878bcad9f543c7d4977119dff28c01acd46e08d3778840982c220372f949a6f1",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+    "sha256": "96f63c8a48d1af77ff5493db37e1d72adc51257e211086dcf4d72ad5f6648a93",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": ".claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py",
+    "sha256": "7ea80935c9a65adc51c23f1f0323ae116ef5e91bdfbc88de7062ba191cda763b",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_fusion.py",
+    "sha256": "f692340b9930c167789fc8ed5f1bec3be62ec3b8d7ff20c93b3a12b76074b9ab",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_ids.py",
+    "sha256": "7823875e62658ff10314ab278e52bd83d35a7a0f21d9acf2971a39e283412f64",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_member_fold.py",
+    "sha256": "3a8753a47f1a0288956a65c6d978492bcacc3e0346c15e0e25d071e7df14b83c",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_neo4j_adapter.py",
+    "sha256": "52ebd0aee4c29d935d6a35221bef86311640bada22ab896681579f567700b9c9",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_period_resolver.py",
+    "sha256": "58431a987f67c10c968ebf2cabbd1eb3aa13cb2c6d9d5fb57de6838c37be4eab",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_units.py",
+    "sha256": "7e158626006860c4baa80e301be145787d3546a77c6f2f5ad2831c1b886fab06",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_validators.py",
+    "sha256": "d7bdb4cfaf2f9aa2cc9cca7e974d8622e354b26ea25ed6235714021daa282f48",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_write_cli.py",
+    "sha256": "2f716b3640cfd13b0a85278231331e7450973b748cc424c6e49f4684618646cf",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/driver_writer.py",
+    "sha256": "52dd6c3083434caa6afeed87f21c24a731a8de6c5146925c2fca3351a1cdfc71",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/fact_match.py",
+    "sha256": "bf6f0c922ef1f443fa16b01c4d80d87b445895d48b7da5fa772964de21304497",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/graph_row_contract.py",
+    "sha256": "1d14a6cb068597cb930cfd643be14a0b00ed07a79edba771a0f4de8da67329f1",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/outcome_codes.py",
+    "sha256": "9bc75bda8402d7d0bd4a1f774c29e7420260edb69a79a338600d545552c4a897",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/prepared_fact.py",
+    "sha256": "aaef4959c7bdda4aee3cdab1e3bdeb436ef4a34cfea211caaba2db3ee42b56c5",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/prepared_fact_v2.py",
+    "sha256": "86d9f72162df9f2f7118606fa6b4b1a4e57259e8ab6a8109f8923d5776de08ad",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/slice_axis_frozen.py",
+    "sha256": "917d61c8416191797741678b59f49843048a39a73f9741fcab0b23cdb08f7b76",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/slice_menu.py",
+    "sha256": "81885b0f3c8326d37514dcce9a137209b8ef1ed2e4889a0260e04403a6522321",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/slot_convert.py",
+    "sha256": "1e831b09b255b5653b23b729de6952e187e6923caff2c1e83330ef5ddfcddbc2",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/unit_resolver.py",
+    "sha256": "1d4b6c44b14e5fae8600ca0b7a0643e53816342b86a2ea3e7b2cc3bb96b41d5a",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/core/xbrl_attach.py",
+    "sha256": "a3ec7ad6f656b628d1d446cb0c8d9641fd0bef9f2f0376258af3d78da8504290",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/relocation/exact_numbers.py",
+    "sha256": "0ab9d86e34e94bc0b11470b0aa59f8b070e2d09e1134ff18ad37cf1839f2383a",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/relocation/inline_html.py",
+    "sha256": "6140e322b24b2a35a5c41cdce4c2b64edef6ade3a65252da3e83b36b2a5f2e4a",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/relocation/locator.py",
+    "sha256": "ead92bdb549b49f0bfe7d60430735cc1f432c7a6145bb7057c26bb10c69b8b82",
+    "tracked": true
+   },
+   {
+    "note": null,
+    "path": "driver/xml_names.py",
+    "sha256": "f6cad0ca0e1fcda57d35d09a661f6c976e30b6d103944d468c5dbae7876db564",
+    "tracked": true
+   }
+  ],
+  "files_note": "HEAD does not pin every reviewed byte because at least one closure file is untracked; each byte is pinned here by sha256",
+  "label": "THE Step-1 kit closure (migration denominator)",
+  "referenced_paths": [
+   "__init__.py",
+   "driver/core/driver_ids.py",
+   "driver/core/driver_neo4j_adapter.py",
+   "driver/core/driver_write_cli.py",
+   "driver/core/driver_writer.py",
+   "driver/core/fact_match.py",
+   "driver/core/graph_row_contract.py",
+   "driver/core/prepared_fact.py",
+   "driver/core/prepared_fact_v2.py",
+   "driver/core/slice_menu.py",
+   "driver/core/slot_convert.py",
+   "driver/core/xbrl_attach.py",
+   "driver/relocation/exact_numbers.py",
+   "driver/relocation/inline_html.py",
+   "driver/relocation/locator.py",
+   "ibkr-mcp-server/.envrc"
+  ],
+  "seeds": [
+   ".claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+   ".claude/plans/Drivers/experiments/harness/build_kfields_inputs.py",
+   ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+   ".claude/plans/Drivers/experiments/harness/build_launch_manifest.py",
+   ".claude/plans/Drivers/experiments/harness/raw_transport.py",
+   ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+   ".claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py",
+   ".claude/plans/Drivers/experiments/harness/make_pin_inventory.py",
+   ".claude/plans/Drivers/experiments/harness/isolated_manifest_check.py",
+   ".claude/plans/Drivers/experiments/harness/key_lint.py",
+   ".claude/plans/Drivers/experiments/harness/sha_lock.py",
+   ".claude/plans/Drivers/experiments/harness/import_inertness.py",
+   ".claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py",
+   ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+   ".claude/plans/Drivers/experiments/harness/test_g_suite.py"
+  ],
+  "totals": {
+   "closure_files": 44,
+   "edges": 112,
+   "parse_failures": 0,
+   "referenced_paths": 16,
+   "seeds": 15,
+   "seeds_missing": []
+  }
+ },
+ "machine_checks": {
+  "action_partition_complete": true,
+  "all_rows_nine_columns": true,
+  "closure_endpoints_present": true,
+  "closure_files_all_hashed": true,
+  "event_paths_unique": true,
+  "events_reconcile": true,
+  "every_identity_file_allowed_by_its_row_step": true,
+  "family_ids_unique": true,
+  "frozen_start_porcelain_matches": true,
+  "no_list_valued_owner": true,
+  "od11_replacement_absent_recorded_null": true,
+  "path_delta_is_exactly_one_added": true,
+  "per_family_identity_sets_disjoint": true,
+  "per_family_rollup_sums_to_48": true,
+  "raw_classes_sum_to_total": true,
+  "starting_entries_stored": true,
+  "step2_step3_disjoint": true,
+  "step4_proof_only": true,
+  "step_partition_complete": true,
+  "term_sets_are_disjoint": true,
+  "term_sets_match_live_owners": true,
+  "zero_unassigned": true,
+  "zero_unknown_or_decision": true
+ },
+ "machine_checks_all_pass": true,
+ "pattern_gate_closure": {
+  "exam_modules": 44,
+  "label": "SEPARATE proof closure of the regex gate; NOT the kit closure",
+  "production_modules": 47,
+  "union_modules": 51
+ },
+ "protected": {
+  "channel_contract_v1_sha256": "1062e0fb1b58b4311bb4a03d0a4a42274288c460d22f74a8f75cc803bb04b0dd",
+  "xbrl_dirty": 0,
+  "xbrl_tracked_files": 16,
+  "xbrl_tree": "32ca3ccc2f1946966df889bde38a64e92a6f7637"
+ },
+ "raw_completeness_appendix": {
+  "by_class": {
+   "keep_door_scoped": 19,
+   "keep_local_name_or_prose": 18,
+   "keep_or_outside_by_surface": 2691,
+   "keep_v2_internal_param": 1,
+   "nonbehavior": 1935,
+   "outside_live_v1_route": 42,
+   "protected": 473,
+   "rolled_into_families": 48
+  },
+  "by_role": {
+   "arg_definition": 218,
+   "assignment_target": 246,
+   "attribute": 531,
+   "bare_name": 912,
+   "comment_text": 601,
+   "definition_site": 38,
+   "docstring_text": 555,
+   "import_binding": 1,
+   "keyword": 168,
+   "prose_string": 634,
+   "string_key_constant": 1323
+  },
+  "identity_tuple": "(path, term, line, col)",
+  "method": {
+   "edge_rules": "imports resolved from a module index built from the real tree; read/generated edges from statically resolvable path expressions with __file__ bound to the scanned file; test collectors are files named test_*",
+   "exclusions": "dotfile secret paths; __pycache__; .git",
+   "roles": "tokenizer decides COMMENT/STRING/CODE by exact (line,col) containment; AST decides docstring vs value and attribute/keyword/arg/target/definition/import; an ast.Attribute's own start is derived from its end because it shares col_offset with its base",
+   "term_sets": {
+    "door_only_retirement": {
+     "count": 1,
+     "formula": "contract CONTRACT-SURFACES retired_fiscal_fields minus the global set",
+     "meaning": "forbidden at the Fiscal public input door only; RETAINED in the V2 item field set as reader output",
+     "names": [
+      "level_shape_hint"
+     ]
+    },
+    "global_item_retirement": {
+     "count": 7,
+     "formula": "PreparedFactV1.FIELDS minus (ITEM_FIELDS | SOURCE_OWNED_FIELDS)",
+     "names": [
+      "change_money_mode_hint",
+      "change_unit_kind_hint",
+      "change_unit_raw",
+      "level_money_mode_hint",
+      "level_unit_kind_hint",
+      "level_unit_raw",
+      "sequential_evidence"
+     ]
+    },
+    "note": "three DISTINCT derived sets; their union is what the scanner matches, but they are never conflated",
+    "retired_reply_key": {
+     "count": 1,
+     "formula": "keys of dicts that are elements of the reply envelope's own declared facts list, minus every retained surface",
+     "meaning": "the old produced-fact key, replaced by fact-level fact_type",
+     "names": [
+      "lane"
+     ]
+    },
+    "s1_reply_envelope": 45,
+    "s2_gold_and_scoring": 327,
+    "s3_raw_event_input": 38,
+    "s4_v1_write_surface": 129
+   }
+  },
+  "note": "appendix only; NOT the behavior denominator",
+  "raw_matches": 5227,
+  "residual": 0
+ },
+ "receipt": "step1_inventory",
+ "regeneration_methods_not_commands": {
+  "census_5227_48_0": {
+   "family_rollup": "a rolled identity is one whose term is in the global retirement set, whose module is a kit owner, whose role is behavioral, excluding the door-scoped name and excluding the reply key where its role is a local parameter or explanatory language; each survivor is attributed to exactly one row by its owning file",
+   "identity_tuple": "(path, term, line, col)",
+   "ordered_classification_branches": [
+    "1 path under XBRL/ -> protected",
+    "2 exact (line,col) inside a COMMENT token -> historical text (non-behavioral)",
+    "3 inside a module/class/function docstring span -> historical text (non-behavioral)",
+    "4 position equals an ast.Attribute's own start, derived as end_col_offset - len(attr) because an Attribute shares col_offset with its base -> attribute reference",
+    "5 equals an ast.keyword position -> keyword reference",
+    "6 equals an ast.arg position -> argument definition",
+    "7 equals an ast.Name in Store context -> assignment target",
+    "8 equals a ClassDef/FunctionDef name position (node col_offset + len of the keyword) -> definition site",
+    "9 equals an ast.alias position -> import binding",
+    "10 inside a Constant whose value EQUALS the term -> string key constant (behavioral)",
+    "11 inside any other Constant -> prose string (classified by its caller, never assumed harmless)",
+    "12 equals an ast.Name in Load context -> bare name (identifier coincidence)",
+    "13 otherwise -> unattributed; this bucket must be 0"
+   ],
+   "term_derivation": "global item retirement = PreparedFactV1.FIELDS minus (ITEM_FIELDS | SOURCE_OWNED_FIELDS); door-only retirement = the contract CONTRACT-SURFACES retired_fiscal_fields minus that global set; the retired reply key = keys of dicts that are elements of the reply envelope's own declared facts list, minus every retained surface; V2 identity fields, numeric slots and slot-triple members come from the V2 owners"
+  },
+  "kit_closure_15_44_112_16": {
+   "closure": "transitive reachability from the seeds over import and read edges",
+   "exclusions": [
+    ".git",
+    "__pycache__",
+    "node_modules",
+    "venv",
+    ".venv",
+    "dotfile secret paths (.envrc/.env/.netrc/.credentials.json)"
+   ],
+   "import_edges": "ast.Import and ast.ImportFrom resolved through that index, longest dotted prefix first",
+   "module_index": "every .py under the scan roots indexed by dotted path and by bare final name, built from the real tree",
+   "read_edges": "string expressions statically resolvable with __file__ bound to the scanned file: module-level string constants, os.path.join, Path/ dirname/abspath/normpath, f-strings and + concatenations over resolvable parts; an expression counts as an edge when it resolves to an existing file or directory",
+   "scan_roots": [
+    "driver",
+    ".claude/plans/Drivers/experiments"
+   ],
+   "seeds": "kit_closure.seeds (15 paths, listed in this receipt)",
+   "test_collectors": "files whose basename starts with test_"
+  },
+  "note": "stated as complete deterministic methods, NOT as runnable snippets; no repository script and no scratch file is required"
+ },
+ "schema_note": "self-contained; regenerable from this file alone",
+ "side_effects": {
+  "activations": 0,
+  "ai_model_calls": 0,
+  "code_test_prompt_contract_fixture_edits": 0,
+  "commits": 0,
+  "filing_fetches": 0,
+  "neo4j_writes": 0,
+  "pushes": 0,
+  "staged": 0,
+  "switches": 0
+ },
+ "step": 1,
+ "v2_comparison_surface": {
+  "envelope_owner": "driver/core/driver_write_cli.py::V2_REPLY_KEYS",
+  "fact_level_keys": [
+   "fact_type",
+   "part_ref",
+   "occurrence_in_part",
+   "per_x",
+   "item"
+  ],
+  "item_fields_model_owned": 32,
+  "item_total": 34,
+  "numeric_field_selection_owner": "driver/core/driver_validators.py::NUMERIC_FIELDS",
+  "slot_structure_owner": "driver/core/slot_convert.py::SLOT_KEYS/_structure",
+  "source_owned_fields": [
+   "member_refs",
+   "xbrl_concept_raw"
+  ]
+ },
+ "verification_commands_runnable": [
+  "git -C . rev-parse --abbrev-ref HEAD HEAD HEAD^{tree} origin/main HEAD:XBRL",
+  "git -C . write-tree",
+  "git -C . merge-base --is-ancestor 0edb1be8 HEAD",
+  "git -C . status --porcelain -z | sha256sum",
+  "git -C . status --porcelain -uall | grep -c '^??'",
+  "./venv/bin/python3 .claude/plans/Drivers/experiments/harness/build_kfields_inputs.py",
+  "./venv/bin/python3 -m pytest .claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py -q",
+  "./venv/bin/python3 -c \"import hashlib,json;d=json.load(open('.claude/plans/Drivers/experiments/harness/step1_inventory.json'));print('authority drift:',[p for p,v in d['authorities'].items() if hashlib.sha256(open(p,'rb').read()).hexdigest()!=v['sha256']])\"",
+  "./venv/bin/python3 -c \"import hashlib,json;d=json.load(open('.claude/plans/Drivers/experiments/harness/step1_inventory.json'));print('event drift:',[e['path'] for e in d['events']['per_event'] if hashlib.sha256(open(e['path'],'rb').read()).hexdigest()!=e['input_sha256']])\"",
+  "./venv/bin/python3 -c \"import hashlib,json;d=json.load(open('.claude/plans/Drivers/experiments/harness/step1_inventory.json'));print('closure drift:',[f['path'] for f in d['kit_closure']['files'] if f['sha256'] and hashlib.sha256(open(f['path'],'rb').read()).hexdigest()!=f['sha256']])\""
+ ]
+}

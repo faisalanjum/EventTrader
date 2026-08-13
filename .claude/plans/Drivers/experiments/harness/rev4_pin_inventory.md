@@ -25,7 +25,7 @@ v5 only LOCATED the hash text, which proves a pin is present and says nothing ab
 | `.claude/plans/Drivers/FinalDesign/BUILD_AND_OPERATIONS.md` | record | 11. Missing recipes (open build gaps — no new design authority here) | aa7239ed (packet v1.0) | dated record | 1 |
 | `.claude/plans/Drivers/FinalDesign/BUILD_AND_OPERATIONS.md` | record | 2. The internal core packet (frozen Candidate Fact Packet v1.0) | 86b2fc17 (packet pre-amendment) | dated record | 1 |
 | `.claude/plans/Drivers/FinalDesign/BUILD_AND_OPERATIONS.md` | record | 2. The internal core packet (frozen Candidate Fact Packet v1.0) | aa7239ed (packet v1.0) | dated record | 1 |
-| `.claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md` | record | 4. Owner rulings record (through 2026-07-18) | aa7239ed (packet v1.0) | dated record | 2 |
+| `.claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md` | record | 4. Owner rulings record (through 2026-08-11) | aa7239ed (packet v1.0) | dated record | 3 |
 | `.claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md` | record | 7. Source crosswalk (33 files → destinations; every row re-verified at Phase 4/5) | aa7239ed (packet v1.0) | dated record | 1 |
 | `.claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md` | record | 8. Archive manifest + evidence pointers | aa7239ed (packet v1.0) | dated record | 1 |
 | `.claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md` | record | STATUS_AND_HISTORY.md — the one mutable dashboard, supersession ledger, and crosswalk | aa7239ed (packet v1.0) | dated record | 1 |
@@ -92,6 +92,7 @@ v5 only LOCATED the hash text, which proves a pin is present and says nothing ab
 | `.claude/plans/Drivers/experiments/harness/rev3_build.py` | build script | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
 | `.claude/plans/Drivers/experiments/harness/rev4_extra.py` | build script | (module level) | 86b2fc17 (packet pre-amendment) | dated record | 2 |
 | `.claude/plans/Drivers/experiments/harness/rev4_extra.py` | build script | (module level) | aa7239ed (packet v1.0) | dated record | 2 |
+| `.claude/plans/Drivers/experiments/harness/step1_inventory.json` | record | key "sha256" | aa7239ed (packet v1.0) | dated record | 1 |
 | `.claude/plans/Drivers/experiments/harness/test_g_suite.py` | test | (module level) | d91443f8 (WorkOrder v2.0) | dated record | 4 |
 | `.claude/plans/Drivers/experiments/harness/test_g_suite.py` | test | function test_a_QUOTED_current_claim_inside_a_code_fence_claims_nothing | d91443f8 (WorkOrder v2.0) | dated record | 1 |
 | `driver/core/driver_period_resolver.py` | production | (module level) | aa7239ed (packet v1.0) | dated record | 1 |
@@ -103,7 +104,7 @@ v5 only LOCATED the hash text, which proves a pin is present and says nothing ab
 | | |
 |---|---|
 | **CURRENT claims whose pin no longer describes its artifact** | **0** |
-| dated record occurrences (stand as written, never corrected) | 107 |
-| rows | 77 |
-| distinct files | 35 |
-| total occurrences | 107 |
+| dated record occurrences (stand as written, never corrected) | 109 |
+| rows | 78 |
+| distinct files | 36 |
+| total occurrences | 109 |

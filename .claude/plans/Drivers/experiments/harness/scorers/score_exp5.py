@@ -2,13 +2,16 @@
 (FableExperimentWorkOrder :641-643), round-13 adversarial corrections applied.
 
 Pipeline per arm:
- 1. MATCH produced items <-> du_worthy gold (same event): quote >=20-char
-    overlap OR canonical value equality — computed on the UNWRAPPED items with
-    EXACT decimal comparison (dec_canon over the resolver's scaled value; NO
-    float rounding). A gold fact with >1 candidate is AMBIGUOUS: it stays
-    UNSCORED and its actual rows are emitted for the qualified graders.
+ 1. MATCH produced items <-> du_worthy gold (same event) through the ONE
+    identity owner, `fact_match.record_key`: an auto-link needs an IDENTICAL
+    complete V2 record plus an identical evidence locator. The retired
+    20-char quote OVERLAP and canonical VALUE-EQUALITY rules are GONE — both
+    could link two genuinely different facts, and B-15 forbids value equality
+    from linking at all. Everything not auto-linked goes to the qualified
+    grader; only its VALIDATED one-to-one rulings add pairs.
  2. recall = unambiguously-matched gold / du_worthy gold.
- 3. fact16_checks + the HOME-FACT rule -> would_park (each item parks ONCE).
+ 3. the PUBLIC route's own decisions -> would_park (B-16: the scorer runs
+    no rule engine of its own; only a public `parked` row counts).
     HOME-FACT (owner pin 2026-07-24): a produced surprise requires, in the
     SAME event, a produced fact on the basis-correct lane (actual->metric,
     guidance->guidance) whose driver is the surprise's BASE driver
@@ -28,7 +31,8 @@ Pipeline per arm:
  9. Final gate: (single>=0.95 OR union>=0.98) && wrong_lane==0 &&
     value_shape_acc>=0.98 && state_acc>=0.95 && would_park<=0.10.
 
-Dry-run: python scorers/score_exp5.py --dry3
+No CLI entry point: `--dry3` and its demo were deleted with the V1 residue
+(SEQ 1131). The pytest suite is the check.
 """
 import json
 import os as _os
@@ -44,21 +48,68 @@ from decimal import Decimal                                             # noqa: 
 from driver.core.driver_ids import dec_canon, norm as _norm             # noqa: E402
 from driver.core.driver_period_resolver import (PeriodResolutionError,  # noqa: E402
                                                 ensure_driver_period)
-from driver.core.driver_units import (UnitResolutionError,             # noqa: E402
-                                      resolve_driver_units)
 
-from fact16_checks import check_item                                    # noqa: E402
 
-CODE_FIELDS = ["level_unit_kind_hint",
-               "level_money_mode_hint", "change_unit_kind_hint",
-               "change_money_mode_hint",
-               "comparison_baseline", "level_shape_hint",
-               "comparison_shape_hint", "surprise_basis_hint",
-               "period_start_date", "period_end_date", "fiscal_year",
-               "fiscal_quarter", "half", "month", "long_range_start_year",
-               "long_range_end_year", "sentinel_class", "period_scope",
-               "time_type", "value_text", "conditions",
-               "company_confirmed"]
+#: WorkOrder §649 gives the GRADER the meaning fields — `driver_state`, lane
+#: routing, OD-13 favorability, OD-11 basis, and slice pick-vs-menu. Those are
+#: the only exclusions from direct code accuracy; everything else in the frozen
+#: V2 item set is code-comparable.
+GRADER_OWNED = ("driver_state", "surprise_basis_hint",
+                "has_favorability_wording", "polarity_proof")
+
+
+#: The two item fields with their OWN specialized comparison: `slice_parts` is
+#: compared as a SET (membership, not order) and `measurement_raw_spans` through
+#: the OD-9 span owner. Named here once, and SUBTRACTED from the generic pool so
+#: they are measured exactly once rather than in both places.
+SPECIALIZED_COLLECTIONS = ("slice_parts", "measurement_raw_spans")
+
+#: The fact-level measurements WorkOrder §649 names alongside the item fields.
+#: `fact_type` also feeds the separate hard `wrong_lane` gate, which is kept.
+FACT_LEVEL_FIELDS = ("fact_type", "per_x")
+
+
+def _code_fields():
+    """The generic pooled item fields, taken MECHANICALLY from the frozen V2 set.
+
+    Never a copied 32-field list (Codex SEQ 1131): a hand-written copy is how
+    the four retired unit/money hints — deleted from V2 with no successor —
+    were still being compared here long after they stopped existing.
+
+    EXACTLY-ONCE (Codex SEQ 1132.1): the numeric slots and the two specialized
+    collections are subtracted, because each already has its own comparison
+    below. Leaving them in pooled them AND counted them again in their
+    specialized form, silently double-weighting those fields.
+    """
+    from driver.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
+    excluded = set(GRADER_OWNED) | set(NUMERIC_SLOTS) | set(SPECIALIZED_COLLECTIONS)
+    excluded.add("quote")                     # evidence, not a scored field
+    return [f for f in ITEM_FIELDS if f not in excluded]
+
+
+CODE_FIELDS = _code_fields()
+
+
+def field_accounting():
+    """Every frozen fact-level + item field, mapped to the ONE place it is
+    measured. Derived, never a copied schema list — so a new V2 field shows up
+    as unaccounted instead of silently going unscored (Codex SEQ 1132)."""
+    from driver.core.prepared_fact_v2 import ITEM_FIELDS, NUMERIC_SLOTS
+    where = {}
+    for f in FACT_LEVEL_FIELDS:
+        where[f] = "fact_level"
+    for f in ITEM_FIELDS:
+        if f == "quote":
+            where[f] = "evidence_locator"
+        elif f in GRADER_OWNED:
+            where[f] = "grader_owned"
+        elif f in NUMERIC_SLOTS:
+            where[f] = "numeric_slot_exact"
+        elif f in SPECIALIZED_COLLECTIONS:
+            where[f] = "specialized_collection"
+        else:
+            where[f] = "pooled"
+    return where
 MEANING_FIELDS = ["driver_state", "lane_routing", "favorability_od13",
                   "basis_od11", "slice_vs_menu"]
 OD_RULES = ["OD-9", "OD-11", "OD-12", "OD-13", "OD-14", "OD-21", "ISS-16",
@@ -93,6 +144,16 @@ def _bucket(code):
         return "shapes"
     if c.startswith(("SURPRISE_", "IMPOSSIBLE_", "HOME_FACT")):
         return "OD-21"
+    if len(c) > 1 and c[0] == "F" and c[1:].isdigit():
+        # B-16: the rollup now reads the ROUTE's real codes. The retired
+        # scorer-invented spellings above (HOME_FACT_MISSING, SURPRISE_*) are
+        # what the deleted engine emitted; production emits F1..F9 for the same
+        # family. `driver_validators` says so in its own module docstring —
+        # "FACT-16 deterministic validators + the OD-21 surprise machinery" — so
+        # this is a like-for-like vocabulary swap, NOT a new rule and NOT a
+        # restructured table. Without it every route code fell into "other" and
+        # the rule table silently stopped counting the surprise family.
+        return "OD-21"
     if c.startswith(("CHANGE_UNIT", "UNIT_REQUIRED")):
         return "OD-12"
     if c.startswith("LANE_"):
@@ -105,7 +166,11 @@ def _bucket(code):
 
 
 def _item(f):
-    return f.get("gold_item", f) if isinstance(f, dict) else {}
+    """THE V2 item. It used to be `f.get("gold_item", f)`, which on a V2 fact
+    found no wrapper and returned the WHOLE FACT — so every item-field lookup
+    (`level_low`, `period_scope`, ...) read None on both sides and the
+    comparison "agreed" while comparing nothing (Codex SEQ 1131.1)."""
+    return (f.get("item") or {}) if isinstance(f, dict) else {}
 
 
 class ExactValueError(ValueError):
@@ -136,46 +201,43 @@ def _dec(v):
 
 
 def _canon_item_values(item):
-    """Canonical value view for ONE item via the PRODUCTION exact path
-    (driver_units.resolve_driver_units: level+comparison share level's unit;
-    change has its own). Returns {"level": [(unit, canon)...], "comparison":
-    [...], "change": [...]} — dec_canon'd exact decimals, no float bridge."""
-    lv = [_dec(item.get("level_low")), _dec(item.get("level_high"))]
-    cv = [_dec(item.get("comparison_low")), _dec(item.get("comparison_high"))]
-    ch = _dec(item.get("change_value"))
-    try:
-        r = resolve_driver_units(
-            str(item.get("driver_name") or "x"),
-            level_values=lv, level_unit_raw=item.get("level_unit_raw"),
-            level_unit_kind_hint=item.get("level_unit_kind_hint"),
-            level_money_mode_hint=item.get("level_money_mode_hint"),
-            comparison_values=cv,
-            change_value=ch, change_unit_raw=item.get("change_unit_raw"),
-            change_unit_kind_hint=item.get("change_unit_kind_hint"),
-            change_money_mode_hint=item.get("change_money_mode_hint"),
-            period_scope=item.get("period_scope"))
-        lu, cu = r["level_unit"], r["change_unit"]
-        out = {"level": [(lu, dec_canon(v)) for v in r["level_values"]
-                         if v is not None],
-               "comparison": [(lu, dec_canon(v)) for v in
-                              r["comparison_values"] if v is not None],
-               "change": ([(cu, dec_canon(r["change_value"]))]
-                          if r["change_value"] is not None else [])}
-        return out
-    except UnitResolutionError:
-        # ONLY a genuine unit-resolution failure falls back to unscaled values.
-        # The old `except (UnitResolutionError, Exception)` was redundant AND
-        # total — UnitResolutionError already subclasses Exception, so the tuple
-        # merely LOOKED targeted while swallowing TypeError/KeyError/any bug and
-        # silently producing WRONG value comparisons. Real errors now surface.
-        return {"level": [(None, dec_canon(v)) for v in lv if v is not None],
-                "comparison": [(None, dec_canon(v)) for v in cv
-                               if v is not None],
-                "change": [(None, dec_canon(ch))] if ch is not None else []}
+    """The EXACT V2 numeric-slot view — the three raw object fields, unconverted.
+
+    B-16 / WorkOrder §649: EXP-5 field truth is the numeric OBJECT
+    `(value, scale_multiplier, unit_scale_evidence)` compared EXACTLY. Converted
+    scalars serve storage and XBRL truth-comparison, never field scoring.
+
+    This replaces a call into `driver_units.resolve_driver_units` that treated
+    slots as scalars, passed the four DELETED unit/money hints, and fell back to
+    unscaled values on a resolution failure — three separate ways for two facts
+    to compare equal while differing (Codex SEQ 1131.4). There is no resolver
+    here, no inferred unit and no fallback: a slot either matches field for
+    field or it does not.
+
+    Returns {slot_name: None | (value, scale_multiplier, unit_scale_evidence)}
+    over the FROZEN `NUMERIC_SLOTS`, so a new slot is picked up automatically
+    and a retired one disappears without a hand edit.
+    """
+    from driver.core.prepared_fact_v2 import NUMERIC_SLOTS
+    from driver.core.slot_convert import SLOT_KEYS
+    out = {}
+    for name in NUMERIC_SLOTS:
+        slot = item.get(name)
+        if slot is None:
+            out[name] = None
+        elif isinstance(slot, dict):
+            out[name] = tuple(slot.get(k) for k in SLOT_KEYS)
+        else:
+            # a bare scalar is NOT a V2 slot; refusing beats silently comparing
+            # a number against an object and calling them different
+            raise ExactValueError(
+                f"{name} is {type(slot).__name__}, not a V2 numeric slot object")
+    return out
 
 
 def _canon_level(item):
-    return _canon_item_values(item)["level"]
+    return [_canon_item_values(item)[k]
+            for k in ("level_low", "level_high")]
 
 
 def _meas_tokens(item):
@@ -205,23 +267,21 @@ def _ev_key(f):
     return ("quote", q)
 
 
-def _value_eq(g_fact, p_fact):
-    """Automatic matching requires COMPLETE slot equality — the WHOLE
-    canonical positional list, never a shared endpoint (5-10 != 5-999)."""
-    gc = _canon_item_values(_item(g_fact))
-    pc = _canon_item_values(_item(p_fact))
-    for slot in ("level", "comparison", "change"):
-        if gc[slot] and gc[slot] == pc[slot]:
-            return True
-    return False
+# `_value_eq` DELETED (B-15 / Codex SEQ 1110). It let VALUE EQUALITY link two
+# records — exactly what B-15 forbids, since two genuinely different facts can
+# share a value. `fact_match.record_key` is the one identity owner; it had zero
+# callers left here, so nothing replaces it.
 
 
 def _shape_pair(item):
-    """POSITIONAL canonical (low, high) — a point (5,5) is NOT a floor (5,None)."""
-    c = _canon_item_values(item)["level"]
-    lo = c[0] if item.get("level_low") is not None and c else None
-    hi = (c[-1] if item.get("level_high") is not None and c else None)
-    return (lo, hi) if (lo or hi) else None
+    """POSITIONAL exact (low, high) — a point (5,5) is NOT a floor (5,None).
+
+    Each endpoint is the slot's exact three-field object, so two facts agree on
+    shape only when they agree on value AND scale AND the scale's evidence.
+    """
+    slots = _canon_item_values(item)
+    lo, hi = slots.get("level_low"), slots.get("level_high")
+    return (lo, hi) if (lo is not None or hi is not None) else None
 
 
 # THE ORACLE'S OWN NAME-17 SPELLINGS (FINAL_DESIGN NAME-17: terminal
@@ -257,187 +317,457 @@ def _name_agrees(g_fact, p_fact):
     return bool(gn) and gn == pn
 
 
-def match(gold_facts, produced_items):
-    """Per-event matching. A gold fact with EXACTLY one EVIDENCE candidate
-    pairs; anything else -> AMBIGUOUS (unscored; rows go to the grader).
+from driver.core.driver_writer import FakeGraph as _PreBatchGraph
 
-    NOTHING is proof of identity on its own. Shared source evidence is a
-    candidate LINK (one sentence can carry several facts — "revenue was $100M in
-    Q1 and $120M in Q2"); equal value is a weaker LEAD. The full graph is built
-    FIRST, then a fixpoint commits only mutually-unambiguous evidence pairs, so
-    the result can never depend on gold or produced ORDER. Any group of facts
-    sharing one span goes to the grader.
-    Name + value can NEVER prove fact identity — reproduced counter-examples:
-      · `revenue $100M`  vs `capital_expenditures $100M`  (different driver)
-      · Q1 `revenue $100M` vs Q2 `revenue $100M`          (different period)
-      · segment A vs segment B, GAAP vs Adjusted          (different slice /
-                                                           measurement)
-    Each shares a name and/or a number while being a DIFFERENT fact; auto-pairing
-    them credits recall for a MISSED gold fact and compares fields across
-    unrelated facts. Value equality therefore only forms a grader CANDIDATE —
-    surfaced, never silently dropped, never auto-credited.
-    Returns (pairs, unmatched_gold, unmatched_produced, ambiguous_rows)."""
-    # ---- 1. build the FULL candidate graph first (order-free by construction) ----
-    ambiguous = []
-    ev_links, val_links = {}, {}
-    for gi, g in enumerate(gold_facts):
-        ev, val = set(), set()
-        for pi, p in enumerate(produced_items):
-            gk, pk = _ev_key(g), _ev_key(p)
-            if gk is not None and gk == pk:
-                ev.add(pi)                   # shared span = a candidate LINK
-            elif _value_eq(g, p):
-                val.add(pi)                  # equal value = a grader LEAD only
-        ev_links[gi], val_links[gi] = ev, val
 
-    # ---- 2. fixpoint on EVIDENCE links; commit only mutually-unambiguous pairs ----
-    pairs, used, resolved = [], set(), set()
-    changed = True
-    while changed:
-        changed = False
-        live = {gi: ev_links[gi] - used
-                for gi in ev_links if gi not in resolved}
-        singles = {gi: next(iter(c)) for gi, c in live.items() if len(c) == 1}
-        claimed = {}
-        for gi, pi in singles.items():
-            claimed.setdefault(pi, []).append(gi)
-        for pi, gis in sorted(claimed.items()):
-            if len(gis) == 1:                # one gold wants it, it wants one gold
-                pairs.append((gis[0], pi))
-                used.add(pi)
-                resolved.add(gis[0])
-                changed = True
-    pairs.sort()
+class _ReplayStore(_PreBatchGraph):
+    """A temporary READ-ONLY store for ONE replay (Codex SEQ 1126.7).
 
-    # ---- 3. everything unresolved that still has ANY link -> the grader ----
-    for gi in sorted(ev_links):
-        if gi in resolved:
+    Built AFTER the reply, from that reply's OWN unique `(driver_name,
+    fact_type)` pairs plus the event's source/company. It exists so the scorer
+    can reach the pinned public `run_event` without importing a Core TEST
+    fixture into runtime code, which SEQ 1126.7 forbids.
+
+    Read-only is enforced, not merely intended: `transaction()` refuses. The
+    caller always passes `enable_writes=False`, so a transaction here would mean
+    the route tried to write during scoring, and failing loudly beats silently
+    buffering an op nobody reads.
+    """
+
+    def __init__(self, drivers, source, companies):
+        # The EMPTY pre-batch graph view. `_PreBatchGraph` is
+        # `driver_writer.FakeGraph` — PRODUCTION code, documented as the
+        # "in-memory pre-batch graph view for tests/dry-runs (same read surface
+        # the real adapter must expose)". It supplies `get_sibling_facts` and
+        # `get_period`, which the writer reaches through this same object.
+        # Core's `FakeStore` would ALSO have supplied them, but it lives in a
+        # Core TEST module and SEQ 1126.7 bars importing one into runtime code.
+        super().__init__()
+        self._drivers, self._source, self._companies = drivers, source, companies
+
+    def get_source(self, source_id):
+        return self._source
+
+    def get_source_companies(self, source_id):
+        return self._companies
+
+    def get_driver(self, name):
+        return self._drivers.get(name)
+
+    def get_prior_guide_units(self, fact):
+        """Empty prior set for this deliberately EMPTY temporary pre-batch graph.
+
+        The pinned route reads this for a numberless guidance
+        withdrawal/reaffirmation (OD-10 series_unit). Returning the empty list
+        states NO semantic rule — it inspects no name and no text; it simply
+        reports that this scratch graph holds no prior guide, which is true by
+        construction. The route's own fail-closed handling then owns the
+        outcome. Missing this method raised AttributeError instead of returning
+        a public row (Codex SEQ 1127).
+        """
+        return []
+
+    def get_company_slice_menu(self, source_id, date):
+        return {"xbrl_members": [], "used_scopes": []}
+
+    def get_xbrl_fact_dimensions(self, source_id, concept):
+        from driver.core.driver_neo4j_adapter import GraphFactRows
+        return GraphFactRows(rows=[], exclusions=())
+
+    def transaction(self):
+        raise RuntimeError(
+            "the scoring replay store is READ-ONLY: run_event was reached with "
+            "writes enabled, which scoring must never do")
+
+
+def _replay_drivers(reply):
+    """The reply's own unique `(driver_name, fact_type)` pairs.
+
+    A name carrying two different fact_types in one reply FAILS LOUDLY — silently
+    keeping one would hand the route a fabricated registry and quietly change
+    which facts pair with which home.
+    """
+    drivers = {}
+    for fact in reply.get("facts") or []:
+        name = (fact.get("item") or {}).get("driver_name")
+        if name is None:
             continue
-        live_ev = sorted(ev_links[gi] - used)
-        live_val = sorted(val_links[gi] - used)
-        cands = live_ev or live_val
-        if not cands:
-            continue
-        if live_ev:
-            reason = ("shared_span_multiple_facts" if len(live_ev) == 1
-                      else "multi_evidence_candidate")
-        else:
-            reason = ("value_match_same_name" if any(
-                _name_agrees(gold_facts[gi], produced_items[pi]) for pi in cands)
-                else "value_match_different_name")
-        ambiguous.append({"gold_idx": gi, "gold_quote": gold_facts[gi].get("quote"),
-                          "produced_idxs": cands, "reason": reason,
-                          "produced_quotes": [produced_items[pi].get("quote")
-                                              for pi in cands]})
-    unmatched_gold = [i for i in range(len(gold_facts))
-                      if i not in {a for a, _ in pairs}
-                      and i not in {r["gold_idx"] for r in ambiguous}]
-    unmatched_prod = [i for i in range(len(produced_items)) if i not in used]
-    return pairs, unmatched_gold, unmatched_prod, ambiguous
+        fact_type = fact.get("fact_type")
+        prior = drivers.get(name)
+        if prior is not None and prior["fact_type"] != fact_type:
+            raise ValueError(
+                f"reply gives driver {name!r} conflicting fact_types "
+                f"{prior['fact_type']!r} and {fact_type!r}; the replay store "
+                f"cannot invent which one the graph holds")
+        drivers[name] = {"name": name, "fact_type": fact_type}
+    return drivers
 
 
-def apply_resolutions(pairs, amb, resolutions, sid):
-    """THE ONE place grader tie-rulings are applied — shared by score_arm and
-    presence_disagreement so the two can never diverge.
+def route_reply(reply, event, audit_dir):
+    """Replay ONE reply through the PINNED public route and return the exact
+    result plus the exact index map (Codex SEQ 1126.7).
 
-    Enforces GLOBAL one-produced-to-one-gold. A CONFLICT — two or more gold rows
-    ruled onto the SAME produced fact, or a ruling onto a fact already consumed
-    by an automatic pair — is a GRADER ERROR, never a race: "first wins" would
-    make the outcome depend on gold ORDER (reproduced: [Q1,Q2] credits Q1,
-    [Q2,Q1] credits Q2). The WHOLE conflicting group is therefore REJECTED —
-    neither gold is credited, EVERY involved ruling is flagged, and the result
-    stays INCOMPLETE until a grader corrects it.
-    Returns (extra_pairs, no_match_gold_idxs, unresolved_or_bad_rows)."""
-    auto_used = {pi for _, pi in pairs}
-    extra, no_match, bad = [], [], []
-    wanted = {}                       # produced_idx -> [rows ruled onto it]
-    for row in sorted(amb, key=lambda r: r["gold_idx"]):
-        row["source_id"] = sid
-        res = (resolutions or {}).get((sid, row["gold_idx"]), "UNSET")
-        if res == "UNSET":
-            bad.append(row)
-        elif res is None:                       # graded: genuinely no match
-            no_match.append(row["gold_idx"])
-        elif res not in row["produced_idxs"]:   # ruling names a non-candidate
-            bad.append(dict(row, bad_resolution=res))
-        else:
-            wanted.setdefault(res, []).append(row)
-    for pi, rows in sorted(wanted.items()):
-        if len(rows) > 1 or pi in auto_used:    # CONFLICT -> reject the GROUP
-            reason = ("duplicate_resolution" if len(rows) > 1
-                      else "resolution_targets_consumed_fact")
-            for r in rows:
-                bad.append(dict(r, bad_resolution=pi, conflict=reason,
-                                conflicting_gold_idxs=[x["gold_idx"]
-                                                       for x in rows]))
-        else:
-            extra.append((rows[0]["gold_idx"], pi))
-    return extra, no_match, bad
+    This is the UPSTREAM operation. It lives beside the other replay helpers on
+    purpose — no new module — and it is the only thing that calls `run_event`.
+    `score_arm` consumes what this returns and never routes anything itself.
+    """
+    from driver.core.driver_write_cli import run_event
+    from driver.core.prepared_fact_v2 import verify_occurrence
+    parts = {p["part"]: p["content"] for p in event.get("text_parts", [])}
+    for i, abstention in enumerate(reply.get("abstentions") or []):
+        part_ref = abstention.get("part_ref")
+        if part_ref not in parts:
+            raise ValueError(f"abstention[{i}] names unknown part {part_ref!r}")
+        bad = verify_occurrence(parts[part_ref], abstention.get("quote") or "",
+                                abstention.get("occurrence_in_part"))
+        if bad:
+            # THE ONE occurrence owner (SEQ 1135) — no second quote rule is
+            # written here. An abstention with an unsound locator is refused at
+            # the seam, because a reply that cannot say WHERE it declined is not
+            # a lawful reply to route.
+            raise ValueError(f"abstention[{i}] locator: {bad}")
+    items, reader = replay_reader(reply)
+    _, index_map = project_replay_items(reply)
+    source = {"date": event["event_time"], "source_type": event["source_type"],
+              "ticker": event["ticker"], "fye_month": event["fye_month"]}
+    store = _ReplayStore(_replay_drivers(reply), source, [event["ticker"]])
+    result = run_event({**event, "items": items}, store=store,
+                       audit_dir=audit_dir, enable_writes=False, reader=reader)
+    return {"result": result, "index_map": index_map}
+
+
+def _to_v2_with_positions(records):
+    """Convert scorer dicts to the records Core's matcher requires, keeping an
+    `id(instance) -> original index` sidecar (SEQ 1108).
+
+    `match_facts` hands back the SAME instances it was given, so identity is the
+    only honest way to recover a record's original position. Equality,
+    `list.index`, `record_key`, the locator or value/quote logic would each
+    either conflate duplicates or re-implement matching — the very engine this
+    change deletes. Transport bookkeeping; it states no rule.
+    """
+    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from kf_lint import GOLD_ONLY          # THE owner of the gold-only field set
+    converted, position = [], {}
+    for i, rec in enumerate(records):
+        # A GOLD fact is the exact V2 model fact plus ONLY `kf_lint.GOLD_ONLY`
+        # (du_worthy, gold_extra, ambiguity_note). Strip that imported owner set
+        # mechanically — never a copied three-key list here, and never by
+        # weakening `from_dict`. Produced facts carry none of them and pass
+        # through unchanged.
+        obj = PreparedFactV2.from_dict(
+            {k: v for k, v in rec.items() if k not in GOLD_ONLY})
+        position[id(obj)] = i
+        converted.append(obj)
+    return converted, position
 
 
 def dedup_items(items):
-    """Union dedup: ONLY truly identical COMPLETE facts collapse — the key is
-    the full canonical JSON of the fact (lane + quote + the entire item)."""
+    """Union dedup through the ONE identity owner, `fact_match.record_key`.
+
+    B-16: the retired key was canonical JSON over `lane` + outer quote + item.
+    `lane` no longer exists, so that key silently collapsed to `None` for every
+    fact and identity rested on the item alone. `record_key` is the same owner
+    the matcher uses, so a union can never disagree with a match about whether
+    two facts are the same fact.
+    """
+    from driver.core.fact_match import record_key
+    from driver.core.prepared_fact_v2 import PreparedFactV2
+    from kf_lint import GOLD_ONLY
     seen, out = set(), []
     for f in items:
-        key = json.dumps({"lane": f.get("lane"), "quote": f.get("quote"),
-                          "item": _item(f)}, sort_keys=True, default=str)
+        key = record_key(PreparedFactV2.from_dict(
+            {k: v for k, v in f.items() if k not in GOLD_ONLY}))
         if key not in seen:
             seen.add(key)
             out.append(f)
     return out
 
 
-def _home_ok(sp, produced, fye):
-    """FINAL_DESIGN:153 VERBATIM law: 'Match family, period, period scope,
-    slice, measurement, and normalized value/unit when value-bearing; a
-    numberless surprise needs a numberless home.' Both periods must RESOLVE
-    (unresolved never matches anything)."""
-    s_item = _item(sp)
-    basis = s_item.get("surprise_basis_hint")
-    home_lane = {"actual": "metric", "guidance": "guidance"}.get(basis)
-    if home_lane is None:
-        return False
-    base = _base_driver(s_item.get("driver_name"))
-    s_pid = _resolved_period(s_item, "surprise", fye)
-    if not base or s_pid is None:
-        return False                      # an unresolvable period never matches
-    s_pair = _shape_pair(s_item)
-    # FINAL_DESIGN:153 — the guidance-basis home is base + `_guidance`;
-    # the actual-basis home is the base metric itself. Depends only on
-    # base and basis, so it is computed once, outside the candidate loop.
-    expected_home = (base + _ORACLE_GUIDANCE_SUFFIX
-                     if basis == "guidance" else base)
-    for h in produced:
-        if h is sp or h.get("lane") != home_lane:
-            continue
-        h_item = _item(h)
-        if h_item.get("driver_name") != expected_home:
-            continue
-        h_pid = _resolved_period(h_item, home_lane, fye)
-        if h_pid is None or h_pid != s_pid:
-            continue                      # BOTH resolved AND equal
-        if s_item.get("period_scope") != h_item.get("period_scope"):
-            continue
-        if set(s_item.get("slice") or []) != set(h_item.get("slice") or []):
-            continue
-        if _meas_tokens(s_item) != _meas_tokens(h_item):
-            continue
-        if s_pair:
-            if s_pair != _shape_pair(h_item):
-                continue                  # POSITIONAL identity: point != floor
+#: Addendum-A extras buckets. EXACTLY these three, no other bucket and no string
+#: heuristic: `duplicate` (already mechanically collapsed), `key_miss` (a genuine
+#: gold-key miss -> the run is INCONCLUSIVE, not failed), and `unsupported` (a
+#: fact the source does not support -> a CONFIRMED-WRONG ACCEPTED fact).
+EXTRAS_BUCKETS = ("duplicate", "key_miss", "unsupported")
+
+
+def classify_extras(verdicts, sid, accepted_unmatched):
+    """Validate ONE fake extras verdict per unmatched ROUTE-ACCEPTED produced
+    fact (Codex SEQ 1133).
+
+    Only route-ACCEPTED facts are eligible: a parked, rejected or skipped row is
+    reported elsewhere but must never enter the accepted-fact safety count —
+    the system already refused it, so counting it as a wrong ACCEPTANCE would
+    punish the safety gate for working.
+
+    Returns `(tally, problems)`. Fake verdicts only; nothing here calls a grader
+    or an AI, and nothing infers a bucket from text.
+    """
+    problems = []
+    eligible = set(accepted_unmatched)
+    if verdicts is None:
+        # Same hole as the rulings path: an unmatched route-WRITTEN fact with no
+        # verdict is INCOMPLETE, not clean. With nothing eligible — including a
+        # run whose extras were all parked/rejected/skipped — supplying no
+        # verdict is lawfully complete.
+        return ({b: 0 for b in EXTRAS_BUCKETS},
+                [{"sid": sid, "reason": "extras_verdict_missing",
+                  "produced_idx": i} for i in sorted(eligible)])
+    mine = {i: v for (s, i), v in verdicts.items() if s == sid}
+    for idx in sorted(set(mine) - eligible):
+        problems.append({"sid": sid, "reason": "extras_verdict_out_of_range",
+                         "produced_idx": idx})
+    for idx in sorted(eligible - set(mine)):
+        problems.append({"sid": sid, "reason": "extras_verdict_missing",
+                         "produced_idx": idx})
+    tally = {b: 0 for b in EXTRAS_BUCKETS}
+    for idx in sorted(eligible & set(mine)):
+        bucket = mine[idx]
+        if bucket not in EXTRAS_BUCKETS:
+            problems.append({"sid": sid, "reason": "extras_verdict_malformed",
+                             "produced_idx": idx, "bucket": bucket})
         else:
-            if _shape_pair(h_item):
-                continue                  # numberless needs a NUMBERLESS home
-            hq = h_item.get("quote")
-            if h_item.get("driver_state") != "unknown" or                     not (isinstance(hq, str) and hq.strip()):
-                continue                  # rule 18: the UNKNOWN + QUOTE sibling
-        return True
-    return False
+            tally[bucket] += 1
+    return tally, problems
+
+
+def reconcile_rulings(first, second):
+    """Two INDEPENDENT grader inputs produce a scorable ruling only where they
+    AGREE (Codex SEQ 1133/1134).
+
+    The smallest existing reconciliation seam — no grader framework: agreement
+    is dict equality on the same key. A key present in one input only, or
+    carrying different answers, yields NO ruling, so the pair stays unmatched
+    and the run stays INCOMPLETE. Silently preferring one input would be the
+    scorer choosing between two qualified graders, which is not its call.
+
+    Returns `(agreed, disagreements)`.
+    """
+    if first is None or second is None:
+        return None, []
+    agreed, disagreements = {}, []
+    for key in sorted(set(first) | set(second), key=repr):
+        a, b = first.get(key, _ABSENT), second.get(key, _ABSENT)
+        if a is _ABSENT or b is _ABSENT or a != b:
+            disagreements.append({"sid": key[0], "reason": "ruling_disagreement",
+                                  "gold_idx": key[1],
+                                  "answers": [None if a is _ABSENT else a,
+                                              None if b is _ABSENT else b]})
+        else:
+            agreed[key] = a
+    return agreed, disagreements
+
+
+_ABSENT = object()
+
+
+def _locator(record, item=None):
+    """The EXACT evidence locator: (part_ref, occurrence_in_part, quote).
+
+    The same triple `fact_match.record_key` uses, so an abstention and a gold
+    fact are "the same evidence" here on exactly the terms the matcher uses.
+    """
+    src = item if item is not None else record
+    return (record.get("part_ref"), record.get("occurrence_in_part"),
+            src.get("quote"))
+
+
+def classify_abstentions(abstentions, gold_facts, unmatched_gold):
+    """Split abstentions into GOLD-LINKED, DIAGNOSTIC and INVALID-LOCATOR.
+
+    Codex SEQ 1126.5 / 1135. A gold-linked abstention — the producer declined on
+    evidence that carries a real gold fact — enters BOTH the would-park
+    numerator and its denominator, and remains a recall miss: declining to
+    answer is not the same as being right. A diagnostic abstention, on evidence
+    no gold covers, enters NEITHER but is still reported; charging it would
+    punish a producer for correctly saying nothing about a non-fact.
+
+    The split comes from the record's own LOCATOR, never from the spelling of a
+    route decision — every lawful abstention shares the one `skipped` decision,
+    so a decision-derived split would put them all in one bucket.
+
+    THREE THINGS THIS OWES ITS AUTHORITY (SEQ 1135):
+      * the locator is validated by `prepared_fact_v2.verify_occurrence` against
+        the EXACT NAMED PART — no second quote/occurrence rule is written here;
+      * a gold abstention links ONE-TO-ONE to an otherwise-UNMATCHED gold fact,
+        so two abstentions can never both claim the same gold row and be charged
+        twice for one miss;
+      * an unsound locator is neither linked nor diagnostic: it is a problem.
+    """
+    available = {}
+    for gi in unmatched_gold:
+        available.setdefault(_locator(gold_facts[gi], _item(gold_facts[gi])),
+                             []).append(gi)
+
+    linked, diagnostic = [], []
+    for i, abstention in enumerate(abstentions):
+        # LOCATOR SOUNDNESS IS PROVEN UPSTREAM by `route_reply`, through the
+        # `prepared_fact_v2.verify_occurrence` owner and the exact named part.
+        # It cannot be checked here: SEQ 1126.2 says a route entry carries ONLY
+        # the result and the index map, so the scorer has no part text. Raised
+        # to Codex rather than smuggling the event in as a third key.
+        key = _locator(abstention)
+        if available.get(key):
+            linked.append((i, available[key].pop(0)))   # ONE-TO-ONE
+        else:
+            diagnostic.append(i)
+    return linked, diagnostic
+
+
+def grade_unmatched(rulings, sid, unmatched_gold, unmatched_produced):
+    """Validate the build-time grader's one-to-one gold<->produced rulings.
+
+    WorkOrder §649 sends every UNMATCHED gold and produced fact to the qualified
+    grader, because `match_facts` auto-links only IDENTICAL complete records —
+    so any fact carrying a real field error is unmatched by construction and
+    would otherwise never reach field scoring at all (Codex SEQ 1132.2).
+
+    This validates rulings; it never SUGGESTS one. No quote or value heuristic,
+    no revived candidate matcher: an unmatched pair is linked here only because
+    a qualified grader said so, by index.
+
+    A ruling is `{(sid, gold_idx): produced_idx or None}`. `None` means "no
+    produced fact corresponds" — a decided MISS, which is valid and still counts
+    against recall. Returns `(valid_pairs, problems)`; any problem blocks PASS,
+    because a scorer that proceeds on a malformed ruling is inventing the
+    grader's answer.
+    """
+    problems = []
+    pending_gold, pending_prod = set(unmatched_gold), set(unmatched_produced)
+    if rulings is None:
+        # THE GRADER WAS NOT RUN. My earlier claim that existing accounting
+        # covered this was WRONG and Codex verified it: a raw unmatched row
+        # increments neither `ambiguities_unresolved` nor `verdicts_missing`,
+        # and `potential_recall` omits it — so an unrun grading could PASS with
+        # unmatched gold sitting there ungraded.
+        #
+        # A ruling is REQUIRED exactly when unmatched gold exists. With none,
+        # not running the grader is lawfully complete.
+        return [], [{"sid": sid, "reason": "ruling_missing", "gold_idx": g}
+                    for g in sorted(pending_gold)]
+    mine = {g: p for (s, g), p in rulings.items() if s == sid}
+
+    for gold_idx in sorted(set(mine) - pending_gold):
+        problems.append({"sid": sid, "reason": "ruling_out_of_range",
+                         "gold_idx": gold_idx})
+    for gold_idx in sorted(pending_gold - set(mine)):
+        # rulings WERE supplied for this run, so an unmatched gold left unruled
+        # is an INCOMPLETE grader answer and blocks PASS
+        problems.append({"sid": sid, "reason": "ruling_missing",
+                         "gold_idx": gold_idx})
+
+    claimed, valid = {}, []
+    for gold_idx in sorted(pending_gold & set(mine)):
+        produced_idx = mine[gold_idx]
+        if produced_idx is None:
+            continue                       # a DECIDED miss: valid, no pair
+        if produced_idx not in pending_prod:
+            problems.append({"sid": sid, "reason": "ruling_out_of_range",
+                             "gold_idx": gold_idx, "produced_idx": produced_idx})
+        elif produced_idx in claimed:
+            # one produced fact credited to two golds is exactly the double
+            # credit the emit-once law exists to prevent
+            problems.append({"sid": sid, "reason": "ruling_duplicate_produced",
+                             "produced_idx": produced_idx,
+                             "gold_idxs": [claimed[produced_idx], gold_idx]})
+        else:
+            claimed[produced_idx] = gold_idx
+            valid.append((gold_idx, produced_idx))
+    return valid, problems
+
+
+def _rows_for_event(route, sid, n_facts, n_abstentions):
+    """Validate ONE event's completed route and return {(kind, i): outcome row}.
+
+    Codex SEQ 1126.3 — every one of these is a REFUSAL, never a repair:
+      * the routed result must carry each outcome index exactly once;
+      * the index map must point only at rows the result actually has;
+      * every emitted fact and abstention needs exactly one mapped row.
+    A scorer that quietly tolerates any of these is attributing a decision to a
+    record that did not produce it, which is worse than refusing to score.
+    """
+    entry = route[sid]
+    if set(entry) != {"result", "index_map"}:
+        raise ValueError(f"route[{sid!r}] must carry exactly result and index_map, "
+                         f"got {sorted(entry)}")
+    items = entry["result"]["items"]
+    seen = [r["index"] for r in items]
+    if len(seen) != len(set(seen)):
+        raise ValueError(f"route[{sid!r}] repeats outcome index(es) "
+                         f"{sorted(i for i in set(seen) if seen.count(i) > 1)}")
+    rows = {r["index"]: r for r in items}
+    index_map = entry["index_map"]
+    missing = [k for k, v in index_map.items() if v not in rows]
+    if missing:
+        raise ValueError(f"route[{sid!r}] maps {missing} onto absent outcome rows")
+    expected = {("fact", i) for i in range(n_facts)}
+    expected |= {("abstention", i) for i in range(n_abstentions)}
+    if set(index_map) != expected:
+        raise ValueError(
+            f"route[{sid!r}] maps {sorted(set(index_map) ^ expected)} — every "
+            f"emitted fact and abstention needs exactly one mapped row")
+    if len(set(index_map.values())) != len(index_map) or set(rows) != set(index_map.values()):
+        raise ValueError(f"route[{sid!r}] rows and map are not a bijection")
+    return {k: rows[v] for k, v in index_map.items()}
+
+
+def invalid_response_stats(responses):
+    """The WorkOrder's reliability gate: invalid-response rate and its
+    rule-of-three bound (step3 §10).
+
+    `responses` is `{"total": N, "invalid": K}` — the counts the RUNNER
+    observes. Step 3 makes no model call, so in this step the rate is
+    NOT APPLICABLE rather than zero: reporting 0% for zero responses would be
+    inventing data about reliability nobody measured.
+
+    RULE OF THREE: with K == 0 observed failures in N trials, the 95% upper
+    bound on the true rate is 3/N. A run of 156 clean replies does NOT show a 0%
+    failure rate — it shows at most ~1.9%. Reported so a small clean run cannot
+    be read as proof of reliability it does not carry.
+    """
+    if not responses:
+        return {"applicable": False, "rate": None, "upper95": None,
+                "why": "no responses observed — Step 3 makes no model call"}
+    total = responses.get("total") or 0
+    invalid = responses.get("invalid") or 0
+    if total <= 0:
+        return {"applicable": False, "rate": None, "upper95": None,
+                "why": "zero responses"}
+    return {"applicable": True, "rate": invalid / total,
+            "upper95": (3.0 / total) if invalid == 0 else None,
+            "total": total, "invalid": invalid}
+
+
+def passes_official_bars(*, recall, lane_wrong, wrong_name, value_shape_acc,
+                         state_acc, would_park, safety_result,
+                         invalid_response_rate=None):
+    """THE OFFICIAL BARS, in ONE place.
+
+    Factored out so the boundary controls can drive the REAL expression instead
+    of re-copying it into a test (Codex SEQ 1143). A copied expression is a
+    second rule owner: it can agree with itself while the scorer does something
+    else, and a source-text search cannot tell a live fragment from a dead or
+    reordered one.
+
+    Every bar is INCLUSIVE at its own value — `>=` on the minimums, `<=` on the
+    park maximum — so a run that exactly meets a bar passes it. Safety is ANDed
+    in, never averaged.
+    """
+    # THE RELIABILITY GATE (§10): at most 2% invalid responses. `None` means
+    # NOT APPLICABLE — Step 3 observes no responses at all — and an
+    # inapplicable metric cannot be read as a passing one, so it neither passes
+    # nor fails this bar here; a real run supplies the counts.
+    if invalid_response_rate is not None and invalid_response_rate > 0.02:
+        return False
+    return (recall >= 0.95 and lane_wrong == 0 and wrong_name == 0
+            and value_shape_acc >= 0.98 and state_acc >= 0.95
+            and would_park <= 0.10
+            and safety_result == "PASS")
 
 
 def score_arm(gold_by_event, arm_by_event, event_meta,
-              grader_verdicts=None, ambiguity_resolutions=None):
+              grader_verdicts=None, ambiguity_resolutions=None, *, route,
+              extras_verdicts=None):
     """event_meta MANDATORY per event. grader_verdicts: {(sid, gold_idx):
     {meaning_field: bool}} — required for EVERY matched pair. ambiguity_
     resolutions: {(sid, gold_idx): produced_idx|None} — the grader's tie
@@ -450,12 +780,37 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
         m = event_meta.get(sid) or {}
         if not m.get("event_date") or m.get("fye_month") is None:
             raise ValueError(f"event_meta missing/incomplete for {sid!r}")
+    if set(route) != set(gold_by_event):
+        raise ValueError(
+            f"route must cover exactly the scored events; extra "
+            f"{sorted(set(route) - set(gold_by_event))}, missing "
+            f"{sorted(set(gold_by_event) - set(route))}")
     tot_gold = matched = 0
     lane_wrong = park = items_n = wrong_name = 0
     code_ok = code_all = 0
     state_ok = state_all = 0
     other_ok = other_all = 0
     verdicts_missing = ambiguities_unresolved = 0
+    confirmed_wrong_accepted = 0
+    # Grader/extras INPUT problems block completeness but are NOT resolvable
+    # ties: counting them in `ambiguities_unresolved` inflated
+    # `potential_recall`, because that formula assumes every unresolved row
+    # COULD still become a match. A missing ruling is not a potential match, and
+    # an empty answer was reaching PASS=None instead of a definite fail.
+    grader_problems = 0
+    # Counted for the ONE-TO-ONE upper bound (SEQ 1140.3), never guessed:
+    #   repairable_pairs — per-event min(open gold, free produced), SUMMED.
+    #                      Accumulating the two sides separately and taking ONE
+    #                      global min let a spare candidate in event B raise the
+    #                      ceiling for missing gold in event A — a pair no
+    #                      grader can make, since matching is same-event
+    #                      (WorkOrder EXP-5 point 1, Codex SEQ 1141).
+    #   key_erratum_seen — a duplicate-gold group was found
+    #   other_problem    — any problem that is NOT a pure key erratum
+    repairable_pairs = 0
+    key_erratum_seen = False
+    other_problem = False
+    extras_tally = {b: 0 for b in EXTRAS_BUCKETS}
     ambiguous_rows = []
     err = {}
 
@@ -467,39 +822,171 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
         tot_gold += len(du)
         produced = (arm_by_event.get(sid) or {}).get("facts", [])
         meta = event_meta[sid]
-        for p in produced:
+        # B-16: the scorer COUNTS the public route's decisions. It runs no
+        # second rule engine — no `check_item`, no `_home_ok`, no home logic of
+        # its own. Only a public `parked` enters the parked NUMERATOR; every
+        # deduplicated emitted fact enters its DENOMINATOR. `rejected` and
+        # `skipped` are reported with their REAL codes and are never renamed
+        # parked, which would overstate the park rate and hide a contract
+        # violation behind a routine-looking number (SEQ 1126.4).
+        outcomes = _rows_for_event(route, sid, len(produced),
+                                   len((arm_by_event.get(sid) or {}).get(
+                                       "abstentions") or []))
+        # ONE MATCHER (B-15), hoisted ABOVE the decision loop because the
+        # deduplicated denominator needs the identity owner's answer first.
+        from driver.core.fact_match import match_facts
+        gold_v2, gold_pos = _to_v2_with_positions(du)
+        prod_v2, prod_pos = _to_v2_with_positions(produced)
+        mr = match_facts(gold_v2, prod_v2)
+        # THE DENOMINATOR IS DEDUPLICATED (SEQ 1135). `MatchResult` already
+        # collapsed produced duplicates through `fact_match.record_key`; counting
+        # the raw list instead let one fact emitted twice inflate the
+        # denominator and dilute the park rate for free.
+        duplicate_extra = {prod_pos[id(x)]
+                           for group in mr.produced_duplicates for x in group[1:]}
+        for orig_i, _p in enumerate(produced):
+            if orig_i in duplicate_extra:
+                continue
             items_n += 1
-            codes = check_item(_item(p), p.get("lane"),
-                               event_date=meta.get("event_date"),
-                               fye_month=meta.get("fye_month"))[0]
-            parked = bool(codes)
-            for c in codes:
-                _e(f"park:{c}")
-            if (not parked and p.get("lane") == "surprise"
-                    and not _home_ok(p, produced, meta.get("fye_month"))):
-                parked = True
-                _e("park:HOME_FACT_MISSING")
-            if parked:
+            row = outcomes[("fact", orig_i)]
+            decision = row["decision"]
+            if decision == "parked":
                 park += 1
-        pairs, ug, up, amb = match(du, produced)
-        resolved_amb, no_match, bad = apply_resolutions(
-            pairs, amb, ambiguity_resolutions, sid)
-        for row in bad:
+            for c in row["codes"]:
+                _e(f"park:{c}" if decision == "parked" else f"{decision}:{c}")
+            if decision not in ("parked", "written") and not row["codes"]:
+                _e(f"{decision}:UNCODED")
+        # ONE MATCHER (B-15). MatchResult stays visible; only `links` become
+        # index pairs, via the identity sidecar. Every non-auto-linked record
+        # flows to grading through `to_grading_*` — the retired ambiguity
+        # candidate path is gone, not renamed.
+        pairs = [(gold_pos[id(g)], prod_pos[id(pr)]) for g, pr in mr.links]
+        up = [prod_pos[id(pr)] for pr in mr.to_grading_produced]
+        # DUPLICATE GOLD IS A KEY ERRATUM, NOT A MODEL FAILURE (SEQ 1139.2).
+        # Two identical gold rows mean the KEY is wrong; the producer cannot
+        # lawfully answer both, and reporting that as recall 0 blames the model
+        # for a defect in the answer key. The group leaves the denominator, is
+        # recorded as inconclusive, and is NOT sent through ordinary pair
+        # rulings — which is why these indexes are excluded from `ug` below.
+        inconclusive_gold = set()
+        for group in mr.gold_inconclusive:        # duplicate gold NEVER credits
             ambiguities_unresolved += 1
-            ambiguous_rows.append(row)
-        ug = ug + no_match
-        pairs = pairs + resolved_amb
+            idxs = [gold_pos[id(g)] for g in group]
+            inconclusive_gold.update(idxs)
+            ambiguous_rows.append({"sid": sid, "reason": "duplicate_gold",
+                                   "gold_idxs": idxs})
+        tot_gold -= len(inconclusive_gold)
+        # ...and they never enter ordinary pair grading, which was raising a
+        # `ruling_missing` per duplicate member for a defect no ruling can fix.
+        ug = [gold_pos[id(g)] for g in mr.to_grading_gold
+              if gold_pos[id(g)] not in inconclusive_gold]
+        for group in mr.produced_duplicates:
+            ambiguous_rows.append({"sid": sid, "reason": "duplicate_produced",
+                                   "produced_idxs": [prod_pos[id(x)] for x in group]})
+        if mr.emit_once_violation:
+            # A produced duplicate earns NO recall and must BLOCK PASS, not just
+            # leave an error string behind (SEQ 1135). `MatchResult.can_pass`
+            # already says so; the scorer was recording it and passing anyway.
+            _e("emit_once_violation")
+            grader_problems += 1
+        # THE GRADER'S RULED PAIRS join the auto-linked ones for field scoring.
+        # Only VALID rulings; every problem is recorded and blocks PASS.
+        ruled, ruling_problems = grade_unmatched(ambiguity_resolutions, sid, ug, up)
+        for problem in ruling_problems:
+            grader_problems += 1
+            ambiguous_rows.append(problem)
+            _e("grader_ruling:" + problem["reason"])
+        pairs = pairs + ruled
+
+        # ABSTENTIONS (SEQ 1126.5 / 1135): locator-validated, linked ONE-TO-ONE
+        # to an otherwise-unmatched gold row.
+        abstentions = (arm_by_event.get(sid) or {}).get("abstentions") or []
+        # A gold row already answered via a VALID grader ruling is no longer
+        # available to an abstention — otherwise an answered fact and an
+        # abstention would both charge the same gold row (Codex SEQ 1136.1).
+        ruled_gold = {gi for gi, _pi in ruled}
+        still_unanswered = [gi for gi in ug if gi not in ruled_gold]
+        linked_abst, diagnostic_abst = classify_abstentions(
+            abstentions, du, still_unanswered)
+        for ai, _gi in linked_abst:
+            row = outcomes[("abstention", ai)]
+            items_n += 1                  # enters the would-park DENOMINATOR
+            park += 1                     # ...and its NUMERATOR
+            _e("abstained_on_gold:" + (row["codes"][0] if row["codes"]
+                                       else row["decision"]))
+        for ai in diagnostic_abst:        # reported, charged to NEITHER side
+            _e("abstention:diagnostic")
+
+        # ADDENDUM-A EXTRAS. Only ROUTE-ACCEPTED produced facts that no ruling
+        # linked are eligible; a parked/rejected/skipped row is reported but is
+        # NOT a wrong ACCEPTANCE — the system already refused it.
+        ruled_produced = {pi for _gi, pi in ruled}
+        # A produced fact blocked ONLY by a duplicate-gold key erratum is not an
+        # "extra" — its gold exists, twice. Asking a grader to classify it as
+        # duplicate/key-miss/unsupported would be charging the model for a
+        # defect in the answer key (SEQ 1140.2). Identity comes from the ONE
+        # owner: same `record_key` as an inconclusive gold row.
+        from driver.core.fact_match import record_key as _rk
+        erratum_keys = {_rk(g) for grp in mr.gold_inconclusive for g in grp}
+        blocked_by_erratum = {prod_pos[id(pr)] for pr in prod_v2
+                              if _rk(pr) in erratum_keys}
+        accepted_unmatched = [i for i in up
+                              if i not in ruled_produced
+                              and i not in blocked_by_erratum
+                              and outcomes[("fact", i)]["decision"] == "written"]
+        tally, extras_problems = classify_extras(extras_verdicts, sid,
+                                                 accepted_unmatched)
+        for problem in extras_problems:
+            grader_problems += 1
+            ambiguous_rows.append(problem)
+            _e("extras:" + problem["reason"])
+        for bucket, n in tally.items():
+            extras_tally[bucket] += n
+        # The DUPLICATE bucket is filled from the identity owner, not by asking
+        # a fake grader to rediscover exact duplicates `MatchResult` already
+        # collapsed (Codex SEQ 1136.2). Emit-once still blocks PASS.
+        extras_tally["duplicate"] += len(duplicate_extra)
+        # an UNSUPPORTED accepted fact is a confirmed-wrong ACCEPTED fact
+        confirmed_wrong_accepted += tally["unsupported"]
+
+        # --- the one-to-one ceiling, counted from the existing sets ---
+        if inconclusive_gold:
+            key_erratum_seen = True
+        decided_miss = {gi for (sid_k, gi), pi in (ambiguity_resolutions or {}).items()
+                        if sid_k == sid and pi is None}
+        decided_miss |= {gi for _ai, gi in linked_abst}   # a park AND a non-match
+        still_open_gold = [gi for gi in ug
+                           if gi not in ruled_gold and gi not in decided_miss]
+        free_produced = [pi for pi in up if pi not in {p for _g, p in ruled}]
+        repairable_pairs += min(len(still_open_gold), len(free_produced))
+        if (ruling_problems or extras_problems or mr.emit_once_violation
+                or verdicts_missing):
+            other_problem = True
+
         matched += len(pairs)
         for gi, pi in pairs:
             g, p = du[gi], produced[pi]
             g_item, p_item = _item(g), _item(p)
-            if g.get("lane") != p.get("lane"):
+            if g.get("fact_type") != p.get("fact_type"):
                 lane_wrong += 1
                 _e("wrong_lane:matched")
             gn, pn = g_item.get("driver_name"), p_item.get("driver_name")
             if gn != pn:
                 wrong_name += 1            # a wrong driver is NEVER a 2% slip
                 _e("wrong_name:driver_name")
+            # FACT-LEVEL measurements (WorkOrder §649 / Codex SEQ 1132.1).
+            # `fact_type` also drives the separate hard `wrong_lane` gate above;
+            # `per_x` has no other owner, so without this it was DECLARED in the
+            # accounting and never actually compared.
+            for f in FACT_LEVEL_FIELDS:
+                gv_f, pv_f = g.get(f), p.get(f)
+                if gv_f is None and pv_f is None:
+                    continue
+                code_all += 1
+                if gv_f == pv_f:
+                    code_ok += 1
+                else:
+                    _e(f"mismatch:{f}")
             for f in CODE_FIELDS:
                 gv_f, pv_f = g_item.get(f), p_item.get(f)
                 if gv_f is None and pv_f is None:
@@ -509,15 +996,21 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
                     code_ok += 1
                 else:
                     _e(f"mismatch:{f}")
+            # EXACT numeric-slot comparison over the FROZEN slot set: each
+            # slot's three raw object fields must agree (WorkOrder §649). The
+            # retired grouping ("level"/"comparison"/"change") came from the
+            # unit RESOLVER's output, which no longer runs.
+            from driver.core.prepared_fact_v2 import NUMERIC_SLOTS
             gc, pc = _canon_item_values(g_item), _canon_item_values(p_item)
-            for slot in ("level", "comparison", "change"):
+            for slot in NUMERIC_SLOTS:
                 code_all += 1
                 if gc[slot] == pc[slot]:
                     code_ok += 1
                 else:
                     _e(f"mismatch:value:{slot}")
             code_all += 1
-            if set(g_item.get("slice") or []) == set(p_item.get("slice") or []):
+            if (set(g_item.get("slice_parts") or [])
+                    == set(p_item.get("slice_parts") or [])):
                 code_ok += 1
             else:
                 _e("mismatch:slice")
@@ -532,6 +1025,14 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
                             for k in MEANING_FIELDS)):
                 verdicts_missing += 1
             else:
+                # ADDENDUM-A: a FALSE required meaning verdict on a
+                # ROUTE-ACCEPTED matched fact is ALSO a confirmed-wrong accepted
+                # fact — the system accepted a fact the grader says is wrong.
+                # A parked/rejected/skipped row is reported but never counted
+                # here; refusing it is the safety gate working, not failing.
+                if (not all(v[k] for k in MEANING_FIELDS)
+                        and outcomes[("fact", pi)]["decision"] == "written"):
+                    confirmed_wrong_accepted += 1
                 state_all += 1
                 if v["driver_state"]:
                     state_ok += 1
@@ -546,9 +1047,19 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
                         other_ok += 1
                     else:
                         _e(f"verdict:{k}")
-        for gi in set(ug):
+        # ONLY gold still unmatched AFTER valid rulings and gold-linked
+        # abstentions may count as a missing twin (Codex SEQ 1139.1). Raw `ug`
+        # is the PRE-grader set, so a surprise the grader had linked was still
+        # charged as missing — reproduced as matched=1, recall=1.0 AND
+        # wrong_lane=1 on the same fact.
+        # ONLY a valid RULED pair answers the twin. A gold-linked abstention is
+        # explicitly a park AND a recall NON-match (WorkOrder EXP-5 scoring
+        # point 3), so it does not supply the required surprise twin — Codex
+        # SEQ 1140.1 corrected my earlier subtraction of both.
+        answered = set(ruled_gold)
+        for gi in set(ug) - answered:
             g = du[gi]
-            if (g.get("lane") == "surprise"
+            if (g.get("fact_type") == "surprise"
                     and (g.get("gold_extra") or {}).get(
                         "expectation_comparison_present")):
                 lane_wrong += 1
@@ -557,28 +1068,65 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
     would_park = park / items_n if items_n else 0.0
     value_shape_acc = code_ok / code_all if code_all else 1.0
     state_acc = state_ok / state_all if state_all else None
+    # ADDENDUM-A SAFETY RESULT, the owner-approved SIXTH criterion.
+    #   FAIL          — at least one confirmed-wrong ACCEPTED fact
+    #   INCONCLUSIVE  — a genuine gold-key miss leaves the question open
+    #   PASS          — neither
+    if confirmed_wrong_accepted:
+        safety_result = "FAIL"
+    elif extras_tally["key_miss"]:
+        safety_result = "INCONCLUSIVE"
+    else:
+        safety_result = "PASS"
     complete = (verdicts_missing == 0 and ambiguities_unresolved == 0
-                and state_acc is not None)
+                and grader_problems == 0 and state_acc is not None)
     # DEFINITE FAIL short-circuit: axes no verdict/resolution could repair —
     # even resolving every tie caps recall at potential_recall; wrong_lane
     # from code, parks, and code-field accuracy are verdict-independent
-    potential_recall = ((matched + ambiguities_unresolved) / tot_gold
+    # THE MECHANICAL ONE-TO-ONE UPPER BOUND (Codex SEQ 1140.3, correcting his
+    # own SEQ 1139 framing and my `ambiguities_unresolved` shortcut). A missing
+    # ruling CAN still become a match — but only if an unused unmatched produced
+    # candidate exists to pair with. So the ceiling is what a perfect grader
+    # could still achieve, counted, never guessed:
+    #   matched  +  SUM over events of min(open gold, free produced)
+    # Decided misses (explicit None rulings, gold-linked abstentions) and
+    # duplicate-gold key errata are NOT repairable and earn no potential credit.
+    # This is count bookkeeping, not a second matcher.
+    potential_recall = ((matched + repairable_pairs) / tot_gold
                         if tot_gold else 0.0)
-    definite_fail = (potential_recall < 0.95 or would_park > 0.10
+    # A PURE KEY ERRATUM IS INCONCLUSIVE, NOT A FAILURE (SEQ 1140.2). When the
+    # only problem is duplicate gold, the run cannot be called False — the key
+    # is broken, so there is nothing to conclude about the model.
+    only_key_erratum = (key_erratum_seen and not other_problem
+                        and tot_gold == 0 and matched == 0)
+    definite_fail = (not only_key_erratum) and (
+                     potential_recall < 0.95 or would_park > 0.10
                      or value_shape_acc < 0.98 or lane_wrong > 0
-                     or wrong_name > 0)
+                     or wrong_name > 0
+                     or confirmed_wrong_accepted > 0)   # <- Addendum-A, sixth
     gate = None
     if complete:
-        gate = (recall >= 0.95 and lane_wrong == 0 and wrong_name == 0
-                and value_shape_acc >= 0.98 and state_acc >= 0.95
-                and would_park <= 0.10)
+        # THE SIXTH CRITERION IS ANDed IN, never averaged: one confirmed-wrong
+        # ACCEPTED fact fails the run outright, however good the other five
+        # numbers look. An INCONCLUSIVE safety result cannot PASS either — an
+        # open question is not a pass.
+        gate = passes_official_bars(
+            recall=recall, lane_wrong=lane_wrong, wrong_name=wrong_name,
+            value_shape_acc=value_shape_acc, state_acc=state_acc,
+            would_park=would_park, safety_result=safety_result)
     elif definite_fail:
         gate = False
     rollup = {r: 0 for r in OD_RULES}
     rollup["other"] = 0
     for code, n in err.items():
         rollup[_bucket(code)] = rollup.get(_bucket(code), 0) + n
-    return {"recall": round(recall, 4), "wrong_lane": lane_wrong,
+    return {"route_codes": dict(err),      # B-16 point 4: the REAL public codes,
+            #   `decision:CODE` for every non-parked outcome and `park:CODE` for
+            #   a park. `error_table_by_rule` below buckets into fixed RULE
+            #   names, which cannot carry a channel-contract or lane code — so a
+            #   rejection would otherwise be reported only as "other", losing
+            #   exactly the information a rejection exists to convey.
+            "recall": round(recall, 4), "wrong_lane": lane_wrong,
             "wrong_name": wrong_name,
             "error_table_by_rule": rollup,
             "value_shape_acc": round(value_shape_acc, 4),
@@ -589,19 +1137,55 @@ def score_arm(gold_by_event, arm_by_event, event_meta,
             "matched": matched, "ambiguous_rows": ambiguous_rows,
             "ambiguities_unresolved": ambiguities_unresolved,
             "verdicts_missing": verdicts_missing,
+            "confirmed_wrong_accepted": confirmed_wrong_accepted,
+            "safety_result": safety_result, "extras": dict(extras_tally),
             "error_table": err, "PASS": gate}
 
 
-def score_union(gold_by_event, arm_a, arm_b, event_meta,
-                grader_verdicts=None, ambiguity_resolutions=None):
-    """Same-tier 2-run union: DEDUPLICATED item union per event, matched once."""
+def union_answer(gold_by_event, arm_a, arm_b):
+    """The DEDUPLICATED union answer, exposed so the caller can route IT.
+
+    Codex SEQ 1126.6: a union needs its OWN completed route over this answer —
+    the two single-run routes may never be combined, because fusion and planning
+    are event-set dependent and a fact that stood alone in one run can collide in
+    the union. The caller cannot build that route without first seeing the union,
+    so the union stops being a private step of `score_union`.
+    """
     union = {}
     for sid in gold_by_event:
         fa = (arm_a.get(sid) or {}).get("facts", [])
         fb = (arm_b.get(sid) or {}).get("facts", [])
         union[sid] = {"facts": dedup_items(list(fa) + list(fb))}
-    return score_arm(gold_by_event, union, event_meta, grader_verdicts,
-                     ambiguity_resolutions=ambiguity_resolutions)
+    return union
+
+
+def score_union(gold_by_event, arm_a, arm_b, event_meta,
+                grader_verdicts=None, ambiguity_resolutions=None, *, route,
+                extras_verdicts=None, tiers=None):
+    """Same-tier 2-run union: DEDUPLICATED item union per event, matched once.
+
+    SAME-TIER ONLY (WorkOrder EXP-5 arms; step3 §11). `tiers` is the two arms'
+    tier labels — the same ones the reader plan pins per arm. A CROSS-TIER union
+    is REFUSED, because unioning a stronger arm into a weaker one would report a
+    recall the weaker tier never achieved. Omitting `tiers` keeps the existing
+    behaviour for callers that already know both arms are one tier.
+
+    `route` MUST be the route over `union_answer(...)`, not either single run's.
+    `extras_verdicts` is FORWARDED — it was ACCEPTED and then dropped, which
+    silently exempted every union from the Addendum-A safety requirement
+    (Codex SEQ 1134.3).
+    """
+    if tiers is not None:
+        a, b = tiers
+        if a != b:
+            raise ValueError(
+                f"cross-tier union refused: {a!r} vs {b!r} — same-tier unions "
+                f"only; unioning tiers reports a recall the weaker tier never "
+                f"achieved")
+    return score_arm(gold_by_event, union_answer(gold_by_event, arm_a, arm_b),
+                     event_meta, grader_verdicts,
+                     ambiguity_resolutions=ambiguity_resolutions, route=route,
+                     extras_verdicts=extras_verdicts)
 
 
 def presence_disagreement(gold_by_event, arm_a, arm_b, event_meta,
@@ -618,15 +1202,60 @@ def presence_disagreement(gold_by_event, arm_a, arm_b, event_meta,
     `score_arm`, exactly as before."""
     invalid = []
 
+    def _rulings(resolutions):
+        """One grader input, or TWO independent ones to reconcile.
+
+        A 2-tuple means two qualified graders answered the same question: only
+        their AGREEMENT is scorable (`reconcile_rulings`). A disagreement yields
+        no ruling and is recorded as invalid, so the run stays INCOMPLETE rather
+        than the scorer picking a winner.
+        """
+        if isinstance(resolutions, tuple) and len(resolutions) == 2:
+            agreed, disagreements = reconcile_rulings(*resolutions)
+            invalid.extend(disagreements)
+            return agreed
+        return resolutions
+
     def _captured(arm, resolutions):
         got = {}
+        rulings = _rulings(resolutions)
         for sid, gold in gold_by_event.items():
             du = [g for g in gold if g.get("du_worthy") is True]
-            pairs, _, _, amb = match(du, (arm.get(sid) or {}).get("facts", []))
-            extra, _no_match, bad = apply_resolutions(
-                pairs, amb, resolutions, sid)
-            invalid.extend([b for b in bad if "bad_resolution" in b])
-            got[sid] = {gi for gi, _ in pairs} | {gi for gi, _ in extra}
+            # SECOND call site of the retired matcher (presence capture). Same
+            # law as the primary one: Core matches, MatchResult stays visible,
+            # and the retired resolution path is gone rather than renamed.
+            from driver.core.fact_match import match_facts
+            gold_v2, gold_pos = _to_v2_with_positions(du)
+            prod_v2, prod_pos = _to_v2_with_positions(
+                (arm.get(sid) or {}).get("facts", []))
+            mr = match_facts(gold_v2, prod_v2)
+            captured = {gold_pos[id(g)] for g, _p in mr.links}
+            # VALID GRADER-LINKED MATCHES COUNT AS CAPTURED (Codex SEQ 1135).
+            # Auto-links alone understate capture, because any fact with a real
+            # field error is unmatched by construction. Same validating owner
+            # the scorer uses — `apply_resolutions` is NOT revived and no
+            # candidate matcher proposes a pair.
+            ug = [gold_pos[id(g)] for g in mr.to_grading_gold]
+            up = [prod_pos[id(pr)] for pr in mr.to_grading_produced]
+            if rulings is None and ug and up:
+                # An unmatched CANDIDATE exists and required grading is absent:
+                # the WorkOrder sends every unmatched fact to a qualified
+                # grader, so a clean numeric diagnostic here would be a made-up
+                # number (Codex SEQ 1139.3). A truly empty / no-candidate run
+                # still reports 0.0 — nothing was missed there.
+                invalid.append({"sid": sid, "reason": "grading_required",
+                                "unmatched_gold": sorted(ug),
+                                "unmatched_produced": sorted(up)})
+            if rulings is not None:
+                # A merely UNGRADED tie is a PENDING state, not a grader ERROR —
+                # this metric's own contract. `score_arm` separately blocks PASS
+                # for it. So rulings are consulted only when supplied; passing
+                # None through would have reported every unmatched row as
+                # invalid and made the metric refuse to emit a number at all.
+                ruled, problems = grade_unmatched(rulings, sid, ug, up)
+                invalid.extend(problems)
+                captured |= {gi for gi, _pi in ruled}
+            got[sid] = captured
         return got
     a, b = _captured(arm_a, resolutions_a), _captured(arm_b, resolutions_b)
     if invalid:                       # a grader ERROR -> refuse to emit a number
@@ -666,6 +1295,14 @@ def final_gate(single_result, union_result=None):
         OR union-leg (recall>=0.98 + the UNION'S OWN axes).
     True if either leg is True; False only when BOTH legs are definitively
     False (known failures take priority over None); None otherwise."""
+    # THE SPEC IS EXPLICIT: an UNSAFE arm is never rescued by union recall. A
+    # plain OR returned True whenever the union leg passed, even with a
+    # confirmed-wrong ACCEPTED fact in the single arm (Codex SEQ 1134). Safety
+    # is a VETO over the tier decision, not one more leg to average against —
+    # and it is checked BEFORE the legs, so an unsafe arm short-circuits.
+    for result in (single_result, union_result):
+        if (result or {}).get("confirmed_wrong_accepted"):
+            return False
     legs = [_leg(single_result, 0.95), _leg(union_result, 0.98)]
     if True in legs:
         return True
@@ -674,56 +1311,62 @@ def final_gate(single_result, union_result=None):
     return None
 
 
-def _dry3():
-    q = ("Revenue for the quarter was $726 million, up strongly versus the "
-         "prior year period of last year")
-    base = {k: None for k in (
-        "driver_name driver_state quote level_low level_high change_value "
-        "comparison_low comparison_high comparison_baseline value_text "
-        "conditions company_confirmed level_unit_raw change_unit_raw "
-        "level_unit_kind_hint level_money_mode_hint change_unit_kind_hint "
-        "change_money_mode_hint level_shape_hint comparison_shape_hint "
-        "surprise_basis_hint measurement_raw_spans period_start_date "
-        "period_end_date fiscal_year fiscal_quarter half month "
-        "long_range_start_year long_range_end_year sentinel_class time_type "
-        "period_scope slice").split()}
-    gold_item = dict(base, driver_name="revenue", driver_state="increased",
-                     quote=q, level_low=726, level_high=726,
-                     level_unit_raw="USD millions", level_shape_hint="point",
-                     level_unit_kind_hint="money",
-                     level_money_mode_hint="aggregate",
-                     comparison_baseline="prior_year",
-                     period_start_date="2026-01-01",
-                     period_end_date="2026-03-31", time_type="duration",
-                     measurement_raw_spans=[], slice=[])
-    gold = {"E1": [{"lane": "metric", "du_worthy": True, "quote": q,
-                    "gold_item": gold_item,
-                    "gold_extra": {"expectation_comparison_present": False}}]}
-    good = {"E1": {"facts": [{"lane": "metric", "quote": q,
-                              "gold_item": dict(gold_item)}]}}
-    bad_item = dict(gold_item, level_high=None, level_unit_raw=None,
-                    period_scope="quarter", surprise_basis_hint="actual")
-    bad = {"E1": {"facts": [{"lane": "guidance", "quote": q,
-                             "gold_item": bad_item}]}}
-    META = {"E1": {"event_date": "2026-04-23", "fye_month": 12}}
-    FULL = {("E1", 0): {k: True for k in MEANING_FIELDS}}
-    g = score_arm(gold, good, META, FULL)
-    b = score_arm(gold, bad, META, FULL)
-    held = score_arm(gold, good, META)            # verdicts withheld
-    print("GOOD:", json.dumps({k: g[k] for k in
-                               ("recall", "would_park", "PASS")}))
-    print("BAD :", json.dumps({k: b[k] for k in
-                               ("recall", "wrong_lane", "would_park", "PASS")}))
-    print("HELD:", held["PASS"], f"(verdicts_missing={held['verdicts_missing']})")
-    assert g["PASS"] is True and b["PASS"] is False and held["PASS"] is None
-    assert final_gate(g, None) is True
-    print("DRY-RUN v5: good PASSES · bad FAILS · withheld verdicts = "
-          "INCOMPLETE(None) — executes and discriminates.")
+# `_dry3()` and its `--dry3` entry point are DELETED (Codex SEQ 1131).
+#
+# It was a manual smoke demo carrying a HAND-COPIED 32-field V1 item list —
+# including `slice`, `level_unit_raw` and the four retired unit/money hints —
+# which is precisely the copied-list residue B-16 exists to remove. It was also
+# already broken: it called `score_arm` without the required `route`. The pytest
+# suite is the real check, so this is deleted per the frozen denominator rather
+# than rebuilt on V2; nothing here was law and nothing is preserved.
 
 
-if __name__ == "__main__":
-    if "--dry3" in sys.argv:
-        _dry3()
-    else:
-        print("usage: score_exp5.py --dry3")
-        sys.exit(2)
+def project_replay_items(reply):
+    """STEP 3 §7 / B-14 — the recorded-answer replay projection.
+
+    MECHANICAL and TEST-ONLY: it copies each record's own quote into both
+    `quote` and `raw_label_or_claim` and derives no label, value or meaning.
+    Facts in emitted order, then abstentions; the returned map is exact.
+    Duplicates stay SEPARATE positions and a lawful zero-fact answer projects to
+    zero items.
+    """
+    items, index_map = [], {}
+    for kind, records in (("fact", reply.get("facts") or []),
+                          ("abstention", reply.get("abstentions") or [])):
+        for original_index, record in enumerate(records):
+            quote = (record.get("item") or {}).get("quote") if kind == "fact" \
+                else record.get("quote")
+            index_map[(kind, original_index)] = len(items)
+            items.append({"quote": quote, "raw_label_or_claim": quote})
+    return items, index_map
+
+
+def replay_reader(reply):
+    """STEP 3 §7 / B-14 — the recorded-answer callback `run_event` calls.
+
+    Each reply is built from the ALREADY-CAPTURED record at the mapped position
+    and nothing else: no fact constructed, no meaning derived, no value invented.
+
+        fact       -> {source_id, facts: [that record], abstentions: []}
+        abstention -> {source_id, facts: [], abstentions: [that record]}
+    """
+    items, index_map = project_replay_items(reply)
+    source_id = reply.get("source_id")
+    by_raw = {}
+    for (kind, original_index), raw_index in index_map.items():
+        records = reply.get("facts") if kind == "fact" else reply.get("abstentions")
+        by_raw[raw_index] = (kind, (records or [])[original_index])
+    served = {"n": 0}
+
+    def reader(**_kw):
+        i = served["n"]
+        served["n"] += 1
+        if i not in by_raw:
+            raise IndexError(f"run_event asked for raw item {i}; the captured "
+                             f"answer projected {len(by_raw)}")
+        kind, record = by_raw[i]
+        return {"source_id": source_id,
+                "facts": [record] if kind == "fact" else [],
+                "abstentions": [] if kind == "fact" else [record]}
+
+    return items, reader

@@ -1,0 +1,99 @@
+STEP 2 — PER-TEST DISPOSITION. One authoritative table, 26 rows, each row in
+exactly ONE bucket. Supersedes every earlier version of this receipt.
+
+BUCKET 1 DELETE (2) — the behaviour no longer exists anywhere:
+    test_lint_fails_inner_outer_mismatch      the duplicate outer quote is gone
+    test_lint_fails_null_sequential_evidence  the field is retired from the item
+
+BUCKET 2 MIGRATE (12) — proof Step 2 still requires, now at the V2 door:
+    test_ingest_validates_both_arms_automatically
+    test_lint_clean_on_int_date
+    test_lint_clean_on_list_driver_state
+    test_lint_clean_on_list_enum_value
+    test_lint_decimal_exact_END_TO_END
+    test_lint_fails_blank_quote
+    test_lint_fails_null_measurement_list
+    test_lint_fails_null_slice_parts_list
+    test_LIVE_workflow_handoff_delivers_Decimal_to_the_validator
+    test_lint_accepts_production_valid_year_2150
+        -> now test_CONTROL_lawful_far_future_fiscal_year_2150_is_accepted
+    test_lint_fails_fractional_year_via_production
+        -> now test_RED_fractional_fiscal_year_is_refused_without_a_raw_exception
+    test_lint_clean_on_dict_period_scope
+        -> now test_RED_dict_period_scope_is_refused_without_a_raw_exception
+           (rename recorded 2026-08-13 in the SEQ 1082 audit; the two sibling
+            rows already carried theirs. Behaviour PRESERVED: the OLD name said
+            "clean" while asserting == 1 error — a refusal — so the new name is
+            the truthful one for the same proof.)
+        -> now test_RED_dict_period_scope_is_refused_without_a_raw_exception
+  The last three have NO exact Core survivor, so they are preserved at the
+  public door rather than removed on a citation that would not prove them.
+
+BUCKET 3 REMOVE (9) — harness duplicate; the surviving Core proof is named and
+each identity was verified present at the stated line:
+    test_lint_fails_illegal_driver_name
+        -> driver/core/test_driver_ids.py:160::test_bad_driver_names_rejected
+    test_lint_fails_null_driver_name
+        -> driver/core/test_driver_ids.py:160::test_bad_driver_names_rejected
+    test_lint_fails_wrong_lane_state
+        -> driver/core/test_driver_validators.py:131::test_state_outside_lane_hard_fails
+    test_lint_fails_none_shape_literal
+        -> driver/core/test_driver_validators.py:140::test_shape_hint_missing_or_mismatched
+    test_lint_fails_month_13_via_production
+        -> driver/core/test_driver_period_resolver.py:403::test_out_of_range_shape_values_park
+    test_lint_fails_half_quarter_conflict
+        -> driver/core/test_driver_period_resolver.py:392::test_conflicting_shape_fields_park_on_every_path
+    test_lint_fails_non_iso_date_via_production
+        -> driver/core/test_v2_attacks.py:669::test_ATTACK_malformed_dates_are_rejected
+    test_lint_fails_start_after_end_via_production
+        -> driver/core/test_driver_period_resolver.py:1042::test_reversed_exact_dates_park_on_the_public_door
+    test_lint_fails_stored_period_scope
+        -> driver/core/test_driver_period_resolver.py:316::test_bad_input_scope_rejected
+
+SKIPPED (3) — builder rows / pre-existing, not gold-shell tests:
+    test_launch_manifest_exact_plan
+    test_RED_contract_builder_reads_archived_authority
+    test_RED_contract_builder_does_not_derive_names_from_core
+
+TOTALS: 2 DELETE + 12 MIGRATE + 9 REMOVE + 3 SKIP = 26
+
+PRECEDENCE RULE. Bucket 1 is the NARROWEST and is applied LAST. A test whose old
+fixture merely MENTIONED the retired wrapper is not thereby dead. An earlier
+classifier applied bucket 1 first and put all 23 into DELETE, which would have
+destroyed the exact-Decimal transport proof and the driver-name case.
+
+CITATION RULE. One test may not stand as evidence for several distinct
+behaviours. An earlier version cited a single period test for eight different
+rules, which proves none of them; every citation above is behaviour-specific.
+
+FROZEN REVIEW SHAPE: gold_extra is exactly {"expectation_comparison_present":
+<bool>} per FableExperimentWorkOrder:420 — two lawful controls and five refusals.
+
+DEAD SYMBOLS REMOVED from kf_lint after proving no consumer: STRINGY,
+NUMERIC_ITEM_FIELDS, event_text, event_meta, DOC_KEYS, SOURCE_OWNED, _is_num,
+ITEM_KEYS, the NUMERIC_SLOTS alias and the SOURCE_OWNED_FIELDS import.
+CALLER RULE: a test of a symbol is not a use of it. _is_num was once retained on
+three "callers" that were one test exercising _is_num itself, and ITEM_KEYS on a
+test comparing it to the ITEM_FIELDS it was copied from. Both are tautologies;
+no symbol is retained solely because a test references it.
+
+=== SEQ 1082 AUDIT — WRONG-REASON PATTERN ACROSS ALL 12 MIGRATE TESTS ===
+Codex found test_lint_fails_blank_quote proving the wrong thing: it also set an
+OUTER f["quote"] = "" , which is not a gold fact key, so lint_doc rejected the
+extra key BEFORE Core's non-blank item-quote rule was reached. The test would
+have stayed green if blank item quotes became acceptable. Only the invented
+outer assignment was removed; the blank item quote and the count stay, and the
+refusal is now asserted to name the quote rule:
+  "0000006201-26-000031#0: quote: required non-blank string"
+The lawful gold control beside it still lints clean (0 errors).
+
+THE OTHER 11, CHECKED INDIVIDUALLY:
+  · outer-key smell (f["<key>"] = ... at fact level): NONE of the 11.
+  · the 2 other refusal proofs reach their NAMED rule:
+      null_measurement_list -> "measurement_raw_spans: list or tuple of non-blank strings"
+      null_slice_parts_list -> "slice_parts: list or tuple of 'kind:value' strings"
+  · the positive controls (clean_on_*, accepts_*, decimal_exact, ingest, LIVE
+    handoff) cannot hide a wrong reason: they require ZERO errors, so any
+    unintended refusal fails them outright.
+RESULT: 1 false proof found (Codex's), 1 fixed, 0 further false proofs.
+NO tests added, per the instruction.

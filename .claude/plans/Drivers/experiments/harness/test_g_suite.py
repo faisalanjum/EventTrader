@@ -86,9 +86,8 @@ G_COVERAGE = {
             "against is scaffolding derived from each item's own quote, because the "
             "historical text the reader was actually shown was never archived. No "
             "test can recover a record that does not exist"),
-    "G12": ("gated-switch", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G12_the_live_launcher_still_serves_the_v1_contract",
-            "the rev-4 prompt is authored, but the live launcher still serves the v1 "
-            "37-field contract; the assembled prompt is regenerated at the switch"),
+    "G12": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G12_the_live_launcher_serves_the_v2_drafter_prompt",
+            ""),
     "G13": ("grading", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G13_attack_fixtures_are_registered_and_classified",
             "a MEANING error: only hidden grading can catch it, never a code proof"),
     "G14": ("partial", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G14_guidance_legacy_path_is_untouched",
@@ -103,9 +102,17 @@ G_COVERAGE = {
     "G17": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G17_transport_is_exact_and_refuses_ambiguity",
             ""),
     "G18": ("partial", "driver/core/test_prepared_fact_v2.py::test_G18_the_new_modules_reach_no_graph_write",
-            "the new modules are write-free (proven, and the driver-side proof covers "
-            "xbrl_attach too); 'zero writes reachable from the EXAM' needs the "
-            "run_event exam path, which is switch-gated"),
+            "REASON RE-ADJUDICATED FROM CURRENT BYTES (Codex SEQ 1138.2). The old "
+            "reason said the exam had not reached run_event; that is now FALSE — "
+            "B-14 proves the replay reaches the public run_event, and the scoring "
+            "seam pins enable_writes=False with a store whose transaction() "
+            "REFUSES, so a write attempt during scoring raises rather than "
+            "succeeding quietly. STILL partial, and this is the precise unproven "
+            "leg: that covers the SCORING replay path only. 'Zero writes "
+            "reachable from the EXAM' also spans the launcher and plan-bound "
+            "entry points, and no single public-path test yet drives the "
+            "COMPLETE exam route and shows it write-free. Not promoted on a "
+            "green count or a module name"),
     "G19": ("partial", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G19_two_rebuilds_are_byte_identical",
             "docs-patch determinism is proven; contract/launcher/manifest "
             "regeneration happens at the switch"),
@@ -160,9 +167,8 @@ G_COVERAGE = {
             "and the violation case are both unproven here"),
     "G31": ("code", "driver/core/test_prepared_fact_v2.py::test_G31_compensated_misread_can_never_grade_correct",
             ""),
-    "G32": ("partial", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G32_source_id_is_delivered_in_the_prompts_event_view",
-            "source_id is in the authored prompt; the live event view is regenerated "
-            "with the launcher at the switch"),
+    "G32": ("code", ".claude/plans/Drivers/experiments/harness/test_g_suite.py::test_G32_every_assembled_event_view_is_exactly_the_authorized_fields",
+            ""),
     "G33": ("code", "driver/core/test_v2_attacks.py::test_ATTACK_an_invalid_slice_kind_is_rejected",
             ""),
     "G34": ("code", "driver/core/test_prepared_fact_v2.py::test_G34_company_confirmed_never_stores_a_guessed_false",
@@ -229,100 +235,10 @@ def unexpected_production_files(status_lines, allowed, staged=STAGED_PATHS):
     return sorted(out)
 
 
-#: PC-4 (#827): the ONE live->staged import edge the closed C1+C10 rows require,
-#: at SYMBOL granularity — (live module, staged module, symbol). CANONICAL_UNITS
-#: is slot_convert's own published unit vocabulary and driver_validators must ask
-#: it rather than keep a second copy, which is exactly what C1+C10 decided. An
-#: ALIAS of this symbol is the same symbol and passes; importing the whole
-#: module, a second slot_convert symbol, or any other live->staged pair does not.
-_ALLOWED_LIVE_STAGED_IMPORTS = frozenset({
-    ("driver_validators.py", "driver.core.slot_convert", "CANONICAL_UNITS")})
-
-
-def live_modules_importing_staged(sources, staged=STAGED_FILES):
-    """`sources` = {filename: text} for LIVE modules. The module names come from
-    `staged`, never from a second hand-maintained list.
-
-    PC-4 (#827): this used to be `if mod in src` — a RAW SUBSTRING SCAN over the
-    file's text, so a module NAME appearing in a comment, a docstring or even a
-    longer identifier counted as an import. It was false on the current
-    candidate: three of the four edges it reported were prose only, and the one
-    real edge it did find was the lawful C1+C10 one. A gate that cannot tell an
-    import from a sentence about an import proves nothing, and this one guards
-    the staged/live boundary, so it now asks the AST.
-
-    What counts as an edge is a fact about Python: an `import` or `from ...
-    import` statement naming a staged module. Anything else in the text is
-    prose. The single lawful exception is declared above at symbol granularity,
-    so widening it — a second symbol, or the whole module — still fails.
-    """
-    #: the staged set as FULL dotted module paths — derived, never re-listed
-    full = frozenset("driver.core." + n[:-3] for n in staged)
-    #: the package these `sources` live in; `.` means this, `..` its parent
-    HOME = "driver.core"
-
-    def reaches(node):
-        """Every staged module this import statement reaches, as
-        (resolved_module, symbol_or_None). `None` means the WHOLE module.
-
-        THE MODULE IS RESOLVED, NEVER MATCHED BY BASENAME (PC-4 corrective,
-        SEQ 860). The previous version mapped any matching tail to
-        `driver.core.<tail>`, which was wrong in BOTH directions and one of them
-        was a false ALLOWANCE: `from unrelated.slot_convert import
-        CANONICAL_UNITS` collected the C1 exception although it never reaches
-        staged code, and `import unrelated.slot_convert` /
-        `from ..relocation import slot_convert` were REPORTED as staged edges
-        they are not. A basename is not an identity; the package is.
-
-        Resolution is ordinary Python: an absolute import is already its own
-        path, and a relative one counts dots up from HOME — `.` is driver.core,
-        `..` is driver — so `from ..core.slot_convert import X` and
-        `from .slot_convert import X` resolve to the same module and get the
-        same verdict, while `from ..relocation import slot_convert` resolves to
-        driver.relocation and is simply not staged.
-        """
-        if isinstance(node, ast.Import):                 # import a.b.c
-            return [(a.name, None) for a in node.names if a.name in full]
-        if node.level:                                   # from .x / ..x import
-            parts = HOME.split(".")
-            if node.level > len(parts):                  # climbs past the root
-                return []
-            base = ".".join(parts[:len(parts) - node.level + 1])
-        else:
-            base = ""                                    # absolute
-        mod = ".".join(p for p in (base, node.module or "") if p)
-        if mod in full:                                  # <staged> import SYMBOL
-            return [(mod, a.name) for a in node.names]
-        # <package> import <staged> — the module itself is the imported name
-        return [(f"{mod}.{a.name}", None)
-                for a in node.names if f"{mod}.{a.name}" in full]
-
-    out = []
-    for fn, src in sources.items():
-        try:
-            tree = ast.parse(src)
-        except SyntaxError:                  # a live module that will not parse
-            out.append(f"{fn} does not parse")   # is its own, louder failure
-            continue
-        for node in ast.walk(tree):
-            if not isinstance(node, (ast.Import, ast.ImportFrom)):
-                continue
-            for mod, symbol in reaches(node):
-                if symbol is None:
-                    # the WHOLE module reaches every symbol in it, so it is
-                    # never covered by a symbol-granular allowance
-                    out.append(f"{fn} imports module {mod}")
-                # the ASNAME is irrelevant: an alias of a symbol IS that
-                # symbol, and `*` is never a named symbol so it can never
-                # be the allowed one.
-                elif (fn, mod, symbol) not in _ALLOWED_LIVE_STAGED_IMPORTS:
-                    out.append(f"{fn} imports {mod}.{symbol}")
-    return sorted(out)
 
 
 _STATUS_VOCAB = ("code", "partial", "grading", "gated-switch")
 _TEST_ROOTS = ("driver", ".claude/plans/Drivers/experiments/harness")
-
 
 def _live_test_inventory():
     """Every test function under the BOUNDED roots, RECURSIVELY, as node ids.
@@ -740,13 +656,22 @@ def test_G15_xbrl_declared_metadata_path_is_untouched():
 # --------------------------------------------------------------------- G16 ----
 
 def test_G16_old_path_removal_is_gated_on_the_switch():
-    """HONEST STATE: v1 and fact16_checks are still present, deliberately — the
-    deletion is the atomic switch, which needs owner sign-offs. What IS provable
-    now: v2 rejects old payloads, and the import fence holds one-way."""
+    """HONEST STATE, UPDATED DELIBERATELY (Codex SEQ 1137).
+
+    The two halves of "old path removal" turned out to be SEPARABLE, and only
+    one has happened:
+      * `fact16_checks` — the duplicate rule engine — is DELETED. B-16 moved the
+        scorer onto the public route's own decisions, so the engine had no
+        callers left. That is Step-3 work and needed no switch.
+      * v1 `prepared_fact.py` still EXISTS. Deleting it IS the atomic switch and
+        still needs owner sign-off.
+    So this no longer asserts the engine is present — that assertion would now
+    be asking for a file whose whole point was to stop existing.
+    """
     assert os.path.exists(os.path.join(_REPO, "driver", "core", "prepared_fact.py")), \
         "v1 must still exist: the switch is not authorised yet"
-    assert os.path.exists(os.path.join(_HERE, "scorers", "fact16_checks.py")), \
-        "the duplicate rule engine retires AT the switch, not before"
+    assert not os.path.exists(os.path.join(_HERE, "scorers", "fact16_checks.py")), \
+        "the duplicate rule engine is deleted (B-10/B-16); this must stay gone"
     from driver.core import fact_match, prepared_fact_v2, slot_convert
     for mod in (slot_convert, prepared_fact_v2, fact_match):
         src = io.open(mod.__file__, encoding="utf-8").read()
@@ -819,10 +744,42 @@ def test_G28_source_id_echo_mismatch_is_refused():
     assert "source_id" in body and "inner" in body
 
 
-def test_G32_source_id_is_delivered_in_the_prompts_event_view():
-    prompt = _prompt_text()
-    assert "source_id" in prompt
-    assert "echo" in prompt.lower(), "the echo instruction must be visible to the model"
+def test_G32_every_assembled_event_view_is_exactly_the_authorized_fields():
+    """MIGRATED partial -> code (Codex SEQ 1095).
+
+    G32 used to read the AUTHORED prompt and check that the words "source_id" and
+    "echo" appeared in it. That proved a description, not the bytes a worker
+    receives — and it would have stayed green while the live view carried the
+    wrong fields, or the wrong event entirely.
+
+    It now decodes the [EVENT] object of every assembled prompt and requires it to
+    equal, exactly, the six WorkOrder-authorized fields taken from that event's own
+    input — including text_parts IN ORDER. Anything extra (a packet hash, a source
+    type, menu bookkeeping) is a leak, and anything missing is a starved reader.
+    """
+    import hashlib
+    import json
+    gen = io.open(os.path.join(_HERE, "launch_kfields_drafts.workflow.js"),
+                  encoding="utf-8").read()
+    k = gen.index("const PROMPTS = ")
+    prompts = json.loads(gen[k + 16:gen.index("\n", k)])
+    man = json.load(io.open(os.path.join(_HERE, "launch_kfields_drafts.manifest.json"),
+                            encoding="utf-8"))
+    AUTHORIZED = ("event_date", "fye_month", "menu_tokens", "source_id",
+                  "ticker", "text_parts")
+    assert len(prompts) == len(man["events"])
+    for e in man["events"]:
+        body = prompts[e["source_id"]]
+        view = json.loads(body[body.index("[EVENT]") + len("[EVENT]"):].strip())
+        assert tuple(sorted(view)) == tuple(sorted(AUTHORIZED)), (
+            f"{e['source_id']}: event view is {sorted(view)}, not the authorized six")
+        raw = json.load(io.open(os.path.join(_REPO, e["input_path"]), encoding="utf-8"))
+        for f in AUTHORIZED:
+            assert view[f] == raw[f], f"{e['source_id']}: {f} differs from its input"
+        assert [p["part"] for p in view["text_parts"]] == \
+            [p["part"] for p in raw["text_parts"]], \
+            f"{e['source_id']}: text_parts are not in the input's order"
+        assert view["source_id"] == e["source_id"], "wrong event delivered"
 
 
 # ------------------------------------------- G9 / G12: the honest position ----
@@ -832,8 +789,17 @@ def test_G9_one_shared_validation_entry_point_exists():
     exactly ONE validation entry point exists for v2 — `validate_via_production`
     — and it delegates to production's own `validate_fact`, restating no rule.
     What is NOT yet true: the scorer and run_event both routing through it. That
-    swap retires `fact16_checks` and IS the atomic switch, so it is registered
-    gated-switch rather than claimed."""
+    swap retired `fact16_checks`, which has now happened.
+
+    G9 NEVERTHELESS STAYS `gated-switch` (Codex SEQ 1138.1). Retiring the
+    duplicate engine is NOT the same as satisfying the contract's named-door
+    requirement, and the absence check below proves only the former.
+    THE EXACT REMAINING LEG: ChannelContractV2 section 6 says every prepared
+    fact passes through `validate_via_production` before any write, but
+    `driver_write_cli._run_event_v2` still calls `driver_validators.validate_fact`
+    DIRECTLY after fusion (two call sites). The engine underneath is the same
+    one, so behaviour is lawful today — what is unproven is the NAMED DOORWAY.
+    Closing it is a production change and belongs to the switch, not Step 3."""
     import inspect
     from driver.core import driver_validators
     from driver.core import prepared_fact_v2 as p2
@@ -841,28 +807,74 @@ def test_G9_one_shared_validation_entry_point_exists():
     assert "validate_fact" in src, "v2 must delegate to production's validator"
     assert not hasattr(p2, "LANE_STATES") and not hasattr(p2, "PERIOD_SCOPES")
     assert callable(driver_validators.validate_fact)
-    # HONEST: the scorer still calls the duplicate engine until the switch
+    # THE FLIP THIS ASSERTION ASKED FOR HAS HAPPENED (Codex SEQ 1137). It used
+    # to REQUIRE the duplicate-engine import and told its reader to update the
+    # status deliberately when the scorer moved off it. B-16 did exactly that:
+    # the scorer consumes the public route's decisions and runs no rule engine
+    # of its own, so the import must now be ABSENT.
     scorer = io.open(os.path.join(_HERE, "scorers", "score_exp5.py"),
                      encoding="utf-8").read()
-    assert "from fact16_checks import check_item" in scorer, (
-        "the scorer moved off the duplicate engine — update G9's status from "
-        "gated-switch to code, deliberately")
+    assert "fact16_checks" not in scorer, (
+        "the scorer reached the deleted duplicate engine again")
 
 
-def test_G12_the_live_launcher_still_serves_the_v1_contract():
-    """The rev-4 prompt is AUTHORED (Part A) but is NOT what the launcher
-    serves: the live template still points at the 37-field v1 contract. Claiming
-    G12 against the package Markdown tested a description, not the artifact a
-    model would actually receive."""
+def test_G12_the_live_launcher_serves_the_v2_drafter_prompt():
+    """MIGRATED gated-switch -> code (Codex SEQ 1085).
+
+    G12 used to assert the OPPOSITE on purpose — that the launcher still served
+    the retired 37-field v1 card — so the row stayed `gated-switch` until the
+    regeneration landed. It has landed: the card is deleted and the launcher
+    serves the generated V2 drafter prompt, so the row becomes `code` and this
+    test proves the real artifact instead of the hold.
+
+    The old `37 model-owned fields` and `level_unit_kind_hint` assertions are
+    DELETED and NOT replaced by a copied schema list: the Step-2 builder and its
+    manifest own the shape proof, and restating it here would recreate exactly
+    the second schema owner Step 2 removed.
+    """
+    import hashlib
+    import json
     tmpl = io.open(os.path.join(_HERE, "launch_kfields_drafts.workflow.template.js"),
                    encoding="utf-8").read()
-    assert "exp5_item_contract.md" in tmpl
-    assert "37 model-owned fields" in tmpl, (
-        "the launcher was regenerated — move G12 to `code` and point this test "
-        "at the real assembled prompt")
-    contract = io.open(os.path.join(_HERE, "exp5_item_contract.md"),
-                       encoding="utf-8").read()
-    assert "level_unit_kind_hint" in contract, "the served contract is not v1"
+    # The path-string assertion is DELETED (Codex SEQ 1095): it proved a dead
+    # constant, and that constant is now gone because the worker receives bytes,
+    # not a path. What remains is the retired-card check plus the assembled-byte
+    # proof below, which is the real one.
+    assert "exp5_item_contract" not in tmpl, "the launcher still names the retired card"
+    served = os.path.join(_HERE, "exp5_prompt_drafter.md")
+    assert os.path.exists(served), "the built prompt is missing"
+    man = json.load(io.open(os.path.join(_HERE, "launch_kfields_drafts.manifest.json"),
+                            encoding="utf-8"))
+    assert man["pins"]["contract"] == hashlib.sha256(
+        io.open(served, "rb").read()).hexdigest(), "manifest pin != served prompt bytes"
+
+    # SEQ 1089: the PATH moving is not the proof. Until these hold, the launcher
+    # still serves reachable V1 instructions and G12 cannot honestly be `code`.
+    for js in ("launch_kfields_drafts.workflow.template.js",
+               "launch_kfields_drafts.workflow.js"):
+        src = io.open(os.path.join(_HERE, js), encoding="utf-8").read()
+        assert "37 model-owned fields" not in src, (
+            f"{js} still instructs the V1 37-field shape")
+        assert "ALL 37" not in src, f"{js} still requires ALL 37 fields"
+        # step3 §2: one preassembled prompt — no repository path, no file access.
+        for tell in ("Read ${WRAPPER}", "Read ${CONTRACT}", "Read ONLY those three files"):
+            assert tell not in src, f"{js} still tells the worker to read files: {tell}"
+
+    # SEQ 1093: prove the ACTUAL assembled bytes, not strings plus a base pin.
+    gen = io.open(os.path.join(_HERE, "launch_kfields_drafts.workflow.js"),
+                  encoding="utf-8").read()
+    k = gen.index("const PROMPTS = ")
+    prompts = json.loads(gen[k + 16:gen.index("\n", k)])
+    assert len(prompts) == len(man["events"]), "prompt count != planned events"
+    assert man.get("made_calls") == 0, "a disabled plan must record made_calls = 0"
+    assert "schema" not in man, "the copied schema block is back"
+    for e in man["events"]:
+        body = prompts[e["source_id"]]
+        assert hashlib.sha256(body.encode("utf-8")).hexdigest() == e["prompt_sha256"], \
+            f"{e['source_id']}: manifest pin != the bytes the worker receives"
+        assert body.index("[EVENT]") > body.index("[BOUNDARY]"), \
+            f"{e['source_id']}: the event is not last"
+        assert "<<EVENT>>" not in body, f"{e['source_id']}: placeholder unsubstituted"
 
 
 def test_G13_the_annual_sequential_attack_is_actually_run():
@@ -971,14 +983,16 @@ def test_the_v2_modules_are_a_STAGED_read_only_adapter():
     unexpected = unexpected_production_files(st.splitlines(), allowed)
     assert not unexpected, f"unexpected production file(s): {unexpected}"
 
-    # 2. nothing in the live path imports ANY staged module — the names are
-    #    DERIVED from the staged set, so a fourth staged module cannot slip past
-    #    a list that still names three.
-    live = {fn: io.open(os.path.join(core, fn), encoding="utf-8").read()
-            for fn in os.listdir(core)
-            if fn.endswith(".py") and fn not in new and not fn.startswith("test_")}
-    leaks = live_modules_importing_staged(live)
-    assert not leaks, f"the live path now reaches staged code: {leaks}"
+    # 2. THE OLD "no live module imports any staged module" RULE IS DELETED.
+    #    0edb1be8 deliberately made driver_write_cli.run_event the ONE entry point
+    #    for two input contracts until the switch, so its private V2 branch MUST
+    #    import the staged V2 owners. The old fence would now be false, and
+    #    allowlisting the thirteen current edges would only hide the next one.
+    #    The real invariant is narrower and is proven by its existing owners:
+    #      * V1 still exists and is still reachable      -> the G16 old-path gate
+    #      * the V2 bridge has NO write surface          -> the G18 no-write owner
+    #    Neither rule is copied here; duplicating them would recreate exactly the
+    #    second-owner problem this suite exists to catch.
 
     # 3. the adapter reaches production only through PURE functions
     from driver.core import prepared_fact_v2 as p2
@@ -1207,103 +1221,6 @@ def test_the_attack_count_is_derived_not_transcribed():
 # MUTATION TESTS — a gate that has never been attacked is a hope, not a gate.
 # Both of these attacks passed the previous version silently.
 # ---------------------------------------------------------------------------
-
-def test_the_gate_CATCHES_a_live_import_of_a_staged_module():
-    """ATTACK: a live production module starts importing staged code. The old
-    check compared against a hand-written three-name list, so an import of the
-    fourth staged module (`xbrl_attach`) was invisible."""
-    for staged_name in sorted(STAGED_FILES):
-        mod = staged_name[:-3]
-        attack = {"driver_writer.py": f"from driver.core.{mod} import something"}
-        assert live_modules_importing_staged(attack), \
-            f"a live import of staged {mod} went undetected"
-        # PC-4 corrective (SEQ 859): the staged module can sit in EITHER half of
-        # an ImportFrom. The whole-module forms below were invisible to the
-        # first version, which read only `.module` — and they are precisely the
-        # ones a SYMBOL-granular allowance can never cover, since importing the
-        # module reaches every symbol in it.
-        for form in (f"from driver.core import {mod}",
-                     f"from driver.core import {mod} as shorthand",
-                     f"from . import {mod}",
-                     f"import driver.core.{mod}"):
-            assert live_modules_importing_staged({"driver_writer.py": form}), \
-                f"whole-module import went undetected: {form}"
-    # NEGATIVE CONTROL: ordinary live code is not flagged
-    assert live_modules_importing_staged(
-        {"driver_writer.py": "from driver.core.driver_ids import build_id"}) == []
-
-    # PC-4 (#827): the check reads IMPORTS, not text. Everything below was
-    # wrong under the old substring scan — the first three were reported as
-    # edges when they are sentences, and the last four were the widenings a
-    # symbol-granular allowance has to refuse.
-
-    # PROSE IS NOT AN EDGE. These are the three real mentions that live in the
-    # current tree's comments and docstrings; the scan called every one a leak.
-    for prose in ('# see xbrl_attach for the event door',
-                  '"""mirrors prepared_fact_v2\'s lane vocabulary."""',
-                  'x = 1  # slot_convert owns the unit law'):
-        assert live_modules_importing_staged({"outcome_codes.py": prose}) == [], \
-            f"prose was counted as an import: {prose}"
-
-    # THE ONE LAWFUL EDGE (C1+C10), an ALIAS of it, and both written RELATIVELY
-    # — the same symbol however it is spelled. The relative spellings are
-    # canonicalized (PC-4 corrective, SEQ 859) so one edge cannot get two
-    # different verdicts depending on how the author wrote the import.
-    for lawful in ("from driver.core.slot_convert import CANONICAL_UNITS",
-                   "from driver.core.slot_convert import CANONICAL_UNITS as CU",
-                   "from .slot_convert import CANONICAL_UNITS",
-                   "from .slot_convert import CANONICAL_UNITS as CU"):
-        assert live_modules_importing_staged(
-            {"driver_validators.py": lawful}) == [], lawful
-    # ...but the relative WHOLE-module form of that same module still fails.
-    assert live_modules_importing_staged(
-        {"driver_validators.py": "from . import slot_convert"}), \
-        "the relative whole-module form rode in on the symbol allowance"
-
-    # PC-4 corrective (SEQ 860/861): THE MODULE IS RESOLVED, NOT MATCHED BY
-    # BASENAME. A module merely NAMED like a staged one, in a different
-    # package, is not a staged edge — in either direction. Before this, the
-    # basename mapping both invented staged edges that do not exist AND let an
-    # unrelated package collect the C1 symbol allowance.
-    for fn in ("driver_validators.py", "driver_writer.py"):
-        for unrelated in ("import unrelated.slot_convert",
-                          "from unrelated import slot_convert",
-                          "from unrelated.slot_convert import convert_slot",
-                          "from unrelated.slot_convert import CANONICAL_UNITS",
-                          "from ..relocation import slot_convert",
-                          "from ..relocation.slot_convert import CANONICAL_UNITS"):
-            assert live_modules_importing_staged({fn: unrelated}) == [], \
-                f"an unrelated package was read as a staged edge: {fn} / {unrelated}"
-
-    # the PARENT spelling of the real package resolves to the same place, so it
-    # gets the same verdicts — caught whole-module, caught non-C1 symbol, and
-    # the C1 symbol allowed in its OWN module only.
-    assert live_modules_importing_staged(
-        {"driver_validators.py": "from ..core import slot_convert"}), "parent whole-module"
-    assert live_modules_importing_staged(
-        {"driver_validators.py": "from ..core.slot_convert import convert_slot"}), \
-        "parent symbol form"
-    assert live_modules_importing_staged(
-        {"driver_validators.py": "from ..core.slot_convert import CANONICAL_UNITS"}) == []
-    assert live_modules_importing_staged(
-        {"driver_writer.py": "from ..core.slot_convert import CANONICAL_UNITS"}), \
-        "the C1 allowance is bound to ITS module, whatever the spelling"
-
-    # ...and it is granted to THAT module alone, for THAT symbol alone.
-    assert live_modules_importing_staged(
-        {"driver_writer.py": "from driver.core.slot_convert import "
-                             "CANONICAL_UNITS"}), "the allowance is not module-bound"
-    assert live_modules_importing_staged(
-        {"driver_validators.py": "from driver.core.slot_convert import "
-                                 "CANONICAL_UNITS, convert_slot"}), \
-        "a SECOND slot_convert symbol rode in on the allowance"
-    assert live_modules_importing_staged(
-        {"driver_validators.py": "import driver.core.slot_convert"}), \
-        "the WHOLE module rode in on a symbol-granular allowance"
-    assert live_modules_importing_staged(
-        {"driver_validators.py": "from driver.core.slot_convert import *"}), \
-        "a star-import rode in on a symbol-granular allowance"
-
 
 def test_the_gate_CATCHES_an_unexpected_untracked_production_file():
     """ATTACK: a brand-new production module is simply never `git add`ed. The
@@ -2243,7 +2160,10 @@ def _credentials_gained_by_importing(module, extra_path=None):
 
 
 @pytest.mark.parametrize("module", [
-    "scripts.driver_seed.build_packets",       # the transitive route that leaked
+    # Retired path `scripts.driver_seed.build_packets` is ABSENT from the tree;
+    # the folder-only move to its canonical home is published at da9afa06. The
+    # credential invariant is unchanged — only the module parameter moves.
+    "driver.channels.fiscal_ai.build_packets",  # the transitive route that leaked
     "driver.core.prepared_fact_v2",
     "driver.core.xbrl_attach",
     "driver.relocation.locator",

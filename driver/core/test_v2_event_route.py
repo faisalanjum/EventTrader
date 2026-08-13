@@ -84,9 +84,26 @@ def _v2_events():
     if "e" not in _CACHE:
         text_cache, records, sources, fye = {}, [], {}, {}
         for packet in SA._real_v1_packets():
-            SA._prepared_text(packet["source_id"], text_cache)
-            sources[SA.BP.canonicalize_source_id(packet["source_id"])] = \
-                SA.SRC.build_source(packet["source_id"])
+            # THIS SUITE IS WIRING ONLY, AND IT MUST NOT NEED THE GRAPH TO BE
+            # COLLECTED (Codex SEQ 1174). It previously threw away the prepared
+            # cache result and called SA.SRC.build_source(), which opens Neo4j
+            # from .env to reconstruct the very same text — so merely COLLECTING
+            # this module queried the live database, and in the committed tree
+            # (no .env) collection died with KeyError: 'NEO4J_URI', taking all
+            # 187 tests with it.
+            #
+            # build_stage_a_v2 consumes exactly one field of a source entry —
+            # `text_parts` (build_packets.py, `sources_by_id[source_id]
+            # ['text_parts']`) — so the entry is built here from the tracked
+            # packet's OWN source_id and the prepared object's exact text, the
+            # same two values production pairs. No accession literal, no helper,
+            # no graph fake, and no change to route_a_source: the real
+            # route_a_source -> locator -> build_stage_a_v2 proof stays owned by
+            # the Fiscal Stage-A suite, which this one must not duplicate.
+            prepared = SA._prepared_text(packet["source_id"], text_cache)
+            sources[SA.BP.canonicalize_source_id(packet["source_id"])] = {
+                "text_parts": [{"part": packet["source_id"],
+                                "content": prepared["text"]}]}
             fye[packet["ticker"]] = packet["fye_month"]
             for it in packet["items"]:
                 records.append(SA._internal_record(packet, it))
@@ -2497,3 +2514,80 @@ def test_F13_enable_writes_is_STILL_refused_after_the_planner_is_wired(tmp_path)
                   enable_writes=True,
                   reader=lambda **kw: _reply("T-GATE",
                                              [_text_fact(ev, kw["item"])]))
+
+
+# ---------------------------------------------------------------- SEQ 1174
+# COLLECTING THIS MODULE MUST NOT TOUCH THE GRAPH.
+#
+# The defect these two guard: `_v2_events()` is reached at import time (via the
+# module-level `_ATTACKS = _shape_attacks()`), and it used to call
+# `SA.SRC.build_source()`, which opens Neo4j from `.env`. Consequences, both
+# real and both measured:
+#
+#   * in the working tree, collection SUCCEEDED by querying the live database,
+#     so every green reading of this suite was made with the graph reachable;
+#   * in the committed tree there is no `.env`, so collection raised
+#     KeyError: 'NEO4J_URI' and all 187 tests became "0 collected, 1 error".
+#
+# The first test has teeth: it re-imports this module in a subprocess with the
+# graph doors replaced by raisers AND every NEO4J_* name stripped, so restoring
+# the old call makes it fail. The second is its lawful positive control: the
+# graph-free construction must still build exactly what the graph-backed one
+# built, checked against text computed independently from the tracked cache
+# rather than against anything `_v2_events()` reports about itself.
+
+def _packets_and_expected_text():
+    """Independent expectation: the tracked packets, and each source's text
+    recomputed straight from its tracked cache file. Deliberately does NOT ask
+    `_v2_events()` what it produced."""
+    from driver.relocation import inline_html as IH
+    packets = SA._real_v1_packets()
+    expected = {}
+    for p in packets:
+        path = (SA.ROOT / "scripts/driver_seed/relocate_probe/inline_html_cache"
+                / f"{p['source_id']}.htm")
+        expected[p["source_id"]] = IH.prepare(
+            path.read_text(encoding="utf-8", errors="replace"))["text"]
+    return packets, expected
+
+
+def test_collecting_this_module_CANNOT_reach_the_graph():
+    """Import this module with both graph doors booby-trapped and no NEO4J_*
+    in the environment. Reinstating the retired `build_source()` call fails
+    here instead of quietly querying a live database."""
+    import subprocess
+    code = (
+        "import sys; sys.path.insert(0, %r)\n"
+        "import driver.channels.fiscal_ai.route_a_source as SRC\n"
+        "def _boom(*a, **k):\n"
+        "    raise AssertionError('the graph was reached while importing')\n"
+        "SRC.build_source = _boom\n"
+        "SRC._driver = _boom\n"
+        "import driver.core.test_v2_event_route as M\n"
+        "print('ITEMS', sum(len(e['items']) for e in M._v2_events().values()))\n"
+        % _REPO)
+    env = {k: v for k, v in os.environ.items() if not k.startswith("NEO4J")}
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    r = subprocess.run([sys.executable, "-B", "-c", code], cwd=_REPO, env=env,
+                       capture_output=True, text=True)
+    assert r.returncode == 0, (
+        "importing this module reached the graph or failed without it:\n"
+        + r.stdout + r.stderr)
+    packets, _ = _packets_and_expected_text()
+    want = sum(len(p["items"]) for p in packets)
+    assert ("ITEMS %d" % want) in r.stdout, (r.stdout, "expected %d" % want)
+
+
+def test_the_graph_free_sources_build_the_SAME_events_as_before():
+    """Lawful positive control for the guard above: every event still carries
+    exactly one text part, keyed by its own source id, whose content equals the
+    text recomputed independently from that source's tracked cache file — and
+    the item population is unchanged."""
+    packets, expected = _packets_and_expected_text()
+    events = _v2_events()
+    assert sum(len(e["items"]) for e in events.values()) == \
+        sum(len(p["items"]) for p in packets)
+    for p in packets:
+        ev = events[SA.BP.canonicalize_source_id(p["source_id"])]
+        assert [x["part"] for x in ev["text_parts"]] == [p["source_id"]]
+        assert ev["text_parts"][0]["content"] == expected[p["source_id"]]

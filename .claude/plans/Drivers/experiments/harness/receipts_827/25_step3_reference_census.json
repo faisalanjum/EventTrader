@@ -1,0 +1,131 @@
+{
+ "reachable": 0,
+ "retired": [
+  "exp5_item_contract.md",
+  "exp5_item_contract.manifest.json"
+ ],
+ "rows": [
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/experiments/WORKORDER_STATUS.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/frozen_proof_r15.txt",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/frozen_proof_r14.txt",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/exp5_proposed_diffs_v3.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/rev4_audit_findings_archive.jsonl",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "guard definition",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+   "why": "the forbidden-names constant of the zero-caller test"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/receipts_827/23_step2_b08_prompt_contract.txt",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/experiments/harness/receipts_827/25_step3_reference_census.json",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md",
+    "exp5_item_contract.manifest.json"
+   ],
+   "path": ".claude/plans/Drivers/WIP/NAME13_OptionC_WorkOrder_v3_2026-07-31.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md"
+   ],
+   "path": ".claude/plans/Drivers/WIP/NAME13_PerX_SpellOut_WorkOrder_2026-08-11.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md"
+   ],
+   "path": ".claude/plans/Drivers/WIP/Core_PreparedFactV2_818_827_Audit_2026-07-27.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md"
+   ],
+   "path": ".claude/plans/Drivers/FinalDesign/FINAL_DESIGN_Aug_6th.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  },
+  {
+   "class": "history/evidence",
+   "hits": [
+    "exp5_item_contract.md"
+   ],
+   "path": ".claude/plans/Drivers/FinalDesign/STATUS_AND_HISTORY.md",
+   "why": "non-executable record; history may name a deleted artefact"
+  }
+ ],
+ "scope": ".claude/plans/Drivers (whole tree)",
+ "what_this_proves": "THE RETIRED-ARTEFACT REFERENCE CENSUS: zero reachable references remain to the two retired card artefacts (exp5_item_contract.md and its manifest). It is NOT the semantic V1-field census \u2014 the frozen Step-1 inventory remains the semantic denominator, and no broader sweep is implied by this receipt."
+}

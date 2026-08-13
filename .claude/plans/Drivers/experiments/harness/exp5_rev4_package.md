@@ -388,7 +388,8 @@ Empty is legal and never means GAAP.
 **Rule 10 — evidence and location.** `quote` = a verbatim, non-blank
 substring of the event text supporting the fact; copy it EXACTLY; never
 paraphrase; no length limit. Every fact and every abstention carries
-`part_ref` (the label of the text part, `p01`, `p02`, onward) and
+`part_ref` (copy the EXACT `part` label of the text part the quote came
+from, as supplied in the event) and
 `occurrence_in_part`: null when the quote appears exactly once in that
 part; a positive left-to-right count (1-based) only when it repeats. The
 location proves WHERE the evidence sits — never, by itself, which fact it
@@ -420,7 +421,7 @@ digit. No extra keys. Code fills nothing.
 {"source_id": "<echo the event id you were given — the wrong-event guard>",
  "facts": [
    {"fact_type": "<metric|guidance|surprise|action_event>",
-    "part_ref": "<p01, p02, onward>",
+    "part_ref": "<the exact `part` label supplied for that text part>",
     "occurrence_in_part": "<null when unique in that part; else 1-based count>",
     "per_x": "<stated denominator like share, barrel, user; null when none>",
     "item": {
@@ -428,10 +429,10 @@ digit. No extra keys. Code fills nothing.
       "driver_state": "<the lane's enum, Rule 4>",
       "quote": "<verbatim substring>",
       "level_low": "<null OR {value, scale_multiplier, unit_scale_evidence}>",
-      "level_high": "<null OR the same 3-key object>",
-      "change_value": "<null OR the same 3-key object>",
-      "comparison_low": "<null OR the same 3-key object>",
-      "comparison_high": "<null OR the same 3-key object>",
+      "level_high": "<null OR {value, scale_multiplier, unit_scale_evidence}>",
+      "change_value": "<null OR {value, scale_multiplier, unit_scale_evidence}>",
+      "comparison_low": "<null OR {value, scale_multiplier, unit_scale_evidence}>",
+      "comparison_high": "<null OR {value, scale_multiplier, unit_scale_evidence}>",
       "comparison_baseline": "<consensus|prior_year|sequential_period|previous_guidance|null>",
       "value_text": "<string, at most 200 chars|null — guidance only>",
       "conditions": "<string|null — guidance only>",
@@ -457,7 +458,7 @@ digit. No extra keys. Code fills nothing.
     }}],
  "abstentions": [
    {"quote": "<verbatim>", "reason": "<short>",
-    "part_ref": "<p01, p02, onward>",
+    "part_ref": "<the exact `part` label supplied for that text part>",
     "occurrence_in_part": "<null when unique; else count>"}]}
 ```
 

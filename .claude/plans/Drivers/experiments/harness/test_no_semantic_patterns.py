@@ -9,8 +9,10 @@ window got in.
 
 THE SCOPE IS DERIVED, NEVER HAND-WRITTEN. An earlier version of this gate listed
 files by hand and gave a FALSE CLEAN twice over: it omitted `fact16_checks`
-(which `score_exp5` imports, so `_NUMY` was live while the gate reported "zero
-exam patterns"), and it walked imports with the heuristic `if "driver" in name`,
+(which `score_exp5` imported at the time, so `_NUMY` was live while the gate
+reported "zero exam patterns" — that module is now DELETED, but the lesson is
+the hand-written list, not the file), and it walked imports with the heuristic
+`if "driver" in name`,
 which silently dropped `guidance_ids` (imported by `driver_period_resolver`).
 A gate that reports clean while a semantic pattern is reachable is worse than no
 gate — so the closure below is computed by FOLLOWING ACTUAL IMPORTS from the real
@@ -257,9 +259,43 @@ SEMANTIC_DEBT = {
                          "prose in value_text; uncertainty ABSTAINS. The "
                          "structural check alone does NOT prove numberlessness. "
                          "Removal lands with that implementation.",
-    "fact16_checks": "_NUMY — hand-written money/percent detector. Retires with "
-                     "the run_event wiring (the duplicate validator goes away "
-                     "entirely). Still LIVE: score_exp5 imports check_item.",
+}
+
+
+# ONE MODULE, THREE DIFFERENT DISPOSITIONS. inline_html is the only file in either
+# closure whose regex sites do NOT share a class. Every table above blesses a
+# whole MODULE, so putting inline_html in any one of them would let any of its
+# three sites silently absorb a new pattern of a different kind — the exact
+# false-green this gate exists to prevent. The disposition is therefore recorded
+# PER SITE, keyed by the same [function, operation, pattern] identity the freeze
+# uses, and such a module counts as classified ONLY while EVERY live site carries
+# one. A fifth site added tomorrow is UNCLASSIFIED and fails.
+SITE_DISPOSITION = {
+    "inline_html": {
+        ("<module>", "compile", "[ \t\n\x0c\r]+"):
+            "MECHANICAL — the CSS white-space character set (CSS Text 3 §4.1.1). "
+            "Collapsing runs of those five characters is markup mechanics on a "
+            "string we already parsed; it judges no prose.",
+        ("_sec_cik", "fullmatch",
+         "<expr>Name(id='_SEC_CIK_10_PATTERN', ctx=Load())"):
+            "GOVERNING_LAW — the SEC 10-digit CIK spelling, IMPORTED from "
+            "driver_ids (line 26) where the identical rule is already frozen. "
+            "The law keeps ONE owner; this site references it, never restates it.",
+        # The fourth site, `_evidence_from` search '\\d', is GONE (EU-094,
+        # #827). It was carried here as SEMANTIC_DEBT on the strength of a
+        # fail-closed claim that measurement disproved — discarding a
+        # digit-bearing candidate could leave exactly one candidate where the
+        # row had two, turning ambiguity into acceptance. Having no standards or
+        # frozen-contract authority, it was removed rather than retained, so it
+        # has no disposition and must not reappear in this table.
+        ("_words", "findall", "[A-Za-z][A-Za-z’'-]*"):
+            "OWNER_SCOPE — ASCII label words. Owner-supported MEASURED scope, "
+            "never a standard: the production owner at inline_html.py:130-141 "
+            "records that NO spec owns what a label word is, so the scope is "
+            "the owner's under the 2026-08-05 routing (rule bf3881d879cb3e3a) "
+            "and its recall cost is measured rather than assumed. It is NOT a "
+            "declared alphabet or a contract.",
+    },
 }
 
 
@@ -295,8 +331,14 @@ FROZEN_PATTERNS = {
     # ruled Option A (2026-07-25); the compile site is gone and only a
     # tombstone comment survives at driver_validators.py:95, so the
     # module now contributes NO regex site and a frozen entry was stale.
-    "fact16_checks": [
-        ["<module>", "compile", "[$\u20ac\u00a3\u00a5]\\s?\\d|\\d+(\\.\\d+)?\\s?%|\\b\\d+\\s?bps\\b|\\b\\d+(\\.\\d+)?\\s?(million|billion|thousand)\\b"],
+    # THREE sites, THREE dispositions — see SITE_DISPOSITION. Frozen per site here
+    # so growth inside the module still fails even though the sites are
+    # separately dispositioned rather than sharing one module class.
+    "inline_html": [
+        ["<module>", "compile", "[ \t\n\x0c\r]+"],
+        ["_sec_cik", "fullmatch",
+         "<expr>Name(id='_SEC_CIK_10_PATTERN', ctx=Load())"],
+        ["_words", "findall", "[A-Za-z][A-Za-z’'-]*"],
     ],
     "guidance_ids": [
         ["<module>", "compile", "SharesOutstanding|ShareCount|WeightedAverage\\w*Shares|NumberOf\\w*Shares"],
@@ -321,10 +363,18 @@ LEGIT_VOCAB = {
     "SHAPES", "CANONICAL_UNITS", "VALID_UNIT_KIND_HINTS",
     "VALID_MONEY_MODE_HINTS", "valid_bases", "__all__", "EXPECT_BASE",
     "MEANING_FIELDS", "CODE_FIELDS", "OD_RULES", "ARMS", "SOURCE_OWNED",
-    "FIELDS37", "DOC_KEYS", "FACT_KEYS", "NUMERIC", "STRINGY", "FUZZY_TOKENS",
+    "ITEM_KEYS", "DOC_KEYS", "FACT_KEYS", "NUMERIC", "STRINGY", "FUZZY_TOKENS",
     "_RE_FUNCS", "_POLARITY_BASES", "_PROOF_KEYS", "_NUMERIC_FIELDS",
     "ENTRY_PRODUCTION", "ENTRY_EXAM", "_SEARCH_ROOTS", "RUN_EVENT_CLOSURE",
     "EXAM_FILES", "LEGIT_VOCAB", "KEYWORD_DEBT",
+    # B-16 closed vocabularies, both STRUCTURAL and both owner-fixed:
+    #   GRADER_OWNED   — the WorkOrder §649 meaning fields, excluded from direct
+    #                    code accuracy because a qualified grader owns them.
+    #   EXTRAS_BUCKETS — the Addendum-A extras classes. Exactly three, by owner
+    #                    ruling; nothing infers a bucket from text.
+    # Neither RECOGNISES meaning in a document — they name which owner scores
+    # which field, so a closed set is the point rather than a smell.
+    "GRADER_OWNED", "EXTRAS_BUCKETS",
     # prepared_fact groups FIELD NAMES by declared type — schema structure,
     # not a judgment about source text.
     "_NUMERIC", "_STR", "_INT",
@@ -337,6 +387,12 @@ LEGIT_VOCAB = {
     # Owner row recorded at receipts_827/28_pc4_row_and_pc1_denominator.md:
     # "NUMERIC_FIELDS | T7 | static tuple literal".
     "NUMERIC_FIELDS",
+    # kf_lint — the three GOLD-ONLY review fields. A closed vocabulary from law
+    # (WorkOrder 620 defines du_worthy as the internal name of the official fact
+    # gate; step2 §7 limits gold additions to the review fields), attached AFTER
+    # the model answers. The checker uses it to REFUSE these names at the model
+    # door — the opposite of a guess about source text.
+    "GOLD_ONLY",
     "_SLICE_KINDS",       # driver_ids — the FS-05 slice-kind enum
     "_SURPRISE_TYPES",    # driver_ids — the OD-21 surprise-type enum
     "_SENTINEL_SCOPES",   # driver_units — the PER sentinel-horizon enum
@@ -372,9 +428,17 @@ def _classified(path_map):
     unknown = {}
     for path, mod in path_map.items():
         hits = regex_patterns(path)
-        if hits and mod not in MECHANICAL and mod not in GOVERNING_LAW \
-                and mod not in SEMANTIC_DEBT:
+        if not hits or mod in MECHANICAL or mod in GOVERNING_LAW \
+                or mod in SEMANTIC_DEBT:
+            continue
+        per_site = SITE_DISPOSITION.get(mod)
+        if per_site is None:
             unknown[mod] = hits
+            continue
+        # classified only while EVERY live site carries its own disposition
+        undisposed = [h for h in hits if tuple(h) not in per_site]
+        if undisposed:
+            unknown[mod] = undisposed
     return unknown
 
 
@@ -548,14 +612,60 @@ def _gate_failures(tmp):
     return json.loads(r.stdout.strip())
 
 
-def _mutated_failures(target_rel, extra):
+def _mutated_failures(target_rel, extra="", replace=None):
+    """APPEND `extra`, and/or REPLACE one exact snippet. Replacement exists
+    because per-SITE dispositions must be provable by ALTERING a site, not only
+    by adding one: an append-only harness can never show that changing an
+    existing frozen site is caught."""
     tmp = _temp_repo()
     try:
-        with open(os.path.join(tmp, target_rel), "a", encoding="utf-8") as f:
-            f.write(extra)
+        path = os.path.join(tmp, target_rel)
+        if replace is not None:
+            old, new = replace
+            src = open(path, encoding="utf-8").read()
+            assert old in src, f"mutation anchor absent in {target_rel}: {old!r}"
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(src.replace(old, new, 1))
+        if extra:
+            with open(path, "a", encoding="utf-8") as f:
+                f.write(extra)
         return _gate_failures(tmp)
     finally:
         shutil.rmtree(tmp)
+
+
+_INLINE_HTML_REL = "driver/relocation/inline_html.py"
+
+# B-17: the sites carry SEPARATE dispositions, so each must be shown
+# to be caught ON ITS OWN. A single module-level proof would not distinguish
+# them — that is precisely the uniform-class blessing this row forbids.
+@pytest.mark.parametrize("disposition,old,new", [
+    ("MECHANICAL css whitespace",
+     "_CSS_WS = re.compile('[ \\t\\n\\x0c\\r]+')",
+     "_CSS_WS = re.compile('[ \\t\\n]+')"),
+    ("GOVERNING_LAW sec cik",
+     "re.fullmatch(_SEC_CIK_10_PATTERN, digits)",
+     "re.search(_SEC_CIK_10_PATTERN, digits)"),
+    ("OWNER_SCOPE ascii words",
+     're.findall(r"[A-Za-z][A-Za-z’\'-]*", value)',
+     're.findall(r"[A-Za-z]+", value)'),
+])
+def test_MUTATION_each_inline_html_site_is_individually_caught(disposition, old,
+                                                              new):
+    """Change ONE dispositioned site; the per-site freeze must fail."""
+    failures = _mutated_failures(_INLINE_HTML_REL, replace=(old, new))
+    assert "test_every_regex_site_is_frozen_individually" in failures, \
+        f"{disposition}: altering this site did NOT fail the freeze — {failures}"
+
+
+def test_MUTATION_a_fifth_inline_html_site_is_unclassified():
+    """A NEW site in the same module has no disposition, so the module stops
+    counting as classified even though its other four are dispositioned."""
+    failures = _mutated_failures(
+        _INLINE_HTML_REL,
+        extra="\n\ndef _added_probe(s):\n    return re.search(r'profit', s)\n")
+    assert "test_no_unclassified_regex_in_the_production_path" in failures, \
+        f"a fifth undispositioned site was tolerated — {failures}"
 
 
 def test_MUTATION_baseline_temp_repo_is_green():

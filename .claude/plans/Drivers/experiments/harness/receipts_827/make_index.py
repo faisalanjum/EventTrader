@@ -116,6 +116,38 @@ PROVENANCE = {
     "13_f6_envelope_census.json": f"{PY}/13_f6_envelope_census.py",
     "17_two_view_mutations.json": f"{PY}/two_view_mutations.py",
     "19_resource_ancestry_census.json": f"{PY}/resource_ancestry_census.py",
+    # ---- Step 2 (LeftOverSteps) receipts ----
+    "16_two_view_census.json": f"{PY}/two_view_census.py",
+    "20_step2_red_first.txt":
+        "(written record: the Step 2 §1 RED-first capture; "
+        "not reproducible by a command)",
+    "21_step2_test_disposition.txt":
+        "(written record: the 26-row test disposition and the SEQ 1082 audit; "
+        "not reproducible by a command)",
+    "22_step2_b08_crosswalk.txt":
+        "(written record: the B-08 owner crosswalk; "
+        "not reproducible by a command)",
+    "23_step2_b08_prompt_contract.txt":
+        "(written record: the prompt-contract build and its final seal; "
+        "not reproducible by a command)",
+    "24_step2_b17_gate_green.txt":
+        "(written record: the B-17 gate and the EU-094 disposition; "
+        "not reproducible by a command)",
+    "25_step3_reference_census.json":
+        "(written record: the Step-3 reference census classifying every "
+        "remaining mention as reachable caller/pin vs non-executable history; "
+        "not reproducible by a command)",
+    "26_step3_atomic_denominator.json":
+        "(written record: the frozen 55-row Step-3 denominator with each row's "
+        "class, authority, coverage and replacement; "
+        "not reproducible by a command)",
+    "28_step3_55row_reconciliation.json":
+        "(written record: every row of the frozen 55-row Step-3 denominator "
+        "reconciled against the live tree, with renames carrying an explicit "
+        "successor; not reproducible by a command)",
+    "27_step3_expanded_union.json":
+        "(written record: the expanded union of the executable set and the "
+        "newly exposed rows; not reproducible by a command)",
     "24_arelle_ixt_parity.json": f"{PY}/arelle_ixt_parity.py",
     "13_f6_envelope_census.py": "(generator source)",
     "arelle_ixt_parity.py": "(generator source)",

@@ -1121,3 +1121,22 @@ def test_S9_slot_numeric_types_at_the_public_door(case, over, lawful):
     else:
         with pytest.raises(prepared_fact_v2.SchemaError):
             prepared_fact_v2.PreparedFactV2.from_dict(f)
+
+
+# ---- S2-D01 (Step-2 discovered row; Codex SEQ 1059) ----
+# A non-string JSON `fact_type` reached the LANE_STATES membership test and
+# raised a raw TypeError for the unhashable classes. Same crash class already
+# guarded for source_type by
+# test_v2_event_route::test_F1_a_non_string_source_type_refuses_without_a_raw_TypeError.
+# The public model boundary must answer SchemaError, never a Python crash.
+
+@pytest.mark.parametrize("bad", [[], {}, None, True, 1, 1.5, "not_a_lane"])
+def test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError(bad):
+    """Every JSON class for a wrong `fact_type` must refuse cleanly."""
+    with pytest.raises(prepared_fact_v2.SchemaError):
+        fact(fact_type=bad)
+
+
+def test_S2D01_control_a_valid_fact_type_is_accepted():
+    """Lawful control beside the refusals above."""
+    assert fact(fact_type="metric").fact_type == "metric"

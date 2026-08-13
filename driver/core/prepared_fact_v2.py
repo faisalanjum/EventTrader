@@ -464,6 +464,14 @@ class PreparedFactV2:
         # one-entry-point law forbids pf2 carrying the validators' vocabulary
         # as a module attribute (a second importable home).
         from driver.core.driver_validators import LANE_STATES
+        # S2-D01: SHAPE before the vocabulary owner. An unhashable JSON value
+        # (array/object) raised a raw TypeError at this membership test; the
+        # public model boundary must answer SchemaError for every JSON class.
+        # Same guard shape as the source_type crash already covered in
+        # test_v2_event_route::test_F1_a_non_string_source_type_refuses_...
+        if not isinstance(self.fact_type, str):
+            raise SchemaError(f"fact_type: must be a string, got "
+                              f"{type(self.fact_type).__name__}")
         if self.fact_type not in LANE_STATES:
             raise SchemaError(f"fact_type: one of {tuple(LANE_STATES)}, "
                               f"got {self.fact_type!r}")

@@ -38,7 +38,7 @@ def _menu_rows(ticker, event_time):
     drv = _driver()
     try:
         with drv.session(default_access_mode="READ") as s:
-            pairs = [(r["du"], r["mu"]) for r in s.run(
+            pairs = [(r["du"], r["mu"], r["cik"]) for r in s.run(
                 "MATCH (co:Company {ticker: $ticker}) "
                 "MATCH (co)<-[:PRIMARY_FILER]-(pr:Report)-[:HAS_XBRL]->(px:XBRLNode) "
                 "WHERE pr.formType IN ['10-K','10-Q','10-K/A','10-Q/A'] "
@@ -50,13 +50,22 @@ def _menu_rows(ticker, event_time):
                 "AND EXISTS { MATCH (f:Fact)-[:IN_CONTEXT]->(c), "
                 "  (f)-[:REPORTS]->(x2:XBRLNode) "
                 "  WHERE f.is_numeric = '1' AND x2 IN xs } "
-                "WITH DISTINCT c "
+                "WITH DISTINCT co, c "
                 "UNWIND range(0, size(c.dimension_u_ids)-1) AS i "
-                "RETURN DISTINCT c.dimension_u_ids[i] AS du, c.member_u_ids[i] AS mu",
+                "RETURN DISTINCT c.dimension_u_ids[i] AS du, "
+                "  c.member_u_ids[i] AS mu, co.cik AS cik",
                 ticker=ticker, event_time=event_time)]
             if not pairs:
                 return []
-            ids = sorted({_norm_uid(u) for du, mu in pairs for u in (du, mu)})
+            # THE MATCHED COMPANY IS THE AUTHORITY (production `_norm_uid`
+            # docstring). #827 made that argument required precisely so a stored
+            # reference can no longer vouch for its own company; this probe still
+            # called the one-argument form and crashed. The cik travels with the
+            # pair from the `co:Company` row that was ALREADY matched — it is
+            # never inferred from the reference and no cik is parsed here.
+            ids = sorted({n for du, mu, cik in pairs
+                          for u in (du, mu)
+                          for n in (_norm_uid(u, cik),) if n})
             found = {r["id"]: (r["kind"], r["qname"], r["label"]) for r in s.run(
                 "CALL { MATCH (d:Dimension) WHERE d.id IN $ids "
                 "       RETURN d.id AS id, 'dim' AS kind, d.qname AS qname, null AS label "
@@ -64,8 +73,12 @@ def _menu_rows(ticker, event_time):
                 "       RETURN m.id AS id, 'mem' AS kind, m.qname AS qname, m.label AS label } "
                 "RETURN id, kind, qname, label", ids=ids)}
             rows = []
-            for du, mu in pairs:
-                d, m = found.get(_norm_uid(du)), found.get(_norm_uid(mu))
+            for du, mu, cik in pairs:
+                # FAIL CLOSED: a missing, malformed, non-registrant or
+                # mismatching cik makes `_norm_uid` return None, which resolves
+                # to no row here and the pair is skipped — never a raw exception.
+                d = found.get(_norm_uid(du, cik))
+                m = found.get(_norm_uid(mu, cik))
                 if not d or not m or d[0] != "dim" or m[0] != "mem":
                     continue                        # unresolvable pair: fail-closed skip
                 rows.append({"axis": d[1], "member": m[1], "label": m[2]})

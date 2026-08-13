@@ -1,0 +1,444 @@
+{
+ "counts": {
+  "DELETE": 8,
+  "KEEP": 1,
+  "REWRITE": 46
+ },
+ "coverage_search": {
+  "conclusion": "no row can be dropped as already-covered; every REWRITE stands",
+  "core_files_referencing_the_matcher": [
+   "test_prepared_fact_v2.py",
+   "test_v2_attacks.py"
+  ],
+  "dedicated_fact_match_test_file": "ABSENT",
+  "method": "grep for match_facts/record_key across driver/core test files",
+  "question": "does an existing CURRENT-OWNER test already cover each row?"
+ },
+ "denominator": {
+  "functions": 55,
+  "note": "55 FUNCTIONS is the ONLY reported denominator (SEQ 1120)",
+  "origin": "36 original + 19 newly exposed (30-function executable set overlaps original by 11)"
+ },
+ "home_fact_reconciliation": {
+  "by_body_touching_rule": 4,
+  "by_name": 10,
+  "note": "6 of the 10 reach the home-fact rule through score_arm's park path rather than referencing _home_ok directly; the affected UNION is 10, which is the denominator \u2014 not a rounded family count.",
+  "union": 10
+ },
+ "keep_is_impossible": "All 9 former KEEP rows call score_arm, which gains a REQUIRED `route` argument in the atomic change. KEEP means byte-unchanged, so no row in this denominator can be KEEP. Verified by AST, not by reading assertions (SEQ 1113.1).",
+ "method_correction": "SEQ 1110: the first pass classified by MECHANISM (which retired surface a test touched). Codex's counterexamples show that is wrong \u2014 a test can touch the old matcher while asserting law that does NOT survive (value equality), or touch score_arm while asserting law owned elsewhere (home facts). Classification must be per-test against current authority.",
+ "normalized": "all 36 rows carry explicit nonblank class/authority/coverage/replacement/why",
+ "rule": "DELETE=retired-only, REWRITE=authoritative formula, KEEP=unaffected",
+ "tests": {
+  "_fact": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 64,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "_gold_fact": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 16,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "_home_case": {
+   "authority_citation": "public run_event outcome rows only (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 3,
+   "why": "FIXTURE BUILDER that feeds _home_ok cases; no _home_ok distinction survives merely because the helper made it"
+  },
+  "_idfact": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 4,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "_matched_pair": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 4,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "_metric_pair": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 2,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "_surprise_gold_and_arm": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 3,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "_surprise_with_home": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 4,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "_vfact": {
+   "authority_citation": "the adopted shapes: V2 model fact (PreparedFactV2) and gold = that fact + only kf_lint.GOLD_ONLY",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 a fixture has no owner test; its correctness shows in the tests it feeds",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "delegate to _v2_fact/_v2_item/_v2_slot (or _gold_fact for gold); restate no defaults",
+   "retained_callers": 1,
+   "why": "FIXTURE BUILDER, not a test \u2014 it must emit the adopted shape; it states no law of its own"
+  },
+  "test_827B4_actual_surprise_finds_its_metric_home": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_827B4_false_homes_must_park_not_pair": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_827B4_guidance_surprise_finds_its_guidance_home": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_RED_old_gold_item_wrapper_is_refused": {
+   "authority_citation": "kf_lint adjudicated door \u2014 the wrapper must not be accepted anywhere",
+   "class": "KEEP",
+   "covered_by_current_owner_test": "NO \u2014 this IS the control",
+   "replacement_test": "NONE \u2014 kept byte-unchanged",
+   "why": "deliberate negative test: proves the retired gold_item wrapper is REFUSED"
+  },
+  "test_ambiguity_resolution_input_works": {
+   "authority_citation": "retired-only",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "NO existing owner test \u2014 the surviving safety property is covered by the rewritten test_unresolved_tie_blocks_pass (duplicate-gold inconclusive / emit_once_violation)",
+   "replacement_test": "NONE \u2014 the asserted behaviour does not survive",
+   "why": "asserts the retired ambiguity-resolution path (SEQ 1108: not preserved as law)"
+  },
+  "test_change_only_value_match": {
+   "authority_citation": "retired-only",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "NO existing owner test; none needed because the law is retired",
+   "replacement_test": "NONE \u2014 the asserted behaviour does not survive",
+   "why": "tests `_value_eq`; adopted B-15 FORBIDS value equality from creating links, so the law it asserts does not survive (SEQ 1110.1)"
+  },
+  "test_comparison_only_value_match": {
+   "authority_citation": "retired-only",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "NO existing owner test; none needed because the law is retired",
+   "replacement_test": "NONE \u2014 the asserted behaviour does not survive",
+   "why": "tests `_value_eq`; same retired authority as above (SEQ 1110.1)"
+  },
+  "test_definite_failures_never_none": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a79 (would-park formula: parked emitted + gold-linked abstentions over deduplicated emitted + gold-linked abstentions) and \u00a710 bar 'would-park at most 10%'",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "re-express against Core outcome rows; the numerator's 'parked' must come from run_event, not a scorer-side validator",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_e2e_unit_value_match_now_works": {
+   "authority_citation": "no current authority \u2014 B-15 forbids value equality from creating links",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "NO existing owner test; none needed because the law is retired",
+   "replacement_test": "NONE \u2014 the asserted behaviour does not survive",
+   "why": "mixes a retired V1 unit canonicalizer, the forbidden value-equality candidate graph, and auto-link: delete the first two claims, preserve only current match_facts exact-record/exact-locator behaviour if not already covered (SEQ 1110.2)"
+  },
+  "test_empty_arm_is_definite_fail": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 pass decision ('a union cannot rescue an unsafe arm')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_false_lane_verdict_increments_wrong_lane": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 wrong_lane ('wrong fact_type or the named missing/wrong surprise cases'; bar: zero)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_home_fact_correct_sibling_no_park": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_home_fact_unrelated_driver_parks": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_home_fact_value_mismatch_parks": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_home_fact_wrong_period_parks": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_home_numberless_needs_numberless": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 Core owns no test for the Step-3 surprise-home distinction; it must be proven through run_event outcomes here",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_home_slice_and_scope_must_match": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_home_unresolved_periods_never_match": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_large_ints_never_merge": {
+   "authority_citation": "superseded by driver/core/test_v2_attacks.py::test_ATTACK_two_different_29_digit_values_must_not_auto_link",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "YES \u2014 driver/core/test_v2_attacks.py::test_ATTACK_two_different_29_digit_values_must_not_auto_link",
+   "replacement_test": "NONE \u2014 the current owner control is stronger",
+   "why": "duplicate retired-helper proof"
+  },
+  "test_matcher_auto_pairs_only_on_shared_source_evidence": {
+   "authority_citation": "no current authority \u2014 shared source evidence is a RETIRED candidate-linking criterion; match_facts links on exact record identity",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "NO existing owner test; none needed because the law is retired",
+   "replacement_test": "NONE \u2014 the asserted behaviour does not survive",
+   "why": "shared source evidence is a RETIRED linking criterion; match_facts links on exact record identity, so the behaviour asserted here has no surviving owner"
+  },
+  "test_matcher_exact_evidence_is_order_free_and_not_fuzzy": {
+   "authority_citation": "driver/core/fact_match.py (record_key = lane + per_x + all 32 item fields + evidence locator; match_facts is 'deterministic and order-free')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO dedicated Core test file exists (driver/core/test_fact_match.py absent); match_facts/record_key are referenced in test_prepared_fact_v2.py and test_v2_attacks.py but no owner test asserts this specific law \u2014 so the Step-3 rewrite is required, not redundant",
+   "replacement_test": "order-freeness IS current law; assert match_facts gives the same MatchResult under input permutation",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_matcher_locator_distinguishes_repeats_of_one_sentence": {
+   "authority_citation": "driver/core/fact_match.py (record_key = lane + per_x + all 32 item fields + evidence locator; match_facts is 'deterministic and order-free')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO dedicated Core test file exists (driver/core/test_fact_match.py absent); match_facts/record_key are referenced in test_prepared_fact_v2.py and test_v2_attacks.py but no owner test asserts this specific law \u2014 so the Step-3 rewrite is required, not redundant",
+   "replacement_test": "the exact locator is part of record_key; repeats of one sentence stay distinct",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_matcher_never_auto_matches_different_drivers_on_equal_value": {
+   "authority_citation": "driver/core/fact_match.py \u2014 record_key includes driver_name, so different drivers cannot share a key; equal value is NOT a linking criterion (B-15)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 no dedicated driver/core/test_fact_match.py exists and no owner test asserts this law (global search, this receipt)",
+   "replacement_test": "assert match_facts links == [] and both records reach to_grading_*",
+   "why": "its surviving law is record-identity, NOT the recall formula I first cited (SEQ 1113.4)"
+  },
+  "test_matcher_one_sentence_two_facts_is_order_free": {
+   "authority_citation": "driver/core/fact_match.py (record_key = lane + per_x + all 32 item fields + evidence locator; match_facts is 'deterministic and order-free')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO dedicated Core test file exists (driver/core/test_fact_match.py absent); match_facts/record_key are referenced in test_prepared_fact_v2.py and test_v2_attacks.py but no owner test asserts this specific law \u2014 so the Step-3 rewrite is required, not redundant",
+   "replacement_test": "order-freeness survives; the 'shared_span_multiple' ambiguity reason does not \u2014 assert only the order-free MatchResult",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_matcher_rejects_same_name_value_DIFFERENT_MEASUREMENT": {
+   "authority_citation": "driver/core/fact_match.py (record_key = lane + per_x + all 32 item fields + evidence locator; match_facts is 'deterministic and order-free')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO dedicated Core test file exists (driver/core/test_fact_match.py absent); match_facts/record_key are referenced in test_prepared_fact_v2.py and test_v2_attacks.py but no owner test asserts this specific law \u2014 so the Step-3 rewrite is required, not redundant",
+   "replacement_test": "records differing in ANY item field get different record_keys, so they do not link; assert links == [] and both records in to_grading_*",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_matcher_rejects_same_name_value_DIFFERENT_PERIOD": {
+   "authority_citation": "driver/core/fact_match.py (record_key = lane + per_x + all 32 item fields + evidence locator; match_facts is 'deterministic and order-free')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO dedicated Core test file exists (driver/core/test_fact_match.py absent); match_facts/record_key are referenced in test_prepared_fact_v2.py and test_v2_attacks.py but no owner test asserts this specific law \u2014 so the Step-3 rewrite is required, not redundant",
+   "replacement_test": "same as above, period fields",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_matcher_rejects_same_name_value_DIFFERENT_SLICE": {
+   "authority_citation": "driver/core/fact_match.py (record_key = lane + per_x + all 32 item fields + evidence locator; match_facts is 'deterministic and order-free')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO dedicated Core test file exists (driver/core/test_fact_match.py absent); match_facts/record_key are referenced in test_prepared_fact_v2.py and test_v2_attacks.py but no owner test asserts this specific law \u2014 so the Step-3 rewrite is required, not redundant",
+   "replacement_test": "same as above, slice_parts",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_name_errors_never_dilute": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 ('use the official denominators')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_numberless_home_requires_quote": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 Core owns no test for the Step-3 surprise-home distinction; it must be proven through run_event outcomes here",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_presence_disagreement_metric": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 ('presence disagreement ... as diagnostics'); rewrite ONLY onto the current owner, never the retired ambiguity call",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 diagnostic, not a Core-owned metric",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "assert the diagnostic from the current owner's result, with no ambiguity-path call",
+   "why": "reaches the stale presence-disagreement ambiguity path that B-16 deletes"
+  },
+  "test_presence_disagreement_uses_tie_decisions": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 ('presence disagreement ... as diagnostics'); rewrite ONLY onto the current owner, never the retired ambiguity call",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 diagnostic, not a Core-owned metric",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "assert the diagnostic from the current owner's result, with no ambiguity-path call",
+   "why": "reaches the stale presence-disagreement ambiguity path that B-16 deletes"
+  },
+  "test_scorer_emits_ambiguous_for_grader": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a79 ('every unmatched produced and gold fact enters the grader queue')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the grader queue is fed from MatchResult.to_grading_gold / to_grading_produced",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_scorer_parks_fiscal_only_future_surprise": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a79 (would-park formula: parked emitted + gold-linked abstentions over deduplicated emitted + gold-linked abstentions) and \u00a710 bar 'would-park at most 10%'",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "re-express against Core outcome rows; the numerator's 'parked' must come from run_event, not a scorer-side validator",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_scorer_parks_grounded_surprise_without_home_sibling": {
+   "authority_citation": "public run_event outcome rows ONLY (step3 \u00a710 wrong_lane named surprise cases)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "assert the run_event outcome row, never the scorer-local helper",
+   "why": "survives only as a public run_event outcome control; no _home_ok distinction survives merely because the helper made it"
+  },
+  "test_scorer_requires_complete_meta_per_event": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 ('expected arithmetic in tests must be independently calculated')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_scorer_requires_event_meta": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 (same: official denominators require complete per-event meta)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_scorer_union_recall_beats_single": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 ('recall per run and same-tier two-run union'; bars: single-run >=95% or union >=98%; 'du_worthy:false rows never enter recall')",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 this is a Step-3 scorer formula/bar; Core owns no test for it by construction, so it cannot be delegated",
+   "replacement_test": "re-express the denominator on MatchResult groups; keep the official bar",
+   "why": "law survives under the new owner; re-expressed, not deleted"
+  },
+  "test_scorer_unit_aware_value_match": {
+   "authority_citation": "no current authority \u2014 unit-aware VALUE equality is forbidden from linking (B-15)",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "NO existing owner test; none needed because the law is retired",
+   "replacement_test": "NONE \u2014 the asserted behaviour does not survive",
+   "why": "value equality is FORBIDDEN from creating links under adopted B-15, so the behaviour asserted here has no surviving owner"
+  },
+  "test_scorer_wrong_measurement_drops_accuracy": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 value/shape = pooled code_ok/code_all, bar >=98%",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_scorer_wrong_slice_drops_accuracy": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 value/shape pooled metric, bar >=98%",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_shared_endpoint_never_matches": {
+   "authority_citation": "value equality is forbidden from linking (B-15); exact-record law and the Core attack tests supersede it",
+   "class": "DELETE",
+   "covered_by_current_owner_test": "YES \u2014 driver/core/test_v2_attacks.py exact-record/attack controls",
+   "replacement_test": "NONE",
+   "why": "both of its assertions are old _value_eq; condition verified, not assumed"
+  },
+  "test_state_accuracy_not_diluted": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 driver_state accuracy, bar >=95%",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 this is the Step-3 scorer metric, not a Core owner test",
+   "replacement_test": "same assertion, driven through the route-supplied seam",
+   "why": "calls score_arm, which gains a REQUIRED `route`; KEEP means byte-unchanged and is therefore impossible (SEQ 1113.1)"
+  },
+  "test_union_accepts_tie_resolutions": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 pass bar 'no emit-once duplicate violation or unresolved duplicate-gold group' \u2014 ties resolve through MatchResult, not the retired resolution path",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "assert MatchResult.gold_inconclusive / emit_once_violation behaviour",
+   "why": "asserts tie handling that the retired ambiguity path owned"
+  },
+  "test_union_dedup_no_inflation": {
+   "authority_citation": "union dedup must reuse the CURRENT complete record identity owner (driver/core/fact_match.record_key), not JSON of the retired wrapper (SEQ 1118)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 Step-3 owns union dedup; Core owns only record identity",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "dedup via record_key over PreparedFactV2 records",
+   "why": "reaches the retired dedup_items helper"
+  },
+  "test_union_keeps_different_facts": {
+   "authority_citation": "union dedup must reuse the CURRENT complete record identity owner (driver/core/fact_match.record_key), not JSON of the retired wrapper (SEQ 1118)",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "NO \u2014 Step-3 owns union dedup; Core owns only record identity",
+   "newly_exposed_by": "B-16 helper deletion (receipt 27)",
+   "replacement_test": "dedup via record_key over PreparedFactV2 records",
+   "why": "reaches the retired dedup_items helper"
+  },
+  "test_unresolved_tie_blocks_pass": {
+   "authority_citation": "FinalDesign/LeftOverSteps/step3.md \u00a710 pass bar: 'no emit-once duplicate violation or unresolved duplicate-gold group'",
+   "class": "REWRITE",
+   "covered_by_current_owner_test": "no \u2014 the bar is Step-3's, not fact_match's",
+   "replacement_test": "assert MatchResult.gold_inconclusive non-empty (or emit_once_violation) blocks pass",
+   "why": "constructs the RETIRED ambiguity path; the surviving SAFETY property is that an unresolved duplicate-gold group or emit-once violation blocks pass (SEQ 1113.3)"
+  }
+ }
+}

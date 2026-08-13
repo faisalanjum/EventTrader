@@ -1,0 +1,274 @@
+{
+ "categories": {
+  "A": "current scorer/matcher -> migrate",
+  "B": "retired helper -> DELETE",
+  "C": "negative test proving gold_item is refused -> KEEP EXACTLY",
+  "D": "comment/docstring only -> no migration",
+  "E": "outside the Step-3 closure"
+ },
+ "counts": {
+  "A": 28,
+  "B": 1,
+  "C": 1
+ },
+ "expanded_union": 30,
+ "functions": {
+  "_fact": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_gold_fact": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_home_case": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "_home_ok"
+   ],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_idfact": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_matched_pair": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_metric_pair": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_surprise_gold_and_arm": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_surprise_with_home": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "_vfact": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "shared fixture builder for scorer/matcher tests; migrated to _v2_fact/_v2_item/_v2_slot"
+  },
+  "test_RED_old_gold_item_wrapper_is_refused": {
+   "category": "C",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "deliberate negative test: proves the retired wrapper is REFUSED; migrating it would delete the guard"
+  },
+  "test_false_lane_verdict_increments_wrong_lane": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_home_numberless_needs_numberless": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "_home_ok"
+   ],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_home_slice_and_scope_must_match": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "_home_ok"
+   ],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_home_unresolved_periods_never_match": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "_home_ok"
+   ],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_large_ints_never_merge": {
+   "category": "B",
+   "executable_gold_item": false,
+   "helpers": [
+    "_canon_item_values"
+   ],
+   "in_original_36": false,
+   "why": "reaches a scorer-local helper slated for deletion (_canon_item_values); superseded by Core outcome rows / record identity"
+  },
+  "test_matcher_exact_evidence_is_order_free_and_not_fuzzy": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_matcher_locator_distinguishes_repeats_of_one_sentence": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_name_errors_never_dilute": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_numberless_home_requires_quote": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "_home_ok"
+   ],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_presence_disagreement_metric": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "presence_disagreement"
+   ],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_presence_disagreement_uses_tie_decisions": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "presence_disagreement"
+   ],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_scorer_emits_ambiguous_for_grader": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_scorer_parks_grounded_surprise_without_home_sibling": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_scorer_union_recall_beats_single": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_shared_endpoint_never_matches": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "_value_eq"
+   ],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_state_accuracy_not_diluted": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_union_accepts_tie_resolutions": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_union_dedup_no_inflation": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "dedup_items"
+   ],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_union_keeps_different_facts": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [
+    "dedup_items"
+   ],
+   "in_original_36": false,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  },
+  "test_unresolved_tie_blocks_pass": {
+   "category": "A",
+   "executable_gold_item": true,
+   "helpers": [],
+   "in_original_36": true,
+   "why": "current scorer/matcher behaviour; migrate via _gold_fact/_v2_fact"
+  }
+ },
+ "method": "AST over FUNCTIONS with EXECUTABLE use (docstrings and comments stripped)",
+ "newly_exposed": [
+  "_fact",
+  "_gold_fact",
+  "_home_case",
+  "_idfact",
+  "_matched_pair",
+  "_metric_pair",
+  "_surprise_gold_and_arm",
+  "_surprise_with_home",
+  "_vfact",
+  "test_RED_old_gold_item_wrapper_is_refused",
+  "test_home_numberless_needs_numberless",
+  "test_large_ints_never_merge",
+  "test_numberless_home_requires_quote",
+  "test_presence_disagreement_metric",
+  "test_presence_disagreement_uses_tie_decisions",
+  "test_shared_endpoint_never_matches",
+  "test_union_accepts_tie_resolutions",
+  "test_union_dedup_no_inflation",
+  "test_union_keeps_different_facts"
+ ],
+ "non_executable_D": 32,
+ "original_36": 36,
+ "raw_gold_item_mentions": 61
+}

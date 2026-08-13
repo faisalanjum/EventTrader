@@ -3102,23 +3102,18 @@ def _evidence_from(fact, prepared):
                     # digit-bearing cells and the span did not — so a row like
                     # "Q1 2023 | Segment detail" reported one cell's words at
                     # the other cell's offsets.
-                    # EU-094 (#827): the digit-exclusion below is an
-                    # UNAUTHORIZED heuristic — no product clause says a
-                    # heading never carries a digit; that absence is the
-                    # recorded defect and it is held FAIL-CLOSED: the rule
-                    # can only WITHHOLD a section (the EU-092 explicit
-                    # empty claim), never fabricate or mis-attribute one,
-                    # and Python's Unicode-wide \d only widens the
-                    # withholding (the safe direction — #827 finding 1's
-                    # concern was acceptance, not exclusion). Real
-                    # digit-bearing headings ("Q1 2023 Results") are
-                    # therefore withheld: recall cost UNKNOWN, recorded
-                    # honestly in g2_evid_recall_EU-094.txt; lifting it is
-                    # an owner scope decision, not a code default.
+                    # EU-094 (#827) REMOVED: an unauthorized digit exclusion
+                    # sat here. Discarding a digit-bearing candidate could
+                    # leave exactly one candidate where the row had two, so it
+                    # turned AMBIGUITY INTO ACCEPTANCE rather than only
+                    # withholding as its comment claimed. The existing
+                    # exactly-one-candidate rule below now owns ambiguity;
+                    # nothing replaces the filter. Measured counterfactual:
+                    # receipts_827/16_two_view_census.json.
                     eligible = [(t, sp) for t, sp in
                                 (_visible_slice(item, prepared)
                                  for item in prior_cells)
-                                if _words(t) and not re.search(r'\d', t)]
+                                if _words(t)]
                     first = (_visible_slice(prior_cells[0], prepared)[0]
                              if prior_cells else '')
                     if prior_cells and not _has_number_fact(prior, numeric) \

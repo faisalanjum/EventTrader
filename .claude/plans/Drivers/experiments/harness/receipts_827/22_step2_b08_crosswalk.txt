@@ -1,0 +1,47 @@
+B-08 MIGRATION CROSSWALK — 15/15 RESOLVED, ZERO OWNER QUESTIONS (corrected per Codex SEQ 1062.1)
+PROOF ONLY. Never a builder input, never a second rule book.
+
+WHY THE PREVIOUS VERSION WAS WRONG. It asked whether the old RULE IDENTITY still
+appears live, and treated nine blocks as owner questions when it did not. That is
+the wrong question: a retired identity does not mean the BEHAVIOUR is unowned — the
+behaviour moved to a differently-named live section. Resolving by CONTENT closes all
+fifteen with nothing left for a ruling.
+
+ROW  OLD BLOCK (content)                        RESOLUTION
+ 1   naming law                                 REPLACED -> FINAL_DESIGN §3 (NAME-01..19 + OD-17)
+ 2   driver_state lane vocabularies             REPLACED -> FINAL_DESIGN §4.3, incl. the Action bullet
+ 3   surprise target-period rule                REPLACED -> FINAL_DESIGN §5.1 (OD-21)
+ 4   producer period routing, first-match prose REPLACED -> FINAL_DESIGN §6.2: one shared resolver,
+                                                             explicit order, instant/duration rule
+ 5   the ITEM CONTRACT / top-level shape        REPLACED -> Core owners + ChannelContractV2 §10 +
+                                                             WorkOrder 633-646.
+                                                CORRECTION: the earlier version cited
+                                                15_CandidateFactPacket.md, which Step 2 fixes as a
+                                                PROTECTED V1 baseline and forbids as a V2 schema source.
+ 6   signed value-space (OD-12)                 REPLACED -> FINAL_DESIGN §6.1 (UNIT-01..14, OD-10..13)
+ 7   the 18-field producer/enrichment table     RETIRED  -> V1 shape; V2 structure comes only from Core +
+                                                             ChannelContractV2 §10 + the current 32-field contract
+ 8   the per-lane validator matrix              REPLACED -> FINAL_DESIGN §7.2
+ 9   FACT-23 four per-slot unit/money hints     RETIRED  -> replaced by the V2 numeric slot shape and the
+                                                             text evidence split, WorkOrder 638-646
+10   growth basis (OD-11)                       REPLACED -> FINAL_DESIGN §6.1
+11   ISS-16 routing                             REPLACED -> FINAL_DESIGN §5.1 (OD-21) + §7.2 routing +
+                                                             WorkOrder line 423
+12   ISS-23 period strictness                   REPLACED -> FINAL_DESIGN §6.2 duration/instant + equal-date
+13   FACT-26f slice-kind ladder                 REPLACED -> FINAL_DESIGN §5.2, the four producer outcomes
+14   FS-15 producer outcomes                    REPLACED -> FINAL_DESIGN §5.2, the four producer outcomes
+15   the EXP-5 output field list                REPLACED -> generated from the Core owners (B-07, done):
+                                                             envelope, fact keys, 32 item fields, slot triple,
+                                                             abstention shape, source-owned pair
+
+TOTALS: 15/15 resolved — 13 REPLACED, 2 RETIRED, 0 owner questions.
+
+METHODS TRIED AND REJECTED (recorded because each looked reasonable):
+  full-anchor string match  -> found nothing; the descriptive tails are unstable
+  first line containing it  -> found MENTIONS, not owners
+  range header alone        -> proves a FAMILY survives, not the member
+  rule-identity presence    -> the error above: a retired ID is not an unowned BEHAVIOUR
+  What works: resolve the block's SUBJECT MATTER to the live section that governs it.
+
+DENOMINATORS KEPT SEPARATE (SEQ 1058): 15 builder input blocks; 14 Step-2 behaviour
+  rows; S2-D01 reported on its own.

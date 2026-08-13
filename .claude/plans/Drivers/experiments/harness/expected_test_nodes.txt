@@ -189,11 +189,12 @@
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_827_the_read_gate_plans_and_executes_the_SAME_parameters
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_827_the_read_gate_still_REFUSES_a_non_read_plan_with_parameters
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[audit_worker_access]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[build_exp5_contract]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[build_kfields_inputs]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[build_launch_manifest]
-.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[fact16_checks]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[import_inertness]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[isolated_manifest_check]
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[key_lint]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[kf_lint]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[make_g_ledger]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[make_pin_inventory]
@@ -205,7 +206,7 @@
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[score_exp5]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_EVERY_active_harness_module_imports_INERTLY[slice_menu_probe]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G12_the_assembled_prompt_defines_every_value_it_demands
-.claude.plans.Drivers.experiments.harness.test_g_suite::test_G12_the_live_launcher_still_serves_the_v1_contract
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G12_the_live_launcher_serves_the_v2_drafter_prompt
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G12_the_untrusted_boundary_precedes_the_event
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G13_attack_fixtures_are_registered_and_classified
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G13_the_annual_sequential_attack_is_actually_run
@@ -218,7 +219,7 @@
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G19_the_patch_still_applies_strictly
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G19_two_rebuilds_are_byte_identical
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G28_source_id_echo_mismatch_is_refused
-.claude.plans.Drivers.experiments.harness.test_g_suite::test_G32_source_id_is_delivered_in_the_prompts_event_view
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_G32_every_assembled_event_view_is_exactly_the_authorized_fields
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_G9_one_shared_validation_entry_point_exists
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_DUPLICATE_JUNIT_identity_is_REFUSED
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_MATRIX_a_DUPLICATE_pin_is_REFUSED
@@ -277,17 +278,16 @@
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_every_grading_row_points_at_a_registered_grading_fixture
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_every_registered_proof_EXISTS_in_the_live_inventory
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_every_registered_proof_is_SELECTABLE
+.claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[driver.channels.fiscal_ai.build_packets]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[driver.core.prepared_fact_v2]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[driver.core.xbrl_attach]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[driver.relocation.locator]
-.claude.plans.Drivers.experiments.harness.test_g_suite::test_importing_a_module_gains_ZERO_credentials[scripts.driver_seed.build_packets]
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_isolated_gate_rejects_mismatched_tree_id
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_step4_one_tree_id_stable
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_active_inventory_INCLUDES_the_declared_generators_themselves
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_attack_count_is_derived_not_transcribed
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_credential_PROBE_ITSELF_can_detect_a_leak
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_g_ledger_is_regenerated_not_transcribed
-.claude.plans.Drivers.experiments.harness.test_g_suite::test_the_gate_CATCHES_a_live_import_of_a_staged_module
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_gate_CATCHES_a_staged_NAME_in_the_WRONG_DIRECTORY
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_gate_CATCHES_an_unexpected_untracked_production_file
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_inventory_CATCHES_a_module_loaded_by_FILENAME_not_by_import
@@ -304,12 +304,131 @@
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_registrys_CLEAN_proofs_run_GREEN_without_any_credential
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_registrys_LIVE_proofs_run_GREEN_against_the_real_graph
 .claude.plans.Drivers.experiments.harness.test_g_suite::test_the_v2_modules_are_a_STAGED_read_only_adapter
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_an_UNSAFE_arm_is_never_rescued_by_union_recall
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_no_extras_input_is_LAWFULLY_complete_when_nothing_is_eligible
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_no_extras_verdict_for_an_accepted_extra_is_INCOMPLETE
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_score_union_FORWARDS_extras_verdicts
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_two_grader_inputs_are_scorable_ONLY_when_they_agree[second0-True]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_two_grader_inputs_are_scorable_ONLY_when_they_agree[second1-False]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_two_grader_inputs_are_scorable_ONLY_when_they_agree[second2-False]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1134_unrun_grading_with_unmatched_gold_cannot_PASS
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1135_a_produced_DUPLICATE_earns_no_recall_and_blocks_PASS
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1135_an_abstention_with_an_unsound_locator_is_REFUSED_upstream
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1135_one_abstention_cannot_be_charged_against_TWO_gold_rows
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1136_an_answered_gold_row_cannot_ALSO_be_charged_to_an_abstention
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1136_presence_disagreement_returns_INCOMPLETE_end_to_end
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1136_the_duplicate_bucket_is_filled_from_the_identity_owner
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1139_a_grader_linked_surprise_is_not_ALSO_a_missing_twin
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1139_duplicate_gold_is_an_inconclusive_KEY_erratum_not_model_failure
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1140_a_gold_linked_abstention_does_NOT_answer_a_surprise_twin
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1140_a_pure_duplicate_key_erratum_is_None_not_False
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1140_a_real_hard_failure_still_returns_False
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1140_an_explicit_None_ruling_earns_no_potential_credit
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1140_unresolved_gold_WITHOUT_candidates_is_a_definite_FAIL
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1140_unresolved_gold_WITH_enough_candidates_stays_PENDING
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1141_a_SAME_event_candidate_still_raises_the_ceiling
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_1141_a_spare_candidate_in_ANOTHER_event_cannot_raise_the_ceiling
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_827B4_actual_surprise_finds_its_metric_home
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_827B4_false_homes_must_park_not_pair[actual-revenue_surprise-metric]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_827B4_false_homes_must_park_not_pair[actual-fuel_cost-metric]
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_827B4_false_homes_must_park_not_pair[guidance-revenue-guidance]
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_827B4_guidance_surprise_finds_its_guidance_home
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ABST_a_diagnostic_abstention_is_charged_to_NEITHER_side
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ABST_a_gold_linked_abstention_is_charged_as_a_park
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ABST_the_split_is_the_LOCATOR_not_the_route_decision
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_a_false_meaning_verdict_on_an_accepted_fact_is_confirmed_wrong
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_a_refused_row_never_enters_the_accepted_fact_safety_count
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_all_correct_lawful_path_passes_safety
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_genuine_key_miss_is_INCONCLUSIVE_not_a_failure
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts0-extras_verdict_malformed]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts1-extras_verdict_out_of_range]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts2-extras_verdict_missing]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ADDA_unsupported_extra_is_a_confirmed_wrong_ACCEPTED_fact
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[0-0-a lawful EMPTY whole-event answer]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[0-1-an abstention only]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[2-0-duplicate facts only]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[2-1-facts and abstentions]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B16_rejected_is_reported_with_its_real_code_never_renamed_parked
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B16_route_is_REQUIRED_with_no_legacy_fallback
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B16_route_refuses_a_map_pointing_outside_the_result
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B16_route_refuses_duplicate_and_missing_outcome_indexes
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B16_route_refuses_event_set_mismatch[<lambda>-an EMPTY route hides every event]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_B16_route_refuses_event_set_mismatch[<lambda>-an EXTRA event was routed]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_door_scoped_field_remains_lawful_reader_output
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_gold_document_surface_accepts_the_review_field
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_gold_extra_lawful_both_booleans[False]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_gold_extra_lawful_both_booleans[True]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_instruction_like_source_text_stays_evidence
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_lawful_abstention_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_lawful_far_future_fiscal_year_2150_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_lawful_locator_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_lawful_zero_fact_reply_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_source_echo_matches_the_trusted_id
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_source_owned_field_in_the_v2_item_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_step3_era_fixture_still_lawful_today
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONTROL_v2_owner_names_are_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONVERSE_1_lawful_v2_fact_accepted_as_raw_model_output
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONVERSE_2_one_review_field_makes_the_model_door_refuse
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_CONVERSE_3_adjudicated_door_accepts_the_three_review_fields
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_LIVE_workflow_handoff_delivers_Decimal_to_the_validator
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_ambiguity_resolution_input_works
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_each_axis_moves_its_own_denominator[fact_type-kwargs0-lane]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_each_axis_moves_its_own_denominator[ordinary item field-kwargs2-field]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_each_axis_moves_its_own_denominator[per_x-kwargs1-field]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_each_axis_moves_its_own_denominator[slice MEMBERSHIP-kwargs5-field]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_each_axis_moves_its_own_denominator[slot scale_multiplier-kwargs4-field]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_each_axis_moves_its_own_denominator[slot value-kwargs3-field]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_equivalent_spellings_must_NOT_move_the_score[measurement SPELLING-kwargs1]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_equivalent_spellings_must_NOT_move_the_score[slice ORDER-kwargs0]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_invalid_grader_rulings_block_PASS[rulings0-ruling_out_of_range]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_invalid_grader_rulings_block_PASS[rulings1-ruling_missing]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_lawful_unchanged_pair_is_the_control
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_MUT_one_produced_fact_cannot_be_ruled_onto_two_golds
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_checker_binds_the_v1_schema_owner
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_contract_builder_reads_archived_authority
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_contract_builder_refuses_a_pin_that_is_not_exactly_one_place
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_dict_period_scope_is_refused_without_a_raw_exception
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_duplicate_outer_quote_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_extra_envelope_key_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_fabricated_quote_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_flat_number_in_a_numeric_slot_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_fractional_fiscal_year_is_refused_without_a_raw_exception
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_gold_extra_off_shape_is_refused[bad0]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_gold_extra_off_shape_is_refused[bad1]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_gold_extra_off_shape_is_refused[bad2]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_gold_extra_off_shape_is_refused[bad3]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_gold_extra_off_shape_is_refused[bad4]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_gold_fact_missing_per_x_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_gold_fact_with_bad_locator_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_lawful_nested_slot_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_lawful_v2_reply_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_malformed_abstention_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_model_reply_carrying_a_gold_only_field_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_nested_evidence_outside_the_quote_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_old_gold_item_wrapper_is_refused
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_replay_projection_exists_and_is_lossless
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_replay_projection_keeps_duplicates_and_empty_answers_honest
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_reply_naming_a_different_valid_event_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_same_quote_in_two_parts_needs_the_right_part
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_schema_owner_drift_breaks_the_generated_card
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_score_arm_consumes_route_outcomes_rather_than_validating_itself
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_scorer_reaches_no_second_rule_engine
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_scorer_uses_core_fact_match_not_its_own_matcher
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_transport_routes_a_gold_drafter_reply_to_the_gold_door
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_transport_routes_an_exp5_producer_reply_to_the_reader_door
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_v2_fact_missing_a_core_fact_level_key_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_container_for_a_fact_is_refused[7]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_container_for_a_fact_is_refused[bad20]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_container_for_a_fact_is_refused[s]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_container_for_facts_is_refused[7]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_container_for_facts_is_refused[None]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_container_for_facts_is_refused[a string]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_container_for_facts_is_refused[bad3]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_occurrence_index_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_RED_wrong_part_ref_is_accepted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_a_plan_whose_manifest_door_is_missing_or_unknown_REFUSES[GOLD-a door in the wrong case]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_a_plan_whose_manifest_door_is_missing_or_unknown_REFUSES[None-a plan that names no door]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_a_plan_whose_manifest_door_is_missing_or_unknown_REFUSES[reader -a door with stray whitespace]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_a_plan_whose_manifest_door_is_missing_or_unknown_REFUSES[tampered-a door that is not a known contract]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_a_wrong_part_label_is_still_refused
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_empty_dir
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_forbidden_tool
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_auditor_fails_missing_required_read
@@ -323,20 +442,26 @@
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_check_passes_intact_copy
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_write_refuses_existing_manifest
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_builder_write_refuses_nonempty_dir
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_change_only_value_match
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_clean_union_rescues_incomplete_single
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_comparison_only_value_match
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_definite_failures_never_none
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_e2e_unit_value_match_now_works
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_empty_arm_is_definite_fail
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_error_table_rule_grouped
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[abstention keys-"reason": "<short>",\n-]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[abstention keys-{"quote": "<verbatim>", "reason"-{"retired_abst": "<x>", "quote": "<verbatim>", "reason"]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[fact keys-"per_x": "<stated denominator-"gone_per_x": "<stated denominator]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[fact keys-{"fact_type":-{"retired_fact_key": "<x>", "fact_type":]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[item fields-"driver_name": "<string, Rule 3>",\n-]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[item fields-"driver_name":-"retired_item": "<x>",\n      "driver_name":]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[reply envelope-,\n "abstentions": [\n   {"quote": "<verbatim>", "reason": "<short>",\n    "part_ref": "<the exact `part` label supplied for that text part>",\n    "occurrence_in_part": "<null when unique; else count>"}]}-}]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[reply envelope-\n "abstentions": [-\n "gone_abstentions": []
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[reply envelope-{"source_id":-{"retired_top": "<x>", "source_id":]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[slot keys-scale_multiplier, unit_scale_evidence}-scale_multiplier, unit_scale_evidence, retired_key}]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[slot-spelling fields-"comparison_high": "<null OR {value, scale_multiplier, unit_scale_evidence}>",-"comparison_high": "<number|null>",]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[slot-spelling fields-"level_high": "<null OR {value, scale_multiplier, unit_scale_evidence}>",-"level_high": "<string>",]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_copied_structural_surface_is_bound_to_core[slot-spelling fields-{value, scale_multiplier,-{scale_multiplier,]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_frozen_v2_field_is_measured_EXACTLY_ONCE
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_every_live_part_label_is_a_lawful_locator
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_exact_decimal_no_rounding_merge
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_change_value_requires_change_unit
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_passes_legal_surprise
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_guidance_vs_previous_guidance
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_impossible_tense_exact_dates
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_impossible_tense_fiscal_only
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_fact16_trips_surprise_temporal_baseline
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_false_lane_verdict_increments_wrong_lane
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_final_gate_or_semantics
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_final_gate_union_axes_govern
@@ -347,12 +472,10 @@
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_fact_unrelated_driver_parks
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_fact_value_mismatch_parks
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_fact_wrong_period_parks
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_numberless_needs_numberless
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_numberless_requires_unknown_state
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_point_matches_point
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_point_vs_floor_rejected
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_slice_and_scope_must_match
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_unresolved_periods_never_match
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_numberless_sibling_pairing_is_enforced_by_the_route
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_slice_must_match_through_the_PUBLIC_ROUTE
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_value_shape_is_decided_by_the_PUBLIC_ROUTE[floor-parked-F9-a FLOOR lacks the matching high endpoint, so it is not a matching home]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_home_value_shape_is_decided_by_the_PUBLIC_ROUTE[point-written-None-equal point endpoints, unit, and the other \xa7153 identity fields]
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_handles_a_malformed_row_without_crashing
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_preserves_a_duplicate_rows_PAID_replies
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_refuses_to_overwrite_a_captured_reply
@@ -361,12 +484,9 @@
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_rejects_wrong_event_reply
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_saves_every_paid_reply_even_if_one_is_malformed
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_ingest_validates_both_arms_automatically
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_large_ints_never_merge
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_launch_manifest_exact_plan
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_accepts_du_worthy_false
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_accepts_production_valid_year_2150
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_arm_fails_single_doc
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_dict_period_scope
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_int_date
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_list_driver_state
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_clean_on_list_enum_value
@@ -375,25 +495,11 @@
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_blank_quote
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_empty_input
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_extra_fact_key
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_fractional_year_via_production
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_half_quarter_conflict
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_illegal_driver_name
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_inner_outer_mismatch
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_month_13_via_production
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_non_bool_du_worthy
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_non_iso_date_via_production
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_none_shape_literal
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_driver_name
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_measurement_list
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_sequential_evidence
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_null_slice_parts_list
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_start_after_end_via_production
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_stored_period_scope
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_wrong_lane_state
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_fails_wrong_type_cleanly
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_num_accepts_decimal_rejects_float
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_lint_passes_valid_doc
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_auto_pairs_only_on_shared_source_evidence
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_exact_evidence_is_order_free_and_not_fuzzy
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_locator_distinguishes_repeats_of_one_sentence
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_never_auto_matches_different_drivers_on_equal_value
@@ -402,10 +508,29 @@
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_rejects_same_name_value_DIFFERENT_PERIOD
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_matcher_rejects_same_name_value_DIFFERENT_SLICE
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_name_errors_never_dilute
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_numberless_home_requires_quote
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_no_scorer_runtime_imports_a_core_test_module
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_numberless_guidance_reaches_the_prior_unit_read_not_an_AttributeError[reaffirmed]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_numberless_guidance_reaches_the_prior_unit_read_not_an_AttributeError[withdrawn]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_numberless_home_without_a_quote_is_REFUSED_by_the_route
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_parser_refuses_nan_infinity_and_duplicate_keys
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_presence_disagreement_metric
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_presence_disagreement_uses_tie_decisions
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_presence_disagreement_reports_0_for_a_truly_empty_answer
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_presence_disagreement_uses_grader_decisions
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_builder_writes_into_a_nonexistent_out_dir
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_carries_the_fact_gate_and_a_lawful_zero_fact_result
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_demands_a_verbatim_quote_with_part_and_occurrence
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_demands_every_field_and_forbids_invention
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_ends_with_the_event_after_the_untrusted_boundary
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_grants_no_file_access_gold_future_or_target_count
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_is_text_only_and_names_xbrl_only_as_forbidden
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_locator_uses_the_events_own_part_label_not_an_invented_one
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_makes_the_source_id_echo_a_wrong_event_guard
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_one_envelope_with_gold_fields_attached_afterward
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_prompt_roles_differ_only_in_the_role_header
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_replay_drivers_REFUSE_one_name_with_two_fact_types
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_replay_returns_each_record_once_in_order_and_never_calls_a_model
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_replay_store_REFUSES_a_transaction_because_scoring_never_writes
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_replay_store_serves_EVERY_v2_lane_not_just_metric
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_rule_bucket_actual_counts
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_emits_ambiguous_for_grader
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_measurement_normalization_equivalent
@@ -414,11 +539,107 @@
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_requires_complete_meta_per_event
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_requires_event_meta
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_union_recall_beats_single
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_unit_aware_value_match
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_wrong_measurement_drops_accuracy
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_scorer_wrong_slice_drops_accuracy
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_shared_endpoint_never_matches
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_state_accuracy_not_diluted
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step1_receipt_is_the_case_source
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_10_du_worthy_false_rows_never_enter_recall
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-1-0.01-True]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-2-0.02-True]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-3-0.03-False]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_10_the_rule_of_three_bound_is_reported_for_a_clean_run
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_10_zero_responses_is_NOT_APPLICABLE_not_zero_percent
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_a_cross_tier_union_is_REFUSED
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_a_same_tier_union_is_ALLOWED
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_every_official_bar_is_inclusive_at_its_threshold[recall-0.95-min]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_every_official_bar_is_inclusive_at_its_threshold[state_acc-0.95-min]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_every_official_bar_is_inclusive_at_its_threshold[value_shape_acc-0.98-min]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_every_official_bar_is_inclusive_at_its_threshold[would_park-0.1-max]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_recall_boundary_below_at_and_above[20-18-0.9-False]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_recall_boundary_below_at_and_above[20-19-0.95-True]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_recall_boundary_below_at_and_above[20-20-1.0-True]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_score_arm_uses_that_same_bar_owner
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_11_the_reader_plan_pins_a_tier_on_every_arm
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[contract-harness/exp5_prompt_contract.manifest.json-bytes]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[model_setting-harness/build_launch_manifest.py-effort]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[prompt-harness/exp5_prompt_producer.md-bytes]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[scorer-harness/scorers/score_exp5.py-bytes]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[source-keys/K-fields/draft_inputs/{first_input}-bytes]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[writes_disabled-harness/build_launch_manifest.py-made_calls]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_12_two_independent_builds_are_byte_identical
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[-empty]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[0000000001-mismatching registrant]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[None-missing]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[not-a-cik-malformed]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_every_events_internal_id_matches_its_filename
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_source_parts_are_complete_ordered_and_stably_referenced
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_the_OD11_contingency_is_recorded_DISABLED_in_both_plans
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_the_menu_is_point_in_time_and_carries_no_prohibited_leakage
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_the_menu_probe_carries_the_MATCHED_company_cik
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_3_the_point_in_time_cutoff_is_unchanged
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_4_both_launch_plans_are_exact_and_DISABLED
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_4_no_producer_under_test_can_define_its_own_key
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_4_runtime_model_IDS_are_NOT_frozen
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_4_the_gold_drafting_plan_can_NEVER_use_the_cheap_tier
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_4_the_opus_ref_subsample_is_h32_LAW_not_a_choice
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_4_the_two_plans_are_SEPARATE_and_neither_launches_the_other
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_a_lawful_run_input_set_still_yields_the_exact_156
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_every_arm_pins_role_effort_tier_and_active_state
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_every_identity_names_a_path_and_matches_its_LIVE_bytes
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_every_reader_event_carries_its_assembled_PRODUCER_prompt
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_no_credential_machine_path_or_self_hash_is_bound
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_committed_plan_still_carries_NO_lock_and_NO_frozen_ids
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_kfields_lock_is_NULL_not_a_placeholder
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_launcher_bound_is_the_READER_one_not_the_draft_one
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_reader_launcher_executes_its_EXACT_156_schedule
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_reader_plan_binds_every_required_identity
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_runner_REFUSES_before_the_first_call[extra0-has not been reviewed]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_runner_REFUSES_before_the_first_call[extra1-no K-fields lock supplied]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_runner_REFUSES_before_the_first_call[extra2-does not match]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_runner_REFUSES_before_the_first_call[extra3-no exact runtime model ID]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_5_the_runner_REFUSES_before_the_first_call[extra4-ALIAS, not an exact runtime ID]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_LAWFUL_156_reply_run_passes_validation
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_MUTATED_prompt_is_caught_even_with_an_untouched_claim
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_duplicate_retry_reply_is_refused_but_still_PRESERVED
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_lawful_FIRST_reply_wins_without_a_retry
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_lawful_first_launch_triggers_NO_retry
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_retry_schedule_must_be_a_SUBSET_of_the_approved_plan
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_scheduled_pair_with_the_same_bad_content_DOES_retry
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_second_failure_never_requests_a_THIRD_launch
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_a_second_invalid_answer_stops_with_no_third_launch
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_actual_bytes_match_the_pin_on_BOTH_phases
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_an_INTERRUPTED_batch_keeps_every_reply_it_already_paid_for
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_an_unknown_or_missing_DOOR_refuses_the_scheduled_ingest[None-missing]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_an_unknown_or_missing_DOOR_refuses_the_scheduled_ingest[not_a_door-unknown]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_an_unscheduled_pair_never_becomes_a_retry_REQUEST[<lambda>-unscheduled ARM]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_an_unscheduled_pair_never_becomes_a_retry_REQUEST[<lambda>-unscheduled EVENT]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_every_checked_reply_is_bound_to_event_arm_run_and_manifest
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_extreme_magnitudes_survive_the_exact_parse[-10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_extreme_magnitudes_survive_the_exact_parse[0.1000000000000000000000000000001]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_extreme_magnitudes_survive_the_exact_parse[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_extreme_magnitudes_survive_the_exact_parse[1e-400]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_first_pass_rows_need_prompt_evidence_too
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_missing_and_wrong_prompt_evidence_give_DISTINCT_reasons
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_more_than_two_attempts_still_refuses
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_retry_raw_uses_a_DISTINCT_name_and_writes_nothing_twice
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_retry_refuses_a_reply_for_the_WRONG_source
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_retry_treats_parseable_but_OFF_CONTRACT_as_invalid
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_schedule_attacks_refuse_without_losing_raw[<lambda>-DUPLICATE reply]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_schedule_attacks_refuse_without_losing_raw[<lambda>-MISSING scheduled reply]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_schedule_attacks_refuse_without_losing_raw[<lambda>-UNEXPECTED reply0]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_schedule_attacks_refuse_without_losing_raw[<lambda>-UNEXPECTED reply1]
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_scheduled_replies_reach_the_authoritative_V2_checker
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_the_REAL_launcher_retries_exactly_once_end_to_end
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_the_emitted_prompt_hash_equals_the_BYTES_ACTUALLY_SENT
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_the_kfields_plan_still_ingests_lawfully
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_the_reader_launchers_156_replies_ALL_ingest
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_the_retry_must_reuse_the_EXACT_pinned_prompt
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_two_off_contract_replies_enter_the_invalid_bucket
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_6_writes_happen_ONLY_at_an_ingest_measured_globally
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_7_a_reader_exception_is_a_LOUD_failed_run_not_an_outcome
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_8_no_shortcut_can_create_a_link_structurally
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_9_the_would_park_formula_is_kept_EXACTLY
+.claude.plans.Drivers.experiments.harness.test_harness_guards::test_step3_no_code_still_calls_the_retired_contract_card
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_transport_hands_off_to_the_single_validator
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_transport_preserves_digits_js_would_collapse
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_transport_proves_the_js_path_would_have_lost_them
@@ -429,14 +650,17 @@
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_unresolved_tie_blocks_pass
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_workflow_bound_to_locked_manifest
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_wrong_driver_name_fails
-.claude.plans.Drivers.experiments.harness.test_harness_guards::test_wrong_unit_hints_fail
 .claude.plans.Drivers.experiments.harness.test_harness_guards::test_zz_frozen_untouched
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_DYNAMIC_a_changed_expression_changes_the_frozen_record[import re\nP = "x"\nR = re.compile("^" % P + r"[0-9]+$")\n-the operator]
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_DYNAMIC_a_changed_expression_changes_the_frozen_record[import re\nP = "x"\nR = re.compile("^" + P + r"[0-9]{4}$")\n-the embedded literal]
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_DYNAMIC_a_changed_expression_changes_the_frozen_record[import re\nZ = "x"\nR = re.compile("^" + Z + r"[0-9]+$")\n-the referenced name]
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_DYNAMIC_a_line_only_move_keeps_the_same_frozen_record
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_a_fifth_inline_html_site_is_unclassified
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_aliased_regex_import_is_caught
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_baseline_temp_repo_is_green
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_each_inline_html_site_is_individually_caught[GOVERNING_LAW sec cik-re.fullmatch(_SEC_CIK_10_PATTERN, digits)-re.search(_SEC_CIK_10_PATTERN, digits)]
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_each_inline_html_site_is_individually_caught[MECHANICAL css whitespace-_CSS_WS = re.compile('[ \\t\\n\\x0c\\r]+')-_CSS_WS = re.compile('[ \\t\\n]+')]
+.claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_each_inline_html_site_is_individually_caught[OWNER_SCOPE ascii words-re.findall(r"[A-Za-z][A-Za-z\u2019'-]*", value)-re.findall(r"[A-Za-z]+", value)]
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_from_re_import_form_is_caught
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_frozenset_keyword_list_is_caught
 .claude.plans.Drivers.experiments.harness.test_no_semantic_patterns::test_MUTATION_fuzzy_import_is_caught
@@ -854,6 +1078,7 @@ driver.core.test_driver_validators::test_F1_surprise_slot_missing
 driver.core.test_driver_validators::test_F2_surprise_slot_on_other_lane
 driver.core.test_driver_validators::test_F3_basis_hint_required_and_lane_bound
 driver.core.test_driver_validators::test_F4_baseline_required_on_surprise
+driver.core.test_driver_validators::test_F5_actual_vs_prior_year_is_not_a_lawful_surprise_pair
 driver.core.test_driver_validators::test_F5_guide_vs_own_prior_is_movement_not_surprise
 driver.core.test_driver_validators::test_F6_missing_home_parks_whole_event
 driver.core.test_driver_validators::test_F7_actual_surprise_before_period_end_rejected
@@ -1263,6 +1488,14 @@ driver.core.test_prepared_fact_v2::test_G7_unknown_units_still_multiply
 driver.core.test_prepared_fact_v2::test_G8_per_x_joins_auto_link_equality
 driver.core.test_prepared_fact_v2::test_G8_per_x_rides_once_at_fact_level
 driver.core.test_prepared_fact_v2::test_GRADE_DOMAIN_source_owned_evidence_cannot_alter_selection
+driver.core.test_prepared_fact_v2::test_S2D01_control_a_valid_fact_type_is_accepted
+driver.core.test_prepared_fact_v2::test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError[1.5]
+driver.core.test_prepared_fact_v2::test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError[1]
+driver.core.test_prepared_fact_v2::test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError[None]
+driver.core.test_prepared_fact_v2::test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError[True]
+driver.core.test_prepared_fact_v2::test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError[bad0]
+driver.core.test_prepared_fact_v2::test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError[bad1]
+driver.core.test_prepared_fact_v2::test_S2D01_non_string_fact_type_refuses_without_a_raw_TypeError[not_a_lane]
 driver.core.test_prepared_fact_v2::test_S2_a_lawful_exact_slot_is_still_accepted
 driver.core.test_prepared_fact_v2::test_S2_a_mixed_key_slot_is_refused_without_rendering_caller_keys
 driver.core.test_prepared_fact_v2::test_S9_slot_numeric_types_at_the_public_door[mult-bool]
@@ -1301,6 +1534,65 @@ driver.core.test_prepared_fact_v2::test_W6_every_emitted_stored_key_traces_to_a_
 driver.core.test_prepared_fact_v2::test_slot_unit_routing_matches_the_FROZEN_contract
 driver.core.test_prepared_fact_v2::test_the_contract_is_32_model_owned_plus_2_source_owned
 driver.core.test_prepared_fact_v2::test_the_field_list_matches_the_packages_A3_skeleton
+driver.core.test_raw_fact_accounting::test_B_a_raw_item_that_produced_NO_fact_gets_exactly_one_typed_terminal
+driver.core.test_raw_fact_accounting::test_B_zero_fact_terminals_are_NOT_forced_to_skipped
+driver.core.test_raw_fact_accounting::test_C_one_raw_item_one_fact_is_one_row_at_that_raw_index
+driver.core.test_raw_fact_accounting::test_D_a_lawful_split_returns_TWO_rows_at_the_SAME_raw_index
+driver.core.test_raw_fact_accounting::test_E_mixed_split_results_stay_BOTH_visible_with_no_worst_collapse
+driver.core.test_raw_fact_accounting::test_F_fusion_gives_EVERY_contributing_raw_index_the_same_fact_and_decision
+driver.core.test_raw_fact_accounting::test_G_one_raw_splits_one_branch_fuses_with_a_second_raw_the_other_stays
+driver.core.test_raw_fact_accounting::test_H_byte_identical_raw_items_are_accounted_by_POSITION_never_by_content
+driver.core.test_raw_fact_accounting::test_I_two_fragments_of_ONE_raw_item_that_fuse_emit_ONE_row_not_a_duplicate
+driver.core.test_raw_fact_accounting::test_J_an_event_wide_failure_reaches_every_distinct_raw_origin
+driver.core.test_raw_fact_accounting::test_K_a_duplicated_terminal_for_one_raw_index_is_LOUD
+driver.core.test_raw_fact_accounting::test_K_a_raw_index_with_BOTH_a_fact_and_a_terminal_is_contradictory
+driver.core.test_raw_fact_accounting::test_K_origin_attacks_fail_LOUDLY_and_never_as_a_public_outcome[origin0-2-raw 1 is never covered and no terminal explains it]
+driver.core.test_raw_fact_accounting::test_K_origin_attacks_fail_LOUDLY_and_never_as_a_public_outcome[origin1-2-raw 5 is out of range]
+driver.core.test_raw_fact_accounting::test_K_origin_attacks_fail_LOUDLY_and_never_as_a_public_outcome[origin2-2-a negative raw index]
+driver.core.test_raw_fact_accounting::test_K_origin_attacks_fail_LOUDLY_and_never_as_a_public_outcome[origin3-2-a bool is not an exact int]
+driver.core.test_raw_fact_accounting::test_K_origin_attacks_fail_LOUDLY_and_never_as_a_public_outcome[origin4-2-a string is not an exact int]
+driver.core.test_raw_fact_accounting::test_K_origin_attacks_fail_LOUDLY_and_never_as_a_public_outcome[origin5-1-a produced fact has no raw origin at all]
+driver.core.test_raw_fact_accounting::test_K_the_lawful_control_for_every_attack_above_still_passes
+driver.core.test_raw_fact_accounting::test_L_a_permutation_keeps_the_same_facts_after_remapping_raw_positions
+driver.core.test_raw_fact_accounting::test_L_the_same_request_twice_gives_identical_rows_and_fact_ids
+driver.core.test_raw_fact_accounting::test_N_the_relation_is_OPTIONAL_and_V1_behaviour_is_untouched_without_it
+driver.core.test_raw_fact_accounting::test_a_conflicting_row_for_the_SAME_raw_and_fact_RAISES_never_chooses
+driver.core.test_raw_fact_accounting::test_a_fact_lost_INSIDE_core_RAISES_and_never_becomes_a_public_park
+driver.core.test_raw_fact_accounting::test_a_failed_fusion_group_reaches_EVERY_distinct_raw_contributor_once
+driver.core.test_raw_fact_accounting::test_a_forged_terminal_can_NEVER_become_a_public_row
+driver.core.test_raw_fact_accounting::test_a_fragment_permutation_preserves_the_full_multiset
+driver.core.test_raw_fact_accounting::test_a_lost_fact_RAISES_through_the_PUBLIC_run_event_boundary
+driver.core.test_raw_fact_accounting::test_a_one_shot_iterable_is_frozen_once_and_never_silently_lost
+driver.core.test_raw_fact_accounting::test_a_split_permutation_is_compared_as_a_MULTISET_not_a_dict
+driver.core.test_raw_fact_accounting::test_a_terminal_must_come_from_the_existing_typed_owner[bad0-a zero-fact terminal must not carry a fact_id]
+driver.core.test_raw_fact_accounting::test_a_terminal_must_come_from_the_existing_typed_owner[bad1-`written` is not a terminal for a raw item that produced nothing]
+driver.core.test_raw_fact_accounting::test_a_terminal_must_come_from_the_existing_typed_owner[bad2-an unowned code]
+driver.core.test_raw_fact_accounting::test_a_terminal_must_come_from_the_existing_typed_owner[bad3-a missing public field]
+driver.core.test_raw_fact_accounting::test_a_terminal_with_NO_code_fails_closed
+driver.core.test_raw_fact_accounting::test_an_EARLY_event_failure_still_accounts_by_raw_index
+driver.core.test_raw_fact_accounting::test_an_EMPTY_event_with_a_MISSING_source_still_fails_closed
+driver.core.test_raw_fact_accounting::test_an_EMPTY_event_with_a_VALID_source_is_lawfully_empty
+driver.core.test_raw_fact_accounting::test_an_int_SUBCLASS_is_refused_and_never_travels_out_as_the_index
+driver.core.test_raw_fact_accounting::test_changing_ONLY_a_frozen_TERMINAL_changes_the_audit_identity
+driver.core.test_raw_fact_accounting::test_changing_the_frozen_relation_CHANGES_the_audit_run_identity
+driver.core.test_raw_fact_accounting::test_every_partial_argument_set_RAISES_before_any_store_callback[kw0]
+driver.core.test_raw_fact_accounting::test_every_partial_argument_set_RAISES_before_any_store_callback[kw1]
+driver.core.test_raw_fact_accounting::test_every_partial_argument_set_RAISES_before_any_store_callback[kw2]
+driver.core.test_raw_fact_accounting::test_group_collapse_does_NOT_reintroduce_the_split_recall_loss
+driver.core.test_raw_fact_accounting::test_one_raw_item_with_three_ambiguous_fragments_yields_ONE_park
+driver.core.test_raw_fact_accounting::test_only_an_EXACT_builtin_int_is_a_raw_position[0]
+driver.core.test_raw_fact_accounting::test_only_an_EXACT_builtin_int_is_a_raw_position[1.0]
+driver.core.test_raw_fact_accounting::test_only_an_EXACT_builtin_int_is_a_raw_position[True]
+driver.core.test_raw_fact_accounting::test_the_COMPANY_AMBIGUOUS_path_accounts_by_raw_index
+driver.core.test_raw_fact_accounting::test_the_ROLLBACK_path_accounts_by_raw_index
+driver.core.test_raw_fact_accounting::test_the_WRITER_BUSY_lock_path_accounts_by_raw_index
+driver.core.test_raw_fact_accounting::test_the_WRITE_GATE_refusal_still_accounts_by_raw_index
+driver.core.test_raw_fact_accounting::test_the_frozen_relation_is_recorded_in_the_ONE_audit_and_its_run_id
+driver.core.test_raw_fact_accounting::test_the_lawful_control_a_terminal_WITH_an_owned_code_is_published
+driver.core.test_raw_fact_accounting::test_the_nested_terminal_CONTENT_is_frozen_before_any_callback
+driver.core.test_raw_fact_accounting::test_the_relation_is_FROZEN_before_any_store_callback
+driver.core.test_raw_fact_accounting::test_two_split_branches_with_the_SAME_code_AND_detail_BOTH_remain
+driver.core.test_raw_fact_accounting::test_two_split_branches_with_the_SAME_code_BOTH_remain
 driver.core.test_round10_event_boundary::test_823_ALL_FIVE_numeric_slots_are_frozen_and_caller_proof
 driver.core.test_round10_event_boundary::test_823_DERIVED_inventory_every_public_v2_dataclass_is_deeply_frozen
 driver.core.test_round10_event_boundary::test_823_a_provider_CALLBACK_cannot_mutate_the_refs_it_was_handed
@@ -2228,6 +2520,197 @@ driver.core.test_v2_attacks::test_ATTACK_unequal_29_digit_endpoints_are_not_a_po
 driver.core.test_v2_attacks::test_ATTACK_unmatched_output_is_canonically_ordered
 driver.core.test_v2_attacks::test_W9_the_verified_bundle_boundary_is_static_and_singular
 driver.core.test_v2_attacks::test_the_contract_does_not_reimplement_THREE_NAMED_production_symbols
+driver.core.test_v2_attacks::test_the_staged_V2_contract_hash_is_FROZEN_in_the_history_record
+driver.core.test_v2_attacks::test_the_staged_V2_contract_matches_every_live_V2_owner
+driver.core.test_v2_event_route::test_F10_a_preflight_failure_remaps_to_its_raw_position_and_reaches_accounting
+driver.core.test_v2_event_route::test_F10_the_doors_member_menu_audit_reaches_the_write_ahead_audit
+driver.core.test_v2_event_route::test_F10_the_public_rows_carry_exactly_the_five_published_fields
+driver.core.test_v2_event_route::test_F10_the_route_freezes_the_complete_origin_n_raw_terminals_triple
+driver.core.test_v2_event_route::test_F11_the_dry_run_reads_what_it_needs_and_writes_nothing
+driver.core.test_v2_event_route::test_F12_a_reader_abstention_is_a_public_skipped_row
+driver.core.test_v2_event_route::test_F12_both_new_codes_live_in_the_ONE_vocabulary_owner
+driver.core.test_v2_event_route::test_F12_the_XBRL_door_keeps_its_OWN_code_not_the_generic_one
+driver.core.test_v2_event_route::test_F13_ONE_raw_item_in_a_parked_fusion_group_owes_exactly_ONE_row
+driver.core.test_v2_event_route::test_F13_REJECT_still_beats_PARK_on_the_fused_fact
+driver.core.test_v2_event_route::test_F13_a_lawful_XBRL_singleton_is_PLANNED_too
+driver.core.test_v2_event_route::test_F13_a_lawful_text_singleton_is_PLANNED_by_the_existing_writer
+driver.core.test_v2_event_route::test_F13_a_numberless_guidance_withdrawal_carries_its_PRIOR_units
+driver.core.test_v2_event_route::test_F13_a_one_raw_lawful_split_keeps_BOTH_planned_facts
+driver.core.test_v2_event_route::test_F13_a_planner_PARK_reaches_the_public_row_with_the_planners_own_code
+driver.core.test_v2_event_route::test_F13_a_split_with_MIXED_outcomes_loses_neither_branch
+driver.core.test_v2_event_route::test_F13_a_surprise_PARKS_when_its_home_fact_is_not_accepted
+driver.core.test_v2_event_route::test_F13_a_surprise_stands_when_its_home_fact_is_accepted
+driver.core.test_v2_event_route::test_F13_all_FOUR_existing_owners_run_on_the_ONE_route_IN_V1_ORDER
+driver.core.test_v2_event_route::test_F13_an_AMBIGUOUS_fusion_group_parks_every_raw_item_in_it
+driver.core.test_v2_event_route::test_F13_enable_writes_is_STILL_refused_after_the_planner_is_wired
+driver.core.test_v2_event_route::test_F13_the_dry_run_planner_still_writes_NOTHING
+driver.core.test_v2_event_route::test_F13_the_existing_planner_outcomes_are_really_reachable[byte-identical stored fact-seed_over0-noop-merged]
+driver.core.test_v2_event_route::test_F13_the_existing_planner_outcomes_are_really_reachable[stored fact carrying an older quote-seed_over2-updated-merged]
+driver.core.test_v2_event_route::test_F13_the_existing_planner_outcomes_are_really_reachable[stored fact missing one signature slot-seed_over1-filled-merged]
+driver.core.test_v2_event_route::test_F13_the_interface_double_matches_the_REAL_adapters_read_surface
+driver.core.test_v2_event_route::test_F13_the_planner_DEDUPED_outcome_is_CLOSED_OFF_in_this_scope
+driver.core.test_v2_event_route::test_F13_two_pairwise_CONFLICTING_facts_both_plan_as_hashed_members
+driver.core.test_v2_event_route::test_F13_two_raw_facts_that_FUSE_yield_ONE_fact_on_BOTH_raw_positions
+driver.core.test_v2_event_route::test_F13_validation_runs_on_the_FUSED_fact_not_on_the_fragment
+driver.core.test_v2_event_route::test_F1_a_bad_source_id_never_reaches_the_store[5]
+driver.core.test_v2_event_route::test_F1_a_bad_source_id_never_reaches_the_store[None]
+driver.core.test_v2_event_route::test_F1_a_bad_source_id_never_reaches_the_store[True]
+driver.core.test_v2_event_route::test_F1_a_bad_source_id_never_reaches_the_store[]
+driver.core.test_v2_event_route::test_F1_a_bad_source_id_never_reaches_the_store[bad5]
+driver.core.test_v2_event_route::test_F1_a_bad_source_id_never_reaches_the_store[x/y]
+driver.core.test_v2_event_route::test_F1_a_lawful_sparse_text_item_is_NOT_refused
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[dimension extra key]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[dimension missing axis]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[dimension missing member]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[ix extra key]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[ix missing format]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[ix missing scale]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[ix missing sign]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[ix missing unit_ref]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[raw item extra key]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[raw item missing quote]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[raw item missing raw_label_or_claim]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[raw item retired key]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl extra key]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl is not an object]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl missing concept]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl missing dimensions]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl missing ix]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl missing period_end]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl missing period_start]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl missing ptype]
+driver.core.test_v2_event_route::test_F1_a_malformed_ITEM_is_rejected_item_locally[xbrl missing unit]
+driver.core.test_v2_event_route::test_F1_a_missing_stored_source_rejects_every_raw_item
+driver.core.test_v2_event_route::test_F1_a_non_string_source_type_refuses_without_a_raw_TypeError[7]
+driver.core.test_v2_event_route::test_F1_a_non_string_source_type_refuses_without_a_raw_TypeError[None]
+driver.core.test_v2_event_route::test_F1_a_non_string_source_type_refuses_without_a_raw_TypeError[True]
+driver.core.test_v2_event_route::test_F1_a_non_string_source_type_refuses_without_a_raw_TypeError[bad0]
+driver.core.test_v2_event_route::test_F1_a_non_string_source_type_refuses_without_a_raw_TypeError[bad1]
+driver.core.test_v2_event_route::test_F1_a_source_type_outside_the_published_vocabulary_is_refused
+driver.core.test_v2_event_route::test_F1_a_stored_owned_echo_must_match_TYPE_as_well_as_value[1.0]
+driver.core.test_v2_event_route::test_F1_a_stored_owned_echo_must_match_TYPE_as_well_as_value[True]
+driver.core.test_v2_event_route::test_F1_an_ambiguous_source_company_parks_every_raw_item
+driver.core.test_v2_event_route::test_F1_duplicate_text_part_labels_refuse_before_any_io
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event extra field]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event missing event_time]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event missing fye_month]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event missing items]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event missing source_id]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event missing source_type]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event missing text_parts]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[event missing ticker]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[items is a generator]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[items is a str]
+driver.core.test_v2_event_route::test_F1_hostile_EVENT_shape_is_refused_before_any_io[text_parts is a dict]
+driver.core.test_v2_event_route::test_F1_hostile_MIXED_TYPE_extra_keys_do_not_crash_the_guard
+driver.core.test_v2_event_route::test_F1_the_STORED_fye_wins_over_the_channel_envelope
+driver.core.test_v2_event_route::test_F1_the_in_memory_v2_events_carry_exactly_the_seven_envelope_fields
+driver.core.test_v2_event_route::test_F1_the_lawful_exact_int_fye_echo_is_still_accepted
+driver.core.test_v2_event_route::test_F1_the_route_runs_on_the_REAL_adapter_surface_only
+driver.core.test_v2_event_route::test_F1_two_distinct_lawful_parts_remain_selectable
+driver.core.test_v2_event_route::test_F2_a_malformed_event_time_never_reaches_the_store[2026-07-01 12:00:00]
+driver.core.test_v2_event_route::test_F2_a_malformed_event_time_never_reaches_the_store[2026-07-01]
+driver.core.test_v2_event_route::test_F2_a_malformed_event_time_never_reaches_the_store[None]
+driver.core.test_v2_event_route::test_F2_a_malformed_event_time_never_reaches_the_store[bad3]
+driver.core.test_v2_event_route::test_F2_a_malformed_event_time_never_reaches_the_store[bad4]
+driver.core.test_v2_event_route::test_F2_a_malformed_event_time_never_reaches_the_store[not-a-stamp]
+driver.core.test_v2_event_route::test_F2_a_text_only_event_needs_no_filing_provider
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[channel is a bare date-2026-07-01-2026-07-01T00:00:00Z-False]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[channel malformed-not-a-timestamp-2024-08-02T16:17:22-04:00-False]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[channel missing-None-2024-08-02T16:17:22-04:00-False]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[different instant-2024-08-02T16:17:22-04:00-2024-08-02T16:17:23-04:00-False]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[identical aware stamps-2024-08-02T16:17:22-04:00-2024-08-02T16:17:22-04:00-True]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[mixed awareness-2026-07-01T12:00:00Z-2026-07-01T12:00:00-False]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[same instant, equivalent offsets-2024-08-02T16:17:22-04:00-2024-08-02T20:17:22Z-True]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[same naive wall time-2026-07-01T12:00:00-2026-07-01T12:00:00-True]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[space separator, not RFC3339 T-2026-07-01 12:00:00-2026-07-01 12:00:00-False]
+driver.core.test_v2_event_route::test_F2_the_event_time_PIT_boundary[stored is a bare date-2026-07-01T00:00:00Z-2026-07-01-False]
+driver.core.test_v2_event_route::test_F2_the_reader_gets_the_exact_input_keys_and_never_the_raw_index
+driver.core.test_v2_event_route::test_F2_the_reader_receives_the_STORED_stamp_not_the_channel_spelling
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention missing a key]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention naming a part that does not exist]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention of the wrong shape]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention part_ref blank]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention part_ref not a string]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention part_ref unhashable dict]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention part_ref unhashable list]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention quoting a DIFFERENT raw item]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention with a blank reason]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention with a non-string reason]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention with a wrong occurrence]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[abstention with an extra key]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[empty both]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[facts AND abstention]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[multiple abstentions]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[unknown envelope key]
+driver.core.test_v2_event_route::test_F2_unlawful_reader_replies_are_refused[wrong source echo]
+driver.core.test_v2_event_route::test_F3_all_11_real_v2_xbrl_items_return_by_ordered_public_index
+driver.core.test_v2_event_route::test_F3_the_four_identical_quote_ce_items_stay_public_0_1_2_3
+driver.core.test_v2_event_route::test_F4_a_fact_quoting_a_DIFFERENT_in_part_string_is_refused
+driver.core.test_v2_event_route::test_F4_a_lawful_text_split_keeps_both_facts_on_one_raw_position
+driver.core.test_v2_event_route::test_F4_an_XBRL_lane_fact_quoting_a_DIFFERENT_raw_item_is_refused
+driver.core.test_v2_event_route::test_F4_two_byte_identical_raw_quotes_stay_lawful_and_distinct
+driver.core.test_v2_event_route::test_F4_two_equal_quote_text_items_remain_distinct_by_caller_position
+driver.core.test_v2_event_route::test_F5_an_xbrl_event_without_a_filing_provider_fails_closed
+driver.core.test_v2_event_route::test_F5_mixed_same_source_interleaving_remaps_the_attach_subset_index
+driver.core.test_v2_event_route::test_F6_a_text_fact_cannot_assert_the_source_owned_xbrl_fields[member_refs]
+driver.core.test_v2_event_route::test_F6_a_text_fact_cannot_assert_the_source_owned_xbrl_fields[xbrl_concept_raw]
+driver.core.test_v2_event_route::test_F7_the_route_does_not_duplicate_occurrence_for_the_xbrl_lane
+driver.core.test_v2_event_route::test_F7_verify_occurrence_runs_exactly_once_per_text_fact
+driver.core.test_v2_event_route::test_F8_a_lawful_split_with_no_graph_match_owes_exactly_ONE_terminal
+driver.core.test_v2_event_route::test_F8_an_instant_context_carries_a_null_start_only[instant with empty-string start--False]
+driver.core.test_v2_event_route::test_F8_an_instant_context_carries_a_null_start_only[instant with null start \u2014 LAWFUL-None-True]
+driver.core.test_v2_event_route::test_F8_an_instant_context_carries_a_null_start_only[instant with the date duplicated into start-2023-06-30-False]
+driver.core.test_v2_event_route::test_F8_an_unmatched_dimension_claim_parks_and_never_reaches_the_door
+driver.core.test_v2_event_route::test_F8_core_converts_raw_pairs_to_member_refs_before_the_attach_door
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[blank axis-over1]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[blank concept-over5]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[blank member-over2]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[int member-over3]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[list concept-over4]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[malformed end date-over7]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[malformed start date-over8]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[repeated axis-over9]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[unhashable axis-over0]
+driver.core.test_v2_event_route::test_F8_hostile_raw_xbrl_identity_is_rejected_item_locally[unlisted ptype-over6]
+driver.core.test_v2_event_route::test_F8_lawful_raw_xbrl_identity_is_still_accepted[lawful duration-over1]
+driver.core.test_v2_event_route::test_F8_lawful_raw_xbrl_identity_is_still_accepted[lawful standards-owned qname-over2]
+driver.core.test_v2_event_route::test_F8_lawful_raw_xbrl_identity_is_still_accepted[lawful verified-empty dimensions-over0]
+driver.core.test_v2_event_route::test_F9_a_typed_preparation_failure_PARKS_with_its_registered_code
+driver.core.test_v2_event_route::test_F9_an_UNCODED_preparation_error_still_propagates_loudly
+driver.core.test_v2_event_route::test_F9_each_REAL_preparation_branch_parks_with_its_own_code[not storable-NOT_STORABLE-over1-quotes1]
+driver.core.test_v2_event_route::test_F9_each_REAL_preparation_branch_parks_with_its_own_code[period unresolved-PERIOD_UNRESOLVED-over0-quotes0]
+driver.core.test_v2_event_route::test_F9_every_surviving_prepared_fact_reaches_the_one_validator_once
+driver.core.test_v2_event_route::test_F9_one_bad_sibling_stays_local_to_its_own_raw_position
+driver.core.test_v2_event_route::test_OD21_a_defect_decidable_before_fusion_is_REJECTED_with_its_exact_codes[F1 surprise= missing-codes0-over0]
+driver.core.test_v2_event_route::test_OD21_a_defect_decidable_before_fusion_is_REJECTED_with_its_exact_codes[F2 surprise= off-lane-codes1-over1]
+driver.core.test_v2_event_route::test_OD21_a_defect_decidable_before_fusion_is_REJECTED_with_its_exact_codes[F3 basis hint missing-codes2-over2]
+driver.core.test_v2_event_route::test_OD21_a_defect_decidable_before_fusion_is_REJECTED_with_its_exact_codes[F4 baseline missing-codes3-over3]
+driver.core.test_v2_event_route::test_OD21_a_defect_decidable_before_fusion_is_REJECTED_with_its_exact_codes[F5 guidance+previous_guidance-codes4-over4]
+driver.core.test_v2_event_route::test_OD21_a_defect_decidable_before_fusion_is_REJECTED_with_its_exact_codes[F7 impossible tense-codes5-over5]
+driver.core.test_v2_event_route::test_OD21_fusion_still_COMPLETES_a_lawful_complementary_fragment
+driver.core.test_v2_event_route::test_OD21_the_lawful_fusion_result_is_permutation_identical
+driver.core.test_v2_event_route::test_R1_a_reader_cannot_mutate_the_event_core_trusts_and_audits
+driver.core.test_v2_event_route::test_R1_the_lawful_reader_still_sees_the_real_view_and_item
+driver.core.test_v2_event_route::test_R2_a_fact_type_disagreeing_with_the_stored_driver_parks
+driver.core.test_v2_event_route::test_R2_the_matching_lane_is_still_accepted
+driver.core.test_v2_event_route::test_R4_each_route_still_accepts_its_OWN_arguments
+driver.core.test_v2_event_route::test_R4_the_V1_route_refuses_arguments_that_belong_to_V2[kw0]
+driver.core.test_v2_event_route::test_R4_the_V1_route_refuses_arguments_that_belong_to_V2[kw1]
+driver.core.test_v2_event_route::test_R4_the_V2_route_refuses_arguments_that_belong_to_V1[kw0]
+driver.core.test_v2_event_route::test_R4_the_V2_route_refuses_arguments_that_belong_to_V1[kw1]
+driver.core.test_v2_event_route::test_R4_the_V2_route_refuses_arguments_that_belong_to_V1[kw2]
+driver.core.test_v2_event_route::test_R4_the_V2_route_refuses_arguments_that_belong_to_V1[kw3]
+driver.core.test_v2_event_route::test_R4_the_V2_route_refuses_arguments_that_belong_to_V1[kw4]
+driver.core.test_v2_event_route::test_R4_the_V2_route_refuses_arguments_that_belong_to_V1[kw5]
+driver.core.test_v2_event_route::test_R4_the_V2_route_refuses_arguments_that_belong_to_V1[kw6]
+driver.core.test_v2_event_route::test_R5_a_text_fact_plans_NO_member_edges
+driver.core.test_v2_event_route::test_R5_the_member_links_the_XBRL_door_proved_reach_the_planner
+driver.core.test_v2_event_route::test_R7_one_enrichment_read_per_concept_and_one_pair_derivation_per_item
+driver.core.test_v2_event_route::test_R8_the_production_V2_tuples_equal_the_staged_contract_block
+driver.core.test_v2_event_route::test_R9_one_real_dimensioned_item_crosses_the_ACTUAL_door_to_the_planner
+driver.core.test_v2_event_route::test_collecting_this_module_CANNOT_reach_the_graph
+driver.core.test_v2_event_route::test_the_graph_free_sources_build_the_SAME_events_as_before
 driver.relocation.test_anchor_schema_probe::test_10_driver_name_mismatch_rejected
 driver.relocation.test_anchor_schema_probe::test_11_stored_fact_scope_must_match_id_suffix
 driver.relocation.test_anchor_schema_probe::test_12_cross_wired_company_rejected
@@ -2988,9 +3471,11 @@ driver.relocation.test_row_label_span::test_a_hidden_only_cell_does_not_COUNT_as
 driver.relocation.test_row_label_span::test_a_label_cell_with_HIDDEN_MARKUP_keeps_its_span
 driver.relocation.test_row_label_span::test_a_prose_element_has_no_row_label_span
 driver.relocation.test_row_label_span::test_a_section_with_a_LEADING_DASH_stores_the_EXACT_slice
+driver.relocation.test_row_label_span::test_a_unique_DIGIT_BEARING_heading_stays_eligible
+driver.relocation.test_row_label_span::test_a_unique_NON_DIGIT_heading_is_unchanged_and_shares_one_cell
+driver.relocation.test_row_label_span::test_an_AMBIGUOUS_section_row_is_not_resolved_by_discarding_a_candidate
 driver.relocation.test_row_label_span::test_no_label_cell_yields_the_approved_null_rather_than_a_guess
 driver.relocation.test_row_label_span::test_row_cells_exclude_hidden_descendants
-driver.relocation.test_row_label_span::test_section_TEXT_and_SPAN_come_from_the_SAME_cell
 driver.relocation.test_row_label_span::test_the_EXISTING_container_owners_are_untouched[<div>-</div>]
 driver.relocation.test_row_label_span::test_the_EXISTING_container_owners_are_untouched[<li>-</li>]
 driver.relocation.test_row_label_span::test_the_EXISTING_container_owners_are_untouched[<p>-</p>]

@@ -5,7 +5,7 @@ open-class "familiar acronyms" sentence, so every stated per-X denominator is
 written out (`earnings_per_share`). This file guards that the retired wording
 does not survive anywhere it would still be READ AS LAW or SERVED TO A MODEL.
 
-SCOPE IS A CLOSED, HARD-CODED LIST OF 8 FILES, and that is deliberate:
+SCOPE IS A CLOSED, HARD-CODED LIST OF 9 FILES, and that is deliberate:
 
   * The tree carries ~777 untracked files (evidence dumps, frozen run
     artifacts, superseded drafts). A repo-wide scan would be slow and would
@@ -21,6 +21,8 @@ tripped) by a document quoting the very rule it retired.
 """
 import io
 import os
+
+import re
 
 import pytest
 
@@ -51,7 +53,16 @@ CLEAN_SIX = (
 )
 RULEBOOKS = ("workflows/gate.js", "workflows/reconcile.js", "workflows/menu_build.js")
 PACKAGE = "experiments/harness/exp5_rev4_package.md"
-SERVED_CONTRACT = "experiments/harness/exp5_item_contract.md"
+# BOTH generated role prompts are now the served surface: the single stale V1
+# card is deleted, and one builder emits one envelope for both roles.
+SERVED_PROMPTS = ("experiments/harness/exp5_prompt_drafter.md",
+                  "experiments/harness/exp5_prompt_producer.md")
+
+
+def _norm(text):
+    """Whitespace-normalised: the prompts hard-wrap their sentences, so a
+    line-sensitive check would miss a phrase that is present."""
+    return re.sub(r"\s+", " ", text)
 
 
 def _read(rel):
@@ -98,26 +109,29 @@ def test_the_package_keeps_the_retired_sentence_ONLY_in_its_frozen_ledger():
             f"REV-4F/4G ledger line: {line.strip()[:120]}")
 
 
-def test_the_SERVED_item_contract_still_carries_it_because_that_hold_is_DELIBERATE():
-    """THE ONE ACCEPTED EXCEPTION, asserted POSITIVELY rather than skipped.
+def test_both_SERVED_prompts_carry_the_CURRENT_perX_rule_and_not_the_retired_one():
+    """THE HOLD IS OVER, UPDATED DELIBERATELY (Codex SEQ 1085).
 
-    `exp5_item_contract.md` is a GENERATED, hash-pinned artifact. Regenerating
-    it belongs to the separate "Core contract migration + freeze" step, because
-    its generator and the launch manifest are still on the retired 37-field
-    PreparedFactV1 shape while the live contract is v2 (34 total / 32
-    model-owned). Editing the contract here would change its sha and break the
-    very pins that migration defers — so the reason lives in THIS file and the
-    contract stays byte-identical.
+    This assertion used to require the served card to STILL carry the retired
+    open-class sentence, because its generator was stuck on the V1 shape and
+    regenerating it would have broken the pins that migration deferred. That
+    migration has now landed: the stale card is deleted and one Step-2 builder
+    emits both role prompts on the V2 shape.
 
-    While it still serves the old sentence, K-fields GO#1 stays disabled and
-    unfired; drafters must never be run on stale law.
-
-    When the migration lands, this assertion FLIPS to zero. That flip is the
-    guard telling you the hold is over — update it deliberately; do not paper
-    over it, and do not pre-emptively relax it to make a future run green.
+    So the guard flips, as its own note said it would — it is not relaxed and not
+    deleted. It now requires, of BOTH prompts, that the retired sentence is gone
+    and the owner-approved spell-out/abstain rule is present. The required text is
+    reused verbatim from the NOTE above; no acronym list or interpretation is
+    added here. Comparison is whitespace-normalised because the prompt hard-wraps.
     """
-    assert RETIRED in _read(SERVED_CONTRACT), (
-        f"{SERVED_CONTRACT} no longer carries the retired sentence. If the EXP-5 "
-        f"contract migration has LANDED, this is correct — move this file into "
-        f"CLEAN_SIX and delete this test. If it has not, the served contract was "
-        f"edited out of band and its hash pins are now wrong.")
+    required = [_norm(x) for x in (
+        'Write the per-X denominator out in the name',
+        'If you cannot verify what a per-X acronym expands to, do not guess',
+    )]
+    for rel in SERVED_PROMPTS:
+        flat = _norm(_read(rel))
+        assert _norm(RETIRED) not in flat, (
+            f"{rel} still serves the RETIRED open-class sentence")
+        for phrase in required:
+            assert phrase in flat, (
+                f"{rel} does not carry the current owner rule: {phrase!r}")

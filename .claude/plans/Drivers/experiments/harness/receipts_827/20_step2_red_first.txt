@@ -1,0 +1,56 @@
+STEP 2 §1 — RED-FIRST evidence (regenerated per SEQ 1052; supersedes the SEQ 1047 and 1051 versions)
+measured against kf_lint.py at HEAD, byte-identical; the earlier partial implementation was reverted
+source of cases: VERIFIED Step 1 receipt 5a66931a3cdf61901d1f49358cbc711b3cfebae0fea2add144a08cd1a77b9425
+
+FIXTURE (Step-2 only; the Step-3-era _doc/_fact helpers are UNCHANGED)
+  Every level asserts set-equality against its committed owner:
+    _v2_doc  -> V2_REPLY_KEYS      _v2_fact -> PreparedFactV2._FACT_KEYS
+    _v2_item -> ITEM_FIELDS        _v2_slot -> SLOT_KEYS, exact JSON numbers
+  LOCATOR CORRECTION (SEQ 1052.1): quote, part_ref and occurrence_in_part are now taken from
+  the SAME text_parts[] entry. The previous fixture sliced event_text(), which JOINS parts:
+  that slice spanned the form/items boundary, occurred in NO single part, and was paired with
+  an unrelated hardcoded part_ref. It was not a lawful V2 locator and is replaced.
+  live locator: part_ref='exhibit_99_1', occurrence_in_part=None (null because unique in that part)
+
+MASKED DEPENDENCIES — recorded, NOT claimed as proof:
+  B-01 envelope --> B-02/B-04/B-06a, B-09, and B-03 --> B-06b
+  measured reason: a V2-shaped document is rejected at the door with
+    "doc keys must be EXACTLY ['facts', 'source_id'], got ['abstentions', 'facts', 'source_id']"
+  so the checker never reaches the fact, item or slot. Separately, a nested slot fails earlier on
+    "level_low must be a number or null, got dict" — the scalar rule, not the quote-local rule.
+  A wrong-reason refusal is never counted as evidence for the rule it appears to satisfy.
+
+DEMONSTRATED NOW (the reason IS the governed condition):
+  B-01  test_RED_lawful_v2_reply_is_refused
+  B-23  test_RED_checker_item_lists_are_not_derived_from_the_v2_owner
+  B-23  test_RED_checker_binds_the_v1_schema_owner
+  B-07  test_RED_contract_builder_does_not_derive_names_from_core
+  B-08  test_RED_contract_builder_reads_archived_authority
+
+RETAINED CONTROLS (green now, must stay green through the fix):
+  B-05  test_CONTROL_source_owned_field_in_the_v2_item_is_refused   (ITEM_FIELDS is built as
+        'k not in SOURCE_OWNED_FIELDS', prepared_fact_v2.py:445-446 — refusal by construction)
+  B-09  test_CONTROL_gold_document_surface_accepts_the_review_field  (REUSES the existing real
+        gold acceptance path, test_lint_passes_valid_doc line 176 — not a membership assertion)
+  B-22  test_CONTROL_door_scoped_field_remains_lawful_reader_output
+  base  test_CONTROL_step3_era_fixture_still_lawful_today
+  src   test_step1_receipt_is_the_case_source   (exactly one definition)
+
+CITED, NOT DUPLICATED:
+  B-17  existing failures in test_no_semantic_patterns.py:
+          FAILED test_no_semantic_patterns.py::test_no_unclassified_regex_in_the_production_path
+          FAILED test_no_semantic_patterns.py::test_every_regex_site_is_frozen_individually
+          FAILED test_no_semantic_patterns.py::test_MUTATION_baseline_temp_repo_is_green
+          FAILED test_no_semantic_patterns.py::test_MUTATION_aliased_regex_import_is_caught
+          FAILED test_no_semantic_patterns.py::test_MUTATION_from_re_import_form_is_caught
+          FAILED test_no_semantic_patterns.py::test_MUTATION_new_regex_inside_an_APPROVED_module_is_caught
+          FAILED test_no_semantic_patterns.py::test_MUTATION_operation_swap_is_caught
+  B-18  both cited recall receipts absent from the live tree (present count 0)
+  B-02  the frozen kf_lint 'lane' identity (line 225 col 30) is a PARAMETER NAME; the data path
+        already reads f['fact_type'] and no "lane" data key exists in the module.
+
+RUN AT CAPTURE TIME
+  REDs     : 6 failed, 4 passed, 133 deselected in 0.25s
+  CONTROLs : 6 passed, 137 deselected in 0.08s
+
+SCOPE: kf_lint.py byte-identical to HEAD; production driver/ untouched; nothing staged.

@@ -131,11 +131,41 @@ def test_row_cells_exclude_hidden_descendants():
         assert c in ev['row_text'], (c, ev['row_text'])
 
 
-def test_section_TEXT_and_SPAN_come_from_the_SAME_cell():
-    """Two cells, and the two outputs used DIFFERENT filters: the text skipped
-    the digit-bearing cell, the span did not — so they described different
-    cells."""
+def test_an_AMBIGUOUS_section_row_is_not_resolved_by_discarding_a_candidate():
+    """EU-094 (#827). TWO word-bearing candidates is an AMBIGUOUS row, and the
+    only lawful answer is no section.
+
+    This row used to yield 'Segment detail', because a digit filter discarded
+    'Q1 2023' first and left exactly one candidate. That is a FABRICATED single
+    choice: the selection rule requires one unambiguous candidate, and here
+    there were two. The filter's claim that it could only ever withhold was
+    disproved by counterfactual over the frozen corpus — exact counts live in
+    receipts_827/16_two_view_census.json, not restated here where they would go
+    stale. It carried no standards or frozen-contract authority, so it is gone
+    and ambiguity is answered as ambiguity.
+    """
     prep, ev = _ev('<table><tr><td>Q1 2023</td><td>Segment detail</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert not ev['section'], (
+        f"an ambiguous two-candidate row produced {ev['section']!r} — a "
+        "discarded candidate must not manufacture a single choice")
+    assert not ev['section_span']
+
+
+def test_a_unique_DIGIT_BEARING_heading_stays_eligible():
+    """CONTROL. With the filter gone, a lone word-bearing heading that happens
+    to carry a digit is a lawful section — it was previously discarded for
+    containing a digit, which is the recall cost the census counted."""
+    prep, ev = _ev('<table><tr><td>Q1 2023 Results</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    a, b = ev['section_span']
+    assert prep['text'][a:b].strip(' —-') == ev['section'] == 'Q1 2023 Results'
+
+
+def test_a_unique_NON_DIGIT_heading_is_unchanged_and_shares_one_cell():
+    """CONTROL, unchanged by this edit: the ordinary single-candidate row still
+    yields its section, and TEXT and SPAN still come from the SAME cell."""
+    prep, ev = _ev('<table><tr><td>Segment detail</td></tr>'
                    f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
     a, b = ev['section_span']
     assert prep['text'][a:b].strip(' —-') == ev['section'] == 'Segment detail'

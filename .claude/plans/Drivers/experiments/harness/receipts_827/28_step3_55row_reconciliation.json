@@ -1,0 +1,260 @@
+{
+ "denominator": {
+  "by_frozen_class": {
+   "DELETE": 8,
+   "KEEP": 1,
+   "REWRITE": 46
+  },
+  "total": 55
+ },
+ "landed": {
+  "landed_deleted": 9,
+  "landed_in_place": 41,
+  "landed_renamed": 5
+ },
+ "method": "symbol presence in test_harness_guards.py + scorers/score_exp5.py; renames carry an explicit successor that must also be present; one row reclassified under a named Codex ruling",
+ "open_rows": [],
+ "rows": {
+  "_fact": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "_gold_fact": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "_home_case": {
+   "frozen_class": "REWRITE",
+   "state": "landed_renamed",
+   "successor": "_home_route_case",
+   "successor_present": true
+  },
+  "_idfact": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "_matched_pair": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "_metric_pair": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "_surprise_gold_and_arm": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "_surprise_with_home": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "_vfact": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_827B4_actual_surprise_finds_its_metric_home": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_827B4_false_homes_must_park_not_pair": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_827B4_guidance_surprise_finds_its_guidance_home": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_RED_old_gold_item_wrapper_is_refused": {
+   "frozen_class": "KEEP",
+   "state": "landed_in_place"
+  },
+  "test_ambiguity_resolution_input_works": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_change_only_value_match": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_comparison_only_value_match": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_definite_failures_never_none": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_e2e_unit_value_match_now_works": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_empty_arm_is_definite_fail": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_false_lane_verdict_increments_wrong_lane": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_home_fact_correct_sibling_no_park": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_home_fact_unrelated_driver_parks": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_home_fact_value_mismatch_parks": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_home_fact_wrong_period_parks": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_home_numberless_needs_numberless": {
+   "frozen_class": "REWRITE",
+   "state": "landed_renamed",
+   "successor": "test_home_numberless_sibling_pairing_is_enforced_by_the_route",
+   "successor_present": true
+  },
+  "test_home_slice_and_scope_must_match": {
+   "frozen_class": "REWRITE",
+   "state": "landed_renamed",
+   "successor": "test_home_slice_must_match_through_the_PUBLIC_ROUTE",
+   "successor_present": true
+  },
+  "test_home_unresolved_periods_never_match": {
+   "authority": "Codex SEQ 1125 rule 4, reopened by SEQ 1142, RETRACTED by SEQ 1152",
+   "correction_history": [
+    "I first recorded DELETE on the reading that the rule was helper-only.",
+    "SEQ 1142 reopened it as OPEN-PRODUCTION-BLOCKER citing FINAL_DESIGN:216/:217.",
+    "SEQ 1152 RETRACTED that after the full matrix/control audit. Verified here before acting: FINAL_DESIGN:255's period matrix reads, for surprise, 'when real; guidance-vs-consensus required' \u2014 not a universal presence rule; :217 selects WHICH period applies when one exists; and driver/core/test_driver_validators.py:354-367 already proves the boundary, with the null-period actual-vs-consensus twin raising no PERIOD_LANE row.",
+    "Net: the retired helper test is obsolete, production is LAWFUL and unchanged, and no blocker remains."
+   ],
+   "frozen_class": "REWRITE",
+   "production_changed": false,
+   "receipt_26_untouched": true,
+   "state": "landed_deleted"
+  },
+  "test_large_ints_never_merge": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_matcher_auto_pairs_only_on_shared_source_evidence": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_matcher_exact_evidence_is_order_free_and_not_fuzzy": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_matcher_locator_distinguishes_repeats_of_one_sentence": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_matcher_never_auto_matches_different_drivers_on_equal_value": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_matcher_one_sentence_two_facts_is_order_free": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_matcher_rejects_same_name_value_DIFFERENT_MEASUREMENT": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_matcher_rejects_same_name_value_DIFFERENT_PERIOD": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_matcher_rejects_same_name_value_DIFFERENT_SLICE": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_name_errors_never_dilute": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_numberless_home_requires_quote": {
+   "frozen_class": "REWRITE",
+   "state": "landed_renamed",
+   "successor": "test_numberless_home_without_a_quote_is_REFUSED_by_the_route",
+   "successor_present": true
+  },
+  "test_presence_disagreement_metric": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_presence_disagreement_uses_tie_decisions": {
+   "frozen_class": "REWRITE",
+   "state": "landed_renamed",
+   "successor": "test_presence_disagreement_uses_grader_decisions",
+   "successor_present": true
+  },
+  "test_scorer_emits_ambiguous_for_grader": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_scorer_parks_fiscal_only_future_surprise": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_scorer_parks_grounded_surprise_without_home_sibling": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_scorer_requires_complete_meta_per_event": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_scorer_requires_event_meta": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_scorer_union_recall_beats_single": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_scorer_unit_aware_value_match": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_scorer_wrong_measurement_drops_accuracy": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_scorer_wrong_slice_drops_accuracy": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_shared_endpoint_never_matches": {
+   "frozen_class": "DELETE",
+   "state": "landed_deleted"
+  },
+  "test_state_accuracy_not_diluted": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_union_accepts_tie_resolutions": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_union_dedup_no_inflation": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_union_keeps_different_facts": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  },
+  "test_unresolved_tie_blocks_pass": {
+   "frozen_class": "REWRITE",
+   "state": "landed_in_place"
+  }
+ },
+ "unaccounted": [],
+ "what_this_proves": "every row of the frozen 55-row Step-3 denominator, reconciled against the LIVE tree by symbol presence"
+}

@@ -3,6 +3,29 @@
 > **CURRENT (2026-08-10):** WorkOrder v2.0 (sha `e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410`) · Plan v1.0 + EXP-5 Addendum A (sha `7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592`). The version title + round pin-lists below are PRESERVED history; this line is the current pin.
 >
 > *Corrected 2026-08-10 (#827): this line still claimed WorkOrder `d91443f8`, which stopped describing the file after it was edited. Only a place that CLAIMS TO BE CURRENT can be wrong, so only this line moves — the dated ROUND-30/31 entries below correctly record that `d91443f8` was the hash on 2026-07-25 and are left exactly as written. The Plan sha was re-verified against `FinalDesign/FableExperimentPlan.md` and still matches, so it is unchanged.*
+>
+> **CURRENT ORDER — OWNER-RULED 2026-08-12:** finish and commit the staged-V2
+> dry-run bridge -> regenerate and hash-freeze the complete EXP-5 bundle against
+> staged V2 while V1 remains live -> lock K-fields -> run EXP-5, then EXP-6 ->
+> build the real shared reader/decomposer and admission/reuse kernel -> prove the
+> complete V2 no-write route -> perform the atomic V1->V2 switch. This
+> supersedes the sequencing tail in the dated 2026-08-11 NAME-13 log entry; that
+> entry remains preserved history. No paid model call, activation or graph write
+> is authorized by this timing ruling.
+>
+> **STEP-1 INVENTORY RECEIPT (LeftOverSteps step 1, read-only audit):**
+> `.claude/plans/Drivers/experiments/harness/step1_inventory.json`
+> sha256 `5a66931a3cdf61901d1f49358cbc711b3cfebae0fea2add144a08cd1a77b9425`
+> — frozen at HEAD `0edb1be8`, index tree unchanged, XBRL baseline unchanged.
+> Self-contained: starting identity with exact path arrays and harness versions,
+> the authority hashes, the 15-seed / 44-file / 112-edge kit closure (the regex
+> gate's own closure is carried separately and is NOT the kit closure), all 36
+> events listed individually plus the one disabled OD-11 contingency, the 24
+> behavior families with owner/action/step/proof, the raw completeness appendix,
+> the deterministic regeneration methods plus executable verification
+> commands, and machine checks that all pass. No code,
+> test, prompt, contract or fixture was edited; nothing was staged, committed or
+> pushed; zero model calls, filing fetches, graph writes, activations or switches.
 
 Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 
@@ -45,7 +68,7 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 | K-pairs.v2 | PENDING | - | - | needs FREEZE (mining) |
 | K-reader | LOCKED v3 (Fable 2026-07-10) | K-reader.v3 | PASS | 1,175 records across 39/40 chunks; deliberate zero-cause skip-test preserved; key sha `cf87a09a…b181736` |
 | K-route | PENDING | - | - | needs FREEZE + candidate pool |
-| K-fields | DRAFTING (GO #1 open 2026-07-24) | - | - | protocol v1 written; dual-tier union route (v1.9); 72 draft calls authorized; lock = Fable-signed after full adjudication + hooks |
+| K-fields | DRAFTING (GO #1 held) | - | - | Do not fire until the complete EXP-5 bundle is regenerated and hash-frozen against the committed staged-V2 dry-run bridge; then use the existing Fable-signoff gate |
 | K-stamp | PENDING | - | - | needs F-C run records |
 | EXP-0 graders | DONE - PASS (Fable-SIGNED 2026-07-10T00:15:20Z) | 2026-07-10T00-10-11Z_exp0v13composite | PASS | grader tier = claude-sonnet-5 x2 @ effort=high; Opus = escalation; blindness discounts NONE; graded scoring UNBLOCKED |
 | WP-FC-EDITS | DONE | 2026-07-10 | 5db902f | 18 files; 2.3 items 1-11 + Fable F1-F8; hermetic suite green (260 pass/1 skip); Fable signed off |
@@ -55,7 +78,7 @@ Bootstrap (WP-0) completed: 2026-07-09T01:05:17Z
 | EXP-4A judge | PENDING | - | - | needs K-pairs.v2 |
 | EXP-4B stamp | PENDING | - | - | needs FC-RUN + K-stamp |
 | F-C FREEZE | PENDING | - | - | needs EXP-4B |
-| EXP-5 fields | PENDING | - | - | needs K-fields |
+| EXP-5 fields | PENDING | - | - | needs committed staged-V2 dry-run bridge + regenerated/frozen V2 bundle + K-fields lock; runs before the V1->V2 switch |
 | EXP-6 twins | PENDING | - | - | needs EXP-1 + EXP-5 |
 
 ## Log
@@ -519,3 +542,627 @@ ACCEPTED AS OUT OF SCOPE (reviewer's 4th point, agreed): the fake-agent test pro
 **2026-07-29 #825 PART 2 — production BUILT and proven (11/11); the test estate is RED at 248 and I am stopping rather than bulk-fixing it.** BUILT AND GREEN ON ITS OWN TESTS: `AttachResult(source_id, facts, preflight_outcomes, member_menu)` — one immutable event result, frozen at every level, carrying `source_id` WITH the facts so a verified event cannot be paired with a different one at handoff. The pure phase now runs PER ITEM with the original index carried from `enumerate` and never renumbered, so a malformed item becomes its own rejection row instead of aborting the comprehension and erasing valid siblings — the actual contract defect. Event-wide causes (conflicting hashes, representation count, provider outage, missing company) FAN OUT to every still-valid item, each keeping its index; a concept-level absence parks ONLY the items claiming that concept; a programming error is never converted into an item row and still aborts loudly. Outcomes use the CLI's exact five fields, frozen, with the five public decision words only — `parked_retry` stays an EXCEPTION CLASS, never a sixth decision. The three defaults are pinned (`SchemaError`→rejected/XBRL_CONTRACT_INVALID · `ProductionValidationError`→parked/XBRL_BINDING_UNAVAILABLE · `SourceUnavailable`→parked/SOURCE_UNAVAILABLE), `SlotConversionError` keeps its own `NOT_STORABLE`, and the item-class tuple is DERIVED from `OUTCOME_CLASSES` so a fifth class cannot be added there and silently escape here. Nothing reads an exception message to choose. **WHY I STOPPED.** The call-site migration is mechanical for ~66 of the failures (`.facts` / `.facts[0][1]` shapes, 12 files already patched) but **182 of the 248 are `DID NOT RAISE`** — tests asserting the OLD law, that a single-item event whose only item fails RAISES. Under part 2 an item-local failure no longer raises; it returns as an outcome row, while an envelope-level failure still raises. Deciding which each of those 182 is — envelope or item — is EXACTLY the per-test judgement the #824 review forbade me from bulk-changing, and doing it mechanically would convert real coverage into whatever makes the suite green. That is a fresh-context job, and I will not start it on the tail of this one. **CURRENT STATE, stated plainly: the tree is RED at 248 failed / 1143 passed.** The production change is complete and self-proven; the estate migration is not. Nothing is committed. HELD: #826, atomic switch, Fiscal changes, AI calls, graph writes, commit, push.
 
 **2026-08-11 NAME-13 per-X spell-out — the 2026-07-25 naming-form deferral is RULED (owner): UNIFORM SPELL-OUT. Law + prompts + records only; zero production behaviour changed.** Both deferred rules are DELETED from live law: the sole `eps` canonical-name exception, and the OPEN-CLASS "familiar acronyms" sentence that let any acronym already carrying its denominator keep the short form. (Neither retired rule is quoted here: the residue guard requires this board to be free of the old wording, so both are described.) Every stated business/physical per-X denominator is now written out — canonical families `earnings_per_share` / `_guidance` / `_surprise`, and `dps` resolves to `dividend_per_share`. **The abstain half is the load-bearing half:** an acronym whose expansion cannot be VERIFIED is not coined and not guessed — the reader skips, and a name↔per_x conflict parks at admission. That check has ONE owning component (the unbuilt admission kernel); **no interim validator, regex, acronym vocabulary or exception class was added**, because a second owner for a naming rule is how the `eps` carve-out survived in four places to begin with. Source quotes are NEVER rewritten; `per_x` stays the fact-level signal; stored unit stays base (`usd`); adjusted/basic/diluted stay in measurement (NAME-14 unchanged). PER-X ONLY — NAME-07 familiar market/policy names and NAME-08 whole phrases (`ebitda`, `fcf`, `fed_rate`, `cogs`, `rpo`) are untouched beyond single example-word swaps. The ⏸ deferral markers are deleted from FINAL_DESIGN §3/§10 and from all three live prompt builders (`gate.js`/`reconcile.js`/`menu_build.js`), which stay byte-identical to each other. **Guarded, not just documented:** the new `workflows/tests/test_perx_naming_residue.py` checks a CLOSED, hard-coded list of 8 live files — it never walks the repo, because 777 untracked files make a repo-wide scan both slow and wrong. **TWO HOLDS REMAIN OPEN AND ARE DELIBERATELY NOT IN THIS BATCH:** (1) the EXP-5 item contract is still generated on the retired 37-field PreparedFactV1 shape while the live contract is v2 (34 total / 32 model-owned), and its generator `build_exp5_contract.py` is still UNTRACKED — that regeneration plus the launch-manifest re-pin belong to the next "Core contract migration + freeze" step; (2) because `exp5_item_contract.md:127` therefore still SERVES the old sentence, **K-fields GO#1 must stay disabled/unfired** (verified 2026-08-11: `experiments/exp5_fields/runs/` is empty). If K-fields must fire sooner, the migration stops being deferrable — escalate to the owner rather than firing drafters on stale law. The residue test asserts that hold POSITIVELY: file 8 of 8 must STILL contain the sentence, and the day that assertion flips to zero is the test reporting the hold is over, not a failure to paper over. Sequencing, corrected: EPS rule (this batch) → Core contract migration + freeze → Fiscal migration → v1→v2 switch.
+
+**2026-08-13 LeftOverSteps STEP 2 — CANDIDATE COMPLETE, awaiting Codex's exact-candidate verdict.**
+Recorded so Step 3 is startable from this file alone, with no chat context.
+
+STEP-2 CANDIDATE IDENTITY (sha256, working tree — nothing committed):
+| artefact | sha256 |
+|---|---|
+| `driver/relocation/inline_html.py` | `66b25fa2488d1b75eb44c02321d06a077a7d381b94bcebab397e4af7a1c8629c` |
+| `driver/relocation/test_row_label_span.py` | `12147e51862b2c488f900b5cdcb12951cb534a4af28613292780d97fd8486084` |
+| `.claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py` | `14815f94ddc492e3a59e77e4b6943ea6b0fb579947c379601a9c720b90f8e519` |
+| `.claude/plans/Drivers/experiments/harness/test_harness_guards.py` | `2465305003c0f85f2ae1adc5229a594d07eca5c57510c610a984cb3803b9b778` |
+| `.claude/plans/Drivers/experiments/harness/kf_lint.py` | `831d8532c4dfadbc6e72ef7c973910889e7c0477d81a5b171de2a9566f12fb75` |
+| `.claude/plans/Drivers/experiments/harness/build_exp5_contract.py` | `90d493a18d671a26d22e5ece92d203d8b45047d106507ffcf6e46a23c964fe64` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/two_view_census.py` | `efc81551d29df54ee99f987621f638a8ff812edc28752291a9d683b78e5acb44` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/16_two_view_census.json` | `d8aba45e82136527af69a3adc77b1eea949a26e1932819448afb7e451a9a289b` |
+
+STEP-2 ROWS, ALL 14 CLOSED: B-01 B-02 B-03 B-04 B-05 B-06a B-06b (checker rebuilt on the
+V2 shape) · B-07 B-08 (ONE prompt builder; archived-authority dependency deleted) · B-09
+B-22 B-23 (gold-only fields kept off the model door; item schema derived from Core) ·
+B-17 (no-semantic-pattern gate GREEN) · B-18 (recall census measured; EU-094 disposed).
+
+EU-094 DISPOSITION (Codex SEQ 1076/1077): the digit-heading exclusion in
+`inline_html.py` was REMOVED. It had no standards or frozen-contract authority and its
+fail-closed claim was disproved by counterfactual over the frozen 1,769-file corpus
+(2,310,466 facts): 21,337 sections existed ONLY because of it, 29,987 pointed elsewhere.
+Exact counts live in `.claude/plans/Drivers/experiments/harness/receipts_827/16_two_view_census.json`, never in production source.
+The pre-existing exactly-one-candidate rule now owns ambiguity; nothing replaced the filter.
+
+TEST COUNTS AT CANDIDATE: public path 114 · no-semantic-pattern gate 26 · harness guards
+175 · driver/relocation 1028 · driver/core 2020 passed 1 skipped.
+
+THE EXACT ROWS HANDED TO STEP 3 (obligations Step 2 may not perform):
+1. REPOINT-THEN-DELETE: repoint every real caller and manifest pin from
+   `exp5_item_contract.md` + `exp5_item_contract.manifest.json` to the two role prompts
+   (`exp5_prompt_drafter.md`, `exp5_prompt_producer.md`) plus
+   `exp5_prompt_contract.manifest.json`; prove ZERO old callers; THEN delete the two old
+   files. No second emitted card may be retained (it would restore duplicate prompt
+   ownership). Step 2 leaves both old files BYTE-IDENTICAL — launcher/transport edits are
+   barred in Step 2.
+2. Step-3 TDD defect: `test_launch_manifest_exact_plan` is CWD-dependent — it passes from
+   the repo root and fails from the harness directory, because the launch manifest stores
+   repo-relative input paths opened against the current directory.
+
+PROTECTED, BYTE-IDENTICAL TO HEAD: `15_CandidateFactPacket.md`, `FINAL_DESIGN.md`,
+`ChannelContract.md`, `driver/core/prepared_fact.py` (V1).
+NO AI call, fetch, graph write, activation, commit or push occurred. HEAD 0edb1be8 unmoved.
+
+**2026-08-13 STEP 2 FINAL CANDIDATE (supersedes the block above).** Codex SEQ
+1079-1083 corrections applied: the invented positional part-label instruction
+removed, all six copied structural surfaces bound to Core, one false migrated
+proof fixed, one duplicate test deleted.
+
+STEP-3 STARTS FROM HERE. Exact prompt/manifest artefacts — regenerate with
+`venv/bin/python3 .claude/plans/Drivers/experiments/harness/build_exp5_contract.py --out DIR`
+(two runs in separate dirs are byte-identical):
+| emitted artefact | sha256 |
+|---|---|
+| `exp5_prompt_drafter.md` | `f4c556960bbb191147b7a7d6d9cffb8dee32dd790f7654ce5c8bfe486275927f` |
+| `exp5_prompt_producer.md` | `060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc` |
+| `exp5_prompt_contract.manifest.json` | `1cf043f9d202766399b2b4bde6d23cf3a50faa91e429f156e509d8f025be6264` |
+
+EVERY STEP-2 CHANGED ARTEFACT AND RECEIPT (this board excludes its own
+self-hash, which cannot include itself):
+| path | sha256 |
+|---|---|
+| `driver/relocation/inline_html.py` | `66b25fa2488d1b75eb44c02321d06a077a7d381b94bcebab397e4af7a1c8629c` |
+| `driver/relocation/test_row_label_span.py` | `12147e51862b2c488f900b5cdcb12951cb534a4af28613292780d97fd8486084` |
+| `driver/core/prepared_fact_v2.py` | `a98d6c64c6c429d8577c80d8dc0a30cb62919428d8a9a1cd664167fd5d3352fd` |
+| `driver/core/test_prepared_fact_v2.py` | `58b57146fa0bf907f376bd577b776178ad474a405570d5a2d0870a64be07450f` |
+| `.claude/plans/Drivers/experiments/harness/build_exp5_contract.py` | `cb151cf6f72fb0be0882b9767a26fa6ec0a1b4901811081c7199cf91b5a1ff87` |
+| `.claude/plans/Drivers/experiments/harness/exp5_rev4_package.md` | `86f31fbff77d52ddca9bd58957bcdddc5fe619caa3c1946800309ae8c524156d` |
+| `.claude/plans/Drivers/experiments/harness/test_harness_guards.py` | `8b1f1dde3f9c24044a45c87171fc5267b2e7fd00805cdfb4846aeadb0a2d4c88` |
+| `.claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py` | `14815f94ddc492e3a59e77e4b6943ea6b0fb579947c379601a9c720b90f8e519` |
+| `.claude/plans/Drivers/experiments/harness/kf_lint.py` | `831d8532c4dfadbc6e72ef7c973910889e7c0477d81a5b171de2a9566f12fb75` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/two_view_census.py` | `efc81551d29df54ee99f987621f638a8ff812edc28752291a9d683b78e5acb44` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/16_two_view_census.json` | `d8aba45e82136527af69a3adc77b1eea949a26e1932819448afb7e451a9a289b` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/21_step2_test_disposition.txt` | `a32a9fca71e7617f9571e471835375169ccc4495365aa6e2581e59d6f6da1268` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/23_step2_b08_prompt_contract.txt` | `4abdc21050f3887d022878c1b09235479a03036bdad71842466af84be6d21095` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/24_step2_b17_gate_green.txt` | `a3984edc5ec73639587da40e1b4049525c9250d0663d1c6735eab07908f86e25` |
+
+TESTS AT SEAL: harness 190 · no-semantic-pattern gate 26 · locator/public path
+114 · driver/relocation 1028 · driver/core 2020 passed 1 skipped.
+PROTECTED, byte-identical to HEAD: 15_CandidateFactPacket.md · FINAL_DESIGN.md ·
+ChannelContract.md · BUILD_AND_OPERATIONS.md · driver/core/prepared_fact.py (V1).
+HEAD 0edb1be8 unmoved · staged 0 · no AI call, fetch, graph write, commit or push.
+
+**2026-08-13 STEP 3 CANDIDATE — COMPLETE KIT, NOT COMMITTED.**
+
+Written so a reader with NO chat context can reproduce and check it. Every
+number below is one command away. Codex VERIFIED the retry seam (SEQ 1166/1167)
+and authorised this record (SEQ 1166).
+
+**Candidate artifacts** (paths under `.claude/plans/Drivers/experiments/harness/`):
+
+| path | sha256 |
+|---|---|
+| `launch_kfields_drafts.manifest.json` | `565586fb8ecac3d5f25b9dbfa2a0280a23cd491461394f68d837e99e41d42512` |
+| `launch_kfields_drafts.workflow.js` | `ba2fbf376c6dfb18df9a11ac1166ecd92e5fb61d6e3757b9961c991b42bf815c` |
+| `launch_kfields_drafts.workflow.template.js` | `bda3ff32b8bc3961218ef3dc3695e1d908779907d94135e67543b05c67297c59` |
+| `launch_exp5_readers.manifest.json` | `8283e25b390775a0c8eb730f69c8ed4256e1f15f3c0e709ea60de9df82077d8e` |
+| `launch_exp5_readers.workflow.js` | `0713ea41677bb1c5126dcd88714a66d3663a2578516688732acf9098ebf7b105` |
+| `launch_exp5_readers.workflow.template.js` | `e923782b3bf283f30a6990342625c72fb1c61bdad5bd2eb182c7732cc455ed03` |
+| `exp5_prompt_drafter.md` | `f4c556960bbb191147b7a7d6d9cffb8dee32dd790f7654ce5c8bfe486275927f` |
+| `exp5_prompt_producer.md` | `060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc` |
+| `exp5_prompt_contract.manifest.json` | `1cf043f9d202766399b2b4bde6d23cf3a50faa91e429f156e509d8f025be6264` |
+| `build_exp5_contract.py` | `cb151cf6f72fb0be0882b9767a26fa6ec0a1b4901811081c7199cf91b5a1ff87` |
+| `build_launch_manifest.py` | `7f85adfcd6eda09793b5c504dc1740b53fa1c9eeaad45c06d97a2b44ac4e59eb` |
+| `raw_transport.py` | `8cca087c384aa4dd300ebc48f23da6ccb77baff9abf48f9eb22b29af606a1db1` |
+| `kf_lint.py` | `48d9d19c2c647ceb893fc55e29af3e1fb2150eb7930214fa94f0814c2e1bae77` |
+| `slice_menu_probe.py` | `70f300e6b7fea73e1c9ed3c2537674e1c5929c44437de7bf05fcb4127937da82` |
+| `scorers/score_exp5.py` | `cff6fcba1f99e71d39e6e30ce31b39f7703afeb7d81965058a085928ebec1371` |
+| `test_harness_guards.py` | `92319eeeeb3617ab661d86ebef9a948226b36983c16a3c1277e45affacee1394` |
+| `receipts_827/28_step3_55row_reconciliation.json` | `ddb1fc88317d96be1e2610a1f00b7f15a8b73119ef99352f803305d4b2c85133` |
+
+**Rebuild (deterministic — run twice in separate roots and compare):**
+```
+cd .claude/plans/Drivers/experiments/harness && python3 build_launch_manifest.py
+```
+Regenerates BOTH disabled plans and BOTH generated launchers. Proven
+byte-identical from clean outputs by
+`test_step3_12_two_independent_builds_are_byte_identical`.
+
+**Verify the frozen 36-event population (read-only, no writes):**
+```
+cd .claude/plans/Drivers/experiments && python3 harness/build_kfields_inputs.py --recompute
+```
+Result: `36 entries; problems: 0` · frozen inputs intact and byte-reproducible.
+
+**Test commands and raw results — 0 failed, 0 skipped, 0 xfail:**
+
+| suite | command | result |
+|---|---|---|
+| EXP-5 harness guards | `pytest .claude/plans/Drivers/experiments/harness/test_harness_guards.py` | 347 passed |
+| G suite (manifest/pins) | `pytest .claude/plans/Drivers/experiments/harness/test_g_suite.py` | 120 passed |
+| no-semantic-pattern gate | `pytest .claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py` | 26 passed |
+| per-X residue | `pytest .claude/plans/Drivers/workflows/tests/test_perx_naming_residue.py` | 12 passed |
+| Core V2 (import-derived) | `pytest driver/core/test_driver_validators.py driver/core/test_prepared_fact_v2.py driver/core/test_v2_event_route.py driver/core/test_v2_attacks.py` | 500 collected; clean lane (`-m 'not live and not live_write'`) 499 passed, 1 deselected — the R9 live graph test. Was 498; +2 are the SEQ 1174 collection guards. |
+
+**Both plans are DISABLED and separately approved:**
+
+| plan | planned | made | start gate |
+|---|---|---|---|
+| K-fields drafts (GO #1) | 72 workers over 36 events | **0** | not launched |
+| EXP-5 readers | **156** producer calls (P1-P4 x 36, P5 x 12) | **0** | REFUSES: `kfields_lock.sha256` is `null`, and exact runtime model IDs are required at run time |
+
+Neither plan may launch the other. The OD-11 ULTA->LUV contingency is recorded
+`enabled: false` in BOTH manifests with no substitution engine.
+
+**Zero writes:** no graph write, activation, V1->V2 switch, AI call, fetch,
+commit or push. `driver/core/prepared_fact.py` (V1) is still present. Scoring
+replays run `enable_writes=False` against a store whose `transaction()` REFUSES.
+The Step-3 modules import under `env -i` with zero credential variables visible.
+
+**Reply handling (§6):** every paid reply is SAVED before any interpretation;
+classification and resolution consume the persisted captures; the resolver
+performs ZERO writes; one retry only, bound to the pinned prompt by
+launcher-emitted evidence checked against the bytes actually sent.
+
+**55-row reconciliation:** `receipts_827/28_step3_55row_reconciliation.json` —
+41 landed in place, 5 renamed (each successor verified present), 9 deleted,
+**0 open rows**.
+
+**Production tree:** 5 files differ from HEAD and NONE are Step-3 edits —
+`prepared_fact_v2.py` + its test (S2-D01, Step 2), `inline_html.py` +
+`test_row_label_span.py` (EU-094), and one preserved F5 control in
+`test_driver_validators.py` authorised by Codex SEQ 1137.
+
+**Correction on record:** the periodless actual-surprise row was raised as a
+production blocker (SEQ 1142) and RETRACTED after a full matrix/control audit
+(SEQ 1152). FINAL_DESIGN:255's period matrix reads "when real;
+guidance-vs-consensus required" for the surprise lane, and
+`driver/core/test_driver_validators.py:354-367` already proves that boundary.
+Production bytes unchanged; no blocker remains.
+
+**Changed-path denominator (complete).** 23 modified · 43 untracked ·
+3 deleted, under `.claude/plans/Drivers/experiments/` and `driver/`.
+
+Deleted (all retired, none replaced by a second owner):
+  - `.claude/plans/Drivers/experiments/harness/exp5_item_contract.manifest.json`
+  - `.claude/plans/Drivers/experiments/harness/exp5_item_contract.md`
+  - `.claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py`
+
+Modified under `driver/` — **zero are Step-3 edits**, each carries its
+authorising marker in the diff:
+
+| path | authority |
+|---|---|
+| `driver/core/prepared_fact_v2.py` | S2-D01 (Step 2) |
+| `driver/core/test_prepared_fact_v2.py` | S2-D01 (Step 2) |
+| `driver/relocation/inline_html.py` | EU-094 (earlier, owner-approved) |
+| `driver/relocation/test_row_label_span.py` | EU-094 (earlier) |
+| `driver/core/test_driver_validators.py` | the ONE preserved F5 control, Codex SEQ 1137 |
+
+**Step 3 completion conditions, reconciled row by row:**
+
+| # | condition | state |
+|---|---|---|
+| 1 | Every Step 3 row closed, no other row changed | MET — receipt 28, 0 open rows |
+| 2 | One shared prompt builder and envelope serve both paid jobs | MET — `_assemble` parameterised by instruction; one Step-2 builder pinned |
+| 3 | Both launch plans exact, separate, deterministic, disabled | MET — 72/0 and 156/0; neither may launch the other |
+| 4 | All 36 events and the disabled contingency accounted for | MET — recompute 36/0 problems; OD-11 recorded `enabled:false` in both plans |
+| 5 | Raw reply bytes survive before parsing; every response reconciled | MET — writes occur ONLY at an ingest; globally measured 156+N |
+| 6 | Smallest replay adapter reaches the real committed Core dry-run | MET — B-14; no copied production rules, no gold-derived context |
+| 7 | The existing Core fact matcher is the only automatic matching owner | MET — structurally guarded (AST), mutation-proven |
+| 8 | Every fact/abstention/duplicate/unmatched/outcome/ruling/denominator accounted | MET |
+| 9 | Official bars and model-resolution rules unchanged | MET — roles pinned, no runtime ID frozen |
+| 10 | Every changed branch has a test and lawful control; focused tests green | MET — 347/120/26/12/498, 0 failed |
+| 11 | Two integrated builds byte-identical | MET — separate roots, from clean outputs |
+| 12 | No AI call, fetch, graph write, activation, commit, push, or V1→V2 switch | MET |
+| 13 | Exact Step 4 candidate recoverable from this file without chat context | MET — this section |
+| 14 | Codex has VERIFIED it | **PENDING — this handoff is the submission** |
+
+**Remaining UNKNOWNs and risks (stated, not hidden):**
+
+- The `156` and `72` plans have never executed against a real model. Everything
+  proven here is structural or fake-data; reliability of actual model output is
+  measured only when a future approved run happens.
+- The invalid-response rate bar (≤2%) is implemented and controlled, but is
+  **NOT APPLICABLE** in Step 3 because zero responses were observed. It is not
+  0% — with N clean replies the rule-of-three upper bound is 3/N.
+- The plans bind `test_harness_guards.py` by hash, so editing tests changes a
+  plan's identity and requires a rebuild before commit. Deliberate; flagged to
+  Codex (SEQ 1144) and left as the stronger pin.
+- Grader tier/independence/batching/blindness rules govern a FUTURE grader call
+  that Step 3 never makes; they are not Step-3-provable and are not claimed.
+- The mailbox holds one message; two Codex messages were lost or delayed during
+  this step (SEQ 1155, and one of my own sends timed out). Recovery worked, but
+  the channel can silently drop a message.
+
+**Step 4 starting identity — NOT AUTHORISED TO START.**
+
+Step 4 begins from this exact candidate: `test_harness_guards.py` at
+`92319eee…`, `raw_transport.py` at `8cca087c…`, `scorers/score_exp5.py` at
+`cff6fcba…`, both plan manifests at `565586fb…` (K-fields) and `8283e25b…`
+(readers), repository HEAD `0edb1be8` with **nothing staged and nothing
+committed**. Starting Step 4 requires a NEW explicit owner authorization; this
+record confers none.
+
+**CORRECTION (Codex SEQ 1169) — the changed-path figure above is the SELECTED
+candidate denominator, NOT the complete live scoped worktree.**
+
+The earlier line "23 modified · 43 untracked · 3 deleted" counted git STATUS
+ENTRIES, where an untracked DIRECTORY collapses to one entry. The same scope
+expanded per file (`git status --short -uall`) returns **977 untracked**, because
+ONE inherited directory holds 935 files.
+
+**Selection rule — reproducible, no hand-picking:**
+```
+git status --short -uall .claude/plans/Drivers/experiments/ driver/
+```
+then EXCLUDE every path under `.claude/plans/Drivers/experiments/exp2_reader/runs/` — inherited
+experiment-run artifacts that predate this candidate and are no part of it.
+
+**Selected candidate: 68 paths** (67 listed below plus this file itself) (23 modified ·
+42 untracked · 3 deleted), each listed exactly once
+with its full SHA-256:
+
+| path | status | sha256 |
+|---|---|---|
+| `.claude/plans/Drivers/experiments/ALIGNMENT_REVIEW_2026-07-24.md` | untracked | `c71acef154d8697f998d5da49bf5f7c31aa5c1b0d7f2d467e17c54ac9c9ba526` |
+| `.claude/plans/Drivers/experiments/exhibits/ra_0009.json` | untracked | `7fe7d463484767e3124613b7dcc4a47a8511a4d46a81962c97e9af972636b9ab` |
+| `.claude/plans/Drivers/experiments/harness/DESIGN_minimal_exam_2026-07-24.md` | untracked | `2c14581fdafeb23d7468d720cf0be08dfa725accea3f2e0b2401ff8a55a2f596` |
+| `.claude/plans/Drivers/experiments/harness/DESIGN_v2_2026-07-24.md` | untracked | `5207762f2e3fa6eb896946732da88d5bf21023476eee2df483cbfcd7194196e1` |
+| `.claude/plans/Drivers/experiments/harness/DESIGN_v3_diff_2026-07-24.md` | untracked | `ddd368e0d2163c5336406732667f467a2351b586be9c67ef7ef07a227e8b6ab3` |
+| `.claude/plans/Drivers/experiments/harness/FableExperimentPlan_v2_DELTA.md` | untracked | `30d4404a82e3a502f2059ed37a036fab0c53f23adc16edd38d38baedee8f9719` |
+| `.claude/plans/Drivers/experiments/harness/PROPOSAL_prompt_and_scoring_2026-07-24.md` | untracked | `ee3b2cbc1c34aed6634767793b6a231f62c588ca0bb5e291cfac6f90b0279203` |
+| `.claude/plans/Drivers/experiments/harness/audit_worker_access.py` | modified | `82ff15b901c628b376b911c5f755be6aad54e896b0c1d4e9eb695ba94a99a34e` |
+| `.claude/plans/Drivers/experiments/harness/build_exp5_contract.py` | untracked | `cb151cf6f72fb0be0882b9767a26fa6ec0a1b4901811081c7199cf91b5a1ff87` |
+| `.claude/plans/Drivers/experiments/harness/build_launch_manifest.py` | modified | `7f85adfcd6eda09793b5c504dc1740b53fa1c9eeaad45c06d97a2b44ac4e59eb` |
+| `.claude/plans/Drivers/experiments/harness/exp5_item_contract.manifest.json` | deleted | *(deleted — no hash)* |
+| `.claude/plans/Drivers/experiments/harness/exp5_item_contract.md` | deleted | *(deleted — no hash)* |
+| `.claude/plans/Drivers/experiments/harness/exp5_law_crosswalk_v3.md` | untracked | `a74c2f32b129cc52baf74733c3a89733379563b69387667388cab2e364318efb` |
+| `.claude/plans/Drivers/experiments/harness/exp5_literal_patch_v3.md` | untracked | `c5831948ffb7963b1b93e8ddf0015c70928b8d5704e6b9b78bdf22869d70076d` |
+| `.claude/plans/Drivers/experiments/harness/exp5_menu_mapping_v2.md` | untracked | `c56c53654efad8019c716f061c8c4e4ca5c9369543dc07b8cf9a795d1add8a40` |
+| `.claude/plans/Drivers/experiments/harness/exp5_ownership_checklist_v2.md` | untracked | `c970be2d2c803e53f59d769d45365d4b11b6140b5c83897e9b80e6ca6fdc26d6` |
+| `.claude/plans/Drivers/experiments/harness/exp5_ownership_checklist_v3.md` | untracked | `f670f191320de1cb01610819cc663851f1fa015fe0c2c216902a0d1d1a86a2ec` |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_and_schema_v2.md` | untracked | `ec05f166f8bac2d688b6e92946a4cdf9b9fe887ef24b6745d7f7299b71b7de28` |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_and_schema_v3.md` | untracked | `8f720c57f9807b3ad1101efb16f229b147fca4d9fde3acdc8c2d3d9897ca709a` |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_contract.manifest.json` | untracked | `1cf043f9d202766399b2b4bde6d23cf3a50faa91e429f156e509d8f025be6264` |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_drafter.md` | untracked | `f4c556960bbb191147b7a7d6d9cffb8dee32dd790f7654ce5c8bfe486275927f` |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_producer.md` | untracked | `060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc` |
+| `.claude/plans/Drivers/experiments/harness/exp5_proposed_diffs_v3.md` | untracked | `485f89ef83ed2336ffaef32d234c85490a3b809d5c1b7f376c8b2a51d3486805` |
+| `.claude/plans/Drivers/experiments/harness/exp5_rev4_package.md` | modified | `86f31fbff77d52ddca9bd58957bcdddc5fe619caa3c1946800309ae8c524156d` |
+| `.claude/plans/Drivers/experiments/harness/exp5_scoring_spec_v2.md` | untracked | `c9ae6f09caec66efbae48aae02f074c8c26889a9409da27b20a4cad7068d532c` |
+| `.claude/plans/Drivers/experiments/harness/exp5_v2.0.patch` | untracked | `266e7034dcf6d23058473233ab4537f9c16350bff0a3434cada55b10b973ec2a` |
+| `.claude/plans/Drivers/experiments/harness/exp5_v2.1.patch` | untracked | `ad4776379e78fedf27c13c4a764d44e9c9a111fcb056cad5d2feb3abe120f977` |
+| `.claude/plans/Drivers/experiments/harness/exp5_v2.2_package.md` | untracked | `36929938b56faac900c03a82c61074fade6b8e4dd924b076f8cee290f95987ca` |
+| `.claude/plans/Drivers/experiments/harness/exp5_v2.2b_package.md` | untracked | `bcdcdb94ef82012698a9e1b78a12b703a86c14e4b6195b4e250e990ad960c1ac` |
+| `.claude/plans/Drivers/experiments/harness/exp5_workorder_amendments_v3.md` | untracked | `440830414fdd5e7a85ad1e5eb4c78217318b42ba6f26ab2afff61d735c7d8991` |
+| `.claude/plans/Drivers/experiments/harness/field34_audit.md` | untracked | `df2e7ecf02b717eda2a57c5deeb2501648458099ce5e879990597c5268e9d1f3` |
+| `.claude/plans/Drivers/experiments/harness/frozen_proof_r14.txt` | untracked | `442e6626a7ab9962664489267d6d384c66411527e856c6fea5a20a505c25d2a5` |
+| `.claude/plans/Drivers/experiments/harness/g_status_ledger.md` | modified | `d53d8599b0faa52c34911d668c75e9b52011a7aa04ef39ce824b16bd86cc9cbb` |
+| `.claude/plans/Drivers/experiments/harness/kf_lint.py` | modified | `48d9d19c2c647ceb893fc55e29af3e1fb2150eb7930214fa94f0814c2e1bae77` |
+| `.claude/plans/Drivers/experiments/harness/launch_exp5_readers.manifest.json` | untracked | `8283e25b390775a0c8eb730f69c8ed4256e1f15f3c0e709ea60de9df82077d8e` |
+| `.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js` | untracked | `0713ea41677bb1c5126dcd88714a66d3663a2578516688732acf9098ebf7b105` |
+| `.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.template.js` | untracked | `e923782b3bf283f30a6990342625c72fb1c61bdad5bd2eb182c7732cc455ed03` |
+| `.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.manifest.json` | modified | `565586fb8ecac3d5f25b9dbfa2a0280a23cd491461394f68d837e99e41d42512` |
+| `.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.workflow.js` | modified | `ba2fbf376c6dfb18df9a11ac1166ecd92e5fb61d6e3757b9961c991b42bf815c` |
+| `.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.workflow.template.js` | modified | `bda3ff32b8bc3961218ef3dc3695e1d908779907d94135e67543b05c67297c59` |
+| `.claude/plans/Drivers/experiments/harness/raw_transport.py` | modified | `8cca087c384aa4dd300ebc48f23da6ccb77baff9abf48f9eb22b29af606a1db1` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/16_two_view_census.json` | untracked | `d8aba45e82136527af69a3adc77b1eea949a26e1932819448afb7e451a9a289b` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/20_step2_red_first.txt` | untracked | `f8a935e036702d6ced830fdd44e9d6a80a37e85381a5b84fbca479e0ffdedc84` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/21_step2_test_disposition.txt` | untracked | `a32a9fca71e7617f9571e471835375169ccc4495365aa6e2581e59d6f6da1268` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/22_step2_b08_crosswalk.txt` | untracked | `3c684fca82d68aa673dccca8571f2a6081347c62c5f582736355c46b0371efdc` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/23_step2_b08_prompt_contract.txt` | untracked | `4abdc21050f3887d022878c1b09235479a03036bdad71842466af84be6d21095` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/24_step2_b17_gate_green.txt` | untracked | `a3984edc5ec73639587da40e1b4049525c9250d0663d1c6735eab07908f86e25` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/25_step3_reference_census.json` | untracked | `15577a51c95fa4a7765047ae7455c73bd28aab26c5560cd817504c9abe298848` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/26_step3_atomic_denominator.json` | untracked | `e202818f38068dfed49ad88471ea3adf15ab22a1accede89061e5b8c99122ea9` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/27_step3_expanded_union.json` | untracked | `5b6214a938ae326f7a5dac0a044f0a19a096c6167a878ef13ec6bd814fe6ef36` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/28_step3_55row_reconciliation.json` | untracked | `ddb1fc88317d96be1e2610a1f00b7f15a8b73119ef99352f803305d4b2c85133` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/make_index.py` | modified | `32bbac39c5ccafdb49b6fe6731127d27f7d01dacde9a76295d50755c2b97c7d0` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/two_view_census.py` | modified | `efc81551d29df54ee99f987621f638a8ff812edc28752291a9d683b78e5acb44` |
+| `.claude/plans/Drivers/experiments/harness/rev4_pin_inventory.md` | modified | `b3aa90fe6fa61329e393d09a482f2b8071c6cc4195d2465024758c8c08440030` |
+| `.claude/plans/Drivers/experiments/harness/run_reader_launcher_fake.mjs` | untracked | `10ccf5263f6bfe61639258530bc19f786b6701306142e039b8179a67c8ff6a2a` |
+| `.claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py` | deleted | *(deleted — no hash)* |
+| `.claude/plans/Drivers/experiments/harness/scorers/score_exp5.py` | modified | `cff6fcba1f99e71d39e6e30ce31b39f7703afeb7d81965058a085928ebec1371` |
+| `.claude/plans/Drivers/experiments/harness/slice_menu_probe.py` | modified | `70f300e6b7fea73e1c9ed3c2537674e1c5929c44437de7bf05fcb4127937da82` |
+| `.claude/plans/Drivers/experiments/harness/step1_inventory.json` | untracked | `5a66931a3cdf61901d1f49358cbc711b3cfebae0fea2add144a08cd1a77b9425` |
+| `.claude/plans/Drivers/experiments/harness/test_g_suite.py` | modified | `bcba83bb9b604d0919fc42d85e1c1c52fa19a11f6bd0cb90df8107c31793c33a` |
+| `.claude/plans/Drivers/experiments/harness/test_harness_guards.py` | modified | `92319eeeeb3617ab661d86ebef9a948226b36983c16a3c1277e45affacee1394` |
+| `.claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py` | modified | `127004c511e9af8403111a38b21b1da7bb592ade47910d9d4621d885661927fa` |
+| `driver/core/prepared_fact_v2.py` | modified | `a98d6c64c6c429d8577c80d8dc0a30cb62919428d8a9a1cd664167fd5d3352fd` |
+| `driver/core/test_driver_validators.py` | modified | `dd6cf8568030664bb0b30ccb2ae139d6241e98c84fe2d087f57fe7deba9bdd12` |
+| `driver/core/test_prepared_fact_v2.py` | modified | `58b57146fa0bf907f376bd577b776178ad474a405570d5a2d0870a64be07450f` |
+| `driver/relocation/inline_html.py` | modified | `66b25fa2488d1b75eb44c02321d06a077a7d381b94bcebab397e4af7a1c8629c` |
+| `driver/relocation/test_row_label_span.py` | modified | `12147e51862b2c488f900b5cdcb12951cb534a4af28613292780d97fd8486084` |
+
+`WORKORDER_STATUS.md` is deliberately ABSENT from the table above: a file
+cannot carry its own hash — writing the value changes the value. Its identity
+is reported separately with each submission, exactly as the launch manifests
+refuse to bind their own hash.
+
+**Excluded as inherited: 935 paths**
+(935 untracked · 0 modified), all under
+`.claude/plans/Drivers/experiments/exp2_reader/runs/`. Step 4 must stage NONE of them, and can prove it by
+re-running the command above and diffing against this table.
+
+Live scoped totals for cross-checking: 1003 changed paths
+overall = 68 selected + 935 inherited.
+
+**CORRECTION 2 (Codex SEQ 1170) — the previous selection rule was LOCATION-based
+and therefore unlawful.** "Everything outside `exp2_reader/runs`" swept old
+drafts, proposals and patches into the stageable candidate merely because they
+sit nearby. Step 1 says archived plans, packages, history and scratch are LEADS
+ONLY.
+
+**Lawful rule — a path is KEPT only if a real owner requires it:**
+1. it is in Step 1's frozen `kit_closure.files`; OR
+2. an approved plan BINDS it (by `identities` path or by `pins` hash) — binding
+   is what "required" means; OR
+3. it is a Step-2/3 generated artifact or receipt named by a closed row; OR
+4. it is `step1_inventory.json`, the frozen closure this classification uses.
+Appearing in Step 1's starting-status EVIDENCE is NOT a caller.
+
+**Selected candidate: 51 paths** — 28 modified ·
+20 untracked · 3 deleted:
+
+| path | status | sha256 |
+|---|---|---|
+| `.claude/plans/Drivers/experiments/harness/audit_worker_access.py` | modified | `82ff15b901c628b376b911c5f755be6aad54e896b0c1d4e9eb695ba94a99a34e` |
+| `.claude/plans/Drivers/experiments/harness/build_exp5_contract.py` | untracked | `cb151cf6f72fb0be0882b9767a26fa6ec0a1b4901811081c7199cf91b5a1ff87` |
+| `.claude/plans/Drivers/experiments/harness/build_launch_manifest.py` | modified | `a4e8f548970009e94fd691072c24ed5e60fa829e51be65f4093c82e6b497f410` |
+| `.claude/plans/Drivers/experiments/harness/exp5_item_contract.manifest.json` | deleted | *(deleted — no hash)* |
+| `.claude/plans/Drivers/experiments/harness/exp5_item_contract.md` | deleted | *(deleted — no hash)* |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_contract.manifest.json` | untracked | `1cf043f9d202766399b2b4bde6d23cf3a50faa91e429f156e509d8f025be6264` |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_drafter.md` | untracked | `f4c556960bbb191147b7a7d6d9cffb8dee32dd790f7654ce5c8bfe486275927f` |
+| `.claude/plans/Drivers/experiments/harness/exp5_prompt_producer.md` | untracked | `060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc` |
+| `.claude/plans/Drivers/experiments/harness/exp5_rev4_package.md` | modified | `86f31fbff77d52ddca9bd58957bcdddc5fe619caa3c1946800309ae8c524156d` |
+| `.claude/plans/Drivers/experiments/harness/g_status_ledger.md` | modified | `d53d8599b0faa52c34911d668c75e9b52011a7aa04ef39ce824b16bd86cc9cbb` |
+| `.claude/plans/Drivers/experiments/harness/kf_lint.py` | modified | `48d9d19c2c647ceb893fc55e29af3e1fb2150eb7930214fa94f0814c2e1bae77` |
+| `.claude/plans/Drivers/experiments/harness/launch_exp5_readers.manifest.json` | untracked | `bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070` |
+| `.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js` | untracked | `0713ea41677bb1c5126dcd88714a66d3663a2578516688732acf9098ebf7b105` |
+| `.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.template.js` | untracked | `e923782b3bf283f30a6990342625c72fb1c61bdad5bd2eb182c7732cc455ed03` |
+| `.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.manifest.json` | modified | `565586fb8ecac3d5f25b9dbfa2a0280a23cd491461394f68d837e99e41d42512` |
+| `.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.workflow.js` | modified | `ba2fbf376c6dfb18df9a11ac1166ecd92e5fb61d6e3757b9961c991b42bf815c` |
+| `.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.workflow.template.js` | modified | `bda3ff32b8bc3961218ef3dc3695e1d908779907d94135e67543b05c67297c59` |
+| `.claude/plans/Drivers/experiments/harness/raw_transport.py` | modified | `8cca087c384aa4dd300ebc48f23da6ccb77baff9abf48f9eb22b29af606a1db1` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/16_two_view_census.json` | untracked | `d8aba45e82136527af69a3adc77b1eea949a26e1932819448afb7e451a9a289b` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/20_step2_red_first.txt` | untracked | `f8a935e036702d6ced830fdd44e9d6a80a37e85381a5b84fbca479e0ffdedc84` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/21_step2_test_disposition.txt` | untracked | `a32a9fca71e7617f9571e471835375169ccc4495365aa6e2581e59d6f6da1268` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/22_step2_b08_crosswalk.txt` | untracked | `3c684fca82d68aa673dccca8571f2a6081347c62c5f582736355c46b0371efdc` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/23_step2_b08_prompt_contract.txt` | untracked | `4abdc21050f3887d022878c1b09235479a03036bdad71842466af84be6d21095` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/24_step2_b17_gate_green.txt` | untracked | `a3984edc5ec73639587da40e1b4049525c9250d0663d1c6735eab07908f86e25` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/25_step3_reference_census.json` | untracked | `15577a51c95fa4a7765047ae7455c73bd28aab26c5560cd817504c9abe298848` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/26_step3_atomic_denominator.json` | untracked | `e202818f38068dfed49ad88471ea3adf15ab22a1accede89061e5b8c99122ea9` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/27_step3_expanded_union.json` | untracked | `5b6214a938ae326f7a5dac0a044f0a19a096c6167a878ef13ec6bd814fe6ef36` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/28_step3_55row_reconciliation.json` | untracked | `ddb1fc88317d96be1e2610a1f00b7f15a8b73119ef99352f803305d4b2c85133` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/make_index.py` | modified | `32bbac39c5ccafdb49b6fe6731127d27f7d01dacde9a76295d50755c2b97c7d0` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/two_view_census.py` | modified | `efc81551d29df54ee99f987621f638a8ff812edc28752291a9d683b78e5acb44` |
+| `.claude/plans/Drivers/experiments/harness/rev4_pin_inventory.md` | modified | `7388fca392006c2b2ac8c6097c28969b75364bdfcc9de4b977ed11ed597b626f` |
+| `.claude/plans/Drivers/experiments/harness/run_reader_launcher_fake.mjs` | untracked | `10ccf5263f6bfe61639258530bc19f786b6701306142e039b8179a67c8ff6a2a` |
+| `.claude/plans/Drivers/experiments/harness/scorers/fact16_checks.py` | deleted | *(deleted — no hash)* |
+| `.claude/plans/Drivers/experiments/harness/scorers/score_exp5.py` | modified | `2901f1a615e988af30eba07d18e70bb5ad0473b52de6c537847f1bf3912b3a90` |
+| `.claude/plans/Drivers/experiments/harness/slice_menu_probe.py` | modified | `70f300e6b7fea73e1c9ed3c2537674e1c5929c44437de7bf05fcb4127937da82` |
+| `.claude/plans/Drivers/experiments/harness/step1_inventory.json` | untracked | `5a66931a3cdf61901d1f49358cbc711b3cfebae0fea2add144a08cd1a77b9425` |
+| `.claude/plans/Drivers/experiments/harness/test_g_suite.py` | modified | `bcba83bb9b604d0919fc42d85e1c1c52fa19a11f6bd0cb90df8107c31793c33a` |
+| `.claude/plans/Drivers/experiments/harness/test_harness_guards.py` | modified | `efe54ee1e316a1499af8f216485991723ea5d924e63737bd9a6d7cfca7cb5fd9` |
+| `.claude/plans/Drivers/experiments/harness/test_no_semantic_patterns.py` | modified | `127004c511e9af8403111a38b21b1da7bb592ade47910d9d4621d885661927fa` |
+| `driver/core/prepared_fact_v2.py` | modified | `a98d6c64c6c429d8577c80d8dc0a30cb62919428d8a9a1cd664167fd5d3352fd` |
+| `driver/core/test_driver_validators.py` | modified | `dd6cf8568030664bb0b30ccb2ae139d6241e98c84fe2d087f57fe7deba9bdd12` |
+| `driver/core/test_prepared_fact_v2.py` | modified | `58b57146fa0bf907f376bd577b776178ad474a405570d5a2d0870a64be07450f` |
+| `driver/relocation/inline_html.py` | modified | `66b25fa2488d1b75eb44c02321d06a077a7d381b94bcebab397e4af7a1c8629c` |
+| `driver/relocation/test_row_label_span.py` | modified | `12147e51862b2c488f900b5cdcb12951cb534a4af28613292780d97fd8486084` |
+| `.claude/plans/Drivers/experiments/harness/receipts_827/03_commands_and_hashes.txt` | modified | `456621c123dd525a6a86c2fd4b22bc4797e6872e21ee73420e125f05e6f53ff6` |
+| `.claude/plans/Drivers/experiments/harness/step4_gate.py` | untracked | `5382b0d7a504ab60f71862e7d2bef7816c9e0fb01c544105b0f7c4e0f0738662` |
+| `driver/core/test_v2_event_route.py` | modified | `b9d90c1d8e84aa0c574b3ddbf8b4fa7be1c204c5fcc000eefad0ca4f3208a2c5` |
+| `.claude/plans/Drivers/workflows/tests/test_perx_naming_residue.py` | modified | `9976e7448f4d5920c912db3b4bb7899dcf87266158eeca8cedd409141169ca60` |
+| `.claude/plans/Drivers/experiments/harness/gate_pins.jsonl` | modified | `9a8cfa546c544b071f84c5e980f0f031bade066782e85e0a05bbd1238702df89` |
+| `.claude/plans/Drivers/experiments/harness/expected_test_nodes.txt` | modified | `a4e585fd7df48e82b165dcdf608cd926f137241f35f6c487ce06b23ebaa1e512` |
+
+**Excluded, and NOT to be staged (bytes untouched, nothing deleted):**
+- **23 historical untracked documents** with no real caller — old
+  DESIGN/PROPOSAL drafts, superseded v2/v3 packages and checklists, `.patch`
+  files, and one-off audits:
+  - `.claude/plans/Drivers/experiments/ALIGNMENT_REVIEW_2026-07-24.md`
+  - `.claude/plans/Drivers/experiments/exhibits/ra_0009.json`
+  - `.claude/plans/Drivers/experiments/harness/DESIGN_minimal_exam_2026-07-24.md`
+  - `.claude/plans/Drivers/experiments/harness/DESIGN_v2_2026-07-24.md`
+  - `.claude/plans/Drivers/experiments/harness/DESIGN_v3_diff_2026-07-24.md`
+  - `.claude/plans/Drivers/experiments/harness/FableExperimentPlan_v2_DELTA.md`
+  - `.claude/plans/Drivers/experiments/harness/PROPOSAL_prompt_and_scoring_2026-07-24.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_law_crosswalk_v3.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_literal_patch_v3.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_menu_mapping_v2.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_ownership_checklist_v2.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_ownership_checklist_v3.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_prompt_and_schema_v2.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_prompt_and_schema_v3.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_proposed_diffs_v3.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_scoring_spec_v2.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_v2.0.patch`
+  - `.claude/plans/Drivers/experiments/harness/exp5_v2.1.patch`
+  - `.claude/plans/Drivers/experiments/harness/exp5_v2.2_package.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_v2.2b_package.md`
+  - `.claude/plans/Drivers/experiments/harness/exp5_workorder_amendments_v3.md`
+  - `.claude/plans/Drivers/experiments/harness/field34_audit.md`
+  - `.claude/plans/Drivers/experiments/harness/frozen_proof_r14.txt`
+- **935 inherited run artifacts** under `.claude/plans/Drivers/experiments/exp2_reader/runs/`.
+
+Live scoped total **1005** = 47 selected + 23 historical + 935 inherited.
+Confirmed independently by
+`git status --porcelain=v1 -uall -- .claude/plans/Drivers/experiments driver`,
+which returns 1005. (The earlier 1937 came from a malformed count expression in
+the generator, not from a different reading of the tree — the selection, paths
+and hashes were unaffected.)
+
+**STEP-4 REOPEN (step4.md §1) — the count moves 45 → 47, with the reason.**
+step4.md §1 permits a closed row to reopen only on proven byte drift, a missed
+reachable caller, or a real omitted behavior, and requires the visible count to
+change with the reason. Two paths join the selection; nothing already selected
+was removed or re-hashed.
+
+1. `receipts_827/03_commands_and_hashes.txt` — **a real omitted path, not new
+   work.** The receipt index is generated by `make_index.py` and is read by
+   `test_g_suite.py::test_the_receipt_index_ACCOUNTS_FOR_EVERY_FILE_including_written_records`,
+   so it is caller-backed and in scope. Steps 2–3 added receipts 16 and 20–28
+   and extended `make_index.py`'s provenance table, but the index itself was
+   never regenerated, so the committed file still described the pre-Step-2 set.
+   Regenerating it (63 receipts) is what makes the index true; it was omitted
+   from the frozen 45 because it was byte-clean at the time the selection was
+   taken, which is exactly the blind spot a status-derived selection has.
+   This is the arithmetic that exposed it: the live total is now 1005, and
+   1005 − 1003 = the two paths below, so the old 1003 could only balance while
+   the index sat unmodified.
+**STEP-4 REOPEN #3 (Codex SEQ 1175) — 49 → 52.** The gate's identity artifacts
+become part of the candidate because this round changes them deliberately:
+`gate_pins.jsonl` gains exactly ONE `live_read` pin for the R9 Core-V2 live
+graph test — it was already `@pytest.mark.live` and genuinely reads the graph,
+but had no gate pin, so the clean lane deselected it and nothing recorded that
+it was LIVE rather than LOST. `expected_test_nodes.txt` is regenerated through
+the existing `--write-expected` owner, which excludes the owner-gated write
+probe STRUCTURALLY (`-m "not live_write"`), verified in the function rather
+than assumed. A first attempt wrote a `reconcile_expected.py` tool for this. It was
+BUILT, THEN DELETED UNUSED (Codex SEQ 1176), and the reason is recorded because
+the mistake is instructive. It authorized any removed identity whose module was
+a selected changed file — so deleting one real test from an already-selected
+module still returned PASS, which is precisely the silent test loss the expected
+inventory exists to catch. It also mapped a `.claude.plans…` identity to
+`/claude/plans…` instead of `.claude/plans…`, misclassifying genuine harness
+families. My two controls did not catch either: identical inputs decide nothing,
+and injecting an identity from an UNSELECTED module tests only the easy
+boundary. The reconciliation is therefore done as a read-only scratch analysis
+recorded as a (module, test family) table in THIS document, with each removed
+and added family named against the selected diff and its closed row — membership
+in a changed module is not authorization — and no one-use proof framework is
+left behind in the kit.
+
+**EXPECTED-IDENTITY RECONCILIATION (Codex SEQ 1175 item 3 / SEQ 1176).** Done as
+a read-only scratch analysis grouped by `(module, test family)`; no tool ships.
+
+| | identities | families |
+|---|---|---|
+| old set | 3256 | — |
+| new set | 3741 | — |
+| removed | 45 | 45 |
+| added | 530 | 341 |
+
+REMOVED — 45 of 45 families explained, **zero unexplained**, which is the
+direction that matters: an unexplained removal is a test that silently stopped
+running. 43 are `definition removed in a selected diff` — the B-10/B-16
+`fact16_*` deletions, the retired `lint_*` production-path duplicates, the G12
+V1-launcher and G32 event-view renames, the retired staged-import gate. 2 are
+`parameter expansion changed in a selected file`
+(`test_EVERY_active_harness_module_imports_INERTLY`,
+`test_827B4_false_homes_must_park_not_pair`), where the family still runs and
+only its parameter set moved. Membership in a changed module authorized nothing;
+each removal was matched to the definition actually leaving the staged diff.
+
+ADDED — 292 families come from selected diffs. The remaining **49 families are
+EXPLAINED BASELINE ADDITIONS**, adjudicated by the reviewer (SEQ 1178) and
+re-verified here from the tree rather than accepted on assertion:
+
+- the OLD expected inventory was last committed at `7712cdb5`;
+- 47 families are real definitions committed in `driver/core/test_raw_fact_accounting.py`
+  at `0edb1be8`; 2 are real definitions committed in `driver/core/test_v2_attacks.py`
+  at `bd267040`;
+- `git merge-base --is-ancestor` confirms all three commits are ancestors of the
+  current HEAD, and neither file is staged in this candidate.
+
+So these tests already existed in the committed tree and were missing from the
+pin only because the pin predated their commits. Regenerating adds the coverage
+the stale inventory lacked; it cannot conceal a loss. **Final unexplained
+families: 0, on both sides.**
+
+CONTROL, proven on the dangerous case rather than the easy one: deleting exactly
+one real test from an ALREADY-SELECTED changed module
+(`driver.core.test_prepared_fact_v2::test_827B1_measurement_raw_spans_message_names_list_or_tuple`)
+yields removed 1 / added 0 and VERDICT FAIL with that family named UNEXPLAINED.
+
+HAZARD FOUND IN THE ARTIFACT ITSELF: `expected_test_nodes.txt` holds a single
+identity 1,333,449 characters long (a parametrized id carrying an enormous
+grouped number). `grep -v` silently truncates it, which fabricated two removals
+and one addition on the first attempt at the control above. This file must be
+read and written with a tool that does not assume sane line lengths.
+
+2. `harness/step4_gate.py` — the Step-4 begin-conditions gate (step4.md
+   "Fresh-session start" + §1), answering all five conditions from the files
+   that already own them.
+
+**STEP-4 REOPEN #2 (step4.md §1; Codex SEQ 1174) — 47 → 48, one test-file
+defect.** `driver/core/test_v2_event_route.py` reached the LIVE GRAPH at
+COLLECTION time: the module-level `_ATTACKS = _shape_attacks()` calls
+`_v2_events()`, which discarded its prepared-cache result and called
+`SA.SRC.build_source()` → `route_a_source._driver()` → `dotenv_values('.env')`
+→ `GraphDatabase.driver(cfg['NEO4J_URI'] …)` and then ran two Cypher reads.
+
+Measured both ways. In the working tree collection SUCCEEDED **by querying the
+live database**, so every green reading of this suite was taken with the graph
+reachable. In the committed tree there is no `.env`, so collection raised
+`KeyError: 'NEO4J_URI'` and all 187 tests became `0 collected, 1 error` —
+blocking step4.md §7 (credentials absent) and §8 (the isolated tree must need
+no credential).
+
+FIXED IN THE TEST FIXTURE, NOT PRODUCTION. `build_stage_a_v2` consumes exactly
+one field of a source entry — `text_parts` (`build_packets.py`,
+`sources_by_id[source_id]['text_parts']`) — so `_v2_events()` now builds that
+entry from the tracked packet's OWN `source_id` and the prepared object's exact
+`text`, the same two values production pairs. `route_a_source.py` is unchanged;
+the real `route_a_source → locator → build_stage_a_v2` proof stays owned by the
+Fiscal Stage-A suite, which this wiring suite must not duplicate. No accession
+literal, helper, graph fake, or rule was added.
+
+PROVEN, not assumed:
+- output is **byte-identical** to the graph-built baseline captured before the
+  change — same 4 events, same 11 items, same part keys and text digests;
+- the new guard has teeth: reinstating the old `build_source()` call fails it,
+  and the file was restored byte-identical afterwards;
+- its lawful positive control checks each event's single text part against text
+  recomputed independently from that source's tracked cache file, never against
+  what `_v2_events()` says about itself;
+- the R9 `@pytest.mark.live` test is untouched (0 live-marker lines in the
+  diff) and the live lane still collects 58 nodes.
+
+**Deliberately NOT added: the gate's own output receipt.** A receipt that
+records this document's sha256 cannot also be a member of the selection this
+document freezes — listing it changes the hash it just recorded, and the two
+never converge. The handoff already applies this rule to itself (it is a
+selected path whose own hash the table cannot carry), and the same rule is
+applied here rather than inventing a new category for it. The gate therefore
+prints its verdict and writes a receipt only on request; the verdict is
+reported to the reviewer in the round, and `step4_gate.py` reproduces it.
+
+---
+
+## EXP-5 KIT FREEZE — status row (step4.md §10 item 6)
+
+**THIS CONTAINING COMMIT IS THE EXP-5 EXAM-KIT FREEZE.** The row is deliberately
+written against "this containing commit" rather than a hash: a commit cannot
+record its own id, and a row naming a future hash would be a claim nobody could
+check at the moment it is read.
+
+| | |
+|---|---|
+| What this commit freezes | the complete EXP-5 exam kit produced by LeftOverSteps Steps 1–3 and proved by Step 4 |
+| Final reader-plan manifest | `.claude/plans/Drivers/experiments/harness/launch_exp5_readers.manifest.json` |
+| Its SHA-256 | `bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070` |
+| K-fields | **preparation-ready** — the drafting plan is built, pinned and disabled |
+| Paid calls made by this commit | **0** |
+
+**THE SEPARATE OWNER APPROVAL SURVIVES THIS FREEZE.** Preparation-ready is not
+authorization to run. Both launch plans ship DISABLED with `made_calls: 0`, the
+K-fields lock hash is still `null`, and the runner refuses to start until a real
+reviewed lock is supplied. K-fields GO#1 remains UNFIRED and owner-gated, and no
+AI call, filing fetch, Neo4j write, activation or V1→V2 switch is authorized by
+this commit. The next paid step requires the owner's explicit approval at that
+time — freezing the exam kit and sitting the exam are separate decisions, and
+this row does not blur them.
+
+**WHY THIS SHA IS NOT THE ONE THE REVIEWER NAMED (SEQ 1178).** He instructed
+that this row pin the reader-plan manifest at
+`f9ab0f6aad9a037b3a7a6d6effe7321cc85a4e7821a51fa2fecb27233864b656`. His two
+corrections interact, and the first invalidates that value: removing the extra
+trailing blank line from `scorers/score_exp5.py` changes the scorer's bytes, and
+the manifest PINS the scorer by SHA-256 (`identities.scorer`). Rebuilding the
+manifest through its own generator therefore moves it to
+`bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070`, with the
+scorer pin now equal to the live file. Recording the value he named would have
+pinned a manifest that no longer exists — a hash nobody could reproduce, which
+is the exact defect this document keeps having to undo. Both plans were rebuilt
+TWICE and are byte-identical across builds; the K-fields manifest is unchanged.
+
+There is exactly ONE manifest owner named here. The K-fields drafting plan has
+its own manifest and is not re-pinned in this row; inventing a second owner for
+the same fact is the defect this document has repeatedly had to undo.

@@ -1,0 +1,121 @@
+24 — STEP 2 / B-17: THE NO-SEMANTIC-PATTERN GATE IS GREEN
+generated 2026-08-12 19:15:27  ·  harness only  ·  production untouched  ·  nothing staged
+
+BEFORE: 9 failed, 13 passed   AFTER: 27 passed
+
+WHY IT WAS RED — TWO SEPARATE CAUSES, NOT ONE
+  1. inline_html's four regex sites were UNCLASSIFIED.
+  2. kf_lint's GOLD_ONLY vocabulary was unclassified. This one was MINE:
+     the Step-2 kf_lint rebuild introduced it earlier this session.
+
+THE FOUR SITES KEEP FOUR SEPARATE DISPOSITIONS (Codex SEQ 1069: do not bless
+inline_html as one uniform module class). Every pre-existing table classifies a
+whole MODULE, so putting inline_html in any of them would let any one of its
+four sites silently absorb a new pattern of a different kind. A per-SITE
+disposition table was therefore added, keyed by the SAME [function, operation,
+pattern] identity the freeze already uses:
+  <module> compile '[ \t\n\x0c\r]+'      MECHANICAL     CSS white-space set
+  _sec_cik fullmatch _SEC_CIK_10_PATTERN  GOVERNING_LAW  SEC CIK rule, imported
+                                                         from driver_ids, one owner
+  _evidence_from search '\\d'              SEMANTIC_DEBT  digit-heading guess,
+                                                         RETAINED because fail-closed
+  _words findall '[A-Za-z][A-Za-z...]*'   OWNER_SCOPE    ASCII label words, a
+                                                         DECLARED alphabet
+A module classified this way counts as classified ONLY while EVERY live site
+carries a disposition — a fifth site added tomorrow is unclassified and fails.
+
+RED-FIRST MUTATION PER SITE (B-17 completion proof)
+  Each of the four sites is ALTERED individually and must fail the freeze.
+  _mutated_failures gained a replace= mode for this: the append-only harness
+  could only ever prove a NEW site is caught, never that CHANGING one is.
+  A fifth-site mutation proves the undispositioned case separately.
+
+GOLD_ONLY -> LEGIT_VOCAB. A closed vocabulary from law (WorkOrder 620 defines
+du_worthy as the internal name of the official fact gate; step2 §7 limits gold
+additions to the review fields), attached AFTER the model answers. kf_lint uses
+it to REFUSE those names at the model door — the opposite of a guess about text.
+
+=== SEQ 1074 — FULL CORPUS RESULT (generated 2026-08-13 00:05:17) ===
+EU-094 measured through the REAL section decision, live vs the same module
+with ONLY the digit filter removed. Exact (section, section_span) pair.
+
+POPULATION      documents 1769 · readable 1768 · refused 1
+                refusal reason: Specification mandates value for attribute s
+DENOMINATOR     id-bearing 2306670 + id-less 3796 = 2310466 = facts_compared
+OUTCOMES        unchanged                    2151913
+                current_only_accepted          21337   <- filter CAUSED the section
+                counterfactual_only_withheld  107229   <- filter withheld a section
+                changed_section                29987   <- attribution MOVED
+                sum                          2310466   == facts_compared (closes)
+VERDICT         fail_closed_premise = DISPROVED
+
+READ THE RATIO CORRECTLY. On the 6-document sample the filter accepted more
+than it withheld (226 vs 56). Over the WHOLE corpus that reverses: it
+withholds 107229 and causes 21337. Both directions are real; the premise
+fails because the causing and changing classes are NON-ZERO at all, not
+because one outnumbers the other. 21337 + 29987 = 51324 facts whose section
+outcome is not explainable as withholding.
+
+EU-150 (separate population, cells): text-bearing 6621586 · rule sees words
+1675179 · letters the rule cannot see AT ALL 330 · mixed surviving via ASCII 704.
+The cited lead g2_evid_recall_EU-150.txt claimed 6625305 / 330 / 705. The blind
+count 330 reproduces EXACTLY; cells and mixed differ slightly (6621586 vs
+6625305, 704 vs 705). Leads corroborated, not identical — reported as measured.
+
+IDENTITIES
+  two_view_census.py        efc81551d29df54ee99f987621f638a8ff812edc28752291a9d683b78e5acb44
+  01b_ix_input_manifest.txt 6f26e617af1db73a0ba45dd7a352dbfd76466cfc83cdbb11fd153e39019f61fd
+  16_two_view_census.json   d8aba45e82136527af69a3adc77b1eea949a26e1932819448afb7e451a9a289b
+  inline_html.py (live)     6140e322b24b2a35a5c41cdce4c2b64edef6ade3a65252da3e83b36b2a5f2e4a
+
+EXAMPLES (text + spans)
+  current-only 0000002488-24-000123.htm f-346 section='Inventories' span=[14964,14975]
+  changed      0000004977-24-000053.htm f-1133
+               current        'Aflac Japan:'                [423119,423131]
+               counterfactual 'Net earned premiums: (1)'    [423132,423159]
+  Of the 20 recorded changed examples, 0 are same-text-different-cell; the
+  span comparison is still required — its absence could not have been known
+  in advance, and it is the class this area already failed on.
+
+NO FORBIDDEN ACTION: HEAD 0edb1be8 unmoved · staged 0 · production diff 2 files
+/ 27 insertions / 0 deletions (the already-VERIFIED S2-D01 only) · no AI call,
+fetch, or DB action · nothing committed or pushed.
+
+AWAITING THE OWNER DECISION CARD. The digit rule is untouched.
+
+=== EU-094 DISPOSITION CLOSED — FILTER REMOVED (Codex ruling SEQ 1076/1077) ===
+generated 2026-08-13 00:18:14
+RULING: the owner's already-frozen requirements resolve EU-094. The digit
+regex had no standards or frozen-contract authority, its fail-closed
+justification is disproved by receipt 16, and an active unauthorized rule may
+not remain as debt. A/B/C were NOT equally open; disposition = REMOVE.
+
+PRODUCTION CHANGE (exactly one behaviour-bearing condition):
+  -   if _words(t) and not re.search(r'\d', t)]
+  +   if _words(t)]
+  plus the now-false fail-closed comment, replaced with a concise one.
+  Per SEQ 1077 the 1769-file counts are NOT copied into production source;
+  they stay in receipt 16. Nothing replaces the filter; the pre-existing
+  exactly-one-candidate rule now owns ambiguity.
+
+TDD ORDER (RED before the edit, proven):
+  RED  test_an_AMBIGUOUS_section_row_is_not_resolved_by_discarding_a_candidate
+  RED  test_a_unique_DIGIT_BEARING_heading_stays_eligible
+  CTRL test_a_unique_NON_DIGIT_heading_is_unchanged_and_shares_one_cell (passed before AND after)
+  Pre-edit run: 2 failed, 1 passed. Post-edit: 3 passed.
+
+EQUIVALENCE TO THE MEASURED COUNTERFACTUAL (so the 4h39m census is NOT repeated):
+  receipt 16 live_source_sha256 == HEAD driver/relocation/inline_html.py sha256
+    6140e322b24b2a35a5c41cdce4c2b64edef6ade3a65252da3e83b36b2a5f2e4a
+  shipped behaviour-bearing line == the counterfactual's line: 'if _words(t)]'
+
+MUTATION: reintroducing the filter is CAUGHT (2 failed), source restored byte-identical.
+
+B-17 FROZEN LIST UPDATED — the gate caught its own stale entries. inline_html
+now has THREE sites and THREE dispositions; the digit site is removed from
+SITE_DISPOSITION, FROZEN_PATTERNS and the per-site mutation set, with a note
+that it must not reappear. Gate 26 passed (was 27; one mutation case retired
+with the site it tested).
+
+REGRESSION: relocation 1028 passed · driver/core 2020 passed 1 skipped ·
+harness guards 175 passed · public path 114 passed · gate 26 passed.
