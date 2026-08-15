@@ -8,7 +8,7 @@ For every fact produced by Step 3, decide safely:
 * reuse it after a harmless word-order correction;
 * create a new Driver;
 * skip an unusable candidate; or
-* park it until enough evidence exists.
+* park it only until an exact registered trigger can change the result.
 
 A Driver is the reusable cause or standing measure. This step decides its identity. A wrong reuse is worse than creating a temporary duplicate, so uncertainty always stays separate or stops.
 
@@ -24,7 +24,7 @@ Lawful and clear? ── yes → create separately
 │
 no
 ↓
-Skip or park
+Skip or exact-trigger park
 
 ## Important current state
 
@@ -68,8 +68,10 @@ scratch files are leads only.
 If Step 2 did not settle any item below, stop with one exact owner question:
 
 1. Sonnet 5 at high effort is fixed for routing, identity judging, type
-   judging, high-impact second review, and recovery review. Step 2 must show
-   that it passed each role's existing gate; a failed role remains off.
+   judging, continuity judging, and recovery review. Step 2 must show that it
+   passed each role's existing gate; a failed role remains off. The reader and
+   router only propose. The one identity judge independently approves every
+   new semantic identity decision; no company-count branch adds another judge.
 
 2. Whether the OD-19 generic “possibly same meaning” class passed K-pairs.v2
    with zero wrong-same decisions. If not, it remains refused.
@@ -80,7 +82,9 @@ If Step 2 did not settle any item below, stop with one exact owner question:
    or merging; a cross-company read derives its current eligible companies
    from facts and naturally has no comparison below two.
 
-4. The aging threshold for deferred identity pairs. Never invent “after N periods.”
+4. **Settled — owner ruling 2026-08-15:** elapsed time alone never reopens a
+   deferred identity pair or parked item. Each retryable case must name an exact
+   owner-exported state or evidence trigger. A case without one is terminal.
 
 5. **Settled — owner confirmation 2026-08-14, recording existing law:** any
    authorized channel may submit prose or human-readable table evidence to the
@@ -235,14 +239,23 @@ Never show:
 * hidden empty base anchors;
 * parked or quarantined targets;
 * similarity scores;
+* company counts, industry counts, or mention counts;
 * the full catalog;
 * model reasoning.
 
-Semantic search may suggest candidates only. It never authorizes reuse.
+Search every Driver visible at the event time; never restrict candidates to the
+same company or industry. The source and candidate industry labels may be shown
+as context. Semantic search may suggest and order candidates only; it never
+authorizes reuse. Production prompts and code must contain no named
+industry-pair example.
 
 ### Stage 1 — Meaning decision
 
-Use one bounded model request per event, following the exact Step 2 role assignment.
+Use one bounded identity-judge request per event, following the exact Step 2
+role assignment. The request is independent of the reader and router and must
+return one action for every proposal. It may batch the event's proposals; do
+not create one call per proposal. Exact replay of an unchanged frozen decision
+reuses that decision and is not a new model call.
 
 For each proposal, return one approved action:
 
@@ -259,10 +272,12 @@ An exact spelling is never sufficient by itself.
 Additional rules:
 
 * A quarantined Driver cannot receive new facts.
-* A suspected homonym must be re-coined more specifically once; if no safe name exists, park.
-* High-risk exact matches require the Sonnet 5 high-effort identity judge.
+* A suspected homonym must be re-coined more specifically once; if no safe name exists, skip it.
+* Every exact-name match requires the Sonnet 5 high-effort identity judge.
 * A refusal can never be overturned into acceptance by a weaker model.
-* A timeout or unresolved disagreement parks.
+* An unresolved meaning keeps the Drivers separate or skips the candidate. A
+  timeout fails closed and is retryable only if Step 10 derives an exact
+  authorized service-state trigger.
 
 #### ADOPT
 
@@ -281,11 +296,13 @@ The router may propose a possible same-meaning pair, but it never decides the li
 The synchronous link remains off. Therefore:
 
 * create the lawful candidate under its own wording;
-* send the pair to the one later link judge;
+* send the pair to a later invocation of the same identity judge;
 * keep both histories separate meanwhile;
 * never move or re-key a fact later.
 
-If the target is quarantined or otherwise flagged, park the candidate instead of creating duplicate Drivers around a possibly corrupted target.
+If the target is quarantined or otherwise flagged, park the candidate only on
+the existing exact quarantine-clear or recovery trigger instead of creating
+duplicate Drivers around a possibly corrupted target.
 
 #### CREATE
 
@@ -311,24 +328,30 @@ A skip is counted and source-linked. It never silently disappears.
 
 #### PARK
 
-Park when the candidate may become usable later but currently lacks enough evidence or required state.
+Park only when the owning rule exposes all of:
 
-Use only the frozen retry and terminal reasons:
+* one typed reason;
+* one exact machine-observable state or evidence trigger that can change the
+  result;
+* the whole event to reconsider;
+* the evidence that remains bound to that original event.
 
-* temporary gate unavailable;
-* too little evidence to stamp type;
-* unresolved base metric;
-* conflicting type evidence;
-* first fact does not exercise its lane;
-* vague or rejected rule;
-* rejected identity gate.
+A temporary gate, missing base, incomplete source state, or quarantine may park
+only when its existing owner supplies that exact trigger. Vague meaning,
+conflicting permanent type, a rejected rule, a rejected identity decision, or
+mere passage of time is terminal: skip, reject, or keep separate. A later
+source is processed as its own event and fact. It may trigger reconsideration
+of an older whole event only through an owner-proved relationship or state
+change, and the older event may not borrow its quote, value, unit, period, or
+meaning.
 
 Do not accept facts merely to reduce park rates.
 
 ### Uncertainty rule
 
 * Unsure whether two lawful names are the same: keep them separate.
-* Unsure whether the candidate itself is lawful or correctly typed: park or skip.
+* Unsure whether the candidate itself is lawful or correctly typed: park only
+  on an exact registered trigger; otherwise skip or reject.
 * Never use a model confidence score as permission.
 * Do not add a separate UNSURE mechanism unless Step 2 explicitly enabled it.
 
@@ -350,7 +373,8 @@ Requirements:
 * Never build a stored fact ID from the proposed name.
 * Create the final immutable fact through the existing construction owner.
 * A stored Driver’s permanent type wins on reuse.
-* A type mismatch parks; it is never silently corrected.
+* A permanent type mismatch refuses reuse. Keep a lawful distinct candidate
+  separate or reject it; never silently correct or blindly retry it.
 * A newly created Driver receives its permanent type only after the required checks pass.
 * The final decision and its evidence must be included in the existing run audit.
 * Model explanations are evidence records, never executable instructions.
@@ -381,9 +405,10 @@ Apply the frozen order:
 1. deterministic terminal and approved bare-root rules;
 2. exact locked fact-type classifier;
 3. if it says action, stamp action;
-4. if it says guidance or surprise on a bare name, re-coin with the required suffix or park;
+4. if it says guidance or surprise on a bare name, re-coin with the required suffix or skip;
 5. if it says metric, run the metric-proof challenge;
-6. in live thin evidence, unclear means park—never default;
+6. in live thin evidence, unclear means skip unless an existing owner exposes
+   an exact trigger that can change the result—never default;
 7. permanent type is written once and never changed after facts exist.
 
 ### Family integrity
@@ -424,7 +449,9 @@ Requirements:
 
 8. Recheck source, company, Driver existence, type, collision state, and required family relationships inside the eventual transaction.
 
-9. If the Driver appeared concurrently, never create a duplicate and never auto-retry; fail closed for later re-evaluation.
+9. If the Driver appeared concurrently, never create a duplicate and never
+   auto-retry. The changed Driver state may trigger a later whole-event
+   re-evaluation through Step 10, using only the original event's evidence.
 
 10. A catalog card with no graph node creates lazily:
 
@@ -447,7 +474,8 @@ Step 4 proves the plan and rollback behavior with controlled transaction doubles
 Use one judge and two triggers:
 
 * synchronous proposal during admission—shadow only; no link;
-* asynchronous review after creation or evidence growth.
+* asynchronous review after creation or an exact owner-registered evidence or
+  state change.
 
 ### Pair construction
 
@@ -474,9 +502,17 @@ Refuse without a model only when the frozen design directly supplies the rule:
 * the target is quarantined or not eligible;
 * a gated rule has not passed its experiment.
 
-Do not add semantic word lists. Named-series, benchmark, cause-versus-effect, and industry homonym questions remain model decisions.
+Do not add semantic word lists or named industry-pair examples. Named-series,
+benchmark, cause-versus-effect, and industry-homonym questions remain model
+decisions under the same object, business-scope, and mechanism test.
 
 ### Strong identity judge
+
+Every new semantic identity decision receives this one independent review.
+The reader, router, candidate search, exact spelling, and deterministic token
+checks may propose or refuse; none may approve semantic identity. Company,
+industry, and mention counts neither change this rule nor add a second judge.
+An exact replay of an unchanged frozen decision reuses its recorded result.
 
 All five checks must pass, with evidence from both sides:
 
@@ -487,9 +523,6 @@ All five checks must pass, with evidence from both sides:
 5. the target’s frozen birth evidence describes one coherent mechanism.
 
 Any failure or uncertainty keeps the Drivers separate.
-
-For a link affecting the officially frozen high number of companies, require
-an independent second Sonnet 5 high-effort review. Both calls must agree.
 
 ### Applying an approved link
 
@@ -509,7 +542,8 @@ Code then:
 * never deletes or re-keys history;
 * prevents variants from becoming link targets;
 * records refused pairs;
-* rechecks a refused pair only after meaningful new evidence.
+* rechecks a refused pair only after an exact owner-registered evidence or
+  state change affecting that pair.
 
 ### Deferred pairs
 
@@ -517,9 +551,9 @@ Maintain one deferred-pair record:
 
 * no duplicate ledger;
 * no Driver created around a flagged target;
-* evidence growth reopens the pair;
-* recovery of the target reopens affected pairs;
-* aging changes state only at the threshold frozen in Step 2;
+* only an exact owner-registered evidence change reopens the pair;
+* only the target owner's exact recovery-state change reopens affected pairs;
+* aging may raise an operational alarm but never changes semantic state;
 * every transition is audited;
 * no scheduler is built here.
 
@@ -725,14 +759,20 @@ Every submitted item must remain accounted for through one or more facts, or one
 * internal company measure versus external market cause;
 * upstream cause versus downstream effect;
 * same words with different industry mechanisms;
+* the same meaning remaining eligible across different industries;
+* different meanings remaining separate inside one industry;
 * competing plausible targets;
 * cross-flavor pair;
 * terminal-suffix mismatch;
 * per-unit mismatch;
 * portion-qualified versus unqualified name;
 * young, frozen, or quarantined target;
-* high-impact reviewers disagreeing;
-* model timeout or malformed result.
+* model timeout or malformed result;
+* reader or router proposes an identity that the independent judge refuses;
+* company-count changes leave the decision path unchanged.
+* candidate ordering changes never hide a lawful cross-industry match or let
+  shared industry force reuse;
+* the exact assembled production prompt contains no named industry-pair rule.
 
 ### Type and family
 
@@ -745,7 +785,8 @@ Every submitted item must remain accounted for through one or more facts, or one
 * missing or failed dual suffix checks;
 * lawful exact empty base anchor;
 * fuzzy anchor graduation refused;
-* bare unknown first fact parked;
+* bare unknown first fact skipped, or parked only with an exact registered
+  trigger;
 * lawful terminal unknown first fact accepted;
 * surprise home resolved through real family and same-meaning relationships.
 
@@ -768,11 +809,16 @@ Every submitted item must remain accounted for through one or more facts, or one
 * mechanical refusals;
 * gated rule off and on;
 * rival ambiguity;
-* high-impact second review;
+* every proposed link receives the one independent identity review;
+* company-count changes add no branch or reviewer;
 * deterministic head choice;
 * chain flattening;
 * refused-pair caching;
 * evidence-growth reopening;
+* a later source remains a separate event and cannot lend evidence to an older
+  parked event;
+* exact-trigger reopening of the whole original event and refusal of an
+  age-only or vague retry;
 * flagged-head deferral;
 * no synchronous link while the switch is off.
 
@@ -862,6 +908,8 @@ Step 4 is complete only when:
 
 * the real V2 route invokes one real identity decision component;
 * every candidate reaches reuse, safe separate creation, skip, or park;
+* every new semantic identity decision passes the one independent identity
+  judge and no count-based review branch exists;
 * exact spelling alone never authorizes reuse;
 * uncertain identity remains separate;
 * final name and permanent type are fixed before ID construction;
@@ -871,6 +919,8 @@ Step 4 is complete only when:
 * every required family relationship is real, not suffix approximation;
 * synchronous different-wording linking remains off;
 * the asynchronous reversible link and deferred-pair paths are proven;
+* every park has one exact registered trigger, terminal outcomes never enter a
+  retry queue, and later sources remain separate facts;
 * company-declared renames are evidence-bound, guarded, and reversible;
 * all fourteen validators and required detectors have effective failing controls;
 * recovery changes only reversible state and never deletes or re-keys history;

@@ -109,7 +109,8 @@ This step excludes:
 
 * No semantic word list, regular expression, threshold, exception, or example-specific branch may be added unless derived from an official standard or frozen contract.
 
-* Uncertain facts are skipped or parked. They are never guessed into acceptance.
+* Uncertain facts are skipped or parked only on an exact registered trigger.
+  They are never guessed into acceptance or placed in an indefinite queue.
 
 * Every accepted fact must be fully supported.
 
@@ -256,11 +257,15 @@ An item-level failure must not erase successful sibling items. An event-level fa
 
 * written: the dry-run plan predicts creation of a new fact.
 * merged: the dry-run plan predicts safe reuse, filling, updating, or deduplication.
-* parked: the item is preserved for later review because evidence is insufficient.
+* parked: the item is preserved only until its named, exact registered trigger
+  can change the result.
 * skipped: the reader intentionally produced no fact.
 * rejected: the item or its evidence violated a frozen rule.
 
-Only the existing “source unavailable” reason promises automatic retry. Do not create retry behavior here.
+Only the existing “source unavailable” reason promises automatic retry. Do not
+create retry behavior here. A later source is a new event and fact; it cannot
+lend evidence to this event. Any later reconsideration of this whole event must
+use its original evidence and an exact owner-proved trigger.
 
 Dry-run receipts:
 
@@ -329,6 +334,12 @@ Call the one Step 3 production reader. Do not copy its prompt, parser, schema, o
 ### 7. Connect the identity system
 
 Call the one Step 4 production decision system. Do not copy its candidate search, judge rules, or decision table.
+Prove the reader and router cannot finalize identity: every new exact-name
+reuse, word-order adoption, separate creation, or same-meaning link reaches the
+one independent identity judge. Exact replay of an unchanged frozen decision
+must not create another semantic call, and company count must not change the
+path. Candidate retrieval must span the complete time-visible catalog: industry
+may be context but never a filter or a named production example.
 
 ### 8. Prove both evidence doors
 
@@ -387,7 +398,11 @@ Also prove:
 
 * different wording does not force a merge;
 * insufficient evidence does not create;
-* ambiguous candidates park;
+* ambiguous candidates stay separate, skip, or park only on an exact registered
+  trigger;
+* the same meaning remains available across industries;
+* shared industry never forces reuse;
+* production prompts and code contain no named industry-pair rule;
 * rename or continuity declarations are used only when proven;
 * every suggestion is source-bound, judged, and either planned or refused;
 * disabled decisions remain unreachable.
@@ -438,7 +453,11 @@ Prove:
 * conflicting fragments refusing combination;
 * repeated identical input;
 * input-order changes;
-* retry of the same event.
+* retry of the same event;
+* a later source producing its own fact without lending evidence to an older
+  event;
+* exact-trigger whole-event reconsideration using only the original evidence;
+* refusal of vague, age-only, and terminal retry attempts.
 
 ### Failure boundaries
 
@@ -637,10 +656,16 @@ Step 5 is complete only when:
 
 * real text and machine-tagged Fiscal events traverse the same public V2 route;
 * the real shared reader and real identity system are used;
+* every new semantic identity decision passes the one independent identity
+  judge, with no company-count branch or second normal-case judge;
+* candidate retrieval is not company- or industry-limited and industry context
+  carries no example-specific identity rule;
 * both evidence doors are proven;
 * every submitted item and fact branch is accounted for;
 * all enabled fact kinds and identity decisions are exercised;
 * all five public decisions are produced truthfully;
+* every park names an exact registered trigger, terminal results never enter a
+  retry queue, and later sources remain separate facts;
 * conversion, combination, validation, and planning occur in the approved order;
 * the staged validation-door mismatch is closed without duplicate logic;
 * quote occurrence is re-proven through its existing owner;

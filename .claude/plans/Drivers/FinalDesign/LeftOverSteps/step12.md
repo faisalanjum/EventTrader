@@ -35,6 +35,12 @@ the first-release 12B set is empty. Record that decision and proceed without
 inventing a channel merely to fill the step. Preserve the complete 12B
 procedure below for a separately authorized future release.
 
+Under the standing no-write ruling in `Steps.md`, agents may prepare, build,
+test, simulate, review, and prove every part of this step without another owner
+question. Stop before executing any live writer drain, consumer cutover,
+deployment, schedule, real graph mutation, or deletion; each uses its stated
+fresh approval gate.
+
 ## Authority
 
 Apply these owners in order:

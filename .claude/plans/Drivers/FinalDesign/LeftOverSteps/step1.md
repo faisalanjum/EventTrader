@@ -578,6 +578,17 @@ Create:
 If real data cannot fill a required group, stop. Never change the quota silently.
 
 For every event, show only catalog evidence public by that event’s date.
+Search the complete time-visible catalog; do not filter by the source company
+or industry. The source and candidate industry labels may contribute context
+to semantic retrieval, but company counts, industry counts, and mention counts
+must be absent and may not influence candidate selection or identity. No named
+industry-pair example may enter a production candidate prompt.
+
+Before freezing this packet, amend only the pinned router-card field list in
+`FableExperimentWorkOrder.md` to remove `companies_count` and record the
+2026-08-15 owner ruling. Preserve the corpus, hidden key, evidence, prompt arms,
+quotas, and pass bars. Freeze and hash the amended work order before any call;
+the work order remains the experiment owner.
 
 Build only the missing temporary retrieval, router and scorer tools. Prove:
 
@@ -585,6 +596,10 @@ Build only the missing temporary retrieval, router and scorer tools. Prove:
 * the correct target’s presence is measured separately from model judgment;
 * every served card view is saved;
 * exact-name placement cannot force a merge;
+* adding or changing descriptive population counts outside the packet cannot
+  change retrieval, routing, or scoring;
+* identical meaning remains retrievable across industries, while shared
+  industry alone never forces retrieval or reuse;
 * reordered inputs produce identical scoring;
 * planted wrong merges are caught.
 
@@ -602,8 +617,11 @@ Pass only when:
 * every planted family reported;
 * every wrong merge classified as model error or missing target display.
 
-If results show that direct attachment needs a second independent Sonnet 5
-confirmation, prepare the required owner decision. Do not implement it here.
+These are router-quality measurements, not production identity approvals. The
+router may only propose a candidate. Every new semantic identity decision must
+later pass the one independent Sonnet 5 high-effort identity judge required by
+Step 4, regardless of these results. Do not ask whether that judge is needed,
+and do not add a second identity judge based on company count or measured risk.
 
 Lane B completes only when the mini-catalog, K-stamp, EXP-4B, frozen catalog, ra_0007, K-pairs version 2, EXP-4A, K-route and EXP-3 all have signed, hash-bound results.
 

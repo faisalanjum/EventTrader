@@ -67,7 +67,7 @@ This step includes only:
 * company, industry, sector, and global catalog construction;
 * duplicate reconciliation and repair;
 * permanent type and family finalization;
-* the seed-size, eligibility, defense, gauntlet, detector, and final fitness
+* the seed-size, defense, gauntlet, detector, and final fitness
   gates assigned to this phase;
 * one frozen, fully accounted offline catalog and its proof files.
 
@@ -235,7 +235,6 @@ protocols. Before any call for one of them, create one reviewed protocol
 record for:
 
 * `S1`/`X-S1`—one seed-size test, not two tests with different names;
-* `S4`—the company-count and eligibility-floor test;
 * `X0–X9`—the defense-ladder tests;
 * `X-G`—the seed gauntlet;
 * `X-IM`—the detector and validator-mutation proof;
@@ -465,7 +464,7 @@ reproducibility claim is narrower: frozen inputs, prompts, settings, raw
 responses, deterministic transforms, and pass/fail accounting can be replayed
 exactly.
 
-## 9. Run the seed-size and eligibility gates
+## 9. Run the seed-size gate
 
 Run the single frozen `S1`/`X-S1` protocol before fixing the production
 companies-per-industry depth.
@@ -477,14 +476,14 @@ companies-per-industry depth.
 * Never choose a size after seeing which value makes later tests green.
 
 Write the separate seed-roster manifest from that result, freeze its §4 source
-snapshot, and only then build the full seed. Run the frozen `S4` protocol
-on the resulting evidence distribution before assigning eligibility standing.
+snapshot, and only then build the full seed.
 
 * Report company counts only as descriptive evidence.
 * Let the approved judge decide evidence coherence.
 * Do not turn popularity into meaning.
 * Do not build a `BROAD` label or mint standing from company count.
-* An unproved catalog card remains young, not silently established.
+* An unproved catalog card remains unapproved; company count cannot change it.
+* Do not rename or repurpose the retired `S4`/`X-S4` count gate.
 
 ## 10. Build the complete production catalog
 
@@ -534,8 +533,14 @@ At every level:
   channel;
 * every proposed merge or wording rewrite passes the same object, scope, and
   mechanism test;
-* high-impact merges receive the required independent second view and both
-  decisions must pass;
+* every proposed semantic merge receives the one independent Sonnet 5
+  high-effort identity review; the reader or proposer never approves its own
+  merge;
+* company, industry, and mention counts neither approve a merge nor add another
+  reviewer, and are absent from the semantic judge input; the industry label
+  itself may be supplied as context;
+* candidate search spans all time-visible catalog records and no named
+  industry-pair example enters production prompts or code;
 * uncertainty parks or remains separate;
 * approved synonym links remain reversible;
 * the deterministic assembler, never a model, applies the decision;
@@ -765,6 +770,10 @@ Run on the exact candidate:
 * leaf, fold, repair, final-validation, and consumer-guard tests;
 * lawful controls beside every rejection or park;
 * boundary, hostile, permutation, and reordered-input tests;
+* every proposed merge reaching the independent identity judge, with
+  exact-name and company-count controls;
+* cross-industry same-meaning and same-industry different-meaning controls,
+  kept as hidden tests rather than prompt rules;
 * interrupted-run and exact-resume tests;
 * replay determinism with frozen responses;
 * the real calibration leaf and two-industry fold;
@@ -909,11 +918,14 @@ Step 7 is complete only when:
 * every leaf, fold, repair, type, family, skip, park, refusal, and zero-yield row
   is accounted for;
 * the final catalog and every required side file are hash-bound;
-* `S1`/`X-S1`, `S4`, `X0–X9`, `X-G`, `X-IM`, and `OD-6` are green;
+* `S1`/`X-S1`, `X0–X9`, `X-G`, `X-IM`, and `OD-6` are green;
 * any legitimately triggered `S2` result is resolved and all invalidated gates
   were rerun;
 * observed wrong accepted merges are zero and measured recall loss is fully
   reported;
+* every semantic merge was independently judged and no company-count review
+  branch exists;
+* no company/industry filter or named industry-pair production rule exists;
 * all focused, regression, isolation, identity, branch, and mutation checks
   pass on the exact candidate;
 * the blank-context check passes;

@@ -5,6 +5,10 @@
 Prove that the finished V2 system can operate against the real graph, then make
 one small, separately approved Fiscal write and account for every graph change.
 
+All work through the completed shadow, isolated-database, safety, and approval
+packet gates is already authorized by the standing no-write ruling in
+`Steps.md`. Stop only before the first real graph mutation or live activation.
+
 ```text
 frozen real events
 → complete production path with writes off
@@ -123,8 +127,10 @@ It excludes:
 * TDD is required for every write-enabling behavior. Each negative test has a
   lawful control, and each high-risk guard has a mutation or deliberate-fault
   proof.
-* Neo4j writes—including isolated setup tests, live constraints, sentinels, and
-  the pilot—require explicit owner approval for the exact target and scope.
+* Disposable isolated-database writes are authorized only inside the frozen
+  tests and must prove the real graph remained unchanged. Live constraints,
+  sentinels, the pilot, and every other real graph mutation require explicit
+  owner approval for the exact target and scope.
 
 ## Existing owners to preserve
 
@@ -150,8 +156,9 @@ Before editing or running anything:
    recovery action, and test from live code.
 3. Derive the exact pilot-eligible Fiscal event population from the certified
    selector and Step 10 ledger. Do not hand-pick a successful event.
-4. Freeze the owner-proposed bounded pilot selection before seeing its write
-   result. The owner must approve the exact event count and selection rule.
+4. Freeze the mechanically derived bounded pilot selection before seeing any
+   write result. Include the exact event count and selection rule in the Gate
+   11.5 packet for owner approval immediately before writing.
 5. Record every graph label, relationship, property, constraint, index, and
    sentinel the planned write may touch.
 6. Account separately for existing Driver objects, old Guidance objects,
@@ -212,7 +219,8 @@ The isolated proof must cover:
 14. graph reads after commit matching the final in-transaction plan exactly.
 
 Use an isolated disposable database with a recorded empty or frozen starting
-state. This gate does not authorize a live graph mutation.
+state. The standing no-write ruling authorizes these disposable test mutations;
+this gate does not authorize a real graph mutation.
 
 ## Gate 11.3 — Run the full no-write shadow
 

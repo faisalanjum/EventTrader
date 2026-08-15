@@ -61,6 +61,28 @@ This standing approval does not cover partial or failed work, a changed tree
 after review, unrelated cleanup, force-push, history rewrite, activation,
 deletion, deployment, or graph mutation.
 
+## No-write completion and live-activation ruling
+
+Owner ruling, 2026-08-15: agents may complete every bounded design, code,
+model, retrieval, test, read-only graph check, disposable-database test,
+fault test, shadow run, safety proof, review, and evidence task assigned by
+Steps 0–13 without another owner question. Completed work may be committed and
+normally pushed only under the completed-step ruling above. A gate failure,
+unknown authority, unplanned scope, or unsafe result still stops the work.
+
+Fresh explicit owner approval is required immediately before either:
+
+* any mutation of the real Neo4j database, including constraints, indexes,
+  sentinels, nodes, relationships, properties, or deletions; or
+* any live deployment, schedule, writer enablement, consumer cutover, or other
+  activation that changes production behavior.
+
+Preparing and reviewing the exact activation packet does not require approval.
+Disposable isolated databases may be created, mutated, and discarded only
+inside their frozen tests, with proof that the real database was unchanged.
+The already-approved Step 6 contract switch remains a no-write code switch,
+not live system activation.
+
 ## Exact public-source retrieval ruling
 
 Owner ruling, 2026-08-14: an agent may retrieve the exact public, free filing,
@@ -150,6 +172,45 @@ the calculation, not Driver state. Existing meaning checks, evidence-coherence
 review, quarantine, and recovery safeguards remain unchanged. Step 2 must
 replace the current `BROAD` shorthand in live authority before Step 4; never
 turn it into a graph property, tag, cache, or second eligibility system.
+
+## Independent identity-check ruling
+
+Owner ruling, 2026-08-15: the reader, retrieval code, and router may propose a
+Driver or candidate only. Every new semantic identity decision—exact-name
+reuse, word-order adoption, separate creation, or a reversible same-meaning
+link—must be approved by the one independent Sonnet 5 high-effort identity
+judge from the source evidence and the candidate evidence. One bounded call may
+judge all proposals in an event; do not build one call per proposal.
+
+Code may refuse a conflict mechanically only when a frozen owner supplies the
+rule. Exact spelling, company count, industry count, mention count, or any
+other popularity measure may neither approve identity nor add another judge.
+The source and candidate industry labels may be shown as context, but retrieval
+must search the whole time-visible catalog rather than filter by company or
+industry. Production code and prompts must state only the general identity
+test—same object, same business scope, and same mechanism—and contain no named
+industry-pair example. Real examples remain lawful only as hidden tests; they
+never become rules.
+An exact replay of an already frozen, unchanged decision reuses that decision;
+it is not a new semantic decision. Suspected wrong-link recovery keeps its
+separately frozen recovery review. Steps 1 and 2 measure router quality but no
+longer decide whether the identity judge is required.
+
+## Exact-trigger waiting ruling
+
+Owner ruling, 2026-08-15: a `parked` result is retryable only when its owning
+rule exposes an exact, typed, machine-observable future trigger that can change
+the result. General “wait for more evidence,” elapsed time, a future filing
+guess, vague meaning, or a rejected identity decision is not a trigger. Only
+the existing `SOURCE_UNAVAILABLE` case has general automatic retry authority.
+
+A later source is always processed as its own event and may create its own
+DriverUpdate. It may cause an older whole event to be reconsidered only when an
+existing owner proves the exact relationship or state change. That older event
+must still use its own source evidence; it may not borrow a quote, value, unit,
+period, or meaning from the later source. A result with no exact trigger is
+terminal—skip, reject, or keep separate—and never enters a retry queue. Step 10
+must derive the one runtime trigger table mechanically from the owning rules.
 
 ## Cross-company slice comparison ruling
 

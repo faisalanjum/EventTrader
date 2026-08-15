@@ -151,6 +151,10 @@ Step 10 excludes:
   catch late and backdated arrivals without an arbitrary look-back window.
 * Whole-event retry means the complete event crosses the public path again.
   Never replay only a parked fact or surprise without its siblings.
+* A later source is always a new event and may create its own fact. It may
+  trigger reconsideration of an older whole event only through an exact
+  owner-proved relationship or state change; the older event still uses only
+  its own source evidence.
 * Never retry inside the Core transaction or hide a second attempt inside one
   run. An authorized retry is a new durable whole-event attempt after the prior
   attempt is fully accounted or reconciled.
@@ -484,13 +488,16 @@ Binding minimum:
 
 * only `SourceUnavailable` carrying `SOURCE_UNAVAILABLE` has general automatic
   retry authority under the live channel contract;
-* a channel value-absent skip reopens only for a new source, repaired corpus, or
-  certified locator upgrade;
+* a new source is processed as a new event and never reopens an old skip by
+  itself; an old source reopens only when its own corpus state changes or a
+  certified locator upgrade can re-read that same source;
 * incomplete source search remains parked until the channel's completeness
   owner reports the missing source state has changed;
 * kernel retry parks drain only on the exact arrival or state-clear trigger
   registered by the kernel;
 * kernel terminal classes remain counted and do not enter a retry queue;
+* vague meaning, rejected identity, elapsed time, or a guessed future filing is
+  terminal unless an existing owner exports a different exact trigger;
 * `xbrl_internal_conflict` reopens only when that report's parsed structured
   facts change; an amendment is a new report;
 * an execution failure, writer-busy result, unknown code, programming error,
@@ -498,6 +505,8 @@ Binding minimum:
 * unexpected errors propagate, halt the affected bounded run, and alert;
 * every retry submits the whole event, preserves the prior attempt, and is
   idempotent at Core;
+* no retry may borrow a quote, value, unit, period, or meaning from a later
+  source;
 * no free-text detail is parsed to choose a transition.
 
 Do not hand-copy the matrix into multiple modules. If an owning component does
@@ -693,7 +702,8 @@ future running entry point.
 * every channel selector, source type, source query, completeness branch, and
   source outcome;
 * every Core public decision, structural code, exception class, and run state;
-* every kernel retry, terminal park, deferred, and recovery trigger;
+* every kernel retryable park, terminal outcome, deferred pair, and recovery
+  trigger;
 * every lifecycle transition and crash boundary;
 * every cursor partition and source-order key;
 * every model role, prompt owner, budget, and network call, plus the required
@@ -912,7 +922,8 @@ Derive exact tests from Gate 10.0. At minimum prove:
 * missing or malformed source time;
 * duplicate source discovery by two invocations;
 * complete-corpus skip and incomplete-corpus park;
-* each of the three lawful skip-reopening triggers and a near-miss;
+* every owner-registered skip-reopening trigger and a near-miss;
+* a later source processed separately from an older event;
 * historical cutoff immediately before, at, and after source public time;
 * live/backfill overlap;
 * both PER-21 routes and refusal of a third-route substitute.
@@ -922,6 +933,8 @@ Derive exact tests from Gate 10.0. At minimum prove:
 * `SOURCE_UNAVAILABLE` retries the whole event;
 * every kernel retry park drains only on its exact trigger;
 * every terminal class remains terminal;
+* vague and age-only waits never enter a retry queue;
+* a triggered older whole event uses only its original source evidence;
 * an unknown code or exception stops;
 * writer busy and execution failure do not retry blindly;
 * a `prepared` audit stops for reconciliation;
@@ -1112,6 +1125,7 @@ Step 10 is complete only when:
 * every raw item and public outcome reconciles to the exact Core audit;
 * only authorized reasons retry or reopen, every retry is whole-event and
   bounded, and no retry can lose or duplicate work;
+* later sources remain separate events and no old event borrows their evidence;
 * frozen fact and identity replays preserve zero observed wrong accepts and the
   earlier measured recall exactly;
 * every failure is durable, visible, attributable, and recoverable;

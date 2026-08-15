@@ -10,8 +10,8 @@ Step 2 answers:
    gate?
 2. Which experiment results are trustworthy?
 3. Did any result expose an unclear or incorrect rule?
-4. Does attaching to an existing business cause require a second independent
-   Sonnet 5 check?
+4. Which router display passed while the independent identity judge remained
+   mandatory for every new semantic identity decision?
 5. Did the text-versus-machine-tag comparison require any existing rule adjustment?
 6. Which already-approved day-one features must be built now, and which remain off?
 7. May Steps 3 and 4 begin, or must a failed area stop?
@@ -326,24 +326,27 @@ Rules:
 Do not optimize model cost in Steps 2–13. Step 14 remains dormant unless a
 future owner ruling permits a different model after Step 13 closes.
 
-### H. Decide the router question
+### H. Freeze the router boundary
 
-EXP-3 determines whether attaching to an existing cause needs an immediate
-second independent Sonnet 5 confirmation.
+EXP-3 measures whether the router displays and proposes the correct candidates.
+It never authorizes attachment. Record its recall, wrong proposals, and blocked
+classes, but apply the owner-frozen boundary regardless of the score:
 
-Prepare one owner decision:
+* the reader and router are proposers only;
+* every new exact-name reuse, word-order adoption, separate creation, and
+  same-meaning link passes the one qualified Sonnet 5 high-effort identity
+  judge before it becomes final;
+* deterministic code may refuse an owner-defined structural conflict, but it
+  may not approve semantic identity;
+* company, industry, and mention counts neither change this requirement nor
+  add a second identity judge;
+* candidate retrieval searches the complete time-visible catalog; industry is
+  context only and never a company/industry filter;
+* production prompts and code use only the general same-object, same-scope,
+  same-mechanism test and contain no named industry-pair example;
+* an exact replay of an unchanged frozen decision does not call the judge again.
 
-* Not triggered: measured routing had zero dangerous attachments under the frozen requirements; preserve the already-approved design.
-
-* Triggered: a dangerous attachment occurred while the correct target was
-  visible; require the existing Sonnet 5 high-effort identity judge before an
-  attachment becomes permanent.
-
-* Blocked: evidence or scoring is inconclusive; do not build the affected attachment path.
-
-Do not add a new judge. Reuse the one qualified identity judge.
-
-Record the decision even when no change is required.
+Do not prepare another owner decision on this boundary.
 
 ### I. Settle the text-versus-machine-tag findings
 
@@ -385,7 +388,7 @@ The already-approved day-one core remains:
 * born-complete creation;
 * one delayed same-meaning link mechanism;
 * frozen birth evidence;
-* establishment and broadness controls;
+* evidence-coherence safeguards;
 * existing validators;
 * model-free warning signals;
 * attachment audit;
@@ -399,7 +402,6 @@ Choose only:
 * exact model membership by role;
 * router display size proven by EXP-3;
 * full-evidence versus frozen-anchor judge input proven by EXP-4A;
-* whether direct attachment needs immediate independent Sonnet 5 confirmation;
 * reader model, chunk and run count;
 * fact-producer model and run count;
 * whether the simple seed checks are sufficient or the full planted set is required;
@@ -478,12 +480,54 @@ threshold exists. Record and propagate the smallest amendment before Step 4:
   naturally returns no comparison when fewer than two exist;
 * no `BROAD` property, tag, cache, configuration, or replacement state is
   built;
+* the old `S4`/`X-S4` company-count eligibility gate is retired rather than
+  renamed or repurposed; its prior artifacts remain historical evidence only;
 * the existing meaning, evidence-coherence, quarantine, recovery, and native
   fact safeguards remain intact.
 
 Replace the `BROAD` shorthand in the live owner documents through the normal
 authority-amendment procedure. Do not add production code in this step and do
 not ask the owner to decide this again.
+
+### J4. Apply the owner-frozen exact-trigger waiting ruling
+
+The owner ruled on 2026-08-15 that a parked item is retryable only when its
+owning rule exports an exact, typed, machine-observable trigger that can change
+the result. Record and propagate the smallest amendment before Steps 4 and 10:
+
+* only `SOURCE_UNAVAILABLE` has general automatic retry authority;
+* vague meaning, a rejected identity decision, elapsed time, and a guessed
+  future filing are terminal, not retry triggers;
+* a later source is processed as its own event and fact;
+* an older whole event may be reconsidered only after an owner-proved state or
+  source-relationship trigger, using its own evidence and never borrowing from
+  the later source;
+* a reason with no exact trigger skips, rejects, or remains separate and never
+  enters a retry queue;
+* Step 10 derives one runtime trigger table from the existing owners rather
+  than copying a second reason list.
+
+Replace conflicting waiting and company-count review wording in the live owner
+documents through the normal authority-amendment procedure. Do not add
+production code in this step and do not ask the owner to decide this again.
+
+At minimum reconcile:
+
+* `FINAL_DESIGN.md`—identity meaning, retryable-versus-terminal meaning, and
+  every count-triggered identity review; remove named industry-pair examples
+  from production instructions while preserving their general identity rule;
+* `BUILD_AND_OPERATIONS.md`—router/judge duties, `BROAD`/establishment count
+  rules, high-blast review, deferred-pair aging, retry/terminal classes, and
+  named industry-pair production examples;
+* `ChannelContractV2.md`—public outcome mappings so `parked` names only an
+  exact-trigger retryable result.
+
+Do not change the active V1 `15_CandidateFactPacket.md` in Step 2. Step 6
+replaces it atomically with the promoted V2 packet and proves no retired
+count-based or indefinite-wait behavior survives.
+
+Keep realistic industry pairs only in hidden tests and historical evidence.
+Never copy them into the production prompt, code, or public contract.
 
 ### K. Produce the one signed result memo
 
@@ -500,7 +544,7 @@ The memo must contain:
 9. every unclear rule;
 10. every failure or inconclusive result;
 11. model-role table;
-12. router decision;
+12. router results and the frozen independent identity-check boundary;
 13. machine-tag decision;
 14. day-one identity settings;
 15. features kept off;
@@ -509,7 +553,8 @@ The memo must contain:
 18. proof of zero Neo4j writes;
 19. the owner-frozen temporary rename-suggestion handoff;
 20. the owner-frozen no-`BROAD`, natural cross-company reuse ruling;
-21. explicit statement that no production code or activation occurred.
+21. the owner-frozen exact-trigger waiting ruling;
+22. explicit statement that no production code or activation occurred.
 
 Fable signs the evidence interpretation. Codex independently verifies the exact document and referenced identities.
 
@@ -523,7 +568,6 @@ from prose or a human-readable table; Core alone decides identity; and
 machine-tagged XBRL alone cannot create a Driver.
 
 * any unclear rule amendment;
-* router second-confirmation decision if triggered;
 * machine-tag pin adjustments;
 * day-one optional settings that evidence actually triggered;
 * any residual measured recall loss after simple general recovery options are exhausted;
@@ -641,9 +685,10 @@ Step 2 is complete only when:
 * exact model roles and effort settings are pinned;
 * every semantic role is pinned to Sonnet 5 at high effort and records no
   automatic fallback;
-* the router decision is recorded;
+* the router results and independent identity-check boundary are recorded;
 * the machine-tag adjustment decision is recorded;
 * the temporary rename-suggestion handoff is owner-frozen;
+* the exact-trigger waiting ruling is published in its live owners;
 * the smallest day-one identity settings are owner-approved;
 * all untriggered features remain off;
 * the result memo is signed and independently verified;

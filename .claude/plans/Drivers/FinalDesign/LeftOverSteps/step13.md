@@ -159,9 +159,17 @@ For every enabled behavior row:
    vocabulary, validator, writer, read rule, or source matcher is reachable;
 5. prove every behavior-changing constant or pattern is authorized or
    mechanically derived;
-6. prove uncertainty fails closed without deleting lawful cases;
-7. delete dead duplicate code only through its owning earlier step if closure
+6. prove every new semantic identity decision reached the one independent
+   identity judge and no company-count branch or second normal-case judge is
+   reachable;
+7. prove every retryable park has one exact owner-registered trigger and every
+   terminal outcome is absent from the retry queue.
+8. prove uncertainty fails closed without deleting lawful cases;
+9. delete dead duplicate code only through its owning earlier step if closure
    discovers it.
+10. prove candidate retrieval spans the complete time-visible catalog, industry
+    is context only, and production prompts/code contain no named industry-pair
+    identity example.
 
 Specifically require:
 
@@ -249,6 +257,9 @@ Using the live-approved scope and safe fault controls, demonstrate:
 * whole-event retry only for authorized reasons;
 * skip reopening only on its contract-owned triggers;
 * park draining through the full owning path;
+* a later source remaining a separate event and fact;
+* an older triggered event using only its own evidence;
+* refusal of vague, age-only, and terminal retry attempts;
 * process crash at each durability boundary;
 * stale `prepared` audit reconciliation;
 * catalog-refresh failure retaining the last valid catalog;
@@ -375,6 +386,9 @@ The Driver program is complete only when:
   unreachable and separately identified;
 * zero observed confirmed-wrong accepted fact or identity remains, with recall
   and uncertainty reported honestly;
+* every new semantic identity was independently judged, company count changed
+  no identity path, every park had an exact trigger, and no later source lent
+  evidence to an older event;
 * focused, full, isolated, branch, mutation, real-data, graph-integrity,
   operations, recovery, and staged-tree gates all pass on one exact candidate;
 * local, remote, deployed, configuration, contract, artifact, and graph
