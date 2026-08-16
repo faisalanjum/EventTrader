@@ -130,6 +130,21 @@ future-release procedure; none of its requirements or safety gates is deleted
 or weakened. A later channel may enter only through a new explicit owner
 ruling and that preserved per-channel procedure.
 
+## Channel-owned price-attribution boundary
+
+Owner ruling, 2026-08-16: the Driver program does not make price-attribution
+judgments and must contain no price-attribution prompt, model, heuristic, or
+semantic rule. A separately admitted future channel alone makes that judgment
+and may submit the live packet's optional verdict block through the common
+channel contract.
+
+Core owns the one generic doorway only: it checks, records, plans, stores, and
+audits the channel's attribution. The channel must reuse the same common
+contract and Core code used by Fiscal; it may not copy a validator, planner,
+writer, or audit path. The existing ban on exposing realized returns to a fact
+or verdict producer remains unchanged. No attribution channel is enabled in
+the Fiscal-only first release.
+
 ## Catalog population ruling
 
 Owner ruling, 2026-08-14: do not hardcode either the historical 786 or 796

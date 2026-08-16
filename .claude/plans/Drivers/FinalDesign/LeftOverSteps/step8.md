@@ -153,7 +153,7 @@ must be recorded; a second owner is forbidden.
 | Source has one usable machine-tagged representation | the source selector using the graph adapter's read | an incomplete or racing filing being offered as structured evidence |
 | Slice classification, menu, exact member fold, member verification | `slice_axis_frozen.py`, `slice_menu.py`, and the adapter's raw reads | guessed slice kind, future-data leak, or false member link |
 | Event fusion, collision, and fact write plan | existing fusion, identity, and writer planners | cross-event fusion or order-dependent identity |
-| Verdict and DailyCompanyMoveEvent plan | one new verdict owner | duplicate or contradictory attribution edges |
+| Generic verdict and DailyCompanyMoveEvent doorway | one new verdict owner | duplicate or contradictory attribution edges without moving channel-owned judgment into Core |
 | Trading date | the existing returns/trading-day layer | a second market calendar assigning the wrong day |
 | Text-fact accounting-concept resolution | one new concept-link owner using one menu-query owner | a silent link to a related but different accounting line |
 | Source rank and read collapse | one read owner; extract the existing narrow ranking rule if needed | different read paths selecting different current facts |
@@ -421,10 +421,15 @@ Do not create another table, list, normalizer, menu, or member matcher.
 
 ## 5. Build the `EXPLAINED_BY` verdict and DailyCompanyMoveEvent planner
 
+The attribution judgment is channel-owned input, not Core behavior. A
+separately admitted future channel produces the optional verdict block through
+the common contract. Core must contain no price-attribution prompt, model,
+heuristic, or semantic rule and must not alter the channel's judgment.
+
 Build one production owner that consumes only the live packet's optional
-verdict block and returns a deterministic write plan. It must share the existing
-audit, outcome, and transaction-plan conventions. It must not execute a plan in
-this step.
+verdict block; checks and records it; returns a deterministic write plan; and
+owns its later storage and audit through the existing shared paths. Every
+channel reuses this doorway. It must not execute a plan in this step.
 
 Validate before planning:
 

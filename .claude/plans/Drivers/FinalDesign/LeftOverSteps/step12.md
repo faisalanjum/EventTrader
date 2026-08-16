@@ -141,6 +141,9 @@ Nothing may be classified by filename alone. Each row must be old-only,
 shared-and-retained, consumer-to-move, graph target, evidence-only, or outside
 scope.
 
+Classify every old prompt by its real caller and function. Its bytes are
+archive evidence, never current authority or an automatic reuse target.
+
 ## Gate 12A.1 — Freeze the cutover and history-gap decision
 
 For every consumer, record:
@@ -209,6 +212,13 @@ For each consumer:
 
 Do not add a compatibility layer. If a consumer needs a genuinely missing read
 behavior, return it to the one Step 8 read owner.
+
+Each moved function must use its one current live prompt or code owner. Never
+reuse an old prompt merely because it once served a similar function, and never
+make old-output parity a release rule. If an old prompt reveals required live
+behavior missing from the current owner, return only that behavior to its
+owning earlier step and test it there; ask the owner only if live authority
+cannot settle it.
 
 ## Gate 12A.5 — Prove zero old reachability
 
@@ -297,9 +307,10 @@ separately. Never sweep unrelated deletions into these commits.
 
 ## Purpose
 
-Add later sources without giving any channel its own meaning, identity,
-validation, or write logic. This is a repeatable gate over a finite owner-chosen
-release set, not an open-ended promise to build every possible channel.
+Add later sources without giving any channel its own Driver or fact meaning,
+identity, validation, or write logic. This is a repeatable gate over a finite
+owner-chosen release set, not an open-ended promise to build every possible
+channel.
 
 ## First-release disposition
 
@@ -358,6 +369,12 @@ copy:
 * a direct call to either internal trust door;
 * a graph write or an outcome translation.
 
+A separately admitted future attribution channel may additionally produce the
+live optional verdict block. That channel alone owns the attribution judgment;
+Core's one Step 8 doorway checks, records, plans, stores, and audits it. This
+adds no attribution judgment logic or AI to Core and gives the channel no
+authority over Driver or fact meaning.
+
 ## Per-channel gate
 
 For each admitted channel, in serial order:
@@ -397,7 +414,8 @@ For the first release, 12B is complete when the empty release-set record is
 hash-bound and every later channel remains disabled. For any future non-empty
 release, 12B is complete when every channel in its frozen release set:
 
-* implements only SELECT, FETCH, SUBMIT, and receipt consumption;
+* implements only SELECT, FETCH, SUBMIT, receipt consumption, and—only when its
+  frozen charter permits it—the channel-owned optional attribution proposal;
 * has a complete unseen source/evidence proof with zero observed wrong accepts;
 * uses the shared V2 reader, admission system, validator, writer, reads,
   operations, and recovery with no copied rule;

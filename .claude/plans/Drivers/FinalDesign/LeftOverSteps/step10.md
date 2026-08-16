@@ -312,7 +312,8 @@ owners:
 * its deferred-pair and retry-park drains;
 * its falsifier, exact-attach audit, calibration, recovery, and fresh-key
   checks;
-* Step 8 verdict production and read maintenance, if that step enabled them;
+* Step 8 generic verdict-doorway and read maintenance, if an admitted channel
+  uses them;
 * incremental catalog refresh;
 * lifecycle reconciliation and health reporting.
 
