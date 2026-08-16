@@ -11,7 +11,204 @@
 > live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
 > current sha `aa7239ed…`).
 
-## 1. One-page dashboard (2026-07-22)
+## 1. Current execution checkpoint (2026-08-13; identity re-measured 2026-08-16)
+
+**Plain truth:** the rule design is mostly settled and the deterministic Core
+foundation is strong, but the new Driver system is not live. V1 is still the
+active contract. The real shared meaning reader, the admission/reuse kernel,
+production Driver writes, the complete point-in-time read layer and the running
+system do not yet exist. Old Guidance was intact at the 2026-07-03 re-census
+recorded in `BUILD_AND_OPERATIONS.md` §6; its state since then has not been
+rechecked.
+
+### 1.1 Exact current identity and evidence
+
+- Published head, measured 2026-08-16: `main == origin/main ==
+  356146dd5275d9fee65c1d58c95c37a7db4d9a63`; tree
+  `bd1248968e5ded892bbe1c87122d6e6ff869bc03`. `origin/main` is this clone's
+  remote-tracking record at its last sync; the remote itself was not queried for
+  this status update. Every path published since the EXP-5 freeze is
+  documentation under `FinalDesign/LeftOverSteps/`, so no code, contract or test
+  identity moved with it.
+- Last code identity: `0dd71956e942c889c70fede4e547f4737a39cff0`; tree
+  `9f80af23f037f68d0a4233b1d752421963549011`. This is the EXP-5 exam-kit freeze
+  commit (below).
+- The Core V2 dry-run bridge is NO LONGER an uncommitted candidate. It is
+  published at `0edb1be860524556134ecdedab248279590b23b9`; tree
+  `d806365c41def2108f04cfa7ec6cef8559415638`. It is built and tested, and it is
+  **dormant — dry-run only**: it is not the live contract, it performs no graph
+  write, and committing it activated nothing.
+- Fiscal V2 staging is published at `971ba079`; the Fiscal channel relocation at
+  `da9afa06`; the four withdrawn Route-A certification artifacts at
+  `54844a9f`; and the exact instant-period correction at `e6c9a956`.
+- **EXP-5 exam-kit freeze — `0dd71956…`.** One bounded commit carrying exactly
+  51 paths (28 modified, 20 added, 3 deleted), whose tree equals the
+  independently reviewed `9f80af23…`. The final reader-plan manifest is
+  `bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070`. Proof over
+  that exact tree, reconstructed in isolation and measured 2026-08-13: the
+  isolated tree's own write-tree equalled the commit; the clean lane ran with NO
+  credentials of any kind and returned **3,682 passed / 0 failed / 0 skipped**,
+  with all **3,741** pinned identities accounted for in a lane; **58**
+  read-only live nodes plus
+  **1** owner-gated write probe were pinned and the write probe was NOT run.
+  Zero AI calls, zero filing fetches, zero Neo4j writes, no activation and no
+  V1->V2 switch. This freezes the exam kit; it does not run the exam.
+- Graph: this update performed NO database read, so no current count is claimed.
+  An earlier draft of this section attributed one combined census to
+  2026-08-12; that date has no surviving receipt and is WITHDRAWN. Each figure
+  below now carries only the evidence that actually supports it:
+  - old Guidance, at the **2026-07-03** re-census in `BUILD_AND_OPERATIONS.md`
+    §6: `Guidance=548` anchors, `GuidanceUpdate=8,432`, `GuidancePeriod=237`,
+    and **894** sources (532 Reports + 362 Transcripts);
+  - `Driver=0` and `DriverUpdate=0`, at the **2026-07-24** read-only check
+    recorded in `WIP/Fiscal_Core_Review_Guardrails_2026-07-24.md`;
+  - the DriverPeriod count, the Driver uniqueness constraints and the four
+    required DriverPeriod sentinels are **unknown**: no receipt for them was
+    found, and none may be inferred from this document;
+  - writes being refused is not a census claim at all — it is live code: the
+    Neo4j adapter's `transaction()` raises rather than opening one.
+
+  The bridge and exam-kit work itself made **zero Neo4j writes**. Every figure
+  above is dated historical evidence and cannot exclude unrelated external
+  changes since its own measurement date.
+
+| Area | Current truth |
+|---|---|
+| Rule design | Mostly final; the running layer is still design-incomplete |
+| Catalog builder | Partial; no production catalog or OD-6 fitness pass |
+| Fiscal tagged-filing path | Strong offline/staged V2 path; live command still emits V1 |
+| Core IDs, periods, units, validation, fusion, planning | Built and tested; dry-run only |
+| V2 event bridge | Published at `0edb1be8`; dormant, dry-run only, not active |
+| EXP-5 exam kit | Frozen and published at `0dd71956`; NOT run — no model quality is claimed |
+| Shared meaning reader | Not built; tests inject recorded answers |
+| Driver reuse/create decision system | Approved design and rehearsal seams only; production kernel not built |
+| Graph writes | Disabled (current, from live code: the adapter's `transaction()` raises); the 2026-07-24 read-only check found `Driver=0` and `DriverUpdate=0` |
+| Point-in-time read layer | Build-pending; the adapter's narrow reads are not the finished layer |
+| Schedules, retries, monitoring and backfills | Not built; design is incomplete |
+| Old Guidance retirement | Not started by this work; the 2026-07-03 re-census (BUILD §6) found the old graph intact (state since then not rechecked) |
+
+Corrections to the 2026-08-12 outside status review:
+
+1. The Fiscal instant-period defect is no longer open; it is published at
+   `e6c9a956`. The Core bridge is no longer uncommitted either — it is published
+   at `0edb1be8`.
+2. **THIS ENTRY WAS WRONG AND IS WITHDRAWN 2026-08-13.** It previously read that
+   the new Core tests "do not open Neo4j while pytest is collecting them" and
+   that "the reported collection-time side effect was not reproduced". The
+   effect is REAL and was reproduced during Step 4:
+   `driver/core/test_v2_event_route.py` built its fixtures at module import via
+   `_v2_events()`, which called `route_a_source.build_source()` ->
+   `dotenv_values('.env')` -> `GraphDatabase.driver(...)` and then ran two Cypher
+   reads. In the working tree collection therefore SUCCEEDED by querying the
+   live database, so every green reading of that suite had been taken with the
+   graph reachable; in the committed tree, which has no `.env`, collection
+   failed with `KeyError: 'NEO4J_URI'` and all 187 tests became "0 collected, 1
+   error". The outside reviewer's original report was correct and this file's
+   rebuttal was not. Fixed in the test fixture only — the source entry is now
+   built from the tracked packet's own `source_id` and prepared text, output
+   byte-identical to the graph-built baseline, with a mutation-proven guard that
+   fails if the call returns. Production `route_a_source.py` was not changed.
+
+### 1.2 Immediate bounded unit
+
+The staged V2 dry-run bridge foundation and the EXP-5 kit freeze are both DONE
+and published. The live ordered sequence is now `LeftOverSteps/Steps.md`; the
+reader work below is its Step 1 and begins only after Step 0 publishes the
+roadmap and this document, and after Codex authorizes that step.
+
+1. **The K-fields launch is NOT ready and is NOT lawfully frozen for a run.**
+   **CORRECTED 2026-08-16** — an earlier draft of this entry called the
+   preparation READY and made the next unit a model run. What is true: the
+   frozen inputs and the 36-event schedule exist, and `made_calls` is 0 in
+   `experiments/harness/launch_kfields_drafts.manifest.json`. What is also
+   true, and blocks a run: that same manifest still schedules two lanes per
+   event, `model: sonnet` and `model: opus`, and
+   `launch_kfields_drafts.workflow.template.js` calls those aliases directly.
+   An Opus lane may not run under the `Steps.md` first-release model ruling.
+2. The immediate bounded work after Step 0 is therefore preparation, not calls.
+   `step1.md` A1-A2 require replacing the Opus lane with a second independent
+   blind Sonnet 5 high-effort call, resolving the exact runtime identity and
+   transport, regenerating the manifest and launcher twice to identical bytes,
+   freezing the exact launch packet, and passing its deterministic preflight.
+   Only after that may the 72 calls run — 36 events read twice, one lane each.
+   Those calls need no separate owner or spending approval: the owner ruling in
+   `Steps.md` pre-authorizes every model call already bounded by a reviewed
+   step. Neo4j writes and live activation keep their own separate
+   fresh-approval requirement.
+3. **CORRECTED 2026-08-16** — an earlier draft of this entry stated that the
+   K-fields lock hash is unset and that a runner refuses to start without it.
+   Those belong to the EXP-5 launcher (`launch_exp5_readers.manifest.json`
+   carries `kfields_lock.sha256 = null` and its runner-refusal rule), not to
+   the K-fields door, which has no lock field at all.
+4. After the drafts exist, Fable settles every K-fields record and disputed
+   result against the event text alone, then signs and hash-locks the key
+   (`step1.md` Roles and A4). Fable is a live independent review role, not a
+   superseded model tier: the `Steps.md` model ruling replaces the old tier
+   choices, not Fable. Any model-assisted part of that review is a separate
+   blind Sonnet 5 high-effort call, and no call may grade its own answer. Only
+   then may EXP-5 run, and EXP-6 only if EXP-5 passes.
+
+**EXP-5 HAS NOT RUN.** The exam kit is frozen and proved self-sufficient; no
+model has sat the exam, so no reader accuracy, recall or model-quality claim
+exists or may be inferred from this checkpoint.
+
+This checkpoint does **not** build the real reader or kernel, run EXP-5, switch
+contracts, enable writes, build the read/running layers, or activate native XBRL.
+
+One named pre-switch issue remains. The candidate deliberately splits
+`validate_via_production` into its existing conversion owner before fusion and
+its one underlying `validate_fact` rule engine after fusion. That is not a
+second validator, but the staged public V2 contract §6 literally requires the switched
+pipeline to pass every prepared fact through the named
+`validate_via_production` doorway. Before the atomic switch, either that named
+owner must support the fused production value without duplicate conversion, or
+the owner must explicitly amend the contract. The current dry-run checkpoint
+must not be described as completing that switch-time requirement.
+
+### 1.3 Ordered roadmap after the Core checkpoint
+
+**OWNER-RULED 2026-08-12: EXP-5 is a pre-switch proof.** The Core bridge is now
+committed (`0edb1be8`) and the EXP-5 bundle is frozen (`0dd71956`), both while
+V1 remains the live production contract and all writes remain off. Only then may
+K-fields and EXP-5 run. This supersedes the 2026-08-11 “switch-gated bundle”
+timing, which became circular once the switch itself required the still-unbuilt
+reader/kernel that EXP-5 must first prove.
+
+The dependency order is:
+
+1. ~~Regenerate and freeze the EXP-5 contract, prompts, checks and manifests
+   against staged V2, using only the committed dry-run bridge; V1 stays live.~~
+   **COMPLETED 2026-08-13** at `0dd71956` (tree `9f80af23`). V1 stayed live
+   throughout and no write was enabled.
+2. **← NEXT.** Run the remaining evidence program: reader lane = K-fields ->
+   EXP-5 -> EXP-6. It starts with preparation, not calls: `step1.md` A1-A2
+   first replace the Opus lane with a second blind Sonnet 5 high-effort lane,
+   re-freeze the launch packet and pass preflight. The 72 calls follow that and
+   need no separate owner approval; GO #1 is still UNFIRED;
+   identity/catalog lane = WP-FC-RUN, K-stamp/EXP-4B, F-C, K-route/EXP-3 and
+   K-pairs.v2/EXP-4A. `LeftOverSteps/step1.md` now owns that lane's exact plan:
+   the WorkOrder supplies its dependencies, but its still-unrun model,
+   escalation and fallback choices are superseded by `Steps.md`, and no lane may
+   launch before Step 0 closes.
+3. Record the result memo; no failed or uncertain experiment becomes code.
+4. Build one shared reader/decomposer and one admission/reuse kernel. Reuse the
+   existing validation, fusion, planning and audit owners.
+5. Prove a complete no-write V2 run over real text and XBRL-backed events,
+   including all five outcomes and reuse/create/refuse/park behavior.
+6. Resolve the named validation-door issue, then perform one atomic V1->V2
+   switch: promote V2, freeze the V2 internal packet, move every caller and pin,
+   delete V1 and the temporary V2 contract, and prove zero V1 reachability.
+   Graph writes remain off.
+7. Finish the full catalog/OD-6 gate, independent Fiscal prose certification,
+   point-in-time read layer, operating layer, shadow burn-in and recovery.
+   Native-XBRL materialization, other channels, verdict/DCM work, old Guidance
+   retirement and broader rollout remain separately gated.
+8. Model calls bounded by a reviewed step are pre-authorized under `Steps.md`
+   and need no separate owner or spending approval; freeze each one's exact plan
+   and Sonnet 5 high-effort identity first. Obtain fresh owner approval
+   immediately before any Neo4j write and before any live activation.
+
+### 1.4 Earlier one-page dashboard (2026-07-22 baseline)
 
 | Layer | Design | Code | Tests | Production run |
 |---|---|---|---|---|
@@ -105,7 +302,11 @@ OD-19 (§5.4) · OD-20 (§5.4) · OD-21 (§5.1/§6.2/§7) · K2 = fold repair st
 deferred (BUILD §4) · frozen packet v1.0 + Channel Contract v1.0 (boundary files) · Track C full no-replay
 reversal (BUILD §6).
 
-## 4. Owner rulings record (through 2026-08-11)
+## 4. Owner rulings record (through 2026-08-12)
+
+> Owner rulings made after that date are recorded in
+> `LeftOverSteps/Steps.md`, not here; this section is not a complete record of
+> them.
 
 Q1 `company_confirmed`: CORE derives from who-said-it evidence; unclear = SKIP (ruling's own content); `false`
 stays reserved for explicitly-ALLOWED future third-party classes (enabling any class = part-2/news-channel
@@ -214,10 +415,17 @@ acronym probe (zero acronyms kept as names, unverifiable acronym skipped, ARPA-a
 Guard: `workflows/tests/test_perx_naming_residue.py`. STILL OPEN and deliberately NOT in this batch:
 the EXP-5 item-contract regeneration (`exp5_item_contract.md:127` still serves the old sentence) and
 the launch-manifest re-pin. CORRECTED 2026-08-11 (reviewer SEQ 957/959): these do NOT belong to the
-Core contract-freeze step. The WHOLE EXP-5 bundle — contract, both manifests, launcher template and
-assembled launcher, `kf_lint.py`, `protocol.md` — is SWITCH-GATED, because its checker and
-instructions are still V1 and a V2 launcher with V1 consumers is invalid. G12 stays `gated-switch`.
-K-fields GO#1 stays disabled/unfired until the atomic switch lands.
+Core contract-freeze step. The 2026-08-11 conclusion that the whole bundle was
+switch-gated is **SUPERSEDED by the 2026-08-12 owner ruling below**. K-fields
+GO#1 was gated on the complete bundle being regenerated, hash-frozen and proved
+against the committed staged-V2 dry-run bridge. **That condition was satisfied
+on 2026-08-13 (`0dd71956`), and GO#1 is still UNFIRED.** The bundle was the
+TECHNICAL PREREQUISITE, not the authorization: satisfying it did not by itself
+start any call. **SUPERSEDED 2026-08-14** — this entry ended by keeping GO#1
+owner-gated pending fresh approval at the moment of the run. The `Steps.md`
+owner ruling pre-authorizes every model call already bounded by a reviewed step,
+so GO#1 now waits on Step 1 freezing its exact bounded plan and pinning Sonnet 5
+at high effort, not on a further owner approval.
 
 **2026-08-11 — STAGED CORE V2 PUBLIC CHANNEL CONTRACT FROZEN (not live).**
 `FinalDesign/ChannelContractV2.md` sha256 `d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b`.
@@ -234,17 +442,26 @@ boundary tests. The exact first-consumer raw profile is PUBLISHED as the
 `staged_raw_channel` object inside the single CONTRACT-SURFACES block (event, text-part,
 item, xbrl, nested `ix`, dimension and retired-field spellings, plus the unchanged
 source_type vocabulary), and the never-send / source-completeness duties are retained. It is STAGED, not live: `ChannelContract.md` (v1.0) remains the live public
-authority and `15_CandidateFactPacket.md` remains the live INTERNAL packet law — both
-byte-identical, as are all their pins and the whole switch-gated EXP-5 bundle.
+authority and `15_CandidateFactPacket.md` remains the live INTERNAL packet law.
 The freeze is ENFORCEABLE, not prose: `driver/core/test_v2_attacks.py` compares every CURRENT
 CODE-OWNED surface to its existing code owner AND proves this sha256 equals the
 document's real bytes, so a silent edit to either side fails.
 PROMOTION RULE — at the atomic V1->V2 switch, in ONE batch: this document is PROMOTED to
 `ChannelContract.md`; `15_CandidateFactPacket.md` is SEPARATELY re-frozen to its own V2
-packet law (a distinct internal contract, never a copy of this public one); every `aa7239ed`
-pin is re-pinned; the EXP-5 bundle regenerates off live law; G12 moves gated-switch -> code;
-the NAME-13 residue guard's held assertion flips to zero; and `ChannelContractV2.md` IS
-DELETED. Nothing was activated, written, fetched or run by this freeze.
+packet law (a distinct internal contract, never a copy of this public one); every live caller
+and `aa7239ed` pin is moved; the already-frozen V2 EXP-5 bundle is verified rather than
+regenerated; and `ChannelContractV2.md` IS DELETED. Nothing was activated, written, fetched
+or run by this freeze.
+
+**2026-08-12 — EXP-5 TIMING: PRE-SWITCH PROOF (owner-ratified).** The
+2026-08-11 switch-gated timing above is superseded. Exact order: commit and
+freeze the staged-V2 dry-run bridge -> regenerate and freeze the complete EXP-5
+bundle against that staged contract while V1 remains live -> lock K-fields and
+run EXP-5, then EXP-6 -> build the real shared reader/decomposer and
+admission/reuse kernel from the signed evidence -> prove the complete V2
+no-write route -> perform the atomic V1->V2 switch. This is a timing ruling only:
+it activates no V2 caller, authorizes no paid model call, changes no fact rule
+or test bar, and permits no Neo4j write. A failure stops before activation.
 
 ## 5. Signed experiment decisions + remaining gates (authority = signed decision.json artifacts)
 
