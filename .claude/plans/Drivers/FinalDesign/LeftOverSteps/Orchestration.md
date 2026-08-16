@@ -31,12 +31,54 @@ SEQ: <this sender's next integer>
 IN_REPLY_TO: <the other sender's exact SEQ>
 FROM: Core | Codex
 TO: Codex | Core
+SESSION: <this sender's own runtime session id>
 ACTION: <action>
 TYPE: <short purpose>
 ```
 
 The two senders have separate counters. `IN_REPLY_TO`, not matching counter
 values, joins the conversation.
+
+## Session binding
+
+`FROM` names a role; `SESSION` names the exact process behind it. Without it a
+replaced session is invisible to the other side.
+
+Each side reads only its own nonempty runtime id:
+
+* Core uses `CLAUDE_CODE_SESSION_ID`. It must equal line 1 of
+  `G3_CONTINUOUS_RUN`. `CODEX_COMPANION_SESSION_ID` is Core's id despite its
+  name and must never be used as Codex's id.
+* Codex uses `CODEX_THREAD_ID`.
+
+Neither side reads, copies, or invents the other's id.
+
+Before a new session sends, it derives its next `SEQ` as one greater than the
+highest `SEQ` header in its current outbound mailbox and all archives for its
+role under `.core827-orchestrator`, `.core827_backups`, and
+`.core827_backups/sendgate`. It never resets or reuses a number. Its
+`IN_REPLY_TO` is the exact current peer `SEQ` it read.
+
+The current sessionless mailbox messages may be used once as the legacy record
+from which the first bound messages continue. After that migration, a missing
+`SESSION` is invalid.
+
+A new session's first outbound message is `TYPE: SESSION_HANDOVER`; when its
+first outbound is answering the peer's handover, it uses
+`TYPE: SESSION_HANDOVER_ACK`, which also serves as its own handover. Both use
+`ACTION: WAIT` and carry the sender's `SESSION`, derived `SEQ`, exact
+`IN_REPLY_TO`, current repo HEAD, and hash of the incoming peer message. An ACK
+must reply to the exact handover `SEQ`. No work starts until each side has
+published its own id and read the other's id. If both handovers cross, each
+side sends one exact ACK before work.
+
+Core claims-backs every `SESSION` line passed through `send_gated.sh` by freshly
+reading line 1 of `G3_CONTINUOUS_RUN`; otherwise the send linter correctly
+rejects the unproved id.
+
+After binding, a `SESSION` value that changes without a `SESSION_HANDOVER` is
+reported, not answered: it means a session was replaced silently and the
+conversation state may be wrong.
 
 ## Start or resume a Codex session
 
@@ -45,7 +87,11 @@ values, joins the conversation.
 3. Record both `SEQ` values, Core's `IN_REPLY_TO`, and the mailbox hashes.
 4. If Core's `IN_REPLY_TO` does not name Codex's current `SEQ`, reconstruct the
    missing chain from `archive_CORE_*.md` and `archive_CODEX_*.md`; do not guess.
-5. Check the one event watcher below. Reuse it if present; start it only if
+5. Derive Codex's next `SEQ` from the current mailbox and all archives as
+   defined above; verify that `CODEX_THREAD_ID` is nonempty.
+6. Complete or acknowledge the session handover. Do no review or work until the
+   two sessions are bound.
+7. Check the one event watcher below. Reuse it if present; start it only if
    absent. More than one is an error to report, not a reason to start another.
 
 ## Codex's proven cheap watcher
@@ -100,6 +146,7 @@ SEQ: <next Codex integer>
 IN_REPLY_TO: <Core SEQ reviewed>
 FROM: Codex
 TO: Core
+SESSION: <Codex's own CODEX_THREAD_ID>
 ACTION: CONTINUE | WAIT | CHANGES_REQUIRED | VERIFIED
 TYPE: <short purpose>
 IDENTITY: <exact reviewed commit, tree, manifest, or file hashes>
@@ -117,7 +164,35 @@ mailbox; Codex uses the event watcher above, so both sides do not poll.
   archives the message, renames atomically, and byte-checks delivery.
 * Core keeps exactly one 30-second monitor on `CODEX_TO_CORE.md`, archives each
   new Codex message, and sends a factual heartbeat every ten minutes during
-  long work.
+  long work. Check the exact monitor signature with:
+
+  ```bash
+  pgrep -af '[C]ODEX_TO_CORE\.md.*archive_CODEX_.*sleep 30'
+  ```
+
+  Expect exactly one row. The broader mailbox-only pattern can match an
+  unrelated process. If no row exists, start exactly one copy in a persistent
+  background terminal:
+
+  ```bash
+  cd /home/faisal/.core827-orchestrator
+  last=$(sed -n 's/^SEQ:[[:space:]]*//p' CODEX_TO_CORE.md | head -n 1)
+  while true; do
+    cur=$(sed -n 's/^SEQ:[[:space:]]*//p' CODEX_TO_CORE.md | head -n 1)
+    if [ -n "$cur" ] && [ "$cur" != "$last" ]; then
+      cp CODEX_TO_CORE.md "archive_CODEX_${cur}.md"
+      printf 'CODEX REPLIED SEQ %s: %s | %s\n' \
+        "$cur" \
+        "$(grep -m1 '^ACTION:' CODEX_TO_CORE.md)" \
+        "$(grep -m1 '^TYPE:' CODEX_TO_CORE.md)"
+      last=$cur
+    fi
+    sleep 30
+  done
+  ```
+
+  Never use `ps ... | grep -c`: it counts displayed lines rather than monitor
+  processes.
 * Core's armed stop hook prevents that Core session from ending with the newest
   Codex instruction unanswered. The hook does not wake Codex.
 * Core carries forward a superseded conclusion in the next message and names
