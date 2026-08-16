@@ -372,8 +372,8 @@ copy:
 A separately admitted future attribution channel may additionally produce the
 live optional verdict block. That channel alone owns the attribution judgment;
 Core's one Step 8 doorway checks, records, plans, stores, and audits it. This
-adds no attribution judgment logic or AI to Core and gives the channel no
-authority over Driver or fact meaning.
+adds no new price-attribution judgment logic or attribution AI to Core and
+gives the channel no authority over Driver or fact meaning.
 
 ## Per-channel gate
 
