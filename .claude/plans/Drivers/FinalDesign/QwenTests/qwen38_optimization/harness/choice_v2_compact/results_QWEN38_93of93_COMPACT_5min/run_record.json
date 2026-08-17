@@ -1,0 +1,141 @@
+{
+  "test_id": "QF-01-CHOICE-V2-COMPACT-DEV",
+  "started_at_utc": "2026-08-17T04:40:58.556259+00:00",
+  "finished_at_utc": "2026-08-17T04:46:14.434250+00:00",
+  "wall_seconds": 315.878,
+  "manifest_sha256": "4a685f05852472f4214290bf83a1bd49f497dbfe14c2bfc6eac12fda6ca6996e",
+  "raw_results_sha256": "da73a80d132d7d0f3dccac8b002a87f20c0f2e60a1a9c97f559bf31acda15d01",
+  "case_count": 93,
+  "completed_responses": 93,
+  "transport_failures": 0,
+  "model_before": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  },
+  "model_after": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  },
+  "prefix_priming": true,
+  "prime_calls": [
+    {
+      "first_family": "SCR-01",
+      "prefix_chars": 5295,
+      "stats": {
+        "prompt_eval_count": 2179,
+        "prompt_eval_s": 24.165,
+        "total_s": 25.871,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 25.915
+    },
+    {
+      "first_family": "SCR-03",
+      "prefix_chars": 5114,
+      "stats": {
+        "prompt_eval_count": 2277,
+        "prompt_eval_s": 21.645,
+        "total_s": 22.169,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 22.256
+    },
+    {
+      "first_family": "SCR-05",
+      "prefix_chars": 3091,
+      "stats": {
+        "prompt_eval_count": 1384,
+        "prompt_eval_s": 12.312,
+        "total_s": 12.67,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 12.712
+    },
+    {
+      "first_family": "SCR-08",
+      "prefix_chars": 2799,
+      "stats": {
+        "prompt_eval_count": 1228,
+        "prompt_eval_s": 10.731,
+        "total_s": 11.046,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 11.093
+    },
+    {
+      "first_family": "SCR-11",
+      "prefix_chars": 8194,
+      "stats": {
+        "prompt_eval_count": 5381,
+        "prompt_eval_s": 53.818,
+        "total_s": 54.196,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 54.241
+    },
+    {
+      "first_family": "SCR-15",
+      "prefix_chars": 2474,
+      "stats": {
+        "prompt_eval_count": 1020,
+        "prompt_eval_s": 8.959,
+        "total_s": 9.168,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 9.232
+    },
+    {
+      "first_family": "SCR-16",
+      "prefix_chars": 2474,
+      "stats": {
+        "prompt_eval_count": 1020,
+        "prompt_eval_s": 8.789,
+        "total_s": 9.128,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 9.172
+    },
+    {
+      "first_family": "SCR-17",
+      "prefix_chars": 8203,
+      "stats": {
+        "prompt_eval_count": 5371,
+        "prompt_eval_s": 53.303,
+        "total_s": 54.198,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 54.255
+    }
+  ],
+  "scored": false
+}

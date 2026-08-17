@@ -766,3 +766,36 @@ H6. Memory pressure / swap once resident grows to 35 GB.
  19fe0382b26f4a72). Queued as J8 (cv2_tableprime) after J4/J3.
  General rule: prime the LONGEST prefix shared by the LARGEST group of upcoming
  calls (the document), not the per-question group.
+
+## J4: num_ctx COST (00:28-00:33, battery 30-26%, same fresh 6.26k-token prompt, interleaved)
+   num_ctx=16384 : 93.6, 98.0 tok/s cold prefill
+   num_ctx=32768 : 97.1, 98.0 tok/s
+ => NO measurable prefill cost for 32k vs 16k on the MLX engine (the earlier
+    "32k slower" reading was throttling noise). load=0.0 s on the 32k requests
+    and `ollama ps` kept context_length=16384: the MLX runner did NOT reload
+    for the larger per-request num_ctx (KV grows dynamically). Whether it then
+    ACCEPTS a >16k-token prompt is tested by the whole-exhibit decode probe (J7).
+    Resident size unchanged (~29.4 GB).
+
+## POWER (00:12): idle charging had collapsed to 142 mA (~1.6 W net) because the
+ display never sleeps (pmset displaysleep 0) and WindowServer + an animated
+ aerial wallpaper + a DisplayLink external display + app helpers ate the 30 W.
+ `pmset displaysleepnow` (transient, any keypress wakes it) -> 1,781 mA (~20 W
+ into the battery), 12x faster recharge. Owner suggestion: set a display-sleep
+ timeout on AC; and a >=70 W adapter.
+
+## *** VICTORY #9: COMPACT ENCODING + TABLE-LEVEL PRIMING = 93/93 IN 5.3 MIN ***
+ 2026-08-17 00:41-00:46, cold trie, battery 30->26%.
+   93/93, precision 1.0, recall 1.0, 0 transport failures, one pass.
+   8 primes (one per table) = 199 s ; 93 case calls = 117 s ; TOTAL 316 s = 5.3 min
+   prime prefill s: 24.2 21.6 12.3 10.7 53.8 9.0 8.8 53.3
+ Progression at 100% accuracy: 9.0 min (dense, family priming) -> 5.3 min
+ (compact -16.7% tokens, table priming). Old MoE model: 25.2 min at 75/93.
+ Compact encoding = no 2-space indent + one `cols` legend; VERIFIED 93/93,
+ adopt it. Harness: table_evidence/choice_v2_compact (cases sha c4565c09675db3bf).
+
+## CHECKPOINT 00:50 — still running unattended in queue 2 (battery-gated):
+   J8 dense+table-priming run (expect ~5.8 min), J6 qf01 table-first+primed
+   (19 calls), J7 whole-exhibit decode/ctx probe (13.5k and 23.4k tokens at
+   num_ctx 32768). Logs: scratchpad/gpu_queue2.log*, /tmp/qwen38_scratch/s2/*.log
+   on the Minisforum; results in the shadow harness dirs.
