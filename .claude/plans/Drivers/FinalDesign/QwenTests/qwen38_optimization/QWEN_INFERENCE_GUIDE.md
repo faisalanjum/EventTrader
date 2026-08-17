@@ -133,6 +133,10 @@ Reference implementation: `.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_op
 ## 11. Machine conditions during runs
 - With the model resident (29.5 GiB) the Mac swaps heavily if many apps are open
   (swap was 95% full on 2026-08-17). Keep other apps light during batch runs.
-- On the 30 W adapter, sustained GPU work drains ~2%/min and throttles when low;
-  the display never sleeps by default and eats most of the adapter — sleep it
-  (`pmset displaysleepnow`) or use a ≥70 W adapter for long runs.
+- Power (all measured on this Mac): the connected adapter is a 30 W unit (the
+  machine, Mac16,8 = 14-inch M4 Pro, ships with 70 W). Under GPU load the battery
+  drains ~2%/min even while plugged in, and identical calls ran up to 3.5x slower
+  once the battery was low (5–16%). Display sleep is disabled (`pmset displaysleep 0`)
+  and the display stack consumed most of the adapter: charging went from 142 mA to
+  1,781 mA after `pmset displaysleepnow`. For long batch runs: sleep the display
+  and/or use a ≥70 W adapter.
