@@ -1,0 +1,284 @@
+{
+  "test_id": "QF-01-CHOICE-V2-DEV",
+  "started_at_utc": "2026-08-17T02:04:03.939632+00:00",
+  "finished_at_utc": "2026-08-17T02:13:04.747742+00:00",
+  "wall_seconds": 540.808,
+  "manifest_sha256": "95e27959f06c3c5d26846cb55a9615c22ad769550566074afdb9e411e6b506d6",
+  "raw_results_sha256": "013278c950110bcb8ecaadfd2cdc4f46eb14476a84dc2df241f2499392a082f2",
+  "case_count": 93,
+  "completed_responses": 93,
+  "transport_failures": 0,
+  "model_before": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  },
+  "model_after": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  },
+  "prefix_priming": true,
+  "prime_calls": [
+    {
+      "family": "SCR-01",
+      "cases": 3,
+      "stats": {
+        "prompt_eval_count": 2574,
+        "prompt_eval_s": 26.52,
+        "total_s": 26.805,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 26.859
+    },
+    {
+      "family": "SCR-02",
+      "cases": 3,
+      "stats": {
+        "prompt_eval_count": 2574,
+        "prompt_eval_s": 0.109,
+        "total_s": 0.281,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 0.326
+    },
+    {
+      "family": "SCR-03",
+      "cases": 3,
+      "stats": {
+        "prompt_eval_count": 2696,
+        "prompt_eval_s": 27.495,
+        "total_s": 27.779,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 27.827
+    },
+    {
+      "family": "SCR-04",
+      "cases": 3,
+      "stats": {
+        "prompt_eval_count": 2695,
+        "prompt_eval_s": 25.948,
+        "total_s": 26.2,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 26.244
+    },
+    {
+      "family": "SCR-05",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1540,
+        "prompt_eval_s": 14.005,
+        "total_s": 14.426,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 14.474
+    },
+    {
+      "family": "SCR-06",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1538,
+        "prompt_eval_s": 14.006,
+        "total_s": 14.43,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 14.478
+    },
+    {
+      "family": "SCR-07",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1535,
+        "prompt_eval_s": 0.087,
+        "total_s": 0.287,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 0.336
+    },
+    {
+      "family": "SCR-08",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1368,
+        "prompt_eval_s": 12.082,
+        "total_s": 12.456,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 12.498
+    },
+    {
+      "family": "SCR-09",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1366,
+        "prompt_eval_s": 12.296,
+        "total_s": 12.472,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 12.514
+    },
+    {
+      "family": "SCR-10",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1363,
+        "prompt_eval_s": 0.085,
+        "total_s": 0.256,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 0.296
+    },
+    {
+      "family": "SCR-11",
+      "cases": 7,
+      "stats": {
+        "prompt_eval_count": 6181,
+        "prompt_eval_s": 65.871,
+        "total_s": 66.345,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 66.392
+    },
+    {
+      "family": "SCR-12",
+      "cases": 7,
+      "stats": {
+        "prompt_eval_count": 6182,
+        "prompt_eval_s": 69.656,
+        "total_s": 70.158,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 70.207
+    },
+    {
+      "family": "SCR-13",
+      "cases": 7,
+      "stats": {
+        "prompt_eval_count": 6185,
+        "prompt_eval_s": 0.423,
+        "total_s": 0.621,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 0.661
+    },
+    {
+      "family": "SCR-14",
+      "cases": 7,
+      "stats": {
+        "prompt_eval_count": 6186,
+        "prompt_eval_s": 0.415,
+        "total_s": 0.613,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 0.661
+    },
+    {
+      "family": "SCR-15",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1169,
+        "prompt_eval_s": 11.331,
+        "total_s": 11.702,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 11.747
+    },
+    {
+      "family": "SCR-16",
+      "cases": 4,
+      "stats": {
+        "prompt_eval_count": 1169,
+        "prompt_eval_s": 11.37,
+        "total_s": 11.781,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 11.826
+    },
+    {
+      "family": "SCR-17",
+      "cases": 7,
+      "stats": {
+        "prompt_eval_count": 6180,
+        "prompt_eval_s": 69.845,
+        "total_s": 70.22,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 70.267
+    },
+    {
+      "family": "SCR-18",
+      "cases": 7,
+      "stats": {
+        "prompt_eval_count": 6181,
+        "prompt_eval_s": 69.324,
+        "total_s": 69.822,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 69.866
+    },
+    {
+      "family": "SCR-19",
+      "cases": 7,
+      "stats": {
+        "prompt_eval_count": 6184,
+        "prompt_eval_s": 0.419,
+        "total_s": 0.626,
+        "host": "http://CA-K429CXLGF9.local:11434",
+        "model": "qwen3.8:27b-mlx",
+        "num_ctx": 16384
+      },
+      "wall_s": 0.666
+    }
+  ],
+  "scored": false
+}

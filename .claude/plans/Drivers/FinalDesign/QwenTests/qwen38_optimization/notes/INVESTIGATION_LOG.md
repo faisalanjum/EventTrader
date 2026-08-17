@@ -724,3 +724,18 @@ H6. Memory pressure / swap once resident grows to 35 GB.
  shadow harness: QWEN_NUM_CTX at prepare time (frozen into manifest).
  Rule: keep num_ctx constant per run — a change reloads the model AND drops
  the whole prefix-cache trie.
+
+## *** VICTORY #8: FULL choice_v2 WITH PRIMING = 93/93 IN 9.0 MIN, COLD CACHE ***
+ 2026-08-16 22:04-22:13, model freshly reloaded (empty trie), battery 30%->18%.
+   93/93 correct, precision 1.0, recall 1.0, 0 transport failures, ONE pass.
+   19 prime calls = 438 s (13 cold: SCR-01/03/04/05/06/08/09/11/12/15/16/17/18;
+   6 hits on shared tables: SCR-02/07/10/13/14/19 at 0.1-0.4 s)
+   93 case calls = 103 s (every call 1.0-1.2 s)
+   TOTAL 541 s = 9.0 min   (old MoE: 25.2 min at 75/93; previous 93/93 run:
+                            24-35 min of compute with LAN resets)
+ Cold prefill at 30% battery: SCR-11 6217 tok / 65.9 s = 94 tok/s; SCR-01
+   2574 tok / 26.5 s = 97 tok/s  => this GPU's real ceiling is ~95-100 tok/s
+   (the 84-87 seen at 25-30% earlier and 63 at 5-16% were throttled).
+ Floor for this suite = ~40.8k cold tokens / 95 + 93 x 1 s ~= 8.7 min. We are
+ within ~5% of the hardware floor. Nothing software can take from here except
+ fewer tokens (compact encoding, queued) or hardware.
