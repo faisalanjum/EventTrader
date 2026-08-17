@@ -1,0 +1,47 @@
+--- /tmp/qwen38_bench/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/choice_v2.py	2026-08-16 21:08:56.706899137 -0400
++++ /tmp/qwen38_bench/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2_compact/choice_v2.py	2026-08-16 21:21:26.654493156 -0400
+@@ -63,7 +63,7 @@
+ RUN_RECORD_PATH = RESULTS_DIR / "run_record.json"
+ SCORE_PATH = RESULTS_DIR / "score.json"
+ 
+-TEST_ID = "QF-01-CHOICE-V2-DEV"
++TEST_ID = "QF-01-CHOICE-V2-COMPACT-DEV"
+ MODEL_NAME = "qwen3.8:27b-mlx"
+ # num_ctx is configurable at PREPARE time (frozen into the manifest, verified at
+ # run time). Keep it fixed for a whole run: changing it reloads the model and
+@@ -286,8 +286,8 @@
+         "- Never calculate, guess, or explain.",
+         "- Return JSON only, no prose and no code fence.",
+         "",
+-        "Source-derived choices "
+-        "(each row lists: choice|occurrence|value|headers):",
++        "Source-derived choices. Every choice line is "
++        "choice|occurrence|value|headers:",
+     ]
+ 
+     prior_block = None
+@@ -308,8 +308,10 @@
+                 header += f" caption={json.dumps(item['caption'], ensure_ascii=False)}"
+             header += (f" section={json.dumps(item['section'], ensure_ascii=False)}"
+                        f" label={json.dumps(item['label'], ensure_ascii=False)}")
+-            lines.extend(["", header,
+-                          "  cols: choice|occurrence|value|headers"])
++            # COMPACT ENCODING (2026-08-16): the per-row `cols:` legend cost
++            # 12 tokens x 41 rows (7.6% of the prompt); it is stated once in
++            # the instructions instead.
++            lines.extend(["", header])
+         # OCCURRENCE LABELLING (2026-08-16): the model was asked to COUNT the
+         # left-to-right ordinal position within a row and got it wrong on 4/93
+         # cases (all WRONG:occurrence). The count is fully deterministic, so
+@@ -317,8 +319,10 @@
+         # row_v3 ("code applies the occurrence; Qwen never retypes").
+         occurrence_in_row += 1
+         heads = ",".join(str(h) for h in item["period_headers"])
++        # COMPACT ENCODING (2026-08-16): the two-space indent tokenised as
++        # two separate tokens on every line (10% of the whole prompt).
+         lines.append(
+-            f"  {item['choice']}|{occurrence_in_row}|{item['value']}|{heads}"
++            f"{item['choice']}|{occurrence_in_row}|{item['value']}|{heads}"
+         )
+     # PREFIX-CACHE ORDERING (2026-08-16): the per-call target lines used to sit
+     # at char ~144, ahead of the ~17k-char row block that every case in a
