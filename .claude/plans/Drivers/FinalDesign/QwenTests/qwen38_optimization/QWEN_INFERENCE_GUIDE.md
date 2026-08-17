@@ -229,3 +229,35 @@ Script + raw results: `qwen38_optimization/exams/reader_exam/` (`reader_exam.py 
 --model qwen3.8:27b-mtp-q4_K_M --mode grammar --think 0 --max-tokens 8000`; results in
 `results_qwen3.8_27b-mtp-q4_K_M/`, `score_first10.json`, `per_chunk_first10.txt`, probe files for
 the failed modes; inputs are read from `experiments/` — see README.txt).
+
+### 15a. Reader exam — rule/format COMPLIANCE audit (same 10 chunks, measured mechanically)
+| compliance check | Qwen (148 names) | Sonnet (120) | Opus (126) |
+|---|---|---|---|
+| exact JSON shape, all fields present, evidence ties to a real event in the chunk | **148/148 (100%)** | 100% | 100% |
+| name format rule NAME-05 (lowercase, letters/digits/underscore, starts with a letter) | **148/148 (100%)** | 100% | 100% |
+| no direction/size/date word in the name (NAME-01) | 146/148 (`minimum_wage_increase`, `headcount_growth`) | 118/120 (`consumer_trade_down`, `headcount_growth`) | 124/126 |
+| quote is a verbatim copy from the source | 145/148 (98%) — 3 paraphrased | 120/120 | 126/126 |
+| quote within the 60–200-character rule | **109/148 (74%)** — mostly too short (e.g. "lower advertising expense") | 120/120 | 126/126 |
+Name correctness vs the key (all 148): 97 exact key names (66%), 34 point at a real key fact but
+name it differently (spelling drift like `restructuring_costs`; rule drift like `commodity_costs`
+for the cause `commodity_inflation`, or a dropped `_guidance` suffix), 17 not in the key (11%).
+Reading: output shape and name syntax are 100%; cause-only naming is Sonnet-level; the two real
+gaps are quote discipline (3 paraphrases, 39 quotes shorter than 60 chars) — correct text, too
+little of it — and naming drift on ~1 in 4 real facts.
+
+Recommended MECHANICAL checks before any Qwen reader output is accepted (all deterministic, code-owned):
+1. Verbatim gate: reject a candidate whose quote is not an exact substring of the chunk's event
+   content (whitespace-normalised) — catches the 3 paraphrases.
+2. Quote-length gate: reject quotes < 60 or > 200 chars (the rule); or ask the model once more
+   for that item only (transport-level retry, same prompt).
+3. Name-syntax gate: `^[a-z][a-z0-9_]*$` (already 100%, keep it).
+4. Cause-only word gate: reject names containing direction/size/period tokens
+   (higher|lower|increase|decrease|growth|decline|up|down|q1..q4|20xx|percent|million…) — the
+   NAME-01 slips (both models make them).
+5. Evidence gate: `evidence.company` == chunk ticker and `evidence.source_id` ∈ chunk events
+   (already 100%, keep it).
+6. Empty-output gate: 0 candidates on a chunk with substantive text → route that chunk to Sonnet
+   (Qwen returned empty on 2 of 10 chunks; Sonnet never did).
+7. Naming drift is NOT mechanically fixable — it belongs to the identity/dedup stage (the same
+   Sonnet-or-Qwen judge that decides "same driver?"), which is where `restructuring_costs` vs
+   `restructuring_cost` gets reconciled by design.
