@@ -261,3 +261,66 @@ Recommended MECHANICAL checks before any Qwen reader output is accepted (all det
 7. Naming drift is NOT mechanically fixable — it belongs to the identity/dedup stage (the same
    Sonnet-or-Qwen judge that decides "same driver?"), which is where `restructuring_costs` vs
    `restructuring_cost` gets reconciled by design.
+
+## 16. Quick start & re-run recipes for a NEW agent (everything you need, in order)
+Ownership: you may edit only `config/local_llm.py` and
+`.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_optimization/`. Never run experiments against
+the real repo tree; never touch `experiments/keys/`. Commit only those two paths.
+
+A. Is the server up? (from the Minisforum)
+    curl -s localhost:11434/api/version            # {"version":"0.32.13"}
+    curl -s localhost:11434/api/ps                  # should list qwen3.8:27b-mlx (resident)
+    cd /home/faisal/EventMarketDB && /home/faisal/EventMarketDB/venv/bin/python -m config.local_llm
+   If nothing is resident, any call loads it (~9 s). If the tunnel is down, the Mac side is
+   `~/Library/LaunchAgents/com.faanjum.ollama.plist` (+ autossh); reload env with
+   `launchctl bootout gui/$UID/com.faanjum.ollama && launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.faanjum.ollama.plist`
+   (NOT `kickstart -k`). Copy of the plist: `qwen38_optimization/server/`.
+
+B. Two engines, one resident at a time (48 GB): MLX `qwen3.8:27b-mlx` (default; fast decode,
+   NO schema enforcement) and GGUF `qwen3.8:27b-mtp-q4_K_M` (schema grammar-enforced via `format=`,
+   ~3x slower decode). Switch by simply calling the other model; to force-unload:
+    curl -s localhost:11434/api/generate -d '{"model":"qwen3.8:27b-mlx","keep_alive":0}'
+   Rule of thumb: tiny structured answers (tables, ids) -> MLX + JSON system message + code
+   validation; long/complex structured output that must be well-formed -> GGUF + `format=schema`.
+   Reasoning stays OFF (`think=False`) everywhere; on the reader it ran away past 8-12k tokens.
+
+C. Minimal call (Python, repo root on the Minisforum; the client finds the host itself):
+    from config import local_llm as L
+    obj = L.structured(prompt, schema, system=SYS, num_ctx=16384, max_tokens=512, timeout=1800)
+    L.prime(shared_prefix, system=SYS, num_ctx=16384)   # once per document before its batch
+
+D. Re-run the table exams (choice_v2 / row_v3 / qf01) — needs a SHADOW copy of the repo:
+    mkdir -p /tmp/qwen38_bench && cp -r /home/faisal/EventMarketDB/{config,driver,scripts,.claude} /tmp/qwen38_bench/EventMarketDB/
+    # qf01 only: restore the July parser into the shadow (stale gold key): git show 964bb4e6:driver/relocation/inline_html.py > /tmp/qwen38_bench/EventMarketDB/driver/relocation/inline_html.py
+    # copy the patched harnesses over the shadow copies:
+    #   qwen38_optimization/harness/choice_v2_compact/choice_v2.py -> shadow .../QwenTests/table_evidence/choice_v2/choice_v2.py
+    #   qwen38_optimization/harness/qf01/qf01.py                    -> shadow .../QwenTests/table_evidence/qf01.py
+    cd /tmp/qwen38_bench/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2
+    PY=/home/faisal/EventMarketDB/venv/bin/python
+    rm -f cases.jsonl manifest.json; rm -rf results
+    LOCAL_LLM_MODEL=qwen3.8:27b-mlx LOCAL_LLM_NUM_CTX=16384 $PY choice_v2.py prepare
+    LOCAL_LLM_MODEL=qwen3.8:27b-mlx LOCAL_LLM_NUM_CTX=16384 $PY choice_v2.py run     # resumable; rerun on transport failure
+    LOCAL_LLM_MODEL=qwen3.8:27b-mlx LOCAL_LLM_NUM_CTX=16384 $PY choice_v2.py score
+   (row_v3: same commands in `row_v3/`; qf01: `qf01.py prepare|run|score` in `table_evidence/`;
+    a loop that reruns `run` until 93 ok answers: `qwen38_optimization/scripts/queue/run_until_done.sh`)
+   Expected: choice_v2 93/93 in ~5-6 min cold, row_v3 93/93 ~4 min, qf01 19/19 ~3.5 min.
+
+E. Re-run the identity exam (K-pairs, 160 pairs; runs on the Mac against localhost, or on the
+   Minisforum with LOCAL_LLM_HOST unset):
+    cd qwen38_optimization/exams/identity_exam/   # copy K-pairs.v1.3.jsonl (experiments/keys/K-pairs/) + config/local_llm.py next to it
+    python3 identity_exam.py run   --model qwen3.8:27b-mtp-q4_K_M --max-tokens 1500 [--limit N]
+    python3 identity_exam.py score --model qwen3.8:27b-mtp-q4_K_M
+   ~28 s/pair on GGUF (76 min); MLX without schema enforcement answers in prose -> invalid.
+
+F. Re-run the reader exam (EXP-2 proxy; inputs from experiments/, see exams/reader_exam/README.txt):
+    cd qwen38_optimization/exams/reader_exam/
+    python3 reader_exam.py run   --n 10 --model qwen3.8:27b-mtp-q4_K_M --mode grammar --think 0 --max-tokens 8000
+    python3 reader_exam.py score --n 10 --model qwen3.8:27b-mtp-q4_K_M      # also scores Sonnet/Opus saved outputs
+   ~6.6 min/chunk; --n 40 for the full set (~4.5 h).
+
+G. Long runs on battery: `qwen38_optimization/scripts/queue/gpu_queue.sh` pattern (start >=30%,
+   pause <=12%, resume; jobs must be resumable). Sleep the display (`pmset displaysleepnow`) —
+   otherwise the display stack eats the adapter. Log a battery reading with every timing you report.
+
+H. Where every number in this document comes from: `qwen38_optimization/notes/INVESTIGATION_LOG.md`
+   (chronological, every measurement and dead end) and `notes/RUNBOOK.md`.
