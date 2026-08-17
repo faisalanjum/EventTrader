@@ -1,6 +1,6 @@
 --- /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/choice_v2.py	2026-08-01 18:59:00.900428740 -0400
-+++ /home/faisal/qwen38_WORKING_CHECKPOINT/choice_v2_100pct/choice_v2.py	2026-08-16 18:53:39.684139692 -0400
-@@ -64,10 +64,10 @@
++++ /tmp/qwen38_bench/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/choice_v2.py	2026-08-16 21:08:56.706899137 -0400
+@@ -64,11 +64,20 @@
  SCORE_PATH = RESULTS_DIR / "score.json"
  
  TEST_ID = "QF-01-CHOICE-V2-DEV"
@@ -9,13 +9,23 @@
 -MAX_TOKENS = 64
 -TIMEOUT_SECONDS = 300
 +MODEL_NAME = "qwen3.8:27b-mlx"
-+NUM_CTX = 16_384
++# num_ctx is configurable at PREPARE time (frozen into the manifest, verified at
++# run time). Keep it fixed for a whole run: changing it reloads the model and
++# drops the server prefix cache. 16384 comfortably holds the largest dense prompt
++# (~6.3k tokens) plus output; larger values cost KV memory and prefill time.
++NUM_CTX = int(os.environ.get("QWEN_NUM_CTX", "16384"))
 +MAX_TOKENS = 512
 +TIMEOUT_SECONDS = 1800
  WORKERS = 1
++# Prefix priming (QWEN_PRIME=0 disables): before the first call of each family,
++# send the family's shared prompt prefix once (raw) so the server leaves a cache
++# snapshot at the branch point. Prompt bytes per case are UNCHANGED; this only
++# removes the second cold prefill per table. See config/local_llm.py: prime().
++PRIME_PREFIX = os.environ.get("QWEN_PRIME", "1") != "0"
  
  FORBIDDEN_PROMPT_TEXT = (
-@@ -243,44 +243,86 @@
+     "expected_",
+@@ -243,44 +252,86 @@
      }
  
  
@@ -117,7 +127,7 @@
          'Return only JSON in this form: {"choice": <number or null>}',
      ])
      return "\n".join(lines)
-@@ -436,12 +478,20 @@
+@@ -436,12 +487,20 @@
          len(case["prompt"].encode("utf-8")) for case in cases
      ]
      maximum = max(byte_counts)
@@ -140,7 +150,7 @@
          "conservative_input_token_budget": budget,
      }
  
-@@ -571,7 +621,7 @@
+@@ -571,7 +630,7 @@
              "timeout_seconds": TIMEOUT_SECONDS,
              "workers": WORKERS,
              "completed_answer_retries": 0,
@@ -149,7 +159,7 @@
          },
          "interface": {
              "model_output": '{"choice": integer_or_null}',
-@@ -621,7 +671,7 @@
+@@ -621,7 +680,7 @@
          "timeout_seconds": TIMEOUT_SECONDS,
          "workers": WORKERS,
          "completed_answer_retries": 0,
@@ -158,7 +168,7 @@
      }
      if manifest["settings"] != expected_settings:
          raise ValueError("runner settings changed")
-@@ -649,7 +699,7 @@
+@@ -649,7 +708,7 @@
      try:
          raw, stats = client.generate(
              case["prompt"],
@@ -167,7 +177,7 @@
              format=case["schema"],
              think=False,
              temperature=0.0,
-@@ -685,7 +735,7 @@
+@@ -685,7 +744,7 @@
              "stats": stats,
          }
      try:
@@ -176,3 +186,62 @@
      except Exception as error:
          return {
              "id": case["id"],
+@@ -745,6 +804,29 @@
+     ]
+ 
+ 
++def _family_of(case: dict) -> str:
++    """SCR-11-q3 -> SCR-11: all cases of a family share one source table."""
++    return case["id"].rsplit("-", 1)[0]
++
++
++def _prime_family(family: str, prompts: list[str]) -> dict:
++    """Prime the server prefix cache with the family's shared prompt prefix.
++    Never fails the run: priming is a pure cache warm-up (its output is
++    discarded and no case prompt changes)."""
++    started = time.monotonic()
++    entry = {"family": family, "cases": len(prompts)}
++    try:
++        stats = L.prime_for(prompts, SYSTEM_MESSAGE, num_ctx=NUM_CTX,
++                            timeout=TIMEOUT_SECONDS)
++        entry["stats"] = stats
++    except Exception as error:  # noqa: BLE001
++        entry["error"] = f"{type(error).__name__}: {error}"
++    entry["wall_s"] = round(time.monotonic() - started, 3)
++    print(f"[prime] {family} {entry.get('stats') or entry.get('error')} "
++          f"{entry['wall_s']}s", flush=True)
++    return entry
++
++
+ def run() -> dict:
+     manifest = verify_manifest(check_model=True)
+     if RUN_RECORD_PATH.exists():
+@@ -759,9 +841,19 @@
+     started = time.monotonic()
+     new_results = []
+ 
++    families = {}
++    for case in cases:
++        families.setdefault(_family_of(case), []).append(case["prompt"])
++    prime_log = []
++    last_family = None
++
+     mode = "a" if RAW_RESULTS_PATH.exists() else "x"
+     with RAW_RESULTS_PATH.open(mode, encoding="utf-8") as handle:
+         for number, case in enumerate(pending, 1):
++            family = _family_of(case)
++            if PRIME_PREFIX and family != last_family:
++                prime_log.append(_prime_family(family, families[family]))
++            last_family = family
+             result = run_one(case)
+             new_results.append(result)
+             handle.write(json.dumps(result, ensure_ascii=False) + "\n")
+@@ -796,6 +888,8 @@
+             not bool(item["completed_response"]) for item in results),
+         "model_before": manifest["model"],
+         "model_after": model_fingerprint(),
++        "prefix_priming": PRIME_PREFIX,
++        "prime_calls": prime_log,
+         "scored": False,
+     }
+     if record["model_after"] != record["model_before"]:

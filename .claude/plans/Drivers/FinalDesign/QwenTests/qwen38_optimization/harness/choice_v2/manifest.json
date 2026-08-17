@@ -1,7 +1,7 @@
 {
   "test_id": "QF-01-CHOICE-V2-DEV",
   "purpose": "Development test: Qwen chooses one clean source-derived cell or abstains; code reconstructs exact evidence",
-  "prepared_at_utc": "2026-08-16T21:45:20.926753+00:00",
+  "prepared_at_utc": "2026-08-17T01:09:39.032987+00:00",
   "authorization": "Owner authorized TDD preparation, but not model calls, on 2026-07-24",
   "scope": {
     "development_cases": 93,
@@ -57,12 +57,12 @@
     ".claude/plans/Drivers/WIP/phase6_screen_answers_HIDDEN.json": "b4a26aa5e3565b95e5146fcb611862cef9dab86759329d4d12f876a83db07dd5",
     ".claude/plans/Drivers/WIP/phase6_screen_grade.py": "b3a3a285e0b4a9ffebfeb5e1e8b236e023b527725f7dc6c4d8c01aa534e78d6a",
     ".claude/plans/Drivers/WIP/phase6_screen_validate.py": "6f82ef94d1fb3ba3891e3e94928a88edf32d2cdc045fe3a367e91df11083fb3e",
-    "config/local_llm.py": "7f0a74c0f686dc93487985c2f043a35c69151cb206350258885c2c67dbd3eb25",
+    "config/local_llm.py": "836e5722ec01c5e1ef53b8eeb2675beb4fcb58d9e10b22570afc3c00daf80b66",
     "driver/relocation/inline_html.py": "ec220ccf50fba4f106f12ed6555254829406a7160416836768cb9d493a10387f",
     "scripts/driver_seed/relocate_probe/phase2/m1_structure_inventory.py": "195689ca9e190e2e3e51757ef2c08fb39992b7655c6553c372d1460a2a83d3fe",
     "scripts/driver_seed/relocate_probe/phase2/m1_transcript_census.py": "ed932608205904b2939d4a38721f9f01b8bc941965764bad61c78576e165c38b",
     "scripts/driver_seed/relocate_probe/phase2/m2_native_table_shadow_r3.py": "ebd22160439276e87e11f53b38128de1ffce7753e9f3685ad288026c9be01a88",
-    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/choice_v2.py": "9444aa24b9eb63fe25490258592c7599463e2ac50e0127267de09dd6f3b4e0d4",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/choice_v2.py": "eeb6e959e4012160a36504c645cc566ca829c27337775b7a07b1f69f9dc7c64e",
     ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/test_choice_v2.py": "633f111fc306c6f5dc640aaa1aeac5d954efddcf872b0903ece3151cb756b51e",
     ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/cases.jsonl": "19fe0382b26f4a7280e1dec8c821fa9bfccab86408550eb3027956856cacdc65",
     "scripts/driver_seed/relocate_probe/exhibit_html_cache/0000006201-26-000031__EX-99.1.htm": "59f2a20f3240b354a6172223f32acbfe43bc304fffe44ea0a7f63fd9d921549b",

@@ -640,3 +640,87 @@ H6. Memory pressure / swap once resident grows to 35 GB.
  proven: it removed the 35 GB thrash and is well clear of the 6.2k-token
  dense prompts). Revisit only on a 140W adapter.
  => "do not chase what does not work" - stopping this line.
+
+################################################################
+## SESSION 2 (2026-08-16 evening) — after commit 480b6a73
+################################################################
+
+## HARDWARE FACTS CORRECTED (earlier notes said 16-inch / 140W — WRONG)
+ sysctl hw.model = Mac16,8 ; display 3024x1964 => 14-inch MacBook Pro
+ Apple M4 Pro, 12-core CPU (8P+4E), 16-core GPU, 48 GB. Ships with a 70W
+ USB-C adapter (96W optional). Connected: "30W USB-C Power Adapter".
+ Measured drain under GPU load: 25% -> 17% in ~4 min (llama-bench);
+ idle recharge ~ +0.25%/min. => sustained batch runs are power-bound.
+
+## WORKLOAD PROFILE (from LeftOverSteps step1-5, 7-9, 14 + QwenTests docs)
+ Reader (Steps 3/5, highest volume): instructions + WHOLE event source parts
+   + one item; the same event is re-sent per item -> prefix cache pays;
+   output = multi-fact JSON with verbatim quotes (100s of tokens).
+ Fiscal locator (Step 9A): anchor + one complete table/prose block; same
+   table re-sent per anchor -> cache pays; output tiny (ID list).
+ Catalog reader (Steps 1/7): 40,000-char chunks (~10k tok), each read ONCE
+   -> fresh-document prefill, no cache help; up to ~600 calls.
+ Identity/continuity judges (Step 4): mostly unique inputs, small outputs.
+ Concept picker (Step 8): fact + whole company concept menu (menu repeats).
+ Steps 1-13 currently run Sonnet 5; Qwen is the Step-14 cheaper-model
+ candidate + diagnostics. No numeric latency SLA anywhere; accuracy bar =
+ zero wrong accepted. Largest stated input: 40,000 chars.
+
+## ENGINE BAKE-OFF ON THIS MACHINE (cold prefill = the fresh-document metric)
+ llama.cpp b10450 Metal, GGUF Q4_K_M, pp6144: 81.6 tok/s (ub512), 80.9 (ub2048)
+                                       tg32 :  9.8-10.1 tok/s (no MTP)
+ Ollama MLX (nvfp4), same-size real prompt : 84-87 tok/s cold prefill,
+                                       decode ~29 tok/s WITH MTP (log:
+                                       "speculative decode stats ... acceptance=1.00
+                                       avg_draft=3.00")
+ mlx-lm 0.31.3 affine-4bit (earlier)     : 84-88 tok/s
+ llama.cpp Apple-Silicon table (M4 Pro 16-core, 7B Q4_0 pp512 = 364 t/s)
+   scaled to 27.8B dense => ~88 tok/s. All engines agree.
+ => COLD PREFILL IS AT THE HARDWARE CEILING (~85 tok/s) ON THIS GPU.
+    No engine/config change can make a NEW document faster here. Levers left
+    for fresh docs: fewer tokens, or faster hardware (M4 Max ~2x, M5 much
+    more: llama.cpp logs "tensor API disabled for pre-M5").
+ Ollama 0.32.14 (Aug 15) exists; 0.32.10 already added +7-8% NVFP4 prefill.
+
+## THE OLLAMA MLX PREFIX CACHE, FROM SOURCE (x/mlxrunner, main 2026-08-16)
+ pipeline.go : prefillChunkSize = 2048 (fixed); automatic snapshots at every
+               8192 tokens AND at len(prompt)-4 ("preThinking"); no env knobs.
+ prefix_cache.go : trie of token paths; snapshots at the frontier + at branch
+               points, but a branch-point snapshot is scheduled only DURING
+               THE REQUEST THAT DIVERGES THERE (i.e. the second one).
+               "Snapshotting non-leaf nodes ... would produce wrong results for
+               non-rewindable caches (e.g. RecurrentCache)". Qwen3.8 has
+               recurrent layers => a diverging request cannot trim back.
+               maxPagedOutBytes = 8 GiB; evict oldest, deepest, largest.
+ mtp.go      : draftLookahead=1 -> MTP speculative decoding is ON for this
+               model (explains decode > memory-bandwidth bound).
+ => THIS is why every table cost TWO cold prefills before hits started
+    (log: q2 "cache hit total=6284 matched=6222 cached=42").
+
+## *** VICTORY #7: PREFIX PRIMING — 1 cold prefill per document, not 2 ***
+ A raw /api/generate request whose tokens are EXACTLY the shared prefix
+ (rendered as the qwen3.8 renderer would: "<|im_start|>system\n{sys}<|im_end|>\n
+ <|im_start|>user\n{prefix}") leaves the automatic len-4 snapshot ON the
+ shared path, so the FIRST real call restores there.
+ Measured (SCR-11 dense, 6.2k tok, fresh nonce, prod server, num_ctx 16384):
+   control: q1 79.3s | q2 74.4s (cached=42) | q3 1.5s   = 155 s
+   primed : PRIME 72.3s | q1 2.9s (cached=6212) | q2 1.9s | q3 1.2s = 78 s
+   answers identical ({"choice":15/16/17}).
+ Implemented: config/local_llm.py prime()/prime_for()/shared_prefix()
+ (real + shadow copies identical); shadow choice_v2.py primes once per family
+ (QWEN_PRIME=0 disables) and records prime_calls in run_record.
+ Generalises to every repeated-document role (reader per item, locator per
+ anchor, picker per company): cost = 1 cold + K cheap instead of 2 cold + (K-2).
+
+## Renderer facts (model/renderers/qwen35.go, qwen3.8 variant)
+ think=nil  -> reasoning ON with "Reasoning effort is set to xhigh" system text
+ think=false-> no reasoning text; assistant prefill "<think>\n\n</think>\n\n"
+ Our client always sends think=False (LOCAL_LLM_THINK=0) => no hidden thinking.
+ Content is TrimSpace'd. No BOS.
+
+## num_ctx configurability
+ client: LOCAL_LLM_NUM_CTX (default 32768), LOCAL_LLM_TIMEOUT (new, 1800 s),
+         LOCAL_LLM_MODEL, LOCAL_LLM_THINK, LOCAL_LLM_HOST.
+ shadow harness: QWEN_NUM_CTX at prepare time (frozen into manifest).
+ Rule: keep num_ctx constant per run — a change reloads the model AND drops
+ the whole prefix-cache trie.
