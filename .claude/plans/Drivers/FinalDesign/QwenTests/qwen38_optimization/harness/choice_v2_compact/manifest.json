@@ -1,7 +1,7 @@
 {
   "test_id": "QF-01-CHOICE-V2-COMPACT-DEV",
   "purpose": "Development test: Qwen chooses one clean source-derived cell or abstains; code reconstructs exact evidence",
-  "prepared_at_utc": "2026-08-17T01:21:27.496230+00:00",
+  "prepared_at_utc": "2026-08-17T03:40:02.249135+00:00",
   "authorization": "Owner authorized TDD preparation, but not model calls, on 2026-07-24",
   "scope": {
     "development_cases": 93,
@@ -62,7 +62,7 @@
     "scripts/driver_seed/relocate_probe/phase2/m1_structure_inventory.py": "195689ca9e190e2e3e51757ef2c08fb39992b7655c6553c372d1460a2a83d3fe",
     "scripts/driver_seed/relocate_probe/phase2/m1_transcript_census.py": "ed932608205904b2939d4a38721f9f01b8bc941965764bad61c78576e165c38b",
     "scripts/driver_seed/relocate_probe/phase2/m2_native_table_shadow_r3.py": "ebd22160439276e87e11f53b38128de1ffce7753e9f3685ad288026c9be01a88",
-    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2_compact/choice_v2.py": "3cbff6b9496d5deeb2f0cd6a26695a4d619b164290364b388e87fff4c958404f",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2_compact/choice_v2.py": "9d6150a2cee265a0e443f2598c2fade593e44d46b00a71763645c5b3fa16140c",
     ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2_compact/test_choice_v2.py": "633f111fc306c6f5dc640aaa1aeac5d954efddcf872b0903ece3151cb756b51e",
     ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2_compact/cases.jsonl": "c4565c09675db3bf195e569cbfe2ae0a001cf5d902843f6d539b165d43c3c2f4",
     "scripts/driver_seed/relocate_probe/exhibit_html_cache/0000006201-26-000031__EX-99.1.htm": "59f2a20f3240b354a6172223f32acbfe43bc304fffe44ea0a7f63fd9d921549b",

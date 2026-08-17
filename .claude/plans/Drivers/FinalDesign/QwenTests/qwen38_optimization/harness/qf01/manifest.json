@@ -1,7 +1,7 @@
 {
   "test_id": "QF-01",
   "purpose": "Diagnostic only: exact 8-K table evidence for a known anchor",
-  "prepared_at_utc": "2026-08-15T23:29:08.467381+00:00",
+  "prepared_at_utc": "2026-08-17T02:17:33.370787+00:00",
   "authorization": "ALIGNED per the owner ruling 2026-07-25 (Phase6 plan S6). The 2026-07-24 run authorization was CONSUMED by the failed old-format run (0/93, history in results/); a NEW model run requires its OWN owner GO.",
   "scope": {
     "answerable_requests": 19,
@@ -24,11 +24,11 @@
   "settings": {
     "reasoning": false,
     "temperature": 0.0,
-    "num_ctx": 65536,
-    "conservative_input_token_budget": 32768,
+    "num_ctx": 16384,
+    "conservative_input_token_budget": 8192,
     "max_tokens": 512,
-    "timeout_seconds": 300,
-    "workers": 4,
+    "timeout_seconds": 1800,
+    "workers": 1,
     "completed_answer_retries": 0,
     "system_message": null
   },
@@ -36,9 +36,9 @@
     "aligned_instruction_sha256": "d5f4a323c8cb887d34f5c13555a28d9689bdfc9df573ffa23709087535a8aaba",
     "input_marker": "\n\nINPUT (exactly one request and its complete table):\n",
     "response_schema_sha256": "5faac796dcf3a7213c73d0bb80e69548c53945ef98e39d752875fccf33b40a91",
-    "largest_case_characters": 12519,
-    "largest_case_utf8_bytes": 13224,
-    "conservative_input_token_budget": 32768
+    "largest_case_characters": 12266,
+    "largest_case_utf8_bytes": 12276,
+    "conservative_input_token_budget": 8192
   },
   "frozen_files": {
     ".claude/plans/Drivers/WIP/phase6_screen_call_1.json": "da9d79251a63ff71a9d86ae59e6924b6c37d44d68f7d2897fb1e228801f33228",
@@ -48,9 +48,9 @@
     ".claude/plans/Drivers/WIP/phase6_screen_grade.py": "b3a3a285e0b4a9ffebfeb5e1e8b236e023b527725f7dc6c4d8c01aa534e78d6a",
     ".claude/plans/Drivers/WIP/phase6_screen_validate.py": "6f82ef94d1fb3ba3891e3e94928a88edf32d2cdc045fe3a367e91df11083fb3e",
     ".claude/plans/Drivers/WIP/phase6_screen_manifest_v2.json": "05592af609a4f8da0869e396ab63b03c085ba5377a17ec74020c3dd04f2971c7",
-    "config/local_llm.py": "abcaf0d0d35bb5261e2f9dc888ed5a15e8ab0ff8046cc45c1a09995464efd520",
-    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/qf01.py": "cdefcea5c2f7c6c40a3145faf2148ff4d49d45d25dc9186b7536a629b2927132",
-    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/cases.jsonl": "4376b0843180dad1d61289d286bfd15c10d53eb04aa3444828f27a07ca376b88"
+    "config/local_llm.py": "836e5722ec01c5e1ef53b8eeb2675beb4fcb58d9e10b22570afc3c00daf80b66",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/qf01.py": "5a86295ec00ec8bcec6ec0c21c004f4c37fa7d01491a63c0645b8a4d0171303f",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/cases.jsonl": "85076fd41ccaaa3917b102a8cd8d3bee4fc41c58e2ed7ebf91ef7c1f3aac2a83"
   },
   "blindness": {
     "hidden_key_sent_to_model": false,

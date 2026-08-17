@@ -115,11 +115,13 @@ FORBIDDEN_MODEL_TEXT = (
     "expected", "truth_", "HIDDEN", "cell_text", "grading_law",
 )
 
-NUM_CTX = 16384
+NUM_CTX = int(os.environ.get("QWEN_NUM_CTX", "16384"))  # frozen at prepare
 MAX_TOKENS = 512
-TIMEOUT_SECONDS = 300
-WORKERS = 4
-MODEL_NAME = "qwen3.8:27b-mtp-q4_K_M"
+TIMEOUT_SECONDS = 1800   # cold prefill of a 12k-char table can exceed 300 s
+WORKERS = 1              # sequential, grouped by table: prefix cache + priming
+MODEL_NAME = "qwen3.8:27b-mlx"
+# Prefix priming per table (QWEN_PRIME=0 disables) - see config/local_llm.py prime()
+PRIME_PREFIX = os.environ.get("QWEN_PRIME", "1") != "0"
 
 # R28: THE aligned contract — the 5x50 table response, nothing else. The old
 # per-cell shape (block/occurrence/copied_label/period arrays) is the 0/93
@@ -247,7 +249,11 @@ def build_cases_from_calls(calls: list[dict]) -> list[dict]:
                           "time_type": "duration",
                           "wording": [label]}   # FIXTURE anchor — value-blind;
                 # a diagnostic stand-in, never Core output.
-                model_input = {"anchor": anchor, "rendered_table": rendered}
+                # PREFIX-CACHE ORDERING (2026-08-16): the table (shared by every
+                # anchor on it) goes FIRST and the per-call anchor LAST, so the
+                # server KV prefix is reused across the table's calls. Same JSON
+                # content, same keys; only the key order changes.
+                model_input = {"rendered_table": rendered, "anchor": anchor}
                 prompt = (instruction + INPUT_MARKER
                           + json.dumps(model_input, ensure_ascii=False,
                                        indent=2))
@@ -279,12 +285,18 @@ def ensure_prompt_budget(cases: list[dict], *, num_ctx: int) -> dict:
         len(case["prompt"].encode("utf-8")) for case in cases
     ]
     maximum = max(byte_counts)
-    if maximum >= budget:
+    # The original compared raw UTF-8 BYTES against a TOKEN budget (~3-4x too
+    # strict; measured 2026-08-16 with the Qwen tokenizer: the largest aligned
+    # prompt is 12,276 bytes = 3,920 tokens). Convert at 3 bytes/token, which is
+    # still conservative for these rendered tables (3.13 chars/token measured).
+    max_tokens_estimate = (maximum + 2) // 3
+    if max_tokens_estimate >= budget:
         raise ValueError(
             f"input budget unsafe: largest prompt is {maximum} UTF-8 bytes "
-            f"against a {budget}-token budget")
+            f"(~{max_tokens_estimate} tokens) against a {budget}-token budget")
     return {
         "largest_case_utf8_bytes": maximum,
+        "largest_case_token_estimate": max_tokens_estimate,
         "conservative_input_token_budget": budget,
     }
 
@@ -544,13 +556,34 @@ def run() -> dict:
     started_wall = time.monotonic()
     counts = {"completed": 0, "no_response": 0}
 
+    # Sequential, grouped by table, one prime per table (see PRIME_PREFIX).
+    ordered = sorted(cases, key=lambda c: (c.get("table_id") or "", c["id"]))
+    prime_log = []
+    last_table = None
+
+    def _results():
+        nonlocal last_table
+        for case in ordered:
+            table = case.get("table_id")
+            if PRIME_PREFIX and table != last_table:
+                prompts = [c["prompt"] for c in ordered if c.get("table_id") == table]
+                t0 = time.monotonic()
+                entry = {"table": table, "cases": len(prompts)}
+                try:
+                    entry["stats"] = L.prime_for(prompts, None, num_ctx=NUM_CTX,
+                                                 timeout=TIMEOUT_SECONDS)
+                except Exception as error:  # noqa: BLE001
+                    entry["error"] = f"{type(error).__name__}: {error}"
+                entry["wall_s"] = round(time.monotonic() - t0, 3)
+                print(f"[prime] {table} {entry.get('stats') or entry.get('error')} "
+                      f"{entry['wall_s']}s", flush=True)
+                prime_log.append(entry)
+            last_table = table
+            yield run_one(case)
+
     with RAW_RESULTS_PATH.open("x", encoding="utf-8") as output_file:
-        with ThreadPoolExecutor(max_workers=WORKERS) as executor:
-            futures = {
-                executor.submit(run_one, case): case for case in cases
-            }
-            for number, future in enumerate(as_completed(futures), 1):
-                result = future.result()
+        if True:
+            for number, result in enumerate(_results(), 1):
                 output_file.write(
                     json.dumps(result, ensure_ascii=False) + "\n")
                 output_file.flush()
@@ -577,6 +610,8 @@ def run() -> dict:
         "counts": counts,
         "model_before": manifest["model"],
         "model_after": model_fingerprint(),
+        "prefix_priming": PRIME_PREFIX,
+        "prime_calls": prime_log,
         "scored": False,
     }
     if record["model_after"] != record["model_before"]:

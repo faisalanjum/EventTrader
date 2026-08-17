@@ -739,3 +739,30 @@ H6. Memory pressure / swap once resident grows to 35 GB.
  Floor for this suite = ~40.8k cold tokens / 95 + 93 x 1 s ~= 8.7 min. We are
  within ~5% of the hardware floor. Nothing software can take from here except
  fewer tokens (compact encoding, queued) or hardware.
+
+## J2: WARM RE-RUN OF choice_v2 (23:27-23:37) = 93/93 again, but 9.4 min, NOT faster
+ First prime of the re-run logged "cache hit total=2574 matched=152 cached=152":
+ J1's snapshots were gone although the model never reloaded (no server events
+ in the 74-min gap). Eviction is purely size-based: maxPagedOutBytes = 8 GiB
+ (compile-time, prefix_cache.go) — evict oldest, then deepest, then largest.
+ A 93-case / 8-table run exceeds it, and re-running in the same order is the
+ LRU worst case (each cold table evicts the next one you need). Peak runner
+ memory during the run: 27.8 GiB (model 18) — consistent with the cap being hit.
+ => Within a run: everything hits. Across runs: only working sets that fit in
+    8 GiB of snapshots persist. Production events (seen once) are unaffected;
+    benchmark re-runs pay the 8 cold tables again (~4 min). No disk cache in
+    Ollama; mlx-lm's disk cache would only matter for repeated benchmark runs.
+
+## THIRD-ORDER FINDING (from J1/J2 logs): family-level priming still re-prefills
+## a table when a SECOND family uses the same table with a different Known-Driver
+ J2 SCR-12 prime: "cache hit total=6182 matched=6172 cached=152 left=6030" — the
+ trie held SCR-11's path (6172 tokens matched) but the branch point (before the
+ Known-Driver line) had no snapshot -> full re-prefill. 6 such pairs in the
+ suite (13 cold primes for 8 tables).
+ FIX: prime at TABLE level — prefix up to and including "TARGET FOR THIS CALL:\n"
+ (8 distinct prefixes = the 8 tables). Cold tokens 40.8k -> 22.9k => projected
+ ~5.8 min for the whole suite (from 9.0). Implemented in both shadow harness
+ copies (_prime_key/_prime_table), re-prepared (dense cases sha unchanged
+ 19fe0382b26f4a72). Queued as J8 (cv2_tableprime) after J4/J3.
+ General rule: prime the LONGEST prefix shared by the LARGEST group of upcoming
+ calls (the document), not the per-question group.
