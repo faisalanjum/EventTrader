@@ -178,3 +178,24 @@ Set max_tokens ≥ 1500 for this role (the `reason` field is unbounded).
 Script + raw results: `.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_optimization/exams/identity_exam/`
 (`identity_exam.py run|score --model … [--limit N]`, `run_gated.sh`, `results_qwen3.8_27b-mtp-q4_K_M/`
 raw_results.jsonl + score.json + kp_0152_cap1500.json, `identity_exam.log`).
+
+## 14. Which roles/steps benefit from the cache (and what has to change)
+By role (7 real AI roles): **3 of 7 use the cache** — reader (many items per event), table/prose
+locator (many anchors per table), concept picker (many facts per company menu). These are the
+high-volume roles, so by call count roughly **70–80% of all calls are cache-fast** (~1 s each after the
+document's one cold read). The other 4 — catalog chunk reader (each 40k-char chunk read once),
+identity judge, continuity judge, graders/reviewers — read each input once at the plain ~95 tok/s;
+their inputs are small (~1k tokens), so they still cost only ~10 s each.
+By step: caching helps Steps **3, 5, 8, 9, 11**; Steps 1, 4, 7, 12, 13 don't benefit; Steps 0, 2, 6,
+10, 14 have little or no model work.
+Do tests change? **No test changes its questions or answers.** Two mechanical requirements to get
+the cache: (1) put the shared document BEFORE the per-call part in the prompt — a prompt-layout
+change, so re-freeze that prompt version; (2) one `L.prime()` call per document — touches nothing.
+
+Speed vs Sonnet (for planning): fresh document — Sonnet ≈ 5–15 s to first token on 13k tokens vs
+Qwen ≈ 2.3 min (10–20x); repeated document — Qwen ~1 s (competitive or faster); Qwen is one call
+at a time. Backfill estimate: ~790 companies × 3 years × ~4 releases (+ transcripts) ≈ 10–30k
+documents ≈ 150–450M tokens ≈ **3 weeks–2 months of 24/7 GPU** for one full read (later question
+passes over the same documents are near-free only while cached).
+Hardest exam for any LLM: the reader (every exact fact from a whole filing; Sonnet ≈ 40% recall in
+EXP-2). Identity and table lanes are near-perfect for both.
