@@ -1,0 +1,21 @@
+{
+ "chunk_id": "BLMN__chunk_031",
+ "prompt_chars": 55260,
+ "prompt_sha256": "4f200ccfd03f80be6919a1e2426335ddd8bd579bb7c62b25bc637009c7ef555e",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"BLMN__chunk_031\", \"candidates\": []}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "BLMN__chunk_031",
+  "candidates": []
+ },
+ "n_candidates": 0,
+ "stats": {
+  "prompt_eval_count": 12473,
+  "eval_count": 20,
+  "total_s": 155.47,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 155.5
+}

@@ -1,0 +1,430 @@
+{
+ "chunk_id": "CMG__chunk_033",
+ "prompt_chars": 54028,
+ "prompt_sha256": "2f66e1dc4478abefe0173af9a9b1a7a8b0b09273d6dcec09af106856ce2d324d",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"CMG__chunk_033\", \"candidates\": [\n  {\n    \"proposed_name\": \"menu_price\",\n    \"quote\": \"The increase is primarily attributable to an increase in menu prices and, to a lesser extent, an increase in transactions\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"transactions\",\n    \"quote\": \"The increase is primarily attributable to an increase in menu prices and, to a lesser extent, an increase in transactions\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"group_size\",\n    \"quote\": \"partially offset by a decrease in group size from the continued resurgence of our in-restaurant business\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"consumer_behavior_shift\",\n    \"quote\": \"The increase was primarily due to menu price increases, a shift in consumer behaviors related to COVID-19 from digital sales to in-restaurant sales\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"new_restaurant_openings\",\n    \"quote\": \"Total revenue increased due to comparable restaurant sales increase of $568.6 million and restaurants not yet in the comparable base of $519.4 million\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"sales_leverage\",\n    \"quote\": \"The decrease was driven primarily by sales leverage and, to a lesser extent, lower delivery expenses associated with lower volume of delivery transactions\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"delivery_volume\",\n    \"quote\": \"lower delivery expenses associated with lower volume of delivery transactions, partially offset by wage inflation and higher commodity inflation\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"wage_inflation\",\n    \"quote\": \"partially offset by wage inflation and higher commodity inflation primarily from avocados, packaging, dairy, beef and chicken\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"commodity_inflation\",\n    \"quote\": \"partially offset by wage inflation and higher commodity inflation primarily from avocados, packaging, dairy, beef and chicken\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"rent_expense\",\n    \"quote\": \"Occupancy costs decreased as a percentage of total revenue for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to sales leverage, partially offset by increased rent expense associated with new restaurants.\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"utilities_cost\",\n    \"quote\": \"These decreases were partially offset by higher costs across several expenses, most notably higher utilities primarily related to inflation in natural gas and electricity\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"maintenance_cost\",\n    \"quote\": \"most notably higher utilities primarily related to inflation in natural gas and electricity and higher maintenance costs\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"stock_based_compensation\",\n    \"quote\": \"a $81.5 million decrease in stock-based compensation and related taxes, primarily attributable to the timing of vesting of the December 2020 modification of 2018 performance awards\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"performance_bonus\",\n    \"quote\": \"a $13.7 million decrease in performance bonuses and related taxes; and a $12.4 million decrease in litigation expense in 2022 compared to 2021\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"litigation_expense\",\n    \"quote\": \"a $13.7 million decrease in performance bonuses and related taxes; and a $12.4 million decrease in litigation expense in 2022 compared to 2021\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"employee_wages\",\n    \"quote\": \"These decreases were partially offset by a $21.5 million increase in employee wages primarily due to headcount growth\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"headcount_growth\",\n    \"quote\": \"These decreases were partially offset by a $21.5 million increase in employee wages primarily due to headcount growth\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"outside_services_expense\",\n    \"quote\": \"$20.5 million increase in outside services expense related to corporate initiatives; and $12.5 million associated with the biennial All Managers’ Conference\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"conference_cost\",\n    \"quote\": \"$20.5 million increase in outside services expense related to corporate initiatives; and $12.5 million associated with the biennial All Managers’ Conference that was held in March 2022\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"depreciation_expense\",\n    \"quote\": \"Depreciation and amortization decreased as a percentage of total revenue for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to sales leverage, partially offset by increased depreciation expense associated with new restaurants.\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"pre_opening_cost\",\n    \"quote\": \"Pre-opening costs increased in dollar terms for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to higher wages and rent on increased openings of 236 new restaurants\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"investment_gain\",\n    \"quote\": \"Interest and other income (expense), net increased for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to a gain on our investments in Tractor Beverages, Inc.\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"interest_income\",\n    \"quote\": \"and, to a lesser extent, increased interest income on our investments in US Treasury securities, money market funds and time deposits due to increased interest rates in 2022 as compared to 2021\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"interest_rate\",\n    \"quote\": \"increased interest income on our investments in US Treasury securities, money market funds and time deposits due to increased interest rates in 2022 as compared to 2021\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"tax_benefit\",\n    \"quote\": \"The effective income tax rate for the year ended December 31, 2022, was higher than the effective income tax rate for the year ended December 31, 2021, primarily due to a decrease in tax benefits related to option exercises and equity vesting\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"uncertain_tax_position_reserve\",\n    \"quote\": \"a reduction in return to provision benefits, and a net increase in uncertain tax position reserves\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"seasonality\",\n    \"quote\": \"Seasonal factors cause our profitability to fluctuate from quarter to quarter. Historically, our average daily restaurant sales and net income are lower in the first and fourth quarters\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"weather\",\n    \"quote\": \"because fewer people eat out during periods of inclement weather (the winter months) than during periods of mild or warm weather (the spring, summer and fall months)\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"trading_days\",\n    \"quote\": \"The number of trading days in a quarter can also affect our results, although, on an overall annual basis, changes in trading days do not have a significant impact on our results.\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"capital_expenditure\",\n    \"quote\": \"Our total capital expenditures for 2022 were $479.2 million. In 2022, we spent on average about $1.2 million in development and construction costs per new restaurant\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"share_repurchase\",\n    \"quote\": \"repurchase additional shares of our common stock subject to market conditions; invest in, maintain, and refurbish our existing restaurants\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"treasury_security_purchase\",\n    \"quote\": \"The change was primarily associated with a $267.3 million increase in U.S. Treasury security purchases net of U.S. Treasury security maturities\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"tax_withholding\",\n    \"quote\": \"and, to a lesser extent, $19.1 million of elevated payments of tax withholdings related to stock compensation for the year ended December 31, 2022\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"food_safety_incident\",\n    \"quote\": \"Any report, legitimate or rumored, of food-borne illness such as E. coli, hepatitis A, norovirus or salmonella, or other food safety issue, such as food tampering or contamination, at one of our restaurants could adversely affect our reputation\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001058090-23-000010\",\n      \"date\": \"2023-02-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "CMG__chunk_033",
+  "candidates": [
+   {
+    "proposed_name": "menu_price",
+    "quote": "The increase is primarily attributable to an increase in menu prices and, to a lesser extent, an increase in transactions",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "transactions",
+    "quote": "The increase is primarily attributable to an increase in menu prices and, to a lesser extent, an increase in transactions",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "group_size",
+    "quote": "partially offset by a decrease in group size from the continued resurgence of our in-restaurant business",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "consumer_behavior_shift",
+    "quote": "The increase was primarily due to menu price increases, a shift in consumer behaviors related to COVID-19 from digital sales to in-restaurant sales",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "new_restaurant_openings",
+    "quote": "Total revenue increased due to comparable restaurant sales increase of $568.6 million and restaurants not yet in the comparable base of $519.4 million",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "sales_leverage",
+    "quote": "The decrease was driven primarily by sales leverage and, to a lesser extent, lower delivery expenses associated with lower volume of delivery transactions",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "delivery_volume",
+    "quote": "lower delivery expenses associated with lower volume of delivery transactions, partially offset by wage inflation and higher commodity inflation",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "wage_inflation",
+    "quote": "partially offset by wage inflation and higher commodity inflation primarily from avocados, packaging, dairy, beef and chicken",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "commodity_inflation",
+    "quote": "partially offset by wage inflation and higher commodity inflation primarily from avocados, packaging, dairy, beef and chicken",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "rent_expense",
+    "quote": "Occupancy costs decreased as a percentage of total revenue for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to sales leverage, partially offset by increased rent expense associated with new restaurants.",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "utilities_cost",
+    "quote": "These decreases were partially offset by higher costs across several expenses, most notably higher utilities primarily related to inflation in natural gas and electricity",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "maintenance_cost",
+    "quote": "most notably higher utilities primarily related to inflation in natural gas and electricity and higher maintenance costs",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "stock_based_compensation",
+    "quote": "a $81.5 million decrease in stock-based compensation and related taxes, primarily attributable to the timing of vesting of the December 2020 modification of 2018 performance awards",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "performance_bonus",
+    "quote": "a $13.7 million decrease in performance bonuses and related taxes; and a $12.4 million decrease in litigation expense in 2022 compared to 2021",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "litigation_expense",
+    "quote": "a $13.7 million decrease in performance bonuses and related taxes; and a $12.4 million decrease in litigation expense in 2022 compared to 2021",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "employee_wages",
+    "quote": "These decreases were partially offset by a $21.5 million increase in employee wages primarily due to headcount growth",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "headcount_growth",
+    "quote": "These decreases were partially offset by a $21.5 million increase in employee wages primarily due to headcount growth",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "outside_services_expense",
+    "quote": "$20.5 million increase in outside services expense related to corporate initiatives; and $12.5 million associated with the biennial All Managers’ Conference",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "conference_cost",
+    "quote": "$20.5 million increase in outside services expense related to corporate initiatives; and $12.5 million associated with the biennial All Managers’ Conference that was held in March 2022",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "depreciation_expense",
+    "quote": "Depreciation and amortization decreased as a percentage of total revenue for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to sales leverage, partially offset by increased depreciation expense associated with new restaurants.",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "pre_opening_cost",
+    "quote": "Pre-opening costs increased in dollar terms for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to higher wages and rent on increased openings of 236 new restaurants",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "investment_gain",
+    "quote": "Interest and other income (expense), net increased for the year ended December 31, 2022 compared to the year ended December 31, 2021, primarily due to a gain on our investments in Tractor Beverages, Inc.",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "interest_income",
+    "quote": "and, to a lesser extent, increased interest income on our investments in US Treasury securities, money market funds and time deposits due to increased interest rates in 2022 as compared to 2021",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "interest_rate",
+    "quote": "increased interest income on our investments in US Treasury securities, money market funds and time deposits due to increased interest rates in 2022 as compared to 2021",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "tax_benefit",
+    "quote": "The effective income tax rate for the year ended December 31, 2022, was higher than the effective income tax rate for the year ended December 31, 2021, primarily due to a decrease in tax benefits related to option exercises and equity vesting",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "uncertain_tax_position_reserve",
+    "quote": "a reduction in return to provision benefits, and a net increase in uncertain tax position reserves",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "seasonality",
+    "quote": "Seasonal factors cause our profitability to fluctuate from quarter to quarter. Historically, our average daily restaurant sales and net income are lower in the first and fourth quarters",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "weather",
+    "quote": "because fewer people eat out during periods of inclement weather (the winter months) than during periods of mild or warm weather (the spring, summer and fall months)",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "trading_days",
+    "quote": "The number of trading days in a quarter can also affect our results, although, on an overall annual basis, changes in trading days do not have a significant impact on our results.",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "capital_expenditure",
+    "quote": "Our total capital expenditures for 2022 were $479.2 million. In 2022, we spent on average about $1.2 million in development and construction costs per new restaurant",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "share_repurchase",
+    "quote": "repurchase additional shares of our common stock subject to market conditions; invest in, maintain, and refurbish our existing restaurants",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "treasury_security_purchase",
+    "quote": "The change was primarily associated with a $267.3 million increase in U.S. Treasury security purchases net of U.S. Treasury security maturities",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "tax_withholding",
+    "quote": "and, to a lesser extent, $19.1 million of elevated payments of tax withholdings related to stock compensation for the year ended December 31, 2022",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "food_safety_incident",
+    "quote": "Any report, legitimate or rumored, of food-borne illness such as E. coli, hepatitis A, norovirus or salmonella, or other food safety issue, such as food tampering or contamination, at one of our restaurants could adversely affect our reputation",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "10-K",
+     "source_id": "0001058090-23-000010",
+     "date": "2023-02-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "n_candidates": 34,
+ "stats": {
+  "prompt_eval_count": 12759,
+  "eval_count": 5097,
+  "total_s": 626.59,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 626.6
+}

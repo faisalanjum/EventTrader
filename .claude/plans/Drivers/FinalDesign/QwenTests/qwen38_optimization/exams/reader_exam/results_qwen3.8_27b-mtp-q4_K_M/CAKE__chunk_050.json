@@ -1,0 +1,21 @@
+{
+ "chunk_id": "CAKE__chunk_050",
+ "prompt_chars": 25773,
+ "prompt_sha256": "5bc9ec0ad8221b6f20e69af7c19e3c2db739923580637b9326831153b41369fd",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"CAKE__chunk_050\", \"candidates\": []}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "CAKE__chunk_050",
+  "candidates": []
+ },
+ "n_candidates": 0,
+ "stats": {
+  "prompt_eval_count": 6486,
+  "eval_count": 20,
+  "total_s": 76.39,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 76.4
+}

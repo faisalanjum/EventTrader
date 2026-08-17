@@ -1,0 +1,274 @@
+{
+ "chunk_id": "BLMN__chunk_023",
+ "prompt_chars": 38288,
+ "prompt_sha256": "e84d8e3f80ec0e0eb24b0dc1e658b48f68ce720f77efd8c45d9e103eb4e5cfd0",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"BLMN__chunk_023\", \"candidates\": [\n  {\n    \"proposed_name\": \"restaurant_level_operating_margin\",\n    \"quote\": \"Restaurant-level operating margin 12.5 % 12.5 % 13.8 % 14.0 %\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"operating_income\",\n    \"quote\": \"Income from operations $ 17,210 $ 58,216 $ 140,434 $ 268,295\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"asset_impairment\",\n    \"quote\": \"Asset impairments and closure-related charges (2) 5,127 (6,586) 33,873 (6,586)\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"store_closure\",\n    \"quote\": \"closure costs and severance primarily in connection with the Q2 2024 decision to close nine restaurants in Hong Kong\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"executive_transition_cost\",\n    \"quote\": \"Executive transition costs (3) 4,121 — 4,121 —\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"strategic_initiative_fee\",\n    \"quote\": \"Strategic initiative fees (4) 3,000 — 4,000 —\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"transaction_related_expense\",\n    \"quote\": \"Transaction-related expenses (5) 1,490 — 1,490 —\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"net_income\",\n    \"quote\": \"Net income (loss) attributable to Bloomin’ Brands \\n\\n$ 6,912 $ 44,528 $ (48,557) $ 204,116\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"loss_on_extinguishment_of_debt\",\n    \"quote\": \"Loss on extinguishment of debt (2) — — 135,797 —\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"eps\",\n    \"quote\": \"Diluted earnings (loss) per share $ 0.08 $ 0.45 $ (0.56) $ 2.08\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": \"per_share\",\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"systemwide_sales\",\n    \"quote\": \"System-wide sales is a non-GAAP financial measure that includes sales of all restaurants operating under our brand names, whether we own them or not.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"franchise_sales\",\n    \"quote\": \"Total franchise sales $ 233 $ 242 $ 723 $ 761\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"cash_and_cash_equivalents\",\n    \"quote\": \"As of September 29, 2024, we had $83.6 million in cash and cash equivalents, of which $18.9 million was held by foreign affiliates.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"undistributed_foreign_earnings\",\n    \"quote\": \"As of September 29, 2024, we had aggregate undistributed foreign earnings of approximately $35.7 million that may be repatriated to the U.S. without additional material U.S. federal income tax.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"revolving_credit_facility\",\n    \"quote\": \"As of September 29, 2024, we had $407.2 million in available unused borrowing capacity under our revolving credit facility, net of letters of credit of $17.8 million.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"capital_expenditure\",\n    \"quote\": \"We estimate that our capital expenditures will total approximately $260 million to $270 million in 2024.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"judicial_deposit\",\n    \"quote\": \"In July 2024, we made a judicial deposit of $42.9 million, inclusive of principal, interest and potential penalties, in connection with our appeal of an unfavorable court ruling regarding our eligibility for tax exemptions under the Brazil tax legislation.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"dividend_per_share\",\n    \"quote\": \"In October 2024, our Board declared a quarterly cash dividend of $0.24 per share, payable on December 11, 2024.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": \"per_share\",\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"share_repurchase\",\n    \"quote\": \"In February 2024, our Board canceled the remaining $57.5 million under our former share repurchase authorization and approved a new $350.0 million share repurchase authorization.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"working_capital\",\n    \"quote\": \"Working capital (deficit) $ (587,912) $ (659,021)\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"unearned_revenue\",\n    \"quote\": \"Unearned revenue primarily from unredeemed gift cards of $293.5 million and $381.9 million as of September 29, 2024 and December 31, 2023, respectively\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001546417-24-000160\",\n      \"date\": \"2024-11-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "BLMN__chunk_023",
+  "candidates": [
+   {
+    "proposed_name": "restaurant_level_operating_margin",
+    "quote": "Restaurant-level operating margin 12.5 % 12.5 % 13.8 % 14.0 %",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "operating_income",
+    "quote": "Income from operations $ 17,210 $ 58,216 $ 140,434 $ 268,295",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "asset_impairment",
+    "quote": "Asset impairments and closure-related charges (2) 5,127 (6,586) 33,873 (6,586)",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "store_closure",
+    "quote": "closure costs and severance primarily in connection with the Q2 2024 decision to close nine restaurants in Hong Kong",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "executive_transition_cost",
+    "quote": "Executive transition costs (3) 4,121 — 4,121 —",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "strategic_initiative_fee",
+    "quote": "Strategic initiative fees (4) 3,000 — 4,000 —",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "transaction_related_expense",
+    "quote": "Transaction-related expenses (5) 1,490 — 1,490 —",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "net_income",
+    "quote": "Net income (loss) attributable to Bloomin’ Brands \n\n$ 6,912 $ 44,528 $ (48,557) $ 204,116",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "loss_on_extinguishment_of_debt",
+    "quote": "Loss on extinguishment of debt (2) — — 135,797 —",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "eps",
+    "quote": "Diluted earnings (loss) per share $ 0.08 $ 0.45 $ (0.56) $ 2.08",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": "per_share",
+    "slice_note": null
+   },
+   {
+    "proposed_name": "systemwide_sales",
+    "quote": "System-wide sales is a non-GAAP financial measure that includes sales of all restaurants operating under our brand names, whether we own them or not.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "franchise_sales",
+    "quote": "Total franchise sales $ 233 $ 242 $ 723 $ 761",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "cash_and_cash_equivalents",
+    "quote": "As of September 29, 2024, we had $83.6 million in cash and cash equivalents, of which $18.9 million was held by foreign affiliates.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "undistributed_foreign_earnings",
+    "quote": "As of September 29, 2024, we had aggregate undistributed foreign earnings of approximately $35.7 million that may be repatriated to the U.S. without additional material U.S. federal income tax.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "revolving_credit_facility",
+    "quote": "As of September 29, 2024, we had $407.2 million in available unused borrowing capacity under our revolving credit facility, net of letters of credit of $17.8 million.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "capital_expenditure",
+    "quote": "We estimate that our capital expenditures will total approximately $260 million to $270 million in 2024.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "judicial_deposit",
+    "quote": "In July 2024, we made a judicial deposit of $42.9 million, inclusive of principal, interest and potential penalties, in connection with our appeal of an unfavorable court ruling regarding our eligibility for tax exemptions under the Brazil tax legislation.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "dividend_per_share",
+    "quote": "In October 2024, our Board declared a quarterly cash dividend of $0.24 per share, payable on December 11, 2024.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": "per_share",
+    "slice_note": null
+   },
+   {
+    "proposed_name": "share_repurchase",
+    "quote": "In February 2024, our Board canceled the remaining $57.5 million under our former share repurchase authorization and approved a new $350.0 million share repurchase authorization.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "working_capital",
+    "quote": "Working capital (deficit) $ (587,912) $ (659,021)",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "unearned_revenue",
+    "quote": "Unearned revenue primarily from unredeemed gift cards of $293.5 million and $381.9 million as of September 29, 2024 and December 31, 2023, respectively",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "10-Q",
+     "source_id": "0001546417-24-000160",
+     "date": "2024-11-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "n_candidates": 21,
+ "stats": {
+  "prompt_eval_count": 10375,
+  "eval_count": 3161,
+  "total_s": 503.77,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 503.8
+}

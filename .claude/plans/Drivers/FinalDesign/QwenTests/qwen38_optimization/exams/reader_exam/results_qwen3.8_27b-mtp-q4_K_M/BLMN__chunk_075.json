@@ -1,0 +1,214 @@
+{
+ "chunk_id": "BLMN__chunk_075",
+ "prompt_chars": 54445,
+ "prompt_sha256": "e106ed85d55bba7329f16e81f9b1a6844ba5dfde2d4510fa9190166e06b687aa",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"BLMN__chunk_075\", \"candidates\": [\n  {\n    \"proposed_name\": \"guest_check\",\n    \"quote\": \"we are seeing continued frequency, but maybe a little bit of management on the guest check side as they come into our restaurants.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"catering_sales\",\n    \"quote\": \"Catering sales, for example, have basically doubled from where they were a year ago and continue to grow, but the average check per person is much lower on a catering transaction.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"channel:catering\"\n  },\n  {\n    \"proposed_name\": \"lunch_sales\",\n    \"quote\": \"Lunch is another area where we're continuing to see growth. Again, the check on lunch is lower than a check you would see on dinner.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"channel:lunch\"\n  },\n  {\n    \"proposed_name\": \"lto_sales\",\n    \"quote\": \"LTOs have been very popular, right? And again, they carry a little bit lower check average.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"commodity_inflation\",\n    \"quote\": \"I think you might see a stitch lower commodity inflation as well as labor inflation.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"labor_inflation\",\n    \"quote\": \"I think you might see a stitch lower commodity inflation as well as labor inflation.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"same_store_traffic\",\n    \"quote\": \"I want you, I guess, in terms of, Hey, this is a good growing segment that, you know, can generate positive same store traffic and, you know, through a cycle or, you know, if you just say, you know, this is something that you can still create value and this is an industry or this is a segment, this is a brand, you know, that can create value for shareholders even in a perpetually negative same store traffic environment.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"new_unit_openings\",\n    \"quote\": \"Clearly, we're seeing strong new unit openings, and we have earned the right to own and grow, and I'm very familiar with that phrase, and use it my entire career.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"labor_turnover\",\n    \"quote\": \"Our turnover rates are very good. The trends are good. That's a managing partner that runs a restaurant, whether it's the manager, whether it's our team members.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"industry_discounting\",\n    \"quote\": \"On the customer side, we are seeing an uptick in discounting in the industry, but not against the folks that we directly compete with.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"pricing\",\n    \"quote\": \"Yeah, if there's no additional price increases, it'll definitely kick down into the, yeah, it might still be at seven or so in Q2, but then Q3, it takes a pretty decent chunk down from there, and then you would end the year with, again, if we didn't replicate anything, you would end up with low single-digit pricing.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"cogs\",\n    \"quote\": \"We also had some, as I mentioned earlier, we had some COGS favorability above what we were expecting.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"fx\",\n    \"quote\": \"We also had some FX favorability that, again, was a little bit unexpected because the currency can be a little volatile.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"operating_margin\",\n    \"quote\": \"Margins are probably down a little in Q2 versus last year, but I would say op margins still in that 7% to 7.5% range for the quarter.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"restaurant_margin\",\n    \"quote\": \"Restaurant margins probably closer to flat year over year. It would be a ballpark.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"marketing_spend\",\n    \"quote\": \"The reality is, is we've been running in the low twos for the last year or two. We feel pretty good about where we are in terms of the returns we're seeing.\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"transcript\",\n      \"source_id\": \"BLMN_2023-04-28T08.15\",\n      \"date\": \"2023-04-28\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "BLMN__chunk_075",
+  "candidates": [
+   {
+    "proposed_name": "guest_check",
+    "quote": "we are seeing continued frequency, but maybe a little bit of management on the guest check side as they come into our restaurants.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "catering_sales",
+    "quote": "Catering sales, for example, have basically doubled from where they were a year ago and continue to grow, but the average check per person is much lower on a catering transaction.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": "channel:catering"
+   },
+   {
+    "proposed_name": "lunch_sales",
+    "quote": "Lunch is another area where we're continuing to see growth. Again, the check on lunch is lower than a check you would see on dinner.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": "channel:lunch"
+   },
+   {
+    "proposed_name": "lto_sales",
+    "quote": "LTOs have been very popular, right? And again, they carry a little bit lower check average.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "commodity_inflation",
+    "quote": "I think you might see a stitch lower commodity inflation as well as labor inflation.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "labor_inflation",
+    "quote": "I think you might see a stitch lower commodity inflation as well as labor inflation.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "same_store_traffic",
+    "quote": "I want you, I guess, in terms of, Hey, this is a good growing segment that, you know, can generate positive same store traffic and, you know, through a cycle or, you know, if you just say, you know, this is something that you can still create value and this is an industry or this is a segment, this is a brand, you know, that can create value for shareholders even in a perpetually negative same store traffic environment.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "new_unit_openings",
+    "quote": "Clearly, we're seeing strong new unit openings, and we have earned the right to own and grow, and I'm very familiar with that phrase, and use it my entire career.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "labor_turnover",
+    "quote": "Our turnover rates are very good. The trends are good. That's a managing partner that runs a restaurant, whether it's the manager, whether it's our team members.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "industry_discounting",
+    "quote": "On the customer side, we are seeing an uptick in discounting in the industry, but not against the folks that we directly compete with.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "pricing",
+    "quote": "Yeah, if there's no additional price increases, it'll definitely kick down into the, yeah, it might still be at seven or so in Q2, but then Q3, it takes a pretty decent chunk down from there, and then you would end the year with, again, if we didn't replicate anything, you would end up with low single-digit pricing.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "cogs",
+    "quote": "We also had some, as I mentioned earlier, we had some COGS favorability above what we were expecting.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "fx",
+    "quote": "We also had some FX favorability that, again, was a little bit unexpected because the currency can be a little volatile.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "operating_margin",
+    "quote": "Margins are probably down a little in Q2 versus last year, but I would say op margins still in that 7% to 7.5% range for the quarter.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "restaurant_margin",
+    "quote": "Restaurant margins probably closer to flat year over year. It would be a ballpark.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "marketing_spend",
+    "quote": "The reality is, is we've been running in the low twos for the last year or two. We feel pretty good about where we are in terms of the returns we're seeing.",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "transcript",
+     "source_id": "BLMN_2023-04-28T08.15",
+     "date": "2023-04-28"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "n_candidates": 16,
+ "stats": {
+  "prompt_eval_count": 13391,
+  "eval_count": 2371,
+  "total_s": 469.65,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 469.7
+}

@@ -1,0 +1,19 @@
+{
+ "chunk_id": "BLMN__chunk_007",
+ "think": false,
+ "raw_output": "{\"chunk_id\": \"BLMN__chunk_007\", \"candidates\": []}",
+ "parsed": {
+  "chunk_id": "BLMN__chunk_007",
+  "candidates": []
+ },
+ "stats": {
+  "tok_s": 18.5,
+  "eval_count": 19,
+  "prompt_eval_count": 13624,
+  "done_reason": "stop",
+  "truncated_input": false,
+  "truncated_output": false,
+  "total_s": 2.69,
+  "host": "http://127.0.0.1:11434"
+ }
+}

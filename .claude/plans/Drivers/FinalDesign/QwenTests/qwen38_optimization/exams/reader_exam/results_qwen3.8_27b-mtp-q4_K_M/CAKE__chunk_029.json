@@ -1,0 +1,214 @@
+{
+ "chunk_id": "CAKE__chunk_029",
+ "prompt_chars": 55208,
+ "prompt_sha256": "80dc76fd88833302ed6578f9bbde6843cef4eebfde438087e34d65070add013f",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"CAKE__chunk_029\", \"candidates\": [\n  {\n    \"proposed_name\": \"labor_cost_inflation\",\n    \"quote\": \"we have experienced and continue to experience significant labor cost inflation, which has and may continue to significantly increase our cost of doing business.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"minimum_wage_increase\",\n    \"quote\": \"Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage)\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"healthcare_cost_inflation\",\n    \"quote\": \"Healthcare costs continue to rise and are especially difficult to project given that material increases in costs associated with medical claims\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"commodity_price_inflation\",\n    \"quote\": \"causing supply chain challenges and significantly increased commodity and wage inflation. Some of these factors continued to impact our operating results\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"supply_chain_disruption\",\n    \"quote\": \"could reduce customer traffic to our restaurants, disrupt our food supply chain or cause us to be the target of litigation\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"food_safety_incident\",\n    \"quote\": \"We also face food safety risk, including the risk of food-borne illness and food contamination (including allergen cross contamination)\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"product_recall\",\n    \"quote\": \"If any of our bakery products becomes subject to a product recall or market withdrawal, whether voluntary or involuntary, our costs to conduct such recall\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"regulatory_compliance_cost\",\n    \"quote\": \"We may incur significant additional costs and require operational changes to comply with these laws and regulations and may face fines, penalties\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"labor_unionization\",\n    \"quote\": \"Our staff members and others may attempt to unionize our workforce, establish boycotts or picket lines or interrupt our supply chains\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"adverse_weather\",\n    \"quote\": \"Adverse weather conditions, natural disasters and public health emergencies can impact customer traffic, make it more difficult to fully staff our restaurants\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"act_of_violence\",\n    \"quote\": \"Acts of violence at or threatened against our restaurants or the centers in which they are located, including civil unrest, customer intimidation\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"vendor_failure\",\n    \"quote\": \"If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"lease_renewal_cost\",\n    \"quote\": \"We may incur additional costs if we are unable to renew our restaurant leases on similar terms and conditions, or at all, or to relocate our restaurants\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"negative_publicity\",\n    \"quote\": \"Negative publicity directed at any of our brands, regardless of factual basis, such as relating to the quality of our restaurant food or consumer packaged goods\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"key_executive_departure\",\n    \"quote\": \"The departure of Mr. Overton or other senior executives for any reason could have a material adverse effect on our business and long-term strategic plan.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"staffing_shortage\",\n    \"quote\": \"If we are unable to attract and retain qualified personnel, our restaurants and bakery operations could be short staffed, we may be forced to incur overtime expenses\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-K\",\n      \"source_id\": \"0001104659-24-027565\",\n      \"date\": \"2024-02-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "CAKE__chunk_029",
+  "candidates": [
+   {
+    "proposed_name": "labor_cost_inflation",
+    "quote": "we have experienced and continue to experience significant labor cost inflation, which has and may continue to significantly increase our cost of doing business.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "minimum_wage_increase",
+    "quote": "Certain state and localities have significantly increased their minimum wage and/or tip credit wage (or have eliminated the tip credit wage)",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "healthcare_cost_inflation",
+    "quote": "Healthcare costs continue to rise and are especially difficult to project given that material increases in costs associated with medical claims",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "commodity_price_inflation",
+    "quote": "causing supply chain challenges and significantly increased commodity and wage inflation. Some of these factors continued to impact our operating results",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "supply_chain_disruption",
+    "quote": "could reduce customer traffic to our restaurants, disrupt our food supply chain or cause us to be the target of litigation",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "food_safety_incident",
+    "quote": "We also face food safety risk, including the risk of food-borne illness and food contamination (including allergen cross contamination)",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "product_recall",
+    "quote": "If any of our bakery products becomes subject to a product recall or market withdrawal, whether voluntary or involuntary, our costs to conduct such recall",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "regulatory_compliance_cost",
+    "quote": "We may incur significant additional costs and require operational changes to comply with these laws and regulations and may face fines, penalties",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "labor_unionization",
+    "quote": "Our staff members and others may attempt to unionize our workforce, establish boycotts or picket lines or interrupt our supply chains",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "adverse_weather",
+    "quote": "Adverse weather conditions, natural disasters and public health emergencies can impact customer traffic, make it more difficult to fully staff our restaurants",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "act_of_violence",
+    "quote": "Acts of violence at or threatened against our restaurants or the centers in which they are located, including civil unrest, customer intimidation",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "vendor_failure",
+    "quote": "If any of our third-party vendors experiences a failure that affects a significant aspect of our business, we may experience data loss, increased costs",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "lease_renewal_cost",
+    "quote": "We may incur additional costs if we are unable to renew our restaurant leases on similar terms and conditions, or at all, or to relocate our restaurants",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "negative_publicity",
+    "quote": "Negative publicity directed at any of our brands, regardless of factual basis, such as relating to the quality of our restaurant food or consumer packaged goods",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "key_executive_departure",
+    "quote": "The departure of Mr. Overton or other senior executives for any reason could have a material adverse effect on our business and long-term strategic plan.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "staffing_shortage",
+    "quote": "If we are unable to attract and retain qualified personnel, our restaurants and bakery operations could be short staffed, we may be forced to incur overtime expenses",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-K",
+     "source_id": "0001104659-24-027565",
+     "date": "2024-02-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "n_candidates": 16,
+ "stats": {
+  "prompt_eval_count": 10928,
+  "eval_count": 2283,
+  "total_s": 405.97,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 406.0
+}

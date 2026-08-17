@@ -1,0 +1,24 @@
+{
+  "model": "qwen3.8:27b-mtp-q4_K_M",
+  "rules_sha256": "b33ab08ba2ae03c04c34e65951675e647dcb4f9a9d66439ddfdd22a34e848f06",
+  "key_sha256": "cf87a09af1c7b7c6f708c8df56d86bfc600edf8c1eaf6e41a8c6ab783b181736",
+  "system": "You are a JSON API. You emit exactly one JSON object and nothing else. Never write analysis, reasoning, explanation, or markdown. Your entire response must parse as JSON.",
+  "think": false,
+  "mode": "grammar",
+  "temperature": 0.0,
+  "num_ctx": 32768,
+  "max_tokens": 8000,
+  "chunks": [
+    "BLMN__chunk_007.json",
+    "BLMN__chunk_023.json",
+    "BLMN__chunk_031.json",
+    "BLMN__chunk_075.json",
+    "CAKE__chunk_024.json",
+    "CAKE__chunk_029.json",
+    "CAKE__chunk_033.json",
+    "CAKE__chunk_050.json",
+    "CMG__chunk_029.json",
+    "CMG__chunk_033.json"
+  ],
+  "assembled_single_prompt": true
+}

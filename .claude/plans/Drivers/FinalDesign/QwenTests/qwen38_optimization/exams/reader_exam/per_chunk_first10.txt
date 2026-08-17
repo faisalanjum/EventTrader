@@ -1,0 +1,12 @@
+chunk              gold      qwen    sonnet      opus   (gold rows hit / candidates emitted)
+BLMN__chunk_007      34    19/18     16/13     23/17 
+BLMN__chunk_023      23    16/21     15/11     20/18 
+BLMN__chunk_031      17     0/0       6/7       2/2  
+BLMN__chunk_075      32    15/16     12/13     10/11 
+CAKE__chunk_024      36    21/17     19/16     23/16 
+CAKE__chunk_029      40    18/16     13/11     24/20 
+CAKE__chunk_033      34    14/12     18/19     15/12 
+CAKE__chunk_050      10     0/0       5/5       4/4  
+CMG__chunk_029       27    13/14     13/13     16/12 
+CMG__chunk_033       43    32/34     17/12     18/14 
+qwen wall: total 65.7 min, mean 394 s/chunk (GGUF, schema-enforced, no reasoning)

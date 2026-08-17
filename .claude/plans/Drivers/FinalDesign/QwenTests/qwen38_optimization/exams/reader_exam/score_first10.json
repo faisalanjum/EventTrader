@@ -1,0 +1,53 @@
+{
+  "qwen3.8:27b-mtp-q4_K_M": {
+    "gold": 296,
+    "name_hit": 97,
+    "quote_hit": 125,
+    "either": 148,
+    "candidates": 148,
+    "chunks": 10,
+    "quote_verbatim": 145,
+    "name_wellformed": 148,
+    "hard_gold": 98,
+    "hard_either": 39,
+    "name_recall": 0.3277,
+    "quote_recall": 0.4223,
+    "either_recall": 0.5,
+    "hard_either_recall": 0.398,
+    "quote_verbatim_rate": 0.9797
+  },
+  "sonnet_40k_1": {
+    "gold": 296,
+    "name_hit": 95,
+    "quote_hit": 116,
+    "either": 134,
+    "candidates": 120,
+    "chunks": 10,
+    "quote_verbatim": 120,
+    "name_wellformed": 120,
+    "hard_gold": 98,
+    "hard_either": 48,
+    "name_recall": 0.3209,
+    "quote_recall": 0.3919,
+    "either_recall": 0.4527,
+    "hard_either_recall": 0.4898,
+    "quote_verbatim_rate": 1.0
+  },
+  "opus_40k_1": {
+    "gold": 296,
+    "name_hit": 105,
+    "quote_hit": 135,
+    "either": 155,
+    "candidates": 126,
+    "chunks": 10,
+    "quote_verbatim": 126,
+    "name_wellformed": 126,
+    "hard_gold": 98,
+    "hard_either": 47,
+    "name_recall": 0.3547,
+    "quote_recall": 0.4561,
+    "either_recall": 0.5236,
+    "hard_either_recall": 0.4796,
+    "quote_verbatim_rate": 1.0
+  }
+}

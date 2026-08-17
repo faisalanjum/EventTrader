@@ -1,0 +1,226 @@
+{
+ "chunk_id": "CAKE__chunk_024",
+ "prompt_chars": 55735,
+ "prompt_sha256": "fa663f80a3ef6bc47d14e7a1ba8d492ded436b8b6bd3cd47eda1dd19769ee94e",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"CAKE__chunk_024\", \"candidates\": [\n  {\n    \"proposed_name\": \"customer_traffic\",\n    \"quote\": \"The decrease from fiscal 2023 was primarily driven by decreased customer traffic of 1.5% partially offset by an increase in average check of 0.9%\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"segment:the_cheesecake_factory\"\n  },\n  {\n    \"proposed_name\": \"average_check\",\n    \"quote\": \"partially offset by an increase in average check of 0.9% (based on an increase of 5.2% in menu pricing and 4.3% negative impact from mix)\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"segment:the_cheesecake_factory\"\n  },\n  {\n    \"proposed_name\": \"menu_pricing\",\n    \"quote\": \"Average check variations are driven by menu price increases and/or changes in menu mix. We generally update The Cheesecake Factory menus twice each year\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"sales_mix\",\n    \"quote\": \"primarily due to menu price increases in excess of inflation across most categories (0.6%) and a shift in sales mix (0.3%).\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"commodity_cost\",\n    \"quote\": \"Beginning in 2021, our operating results were impacted by geopolitical and other macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"wage_inflation\",\n    \"quote\": \"Beginning in 2021, our operating results were impacted by geopolitical and other macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"supply_chain_disruption\",\n    \"quote\": \"We have also encountered delays in opening new restaurants primarily due to delays in permitting and landlord readiness, as well as supply chain challenges.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"permitting_delay\",\n    \"quote\": \"We have also encountered delays in opening new restaurants primarily due to delays in permitting and landlord readiness, as well as supply chain challenges.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"asset_impairment\",\n    \"quote\": \"During the first quarter of fiscal 2024, we recorded impairment of assets and lease terminations expense of $2.1 million primarily related to impairment of assets for one The Cheesecake Factory location\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"segment:the_cheesecake_factory\"\n  },\n  {\n    \"proposed_name\": \"lease_termination\",\n    \"quote\": \"During the first quarter of fiscal 2024, we recorded impairment of assets and lease terminations expense of $2.1 million primarily related to impairment of assets for one The Cheesecake Factory location and lease termination costs for one The Cheesecake Factory location.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"segment:the_cheesecake_factory\"\n  },\n  {\n    \"proposed_name\": \"preopening_cost\",\n    \"quote\": \"Preopening costs were $5.9 million and $3.1 million in the first quarters of fiscal 2024 and 2023, respectively. We opened two North Italia, one Flower Child and two Other FRC locations in the first quarter of fiscal 2024\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"new_restaurant_opening\",\n    \"quote\": \"Revenues increased 2.9% to $891.2 million for the fiscal quarter ended April 2, 2024 compared to $866.1 million for the comparable prior year period, primarily due to additional revenue related to new restaurant openings\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"off_premise_channel\",\n    \"quote\": \"Sales through the off-premise channel comprised approximately 22% of our restaurant sales during the first quarter of fiscal 2024 as compared to 23% in the first quarter of fiscal 2023.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"channel:off_premise\"\n  },\n  {\n    \"proposed_name\": \"uncertain_tax_position\",\n    \"quote\": \"The decrease was primarily due to a change to our reserve for uncertain tax positions (1.8%), a lower proportion of non-deductible executive compensation in relation to income before income taxes in the first quarter of fiscal 2024 (0.5%)\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"non_deductible_executive_compensation\",\n    \"quote\": \"The decrease was primarily due to a change to our reserve for uncertain tax positions (1.8%), a lower proportion of non-deductible executive compensation in relation to income before income taxes in the first quarter of fiscal 2024 (0.5%)\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"equity_compensation_tax_shortfall\",\n    \"quote\": \"These factors were partially offset by a higher proportion of tax shortfall related to equity compensation in relation to income before income taxes in the first quarter of fiscal 2024 (1.8%).\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"acquisition_related_expense\",\n    \"quote\": \"Acquisition-related contingent consideration, compensation and amortization expenses\\n\\n0.1\\n\\n0.1\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001410578-24-000636\",\n      \"date\": \"2024-05-08\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "CAKE__chunk_024",
+  "candidates": [
+   {
+    "proposed_name": "customer_traffic",
+    "quote": "The decrease from fiscal 2023 was primarily driven by decreased customer traffic of 1.5% partially offset by an increase in average check of 0.9%",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": "segment:the_cheesecake_factory"
+   },
+   {
+    "proposed_name": "average_check",
+    "quote": "partially offset by an increase in average check of 0.9% (based on an increase of 5.2% in menu pricing and 4.3% negative impact from mix)",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": "segment:the_cheesecake_factory"
+   },
+   {
+    "proposed_name": "menu_pricing",
+    "quote": "Average check variations are driven by menu price increases and/or changes in menu mix. We generally update The Cheesecake Factory menus twice each year",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "sales_mix",
+    "quote": "primarily due to menu price increases in excess of inflation across most categories (0.6%) and a shift in sales mix (0.3%).",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "commodity_cost",
+    "quote": "Beginning in 2021, our operating results were impacted by geopolitical and other macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "wage_inflation",
+    "quote": "Beginning in 2021, our operating results were impacted by geopolitical and other macroeconomic events, causing supply chain challenges and significantly increased commodity and wage inflation.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "supply_chain_disruption",
+    "quote": "We have also encountered delays in opening new restaurants primarily due to delays in permitting and landlord readiness, as well as supply chain challenges.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "permitting_delay",
+    "quote": "We have also encountered delays in opening new restaurants primarily due to delays in permitting and landlord readiness, as well as supply chain challenges.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "asset_impairment",
+    "quote": "During the first quarter of fiscal 2024, we recorded impairment of assets and lease terminations expense of $2.1 million primarily related to impairment of assets for one The Cheesecake Factory location",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": "segment:the_cheesecake_factory"
+   },
+   {
+    "proposed_name": "lease_termination",
+    "quote": "During the first quarter of fiscal 2024, we recorded impairment of assets and lease terminations expense of $2.1 million primarily related to impairment of assets for one The Cheesecake Factory location and lease termination costs for one The Cheesecake Factory location.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": "segment:the_cheesecake_factory"
+   },
+   {
+    "proposed_name": "preopening_cost",
+    "quote": "Preopening costs were $5.9 million and $3.1 million in the first quarters of fiscal 2024 and 2023, respectively. We opened two North Italia, one Flower Child and two Other FRC locations in the first quarter of fiscal 2024",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "new_restaurant_opening",
+    "quote": "Revenues increased 2.9% to $891.2 million for the fiscal quarter ended April 2, 2024 compared to $866.1 million for the comparable prior year period, primarily due to additional revenue related to new restaurant openings",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "off_premise_channel",
+    "quote": "Sales through the off-premise channel comprised approximately 22% of our restaurant sales during the first quarter of fiscal 2024 as compared to 23% in the first quarter of fiscal 2023.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": "channel:off_premise"
+   },
+   {
+    "proposed_name": "uncertain_tax_position",
+    "quote": "The decrease was primarily due to a change to our reserve for uncertain tax positions (1.8%), a lower proportion of non-deductible executive compensation in relation to income before income taxes in the first quarter of fiscal 2024 (0.5%)",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "non_deductible_executive_compensation",
+    "quote": "The decrease was primarily due to a change to our reserve for uncertain tax positions (1.8%), a lower proportion of non-deductible executive compensation in relation to income before income taxes in the first quarter of fiscal 2024 (0.5%)",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "equity_compensation_tax_shortfall",
+    "quote": "These factors were partially offset by a higher proportion of tax shortfall related to equity compensation in relation to income before income taxes in the first quarter of fiscal 2024 (1.8%).",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "acquisition_related_expense",
+    "quote": "Acquisition-related contingent consideration, compensation and amortization expenses\n\n0.1\n\n0.1",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001410578-24-000636",
+     "date": "2024-05-08"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "n_candidates": 17,
+ "stats": {
+  "prompt_eval_count": 13529,
+  "eval_count": 2701,
+  "total_s": 497.69,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 497.7
+}

@@ -199,3 +199,33 @@ documents ≈ 150–450M tokens ≈ **3 weeks–2 months of 24/7 GPU** for one f
 passes over the same documents are near-free only while cached).
 Hardest exam for any LLM: the reader (every exact fact from a whole filing; Sonnet ≈ 40% recall in
 EXP-2). Identity and table lanes are near-perfect for both.
+
+## 15. RESULT — reader exam (EXP-2 blind driver-name reader, 10-chunk subset) on local Qwen, 2026-08-17
+Setup (faithful single-prompt proxy; the July run was tool-using agents): same preamble, same
+rulebook `RULES_full.txt` (sha b33ab08b…), same 40k-char chunk JSON, same STEP-3 extraction rules,
+same output shape; key K-reader v3 (sha cf87a09a…); first 10 of the 40 chunks (296 gold facts).
+Scorer = strict, deterministic (the official metric used Sonnet graders): a gold row is hit if a
+candidate's name equals the gold/alt name OR its quote overlaps the gold quote; the SAME scorer
+was run over Sonnet's and Opus's saved July responses on the same chunks (like-for-like, relative).
+
+| first 10 chunks, 296 gold | Qwen3.8 | Sonnet 5 (July) | Opus (July) |
+|---|---|---|---|
+| either-recall (name or quote) | **50.0%** | 45.3% | 52.4% |
+| exact-name recall | 32.8% | 32.1% | 35.5% |
+| quote-anchored recall | 42.2% | 39.2% | 45.6% |
+| recall on "hard" gold rows | 39.8% | 49.0% | 48.0% |
+| candidates emitted / quotes verbatim | 148 / 98% | 120 / 100% | 126 / 100% |
+| chunks with ZERO candidates | **2 of 10** (BLMN_031 10-K, CAKE_050 transcript) | 0 | 0 |
+| speed | 394 s per chunk (GGUF, decode-bound) = 66 min for 10 | — | — |
+Settings that worked / failed (all tried on the same chunk):
+  MLX + JSON system message, reasoning off  -> valid JSON, EMPTY candidate list
+  MLX, reasoning on / "low"                -> reasoning ran past 8,000–12,000 tokens, no answer
+  GGUF runner + schema grammar, no reasoning -> 18 candidates, 56% recall  <== USED
+Reading: on aggregate Qwen matches Sonnet on this strict scorer (and beats it on 6 of 10 chunks),
+but it is less reliable — 2 of 10 chunks came back empty and it trails on the hard rows; empties
+are trivially detectable (0 candidates → route to Sonnet). Precision was not judged (needs
+graders). Full 40-chunk run would take ~4.5 h GPU. Set max_tokens ≥ 8000 (one chunk needed 5,097).
+Script + raw results: `qwen38_optimization/exams/reader_exam/` (`reader_exam.py run|score --n 10
+--model qwen3.8:27b-mtp-q4_K_M --mode grammar --think 0 --max-tokens 8000`; results in
+`results_qwen3.8_27b-mtp-q4_K_M/`, `score_first10.json`, `per_chunk_first10.txt`, probe files for
+the failed modes; inputs are read from `experiments/` — see README.txt).

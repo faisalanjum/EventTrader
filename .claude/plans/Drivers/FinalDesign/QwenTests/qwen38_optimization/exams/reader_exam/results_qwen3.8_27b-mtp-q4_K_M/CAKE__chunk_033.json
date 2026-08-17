@@ -1,0 +1,166 @@
+{
+ "chunk_id": "CAKE__chunk_033",
+ "prompt_chars": 44778,
+ "prompt_sha256": "0bafefaa16775a822ab3ac057656a4359d406d26d091d3f6ab5da08a6290dc52",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"CAKE__chunk_033\", \"candidates\": [\n  {\n    \"proposed_name\": \"revenue\",\n    \"quote\": \"Total revenues were $830.2 million in the third quarter of fiscal 2023 compared to $784.0 million in the third quarter of fiscal 2022.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"net_income\",\n    \"quote\": \"Net income and diluted net income per share were $17.9 million and $0.37, respectively, in the third quarter of fiscal 2023.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"eps\",\n    \"quote\": \"Net income and diluted net income per share were $17.9 million and $0.37, respectively, in the third quarter of fiscal 2023.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"same_store_sales\",\n    \"quote\": \"Comparable restaurant sales at The Cheesecake Factory restaurants increased 2.4% year-over-year in the third quarter of fiscal 2023\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"segment:the_cheesecake_factory\"\n  },\n  {\n    \"proposed_name\": \"operating_income\",\n    \"quote\": \"Income/(loss) from operations 19,030 2.3 % (2,205 ) (0.3 )% 100,427 3.9 % 54,058 2.2 %\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"food_and_beverage_cost\",\n    \"quote\": \"Food and beverage cost 194,733 23.5 % 197,774 25.2 % 602,051 23.5 % 590,457 24.5 %\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"labor_expense\",\n    \"quote\": \"Labor expenses 301,663 36.3 % 293,040 37.4 % 919,340 35.9 % 893,322 37.1 %\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"capital_expenditure\",\n    \"quote\": \"Capital expenditures for new restaurants, including locations under development, were $61.6 million and $36.9 million for the first nine months of fiscal 2023 and 2022, respectively.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001104659-23-114808\",\n      \"date\": \"2023-11-06\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"dividend\",\n    \"quote\": \"Common stock dividends of $40.1 million and $28.3 million were paid in the first nine months of fiscal 2023 and 2022, respectively.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001104659-23-114808\",\n      \"date\": \"2023-11-06\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"share_repurchase\",\n    \"quote\": \"we repurchased an aggregate of 1.1 million shares at a cost of $36.3 million, excluding excise tax, during the first nine months of fiscal 2023\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001104659-23-114808\",\n      \"date\": \"2023-11-06\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"cash_flow_from_operations\",\n    \"quote\": \"Cash flows from operations increased by $51.6 million from the first nine months of fiscal 2022 primarily due to higher net income\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"10-Q\",\n      \"source_id\": \"0001104659-23-114808\",\n      \"date\": \"2023-11-06\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"acquisition_related_expense\",\n    \"quote\": \"The Company recorded a pre-tax net expense of $1.5 million primarily related to Fox Restaurant Concepts (“FRC”) acquisition-related expenses.\",\n    \"evidence\": {\n      \"company\": \"CAKE\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001104659-23-113409\",\n      \"date\": \"2023-11-01\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "CAKE__chunk_033",
+  "candidates": [
+   {
+    "proposed_name": "revenue",
+    "quote": "Total revenues were $830.2 million in the third quarter of fiscal 2023 compared to $784.0 million in the third quarter of fiscal 2022.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "net_income",
+    "quote": "Net income and diluted net income per share were $17.9 million and $0.37, respectively, in the third quarter of fiscal 2023.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "eps",
+    "quote": "Net income and diluted net income per share were $17.9 million and $0.37, respectively, in the third quarter of fiscal 2023.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "same_store_sales",
+    "quote": "Comparable restaurant sales at The Cheesecake Factory restaurants increased 2.4% year-over-year in the third quarter of fiscal 2023",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": "segment:the_cheesecake_factory"
+   },
+   {
+    "proposed_name": "operating_income",
+    "quote": "Income/(loss) from operations 19,030 2.3 % (2,205 ) (0.3 )% 100,427 3.9 % 54,058 2.2 %",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "food_and_beverage_cost",
+    "quote": "Food and beverage cost 194,733 23.5 % 197,774 25.2 % 602,051 23.5 % 590,457 24.5 %",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "labor_expense",
+    "quote": "Labor expenses 301,663 36.3 % 293,040 37.4 % 919,340 35.9 % 893,322 37.1 %",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "capital_expenditure",
+    "quote": "Capital expenditures for new restaurants, including locations under development, were $61.6 million and $36.9 million for the first nine months of fiscal 2023 and 2022, respectively.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-114808",
+     "date": "2023-11-06"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "dividend",
+    "quote": "Common stock dividends of $40.1 million and $28.3 million were paid in the first nine months of fiscal 2023 and 2022, respectively.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-114808",
+     "date": "2023-11-06"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "share_repurchase",
+    "quote": "we repurchased an aggregate of 1.1 million shares at a cost of $36.3 million, excluding excise tax, during the first nine months of fiscal 2023",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-114808",
+     "date": "2023-11-06"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "cash_flow_from_operations",
+    "quote": "Cash flows from operations increased by $51.6 million from the first nine months of fiscal 2022 primarily due to higher net income",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "10-Q",
+     "source_id": "0001104659-23-114808",
+     "date": "2023-11-06"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "acquisition_related_expense",
+    "quote": "The Company recorded a pre-tax net expense of $1.5 million primarily related to Fox Restaurant Concepts (“FRC”) acquisition-related expenses.",
+    "evidence": {
+     "company": "CAKE",
+     "source_type": "8-K",
+     "source_id": "0001104659-23-113409",
+     "date": "2023-11-01"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "n_candidates": 12,
+ "stats": {
+  "prompt_eval_count": 12223,
+  "eval_count": 1898,
+  "total_s": 375.2,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 375.2
+}

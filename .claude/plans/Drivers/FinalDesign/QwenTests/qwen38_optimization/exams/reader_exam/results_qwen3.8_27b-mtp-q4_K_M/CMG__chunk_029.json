@@ -1,0 +1,190 @@
+{
+ "chunk_id": "CMG__chunk_029",
+ "prompt_chars": 43358,
+ "prompt_sha256": "e8f3f3ea3cd7024bb60ad9e82184835ae24839655bf30a8c68ed1ed8c4406c09",
+ "completed_response": true,
+ "raw_output": "{\"chunk_id\": \"CMG__chunk_029\", \"candidates\": [\n  {\n    \"proposed_name\": \"same_store_sales\",\n    \"quote\": \"Comparable restaurant sales increased 7.4%\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"revenue\",\n    \"quote\": \"Total revenue increased 13.6% to $2.5 billion\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"operating_margin\",\n    \"quote\": \"Operating margin was 17.2%, an increase from 15.3%\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"restaurant_level_operating_margin\",\n    \"quote\": \"Restaurant level operating margin was 27.5% 1, an increase of 230 basis points\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"eps\",\n    \"quote\": \"Diluted earnings per share was $12.32, a 33.2% increase from $9.25\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"net_income\",\n    \"quote\": \"Net income for the second quarter was $341.8 million, or $12.32 per diluted share\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"food_cost\",\n    \"quote\": \"Food, beverage and packaging costs in the second quarter were 29.4% of total revenue\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"labor_cost\",\n    \"quote\": \"Labor 611,678 24.3 549,926 24.8\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"occupancy_cost\",\n    \"quote\": \"Occupancy 123,897 4.9 113,919 5.1\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"general_and_administrative_expense\",\n    \"quote\": \"General and administrative expenses for the second quarter were $156.5 million on a GAAP basis\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"effective_income_tax_rate\",\n    \"quote\": \"The effective income tax rate for the second quarter was 23.8% compared to 25.3%\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"same_store_sales_guidance\",\n    \"quote\": \"Third quarter comparable restaurant sales growth in the low to mid-single digit range\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"new_restaurant_openings\",\n    \"quote\": \"Opened 47 new restaurants with 40 locations including a Chipotlane\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"share_repurchase\",\n    \"quote\": \"We repurchased $87.6 million of stock at an average price per share of $1,937.35\",\n    \"evidence\": {\n      \"company\": \"CMG\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001058090-23-000026\",\n      \"date\": \"2023-07-26\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "strict_json": true,
+ "parsed": {
+  "chunk_id": "CMG__chunk_029",
+  "candidates": [
+   {
+    "proposed_name": "same_store_sales",
+    "quote": "Comparable restaurant sales increased 7.4%",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "revenue",
+    "quote": "Total revenue increased 13.6% to $2.5 billion",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "operating_margin",
+    "quote": "Operating margin was 17.2%, an increase from 15.3%",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "restaurant_level_operating_margin",
+    "quote": "Restaurant level operating margin was 27.5% 1, an increase of 230 basis points",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "eps",
+    "quote": "Diluted earnings per share was $12.32, a 33.2% increase from $9.25",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "net_income",
+    "quote": "Net income for the second quarter was $341.8 million, or $12.32 per diluted share",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "food_cost",
+    "quote": "Food, beverage and packaging costs in the second quarter were 29.4% of total revenue",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "labor_cost",
+    "quote": "Labor 611,678 24.3 549,926 24.8",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "occupancy_cost",
+    "quote": "Occupancy 123,897 4.9 113,919 5.1",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "general_and_administrative_expense",
+    "quote": "General and administrative expenses for the second quarter were $156.5 million on a GAAP basis",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "effective_income_tax_rate",
+    "quote": "The effective income tax rate for the second quarter was 23.8% compared to 25.3%",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "same_store_sales_guidance",
+    "quote": "Third quarter comparable restaurant sales growth in the low to mid-single digit range",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "new_restaurant_openings",
+    "quote": "Opened 47 new restaurants with 40 locations including a Chipotlane",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "share_repurchase",
+    "quote": "We repurchased $87.6 million of stock at an average price per share of $1,937.35",
+    "evidence": {
+     "company": "CMG",
+     "source_type": "8-K",
+     "source_id": "0001058090-23-000026",
+     "date": "2023-07-26"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "n_candidates": 14,
+ "stats": {
+  "prompt_eval_count": 12242,
+  "eval_count": 1912,
+  "total_s": 377.31,
+  "done_reason": "stop",
+  "truncated_output": false
+ },
+ "wall_s": 377.3
+}

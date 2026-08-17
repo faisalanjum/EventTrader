@@ -1,0 +1,237 @@
+{
+ "chunk_id": "BLMN__chunk_007",
+ "engine": "gguf-grammar",
+ "think": false,
+ "raw_output": "{\"chunk_id\": \"BLMN__chunk_007\", \"candidates\": [\n  {\n    \"proposed_name\": \"goodwill_impairment\",\n    \"quote\": \"goodwill impairment from the Bonefish Grill reporting unit\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"asset_impairment\",\n    \"quote\": \"asset impairment and closing costs related to closures and underperforming restaurants\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"restructuring_costs\",\n    \"quote\": \"costs incurred as a result of transformational and restructuring activities\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"foreign_currency_forward_contract_costs\",\n    \"quote\": \"costs associated with the foreign currency forward contracts\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"commodity_costs\",\n    \"quote\": \"higher commodity and labor costs, mainly due to inflation\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"labor_costs\",\n    \"quote\": \"higher commodity and labor costs, mainly due to inflation\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"product_cost_mix\",\n    \"quote\": \"unfavorable product cost mix\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"pricing\",\n    \"quote\": \"higher average check per person, primarily due to pricing\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"advertising_expense\",\n    \"quote\": \"lower advertising expense\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"insurance_expense\",\n    \"quote\": \"lower insurance expense\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"franchise_revenues\",\n    \"quote\": \"partially offset by lower franchise revenues\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"restaurant_openings\",\n    \"quote\": \"primarily due to the net impact of restaurant openings and closures\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"restaurant_closures\",\n    \"quote\": \"primarily due to the net impact of restaurant openings and closures\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"comparable_restaurant_sales\",\n    \"quote\": \"U.S. comparable restaurant sales 0.5% to 2.5%\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": \"geography:us\"\n  },\n  {\n    \"proposed_name\": \"eps\",\n    \"quote\": \"Diluted earnings per share (1) $0.70 to $0.85\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"commodity_inflation\",\n    \"quote\": \"Commodity inflation 4.5% to 5.5%\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"labor_inflation\",\n    \"quote\": \"Labor inflation 3% to 3.5%\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  },\n  {\n    \"proposed_name\": \"capital_expenditures\",\n    \"quote\": \"Capital expenditures $185M to $195M\",\n    \"evidence\": {\n      \"company\": \"BLMN\",\n      \"source_type\": \"8-K\",\n      \"source_id\": \"0001546417-26-000006\",\n      \"date\": \"2026-02-25\"\n    },\n    \"per_x\": null,\n    \"slice_note\": null\n  }\n]}",
+ "parsed": {
+  "chunk_id": "BLMN__chunk_007",
+  "candidates": [
+   {
+    "proposed_name": "goodwill_impairment",
+    "quote": "goodwill impairment from the Bonefish Grill reporting unit",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "asset_impairment",
+    "quote": "asset impairment and closing costs related to closures and underperforming restaurants",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "restructuring_costs",
+    "quote": "costs incurred as a result of transformational and restructuring activities",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "foreign_currency_forward_contract_costs",
+    "quote": "costs associated with the foreign currency forward contracts",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "commodity_costs",
+    "quote": "higher commodity and labor costs, mainly due to inflation",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "labor_costs",
+    "quote": "higher commodity and labor costs, mainly due to inflation",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "product_cost_mix",
+    "quote": "unfavorable product cost mix",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "pricing",
+    "quote": "higher average check per person, primarily due to pricing",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "advertising_expense",
+    "quote": "lower advertising expense",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "insurance_expense",
+    "quote": "lower insurance expense",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "franchise_revenues",
+    "quote": "partially offset by lower franchise revenues",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "restaurant_openings",
+    "quote": "primarily due to the net impact of restaurant openings and closures",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "restaurant_closures",
+    "quote": "primarily due to the net impact of restaurant openings and closures",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "comparable_restaurant_sales",
+    "quote": "U.S. comparable restaurant sales 0.5% to 2.5%",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": "geography:us"
+   },
+   {
+    "proposed_name": "eps",
+    "quote": "Diluted earnings per share (1) $0.70 to $0.85",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "commodity_inflation",
+    "quote": "Commodity inflation 4.5% to 5.5%",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "labor_inflation",
+    "quote": "Labor inflation 3% to 3.5%",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   },
+   {
+    "proposed_name": "capital_expenditures",
+    "quote": "Capital expenditures $185M to $195M",
+    "evidence": {
+     "company": "BLMN",
+     "source_type": "8-K",
+     "source_id": "0001546417-26-000006",
+     "date": "2026-02-25"
+    },
+    "per_x": null,
+    "slice_note": null
+   }
+  ]
+ },
+ "stats": {
+  "tok_s": 8.2,
+  "eval_count": 2273,
+  "prompt_eval_count": 13578,
+  "done_reason": "stop",
+  "truncated_input": false,
+  "truncated_output": false,
+  "total_s": 454.91,
+  "host": "http://127.0.0.1:11434"
+ }
+}
