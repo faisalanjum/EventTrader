@@ -154,3 +154,27 @@ Method for every Qwen exam: shadow tree only, own runner + scorer copies under
 reasoning off, temperature 0, raw replies saved before parsing, keys never touched,
 nothing written into `experiments/`. If the only failures are format (prose/fences),
 one rerun on the GGUF build (schema grammar-enforced) separates accuracy from format.
+
+## 13. RESULT — identity-judge exam (EXP-0 contract, K-pairs v1.3) on local Qwen, 2026-08-17
+Setup (original form): key `experiments/keys/K-pairs/K-pairs.v1.3.jsonl` (sha 023fb1ce…, verified
+against the lock), prompt = `experiments/harness/grader_prompt_framing.txt` byte-exact (sha 5a543bd1…),
+no system message, no added instructions, reasoning off, temperature 0, one call per pair, raw reply
+saved before parsing, schema `{pair_id, verdict, cited_a, cited_b, reason}` enforced by the runner
+grammar (GGUF build `qwen3.8:27b-mtp-q4_K_M`) — the MLX build without enforcement answered the raw
+prompt in prose and went invalid (1 pair tried), exactly the format risk in §10.
+
+| metric (score_exp0 definitions) | Qwen3.8 (GGUF, schema-enforced) | Sonnet-A / Sonnet-B / Opus |
+|---|---|---|
+| wrong SAME (over-merge; must be 0) | **0 / 110** | 0 / 0 / 0 |
+| false refusal (gold SAME → DIFFERENT) | **2 / 50 (4%)** — kp_0133, kp_0148 | 0 / 1 / 0 |
+| invalid | **1 / 160** — kp_0152: runaway `reason` hit the 600-token cap; with the cap lifted it returns a valid DIFFERENT (i.e. a 3rd refusal) | 0 / 0 / 0 |
+| correct | 157 / 160 (98.1%) | 160 / 159 / 160 |
+| citations verbatim on both sides | 159 / 160 | — |
+| gate: wrong_same=0 ∧ false_refusal≤10% ∧ invalid≤2% | **PASS** | PASS |
+| speed | 28.4 s per pair (decode-bound on GGUF, ~7 tok/s); 160 pairs = 76 min | — |
+Reading: zero unsafe merges (the safety metric), 2–3 over-refusals on the hardest SAME pairs
+(DIY-vs-retail scope, RASM/PRASM unit ambiguity), i.e. slightly more conservative than Sonnet.
+Set max_tokens ≥ 1500 for this role (the `reason` field is unbounded).
+Script + raw results: `.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_optimization/exams/identity_exam/`
+(`identity_exam.py run|score --model … [--limit N]`, `run_gated.sh`, `results_qwen3.8_27b-mtp-q4_K_M/`
+raw_results.jsonl + score.json + kp_0152_cap1500.json, `identity_exam.log`).

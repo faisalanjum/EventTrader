@@ -1,0 +1,35 @@
+{
+    "file":  "K-pairs.v1.3.jsonl",
+    "sha256":  "023fb1ceddbb8ce912b26bf68e7361a7be42cd18fca86bf396f733e80a054896",
+    "n_records":  160,
+    "supersedes":  "K-pairs.v1.2.jsonl (sha 446587f4...7c5c) after rerun 2 - ONE-pair quote sharpening (kp_0022); all other 159 records byte-identical to v1.2; v1/v1.1/v1.2 stay frozen; run-2 record and scores stand as FAIL",
+    "strata":  {
+                   "planted":  160,
+                   "planted_different":  110,
+                   "planted_same":  50,
+                   "hard_same_flagged":  36,
+                   "families_different":  12,
+                   "per_family_min":  8,
+                   "rival_records":  2
+               },
+    "locked_by":  "fable",
+    "locked_at":  "2026-07-09T23:57:50Z",
+    "drafted_by":  "lineage: opus emitter + fable pass-1/pass-2/O10 + fable O10-2 (kp_0022 quote re-anchored stock-side; gold UNCHANGED)",
+    "protocol_sha256":  "c6f19518e68fc14416f663b73a4094ef06a2fb5d5b3e0bf979da8850128cb354",
+    "sidecar_sha256":  "8aec2eeb8cac7af61e91b1b362f206d38bf16d92214b9b725c0ed3f7d8ba5165",
+    "records_adjudicated":  160,
+    "flipped":  0,
+    "sharpened_o10_2":  1,
+    "dropped":  0,
+    "ra_exhibits":  [
+                        "ra_0006",
+                        "ra_0007"
+                    ],
+    "lint":  "key_lint.py lint ok=true errors=[] on v1.3 (2026-07-09T23:57:50Z)",
+    "notes":  [
+                  "Composite-gate disposition (O10-2): run-2 judgments on the 159 UNCHANGED records remain valid (per-pair stateless calls; identical prompt template, models, effort=high, record bytes). Opus reruns ONLY kp_0022(v1.3) - 3 fresh calls, one per arm, same pinned config - and scores the composite (477 run-2 judgments + 3 fresh) against the UNCHANGED bars.",
+                  "Pre-registered composite outcomes: all three arms judge kp_0022(v1.3) DIFFERENT -\u003e Sonnet tier RATIFIES (A: 0/0/0 perfect; B: 0 wrong_same + 1/50 false_refusal within bar; Opus qualifies as escalation/reference). ANY arm wrong-SAMEs the FIXED item -\u003e real tier failure on a sound stock-anchored item -\u003e 1.8.1 ladder, no further key edits.",
+                  "The two run-2 wrong-SAMEs on kp_0022 are filed as wm_ exhibits with fable_review = key_erratum (fair readings of a defective item); scores.json of run 2 is NEVER retro-edited.",
+                  "Sonnet B\u0027s single false_refusal pair must be named + reasoned in the O10 memo (blindness ledger), though it is within the 10% bar."
+              ]
+}

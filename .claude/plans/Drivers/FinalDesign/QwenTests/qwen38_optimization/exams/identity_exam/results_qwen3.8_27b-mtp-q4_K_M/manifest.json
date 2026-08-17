@@ -1,0 +1,14 @@
+{
+  "key_sha256": "023fb1ceddbb8ce912b26bf68e7361a7be42cd18fca86bf396f733e80a054896",
+  "framing_sha256": "5a543bd118c2e8af59bfd6cc9130b81b42c1112ca6bb9ff425af7f8aefdf5d74",
+  "model": "qwen3.8:27b-mtp-q4_K_M",
+  "n_pairs": 160,
+  "think": false,
+  "temperature": 0.0,
+  "num_ctx": 16384,
+  "max_tokens": 600,
+  "system": null,
+  "added_instructions": false,
+  "format_passed": true,
+  "client": "config/local_llm.py generate()"
+}

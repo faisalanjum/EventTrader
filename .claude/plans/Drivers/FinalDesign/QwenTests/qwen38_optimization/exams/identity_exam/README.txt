@@ -1,0 +1,1 @@
+Key: NOT copied here on purpose - the runner reads experiments/keys/K-pairs/K-pairs.v1.3.jsonl (sha 023fb1ce...) ; place a copy next to identity_exam.py (or symlink) to run. Framing: grader_prompt_framing.txt (byte copy, sha 5a543bd1...). Client: copy of config/local_llm.py alongside, LOCAL_LLM_HOST=http://127.0.0.1:11434 when run on the Mac.

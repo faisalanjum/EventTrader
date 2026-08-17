@@ -1,0 +1,222 @@
+{
+  "model": "qwen3.8:27b-mtp-q4_K_M",
+  "completed": 160,
+  "strict": {
+    "n": 160,
+    "wrong_same": 0,
+    "false_refusal": 2,
+    "invalid": 1,
+    "correct": 157,
+    "n_SAME": 50,
+    "n_DIFFERENT": 110,
+    "by_family": {
+      "bookings_billings": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "benchmark_siblings": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "deferred_recognized": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "genus_species": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "cause_consequence": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "ownership_axis": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "channel_homonym": {
+        "n": 10,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "gross_net": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "adjusted_vs_gaap": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "segment_consolidated": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "cross_flavor": {
+        "n": 10,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "per_x": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "synonym": {
+        "n": 50,
+        "wrong_same": 0,
+        "false_refusal": 2,
+        "invalid": 1
+      }
+    },
+    "hard": {
+      "n": 89,
+      "wrong_same": 0,
+      "false_refusal": 2,
+      "invalid": 1
+    },
+    "wrong_same_rate": 0.0,
+    "false_refusal_rate": 0.04,
+    "invalid_rate": 0.0063,
+    "gate_pass": true
+  },
+  "lenient": {
+    "n": 160,
+    "wrong_same": 0,
+    "false_refusal": 2,
+    "invalid": 1,
+    "correct": 157,
+    "n_SAME": 50,
+    "n_DIFFERENT": 110,
+    "by_family": {
+      "bookings_billings": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "benchmark_siblings": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "deferred_recognized": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "genus_species": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "cause_consequence": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "ownership_axis": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "channel_homonym": {
+        "n": 10,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "gross_net": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "adjusted_vs_gaap": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "segment_consolidated": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "cross_flavor": {
+        "n": 10,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "per_x": {
+        "n": 9,
+        "wrong_same": 0,
+        "false_refusal": 0,
+        "invalid": 0
+      },
+      "synonym": {
+        "n": 50,
+        "wrong_same": 0,
+        "false_refusal": 2,
+        "invalid": 1
+      }
+    },
+    "hard": {
+      "n": 89,
+      "wrong_same": 0,
+      "false_refusal": 2,
+      "invalid": 1
+    },
+    "wrong_same_rate": 0.0,
+    "false_refusal_rate": 0.04,
+    "invalid_rate": 0.0063,
+    "gate_pass": true
+  },
+  "citations_verbatim_both": 159,
+  "wall_total_s": 4541.6,
+  "wall_mean_s": 28.39,
+  "sonnet_baseline": {
+    "g_sonnet_a": {
+      "wrong_same": 0,
+      "false_refusal": 0,
+      "invalid": 0
+    },
+    "g_sonnet_b": {
+      "wrong_same": 0,
+      "false_refusal": 1,
+      "invalid": 0
+    },
+    "g_opus": {
+      "wrong_same": 0,
+      "false_refusal": 0,
+      "invalid": 0
+    }
+  }
+}
