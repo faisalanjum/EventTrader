@@ -101,3 +101,38 @@ Reference implementation: `.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_op
   investigation log, harness copies, all results and scripts:
   `.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_optimization/` (README → notes/RUNBOOK.md).
 - Server env (live): NUM_PARALLEL=1, LOAD_TIMEOUT=30m, KEEP_ALIVE=-1, MAX_LOADED_MODELS=1.
+
+## 9. Hard size limit (measured 2026-08-17) — READ BEFORE DESIGNING A TEST
+- Runner memory grows ~0.24 MB per prompt token: 13.7k tokens → 33.9 GiB peak,
+  23.5k → 36.2 GiB (48 GB Mac, 37.4 GiB Metal budget). A 70k-token prompt ≈ 47 GiB,
+  a 200k window ≈ 78 GiB: **impossible on this machine.**
+- Practical ceiling: **~25k tokens per call (≈100 KB rendered text)**, and such calls
+  cost 4–5 min each. Treat oversize input as a visible failure BEFORE the call
+  (`TruncatedInputError` is raised by the client); never truncate silently.
+- Whole-event / long-reasoning single prompts (60–80k tokens) are therefore out of
+  scope for Qwen here; they stay on Sonnet unless the role is redesigned as
+  self-contained chunks — an owner design decision, not a transport tweak.
+
+## 10. Step-14 comparison rules (how to compare Qwen against Sonnet fairly)
+- Use raw `L.generate(prompt, system=<the frozen system text>, think=False,
+  temperature=0.0, num_ctx=…, max_tokens=…, timeout=1800, retries=0)`; save the raw
+  reply first; feed it to the ONE shared parser/receipt path. Do NOT use
+  `structured()` for comparisons (it appends a JSON-only instruction and strips
+  fences — prompt-byte and output changes).
+- Known risk on the MLX build: no grammar enforcement, so occasional prose or
+  fenced JSON → parser rejects → counts against Qwen (correctly). If format
+  failures dominate, the GGUF build `qwen3.8:27b-mtp-q4_K_M` grammar-enforces the
+  `format` schema (same prefill speed, same accuracy on compared cases, ~3x slower
+  decode) — a legitimate transport choice for short-output roles.
+- Priming is a transport step: it changes no prompt bytes or outputs; record the
+  prime calls in the run record (the reference harness writes `prime_calls`).
+- Chunking a source is valid only when each chunk's answer depends solely on that
+  chunk; exams that must see the whole event (find all facts, de-duplicate across
+  sections) cannot be chunked without a contract change.
+
+## 11. Machine conditions during runs
+- With the model resident (29.5 GiB) the Mac swaps heavily if many apps are open
+  (swap was 95% full on 2026-08-17). Keep other apps light during batch runs.
+- On the 30 W adapter, sustained GPU work drains ~2%/min and throttles when low;
+  the display never sleeps by default and eats most of the adapter — sleep it
+  (`pmset displaysleepnow`) or use a ≥70 W adapter for long runs.
