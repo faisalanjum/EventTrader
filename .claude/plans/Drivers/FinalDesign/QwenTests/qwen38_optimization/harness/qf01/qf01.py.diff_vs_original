@@ -1,0 +1,16 @@
+--- /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/qf01.py	2026-08-01 18:59:00.900428740 -0400
++++ /tmp/qwen38_bench/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/qf01.py	2026-08-15 22:17:37.842279241 -0400
+@@ -115,11 +115,11 @@
+     "expected", "truth_", "HIDDEN", "cell_text", "grading_law",
+ )
+ 
+-NUM_CTX = 65536
++NUM_CTX = 16384
+ MAX_TOKENS = 512
+ TIMEOUT_SECONDS = 300
+ WORKERS = 4
+-MODEL_NAME = "qwen3.6:35b-a3b"
++MODEL_NAME = "qwen3.8:27b-mtp-q4_K_M"
+ 
+ # R28: THE aligned contract — the 5x50 table response, nothing else. The old
+ # per-cell shape (block/occurrence/copied_label/period arrays) is the 0/93

@@ -1,0 +1,170 @@
+"""Local LLM client — Qwen3.6-35B-A3B (MoE) served from the Mac over the LAN.
+
+Production notes
+----------------
+* Addressed by mDNS name (CA-K429CXLGF9.local), NOT a hard-coded IP: the Mac is
+  on Deloitte DHCP and its IP changes. Raw IP kept only as emergency fallback.
+* think=False by default. Benchmarked on this exact stack: thinking mode took
+  37.6s and produced WRONG Cypher (fiscalYear as string); non-thinking took
+  1.3s and produced correct Cypher. 29x faster AND more accurate.
+* temperature=0 by default for determinism (Cypher generation / extraction).
+* NEVER ask this model to do arithmetic. Generate Cypher; let Neo4j compute
+  the numbers. Q4 quantization degrades exact math.
+"""
+from __future__ import annotations
+
+import json
+import os
+import time
+import urllib.request
+
+MODEL = os.getenv("LOCAL_LLM_MODEL", "qwen3.6:35b-mlx")
+# Global reasoning default. A per-call think=True/False always wins.
+THINK_DEFAULT = os.getenv("LOCAL_LLM_THINK", "0").lower() in ("1", "true", "yes")
+
+HOSTS = [h for h in (
+    os.getenv("LOCAL_LLM_HOST"),
+    "http://CA-K429CXLGF9.local:11434",
+    "http://192.168.40.147:11434",
+) if h]
+
+_cached_host: str | None = None
+
+
+def _post(url: str, payload: dict, timeout: int) -> dict:
+    req = urllib.request.Request(
+        url, data=json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json"},
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return json.loads(r.read().decode())
+
+
+def resolve_host(force: bool = False) -> str:
+    """First reachable Ollama host; result cached. Survives IP changes."""
+    global _cached_host
+    if _cached_host and not force:
+        return _cached_host
+    last = None
+    for h in HOSTS:
+        try:
+            with urllib.request.urlopen(f"{h}/api/version", timeout=5) as r:
+                if r.status == 200:
+                    _cached_host = h
+                    return h
+        except Exception as e:  # noqa: BLE001
+            last = e
+    raise ConnectionError(f"No reachable Ollama host in {HOSTS}: {last}")
+
+
+def health() -> dict:
+    host = resolve_host(force=True)
+    out = {"host": host}
+    try:
+        with urllib.request.urlopen(f"{host}/api/version", timeout=5) as r:
+            out["version"] = json.loads(r.read().decode()).get("version")
+        with urllib.request.urlopen(f"{host}/api/ps", timeout=5) as r:
+            out["loaded"] = [m.get("name") for m in
+                             json.loads(r.read().decode()).get("models", [])]
+    except Exception as e:  # noqa: BLE001
+        out["error"] = str(e)
+    return out
+
+
+def generate(
+    prompt: str,
+    system: str | None = None,
+    *,
+    think: bool | None = None,
+    temperature: float = 0.0,
+    num_ctx: int = 8192,
+    max_tokens: int | None = None,
+    timeout: int = 300,
+    retries: int = 2,
+    with_stats: bool = False,
+):
+    """Chat completion against the local model.
+
+    think=False is the production default (29x faster, more accurate here).
+    Set think=True only for genuinely hard multi-step reasoning.
+    """
+    if think is None:
+        think = THINK_DEFAULT
+    msgs = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": prompt}
+    ]
+    opts = {"temperature": temperature, "num_ctx": num_ctx}
+    if max_tokens:
+        opts["num_predict"] = max_tokens
+    payload = {"model": MODEL, "messages": msgs, "stream": False,
+               "think": think, "options": opts}
+
+    last = None
+    for attempt in range(retries + 1):
+        try:
+            host = resolve_host(force=(attempt > 0))
+            d = _post(f"{host}/api/chat", payload, timeout)
+            text = (d.get("message", {}) or {}).get("content", "") or ""
+            if not with_stats:
+                return text
+            ed = d.get("eval_duration", 1) / 1e9
+            return text, {
+                "tok_s": round(d.get("eval_count", 0) / ed, 1) if ed else 0,
+                "eval_count": d.get("eval_count", 0),
+                "total_s": round(d.get("total_duration", 0) / 1e9, 2),
+                "host": host,
+            }
+        except Exception as e:  # noqa: BLE001
+            last = e
+            time.sleep(2 * (attempt + 1))
+    raise RuntimeError(f"local LLM call failed after {retries + 1} tries: {last}")
+
+
+CYPHER_SYSTEM = (
+    "You translate questions into Neo4j Cypher. Output ONLY the Cypher query - "
+    "no prose, no markdown fences, no explanation. Use the provided schema "
+    "exactly; never invent labels, properties or relationships. Perform all "
+    "aggregation and arithmetic in Cypher (SUM/avg/count), never in your head. "
+    "Match property types exactly as declared in the schema."
+)
+
+
+def cypher(question: str, schema: str, **kw) -> str:
+    """Generate a Cypher query for `question` against `schema`."""
+    out = generate(
+        f"Schema:\n{schema}\n\nQuestion: {question}\n\nCypher:",
+        system=CYPHER_SYSTEM, **kw,
+    )
+    t = out.strip()
+    if t.startswith("```"):  # strip accidental fences
+        t = t.split("```")[1] if len(t.split("```")) > 1 else t
+        t = t.removeprefix("cypher").strip()
+    return t.strip()
+
+
+
+def reason(prompt: str, system: str | None = None, **kw):
+    """generate() with extended reasoning ON.
+
+    For genuinely hard multi-step analysis. Benchmarked ~29x slower than the
+    default fast path on this stack, so do NOT use for routine Cypher
+    generation. Timeout is raised automatically.
+    """
+    kw["think"] = True
+    kw.setdefault("timeout", 900)
+    return generate(prompt, system, **kw)
+
+
+def fast(prompt: str, system: str | None = None, **kw):
+    """generate() with reasoning explicitly OFF (production default path)."""
+    kw["think"] = False
+    return generate(prompt, system, **kw)
+
+
+if __name__ == "__main__":
+    import sys
+    print("health:", json.dumps(health(), indent=2))
+    q = sys.argv[1] if len(sys.argv) > 1 else "Reply with exactly: OK"
+    txt, st = generate(q, with_stats=True)
+    print("\nresponse:", txt.strip()[:400])
+    print("stats:", st)

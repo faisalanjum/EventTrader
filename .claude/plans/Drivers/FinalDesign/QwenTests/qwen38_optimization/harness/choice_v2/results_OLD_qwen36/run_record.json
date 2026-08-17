@@ -1,0 +1,36 @@
+{
+  "test_id": "QF-01-CHOICE-V2-DEV",
+  "started_at_utc": "2026-07-24T13:54:01.936441+00:00",
+  "finished_at_utc": "2026-07-24T14:19:12.274986+00:00",
+  "wall_seconds": 1510.339,
+  "manifest_sha256": "71fdd0e315cd7def57462a8c0c19f37fb8ab520bdf8a5d87a347f067d3fc2c01",
+  "raw_results_sha256": "5e7aa70599784e650314fdf58703d0c464937c2009b5bde4f14c7cebc729f2af",
+  "case_count": 93,
+  "completed_responses": 93,
+  "transport_failures": 0,
+  "model_before": {
+    "name": "qwen3.6:35b-a3b",
+    "digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "size_bytes": 23938333577,
+    "format": "gguf",
+    "family": "qwen35moe",
+    "parameter_size": "36.0B",
+    "quantization_level": "Q4_K_M",
+    "runtime_version": "0.32.3",
+    "resident": true
+  },
+  "model_after": {
+    "name": "qwen3.6:35b-a3b",
+    "digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "size_bytes": 23938333577,
+    "format": "gguf",
+    "family": "qwen35moe",
+    "parameter_size": "36.0B",
+    "quantization_level": "Q4_K_M",
+    "runtime_version": "0.32.3",
+    "resident": true
+  },
+  "scored": true,
+  "score_sha256": "7ac18f5064d60213b064a6ab84ab24acd2b38b87ef8f03a60c65938c330546a8",
+  "finalization_note": "The first finalization stopped after all 93 answers because the volatile resident-status field differed transiently. Model name, digest, size, quantization, and runtime were unchanged. Finalization was resumed with zero model calls; timestamps come from the raw-results file birth and final-write times."
+}

@@ -1,0 +1,33 @@
+{
+  "test_id": "QF-01-ROW-V3-DEV",
+  "started_at_utc": "2026-07-24T15:15:22.465792+00:00",
+  "finished_at_utc": "2026-07-24T15:17:52.167493+00:00",
+  "wall_seconds": 149.702,
+  "manifest_sha256": "6127437f486d57f52aec6e10f1a983799b1e81d0aaa8dd74328aa68cf31524f6",
+  "raw_results_sha256": "8be8187ee4a94f11154bfebbf3383238890d0ec956b8a0cb2b657fb895896477",
+  "case_count": 93,
+  "completed_responses": 93,
+  "transport_failures": 0,
+  "model_before": {
+    "name": "qwen3.6:35b-a3b",
+    "digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "size_bytes": 23938333577,
+    "format": "gguf",
+    "family": "qwen35moe",
+    "parameter_size": "36.0B",
+    "quantization_level": "Q4_K_M",
+    "runtime_version": "0.32.3"
+  },
+  "model_after": {
+    "name": "qwen3.6:35b-a3b",
+    "digest": "07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "size_bytes": 23938333577,
+    "format": "gguf",
+    "family": "qwen35moe",
+    "parameter_size": "36.0B",
+    "quantization_level": "Q4_K_M",
+    "runtime_version": "0.32.3"
+  },
+  "scored": true,
+  "score_sha256": "1cdcce5b841f2bba91dc832987725c827f14094c0e24922262cea4909a239b82"
+}

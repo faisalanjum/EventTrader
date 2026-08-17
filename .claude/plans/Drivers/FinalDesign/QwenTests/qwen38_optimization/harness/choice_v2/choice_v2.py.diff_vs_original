@@ -1,0 +1,178 @@
+--- /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/choice_v2.py	2026-08-01 18:59:00.900428740 -0400
++++ /home/faisal/qwen38_WORKING_CHECKPOINT/choice_v2_100pct/choice_v2.py	2026-08-16 18:53:39.684139692 -0400
+@@ -64,10 +64,10 @@
+ SCORE_PATH = RESULTS_DIR / "score.json"
+ 
+ TEST_ID = "QF-01-CHOICE-V2-DEV"
+-MODEL_NAME = "qwen3.6:35b-a3b"
+-NUM_CTX = 65_536
+-MAX_TOKENS = 64
+-TIMEOUT_SECONDS = 300
++MODEL_NAME = "qwen3.8:27b-mlx"
++NUM_CTX = 16_384
++MAX_TOKENS = 512
++TIMEOUT_SECONDS = 1800
+ WORKERS = 1
+ 
+ FORBIDDEN_PROMPT_TEXT = (
+@@ -243,44 +243,86 @@
+     }
+ 
+ 
++SYSTEM_MESSAGE = (
++    "You are a JSON API. You emit exactly one JSON object and nothing "
++    "else. Never write analysis, reasoning, explanation, or markdown. "
++    "Your entire response must parse as JSON."
++)
++# Required on the MLX engine: Ollama's MLX path ignores the `format`
++# JSON-schema (no grammar enforcement), so without a hard role
++# instruction the model emits chain-of-thought prose on ~30% of cases.
++# Verified 2026-08-15: SCR-05-q1 / SCR-06-q2 prose -> valid JSON.
++
++def _strip_fences(text: str) -> str:
++    """MLX has no grammar enforcement and sometimes wraps JSON in a
++    markdown fence. Mirrors config/local_llm.py _strip_fences: parsing
++    only, the answer content is untouched."""
++    t = (text or "").strip()
++    if t.startswith("```"):
++        t = t.split(chr(10), 1)[-1] if chr(10) in t else t
++        if t.rstrip().endswith("```"):
++            t = t.rstrip()[:-3]
++    return t.strip()
++
++
+ def _prompt(request: dict, choices: list[dict]) -> str:
+     lines = [
+         "Choose the exact source-table cell for this known Driver evidence.",
+         "",
+-        f"Known Driver evidence: "
+-        f"{request['ask']['label_wording']}",
+-        f"Requested cell: {request['ask']['target']}",
+-        "",
+         "How to choose:",
+         "- Find the row and section whose meaning matches the known Driver.",
+         "- Within that row, occurrence numbers run left-to-right across the "
+         "numeric choices.",
+         "- Choose null if the requested cell is absent or cannot be proven.",
+         "- Never calculate, guess, or explain.",
++        "- Return JSON only, no prose and no code fence.",
+         "",
+-        "Source-derived choices:",
++        "Source-derived choices "
++        "(each row lists: choice|occurrence|value|headers):",
+     ]
+ 
+     prior_block = None
+     row_number = 0
++    occurrence_in_row = 0
+     for item in choices:
+         if item["block_id"] != prior_block:
+             prior_block = item["block_id"]
+             row_number += 1
+-            lines.extend([
+-                "",
+-                f"ROW {row_number}",
+-                f"  caption={json.dumps(item['caption'], ensure_ascii=False)}",
+-                f"  section={json.dumps(item['section'], ensure_ascii=False)}",
+-                f"  label={json.dumps(item['label'], ensure_ascii=False)}",
+-            ])
++            occurrence_in_row = 0
++            # DENSE ENCODING (2026-08-16): the choice lines were 78% of the
++            # whole prompt (16,745 of 21,472 chars on SCR-14-q1). Prefill is
++            # LINEAR in tokens, so a pure re-encoding - no information
++            # dropped - buys ~2.4x on every COLD call, including brand-new
++            # documents that caching cannot help.
++            header = f"ROW {row_number}"
++            if item["caption"]:
++                header += f" caption={json.dumps(item['caption'], ensure_ascii=False)}"
++            header += (f" section={json.dumps(item['section'], ensure_ascii=False)}"
++                       f" label={json.dumps(item['label'], ensure_ascii=False)}")
++            lines.extend(["", header,
++                          "  cols: choice|occurrence|value|headers"])
++        # OCCURRENCE LABELLING (2026-08-16): the model was asked to COUNT the
++        # left-to-right ordinal position within a row and got it wrong on 4/93
++        # cases (all WRONG:occurrence). The count is fully deterministic, so
++        # emit it instead of making the model do arithmetic. Same principle as
++        # row_v3 ("code applies the occurrence; Qwen never retypes").
++        occurrence_in_row += 1
++        heads = ",".join(str(h) for h in item["period_headers"])
+         lines.append(
+-            f"  choice {item['choice']}: "
+-            f"value={json.dumps(item['value'], ensure_ascii=False)} "
+-            f"headers={json.dumps(item['period_headers'], ensure_ascii=False)}"
++            f"  {item['choice']}|{occurrence_in_row}|{item['value']}|{heads}"
+         )
++    # PREFIX-CACHE ORDERING (2026-08-16): the per-call target lines used to sit
++    # at char ~144, ahead of the ~17k-char row block that every case in a
++    # family shares. That made the shared prefix 0.8% and forced a full
++    # re-prefill of the table on every call. Moving them to the END makes the
++    # prefix 99.6% identical, so Ollama's KV cache is reused.
++    # Measured on SCR-11: prefill 102.1s -> 1.1s / 0.6s on later calls.
+     lines.extend([
+         "",
++        "TARGET FOR THIS CALL:",
++        f"Known Driver evidence: {request['ask']['label_wording']}",
++        f"Requested cell: {request['ask']['target']}",
++        "",
+         'Return only JSON in this form: {"choice": <number or null>}',
+     ])
+     return "\n".join(lines)
+@@ -436,12 +478,20 @@
+         len(case["prompt"].encode("utf-8")) for case in cases
+     ]
+     maximum = max(byte_counts)
+-    if maximum >= budget:
++    # The original compared raw UTF-8 BYTES against a TOKEN budget, which is
++    # ~4x too strict (1 token is roughly 4 bytes of English). That unit error
++    # forced num_ctx=65536; with OLLAMA_NUM_PARALLEL=4 that allocates KV for
++    # 4 x 65536 tokens and drove resident memory to 35 GB of a 37.4 GiB
++    # budget, causing thrashing and 5-minute calls. Convert conservatively
++    # at 3 bytes/token instead. Changed 2026-08-15 for model experimentation.
++    max_tokens_estimate = (maximum + 2) // 3
++    if max_tokens_estimate >= budget:
+         raise ValueError(
+             f"input budget unsafe: largest prompt is {maximum} UTF-8 bytes "
+-            f"against conservative budget {budget}")
++            f"(~{max_tokens_estimate} tokens) against budget {budget}")
+     return {
+         "largest_prompt_utf8_bytes": maximum,
++        "largest_prompt_token_estimate": max_tokens_estimate,
+         "conservative_input_token_budget": budget,
+     }
+ 
+@@ -571,7 +621,7 @@
+             "timeout_seconds": TIMEOUT_SECONDS,
+             "workers": WORKERS,
+             "completed_answer_retries": 0,
+-            "system_message": None,
++            "system_message": SYSTEM_MESSAGE,
+         },
+         "interface": {
+             "model_output": '{"choice": integer_or_null}',
+@@ -621,7 +671,7 @@
+         "timeout_seconds": TIMEOUT_SECONDS,
+         "workers": WORKERS,
+         "completed_answer_retries": 0,
+-        "system_message": None,
++        "system_message": SYSTEM_MESSAGE,
+     }
+     if manifest["settings"] != expected_settings:
+         raise ValueError("runner settings changed")
+@@ -649,7 +699,7 @@
+     try:
+         raw, stats = client.generate(
+             case["prompt"],
+-            system=None,
++            system=SYSTEM_MESSAGE,
+             format=case["schema"],
+             think=False,
+             temperature=0.0,
+@@ -685,7 +735,7 @@
+             "stats": stats,
+         }
+     try:
+-        output = json.loads(raw)
++        output = json.loads(_strip_fences(raw))
+     except Exception as error:
+         return {
+             "id": case["id"],

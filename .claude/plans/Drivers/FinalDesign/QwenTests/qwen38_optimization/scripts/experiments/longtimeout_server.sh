@@ -1,0 +1,8 @@
+#!/bin/zsh
+unset OLLAMA_FLASH_ATTENTION OLLAMA_KV_CACHE_TYPE
+export OLLAMA_HOST=127.0.0.1:11501
+export OLLAMA_NUM_PARALLEL=1
+export OLLAMA_MAX_LOADED_MODELS=1
+export OLLAMA_KEEP_ALIVE=-1
+export OLLAMA_LOAD_TIMEOUT=30m
+exec /opt/homebrew/bin/ollama serve

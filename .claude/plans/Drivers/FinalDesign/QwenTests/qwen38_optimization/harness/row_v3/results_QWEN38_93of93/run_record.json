@@ -1,0 +1,32 @@
+{
+  "test_id": "QF-01-ROW-V3-DEV",
+  "started_at_utc": "2026-08-16T18:52:44.230648+00:00",
+  "finished_at_utc": "2026-08-16T18:56:30.059453+00:00",
+  "wall_seconds": 225.829,
+  "manifest_sha256": "ca17b6a859d45e35a86c97e5a251e3635a9ef2cdb6a5f7912a6f22a8ad49de26",
+  "raw_results_sha256": "5e6ae72fa0be19ae984c7ad1365f3402291df21bc178d149eba68248c9cc30e9",
+  "case_count": 93,
+  "completed_responses": 93,
+  "transport_failures": 0,
+  "model_before": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13"
+  },
+  "model_after": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13"
+  },
+  "scored": false
+}

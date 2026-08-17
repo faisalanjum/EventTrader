@@ -1,0 +1,34 @@
+{
+  "test_id": "QF-01-CHOICE-V2-DEV",
+  "started_at_utc": "2026-08-16T22:48:25.010275+00:00",
+  "finished_at_utc": "2026-08-16T22:48:50.706907+00:00",
+  "wall_seconds": 25.697,
+  "manifest_sha256": "e74a97e2fc5ade0ffb18f8695e8e8e1121367d93bc311ab7290022e9873369d9",
+  "raw_results_sha256": "b5bf1f2b04fc43d168ad222ee6ddfabdf4a570e1a38ed03756b1a54999966217",
+  "case_count": 93,
+  "completed_responses": 93,
+  "transport_failures": 2,
+  "model_before": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  },
+  "model_after": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  },
+  "scored": false
+}

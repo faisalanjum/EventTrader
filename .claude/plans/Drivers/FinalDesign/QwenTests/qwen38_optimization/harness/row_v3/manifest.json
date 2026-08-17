@@ -1,0 +1,86 @@
+{
+  "test_id": "QF-01-ROW-V3-DEV",
+  "purpose": "Development test: Qwen chooses one source-derived row or abstains; code applies the explicit occurrence and copies exact evidence",
+  "prepared_at_utc": "2026-08-16T18:52:32.257986+00:00",
+  "scope": {
+    "development_cases": 93,
+    "independent_tables": 8,
+    "filings": 7,
+    "model_calls": 93,
+    "requests_per_call": 1,
+    "unseen_certification": false
+  },
+  "model": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13"
+  },
+  "settings": {
+    "reasoning": false,
+    "temperature": 0.0,
+    "num_ctx": 16384,
+    "max_tokens": 512,
+    "timeout_seconds": 1800,
+    "workers": 1,
+    "completed_answer_retries": 0,
+    "system_message": null
+  },
+  "interface": {
+    "model_output": "{\"choice\": row_number_or_null}",
+    "qwen_selects_occurrence": false,
+    "qwen_copies_ids_labels_headers_or_values": false,
+    "row_choices_built_from": "real source HTML only",
+    "occurrence_source": "explicit request contract",
+    "occurrence_applied_by": "deterministic code after row choice",
+    "unproven_or_missing_occurrence": "abstain",
+    "hidden_key_used_to_build_choices": false,
+    "semantic_repair_after_row_choice": false,
+    "production_replicable": true
+  },
+  "prompt_budget": {
+    "largest_prompt_utf8_bytes": 4505,
+    "largest_prompt_token_estimate": 1502,
+    "conservative_input_token_budget": 8192
+  },
+  "cases_sha256_before_hidden_key_opened": "b3017281ce41fcb09b4c0ebf6b98d9110696461d5a8f8df281f7e457e8bf1b82",
+  "gold_preflight": {
+    "cases": 93,
+    "gold_rows_found_exactly_once": 93,
+    "occurrences_reconstructed_exactly": 93
+  },
+  "frozen_files": {
+    ".claude/plans/Drivers/WIP/phase6_screen_call_1.json": "da9d79251a63ff71a9d86ae59e6924b6c37d44d68f7d2897fb1e228801f33228",
+    ".claude/plans/Drivers/WIP/phase6_screen_call_2.json": "dcf3cc8248edf8dd0b7ce4c9c613008a9fb192dd7087c116612f8d336fd02208",
+    ".claude/plans/Drivers/WIP/phase6_screen_call_3.json": "b1652c58a6e80b33bc0c96895cb1def7b15bac3868eee84d41fe707d3b9ae3e9",
+    ".claude/plans/Drivers/WIP/phase6_screen_answers_HIDDEN.json": "b4a26aa5e3565b95e5146fcb611862cef9dab86759329d4d12f876a83db07dd5",
+    ".claude/plans/Drivers/WIP/phase6_screen_grade.py": "b3a3a285e0b4a9ffebfeb5e1e8b236e023b527725f7dc6c4d8c01aa534e78d6a",
+    "config/local_llm.py": "abcaf0d0d35bb5261e2f9dc888ed5a15e8ab0ff8046cc45c1a09995464efd520",
+    "driver/relocation/inline_html.py": "ec220ccf50fba4f106f12ed6555254829406a7160416836768cb9d493a10387f",
+    "scripts/driver_seed/relocate_probe/phase2/m1_structure_inventory.py": "195689ca9e190e2e3e51757ef2c08fb39992b7655c6553c372d1460a2a83d3fe",
+    "scripts/driver_seed/relocate_probe/phase2/m1_transcript_census.py": "ed932608205904b2939d4a38721f9f01b8bc941965764bad61c78576e165c38b",
+    "scripts/driver_seed/relocate_probe/phase2/m2_native_table_shadow_r3.py": "ebd22160439276e87e11f53b38128de1ffce7753e9f3685ad288026c9be01a88",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/choice_v2/choice_v2.py": "c952442567247a501bd803637e76a684fd6d879b2705a2cbae8f7a9db3da9e84",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/row_v3/row_v3.py": "27946ee90921afe9ec09795922a019febc75f241b8f785c3889dfc7c9661e44e",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/row_v3/test_row_v3.py": "e39bb83b09f2b0b4b927f9d20290e54ec9fc8c161168881376101114bb459cca",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/row_v3/cases.jsonl": "b3017281ce41fcb09b4c0ebf6b98d9110696461d5a8f8df281f7e457e8bf1b82",
+    "scripts/driver_seed/relocate_probe/exhibit_html_cache/0000006201-26-000031__EX-99.1.htm": "59f2a20f3240b354a6172223f32acbfe43bc304fffe44ea0a7f63fd9d921549b",
+    "scripts/driver_seed/relocate_probe/exhibit_html_cache/0000007084-25-000005__EX-99.1.htm": "0dad3cbab45081db4c3e12f470a5406823652939f7d8af6ef561c0651a457bfe",
+    "scripts/driver_seed/relocate_probe/exhibit_html_cache/0000007084-26-000005__EX-99.1.htm": "fe12e55d34ad7098cc7e0c96ce5d1166c72ef315c41004d38415d25c2691e4cc",
+    "scripts/driver_seed/relocate_probe/exhibit_html_cache/0000950170-25-007765__EX-99.1.htm": "31e8cd05b2ed0bfcc4b290e55adf7d4e5429ed8a97bf505ae97696e625ccf4ba",
+    "scripts/driver_seed/relocate_probe/exhibit_html_cache/0001002910-25-000052__EX-99.1.htm": "2c26c7bb8788df9669454b26ba348b3148b3e7ec22a3fb3eb524003f65123534",
+    "scripts/driver_seed/relocate_probe/exhibit_html_cache/0001002910-26-000005__EX-99.1.htm": "5845681eb1b4dd9a5dcf1e13f4b68593f3676e0494df801561e36a1bb4aa4320",
+    "scripts/driver_seed/relocate_probe/exhibit_html_cache/0001193125-26-019438__EX-99.1.htm": "7441a4eb3ac0eda317faca16a8794ec9117f6b691a962cf1461d821a1f804198"
+  },
+  "pass_gate": {
+    "correct": 93,
+    "wrong": 0,
+    "abstained": 0,
+    "invalid": 0
+  },
+  "interpretation": "This opened set can compare development interfaces only; fresh unseen cases remain required for certification"
+}

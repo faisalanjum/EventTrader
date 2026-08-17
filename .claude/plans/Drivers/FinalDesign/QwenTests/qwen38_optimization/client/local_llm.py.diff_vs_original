@@ -1,0 +1,367 @@
+--- /home/faisal/EventMarketDB/config/local_llm.py.bak.20260724-074657	2026-08-01 18:59:01.248430616 -0400
++++ /home/faisal/EventMarketDB/config/local_llm.py	2026-08-16 17:28:07.692388490 -0400
+@@ -1,25 +1,40 @@
+-"""Local LLM client — Qwen3.6-35B-A3B (MoE) served from the Mac over the LAN.
++"""Local LLM client — Qwen3.6-35B served from the Mac over the LAN.
+ 
+-Production notes
+-----------------
+-* Addressed by mDNS name (CA-K429CXLGF9.local), NOT a hard-coded IP: the Mac is
+-  on Deloitte DHCP and its IP changes. Raw IP kept only as emergency fallback.
+-* think=False by default. Benchmarked on this exact stack: thinking mode took
+-  37.6s and produced WRONG Cypher (fiscalYear as string); non-thinking took
+-  1.3s and produced correct Cypher. 29x faster AND more accurate.
+-* temperature=0 by default for determinism (Cypher generation / extraction).
+-* NEVER ask this model to do arithmetic. Generate Cypher; let Neo4j compute
+-  the numbers. Q4 quantization degrades exact math.
++Treats the model as a frontier-grade text/JSON API. The wrapper's job is to make
++the plumbing bulletproof, independent of any task:
++
++  * NEVER silently truncate input. The GGUF backend gives the prompt only ~half
++    of num_ctx and drops the FRONT when exceeded (verified). We detect that and
++    RAISE, rather than let rules/schema silently vanish.
++  * Surface output truncation (done_reason == "length") instead of returning a
++    quietly-cut answer.
++  * Enforce structured output: pass a JSON schema; GGUF grammar-enforces it, and
++    structured() also fence-strips + parses + retries as a belt-and-suspenders.
++  * Fixed num_ctx by default: changing it forces an ~8s model reload (verified).
++  * temperature=0, deterministic (verified byte-identical).
++  * Addressed by mDNS name (survives Deloitte DHCP IP changes); IP is fallback.
++
++Model choice (one at a time; VRAM holds one):
++  * qwen3.8:27b-mlx  (MLX, default) — 27.8B dense, nvfp4, ~27 t/s. Format is NOT
++                                      grammar-enforced (MLX), but measured 19/19
++                                      schema-valid on the QF-01 aligned set
++                                      (2026-08-15); never truncates input.
++    Migrated 2026-08-15 from qwen3.6:35b-a3b (36B MoE/3B-active, GGUF Q4_K_M,
++    ~77 t/s, grammar-enforced). The old model scored 17/19 on QF-01-aligned
++    (NOT_SAFE_FOR_TASK); qwen3.8 scores 19/19. Trade: ~4x slower decode, dense
++    vs MoE. Both qwen3.6 tags were removed 2026-08-15.
+ """
+ from __future__ import annotations
+ 
+ import json
+ import os
+ import time
++import http.client
++import socket
+ import urllib.request
+ 
+-MODEL = os.getenv("LOCAL_LLM_MODEL", "qwen3.6:35b-mlx")
+-# Global reasoning default. A per-call think=True/False always wins.
++MODEL = os.getenv("LOCAL_LLM_MODEL", "qwen3.8:27b-mlx")   # MLX default (see notes above)
++NUM_CTX = int(os.getenv("LOCAL_LLM_NUM_CTX", "32768"))    # fixed -> no reload thrash
+ THINK_DEFAULT = os.getenv("LOCAL_LLM_THINK", "0").lower() in ("1", "true", "yes")
+ 
+ HOSTS = [h for h in (
+@@ -31,17 +46,111 @@
+ _cached_host: str | None = None
+ 
+ 
++class TruncatedInputError(RuntimeError):
++    """The prompt was (or would be) silently cut by the backend. Never ignore."""
++
++
++class TruncatedOutputError(RuntimeError):
++    """Generation stopped at the token/context limit, not a natural stop."""
++
++
++def _is_mlx(model: str) -> bool:
++    return "mlx" in model.lower()
++
++
++def _input_budget(num_ctx: int, model: str) -> int:
++    """Max prompt tokens before the backend truncates.
++
++    GGUF/llama.cpp reserves ~half of num_ctx for generation (verified: a 7k-token
++    prompt at num_ctx=8192 was cut to ~4098). MLX reads the full input.
++    """
++    if _is_mlx(model):
++        # MLX reads the full prompt (no half-ctx reserve), but it is still
++        # bounded by num_ctx. The old hard-coded 200_000 disabled the guard
++        # entirely and allowed silent overflow once num_ctx was right-sized.
++        return max(num_ctx // 2, num_ctx - 2048)
++    return num_ctx // 2
++
++
++class _KeepAliveConnection(http.client.HTTPConnection):
++    """HTTP connection with TCP keepalive.
++
++    During prompt evaluation the model emits NO tokens, so the socket sits
++    idle for minutes on a long prefill. Something on the LAN path reaps
++    connections idle for ~300s, which surfaced as
++    "[Errno 104] Connection reset by peer" while the SERVER had in fact
++    returned 200 (verified in ollama-agent.log: 5m10s / 6m48s / 6m50s all
++    HTTP 200). Keepalive probes keep the path warm. Verified 2026-08-16.
++    NOTE: TCP_KEEPCNT must be <= 127; larger raises EINVAL.
++    """
++
++    def connect(self):
++        super().connect()
++        try:
++            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
++        except OSError:
++            return
++        for name, value in (("TCP_KEEPIDLE", 30),
++                            ("TCP_KEEPINTVL", 30),
++                            ("TCP_KEEPCNT", 60)):
++            option = getattr(socket, name, None)
++            if option is None:
++                continue
++            try:
++                self.sock.setsockopt(socket.IPPROTO_TCP, option, value)
++            except OSError:
++                pass
++
++
++class _KeepAliveHandler(urllib.request.HTTPHandler):
++    def http_open(self, req):
++        return self.do_open(_KeepAliveConnection, req)
++
++
++_OPENER = urllib.request.build_opener(_KeepAliveHandler)
++
++
+ def _post(url: str, payload: dict, timeout: int) -> dict:
++    """POST to Ollama, always STREAMING, reassembled into the non-streaming
++    response shape so every caller is unaffected.
++
++    Why: streaming keeps the socket active during long generations instead of
++    leaving it idle until the whole reply is ready.
++
++    CORRECTION 2026-08-16: an earlier version of this note claimed streaming
++    turned a 399s call into 1.0s. That was WRONG - it compared a cold prompt
++    against one Ollama had already cached. Measured properly, cold prompt
++    evaluation on qwen3.8:27b-mlx costs ~340-420s for a 7.5k-token prompt
++    either way, and the connection still resets during it because no tokens
++    flow while the prompt is being processed. Streaming is retained as a mild
++    improvement, not a fix; the real cost is cold prompt eval on a dense
++    27B model."""
++    payload = dict(payload)
++    payload["stream"] = True
+     req = urllib.request.Request(
+         url, data=json.dumps(payload).encode(),
+-        headers={"Content-Type": "application/json"},
+-    )
+-    with urllib.request.urlopen(req, timeout=timeout) as r:
+-        return json.loads(r.read().decode())
++        headers={"Content-Type": "application/json"})
++    parts, final = [], {}
++    with _OPENER.open(req, timeout=timeout) as r:
++        for raw_line in r:
++            line = raw_line.strip()
++            if not line:
++                continue
++            chunk = json.loads(line.decode("utf-8"))
++            piece = (chunk.get("message") or {}).get("content") or ""
++            if piece:
++                parts.append(piece)
++            if chunk.get("done"):
++                final = chunk
++    out = dict(final)
++    message = dict(out.get("message") or {})
++    message["content"] = "".join(parts)
++    out["message"] = message
++    return out
+ 
+ 
+ def resolve_host(force: bool = False) -> str:
+-    """First reachable Ollama host; result cached. Survives IP changes."""
++    """First reachable Ollama host; cached. Survives IP changes via mDNS."""
+     global _cached_host
+     if _cached_host and not force:
+         return _cached_host
+@@ -59,7 +168,8 @@
+ 
+ def health() -> dict:
+     host = resolve_host(force=True)
+-    out = {"host": host}
++    out = {"host": host, "model": MODEL, "num_ctx": NUM_CTX,
++           "input_token_budget": _input_budget(NUM_CTX, MODEL)}
+     try:
+         with urllib.request.urlopen(f"{host}/api/version", timeout=5) as r:
+             out["version"] = json.loads(r.read().decode()).get("version")
+@@ -75,96 +185,131 @@
+     prompt: str,
+     system: str | None = None,
+     *,
++    format: str | dict | None = None,   # noqa: A002  "json" or a JSON-schema dict
+     think: bool | None = None,
+     temperature: float = 0.0,
+-    num_ctx: int = 8192,
++    num_ctx: int = NUM_CTX,
+     max_tokens: int | None = None,
+     timeout: int = 300,
+     retries: int = 2,
++    allow_truncation: bool = False,
+     with_stats: bool = False,
+ ):
+-    """Chat completion against the local model.
+-
+-    think=False is the production default (29x faster, more accurate here).
+-    Set think=True only for genuinely hard multi-step reasoning.
+-    """
++    """One chat completion. Raises on silent input truncation by default."""
+     if think is None:
+         think = THINK_DEFAULT
+     msgs = ([{"role": "system", "content": system}] if system else []) + [
+-        {"role": "user", "content": prompt}
+-    ]
++        {"role": "user", "content": prompt}]
+     opts = {"temperature": temperature, "num_ctx": num_ctx}
+     if max_tokens:
+         opts["num_predict"] = max_tokens
+     payload = {"model": MODEL, "messages": msgs, "stream": False,
+                "think": think, "options": opts}
++    if format is not None:
++        payload["format"] = format
+ 
+     last = None
+     for attempt in range(retries + 1):
+         try:
+             host = resolve_host(force=(attempt > 0))
+             d = _post(f"{host}/api/chat", payload, timeout)
+-            text = (d.get("message", {}) or {}).get("content", "") or ""
+-            if not with_stats:
+-                return text
+-            ed = d.get("eval_duration", 1) / 1e9
+-            return text, {
+-                "tok_s": round(d.get("eval_count", 0) / ed, 1) if ed else 0,
+-                "eval_count": d.get("eval_count", 0),
+-                "total_s": round(d.get("total_duration", 0) / 1e9, 2),
+-                "host": host,
+-            }
++            break
+         except Exception as e:  # noqa: BLE001
+             last = e
+             time.sleep(2 * (attempt + 1))
+-    raise RuntimeError(f"local LLM call failed after {retries + 1} tries: {last}")
++    else:
++        raise RuntimeError(f"local LLM call failed after {retries + 1} tries: {last}")
+ 
++    text = (d.get("message", {}) or {}).get("content", "") or ""
++    pec = d.get("prompt_eval_count", 0)
++    done = d.get("done_reason")
++    budget = _input_budget(num_ctx, MODEL)
++
++    # --- silent INPUT truncation: GGUF caps the prompt near num_ctx//2 ---
++    trunc_in = (not _is_mlx(MODEL)) and pec >= budget - 8
++    if trunc_in and not allow_truncation:
++        raise TruncatedInputError(
++            f"prompt truncated: {pec} tokens processed at the ~{budget}-token "
++            f"input budget (num_ctx={num_ctx}). The FRONT of your prompt was "
++            f"dropped. Raise num_ctx to >= 2x your input, shorten the input, or "
++            f"pass allow_truncation=True.")
++
++    # --- OUTPUT truncation: stopped at a limit, not a natural stop ---
++    trunc_out = (done == "length")
++    if trunc_out and max_tokens is None and not allow_truncation:
++        raise TruncatedOutputError(
++            "generation hit the context limit (done_reason='length') with no "
++            "max_tokens set. Raise num_ctx or investigate; output is incomplete.")
++
++    if not with_stats:
++        return text
++    ed = d.get("eval_duration", 1) / 1e9
++    return text, {
++        "tok_s": round(d.get("eval_count", 0) / ed, 1) if ed else 0,
++        "eval_count": d.get("eval_count", 0),
++        "prompt_eval_count": pec,
++        "done_reason": done,
++        "truncated_input": trunc_in,
++        "truncated_output": trunc_out,
++        "total_s": round(d.get("total_duration", 0) / 1e9, 2),
++        "host": host,
++    }
++
++
++def _strip_fences(text: str) -> str:
++    t = text.strip()
++    if t.startswith("```"):
++        parts = t.split("```")
++        t = parts[1] if len(parts) > 1 else t
++        t = t.removeprefix("json").strip()
++    return t
++
++
++def structured(prompt: str, schema: str | dict, system: str | None = None,
++               *, retries: int = 2, with_stats: bool = False, **kw):
++    """Return a parsed JSON object matching `schema` (or (obj, stats)).
+ 
+-CYPHER_SYSTEM = (
+-    "You translate questions into Neo4j Cypher. Output ONLY the Cypher query - "
+-    "no prose, no markdown fences, no explanation. Use the provided schema "
+-    "exactly; never invent labels, properties or relationships. Perform all "
+-    "aggregation and arithmetic in Cypher (SUM/avg/count), never in your head. "
+-    "Match property types exactly as declared in the schema."
+-)
+-
+-
+-def cypher(question: str, schema: str, **kw) -> str:
+-    """Generate a Cypher query for `question` against `schema`."""
+-    out = generate(
+-        f"Schema:\n{schema}\n\nQuestion: {question}\n\nCypher:",
+-        system=CYPHER_SYSTEM, **kw,
+-    )
+-    t = out.strip()
+-    if t.startswith("```"):  # strip accidental fences
+-        t = t.split("```")[1] if len(t.split("```")) > 1 else t
+-        t = t.removeprefix("cypher").strip()
+-    return t.strip()
++    Pass a JSON-schema dict (GGUF grammar-enforces it) or the string "json".
++    Fence-strips + parses + retries, so it is robust even on the MLX model.
++    """
++    kw["format"] = schema
++    if _is_mlx(MODEL) and isinstance(prompt, str):
++        # MLX does NOT grammar-enforce the "format" schema; without an
++        # explicit instruction the model answers in prose. Verified
++        # 2026-08-15 (bare prompt -> prose; +instruction -> valid JSON).
++        prompt = prompt + chr(10) + chr(10) + (
++            "Return JSON only - exactly one object matching the schema, "
++            "no prose, no code fence.")
++    last = None
++    txt = ""
++    for _ in range(retries + 1):
++        txt, stats = generate(prompt, system, with_stats=True, **kw)
++        try:
++            obj = json.loads(_strip_fences(txt))
++            return (obj, stats) if with_stats else obj
++        except Exception as e:  # noqa: BLE001
++            last = e
++    raise ValueError(
++        f"no valid JSON after {retries + 1} tries ({last}); last={txt[:200]!r}")
+ 
+ 
++def fast(prompt: str, system: str | None = None, **kw):
++    """Reasoning explicitly OFF (production default path)."""
++    kw["think"] = False
++    return generate(prompt, system, **kw)
++
+ 
+ def reason(prompt: str, system: str | None = None, **kw):
+-    """generate() with extended reasoning ON.
+-
+-    For genuinely hard multi-step analysis. Benchmarked ~29x slower than the
+-    default fast path on this stack, so do NOT use for routine Cypher
+-    generation. Timeout is raised automatically.
+-    """
++    """Reasoning ON. Much slower; only for genuinely hard multi-step analysis."""
+     kw["think"] = True
+     kw.setdefault("timeout", 900)
+     return generate(prompt, system, **kw)
+ 
+ 
+-def fast(prompt: str, system: str | None = None, **kw):
+-    """generate() with reasoning explicitly OFF (production default path)."""
+-    kw["think"] = False
+-    return generate(prompt, system, **kw)
+-
+-
+ if __name__ == "__main__":
+     import sys
+     print("health:", json.dumps(health(), indent=2))
+     q = sys.argv[1] if len(sys.argv) > 1 else "Reply with exactly: OK"
+     txt, st = generate(q, with_stats=True)
+     print("\nresponse:", txt.strip()[:400])
+-    print("stats:", st)
++    print("stats:", json.dumps(st, indent=2))

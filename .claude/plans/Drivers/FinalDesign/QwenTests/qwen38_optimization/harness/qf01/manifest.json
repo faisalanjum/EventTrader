@@ -1,0 +1,71 @@
+{
+  "test_id": "QF-01",
+  "purpose": "Diagnostic only: exact 8-K table evidence for a known anchor",
+  "prepared_at_utc": "2026-08-15T23:29:08.467381+00:00",
+  "authorization": "ALIGNED per the owner ruling 2026-07-25 (Phase6 plan S6). The 2026-07-24 run authorization was CONSUMED by the failed old-format run (0/93, history in results/); a NEW model run requires its OWN owner GO.",
+  "scope": {
+    "answerable_requests": 19,
+    "independent_tables": 8,
+    "filings": 7,
+    "model_calls": 19,
+    "requests_per_call": 1
+  },
+  "model": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  },
+  "settings": {
+    "reasoning": false,
+    "temperature": 0.0,
+    "num_ctx": 65536,
+    "conservative_input_token_budget": 32768,
+    "max_tokens": 512,
+    "timeout_seconds": 300,
+    "workers": 4,
+    "completed_answer_retries": 0,
+    "system_message": null
+  },
+  "prompt": {
+    "aligned_instruction_sha256": "d5f4a323c8cb887d34f5c13555a28d9689bdfc9df573ffa23709087535a8aaba",
+    "input_marker": "\n\nINPUT (exactly one request and its complete table):\n",
+    "response_schema_sha256": "5faac796dcf3a7213c73d0bb80e69548c53945ef98e39d752875fccf33b40a91",
+    "largest_case_characters": 12519,
+    "largest_case_utf8_bytes": 13224,
+    "conservative_input_token_budget": 32768
+  },
+  "frozen_files": {
+    ".claude/plans/Drivers/WIP/phase6_screen_call_1.json": "da9d79251a63ff71a9d86ae59e6924b6c37d44d68f7d2897fb1e228801f33228",
+    ".claude/plans/Drivers/WIP/phase6_screen_call_2.json": "dcf3cc8248edf8dd0b7ce4c9c613008a9fb192dd7087c116612f8d336fd02208",
+    ".claude/plans/Drivers/WIP/phase6_screen_call_3.json": "b1652c58a6e80b33bc0c96895cb1def7b15bac3868eee84d41fe707d3b9ae3e9",
+    ".claude/plans/Drivers/WIP/phase6_screen_answers_HIDDEN.json": "b4a26aa5e3565b95e5146fcb611862cef9dab86759329d4d12f876a83db07dd5",
+    ".claude/plans/Drivers/WIP/phase6_screen_grade.py": "b3a3a285e0b4a9ffebfeb5e1e8b236e023b527725f7dc6c4d8c01aa534e78d6a",
+    ".claude/plans/Drivers/WIP/phase6_screen_validate.py": "6f82ef94d1fb3ba3891e3e94928a88edf32d2cdc045fe3a367e91df11083fb3e",
+    ".claude/plans/Drivers/WIP/phase6_screen_manifest_v2.json": "05592af609a4f8da0869e396ab63b03c085ba5377a17ec74020c3dd04f2971c7",
+    "config/local_llm.py": "abcaf0d0d35bb5261e2f9dc888ed5a15e8ab0ff8046cc45c1a09995464efd520",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/qf01.py": "cdefcea5c2f7c6c40a3145faf2148ff4d49d45d25dc9186b7536a629b2927132",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/cases.jsonl": "4376b0843180dad1d61289d286bfd15c10d53eb04aa3444828f27a07ca376b88"
+  },
+  "blindness": {
+    "hidden_key_sent_to_model": false,
+    "gold_fields_present_in_cases": false,
+    "scoring_starts_only_after_run": true
+  },
+  "pass_gate": {
+    "correct": 19,
+    "wrong": 0,
+    "abstained": 0,
+    "invalid": 0,
+    "note": "statistics are SET-CALL based (19); 93 is retained ONLY as hidden-cell coverage and 8 as independent tables"
+  },
+  "cell_coverage": {
+    "hidden_cells": 93,
+    "independent_tables": 8
+  }
+}
