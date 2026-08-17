@@ -140,3 +140,17 @@ Reference implementation: `.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_op
   and the display stack consumed most of the adapter: charging went from 142 mA to
   1,781 mA after `pmset displaysleepnow`. For long batch runs: sleep the display
   and/or use a ≥70 W adapter.
+
+## 12. Qwen test coverage across Steps 1–14 — what can be tested in ORIGINAL form (inventory 2026-08-17)
+| Step / role | Frozen material in the repo | Deterministic scorer? | Sonnet baseline | Qwen status |
+|---|---|---|---|---|
+| 1/4/7 identity judge (EXP-0 contract; K-pairs v1.3: 160 pairs, 110 DIFFERENT / 50 SAME, 89 hard) | byte-identical grader prompt + JSON verdict schema; Fable-locked key `keys/K-pairs/K-pairs.v1.3.jsonl` | YES — `harness/scorers/score_exp0.py` gate: wrong_same=0, false_refusal≤10%, invalid≤2% | Sonnet 0 wrong-SAME, 0–1 false refusal, 0 invalid; Opus same | RUNNABLE (~25–40 min GPU) — see results below when done |
+| 9 table locator (choice_v2 / row_v3 / qf01) | frozen harnesses + keys | yes | old qwen3.6 | DONE: 93/93, 93/93, 19/19 |
+| 1/3/5 reader — EXP-2 proxy (40 real 40k-char chunks vs K-reader v3, 1,175 gold facts) | prompt, chunks, key, Sonnet arm outputs (recall 40.4% / precision 85%) | PARTLY — official metric used Sonnet graders; only strict deterministic matching is possible (relative comparison, Sonnet outputs re-scored the same way) | relative only | runnable overnight (~1.7 h GPU); not the official metric |
+| 3/5 reader — EXP-5 per-event exam (36 events) | prompt builder + K-reader key | NO (needs Sonnet graders); some events likely >25k tokens; NOT yet run on Sonnet | none | not recommended: would pre-consume the unrun exam and cannot be fully scored |
+| 1 routing (EXP-3), 1 type/family stamping (EXP-4B), 9 prose/remarks/Q&A/numberless lanes (QF-02..06), 7/8 catalog & concept judges | no built kit or no locked key | — | — | NOT testable in original form today |
+Method for every Qwen exam: shadow tree only, own runner + scorer copies under
+`qwen38_optimization/`, exact prompt bytes, `generate()` raw (no added instructions),
+reasoning off, temperature 0, raw replies saved before parsing, keys never touched,
+nothing written into `experiments/`. If the only failures are format (prose/fences),
+one rerun on the GGUF build (schema grammar-enforced) separates accuracy from format.
