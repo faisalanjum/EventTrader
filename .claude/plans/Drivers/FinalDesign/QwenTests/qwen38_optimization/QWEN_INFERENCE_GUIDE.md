@@ -245,6 +245,13 @@ Reading: output shape and name syntax are 100%; cause-only naming is Sonnet-leve
 gaps are quote discipline (3 paraphrases, 39 quotes shorter than 60 chars) — correct text, too
 little of it — and naming drift on ~1 in 4 real facts.
 
+Pattern (10 concrete slips reviewed 2026-08-17): name syntax is never wrong; the slips are (a) direction/measure words
+creeping into names (`minimum_wage_increase` -> `minimum_wage`, `headcount_growth` -> `headcount`), (b) not honoring the
+60-200-character verbatim-quote rule (too short far more often than paraphrased: e.g. "unfavorable product cost mix",
+28 chars), and (c) naming the effect/measure instead of the underlying cause (`foreign_currency_forward_contract_costs`
+-> `foreign_currency_forward_contract`; `judicial_deposit` -> `brazil_tax_litigation`). Items (a) and (b) are mechanically
+checkable; (c) is the judgment gap.
+
 Recommended MECHANICAL checks before any Qwen reader output is accepted (all deterministic, code-owned):
 1. Verbatim gate: reject a candidate whose quote is not an exact substring of the chunk's event
    content (whitespace-normalised) — catches the 3 paraphrases.
