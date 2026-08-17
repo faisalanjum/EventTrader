@@ -799,3 +799,13 @@ H6. Memory pressure / swap once resident grows to 35 GB.
    (19 calls), J7 whole-exhibit decode/ctx probe (13.5k and 23.4k tokens at
    num_ctx 32768). Logs: scratchpad/gpu_queue2.log*, /tmp/qwen38_scratch/s2/*.log
    on the Minisforum; results in the shadow harness dirs.
+
+## QUEUE 2 RESULTS (2026-08-17 00:56-01:26)
+ J8 dense + TABLE priming : 93/93, precision 1.0, 6.4 min (8 primes 228 s + 93 calls 157 s)
+ J6 qf01 aligned, table-first + priming : 19/19, 0 wrong/abstained/invalid, 3.4 min (was 7.4)
+ J7 whole-exhibit probe @ num_ctx 32768 (no reload):
+     13,665 tok exhibit: prefill 145.5 s (94 tok/s), decode 27.1 tok/s (MTP acc 0.97, avg draft 3.81)
+     23,546 tok exhibit: prefill 261.1 s (90 tok/s), decode 22.2 tok/s (acc 0.98)
+     both produced valid multi-fact JSON until the 1200-token cap (done_reason=length by design)
+ => whole 8-K exhibits are usable at 32k; decode 22-27 tok/s on realistic reader output.
+ Guide for implementing agents written: qwen38_optimization/QWEN_INFERENCE_GUIDE.md

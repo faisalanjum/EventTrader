@@ -1,0 +1,119 @@
+{
+  "counts": {
+    "correct": 19,
+    "wrong": 0,
+    "abstained": 0,
+    "invalid": 0,
+    "total": 19
+  },
+  "evidence_precision": 1.0,
+  "evidence_recall": 1.0,
+  "qualification": "QWEN_ONLY_QUALIFIED",
+  "extra_result_ids": [],
+  "per_request": {
+    "SCR-01-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-02-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-03-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-04-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-05-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-06-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-07-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-08-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-09-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-10-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-11-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-12-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-13-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-14-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-15-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-16-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-17-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-18-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    },
+    "SCR-19-anchor": {
+      "category": "correct",
+      "detail": "correct"
+    }
+  },
+  "test_id": "QF-01",
+  "scored_at_utc": "2026-08-17T05:13:24.377044+00:00",
+  "manifest_sha256": "3bd50ef6815935ea6d06de00593bf0d4a0dbb34a832999f3c5c4ea3715376beb",
+  "raw_results_sha256": "cb725f4d7852f910aa3b68027bc591bb90e621b059a5f389b7b4232ed8734fd6",
+  "hidden_key_sha256": "b4a26aa5e3565b95e5146fcb611862cef9dab86759329d4d12f876a83db07dd5",
+  "fiscal_grader_sha256": "b3a3a285e0b4a9ffebfeb5e1e8b236e023b527725f7dc6c4d8c01aa534e78d6a",
+  "independence": {
+    "aligned_set_requests": "one per anchor family",
+    "hidden_cells_covered": 93,
+    "independent_tables": 8,
+    "filings": 7
+  },
+  "zero_error_rule_of_three_upper_bound": {
+    "set_call_level": 0.15789473684210525,
+    "independent_table_level": 0.375
+  },
+  "scope_limit": "Screen only: exact table evidence for known anchors; no production certification or general reader claim",
+  "model": {
+    "name": "qwen3.8:27b-mlx",
+    "digest": "5642e97495e1a088883805981563dcdc4a040c2f53388b7a41d1f24d3622cf7e",
+    "size_bytes": 18174721847,
+    "format": "safetensors",
+    "family": "",
+    "parameter_size": "",
+    "quantization_level": "nvfp4",
+    "runtime_version": "0.32.13",
+    "resident": true
+  }
+}

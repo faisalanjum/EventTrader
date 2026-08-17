@@ -1,0 +1,392 @@
+{
+  "test_id": "QF-01-CHOICE-V2-DEV",
+  "counts": {
+    "correct": 93,
+    "wrong": 0,
+    "abstained": 0,
+    "invalid": 0,
+    "total": 93
+  },
+  "precision": 1.0,
+  "recall": 1.0,
+  "development_gate": "PERFECT_93_OF_93",
+  "transport_failures_before_completed_answers": 0,
+  "production_authorized": false,
+  "unseen_certification_required": true,
+  "per_request": {
+    "SCR-01-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-01-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-01-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-02-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-02-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-02-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-03-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-03-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-03-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-04-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-04-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-04-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-05-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-05-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-05-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-05-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-06-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-06-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-06-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-06-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-07-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-07-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-07-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-07-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-08-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-08-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-08-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-08-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-09-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-09-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-09-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-09-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-10-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-10-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-10-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-10-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-11-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-11-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-11-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-11-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-11-q5": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-11-q6": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-11-q7": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-12-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-12-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-12-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-12-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-12-q5": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-12-q6": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-12-q7": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-13-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-13-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-13-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-13-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-13-q5": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-13-q6": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-13-q7": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-14-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-14-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-14-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-14-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-14-q5": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-14-q6": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-14-q7": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-15-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-15-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-15-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-15-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-16-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-16-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-16-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-16-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-17-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-17-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-17-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-17-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-17-q5": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-17-q6": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-17-q7": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-18-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-18-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-18-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-18-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-18-q5": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-18-q6": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-18-q7": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-19-q1": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-19-q2": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-19-q3": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-19-q4": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-19-q5": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-19-q6": {
+      "category": "correct",
+      "detail": "CORRECT"
+    },
+    "SCR-19-q7": {
+      "category": "correct",
+      "detail": "CORRECT"
+    }
+  },
+  "raw_results_sha256": "3faa3aa431c2c940ffbbf9ecc182899126c3196644f749c672c6f85b41e19a14",
+  "manifest_sha256": "167bfb6c9bddc25e16df8880898de6e0c71fe15c96891e8931a98de9c255765e"
+}

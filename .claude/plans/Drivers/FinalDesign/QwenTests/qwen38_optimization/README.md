@@ -1,5 +1,7 @@
 # qwen38_optimization — Qwen3.8-27B local inference: 100% accuracy + speed work
 
+**Implementing agents: read `QWEN_INFERENCE_GUIDE.md` first — it is the complete usage contract.**
+
 Self-contained record of the Qwen3.8 (qwen3.8:27b-mlx, Ollama MLX engine on the
 M4 Pro MacBook, consumed from the Minisforum over the autossh tunnel) optimisation
 work. Nothing in here is imported by production code. The ONLY production files
