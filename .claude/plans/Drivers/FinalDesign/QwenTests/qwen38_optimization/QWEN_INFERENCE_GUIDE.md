@@ -106,8 +106,12 @@ Reference implementation: `.claude/plans/Drivers/FinalDesign/QwenTests/qwen38_op
 - Runner memory grows ~0.24 MB per prompt token: 13.7k tokens → 33.9 GiB peak,
   23.5k → 36.2 GiB (48 GB Mac, 37.4 GiB Metal budget). A 70k-token prompt ≈ 47 GiB,
   a 200k window ≈ 78 GiB: **impossible on this machine.**
-- Practical ceiling: **~25k tokens per call (≈100 KB rendered text)**, and such calls
-  cost 4–5 min each. Treat oversize input as a visible failure BEFORE the call
+- Practical ceiling: **~29.5k tokens per call (prompt + generated)**, and such calls
+  cost 6–7 min each. Measured 2026-08-18: a 28,092-token prompt + 1,400 generated =
+  29,492 tokens completed OK at num_ctx=32768 (wall 404 s, prefill 83.1 tok/s,
+  decode 21.3 tok/s). Prefill runs below the usual 95–110 tok/s because the machine
+  swaps hard at this size (swap used peaked 22.9 GiB) — close apps for big calls.
+  The older "~25k" figure was conservative; 25k is the SAFE number, 29.5k the proven one. Treat oversize input as a visible failure BEFORE the call
   (`TruncatedInputError` is raised by the client); never truncate silently.
 - Whole-event / long-reasoning single prompts (60–80k tokens) are therefore out of
   scope for Qwen here; they stay on Sonnet unless the role is redesigned as
