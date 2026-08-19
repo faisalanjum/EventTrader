@@ -8,6 +8,53 @@
 > `FableExperimentPlan.md` and `FableExperimentWorkOrder.md` for experiment
 > procedure, and `STATUS_AND_HISTORY.md` for status.
 
+## Narrow reader amendment — 2026-08-18
+
+This later owner ruling changes only still-unrun reader work. It supersedes a
+conflicting lower instruction only for the four points below; every other step,
+fact rule, safety bar, frozen artifact, and historical result stays unchanged.
+
+1. **Small production-shaped calls.** Each reader call handles one
+   already-located raw item but still receives the complete ordered event. Keep
+   the stable rules first, the readable menu and full event next, and the
+   varying item last. Never shorten source context, exclude long events, or add
+   local-model routing. Apply this ordering only to a newly built or materially
+   changed reader prompt. Prefix reuse may be measured, but correctness,
+   independence, accounting, and launch permission never depend on caching or
+   priming.
+
+2. **Code owns the source locator.** Channel/source code derives `part_ref` and
+   `occurrence_in_part` from the already-selected source span; the model emits
+   neither and only echoes the exact quote. Reuse the existing Core occurrence
+   checker, never a second locator. If the chosen quote is ambiguous or omits a
+   relied-on scale or unit marker, extend it contiguously or refuse.
+
+3. **Sparse model reply, complete internal fact.** The reply remains exactly
+   `source_id`, `facts`, `abstentions`, `continuity_hints`. A fact requires
+   `fact_type` and an `item` containing `driver_name`, `driver_state`, and exact
+   `quote`; `per_x` and other fields appear only when populated. An abstention
+   is exactly `quote` plus nonblank `reason`. One code normalizer attaches
+   the trusted locator and fills only defaults declared by the existing schema
+   before full `PreparedFactV2` validation; explicit null or empty-list forms
+   are accepted only when exactly equal to that schema default. Numeric slots
+   retain their exact `{value, scale_multiplier, unit_scale_evidence}` shape. A
+   continuity hint is exactly `{kind, old, new, quote}`. Add no second schema,
+   compatibility path, semantic default, or partial acceptance.
+
+4. **Readable menu and honest scoring.** Decode an unknown-axis menu token for
+   display with the existing decoder while code retains and restores its exact
+   original token; add no short-reference or alias layer, drop no entry, and
+   preserve lawful off-menu values.
+   Report per-fact errors alongside the existing strict reply gate—a malformed
+   reply still accepts nothing—and count every miss and refusal. Preserve every
+   existing pass bar, zero observed wrong accepts, and the proved Claude Code
+   setting
+   `CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000`; the real call seam and durable runtime
+   configuration must fail closed when that exact setting is absent or changed.
+
+These four points govern the affected portions of Steps 1–6, 9, 10, and 13 at
+their normal turn; they do not reopen or otherwise amend any other work.
+
 ## First-release model ruling
 
 Owner ruling, 2026-08-14: every still-unrun model call in Steps 1–13 uses
