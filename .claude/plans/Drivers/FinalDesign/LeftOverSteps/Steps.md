@@ -23,22 +23,38 @@ fact rule, safety bar, frozen artifact, and historical result stays unchanged.
    independence, accounting, and launch permission never depend on caching or
    priming.
 
-2. **Code owns the source locator.** Channel/source code derives `part_ref` and
-   `occurrence_in_part` from the already-selected source span; the model emits
-   neither and only echoes the exact quote. Reuse the existing Core occurrence
-   checker, never a second locator. If the chosen quote is ambiguous or omits a
-   relied-on scale or unit marker, extend it contiguously or refuse.
+2. **Code owns the whole source binding.** Each call is given exactly one
+   already-verified raw item. Code keeps that item's exact `quote`,
+   `raw_label_or_claim`, `part_ref`, and `occurrence_in_part` unchanged on the
+   frozen raw item and its context. One normalizer, to be built at the existing
+   per-item reader seam and the sole enrichment owner, then completes each
+   returned object from that frozen item. It attaches only the source fields the
+   completed object actually requires: for a fact, the exact `quote`,
+   `part_ref`, and `occurrence_in_part`. `raw_label_or_claim` is required on the
+   public raw input and is not an output field, so it is never attached to a
+   returned object. The model emits none of these four item-level
+   source-binding fields and never copies, repairs, normalizes, chooses, or
+   reconstructs them; it still emits the required top-level `source_id`. Reuse
+   the existing Core occurrence checker, never a second locator. If that input
+   span is ambiguous, crosses parts, or omits a relied-on scale or unit marker,
+   the source and locator owner extends it contiguously before the call or
+   refuses it; the model may never substitute another span.
 
-3. **Sparse model reply, complete internal fact.** The reply remains exactly
-   `source_id`, `facts`, `abstentions`, `continuity_hints`. A fact requires
-   `fact_type` and an `item` containing `driver_name`, `driver_state`, and exact
-   `quote`; `per_x` and other fields appear only when populated. An abstention
-   is exactly `quote` plus nonblank `reason`. One code normalizer attaches
-   the trusted locator and fills only defaults declared by the existing schema
-   before full `PreparedFactV2` validation; explicit null or empty-list forms
+3. **Sparse model reply, complete internal fact.** The top-level reply remains
+   exactly `source_id`, `facts`, `abstentions`, `continuity_hints`. A raw model
+   fact carries only meaning: `fact_type` and an `item` containing
+   `driver_name` and `driver_state`, with `per_x` and other meaning fields only
+   when populated. A raw abstention is exactly `{reason}`, nonblank, which the
+   normalizer completes as exactly
+   `{quote, reason, part_ref, occurrence_in_part}`. That same one normalizer
+   completes each raw fact with its exact source fields and the defaults
+   declared by the existing schema. Completed facts then pass `PreparedFactV2`;
+   completed abstentions and continuity proposals pass their own complete
+   internal validators, not `PreparedFactV2`. Explicit null or empty-list forms
    are accepted only when exactly equal to that schema default. Numeric slots
    retain their exact `{value, scale_multiplier, unit_scale_evidence}` shape. A
-   continuity hint is exactly `{kind, old, new, quote}`. Add no second schema,
+   raw continuity proposal is exactly `{kind, old, new}`, which the same
+   normalizer enriches to the six-field internal proposal. Add no second schema,
    compatibility path, semantic default, or partial acceptance.
 
 4. **Readable menu and honest scoring.** Decode an unknown-axis menu token for
@@ -54,6 +70,50 @@ fact rule, safety bar, frozen artifact, and historical result stays unchanged.
 
 These four points govern the affected portions of Steps 1–6, 9, 10, and 13 at
 their normal turn; they do not reopen or otherwise amend any other work.
+
+## Model-neutral AI-task rule — 2026-08-19
+
+This rule governs every newly built or materially changed AI task. It does not
+force a retrofit of completed evidence or of an existing task that is not being
+changed. It activates no model and changes no product meaning, completed
+evidence, locked answer key, sample, prompt, safety rule, or pass bar.
+
+1. **One canonical builder per task.** Each distinct AI task has one canonical
+   builder and one semantic packet. Its qualification protocol has exactly one
+   independent key owner, one parser/validator owner, and one scorer owner.
+   Every runtime receives the same semantic instructions, the same complete
+   context and item order, the same input identities, and the same response
+   contract. Qualification uses the same frozen hidden key and controls, the
+   same raw-capture path, the same parser, normalizer and validator, the same
+   outcome accounting, and the same pass bars. The hidden key never enters a
+   runtime input. A thin transport may encode the packet but may not shorten or
+   change any of those.
+
+2. **Freeze one runtime before each run.** Freeze one runtime, model,
+   transport, and configuration, one reasoning setting, the measured context
+   and output capacity, the schema behaviour, and the input class before every
+   run. Drift, unsupported capacity, or possible truncation refuses before any
+   call rather than after it. Qualification transfers only to that exact task,
+   that exact runtime and model, that exact transport and configuration, and
+   that tested input class. The runtime that produced an answer never grades
+   that answer.
+
+3. **Subscription runners only.** Claude and Codex/OpenAI work uses approved
+   subscription runners only. API calls, API billing, provider substitution,
+   and silent API fallback are forbidden. Local Qwen may later be used only
+   through `config/local_llm.py`, only after the later owner ruling required by
+   point 4 below, and only for a bounded task and input class that
+   independently passes the same hidden production-shaped precision,
+   recall, refusal, invalid-output, and accounting bars. Each run freezes one
+   qualified runtime before launch; no alternate call, cascade, vote, or
+   fallback. Count every refusal, every miss, and every unserved item. Add no
+   provider framework, compatibility layer, prompt fork, second scorer, or
+   future-model registry.
+
+4. **Boundary.** This portability rule activates no new model. Steps 1–13
+   remain Sonnet 5 at high effort only, and Step 14 remains dormant until a
+   later owner ruling. A Codex collaboration subagent is not proof of a durable
+   production subscription runner.
 
 ## First-release model ruling
 
@@ -356,16 +416,23 @@ reply has exactly `source_id`, `facts`, `abstentions`, and
 `continuity_hints`. The list is present on every reply, is empty when no rename
 is proposed, and may contain more than one proposal.
 
-Each proposal has exactly:
+The model emits exactly the three meaning fields:
+
+`kind` · `old` · `new`
+
+The one normalizer then completes each raw proposal, from the sole input item's
+frozen provenance, into exactly the six-field internal proposal:
 
 `kind` · `old` · `new` · `quote` · `part_ref` · `occurrence_in_part`
 
-`kind` is exactly `driver`, `slice_label`, or `measurement_token`. `old`,
-`new`, `quote`, and `part_ref` are exact nonblank strings. The quote must equal
-the current raw item's verbatim quote; `part_ref` and `occurrence_in_part` use
-the existing Core source-occurrence owner without another locator or rule.
-The first four fields are the original meaning fields; the final two only bind
-that meaning to the existing exact source locator.
+`kind` is exactly `driver`, `slice_label`, or
+`measurement_token`. `old`, `new`, `quote`, and `part_ref` are exact nonblank
+strings. The attached quote is the current raw item's verbatim quote;
+`part_ref` and `occurrence_in_part` use the existing Core source-occurrence
+owner without another locator or rule. The meaning, the continuity judge, the
+accounting, and the strict whole-reply gate do not change. This central ruling
+supersedes matching model-emitted provenance wording in later step files until
+each is reached in its normal turn.
 
 The existing fact-accounting rule is unchanged: every reply contains one or
 more facts or exactly one abstention, never both and never neither. Rename

@@ -137,20 +137,35 @@ an arm, change a key, or tune a prompt after seeing results.
 
 ### Budget reconciliation
 
-The current ledger reports:
+The published ledger at this base reports:
 
 * completed calls: 2,930;
 * completed strong-model calls: 2,760;
 * original global target: 4,000;
 * forced-abort ceiling: 6,000.
 
-The 3,070 calls between the completed count and the forced-abort ceiling are
-unused safety headroom, not a planned run. Before any call:
+That published record is behind the work already completed. Independently
+reconstructed post-baseline failed work adds nine failed rows totalling 140
+Sonnet 5 high-effort calls, so actual completed usage is 3,070 calls and 2,900
+strong-model calls, leaving 2,930 calls before the unchanged 6,000 forced-abort
+ceiling. The last of those nine rows is the failed source-discovery run
+`kf-discovery-20260818T213000Z`, recorded as 72 scheduled call identities, 71
+answer-bearing subscription calls, and one pre-answer service refusal; it is not
+the other eight rows.
+
+Before any further call, the ledger and its preserved failed evidence must be
+reconciled and independently reviewed. Until that reconciliation is published,
+every ceiling calculation uses the conservative 3,070 and 2,900 figures. Failed
+calls remain failed historical evidence and do not complete K-fields or EXP-5.
+
+Before any call:
 
 1. recalculate the exact minimum and maximum remaining calls;
 2. keep only distinct required Sonnet 5 high-effort calls and remove every
    still-unrun different-model, escalation, or fallback arm;
-3. leave all 2,930 completed calls and their model breakdown unchanged;
+3. leave every completed call and its model breakdown unchanged, both the
+   2,930 calls recorded in the published ledger and the 140 calls in the nine
+   reconstructed failed rows;
 4. record the revised total; subscription-covered model calls require no
    spending approval;
 5. abort before 6,000. Any proposal to change that ceiling is a new plan, not
@@ -174,18 +189,69 @@ Each lane remains internally ordered.
 
 ## Lane A — Text fact extraction
 
+### Lane-A amendment — 2026-08-19, one-item design
+
+This amendment replaces only the Lane-A sentences, counts, ceilings, and
+sequence that assumed a whole-event 72-draft plan. Every other source, hard
+class, independence rule, pass bar, safety rule, Lane-B task, and the Step-1
+completion condition stay exactly as written below.
+
+**Failed evidence.** Run `kf-discovery-20260818T213000Z` is failed historical
+source-discovery evidence. It authorizes no retry, no partial acceptance, no
+answer-key promotion, no production import, and no production role for its
+experiment-only `bind_span`. Its raw candidate rows may be used as leads only.
+
+**The benchmark is built from sources, never from failed output.** Before the
+A2 launch freeze, the independent key owner freezes an approximately
+150-item representative benchmark drawn from the same 36 source events, plus
+the required lawful abstention and negative controls. Every selected item is
+re-read against the full source and locked to an exact quote and the existing
+locator; ambiguous or incomplete evidence is extended contiguously or refused.
+Reconcile every event, every required hard class, every selected item, and
+every exclusion. Failed discovery output cannot create or grade truth.
+
+**The one canonical call shape.** Key-draft calls and later EXP-5 calls use the
+one canonical production-shaped semantic task: the complete ordered event, the
+readable reversible menu, one trusted located item last, the sparse four-field
+response carrying meaning only, the code-owned source binding and defaults, and
+the unchanged strict gate. The model returns the required top-level `source_id`
+and meaning; it returns none of the four item-level source-binding fields. Code
+keeps the sole input item's exact `quote`, `raw_label_or_claim`, `part_ref`, and
+`occurrence_in_part` unchanged on that frozen item, and the one normalizer
+completes each returned object with only the source fields it requires.
+Run two blind independent Sonnet 5 high-effort arms per frozen item and per
+control. Derive and freeze the exact call count and package ceiling from the
+final inventory instead of retaining 72 or 100. The key drafts are
+independently adjudicated and sealed before any scoring. EXP-5 uses fresh
+responses and never reuses a key-draft reply as an evaluated answer.
+
+**Separate completeness gate.** Source selection and location completeness stay
+separate, under the channel contract and its own certification gate. The
+meaning-reader score may claim neither source-discovery recall nor production
+source completeness. Preserve the original frozen kits and every failed attempt
+as labelled history.
+
 ### A1. Revalidate the frozen K-fields launch
 
 Using the existing schedule owner, replace the unrun Opus lane with a second
 independent Sonnet 5 high-effort lane. Regenerate the manifest and launcher
-twice and require identical bytes; do not change any event, prompt, key, rule,
-or pass bar. Then run the existing preparation checks:
+twice and require identical bytes. The exact 36 full source-event bytes and
+identities, the semantic rules, the answer key, and the pass bars stay
+unchanged. The prompt and the derived per-item packet may change only by the
+approved 2026-08-18 one-item and four-field amendment. Then run the existing
+preparation checks:
 
-* rebuild the 36 inputs and require byte-for-byte equality;
+* rebuild the 36 underlying source-event inputs and require byte-for-byte
+  equality;
 
 * verify every prompt and input hash;
 
-* verify exactly two independent Sonnet 5 drafts per event;
+* preserve and reverify the exact 36 full source-event bytes and identities,
+  then build the derived packet inventory from the independently frozen items
+  and controls;
+
+* verify exactly two independent blind Sonnet 5 arms per frozen item and per
+  control;
 
 * verify the two prompts are byte-identical and the calls share no response or
   hidden answer;
@@ -205,7 +271,8 @@ or pass bar. Then run the existing preparation checks:
 
 * run the existing harness, manifest and no-hardcoded-pattern checks.
 
-Any changed frozen input stops the launch.
+Any unexpected change in a frozen underlying source-event input stops the
+launch. The reviewed derived item and control inventory is not such a change.
 
 ### A2. Freeze the K-fields launch
 
@@ -214,33 +281,41 @@ Freeze one exact launch packet containing:
 * starting commit and tree;
 * K-fields manifest identity;
 * 36 event identities;
-* 72 planned calls;
-* model: Sonnet 5, two independent blind calls per event;
+* the call count derived and frozen from the final item inventory (see the
+  Lane-A amendment above);
+* model: Sonnet 5, two independent blind calls and two call identities per
+  frozen item and per control;
 * exact Sonnet 5 runtime identity and two independent call identities;
 * effort=high;
-* maximum package ceiling of 100 calls, including only the support calls
-  already named by the frozen package;
+* the package ceiling derived and frozen from that same final inventory,
+  including only the support calls already named by the frozen package;
 * confirmation that no EXP-5 call, database write or production change is included.
 
 No call occurs until this packet passes its deterministic preflight. No
 separate owner approval is required.
 
-### A3. Run 72 blind drafts
+### A3. Run the frozen key drafts
 
-For each of the 36 events:
+SUPERSEDED in part by the Lane-A amendment above: the drafts are per frozen
+benchmark item, not per whole event, and the count is derived from the final
+inventory. The numbered handling rules below stay in force.
 
-1. send the exact same event text and instructions to two independent Sonnet 5
-   calls;
+For each frozen item and control in the inventory:
+
+1. send the exact same instructions to two independent Sonnet 5 calls, each
+   receiving its complete ordered source event plus that one located item
+   last;
 2. keep the two calls independent;
 3. save the raw response before parsing;
 4. bind the response to its exact prompt, input, model and effort;
 5. allow one retry only for an invalid response;
 6. never repair semantic content automatically;
-7. account for all 72 expected replies.
+7. account for every expected reply in the derived and frozen count.
 
 After the run, prove:
 
-* 36 events × 2 independent calls = 72 response identities;
+* two independent calls per frozen benchmark item and per control, matching
+  the derived and frozen count exactly;
 * no missing, duplicated or overwritten response;
 * no worker accessed an unapproved file or tool;
 * no prompt or input drift;
@@ -249,7 +324,12 @@ After the run, prove:
 
 ### A4. Build and lock the K-fields answer key
 
-Fable reviews the union of both drafts against event text only.
+The item and control inventory is already frozen before A2. Here the
+independent key owner adjudicates source truth for that same frozen inventory
+and locks the answer key; it does not build the benchmark after A3. Failed
+discovery rows and model drafts may be used as leads, but neither can create or
+grade truth. The drafts are independently adjudicated and sealed before any
+scoring.
 
 Requirements:
 
@@ -306,16 +386,19 @@ Using the existing manifest builder:
 5. remove P3, P4, P5, and every different-model, escalation, or fallback arm
    from the active launch plan without altering their historical record;
 6. amend the one EXP-5 reader prompt and response owner only with the
-   owner-frozen `continuity_hints` field and rules from Steps 2 and 3; do not
-   change the K-fields gold-draft reply, source inputs, fact rules, answer key,
-   matcher, scorer, or pass bars;
+   2026-08-18 one-item and four-field amendment and the owner-frozen
+   `continuity_hints` field and rules from Steps 2 and 3; preserve the
+   underlying 36 source-event bytes and identities, the fact rules, the answer
+   key, the matcher, the scorer, and the pass bars;
 7. resolve and record the exact Sonnet 5 runtime identity;
 8. regenerate the launch manifest and launcher twice from their existing
    owners; never hand-edit generated files;
-9. require byte-for-byte identical rebuilds and exactly 72 planned calls;
-10. prove every source input, answer key, pass bar, and non-arm kit identity is
-    unchanged, and prove the reader-prompt difference is exactly the approved
-    `continuity_hints` amendment;
+9. require byte-for-byte identical rebuilds and exactly the derived, frozen
+   call count;
+10. prove the underlying 36 source-event bytes and identities, the answer key,
+    the pass bars, and every non-arm kit identity are unchanged, and prove the
+    generated prompt and per-item packet difference equals only the one-item and
+    four-field amendment and the `continuity_hints` amendment;
 11. update only tests and derived inventories whose expected arm set, count,
     or exact reader reply shape changed, then run all existing harness and
     attack tests;
@@ -326,9 +409,10 @@ Using the existing manifest builder:
 Preserve the original 156-call freeze as historical evidence. The new
 Sonnet-only launch receives a new exact manifest identity before use.
 
-The K-fields gold-draft door is not a production-reader reply and remains
-unchanged. Because EXP-5 has made zero reader calls, amend and re-freeze its
-reader door before the first call. Every resulting reader reply must use the
+The K-fields gold-draft door is not a production-reader reply, and it changes
+only by the 2026-08-18 one-item and four-field amendment. Because EXP-5 has
+made zero reader calls, amend and re-freeze its reader door before the first
+call. Every resulting reader reply must use the
 four-field shape; do not build an old-shape adapter or derived reply copy.
 
 ### A6. Freeze the EXP-5 launch
@@ -343,10 +427,10 @@ Record:
 
 * exact Sonnet 5 runtime identity and high effort;
 
-* 72 producer calls:
+* the derived, frozen number of producer calls:
 
-  * Sonnet run 1 over 36 events;
-  * Sonnet run 2 over 36 events;
+  * Sonnet run 1 over every frozen benchmark item and control;
+  * Sonnet run 2 over every frozen benchmark item and control;
 
 * confirmation that Opus, Haiku, local-Qwen, GPT, DeepSeek, and every fallback
   arm are not part of this run;
@@ -366,7 +450,8 @@ For every producer response:
 3. require exactly `source_id`, `facts`, `abstentions`, and
    `continuity_hints`, then validate and preserve every proposal separately
    from fact scoring;
-4. verify every quote against the named source part and repeated occurrence;
+4. prove the enriched provenance equals the frozen sole input item before any
+   fact, abstention, or proposal is accepted;
 5. require text scale evidence inside the quote;
 6. match produced facts to reviewed facts without relying on value or name alone;
 7. send unresolved matches to the qualified independent graders;
@@ -659,8 +744,9 @@ For each tool:
 
 Do not rewrite the existing K-fields and EXP-5 rule, input, parsing, grading,
 or proof machinery. Change only their unrun model schedules and the exact
-owner-approved EXP-5 reader-envelope amendment above; any other change needs a
-reproduced failure against unchanged inputs.
+owner-approved amendments above, namely the 2026-08-18 one-item and four-field
+amendment and the `continuity_hints` amendment; any other change needs a
+reproduced failure against unchanged underlying source-event inputs.
 
 For every new or changed temporary proof tool, cover every reachable branch and
 exception outcome. Deliberately alter an input, key, response, match, count, or
