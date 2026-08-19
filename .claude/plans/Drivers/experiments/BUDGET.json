@@ -189,11 +189,184 @@
    "date": "2026-07-24",
    "note": "dual-draft wave 1 paused by reviewer HOLD (contract v1 lacked hint-enum/lane-matrix definitions; 9/19 workers accessed beyond the exact-input set \u2014 audited, outputs QUARANTINED as non-official; 4 completed, 15 stopped mid-flight; conservative booking = all 19 started)",
    "package": "WP-KEYS-K-fields-draft-wave1-QUARANTINED"
+  },
+  {
+   "by_model": {
+    "claude-sonnet-5": 10
+   },
+   "calls": 10,
+   "effort": "high",
+   "gate": "FAIL",
+   "launch_attempts": 11,
+   "no_response_rejections": 1,
+   "outcome": "every reply fenced \u2014 the served skeleton carried Markdown fence markers; excluded from the answer key and from the 72-response denominator",
+   "pkg": "K-FIELDS-A3-format-failed",
+   "retries": 1,
+   "route": "in-session subscription workflow agent()",
+   "run_id": "kf-a3-20260816T221200EDT",
+   "subagent_tokens_approx": 1014969
+  },
+  {
+   "by_model": {
+    "claude-sonnet-5": 2
+   },
+   "calls": 2,
+   "effort": "high",
+   "gate": "FAIL",
+   "invalid_responses": 2,
+   "launch_attempts": 2,
+   "no_response_rejections": 0,
+   "outcome": "both lanes format-invalid: the served prompt carried no fence marker yet both complete chains came back fenced; excluded from the answer key and from the 72-response denominator",
+   "pkg": "K-FIELDS-A3-rawjson-checkpoint-failed",
+   "retries": 0,
+   "route": "in-session subscription workflow agent()",
+   "run_id": "kf-a3-fmt-rerun-20260817T190000Z",
+   "subagent_tokens_approx": 152410
+  },
+  {
+   "by_model": {
+    "claude-sonnet-5": 2
+   },
+   "calls": 2,
+   "effort": "high",
+   "exact_json_clean_lanes": 1,
+   "exact_json_invalid_lanes": 1,
+   "gate": "FAIL",
+   "launch_attempts": 2,
+   "no_response_rejections": 0,
+   "outcome": "no fence on either lane, but the checkpoint is not format-clean: K1's complete chain is exact JSON and K1 used zero tools; K2's chain and row are exact-JSON invalid and K2 called Read twice; both lanes are excluded from the answer key and 72-response denominator",
+   "pkg": "K-FIELDS-A3-notool-checkpoint-failed",
+   "retries": 0,
+   "route": "in-session subscription workflow agent()",
+   "run_id": "kf-a3-rawjson-rerun-20260817T220000Z",
+   "subagent_tokens_approx": 217520,
+   "tool_calls": 2,
+   "tool_using_lanes": 1
+  },
+  {
+   "by_model": {
+    "claude-sonnet-5": 2
+   },
+   "calls": 2,
+   "effort": "high",
+   "exact_json_clean_lanes": 0,
+   "exact_json_invalid_lanes": 2,
+   "gate": "FAIL",
+   "launch_attempts": 2,
+   "no_response_rejections": 0,
+   "outcome": "both complete chains were enclosed by Markdown fences, so exact parsing refused both and the enclosed document's inner V2 lawfulness was never tested; both lanes remain outside the answer key and the 72-response denominator",
+   "pkg": "K-FIELDS-A3-notool-rerun-fence-failed",
+   "retries": 0,
+   "route": "in-session subscription workflow agent()",
+   "run_id": "kf-a3-notool-rerun-20260817T230000Z",
+   "subagent_tokens_approx": 214803,
+   "tool_calls": 0,
+   "tool_using_lanes": 0
+  },
+  {
+   "answer_bearing_attempts": 4,
+   "by_model": {
+    "claude-sonnet-5": 11
+   },
+   "calls": 11,
+   "effort": "high",
+   "exhausted_invalid_pairs": 2,
+   "gate": "FAIL",
+   "launch_attempts": 11,
+   "no_response_rejections": 0,
+   "outcome": "stopped after the first bounded wave: every one of the seven failures ended at the 64,000 output-token ceiling, including both retries of 0000006201-26-000032, and the packet recorded no effective output limit; 2 of its fixed 72 pairs are exhausted-invalid, which is 2.78% and above the 2% stop, so this run is failed transport evidence only \u2014 no reply of it may enter the answer key or the 72-response denominator",
+   "output_ceiling_failures": 7,
+   "pkg": "K-FIELDS-A3-envelope-output-ceiling-stopped",
+   "retries": 3,
+   "route": "in-session subscription workflow agent()",
+   "run_id": "kf-a3-envelope-20260818T020000Z",
+   "workflow_state_token_counters_sum": 678111
+  },
+  {
+   "answer_bearing_attempts": 7,
+   "by_model": {
+    "claude-sonnet-5": 7
+   },
+   "calls": 7,
+   "effort": "high",
+   "exhausted_invalid_pairs": 4,
+   "gate": "FAIL",
+   "launch_attempts": 8,
+   "no_response_rejections": 1,
+   "official_states": 4,
+   "outcome": "the 128000 output limit held \u2014 zero ceiling failures \u2014 but every one of the four scheduled pairs failed the content door on locator rules and is exhausted-invalid at 4 of the fixed 72, which is 5.56% and above the 2% stop; the run was stopped globally and no reply of it may enter the answer key or the 72-response denominator",
+   "output_ceiling_failures": 0,
+   "pkg": "K-FIELDS-A3-128k-content-stopped",
+   "raw_replies": 7,
+   "retries": 4,
+   "route": "in-session subscription workflow agent()",
+   "run_id": "kf-a3-128k-20260818T093000Z",
+   "workflow_state_token_counters_sum": 321843
+  },
+  {
+   "answer_bearing_attempts": 30,
+   "by_model": {
+    "claude-sonnet-5": 30
+   },
+   "calls": 30,
+   "effort": "high",
+   "exhausted_invalid_pairs": 0,
+   "gate": "FAIL",
+   "launch_attempts": 15,
+   "no_response_rejections": 0,
+   "official_states": 15,
+   "outcome": "30 primary calls served, zero agent errors, zero output-ceiling failures at 128000; 25 of 30 saved replies pass the content door; the public audit REFUSES on transcript stop-reason shape so no retry set could lawfully be derived",
+   "output_ceiling_failures": 0,
+   "pkg": "kf-units-pilot",
+   "raw_replies": 30,
+   "retries": 0,
+   "route": "unit_launchers",
+   "run_id": "kf-units-pilot-20260818T120000Z",
+   "workflow_state_token_counters_sum": 0
+  },
+  {
+   "answer_bearing_attempts": 5,
+   "by_model": {
+    "claude-sonnet-5": 5
+   },
+   "calls": 5,
+   "effort": "high",
+   "exhausted_invalid_pairs": 4,
+   "gate": "FAIL",
+   "launch_attempts": 3,
+   "no_response_rejections": 0,
+   "official_states": 3,
+   "outcome": "the one authorised retry for the five invalid pairs; 1 of 5 recovered (0000027904-26-000013#03 K1) and 4 are exhausted invalid, so the pilot fails its own stop rule",
+   "output_ceiling_failures": 0,
+   "pkg": "kf-units-pilot",
+   "raw_replies": 5,
+   "retries": 5,
+   "route": "unit_launchers",
+   "run_id": "kf-units-pilot-20260818T120000Z.retry1",
+   "workflow_state_token_counters_sum": 0
+  },
+  {
+   "answer_bearing_attempts": 71,
+   "by_model": {
+    "claude-sonnet-5": 71
+   },
+   "calls": 71,
+   "effort": "high",
+   "exhausted_invalid_pairs": 37,
+   "gate": "FAIL",
+   "launch_attempts": 36,
+   "no_response_rejections": 1,
+   "official_states": 36,
+   "outcome": "36 reviewed launchers x blind K1/K2; 72 scheduled, 71 served, 1 refused by the service classifier before any answer. 35 replies valid (2,013 located items with code-authored part_ref); 36 invalid on the locator door: 17 quote repeated inside one part, 17 quote absent from the event, 2 quote spanning two parts. The real prefix audit's retry set is 37 pairs; the remaining package allowance is 28 calls, so NO retry was launched and the run stopped on the measured ceiling rule.",
+   "pkg": "kf-discovery",
+   "retries_launched": 0,
+   "route": "discovery_launchers",
+   "run_id": "kf-discovery-20260818T213000Z"
   }
  ],
  "global_cap": 4000,
  "totals": {
-  "all": 2930,
-  "strong_tier": 2760
+  "all": 3070,
+  "strong_tier": 2900
  }
 }
