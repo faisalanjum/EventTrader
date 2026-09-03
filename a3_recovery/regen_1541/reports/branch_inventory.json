@@ -1,0 +1,988 @@
+{
+  "raw_transport.py": {
+    "records": 43,
+    "counts": {
+      "applied": 41,
+      "producer-correct/completed": 1,
+      "faithfully-failed": 1
+    },
+    "refused_lines": [],
+    "producer_lines": [
+      25922
+    ],
+    "producer_products": {
+      "25922": {
+        "path": "/tmp/claude-1000/rt_keep.py",
+        "present": true,
+        "bytes": 43046,
+        "sha256": "8e4d51f607f714f4478eb3c94c7b59d8ebb57102d6afff90c9305ff8ec89b190",
+        "product_status": "correct",
+        "call_outcome": "completed",
+        "finalizable": true
+      }
+    },
+    "producer_report": {
+      "product_states": {
+        "correct": [
+          25922
+        ],
+        "wrong": [],
+        "missing": [],
+        "unpinned": [],
+        "not-attempted": []
+      },
+      "call_states": {
+        "completed": [
+          25922
+        ],
+        "historically-failed": [],
+        "faithfully-failed": [],
+        "refused": [],
+        "waiting": [],
+        "missing-result": [],
+        "terminated": []
+      },
+      "finalizable": [
+        25922
+      ]
+    },
+    "faithfully_failed_lines": [
+      26845
+    ],
+    "refused_after_empty_lines": [],
+    "waiting_lines": [],
+    "missing_result_lines": [],
+    "terminated_lines": []
+  },
+  "audit_worker_access.py": {
+    "records": 28,
+    "counts": {
+      "applied": 26,
+      "producer-correct/completed": 2
+    },
+    "refused_lines": [],
+    "producer_lines": [
+      25442,
+      25450
+    ],
+    "producer_products": {
+      "25442": {
+        "path": "/tmp/claude-1000/auditor_head.py",
+        "present": true,
+        "bytes": 19572,
+        "sha256": "8089871747997f3e6d4a607883b1a1ba7437832f9121693d95354e3f6259e83b",
+        "product_status": "correct",
+        "call_outcome": "completed",
+        "finalizable": true
+      },
+      "25450": {
+        "path": "/tmp/claude-1000/auditor_a1_body.py",
+        "present": true,
+        "bytes": 17089,
+        "sha256": "6913e8851dd3365b3952508faaf2ecf83cd9bf3966b7beaf4a295fa69ef0b39b",
+        "product_status": "correct",
+        "call_outcome": "completed",
+        "finalizable": true
+      }
+    },
+    "producer_report": {
+      "product_states": {
+        "correct": [
+          25442,
+          25450
+        ],
+        "wrong": [],
+        "missing": [],
+        "unpinned": [],
+        "not-attempted": []
+      },
+      "call_states": {
+        "completed": [
+          25442,
+          25450
+        ],
+        "historically-failed": [],
+        "faithfully-failed": [],
+        "refused": [],
+        "waiting": [],
+        "missing-result": [],
+        "terminated": []
+      },
+      "finalizable": [
+        25442,
+        25450
+      ]
+    },
+    "faithfully_failed_lines": [],
+    "refused_after_empty_lines": [],
+    "waiting_lines": [],
+    "missing_result_lines": [],
+    "terminated_lines": []
+  },
+  "test_harness_guards.py": {
+    "records": 135,
+    "counts": {
+      "applied": 124,
+      "terminated": 1,
+      "faithfully-failed": 4,
+      "no-change": 2,
+      "producer-correct/completed": 4
+    },
+    "refused_lines": [],
+    "producer_lines": [
+      24416,
+      26004,
+      26171,
+      26334
+    ],
+    "producer_products": {
+      "24416": {
+        "path": "/tmp/claude-1000/head_thg.py",
+        "present": true,
+        "bytes": 269035,
+        "sha256": "efe54ee1e316a1499af8f216485991723ea5d924e63737bd9a6d7cfca7cb5fd9",
+        "product_status": "correct",
+        "call_outcome": "completed",
+        "finalizable": true
+      },
+      "26004": {
+        "path": "/tmp/claude-1000/a1_launch_block.py",
+        "present": true,
+        "bytes": 15223,
+        "sha256": "598bda3fd76e6bf932e0ccc54b44b94c12833a5261ba2bc0701fb5cf6aca50ef",
+        "product_status": "correct",
+        "call_outcome": "completed",
+        "finalizable": true
+      },
+      "26171": {
+        "path": "/tmp/claude-1000/a1_public_route.py",
+        "present": true,
+        "bytes": 11655,
+        "sha256": "6ac407747a86c05f7597d1a5e129747436c11d1c7d2934b6f5df57e80082e803",
+        "product_status": "correct",
+        "call_outcome": "completed",
+        "finalizable": true
+      },
+      "26334": {
+        "path": "/tmp/claude-1000/a1_retry_block.py",
+        "present": true,
+        "bytes": 10035,
+        "sha256": "5bf317560c7dc58de66e6e11d28c86a760bc0674b2074c5397fcb85b15cea8de",
+        "product_status": "correct",
+        "call_outcome": "completed",
+        "finalizable": true
+      }
+    },
+    "producer_report": {
+      "product_states": {
+        "correct": [
+          24416,
+          26004,
+          26171,
+          26334
+        ],
+        "wrong": [],
+        "missing": [],
+        "unpinned": [],
+        "not-attempted": []
+      },
+      "call_states": {
+        "completed": [
+          24416,
+          26004,
+          26171,
+          26334
+        ],
+        "historically-failed": [],
+        "faithfully-failed": [],
+        "refused": [],
+        "waiting": [],
+        "missing-result": [],
+        "terminated": []
+      },
+      "finalizable": [
+        24416,
+        26004,
+        26171,
+        26334
+      ]
+    },
+    "faithfully_failed_lines": [
+      23746,
+      26146,
+      31682,
+      31686
+    ],
+    "refused_after_empty_lines": [],
+    "waiting_lines": [],
+    "missing_result_lines": [],
+    "terminated_lines": [
+      23556
+    ]
+  },
+  "branches": [
+    {
+      "branch": "tree qualification",
+      "test": "test_the_owner_is_qualified_by_its_worktree",
+      "mutation": "absolute destination names its tree",
+      "control_only": null
+    },
+    {
+      "branch": "another tree's copy is not this owner",
+      "test": "test_a_write_into_ANOTHER_tree_is_not_a_write_of_this_owner",
+      "mutation": "wrong tree",
+      "control_only": null
+    },
+    {
+      "branch": "cd ordering",
+      "test": "test_a_relative_name_belongs_to_the_cd_that_precedes_it",
+      "mutation": "wrong cwd for a relative name",
+      "control_only": null
+    },
+    {
+      "branch": "checkpoint tuple",
+      "test": "test_it_REFUSES_a_permutation_of_cutoffs_between_two_rows",
+      "mutation": "checkpoint tuple binds cutoff",
+      "control_only": null
+    },
+    {
+      "branch": "signer full prompt",
+      "test": "test_it_REFUSES_a_prompt_that_differs_by_one_byte_from_the_full_script_literal",
+      "mutation": "signer prompt bound in full",
+      "control_only": null
+    },
+    {
+      "branch": "signer uuid chain",
+      "test": "test_it_REFUSES_a_broken_uuid_chain",
+      "mutation": "signer chain bound",
+      "control_only": null
+    },
+    {
+      "branch": "post-read measurement",
+      "test": "test_the_after_state_is_measured_AFTER_the_consumer_not_after_open",
+      "mutation": "after-state measured after open, not after read",
+      "control_only": null
+    },
+    {
+      "branch": "required non-null",
+      "test": "test_it_REFUSES_a_null_in_every_required_field_all",
+      "mutation": "a null in a required field is accepted",
+      "control_only": null
+    },
+    {
+      "branch": "exact historical exception",
+      "test": "test_a_WRONG_exception_over_a_saved_failure_is_refused",
+      "mutation": "a generic failure keyword stands in for the exact exception",
+      "control_only": null
+    },
+    {
+      "branch": "fixed prefix digest",
+      "test": "test_it_REFUSES_a_prefix_whose_byte_changed",
+      "mutation": "the prefix digest is not compared",
+      "control_only": null
+    },
+    {
+      "branch": "cache key identity",
+      "test": "test_the_cache_key_binds_the_transcript_and_store_identity",
+      "mutation": "the cache key ignores the input identity",
+      "control_only": null
+    },
+    {
+      "branch": "resume verdict",
+      "test": "test_a_run_that_raised_is_NEVER_clean_whatever_it_read",
+      "mutation": "a failed resume is clean",
+      "control_only": null
+    },
+    {
+      "branch": "live-only import refused",
+      "test": "test_an_import_only_the_live_filesystem_provides_is_refused",
+      "mutation": "an import only the live filesystem provides is served",
+      "control_only": null
+    },
+    {
+      "branch": "outside the package",
+      "test": "test_outside_means_not_inside_the_package_and_not_tooling",
+      "mutation": "a path outside the package counts as inside",
+      "control_only": null
+    },
+    {
+      "branch": "executed-script argv",
+      "test": "test_executed_scripts_receive_their_own_arguments",
+      "mutation": "an executed script gets no arguments",
+      "control_only": null
+    },
+    {
+      "branch": "suffix needs a directory",
+      "test": "test_the_store_serves_an_empty_committed_file_as_present",
+      "mutation": "a bare filename matches the repository root copy",
+      "control_only": null
+    },
+    {
+      "branch": "empty module is present",
+      "test": "test_a_repo_package_import_is_served_from_the_git_store_not_the_checkout",
+      "mutation": "an empty module source is absence",
+      "control_only": null
+    },
+    {
+      "branch": "bare name needs a bare owner",
+      "test": "test_a_bare_relative_name_never_matches_a_package_marker_of_another_package",
+      "mutation": "a bare relative name matches any owner of that basename",
+      "control_only": null
+    },
+    {
+      "branch": "filesystem questions from the world",
+      "test": "test_filesystem_questions_are_answered_by_the_world_for_outside_paths",
+      "mutation": "a filesystem question about the side table answers from the live box",
+      "control_only": null
+    },
+    {
+      "branch": "namespace packages served",
+      "test": "test_a_namespace_package_is_served_from_the_committed_tree",
+      "mutation": "a namespace package is not served",
+      "control_only": null
+    },
+    {
+      "branch": "directory iteration from the world",
+      "test": "test_glob_walks_directories_through_the_world",
+      "mutation": "glob walks the live box",
+      "control_only": null
+    },
+    {
+      "branch": "tree origin through a shell variable",
+      "test": "test_tree_origin_is_found_when_the_command_names_the_tree_through_a_variable",
+      "mutation": "a tree named through a variable has no origin",
+      "control_only": null
+    },
+    {
+      "branch": "import roots absolute in the world",
+      "test": "test_relative_import_roots_are_absolute_in_the_world",
+      "mutation": "import roots stay relative",
+      "control_only": null
+    },
+    {
+      "branch": "a program's cwd is its record's",
+      "test": "test_a_program_stands_where_its_command_cd_ed",
+      "mutation": "a program stands in the census directory",
+      "control_only": null
+    },
+    {
+      "branch": "shell assignments separated by semicolons",
+      "test": "test_assignments_separated_by_semicolons_are_shell_variables",
+      "mutation": "assignments on one line are not shell variables",
+      "control_only": null
+    },
+    {
+      "branch": "a replayed import is served from its world, not from a pre-loaded bench module",
+      "test": "test_a_pre_imported_bench_module_never_answers_a_replayed_import",
+      "mutation": "a pre-loaded bench module answers a replayed import",
+      "control_only": null
+    },
+    {
+      "branch": "an unmapped /tmp read is temporary, never covered",
+      "test": "test_the_read_classifier_covers_only_mapped_equal_bytes_under_tmp",
+      "mutation": "an unmapped /tmp read is covered",
+      "control_only": null
+    },
+    {
+      "branch": "a schema-invalid attempt is paid evidence, never valid",
+      "test": "test_the_exact_accounting_on_the_package",
+      "mutation": "a schema-invalid attempt is counted as valid",
+      "control_only": null
+    },
+    {
+      "branch": "the raw prefilter sees a JSON-escaped script run",
+      "test": "test_the_script_runner_pattern_matches_a_json_escaped_quoted_path",
+      "mutation": "the raw prefilter misses a JSON-escaped script path",
+      "control_only": null
+    },
+    {
+      "branch": "a cut-short program keeps a write its remainder never names",
+      "test": "test_a_write_survives_a_later_environment_failure_when_the_rest_never_names_the_file",
+      "mutation": "a cut-short program always loses its write",
+      "control_only": null
+    },
+    {
+      "branch": "a stdin program gets the arguments the shell passed",
+      "test": "test_a_stdin_program_with_arguments_gets_them",
+      "mutation": "a stdin program keeps the synthetic argv",
+      "control_only": null
+    },
+    {
+      "branch": "the pre-filter reads the scripts a command runs",
+      "test": "test_the_pre_filter_admits_a_command_whose_executed_script_names_the_file",
+      "mutation": "the pre-filter never reads an executed script",
+      "control_only": null
+    },
+    {
+      "branch": "a sed after a cd names its file from where the shell stood",
+      "test": "test_sed_after_a_same_line_cd_names_its_file_relative_to_that_directory",
+      "mutation": "a sed after a cd names its file from the record start",
+      "control_only": null
+    },
+    {
+      "branch": "an in-place sed is a route of its file",
+      "test": "test_sed_in_place_on_a_quoted_file_is_a_route_of_that_file",
+      "mutation": "an in-place sed is not a route",
+      "control_only": null
+    },
+    {
+      "branch": "the sed file token is unquoted",
+      "test": "test_sed_in_place_on_a_quoted_file_is_applied_at_replay",
+      "mutation": "the sed file token keeps its quotes",
+      "control_only": null
+    },
+    {
+      "branch": "a join-form write names its file",
+      "test": "test_a_join_of_a_literal_directory_is_a_write_of_that_file",
+      "mutation": "a join-form write is not a write",
+      "control_only": null
+    },
+    {
+      "branch": "a program's argument binds its directory",
+      "test": "test_a_join_of_a_command_line_argument_is_a_write_of_that_file",
+      "mutation": "a program's argument is not bound",
+      "control_only": null
+    },
+    {
+      "branch": "a replayed program does not sleep real time",
+      "test": "test_a_replayed_program_does_not_sleep_real_time",
+      "mutation": "a replayed program sleeps real time",
+      "control_only": null
+    },
+    {
+      "branch": "a stat miss on a mount is recorded",
+      "test": "test_an_absent_mounted_file_asked_through_isfile_is_a_recorded_miss",
+      "mutation": "a stat miss on a mount is not recorded",
+      "control_only": null
+    },
+    {
+      "branch": "the seed-tree climb stops at the root",
+      "test": "test_a_source_outside_every_seeded_tree_has_no_seed_tree",
+      "mutation": "the seed-tree climb never stops at the root",
+      "control_only": null
+    },
+    {
+      "branch": "a lookup is answered by its exact path",
+      "test": "test_a_lookup_is_answered_by_its_exact_path_only",
+      "mutation": "a lookup is answered by a suffix match",
+      "control_only": null
+    },
+    {
+      "branch": "a bare exception class is the same failure",
+      "test": "test_a_bare_exception_class_in_history_matches_a_replay_error_with_no_message",
+      "mutation": "a bare exception class never matches",
+      "control_only": null
+    },
+    {
+      "branch": "a -c program ends at its matching quote",
+      "test": "test_a_dash_c_program_ends_at_its_matching_quote_not_the_lines_last_quote",
+      "mutation": "a -c program runs to the line's last quote",
+      "control_only": null
+    },
+    {
+      "branch": "the active owner's text honours the cutoff",
+      "test": "test_the_active_owners_text_is_served_only_at_or_beyond_the_record_being_applied",
+      "mutation": "the active owner text ignores the cutoff",
+      "control_only": null
+    },
+    {
+      "branch": "a tree seeded from another tree's modified files",
+      "test": "test_a_tree_seeded_from_another_trees_modified_files_copies_each_of_them",
+      "mutation": "a seeded tree starts from the bare commit",
+      "control_only": null
+    },
+    {
+      "branch": "an append selects its process",
+      "test": "test_an_append_to_the_owner_selects_the_process",
+      "mutation": "an append is not a write",
+      "control_only": null
+    },
+    {
+      "branch": "a command starts in its record's directory",
+      "test": "test_a_command_without_cd_stood_in_the_records_working_directory",
+      "mutation": "a command without cd stood nowhere",
+      "control_only": null
+    },
+    {
+      "branch": "re-entrant reads honour their cutoff",
+      "test": "test_a_reentrant_read_honours_its_cutoff",
+      "mutation": "a re-entrant read ignores its cutoff",
+      "control_only": null
+    },
+    {
+      "branch": "a rejected tool call did nothing",
+      "test": "test_a_rejected_tool_call_did_nothing",
+      "mutation": "a rejected tool call is replayed",
+      "control_only": null
+    },
+    {
+      "branch": "a -c line inside a heredoc body is content",
+      "test": "test_a_dash_c_line_inside_a_heredoc_body_is_content_not_a_program",
+      "mutation": "a -c line inside a heredoc body is a program",
+      "control_only": null
+    },
+    {
+      "branch": "a nested program restores an outer import",
+      "test": "test_a_nested_program_does_not_evict_an_outer_import_still_loading",
+      "mutation": "a nested program evicts an outer import",
+      "control_only": null
+    },
+    {
+      "branch": "a record's own sibling write is read back",
+      "test": "test_a_sibling_written_by_this_record_is_read_back_as_written_even_if_marked_stale",
+      "mutation": "a record's own sibling write stays stale",
+      "control_only": null
+    },
+    {
+      "branch": "background record judged by what history observed",
+      "test": "test_a_background_record_is_judged_by_what_history_observed_not_its_launch_notice",
+      "mutation": "a background record is judged by its launch notice",
+      "control_only": null
+    },
+    {
+      "branch": "dot-dot paths resolve in the world",
+      "test": "test_a_dot_dot_path_is_the_same_directory_to_the_world",
+      "mutation": "a dot-dot path is a different directory",
+      "control_only": null
+    },
+    {
+      "branch": "import root is where the program stood",
+      "test": "test_an_import_is_served_from_where_the_program_stood_not_where_the_command_ended",
+      "mutation": "an import root is where the command ended",
+      "control_only": null
+    },
+    {
+      "branch": "sed line insert",
+      "test": "test_a_line_addressed_sed_insert_is_replayed",
+      "mutation": "sed line insertion",
+      "control_only": null
+    },
+    {
+      "branch": "grep-guarded sed",
+      "test": "test_a_grep_guarded_sed_does_not_insert_a_line_that_is_already_there",
+      "mutation": "grep-guarded sed is idempotent",
+      "control_only": null
+    },
+    {
+      "branch": "no final newline",
+      "test": "test_a_line_addressed_sed_insert_is_replayed",
+      "mutation": "no final newline",
+      "control_only": null
+    },
+    {
+      "branch": "backup/restore",
+      "test": "test_a_backup_of_this_file_is_captured_so_the_restore_can_run",
+      "mutation": "backup and restore is net zero",
+      "control_only": null
+    },
+    {
+      "branch": "multi-file program",
+      "test": "test_a_loop_over_filenames_binds_one_variable_to_every_file",
+      "mutation": "multi-file saved program",
+      "control_only": null
+    },
+    {
+      "branch": "alias cycle",
+      "test": "test_two_spellings_of_one_path_CANONICALISE_the_same",
+      "mutation": "canonical-path alias cycle",
+      "control_only": null
+    },
+    {
+      "branch": "recovered digest",
+      "test": "test_a_recovered_body_that_does_not_match_its_digest_is_REFUSED",
+      "mutation": "a recovered body must match its digest",
+      "control_only": null
+    },
+    {
+      "branch": "boundary owner",
+      "test": "test_the_a3_evidence_boundary_proves_the_run",
+      "mutation": null,
+      "control_only": "a byte pin: these bytes are those bytes"
+    },
+    {
+      "branch": "era cutoff kind",
+      "test": "test_the_replay_reproduces_surviving_era_bytes",
+      "mutation": null,
+      "control_only": "a byte comparison against surviving era blobs"
+    },
+    {
+      "branch": "owner pins",
+      "test": "test_all_four_a3_artefacts_are_reproduced_byte_exactly",
+      "mutation": null,
+      "control_only": "byte pins for the four A3 artefacts"
+    },
+    {
+      "branch": "shell termination",
+      "test": "test_a_command_whose_shell_was_KILLED_makes_no_edit",
+      "mutation": "shell termination",
+      "control_only": null
+    },
+    {
+      "branch": "script closure",
+      "test": "test_a_command_that_RUNS_A_SCRIPT_owns_that_script_s_writes",
+      "mutation": "executed-script closure",
+      "control_only": null
+    },
+    {
+      "branch": "per-line substitution",
+      "test": "test_a_non_global_substitution_applies_once_PER_LINE",
+      "mutation": "per-line substitution",
+      "control_only": null
+    },
+    {
+      "branch": "command order",
+      "test": "test_sed_operations_run_in_COMMAND_ORDER",
+      "mutation": "sed command order",
+      "control_only": null
+    },
+    {
+      "branch": ".bak preservation",
+      "test": "test_sed_i_suffix_keeps_the_pre_edit_bytes_for_a_later_restore",
+      "mutation": ".bak preserved for restore",
+      "control_only": null
+    },
+    {
+      "branch": "package manifest",
+      "test": "test_the_manifest_compares_CONTENT_not_just_the_file_list",
+      "mutation": "package manifest compares content",
+      "control_only": null
+    },
+    {
+      "branch": "a file's text is not a path",
+      "test": "test_a_whole_FILE_TEXT_is_not_mistaken_for_a_path",
+      "mutation": "a file's text is not a path",
+      "control_only": null
+    },
+    {
+      "branch": "out-of-range line insert",
+      "test": "test_a_line_address_past_the_end_inserts_nothing",
+      "mutation": "out-of-range line insert",
+      "control_only": null
+    },
+    {
+      "branch": "empty-file line insert",
+      "test": "test_an_empty_file_takes_no_line_insert",
+      "mutation": "empty-file line insert",
+      "control_only": null
+    },
+    {
+      "branch": "grep guard reads the named file",
+      "test": "test_the_grep_guard_reads_the_FILE_THE_GREP_NAMES",
+      "mutation": "guard reads the named file",
+      "control_only": null
+    },
+    {
+      "branch": "only owning processes EXECUTE",
+      "test": "test_an_UNRELATED_programs_missing_subprocess_cannot_erase_this_owners_write",
+      "mutation": "only owning processes run",
+      "control_only": null
+    },
+    {
+      "branch": "path built inside the open call",
+      "test": "test_a_path_BUILT_INSIDE_THE_OPEN_CALL_still_names_this_owner",
+      "mutation": "path built inside the open call",
+      "control_only": null
+    },
+    {
+      "branch": "git show producer",
+      "test": "test_a_git_show_REDIRECT_produces_the_file_the_next_step_reads",
+      "mutation": "git show produces its redirect target",
+      "control_only": null
+    },
+    {
+      "branch": "absolute destination names its tree",
+      "test": "test_a_copy_INTO_ANOTHER_TREE_is_not_a_write_of_this_owner",
+      "mutation": "absolute destination names its tree",
+      "control_only": null
+    },
+    {
+      "branch": "binary read yields bytes",
+      "test": "test_a_BINARY_read_of_a_replayed_file_yields_BYTES",
+      "mutation": "binary read yields bytes",
+      "control_only": null
+    },
+    {
+      "branch": "result found by tool_use_id",
+      "test": "test_a_RESULT_IS_FOUND_BY_ITS_TOOL_USE_ID_not_by_proximity",
+      "mutation": "result found by its tool_use_id",
+      "control_only": null
+    },
+    {
+      "branch": "a cd names the tree",
+      "test": "test_a_cd_into_a_SIBLING_TREE_keeps_its_records_out_of_this_route",
+      "mutation": "a cd names the tree",
+      "control_only": null
+    },
+    {
+      "branch": "text inside a program",
+      "test": "test_a_NAME_INSIDE_A_PYTHON_STRING_does_not_classify_the_shell",
+      "mutation": "text inside a program is not a write",
+      "control_only": null
+    },
+    {
+      "branch": "process ownership",
+      "test": "test_ONE_CALL_TWO_PROCESSES_are_owned_separately",
+      "mutation": "text inside a program is not a write",
+      "control_only": null
+    },
+    {
+      "branch": "process selection",
+      "test": "test_only_the_OWNING_processes_of_a_call_are_executed",
+      "mutation": "text inside a program is not a write",
+      "control_only": null
+    },
+    {
+      "branch": "termination order",
+      "test": "test_TERMINATION_is_decided_before_any_composer_or_program_runs",
+      "mutation": "termination decided first",
+      "control_only": null
+    },
+    {
+      "branch": "script cached per cutoff",
+      "test": "test_a_SCRIPT_is_cached_per_CUTOFF_not_per_path",
+      "mutation": "script cached per cutoff",
+      "control_only": null
+    },
+    {
+      "branch": "resume equals fresh",
+      "test": "test_RESUMING_a_resolution_equals_rebuilding_it_from_scratch",
+      "mutation": "resume agrees with the past route",
+      "control_only": null
+    },
+    {
+      "branch": "owner append",
+      "test": "test_an_APPEND_to_the_owner_keeps_what_was_there",
+      "mutation": "owner append keeps its text",
+      "control_only": null
+    },
+    {
+      "branch": "owner append cursor",
+      "test": "test_an_APPEND_to_the_owner_puts_the_cursor_at_the_END",
+      "mutation": "owner append keeps its text",
+      "control_only": null
+    },
+    {
+      "branch": "sibling append",
+      "test": "test_an_APPEND_to_a_SIDE_FILE_keeps_what_was_there",
+      "mutation": "sibling append keeps its text",
+      "control_only": null
+    },
+    {
+      "branch": "cache fence restores exactly",
+      "test": "test_a_cleared_cache_is_restored_with_its_ORIGINAL_object",
+      "mutation": "the cache guard clears before refilling",
+      "control_only": null
+    },
+    {
+      "branch": "owner write truncates",
+      "test": "test_WRITE_to_the_OWNER_still_truncates",
+      "mutation": "write mode still truncates",
+      "control_only": null
+    },
+    {
+      "branch": "sibling write truncates",
+      "test": "test_WRITE_to_a_SIDE_FILE_still_truncates",
+      "mutation": "sibling write mode still truncates",
+      "control_only": null
+    },
+    {
+      "branch": "shim self-interception",
+      "test": "test_the_shim_steps_aside_while_the_replay_reads_for_itself",
+      "mutation": "the shim steps aside for its own reads",
+      "control_only": null
+    },
+    {
+      "branch": "empty result is present",
+      "test": "test_an_EMPTY_completed_result_is_PRESENT_not_missing",
+      "mutation": "an empty result is present",
+      "control_only": null
+    },
+    {
+      "branch": "ledger accounts for every row",
+      "test": "test_the_ledger_accounts_for_EVERY_row_of_the_frozen_prefix",
+      "mutation": "ledger accounts for every row",
+      "control_only": null
+    },
+    {
+      "branch": "child audit",
+      "test": "test_a_CHILD_interpreters_reads_are_audited_too",
+      "mutation": "child audit crosses the boundary",
+      "control_only": null
+    },
+    {
+      "branch": "heredoc opening line continues",
+      "test": "test_a_heredoc_whose_OPENING_LINE_CONTINUES_is_still_a_program",
+      "mutation": "heredoc opening line continues",
+      "control_only": null
+    },
+    {
+      "branch": "a module import is served",
+      "test": "test_a_replayed_program_can_IMPORT_a_sibling_it_could_open",
+      "mutation": "a module import is served",
+      "control_only": null
+    },
+    {
+      "branch": "an unknown module still refuses",
+      "test": "test_an_UNKNOWN_module_still_refuses",
+      "mutation": "an unknown module is not invented",
+      "control_only": null
+    },
+    {
+      "branch": "a recovered artefact has an era",
+      "test": "test_each_era_is_served_at_its_own_window",
+      "mutation": "a recovered artefact has an era",
+      "control_only": null
+    },
+    {
+      "branch": "a tree sibling is not a producer",
+      "test": "test_a_source_with_its_own_TREE_is_not_a_producer",
+      "mutation": "a tree sibling is not a producer",
+      "control_only": null
+    },
+    {
+      "branch": "the producer's product is inspected",
+      "test": "test_all_seven_live_products_reconcile_against_their_pins",
+      "mutation": "the product check is real",
+      "control_only": null
+    },
+    {
+      "branch": "a missing product fails closed",
+      "test": "test_a_call_that_returns_without_its_product_FAILS_CLOSED",
+      "mutation": "a missing product still fails closed",
+      "control_only": null
+    },
+    {
+      "branch": "a wrong product fails closed",
+      "test": "test_a_present_but_WRONG_product_fails_closed",
+      "mutation": "a wrong product is rejected",
+      "control_only": null
+    },
+    {
+      "branch": "producer termination precedes execution",
+      "test": "test_a_TERMINATED_call_never_executes",
+      "mutation": "termination precedes execution",
+      "control_only": null
+    },
+    {
+      "branch": "a producer with no result is not credited",
+      "test": "test_a_MISSING_saved_result_is_not_credited_by_local_bytes",
+      "mutation": "an absent result is not completed",
+      "control_only": null
+    },
+    {
+      "branch": "a truly outstanding call is not credited",
+      "test": "test_a_truly_OUTSTANDING_call_is_not_credited_by_local_bytes",
+      "mutation": "an absent result is not completed",
+      "control_only": null
+    },
+    {
+      "branch": "the report lists every producer call state",
+      "test": "test_the_report_lists_every_producer_call_state",
+      "mutation": "the report lists every call state",
+      "control_only": null
+    },
+    {
+      "branch": "product status and call outcome do not collapse",
+      "test": "test_a_WRONG_product_and_a_FAILED_call_both_survive",
+      "mutation": "the two facts do not collapse",
+      "control_only": null
+    },
+    {
+      "branch": "a faithfully failed call keeps both facts",
+      "test": "test_a_faithfully_failed_call_that_wrote_its_product_keeps_BOTH_facts",
+      "mutation": "the two facts do not collapse",
+      "control_only": null
+    },
+    {
+      "branch": "a refused call keeps both facts",
+      "test": "test_a_REFUSED_call_that_wrote_its_product_keeps_BOTH_facts",
+      "mutation": "the two facts do not collapse",
+      "control_only": null
+    },
+    {
+      "branch": "a history failure is not completed",
+      "test": "test_correct_product_but_HISTORY_FAILED_never_finalizes",
+      "mutation": "a history failure is not completed",
+      "control_only": null
+    },
+    {
+      "branch": "finalization requires a completed call",
+      "test": "test_correct_product_with_a_FAITHFUL_failure_never_finalizes",
+      "mutation": "finalization requires a completed call",
+      "control_only": null
+    },
+    {
+      "branch": "a correct product refused never finalizes",
+      "test": "test_correct_product_with_a_REFUSAL_never_finalizes",
+      "mutation": "finalization requires a completed call",
+      "control_only": null
+    },
+    {
+      "branch": "a correct product outstanding never finalizes",
+      "test": "test_correct_product_that_is_still_OUTSTANDING_never_finalizes",
+      "mutation": "finalization requires a completed call",
+      "control_only": null
+    },
+    {
+      "branch": "a correct product with no result never finalizes",
+      "test": "test_correct_product_with_no_saved_result_never_finalizes",
+      "mutation": "finalization requires a completed call",
+      "control_only": null
+    },
+    {
+      "branch": "a missing pin reports unpinned",
+      "test": "test_a_present_product_with_NO_PIN_reports_unpinned_and_fails_closed",
+      "mutation": "a missing pin is not correct",
+      "control_only": null
+    },
+    {
+      "branch": "each non-completed state is listed exactly",
+      "test": "test_each_non_completed_call_state_is_listed_exactly",
+      "mutation": "a populated call-state line is not omitted",
+      "control_only": null
+    },
+    {
+      "branch": "owner lists exclude producer rows",
+      "test": "test_the_owner_lists_hold_only_owner_rows",
+      "mutation": "owner lists exclude producer rows",
+      "control_only": null
+    },
+    {
+      "branch": "the report carries every required state",
+      "test": "test_the_report_carries_every_required_state",
+      "mutation": "the report lists every call state",
+      "control_only": null
+    },
+    {
+      "branch": "a product before a failure keeps both facts",
+      "test": "test_a_product_written_before_a_FAILURE_keeps_both_facts",
+      "mutation": "the product check is real",
+      "control_only": null
+    },
+    {
+      "branch": "three disputed records write this owner",
+      "test": "test_the_three_disputed_records_really_do_write_THIS_owner",
+      "mutation": "text inside a program is not a write",
+      "control_only": null
+    },
+    {
+      "branch": "pre-series window is empty",
+      "test": "test_before_the_first_timed_body_the_answer_is_exactly_None",
+      "mutation": "an era-less fallback may not fill a pre-series window",
+      "control_only": null
+    },
+    {
+      "branch": "producer boundary is exact",
+      "test": "test_the_producer_boundary_is_exact",
+      "mutation": "a recovered artefact has an era",
+      "control_only": null
+    }
+  ],
+  "untested_branches": [],
+  "branches_without_a_mutation": [],
+  "control_only_branches": [
+    "boundary owner",
+    "era cutoff kind",
+    "owner pins"
+  ]
+}

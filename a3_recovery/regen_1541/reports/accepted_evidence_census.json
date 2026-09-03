@@ -1,0 +1,274 @@
+{
+ "rows": 38,
+ "files_bound": 114,
+ "ledger_rows": 3,
+ "accounting": {
+  "paid_calls": 41,
+  "saved_attempt_rows": 38,
+  "quarantined_calls": 3,
+  "unique_sources": 36,
+  "schema_valid_attempts": 36,
+  "schema_invalid_attempts": 2,
+  "final_source_results": 36,
+  "chain_mismatches": 0,
+  "files_bound": 114
+ },
+ "schema_valid": [
+  {
+   "source_id": "0000006201-26-000031",
+   "attempt": 1,
+   "ordinal": 0,
+   "problems": []
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "attempt": 1,
+   "ordinal": 1,
+   "problems": []
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "attempt": 1,
+   "ordinal": 2,
+   "problems": []
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "attempt": 1,
+   "ordinal": 3,
+   "problems": []
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "attempt": 1,
+   "ordinal": 4,
+   "problems": []
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "attempt": 1,
+   "ordinal": 5,
+   "problems": []
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "attempt": 1,
+   "ordinal": 6,
+   "problems": []
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "attempt": 1,
+   "ordinal": 7,
+   "problems": []
+  },
+  {
+   "source_id": "0000764478-26-000005",
+   "attempt": 1,
+   "ordinal": 8,
+   "problems": []
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "attempt": 1,
+   "ordinal": 9,
+   "problems": []
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "attempt": 1,
+   "ordinal": 10,
+   "problems": []
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "attempt": 1,
+   "ordinal": 11,
+   "problems": []
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "attempt": 1,
+   "ordinal": 12,
+   "problems": []
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "attempt": 1,
+   "ordinal": 13,
+   "problems": []
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "attempt": 1,
+   "ordinal": 14,
+   "problems": []
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "attempt": 1,
+   "ordinal": 15,
+   "problems": []
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "attempt": 1,
+   "ordinal": 16,
+   "problems": []
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "attempt": 1,
+   "ordinal": 17,
+   "problems": []
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "attempt": 1,
+   "ordinal": 18,
+   "problems": []
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "attempt": 1,
+   "ordinal": 19,
+   "problems": []
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "attempt": 1,
+   "ordinal": 20,
+   "problems": []
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "attempt": 1,
+   "ordinal": 21,
+   "problems": []
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "attempt": 1,
+   "ordinal": 22,
+   "problems": []
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "attempt": 2,
+   "ordinal": 23,
+   "problems": []
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "attempt": 1,
+   "ordinal": 24,
+   "problems": []
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "attempt": 1,
+   "ordinal": 25,
+   "problems": []
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "attempt": 1,
+   "ordinal": 26,
+   "problems": []
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "attempt": 1,
+   "ordinal": 27,
+   "problems": []
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "attempt": 2,
+   "ordinal": 28,
+   "problems": []
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "attempt": 1,
+   "ordinal": 29,
+   "problems": []
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "attempt": 1,
+   "ordinal": 30,
+   "problems": []
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "attempt": 1,
+   "ordinal": 31,
+   "problems": []
+  },
+  {
+   "source_id": "bzNews_42014391",
+   "attempt": 1,
+   "ordinal": 32,
+   "problems": []
+  },
+  {
+   "source_id": "bzNews_49256211",
+   "attempt": 1,
+   "ordinal": 33,
+   "problems": []
+  },
+  {
+   "source_id": "bzNews_50877032",
+   "attempt": 1,
+   "ordinal": 34,
+   "problems": []
+  },
+  {
+   "source_id": "bzNews_51962983",
+   "attempt": 1,
+   "ordinal": 35,
+   "problems": []
+  }
+ ],
+ "schema_invalid": [
+  {
+   "source_id": "0001171843-26-001288",
+   "attempt": 1,
+   "ordinal": 23,
+   "problems": [
+    "0001171843-26-001288: verdict 1 keys are not exactly the contract (extra [\"'quote_check'\"], missing [])"
+   ]
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "attempt": 1,
+   "ordinal": 28,
+   "problems": [
+    "DRI_2026-03-19T08.30: exclusion 1 keys are not exactly the contract (extra [\"'quote_context'\"], missing [])"
+   ]
+  }
+ ],
+ "lawful_attempt2_replacements": [
+  {
+   "source_id": "0001171843-26-001288",
+   "attempt": 2,
+   "schema_valid": true
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "attempt": 2,
+   "schema_valid": true
+  }
+ ],
+ "quarantine": {
+  "ledger_pinned_files": 9,
+  "metadata_files": 3,
+  "metadata_sha256": [
+   "b0c0b840227c40033376b6a78a14e46336948683831e87105b9aad2d8bb555a2"
+  ],
+  "ledger_has_meta_sha256": false
+ },
+ "defects": [],
+ "bound": false
+}

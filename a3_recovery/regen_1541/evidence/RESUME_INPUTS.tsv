@@ -1,0 +1,11 @@
+path	bytes	sha256	source
+bench/.claude/plans/Drivers/experiments/runs/a3_serial_run/receipt.json	138988	19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536	evidence/a3_receipt.reproduced_19abb07c.json
+bench/.claude/plans/Drivers/experiments/runs/a3_serial_run/finalization.json	75553	92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7	evidence/a3_finalization.reproduced_92e1872c.json
+bench/.claude/plans/Drivers/experiments/runs/a3_serial_run/retry/receipt.json	1873	4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465	evidence/a3_retry_receipt.reproduced_4a2ecf87.json
+bench/.claude/plans/Drivers/experiments/runs/a3_serial_run/retry/finalization.json	553	15cb7a2dc8c53f0d9ec093e34b816ff88f5ca678196c1896b32494a13a1f72b2	evidence/a3_retry_finalization.reproduced_15cb7a2d.json
+bench/.claude/plans/Drivers/experiments/lock/candidate/final_sign_evidence.json	927	1752fbab5e64dc25c73304c2d1d62e1a80c3ea352e1f73127b6a57ab0d05515b	evidence/signer/evidence.bin
+bench/.claude/plans/Drivers/experiments/lock/candidate/final_sign.attempt1.raw.json	520	722d35e6a42e7e9c4bf74ea5a1308769760c9eaad973a0e05268021ea8a9fbc1	evidence/signer/raw.bin
+bench/.claude/plans/Drivers/experiments/lock/candidate/final_sign_reply.json	525	118332ba3ffb349875094fe2b245e9ff4c8e1ab4cf7592fc3a03cc76ca733495	evidence/signer/reply.bin
+bench/.claude/plans/Drivers/experiments/lock/candidate/final_sign.js	10920	98159783e1f3b0d9d33e15aa7701c506a2fdc1cafb6697b8a49944fde8f0468e	evidence/signer/workflow_state.json field script
+bench/.claude/plans/Drivers/experiments/a3_serial_dir.txt	187	e29f820a3981e9786bb7449890d6ed63e617af15c3e0206361efdc02e4f9f13b	pointer to the run directory as history wrote it (record 34232): the historical absolute path, valid only inside the package-backed projection
+bench/.claude/plans/Drivers/experiments/invrev_run4/transport_proof_replacements.json	2511	22cd6305041ba19df1631c1eaa2d82174ccaf2c8d5af62aff0a33820bb56856e	restored from the exact surviving bytes by restore_ledger.py (records 29581, 29746, harvest calls [29591, 29758, 30066]; twelve quarantine files); identity = Codex SEQ 1560

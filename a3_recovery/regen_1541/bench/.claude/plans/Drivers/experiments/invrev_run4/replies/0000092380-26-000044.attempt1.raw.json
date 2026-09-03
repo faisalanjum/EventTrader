@@ -1,0 +1,99 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "verdicts": [
+    {
+      "proposal_id": "0000092380-26-000044#P000",
+      "decision": "keep",
+      "why": "Quote and locator verified character-for-character in exhibit_99_1, occurs exactly once. It is a real, non-boilerplate guidance fact (point value, adjusted-EPS full-year guidance) with the distinguishing label 'full-year adjusted EPS guidance of $4.00' lying inside the quote.",
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Given the ongoing macroeconomic uncertainty, updating the Company's full-year adjusted EPS guidance of $4.00 would not be productive at this time.",
+        "raw_label_or_claim": "full-year adjusted EPS guidance of $4.00",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000092380-26-000044#P001",
+      "decision": "replace",
+      "why": "The proposed single row merges two distinct facts (Boeing 737-8 aircraft deliveries and separate aircraft retirements for 2026) that only share one sentence because of source grammar. Per the distinct-facts-stay-separate rule they must be two rows distinguished by their own labels; this verdict keeps the deliveries fact, the retirement half is supplied as an addition.",
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Expect 66 Boeing 737-8 aircraft deliveries and plan to retire approximately 60 aircraft in 2026",
+        "raw_label_or_claim": "66 Boeing 737-8 aircraft deliveries",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000092380-26-000044#P002",
+      "decision": "keep",
+      "why": "Quote and locator verified character-for-character in exhibit_99_1 (Non-Fuel Costs and Outlook section), occurs once. This is the complete richer restatement (change + level fused) versus the earlier highlights-section partial mention of the same fact (which lacks the $6.9 billion level); per the fuse/first-complete-quote rule this later complete span is the correct anchor.",
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "First quarter 2026 operating expenses increased 4.0 percent year-over-year, to $6.9 billion",
+        "raw_label_or_claim": "operating expenses",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000092380-26-000044#P003",
+      "decision": "keep",
+      "why": "Quote and locator verified character-for-character in the Condensed Consolidated Statement of Income, occurs once (the lowercase reconciliation-table restatement is a different string, excluded separately). Cleanly exercises OD-12 sign handling: current-period provision stored positive (58), prior-period benefit stored negative via accounting-notation parentheses ((43)).",
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m.",
+        "raw_label_or_claim": "PROVISION (BENEFIT) FOR INCOME TAXES",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Expect 66 Boeing 737-8 aircraft deliveries and plan to retire approximately 60 aircraft in 2026",
+        "raw_label_or_claim": "retire approximately 60 aircraft in 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Repairs the item dropped when P001's single row conflated two distinct facts; this is the 2026 fleet-retirement count (~60 aircraft), a separate metric/label from the delivery count kept under P001, sharing the same smallest complete source span only because of sentence grammar."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "with operating expenses increasing 4.0% and unit costs (CASM-X1) increasing 2.3% on capacity growth of 1.5%, all year-over-year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Earlier partial statement of the same operating-expenses-YoY fact kept (in complete, level-bearing form) under P002; per the within-event fuse/first-complete-quote rule this earlier, incomplete occurrence is not a separate row for that fact. The co-mentioned CASM-X and capacity figures are separate lawful facts not raised by any proposal and are not added here, since this task adds rows only to repair proposal or declared coverage, not merely because another lawful fact exists."
+    },
+    {
+      "quote": "Provision (benefit) for income taxes, as reported $ 58 $ (43) (c)",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same fact as the row kept under P003 (current-period tax provision of 58 vs prior-period benefit of (43)), restated in the non-GAAP reconciliation table. The income-statement occurrence is the first complete supporting quote in source order, so this later restatement is excluded as a duplicate, not a separate row."
+    },
+    {
+      "quote": "the impact of geopolitical conflicts, fears or actual outbreaks of diseases, extreme or severe weather and natural disasters",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking-statement risk boilerplate from the cautionary-statement paragraph; no specific current source-flagged adverse threat is identified, so it fails DU-03/Rule 1 and the DU-11 at_risk strict boundary. Correct reader behavior is omission (negative_control shape), but no row is added here since no proposal raised it and this task adds rows only to repair coverage, not to enumerate every excluded boilerplate mention."
+    }
+  ],
+  "open_issues": [],
+  "blocked": null
+}
+```

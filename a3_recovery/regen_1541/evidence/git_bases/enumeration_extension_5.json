@@ -1,0 +1,21 @@
+{
+ "show_objects": [
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/__init__.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_fusion.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_ids.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_member_fold.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_period_resolver.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_units.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_validators.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_write_cli.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/driver_writer.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/outcome_codes.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/prepared_fact_v2.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/slice_axis_frozen.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/slice_menu.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/slot_convert.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:driver/core/unit_resolver.py"
+ ],
+ "mount_misses": [],
+ "source": "census 18 refusal messages (open_population.py on the 18-rule code, wiped cache)"
+}

@@ -1,0 +1,16 @@
+{
+  "run_id": "retry",
+  "attempt": 2,
+  "states_recorded": 1,
+  "allowed_calls": 1,
+  "invocations": 1,
+  "parent": {
+    "finalization_sha256": "92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7",
+    "receipt_sha256": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+    "run_id": "kf-a3-one-item-196x2-serial-20260821T055948Z"
+  },
+  "bytes": 1873,
+  "sha256": "4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465",
+  "pin": "4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465",
+  "pin_met": true
+}

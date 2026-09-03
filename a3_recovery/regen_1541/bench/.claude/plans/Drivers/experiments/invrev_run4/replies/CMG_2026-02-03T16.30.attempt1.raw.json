@@ -1,0 +1,142 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "verdicts": [
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P000",
+      "decision": "keep",
+      "why": "Quote and locator verified verbatim, unique in prepared_remarks. The quote states two distinct facts (total quarterly sales growth and comparable-restaurant-sales decline) sharing one smallest complete quote; this row keeps the sales-growth fact, the comp-decline fact is added separately per the label-distinguishes-items rule.",
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "For the fourth quarter, sales grew 4.9% to reach $3 billion, with a comp decline of 2.5%.",
+        "raw_label_or_claim": "sales grew 4.9% to reach $3 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P001",
+      "decision": "keep",
+      "why": "Quote and locator verified verbatim and unique in prepared_remarks; single fact, marketing costs as % of sales with an explicit stated YoY basis-point change.",
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Marketing costs were 3.5% of sales in Q4, an increase of about 50 basis points from last year.",
+        "raw_label_or_claim": "Marketing costs were 3.5% of sales in Q4",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P002",
+      "decision": "keep",
+      "why": "Verified exact contiguous substring (drops the non-essential 'As we move into 2026,' lead-in), unique in prepared_remarks; numberless FY2026 full-year comparable-restaurant-sales guidance fact.",
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we anticipate our full-year comparable restaurant sales to be about flat.",
+        "raw_label_or_claim": "full-year comparable restaurant sales to be about flat",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P003",
+      "decision": "keep",
+      "why": "Quote and locator verified verbatim and unique in prepared_remarks. The quote states two distinct facts (current equipment-package restaurant count and an anticipated year-end target) sharing one smallest complete quote; this row keeps the current-count fact, the year-end-target fact is added separately.",
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "350 restaurants have the full equipment package today, and we anticipate about 2,000 by year end",
+        "raw_label_or_claim": "350 restaurants have the full equipment package today",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P004",
+      "decision": "keep",
+      "why": "Quote and locator verified verbatim and unique in prepared_remarks; a specific, numberless company action/state fact (not generic boilerplate).",
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We are conducting a national search for our next chief marketing officer",
+        "raw_label_or_claim": "conducting a national search for our next chief marketing officer",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "For the fourth quarter, sales grew 4.9% to reach $3 billion, with a comp decline of 2.5%.",
+        "raw_label_or_claim": "comp decline of 2.5%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "P000's quote fuses two distinct facts (total company sales growth and comparable-restaurant-sales decline) under one grammatically shared smallest complete quote. Per the split/fusion law and the rule that distinct facts stay separate even when they must share a quote, the comp-decline fact needs its own row, same quote, its own label."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "350 restaurants have the full equipment package today, and we anticipate about 2,000 by year end",
+        "raw_label_or_claim": "we anticipate about 2,000 by year end",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "P003's quote fuses the current 350-restaurant equipment-package count with the anticipated 2,000-by-year-end target under one shared smallest complete quote. These are two distinct facts (current state vs. forward target) and need separate rows sharing the quote. The Q&A restatement ('We should be at 2,000 restaurants by the end of the year') is the same fact restated with no new value/period/scope, so under the first-complete-quote/fuse-before-collision rule it creates no additional row -- this prepared_remarks occurrence is the kept quote."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "certain statements and projections made in this presentation about our future business and financial results constitute forward-looking statements",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Generic safe-harbor / forward-looking-statements boilerplate; fails DU-03/Rule 1 -- correct behavior is omission, not inclusion as a real_item or as a control."
+    },
+    {
+      "quote": "at those 250 restaurants",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Appears only inside an analyst's question (not a company-stated figure) and conflicts with the company's own stated count of 350 restaurants for the same equipment-rollout metric in prepared_remarks; not a company fact, and not needed to repair any proposal's coverage."
+    },
+    {
+      "quote": "Adjusted diluted earnings per share grew 4.5% year over year to $1.17",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real, lawfully-encodable fact (FY2025 adjusted diluted EPS YoY growth) but no proposal raised it and it is not needed to replace or repair any proposed item's coverage; left out under the representative-sample (add-only-to-replace/repair) scope."
+    },
+    {
+      "quote": "Restaurant level margin was 23.4%, down 140 basis points year over year.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real, lawfully-encodable Q4 margin fact, not proposed and not needed to repair any proposed item's coverage; left out under the representative-sample scope for this event."
+    },
+    {
+      "quote": "France is a tough one, I'll be honest with you, because of wage inflation, because of occupancy costs.",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Qualitative commentary on a specific market's slower recovery pace; a genuinely fuzzy candidate against the DU-11 strict at_risk boundary (not clearly a specific current adverse threat, not clearly generic boilerplate). Left out of this representative selection rather than guessed into real_item or negative_control."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the `sequential_comparison` hard-class tag (crosswalk: 'sequential comparisons -> OD-11') is meant to cover every bare-percent growth fact that must apply OD-11's basis-assignment logic (including a plain YoY-default or explicit-YoY outcome), or only facts that specifically exercise the sequential-vs-annual distinction.",
+      "why": "This event's quarterly percentages (sales +4.9%, comp -2.5%, marketing costs +50bps 'from last year') all resolve to percent_yoy, not percent_sequential. I tagged them sequential_comparison on the broader reading that they exercise OD-11's basis-assignment rule; the narrower literal reading of the tag name would drop that tag from every row in this event. The owner rulings do not settle which reading controls."
+    }
+  ],
+  "blocked": null
+}
+```

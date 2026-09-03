@@ -1,0 +1,17 @@
+{
+  "run_id": "kf-a3-one-item-196x2-serial-20260821T055948Z",
+  "ledger_rows": 36,
+  "states_recorded": 36,
+  "unique_states": 36,
+  "allowed_calls": 392,
+  "unique_allowed": 392,
+  "invocations": 36,
+  "manifest_sha256": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+  "max_output_tokens": "128000",
+  "quoted_not_derived": [],
+  "setting_read_from_rebuilt_builder": "128000",
+  "bytes": 138988,
+  "sha256": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+  "pin": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+  "pin_met": true
+}

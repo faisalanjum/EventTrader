@@ -1,0 +1,120 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "verdicts": [
+    {
+      "proposal_id": "0000940944-26-000009#P000",
+      "decision": "replace",
+      "why": "Quote and locator are byte-correct but the row conflates two distinct period facts (Three Months and Nine Months columns of the same table line), which differ in period_scope and in sign (Q3 net charge +25.1 vs 9-month net credit -19.8). Rule 2/4 require a real period difference to split into separate rows; kept the first complete contiguous occurrence (Q3) here and added the 9-month fact separately.",
+      "row": {
+        "source_id": "0000940944-26-000009",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM",
+        "raw_label_or_claim": "Impairments and (gain) loss on disposal of assets, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0000940944-26-000009#P001",
+      "decision": "replace",
+      "why": "Quote and locator are byte-correct but the supplied quote omits the source label that distinguishes this from the parallel Olive Garden/Fine Dining/Other Business same-restaurant-sales-driver sentences (each with its own numbers). Extended the quote backward, contiguously, to include 'LongHorn Steakhouse's sales increase for the third quarter of fiscal 2026' so raw_label_or_claim lies inside the quote per the binding rule.",
+      "row": {
+        "source_id": "0000940944-26-000009",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026 was primarily driven by same-restaurant sales increases, as well as revenue from new restaurants. The increase in same-restaurant sales for the third quarter of fiscal 2026 resulted from a 3.9 percent increase in average check combined with a 3.3 percent increase in same-restaurant guest counts.",
+        "raw_label_or_claim": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "0000940944-26-000009#P002",
+      "decision": "keep",
+      "why": "Quote is character-exact, single occurrence in mdna, and 'current liabilities' (the raw label) lies inside it. A genuine source-stated point balance-sheet fact, not boilerplate.",
+      "row": {
+        "source_id": "0000940944-26-000009",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Our current liabilities totaled $2.61 billion as of February 22, 2026, compared to $2.25 billion as of May 25, 2025.",
+        "raw_label_or_claim": "current liabilities",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000940944-26-000009#P003",
+      "decision": "keep",
+      "why": "Quote is character-exact, single occurrence in mdna (distinct from the parallel three-months bullet which says 'decreased', not 'remained flat'). A real numberless qualitative fact (DU-05), not generic boilerplate. Exercises none of the ten hard-class rules on its own.",
+      "row": {
+        "source_id": "0000940944-26-000009",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Restaurant expenses remained flat as a percent of sales.",
+        "raw_label_or_claim": "Restaurant expenses",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000940944-26-000009",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM",
+        "raw_label_or_claim": "Impairments and (gain) loss on disposal of assets, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "Sibling fact to the corrected P000 row: same table line's Nine-Months-Ended columns show a net -19.8 (a net gain/credit on disposal, driven largely by the Olive Garden Canada sale), a real period-distinct fact under rule 2/4 and a clean OD-12 sign exemplar (charge positive / credit negative) that the original single-row proposal did not separately represent."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "There have been no material changes to the risk factors contained in Item 1A of our Annual Report on Form 10-K for the year ended May 25, 2025.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Boilerplate cross-reference stating no change occurred; carries no specific current-flagged adverse threat or any other fact, so it fails the fact gate and DU-11 at_risk strictness even as a negative-control candidate worth naming here rather than including."
+    },
+    {
+      "quote": "A failure to address cost pressures, including rising costs for commodities, labor, health care and utilities used by our restaurants, and a failure to effectively deliver cost management activities and achieve economies of scale in purchasing;",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking risk-factor boilerplate (one of ~30 similar bullets); not a specific, current, source-flagged adverse threat, so DU-11/Rule-1 requires omission, not abstention. No proposal raised this list and no declared per-event repair need was given, so not added as a formal row this turn."
+    },
+    {
+      "quote": "On February 3, 2026, we announced the completion of this process and our expectation that we will permanently close approximately 14 Bahama Breeze restaurants on or about April 5, 2026, and convert the remaining approximately 14 restaurants to other Darden brands over the next 12\u201318 months.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A genuine, specific, non-boilerplate real_item candidate (closure/conversion action, numberless-count facts), but no proposal raised it and this pass is representative-not-exhaustive; adding it would not replace/correct a proposal nor repair a declared coverage gap for this event, so left unselected."
+    },
+    {
+      "quote": "Olive Garden 23.0% 23.1% (10) BPS 21.8% 21.8% \u2014 BPS",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Segment profit-margin table row (real, point/bps-shaped, segment-sliced fact) not raised by any proposal; excluded per the representative-not-exhaustive rule and the instruction not to add rows merely because another lawful fact exists."
+    },
+    {
+      "quote": "We expect sales growth for fiscal 2026 to be approximately 9.5 percent, driven by growth of approximately 2.0 percent related to the fifty-third week in fiscal 2026; same-restaurant sales growth to be approximately 4.5 percent 2 ; and new restaurant openings to be approximately 70.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Forward guidance (numberless-adjacent, multi-metric) not raised by any proposal; a strong expectation-routing/point-shape candidate in principle, but adding it is outside this turn's scope of correcting supplied proposals or repairing a declared coverage gap for this event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the LongHorn same-restaurant-sales sentence (P001) should split into two rows -- 'average check +3.9%' and 'same-restaurant guest counts +3.3%' -- as two distinct named metrics under the distinct-facts-stay-separate rule, versus remaining one narrative row explaining the SRS driver.",
+      "why": "The authority requires distinct facts to stay separate even sharing a quote, and average check vs guest count are arguably different Driver identities, but nothing in the supplied authority gives a bright-line test for narrative sub-metrics bundled in one explanatory MD&A sentence versus stand-alone stated Drivers. Splitting was not required to fix the proposal's only defect (missing label), so I left it as one corrected row rather than inventing a split rule."
+    },
+    {
+      "what": "Whether generic risk-factor boilerplate bullets and the 'no material changes' risk-part statement should be formally logged as negative_control rows for this event now, versus only when a declared per-event control-coverage repair is issued.",
+      "why": "DU-11/Rule-1 clearly make them omit-worthy, but the ~150-item and per-tag five-row totals are stated to be settled 'across all 36 events' at the final turn, not per event; absent a declared repair need for this event I recorded them only as exclusions_considered."
+    }
+  ],
+  "blocked": null
+}
+```

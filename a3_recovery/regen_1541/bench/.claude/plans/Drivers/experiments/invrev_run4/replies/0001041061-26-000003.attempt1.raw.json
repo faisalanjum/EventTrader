@@ -1,0 +1,105 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "verdicts": [
+    {
+      "proposal_id": "0001041061-26-000003#P000",
+      "decision": "keep",
+      "why": "Quote matches verbatim and uniquely: it is the KFC Division bullet stating 12.7% company-owned restaurant margin, up 40bps YoY. No other division reports 12.7%/40bps, so the locator is correctly bound.",
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "For the quarter, company-owned restaurant margins were 12.7%, up 40 basis points year-over-year.",
+        "raw_label_or_claim": "company-owned restaurant margins",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000003#P001",
+      "decision": "keep",
+      "why": "This exact string ('...by 40 basis points in the quarter and by 10 basis points for the year') occurs verbatim only in the Taco Bell Division bullet; the parallel KFC sentence states 20 basis points for the quarter, not 40, so the quote is uniquely and correctly located as supplied.",
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The impact of lapping the 53rd week negatively impacted the change in company-owned restaurant margins by 40 basis points in the quarter and by 10 basis points for the year.",
+        "raw_label_or_claim": "company-owned restaurant margins",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000003#P002",
+      "decision": "keep",
+      "why": "Quote matches verbatim and uniquely to the KFC Division FX bullet ($10M quarter / $12M year); distinct from the worldwide ($11M, Q4 highlights) and Pizza Hut ($1M) FX bullets elsewhere in the release.",
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Foreign currency translation favorably impacted operating profit by $10 million for the quarter and $12 million for the year.",
+        "raw_label_or_claim": "Foreign currency translation favorably impacted operating profit",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000003#P003",
+      "decision": "replace",
+      "why": "The supplied quote is a header row plus four divisions' worth of five distinct metrics each (system sales, same-store sales, units, GAAP OP growth, core-ex-F/X OP growth) bundled into one span; it carries no single raw_label_or_claim and is only the summary restatement of numbers stated more completely elsewhere (each division's own operating-results table, the Consolidated Summary of Results, and the lead-paragraph prose). Replaced with the first, cleanest, single-fact prose statement of worldwide GAAP operating profit growth for the quarter, per the richer-restatement and smallest-complete-span rules.",
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Fourth-quarter GAAP operating profit grew 12%",
+        "raw_label_or_claim": "GAAP operating profit",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "The Company's Board of Directors approved a dividend of $0.75 per share of common stock, an increase of 6%.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Genuine real, source-stated corporate-action fact (dividend increase), but no proposal raised it and no declared coverage gap requires it this turn; representative sampling does not require adding every lawful fact."
+    },
+    {
+      "quote": "food safety and food- or beverage-borne illness concerns; adverse impacts of public health conditions or other catastrophic or unforeseen events",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic, hypothetical forward-looking risk-factor boilerplate; fails the DU-03/Rule-1 gate (no specific current source-flagged adverse threat) and would be a negative_control candidate, but not added absent a proposal or coverage-repair need."
+    },
+    {
+      "quote": "commenced a review of strategic options for the Pizza Hut brand",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, specific corporate-action fact (strategic review commencement) from the CFO quote, but not raised by any proposal and not needed this turn to replace a proposal or repair declared coverage."
+    },
+    {
+      "quote": "Taco Bell Division +3 +7 +3 +6 +6 Pizza Hut Division (5) (1) (1) +7 +6 Worldwide +2 +3 +3 +12 +5",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Remaining rows of the same summary table proposed in P003; each cell is richer-restated with full dollar and percentage context in its own division's operating-results table or the Consolidated Summary of Results, so the summary-table span is not the first-complete/richest location for any of them and is not separately selected under representative, non-exhaustive scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a population qualifier like 'company-owned' (distinguishing Company sales/margin from System sales) is governed by OD-17 portion_versus_whole or by the entity_ownership slice kind, since the menu lists entity_ownership:companyownedstores as a candidate axis.",
+      "why": "OD-17's worked examples (current/funded/fee_earning) and the FS-05..24 entity_ownership kind (described as JV/equity-method ownership stakes) don't explicitly cover a company-owned-vs-franchised metric qualifier; the crosswalk doesn't settle which rule this fact exercises, so portion_versus_whole was used as the closer match without inventing a new rule."
+    },
+    {
+      "what": "Whether the note describing a Q1-2025 prospective change in rounding/presentation basis ('the Company prospectively changed its basis of presentation to round financial figures ... to the nearest whole number') is a corrections_and_amendments (OD-14) exhibit or an out-of-scope presentation-methodology note.",
+      "why": "OD-14 covers value corrections and guidance amendments; this note is about a rounding-precision convention change, which the authority does not clearly classify either way, so no row was drafted for it this turn."
+    },
+    {
+      "what": "How many cells of an equally-lawful multi-division summary table (as in the original P003) must be represented as separate rows under a location-only freeze versus resolved by selecting one richest single-fact restatement.",
+      "why": "The authority forbids combining distinct facts in one row and forbids a table-pattern rule, but does not state how many of the many lawful cells in one summary table must appear in a ~150-item representative benchmark; resolved here by keeping one clean first-complete statement and excluding the rest as representative-scope, but the judgment call is worth flagging."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,8 @@
+# line	path	bytes	sha256	provenance
+24416	/tmp/claude-1000/head_thg.py	269035	efe54ee1e316a1499af8f216485991723ea5d924e63737bd9a6d7cfca7cb5fd9	git show cd961e51d55b:<owner> - the committed bytes this record redirects
+25442	/tmp/claude-1000/auditor_head.py	19572	8089871747997f3e6d4a607883b1a1ba7437832f9121693d95354e3f6259e83b	deterministic reconstruction; its route lands on the accepted owner identity 9e4762e56c52
+25450	/tmp/claude-1000/auditor_a1_body.py	17089	6913e8851dd3365b3952508faaf2ecf83cd9bf3966b7beaf4a295fa69ef0b39b	literal Write saved at this record
+25922	/tmp/claude-1000/rt_keep.py	43046	8e4d51f607f714f4478eb3c94c7b59d8ebb57102d6afff90c9305ff8ec89b190	deterministic reconstruction; its route lands on the accepted owner identity 12d4aca9a7bf
+26004	/tmp/claude-1000/a1_launch_block.py	15223	598bda3fd76e6bf932e0ccc54b44b94c12833a5261ba2bc0701fb5cf6aca50ef	literal Write saved at this record
+26171	/tmp/claude-1000/a1_public_route.py	11655	6ac407747a86c05f7597d1a5e129747436c11d1c7d2934b6f5df57e80082e803	literal Write saved at this record
+26334	/tmp/claude-1000/a1_retry_block.py	10035	5bf317560c7dc58de66e6e11d28c86a760bc0674b2074c5397fcb85b15cea8de	literal Write saved at this record

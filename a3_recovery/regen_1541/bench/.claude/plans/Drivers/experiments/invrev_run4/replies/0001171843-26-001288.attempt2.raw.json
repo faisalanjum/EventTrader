@@ -1,0 +1,125 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "verdicts": [
+    {
+      "proposal_id": "0001171843-26-001288#P000",
+      "decision": "keep",
+      "why": "Quote is character-exact and contiguous in exhibit_99_1 (only the leading footnote marker '(1)' is dropped, which is not part of the sentence); it is a specific, source-stated, quantified fact about the extra-week comparability of the trailing-4-quarters figures, not boilerplate, so real_item is correct. It does not exercise any of the ten listed hard-class rules (it is a period-comparability note, not a shaped number, sign, sequential-basis, measurement label, direction, expectation route, slice, portion, menu, or correction case).",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Trailing 4 Quarters ending February 15, 2025 include an additional week of sales of approximately $359.1 million for Total AutoZone Stores with $95.7 million for Domestic Commercial.",
+        "raw_label_or_claim": "an additional week of sales of approximately $359.1 million for Total AutoZone Stores with $95.7 million for Domestic Commercial",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P001",
+      "decision": "keep",
+      "why": "Quote is character-exact and unique in exhibit_99_1. States a point-shaped dollar level ($698.5 million) with a stated percent change (-1.2%) versus the prior-year quarter, a positive metric (not a loss), so OD-12 sign handling does not apply, but the point shape (FINAL_DESIGN 7.1) and the YoY/growth-basis determination (OD-11) are both exercised.",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating profit decreased 1.2% to $698.5 million.",
+        "raw_label_or_claim": "Operating profit",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P002",
+      "decision": "keep",
+      "why": "Quote is character-exact (including the parenthetical accounting-notation spacing) and unique in exhibit_99_1. This is the TOTAL-dollar net-inventory figure (distinct fact from the per-store net-inventory figure stated earlier in prose, per NAME-13 total-vs-per-X). Negative values shown via parenthesis accounting notation exercise OD-12 sign handling; the values are point shapes.",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net inventory (net of payables) (813,494 ) (1,196,131 )",
+        "raw_label_or_claim": "Net inventory (net of payables)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P003",
+      "decision": "replace",
+      "why": "The supplied quote is character-accurate but merges two distinct claims under one span: (1) a grounded numberless surprise about international constant-currency sales versus the company's own expectations, and (2) a separate, unrelated, belief-framed market-share claim ('we believe our market share continues to grow...'). Per the split/fusion rule and the smallest-complete-evidence-span rule, these do not belong in one row; the market-share clause is also opinion/belief language with no concrete stated fact and was excluded separately. The quote is trimmed to the smallest complete contiguous span that carries the surprise fact and its label. 'Below' is a directional/favorability statement (OD-13) and the comparison is against the company's own stated expectations, which requires the OD-21/ISS-16 routing determination (baseline is not clearly consensus or previous guidance from this wording alone).",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "our international sales, in constant currency, were slightly below our expectations",
+        "raw_label_or_claim": "international sales, in constant currency, were slightly below our expectations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "weather, including extreme temperatures and natural disasters",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic, non-current, hypothetical forward-looking-statement risk-factor boilerplate list item; a canonical negative_control shape (matches the gate's own 'weather may affect results' example) but not selected for this event's representative allocation; no proposal raised it and no repair need was declared for this event."
+    },
+    {
+      "quote": "we believe our market share continues to grow as we outpace our competition in both Mexico and Brazil",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Belief-framed ('we believe'), unquantified competitive-positioning claim; no specific stated data point or current source-flagged fact, so it does not clear the real-fact gate; split off from proposal P003's over-broad quote and not independently added."
+    },
+    {
+      "quote": "the Company had 6,709 stores in the U.S., 913 in Mexico and 152 in Brazil for a total store count of 7,774",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful geography-slice fact matching menu entries geography:us/geography:mx/geography:br; not raised by any proposal and not added, since inclusion is representative selection, not exhaustive, and no coverage repair was declared for this event."
+    },
+    {
+      "quote": "in line with our expectations to open approximately 350-360 stores for the full fiscal year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful range-shaped (350-360) forward guidance fact with an 'in line' surprise-state qualifier; not raised by any proposal and not added under the representative, non-exhaustive selection scope."
+    },
+    {
+      "quote": "The decrease in gross margin was driven by a 138 basis point non-cash LIFO charge.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful sign/charge fact (LIFO charge, points/bps unit); not raised by any proposal and not added under representative scope."
+    },
+    {
+      "quote": "diluted earnings per share were $27.63 compared to last year at $28.29",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful per-share fact, a separate Driver identity from net income under NAME-13; not raised by any proposal and not added under representative scope."
+    },
+    {
+      "quote": "AutoZone repurchased 85 thousand shares of its common stock at an average price per share of $3,666, for a total investment of $310.8 million.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful action/state fact about share repurchases; not raised by any proposal and not added under representative scope."
+    },
+    {
+      "quote": "Adjusted After-Tax ROIC 37.6 % 45.5 %",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful measurement-tagged ('adjusted') ratio fact; not raised by any proposal and not added under representative scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the trailing-4-quarters 'additional week' comparability footnote (P000) is itself a driver 'state' fact under the DU-03 gate (state/change/surprise/guidance/action) or an out-of-gate data-comparability caveat.",
+      "why": "The fact gate defines what counts as a real fact by reference to state/change/surprise/guidance/action, but does not address period-length comparability footnotes explicitly; treated as real_item here without an explicit hard-class tag."
+    },
+    {
+      "what": "Whether the point_range_floor_ceiling tag is meant to apply to every plain point-valued numeric fact (broad reading applied here for P001 and P002) or only to rows specifically selected to exercise shape edge-cases (range/floor/ceiling, or genuinely contestable point calls).",
+      "why": "The crosswalk names FINAL_DESIGN §7.1's number-shape rule but does not state a materiality threshold for when a row 'exercises' it versus merely containing an ordinary number."
+    }
+  ],
+  "blocked": null
+}
+```

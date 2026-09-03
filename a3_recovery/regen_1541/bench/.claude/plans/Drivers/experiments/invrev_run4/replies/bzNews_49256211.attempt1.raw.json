@@ -1,0 +1,32 @@
+```json
+{
+  "source_id": "bzNews_49256211",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_49256211#P000",
+      "decision": "keep",
+      "why": "Quote is an exact character-for-character match of the sole 'title' text part, occurs once, and states a real, specific, non-boilerplate corporate action (share-repurchase authorization of a stated dollar amount) that satisfies the DU-03 fact gate.",
+      "row": {
+        "source_id": "bzNews_49256211",
+        "part_ref": "title",
+        "occurrence_in_part": null,
+        "quote": "Chipotle Mexican Grill Authorizes Additional $1.8B For Share Repurchases",
+        "raw_label_or_claim": "Authorizes Additional $1.8B For Share Repurchases",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Chipotle Mexican Grill Authorizes Additional $1.8B For Share Repurchases",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Considered whether this single sentence could split into more than one row (e.g., a separate 'existing program' or program-identifier fact tied to the menu's srt:ShareRepurchaseProgramAxis entries), but the text names no specific program id, prior authorization amount, or comparison value, so per rule 6 no slice/axis tag or second row is created from an unused menu entry; the whole sentence supports exactly one real_item row."
+    }
+  ],
+  "open_issues": [],
+  "blocked": null
+}
+```

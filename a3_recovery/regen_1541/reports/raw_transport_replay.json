@@ -1,0 +1,319 @@
+{
+  "owner": "bench_1306/.claude/plans/Drivers/experiments/harness/raw_transport.py",
+  "git_base_commit": "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc",
+  "git_base_sha256": "8cca087c384aa4dd300ebc48f23da6ccb77baff9abf48f9eb22b29af606a1db1",
+  "history_confirms_this_base": "transcript line 28728 records 'raw_transport.py before 8cca087c384aa4dd300ebc48f23da6ccb77baff9abf48f9eb22b29af606a1db1', which is this committed base, measured by the campaign itself",
+  "route_first_line": 23361,
+  "route_upto_line": 32847,
+  "records": 43,
+  "producers_pulled_in": {
+    "25922": "/tmp/claude-1000/rt_keep.py"
+  },
+  "applied": 42,
+  "refused": {
+    "26845": "TypeError: rep() missing 1 required positional argument: 'why'"
+  },
+  "refusal_is_faithful": "26845 fails with the SAME TypeError history recorded at transcript line 26846: rep() missing 1 required positional argument: 'why'. The record changed nothing when it was first run either.",
+  "checkpoints_from_history": [
+    {
+      "line": 24876,
+      "history_printed": [
+        "648"
+      ],
+      "replay_printed": [
+        "648"
+      ],
+      "met": true
+    },
+    {
+      "line": 25743,
+      "history_printed": [
+        "749"
+      ],
+      "replay_printed": [
+        "749"
+      ],
+      "met": true
+    },
+    {
+      "line": 25922,
+      "history_printed": [
+        "894"
+      ],
+      "replay_printed": [
+        "894"
+      ],
+      "met": true
+    },
+    {
+      "line": 26119,
+      "history_printed": [
+        "948"
+      ],
+      "replay_printed": [
+        "948"
+      ],
+      "met": true
+    },
+    {
+      "line": 26447,
+      "history_printed": [
+        "777"
+      ],
+      "replay_printed": [
+        "777"
+      ],
+      "met": true
+    },
+    {
+      "line": 26825,
+      "history_printed": [
+        "68112",
+        "68616"
+      ],
+      "replay_printed": [
+        "68112",
+        "68616"
+      ],
+      "met": true
+    },
+    {
+      "line": 26853,
+      "history_printed": [
+        "70773"
+      ],
+      "replay_printed": [
+        "70773"
+      ],
+      "met": true
+    }
+  ],
+  "checkpoints_met": 7,
+  "checkpoints_total": 7,
+  "pin_32846": "12d4aca9a7bfd9a51303271b54433ad55058dad268e771cff757a3ea0b68a14a",
+  "pin_32846_met": true,
+  "pin_32672": "f5ea60c9f21da4d70e7644680a9fa93a14d6235d35013bdf7c5f905c55d82eac",
+  "pin_32672_met": true,
+  "pin_pre_32672": "15589cb3f86b593f3feb76915f5db18892e2fb3828fedec7d1ee9cdfc650ece5",
+  "pin_pre_32672_met": true,
+  "reached_sha256": "12d4aca9a7bfd9a51303271b54433ad55058dad268e771cff757a3ea0b68a14a",
+  "reached_bytes": 75368,
+  "what_closed_the_gap": "record 26932 cd-ed into the SEPARATE pristine tree at scratchpad/p1319 and edited its own copy of this filename by the bare name. Matching the owner as 'harness/raw_transport.py' accepted that record, so another tree's edit was applied to this file. Qualifying the owner with its worktree (bench_1306) excludes it, and the replay then reproduces both pins exactly.",
+  "steps": [
+    {
+      "line": 23361,
+      "bytes": 31834,
+      "sha256": "870b3514f1eddb00d65f92890b075ad823ad5943663a4d8452a1ef5ccf144b2f"
+    },
+    {
+      "line": 23505,
+      "bytes": 35219,
+      "sha256": "4e476cf7871f5de724a49e64eb7c7803a5ee3fd3edaed7daa0caf614c7ebee65"
+    },
+    {
+      "line": 24066,
+      "bytes": 37040,
+      "sha256": "d47c5ec33555b0035162535299ec549e62ac5fcda4ae7aaf5a1a7b81a440cc51"
+    },
+    {
+      "line": 24876,
+      "bytes": 40252,
+      "sha256": "b92813935717f304bfc1e21048986325fa69a98b0d6660ad442cc193cb15f1ff"
+    },
+    {
+      "line": 24880,
+      "bytes": 42290,
+      "sha256": "5357aa092b08a664f8d09ed3e201aec234bbe0fd70677e1458bdd274018bf95c"
+    },
+    {
+      "line": 25012,
+      "bytes": 42713,
+      "sha256": "904c9cb17c2b2986d1711949128c8e0c16c112de49843a9efb0c101d93f1d672"
+    },
+    {
+      "line": 25048,
+      "bytes": 42945,
+      "sha256": "3d46e60ac7b517899233269d7f0825bbc8ef51cb3564ccf5af9b7d33244e4a08"
+    },
+    {
+      "line": 25166,
+      "bytes": 43720,
+      "sha256": "8320778974c5a9062a8348996eb6080178626a2fa47334ac8c51037fe8f159e3"
+    },
+    {
+      "line": 25310,
+      "bytes": 44531,
+      "sha256": "00d81e6af8d741f66a1d27017f49090f2a2380f154480b8f54ae2340c9775440"
+    },
+    {
+      "line": 25315,
+      "bytes": 41039,
+      "sha256": "c2c5f94dcc202419af6644a0743db851a9697fdfd4c46b87613376fb7754731e"
+    },
+    {
+      "line": 25324,
+      "bytes": 44382,
+      "sha256": "a4d31939c7c2297c2429068f7cd68006ce740820597f108aafc6cb792211bb8e"
+    },
+    {
+      "line": 25401,
+      "bytes": 48423,
+      "sha256": "1363246461882a207ca38960f2f42e0145e22a3c727f8c3ff1ca073a8f737839"
+    },
+    {
+      "line": 25468,
+      "bytes": 48735,
+      "sha256": "6f9d1e71a490fa4d30f842b7da7ec425c26bac10795e84101b5855b279ee27a3"
+    },
+    {
+      "line": 25743,
+      "bytes": 43044,
+      "sha256": "36aaa33ea9e905a9a57ed86deb0689e3154f2bc69d726d0e59e7bf72fb396671"
+    },
+    {
+      "line": 25753,
+      "bytes": 52286,
+      "sha256": "cc37fcc5c2a20a61d86ff584ecc84bcbfb9d11ffdabab5244bbcf9eb0b1c41d3"
+    },
+    {
+      "line": 25922,
+      "bytes": 52286,
+      "sha256": "cc37fcc5c2a20a61d86ff584ecc84bcbfb9d11ffdabab5244bbcf9eb0b1c41d3"
+    },
+    {
+      "line": 25925,
+      "bytes": 49062,
+      "sha256": "2f5ccb23c413cbc68a97c222558f9693928187ce3387d904ca8b2b82a1c15845"
+    },
+    {
+      "line": 25929,
+      "bytes": 56259,
+      "sha256": "a4d8905b57baac5fc3e644b0f0643cb4d3b534a812d78979564725c9eaa817b8"
+    },
+    {
+      "line": 26119,
+      "bytes": 51489,
+      "sha256": "db7b09d05e059d5a2f10e624fae519cdee593acd6f5564ef3a866f619fa32a55"
+    },
+    {
+      "line": 26124,
+      "bytes": 61832,
+      "sha256": "71959762a9639ccc4b5af94662c0c4ed090eb7c1bee614492c38e0130c892bd3"
+    },
+    {
+      "line": 26274,
+      "bytes": 67594,
+      "sha256": "ed15ee35536b5c507fd16500982b15165cf85e5c1d3c700b063e375db47dad0b"
+    },
+    {
+      "line": 26279,
+      "bytes": 67280,
+      "sha256": "0d5b613c05177cf5a1859848ab898cac07bd461e1a463a3d7236549960237499"
+    },
+    {
+      "line": 26283,
+      "bytes": 70582,
+      "sha256": "d45443164036f41af3ce1212cb236c7bf22b84371c7289d8b662843857a7e80a"
+    },
+    {
+      "line": 26297,
+      "bytes": 70985,
+      "sha256": "4bd591889ebed4b19c83bcfed2e0e12e93061b61576954a13bd64b2bf03920ed"
+    },
+    {
+      "line": 26309,
+      "bytes": 71009,
+      "sha256": "09922a2dd72a2f6881ac26ed8e6905a9e9470fd7677c1f67710dd3a428489d9d"
+    },
+    {
+      "line": 26352,
+      "bytes": 71400,
+      "sha256": "649b60c9117cbd4f41cdaf4320c47d7695050950a7b9c8d5fef06d774e6a31c4"
+    },
+    {
+      "line": 26365,
+      "bytes": 71884,
+      "sha256": "978e36163369a6bf470d8ca73ed77321990e867c63c795a7cbc43ebbd5717456"
+    },
+    {
+      "line": 26375,
+      "bytes": 72503,
+      "sha256": "68cc838aee951dd6621d16d75f774eb6fe28e832d3b7c83d027516d240380d42"
+    },
+    {
+      "line": 26447,
+      "bytes": 40866,
+      "sha256": "eff3ef1af9e456e02c64f3eb89f91ed7c7210cd587ae6c2ee3caa7b11eab95df"
+    },
+    {
+      "line": 26450,
+      "bytes": 53679,
+      "sha256": "974ae3c427310fcd17df693d40090e509c261d0b352ec8a48c4f9bd62ea09136"
+    },
+    {
+      "line": 26464,
+      "bytes": 62694,
+      "sha256": "881f778271b0295a39056fb502518f100bc54d1cac23621b5bbcd2808d270394"
+    },
+    {
+      "line": 26467,
+      "bytes": 68189,
+      "sha256": "2d230982d0352d556d031a70452f62f3d155c540fe3eaaf050646569bd72d384"
+    },
+    {
+      "line": 26476,
+      "bytes": 68115,
+      "sha256": "c00b5677cad65fe7775c38827c977ace8d4d6f5fef1c53f22ac5ba78af63d1fd"
+    },
+    {
+      "line": 26556,
+      "bytes": 68250,
+      "sha256": "1654a15f9d3ecf56c17227fda2d05e703e60c465c7acebd9db2849532b1fcb5b"
+    },
+    {
+      "line": 26825,
+      "bytes": 68754,
+      "sha256": "c79882192d7267b7eb738f020f9cff0e0daeda284d7f55165b1a1b738696e9cd"
+    },
+    {
+      "line": 26845,
+      "bytes": 68754,
+      "sha256": "c79882192d7267b7eb738f020f9cff0e0daeda284d7f55165b1a1b738696e9cd"
+    },
+    {
+      "line": 26853,
+      "bytes": 70911,
+      "sha256": "b0f757c7e14dbc35f3b3bac40ee10371f2797315d40ffe7a94346ec7420b4a30"
+    },
+    {
+      "line": 26857,
+      "bytes": 72595,
+      "sha256": "d815f4c836be132077bc36975838aa053aa8fa7b22700f0f37fe94a9b9fa746e"
+    },
+    {
+      "line": 27121,
+      "bytes": 72609,
+      "sha256": "e35d3c462b122cf34c062264efd0ac20803b0234bed2ea20a96764af6a29e196"
+    },
+    {
+      "line": 28644,
+      "bytes": 74887,
+      "sha256": "d90760d3a8a615755234d86f72a0e2ea59e5b8097e52ed83196941c193594992"
+    },
+    {
+      "line": 28768,
+      "bytes": 74951,
+      "sha256": "15589cb3f86b593f3feb76915f5db18892e2fb3828fedec7d1ee9cdfc650ece5"
+    },
+    {
+      "line": 32672,
+      "bytes": 75295,
+      "sha256": "f5ea60c9f21da4d70e7644680a9fa93a14d6235d35013bdf7c5f905c55d82eac"
+    },
+    {
+      "line": 32846,
+      "bytes": 75368,
+      "sha256": "12d4aca9a7bfd9a51303271b54433ad55058dad268e771cff757a3ea0b68a14a"
+    }
+  ]
+}

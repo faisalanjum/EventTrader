@@ -1,0 +1,124 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-26-017090#P000",
+      "decision": "keep",
+      "why": "Quote and locator are character-exact to the non-GAAP reconciliation table row; label 'Gift card adjustment, net(3)' sits inside the quote and distinguishes it from the other bridge lines. The negative figure backs out a net benefit (breakage revenue exceeding an inventory write-down) which is exactly the benefit/credit=negative pattern OD-12 governs, and the row states a clean point value.",
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Gift card adjustment, net(3) (9,396 ) - (9,396 ) -",
+        "raw_label_or_claim": "Gift card adjustment, net(3)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-017090#P001",
+      "decision": "keep",
+      "why": "Quote and locator are character-exact. 'Comparable' is a stated population qualifier distinct from total-company sales (OD-17 portion), and 'year-over-year' is explicit growth-basis wording (OD-11), with a clean point percentage value.",
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable restaurant sales at The Cheesecake Factory restaurants declined 2.2% year-over-year in the fourth quarter of fiscal 2025.",
+        "raw_label_or_claim": "Comparable restaurant sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "portion_versus_whole", "point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-017090#P002",
+      "decision": "replace",
+      "why": "The supplied quote is character-accurate but bundles two distinct facts under one compound subject ('Margins and adjusted diluted net income per share'); their own labels are what tell them apart (rule 5). The EPS-only fact is completely and unambiguously supported by the contiguous suffix of the same sentence, so the quote is narrowed to that span; the EPS claim is a numberless actual-vs-company-expectations comparison with an explicit favorable direction ('higher end').",
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "adjusted diluted net income per share finished toward the higher end of our expectations",
+        "raw_label_or_claim": "adjusted diluted net income per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-017090#P003",
+      "decision": "replace",
+      "why": "The proposed quote is character-accurate to the segment table, but the table's column headers ('The Cheesecake Factory North Other restaurants Italia FRC Other Total') are flattened/interleaved by source table extraction and do not sit inside the quote in an unambiguous per-segment form, so no single segment label can be safely bound without extending into a garbled span. The same total figure ($961,558 thousand = $961.6M) is stated cleanly and completely, with its own label and a prior-year comparison, in the narrative earlier in this same part; that is the correct location for this fact.",
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total revenues were $961.6 million in the fourth quarter of fiscal 2025 compared to $921.0 million in the fourth quarter of fiscal 2024.",
+        "raw_label_or_claim": "Total revenues",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Margins and adjusted diluted net income per share finished toward the higher end of our expectations",
+        "raw_label_or_claim": "Margins",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Splits out the second fact bundled inside P002's original quote (rule 5: distinct facts sharing a forced grammatical span, told apart by their own labels). 'Margins' names no specific driver (gross/operating/restaurant-level margin all plausible) and cannot be lawfully resolved to one from this quote, so per owner ruling 3 the correct behavior is abstention, not a guessed metric identity and not omission. The full span is needed because the shared verb phrase cannot be reached without the intervening 'and adjusted diluted net income per share' text, so it cannot be trimmed further while staying contiguous."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, well-labeled guidance with ceiling and range shapes across named segments; no supplied proposal raised it and it does not correct or repair any of the four proposals, so under representative-sampling scope it is not added this turn."
+    },
+    {
+      "quote": "On February 12, 2026, the Company\u2019s Board of Directors approved an increase of 5.0 million shares to the existing repurchase program raising the total authorization to 66 million shares, of which approximately 6.0 million shares remain available for repurchase following the increase.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, specific corporate-action fact; not tied to correcting any supplied proposal, so excluded from this representative (not exhaustive) pass."
+    },
+    {
+      "quote": "Also on February 12, 2026, the Board approved a $0.03 increase in the quarterly dividend to $0.30 per share to be paid on March 17, 2026, to shareholders of record at the close of business on March 4, 2026.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, specific dividend-increase fact; not needed to correct or repair any of the four proposals in this event, so left out of this representative pass."
+    },
+    {
+      "quote": "This press release contains forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995, as codified in Section 27A of the Securities Act of 1933, as amended, and Section 21E of the Securities Exchange Act of 1934, as amended.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic Safe Harbor risk boilerplate; a plausible negative_control shape, but no proposal raised it and this turn does not add a row merely because a lawful negative-control candidate exists in the source."
+    },
+    {
+      "quote": "Revenues $ 681,431 $ 88,174 $ 99,441 $ 92,512 $ 961,558",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Per-segment revenue breakdown behind this same table row (used for P003); its column headers are flattened/interleaved by source table extraction ('The Cheesecake Factory North Other restaurants Italia FRC Other Total'), so binding an individual segment's label cleanly and contiguously is unreliable. The consolidated total fact is already covered via the narrative sentence used in P003's replacement; per-segment slice rows are not added this turn given representative, not exhaustive, scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether relocating a proposal's fact to a different textual occurrence of the same underlying value (as with P003, moving from the segment table's Total column to the narrative 'Total revenues' sentence) is properly 'replace', or should instead be 'exclude' plus a separate 'addition'.",
+      "why": "The authority defines 'replace' as 'an item belongs here, but the supplied quote or locator is wrong' without settling whether a location in a wholly different part of the document (narrative vs. table) still counts as the same item merely mis-located."
+    },
+    {
+      "what": "Whether a lawful_abstention_control row whose ambiguity is about WHICH driver/metric is named (e.g. the 'Margins' row) should carry an empty hard-class list, or should still carry the tags for rules it would have exercised had the identity been resolvable (here, favourable_unfavourable_direction and expectation_routing).",
+      "why": "None of the ten enumerated hard classes cover 'ambiguous metric identity' itself, and the authority does not state whether tags apply to rows that abstain before reaching that rule's decision point; inventing a mapping was avoided per owner ruling 3."
+    },
+    {
+      "what": "Whether garbled/flattened table header text (segment column headers split and interleaved by source extraction) can ever be used, once extended for completeness, as a lawful contiguous locator for a single segment-level fact.",
+      "why": "Rule 5 requires the distinguishing label to lie inside the quote and be exact, but does not address how to treat source-formatting artifacts that scramble column-header word order while remaining literally contiguous text."
+    }
+  ],
+  "blocked": null
+}
+```

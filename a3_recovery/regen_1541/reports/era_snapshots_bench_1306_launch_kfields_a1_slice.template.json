@@ -1,0 +1,51 @@
+{
+  "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness/launch_kfields_a1_slice.template.js",
+  "owner": "bench_1306/.claude/plans/Drivers/experiments/harness/launch_kfields_a1_slice.template.js",
+  "aligned_by": "transcript event order and type",
+  "snapshots": [
+    {
+      "version": 1,
+      "backup": "7d25b9bdc5931def@v1",
+      "kind": "delta",
+      "event_line": 25333,
+      "era_bytes": 5112,
+      "replay_bytes": 5112,
+      "era_sha256": "dc1b4f6cd88049a24b357ba5c46af25a77ecf0acf54288df2ff8e017f44a6272",
+      "replay_sha256": "dc1b4f6cd88049a24b357ba5c46af25a77ecf0acf54288df2ff8e017f44a6272",
+      "exact": true
+    },
+    {
+      "version": 2,
+      "backup": "7d25b9bdc5931def@v2",
+      "kind": "snapshot",
+      "event_line": 27933,
+      "era_bytes": 6668,
+      "replay_bytes": 6668,
+      "era_sha256": "e00c5532d015fa2d9c52833aa4bf3e96df6881127b1e53ef73b2e9617c52c2e0",
+      "replay_sha256": "e00c5532d015fa2d9c52833aa4bf3e96df6881127b1e53ef73b2e9617c52c2e0",
+      "exact": true
+    },
+    {
+      "version": 3,
+      "backup": "7d25b9bdc5931def@v3",
+      "kind": "snapshot",
+      "event_line": 32586,
+      "era_bytes": 6714,
+      "replay_bytes": 6714,
+      "era_sha256": "c9c7bace946c43a98899f2b5051abc12503171d130439fc8784166935ecba78c",
+      "replay_sha256": "c9c7bace946c43a98899f2b5051abc12503171d130439fc8784166935ecba78c",
+      "exact": true
+    },
+    {
+      "version": 4,
+      "backup": "7d25b9bdc5931def@v4",
+      "kind": "snapshot",
+      "event_line": 35702,
+      "era_bytes": 7340,
+      "replay_bytes": 7340,
+      "era_sha256": "368bf01cb205ccad7e9af90355ab124af5aca5b9efe3f702311f1f4f836b121b",
+      "replay_sha256": "368bf01cb205ccad7e9af90355ab124af5aca5b9efe3f702311f1f4f836b121b",
+      "exact": true
+    }
+  ]
+}

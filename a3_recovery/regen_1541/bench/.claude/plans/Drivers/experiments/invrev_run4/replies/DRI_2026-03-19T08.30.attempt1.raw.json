@@ -1,0 +1,187 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "verdicts": [
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P000",
+      "decision": "keep",
+      "why": "Exact, unique, contiguous substring of prepared_remarks (Raj Vinam's Q4 outlook sentence). Genuine source-stated FY26 Q4 total-sales-growth guidance, closed range shape.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "our annual outlook implies total sales growth of 13% to 14.5%, which includes the extra fiscal week",
+        "raw_label_or_claim": "total sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P001",
+      "decision": "keep",
+      "why": "Exact, unique substring (Rick Cardenas's version, distinguishable from Raj's later paraphrase which has 'we'/'same-russian'). Row scoped to the total-sales fact; the co-stated same-restaurant-sales-growth clause is a distinct metric not elevated to its own row this turn (see exclusions_considered / open issue).",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We generated $3.3 billion of total sales, 5.9% higher than last year, driven by same-restaurant sales growth of 4.2%",
+        "raw_label_or_claim": "total sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P002",
+      "decision": "keep",
+      "why": "Exact, unique substring of prepared_remarks. Row scoped to Longhorn total-sales fact, a segment-sliced metric (menu has segment:longhornsteakhouse / segment:longhornsteakhousesegment). Co-stated same-restaurant-growth and net-new-restaurant clauses are distinct facts not elevated to their own rows this turn.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "At Longhorn, total sales increased 11.2%, driven by same restaurant sales growth of 7.2%, and the addition of 22 net new restaurants",
+        "raw_label_or_claim": "total sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P003",
+      "decision": "keep",
+      "why": "Exact, unique substring of prepared_remarks. This is an actual-vs-expectations surprise fact ('in line'), ISS-16/OD-21 routing. Its required paired ordinary (home) fact is supplied as an addition, same quote, distinct label.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Third quarter earnings were in line with our expectations, delivering mid-single-digit earnings per share growth.",
+        "raw_label_or_claim": "in line with our expectations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P004",
+      "decision": "keep",
+      "why": "Exact, unique substring of prepared_remarks (start of Raj's updated FY26 guidance list). Point value on an annual period; exercises the OD-11 annual-pin (percent_yoy only) branch. Other co-stated guidance items in the same sentence (comp sales, unit openings, commodity inflation, tax rate, EPS range) are separate lawful facts not raised by any proposal and not added this turn.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We now expect total sales growth for the year of approximately 9.5%",
+        "raw_label_or_claim": "total sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P005",
+      "decision": "keep",
+      "why": "Exact, unique substring of prepared_remarks (Raj's adjusted-margin-analysis paragraph). Bps-unit directional change (20 bps lower), exercising the points/bps-wins-over-yoy/sequential branch of OD-11. The co-stated 'total labor inflation of 3.3%' clause is a distinct metric not elevated to its own row this turn.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Restaurant labor was 20 basis points lower, driven by productivity improvement, as pricing was in line with total labor inflation of 3.3%",
+        "raw_label_or_claim": "Restaurant labor",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Third quarter earnings were in line with our expectations, delivering mid-single-digit earnings per share growth.",
+        "raw_label_or_claim": "mid-single-digit earnings per share growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "sequential_comparison"]
+      },
+      "why": "ISS-16/OD-21: an actual-vs-expectation surprise fact requires its paired ordinary (numberless) home fact — grounded numberless facts count (DU-05). This is the EPS-growth home fact for the P003 surprise, sharing P003's quote (grammar forces the same span) but carrying a distinct label per the distinct-facts rule. This repairs required surprise-pairing coverage on the proposal already located, not an unrelated new fact."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "same-restaurant sales growth of 4.2%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct metric co-stated with P001's total-sales fact in the same sentence; not raised as its own proposal. Representative-sampling scope (instruction 3): not added merely because another lawful fact exists in the located span."
+    },
+    {
+      "quote": "the addition of 31 net new restaurants",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "quote_context": "Raj Vinam's restatement of the quarter's totals",
+      "why": "Distinct unit-count fact, no proposal raised it; representative-sampling scope."
+    },
+    {
+      "quote": "same restaurant sales growth of 7.2%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct metric co-stated with P002's Longhorn total-sales fact; not raised as its own proposal; representative-sampling scope."
+    },
+    {
+      "quote": "the addition of 22 net new restaurants",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct unit-count fact co-stated in P002's sentence; not raised as its own proposal; representative-sampling scope."
+    },
+    {
+      "quote": "total labor inflation of 3.3%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct metric co-stated with P005's restaurant-labor fact; not raised as its own proposal; representative-sampling scope."
+    },
+    {
+      "quote": "same-restaurant sales growth of approximately 4.5%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Other lawful FY26 guidance figure in the same sentence as P004; no proposal raised it; representative-sampling scope."
+    },
+    {
+      "quote": "approximately 70 new restaurant openings",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Other lawful FY26 guidance figure in the same sentence as P004; no proposal raised it; representative-sampling scope."
+    },
+    {
+      "quote": "commodities inflation of approximately 4%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Other lawful FY26 guidance figure in the same sentence as P004; no proposal raised it; representative-sampling scope."
+    },
+    {
+      "quote": "an effective tax rate of approximately 12.5%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Other lawful FY26 guidance figure in the same sentence as P004; no proposal raised it; representative-sampling scope."
+    },
+    {
+      "quote": "adjusted diluted net earnings per share of $10.57 to $10.67, including approximately 25 cents related to the addition of 53rd week",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Other lawful FY26 guidance figure (range + measurement wording + condition clause) in the same sentence as P004; no proposal raised it; representative-sampling scope."
+    },
+    {
+      "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Salient real, non-boilerplate fact (brand closure/conversion decision) that no proposal raised; not added, since instruction 3 forbids adding a row merely because another lawful fact exists absent a proposal to correct or a declared coverage gap to repair."
+    },
+    {
+      "quote": "These statements are subject to risks and uncertainties that could cause actual results to differ materially from our expectations and projections",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking-statements risk boilerplate (fails DU-03/Rule 1) — a plausible negative_control candidate, but no proposal raised it and this single-event turn has no visibility into cross-event control-tag coverage needing repair, so it was not added."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a distinct co-stated fact that shares a proposal's already-located quote (e.g., same-restaurant-sales-growth inside P001/P002; total-labor-inflation inside P005) must be split out into its own added row this turn, versus staying unadded under the representative-sampling rule against adding rows merely because another lawful fact exists.",
+      "why": "Rule 5 ('distinct facts stay separate ... their exact source labels are what tell items apart') and the Total-vs-Per-X general rule both require separate rows for genuinely distinct facts, but General Rule 1 and instruction 3 forbid adding a row merely because another lawful fact exists in the source, and the authority does not state which governs when the second fact is already inside a proposal's own located span. I resolved this conservatively — splitting only where a rule structurally requires a paired row (the surprise/home-fact pairing in P003, per ISS-16/OD-21) — and logged the other co-stated facts as exclusions_considered instead of additions."
+    }
+  ],
+  "blocked": null
+}
+```

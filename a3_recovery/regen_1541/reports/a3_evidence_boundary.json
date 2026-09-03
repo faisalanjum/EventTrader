@@ -1,0 +1,10 @@
+{
+  "owner": "build_kfields_key.py",
+  "owner_sha256": "a289601b0bf52f223661f63f64128717baabb9ab1d061055119474d3cc4321f9",
+  "owner_unchanged_by_the_call": true,
+  "callable": "a3_evidence",
+  "answers": 392,
+  "problems": [],
+  "proved": true,
+  "projected_from": "evidence/PROJECTION.tsv"
+}

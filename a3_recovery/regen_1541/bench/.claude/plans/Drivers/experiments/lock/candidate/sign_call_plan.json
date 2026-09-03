@@ -1,0 +1,20 @@
+{
+ "calls": 1,
+ "task": "final_sign",
+ "state": "unmade",
+ "model": "claude-sonnet-5",
+ "effort": "high",
+ "agent_type": "lean-probe",
+ "transport": "subscription",
+ "disallowed_tools": [
+  "Read"
+ ],
+ "max_output_tokens": "128000",
+ "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "prompt_sha256": "b88f4671052f35234dc96b58d9483bc4059492c0bb042abeee5f976cc5c89c60",
+ "prompt_chars": 10001,
+ "input_sha256": "aa4366b32312348a8623ec505356bd961643093634c421b9e5dbed2247ea541a",
+ "instruction_sha256": "ddef039ccc1a4a59994f651c8385629d8d49b72ac2b3e6f47fb3516fbb9b2453",
+ "retry": "one identical-prompt retry only for an answered invalid-JSON or invalid-schema reply",
+ "output": "{\"signed\": true|false, \"blocked\": null|string, \"why\": string}"
+}

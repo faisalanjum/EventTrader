@@ -1,0 +1,111 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "verdicts": [
+    {
+      "proposal_id": "0000764478-25-000057#P000",
+      "decision": "keep",
+      "why": "Quote matches the source character-for-character, occurs once in the mdna part, and the label 'Comparable online sales % change' lies inside the quote and uniquely identifies the Domestic segment's comparable online sales growth line (the International table has no such line).",
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Comparable online sales % change (1) \n\n3.5 % (1.0) % 3.6 % (2.9) %",
+        "raw_label_or_claim": "Comparable online sales % change",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0000764478-25-000057#P001",
+      "decision": "keep",
+      "why": "Quote matches the source character-for-character, occurs once in mdna, and 'Diluted EPS' lies inside the quote. It is a real, source-stated, numberless narrative fact carrying the measurement token 'diluted'.",
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Diluted EPS decreased in the third quarter of fiscal 2026, primarily due to lower net earnings driven by higher goodwill and intangible asset impairments, partially offset by lower income tax expense.",
+        "raw_label_or_claim": "Diluted EPS",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0000764478-25-000057#P002",
+      "decision": "keep",
+      "why": "Quote matches the source character-for-character, occurs once in mdna, and 'Five-Year Facility Agreement' lies inside the quote. 'permits borrowings of up to $1.25 billion' is a stated ceiling shape (high only).",
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The Five-Year Facility Agreement permits borrowings of up to $1.25 billion and expires in April 2030.",
+        "raw_label_or_claim": "Five-Year Facility Agreement",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000764478-25-000057#P003",
+      "decision": "keep",
+      "why": "Quote matches the source character-for-character (including the em-dash zero markers), occurs once in mdna (distinguishable by its '%' signs from the two other 'Restructuring charges (3)' rows in $ and EPS units), and 'Restructuring charges' lies inside the quote. The negative Q3 figure vs positive nine-month figure mirrors the underlying charge($218M, positive)/credit(-$5M, negative) sign pattern reported elsewhere in the event, exercising the charge/benefit sign rule.",
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Restructuring charges (3) \n\n(1.5) % \u2014 % 3.2 % \u2014 %",
+        "raw_label_or_claim": "Restructuring charges",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real, lawful headline revenue fact, but no proposal raised it and it is not needed to replace/correct a proposal or repair declared coverage for this event; excluded under the representative-not-exhaustive scope."
+    },
+    {
+      "quote": "Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real, lawful non-cash impairment fact, but not needed to replace/correct a proposal or repair declared coverage this turn; excluded per representative scope."
+    },
+    {
+      "quote": "In fiscal 2026, we currently expect to reduce our traditional Domestic Best Buy store count by 5 stores in the normal course of operations.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A specific, real, non-boilerplate operational fact (candidate real_item), but no proposal raised it and it is not needed this turn; excluded per representative scope."
+    },
+    {
+      "quote": "There can be no assurance that we will continue to generate cash flows at or above current levels or that we will be able to maintain our ability to borrow under our existing credit facilities or obtain additional financing, if necessary, on favorable terms.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Generic hedging/risk boilerplate with no specific current adverse threat named; a plausible negative_control candidate under DU-03/Rule 1, but no proposal raised it and this turn adds rows only to replace/correct a proposal or repair declared coverage, not to add unrequested controls."
+    },
+    {
+      "quote": "We have two reportable segments: Domestic and International.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Structural/definitional description of segment composition, not a stated state/change/surprise/guidance/action fact under the DU-03 gate; not selected this turn."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Proposal P000's quote bundles four period-scoped values (current-quarter, prior-year-quarter, current-nine-month, prior-year-nine-month) under one label with no in-quote period marker; kept as one row pointing at the current-period value per the minimal-addition scope, but the authority does not settle whether an inventory-freeze row must be split per period_scope when the source table forces multiple periods into one contiguous cell group.",
+      "why": "Splitting by a real period difference is required by the general split law, but rule 1 forbids adding rows for 'another lawful fact' beyond replacing/correcting a proposal; these two instructions point opposite ways for this exact shape and neither is expressly reconciled."
+    },
+    {
+      "what": "Whether the point_range_floor_ceiling tag is intended for every row that states a specific point-shaped number, or only for rows that specifically exercise a non-trivial shape (range/floor/ceiling) determination.",
+      "why": "FINAL_DESIGN §7.1 describes point as one of the self-describing shapes alongside range/floor/ceiling/numberless, but the owner rulings never state whether a plain single point value 'exercises' the tag's rule the same way a floor/ceiling/range case does; this turn tagged it whenever a row carries a specific stated number."
+    },
+    {
+      "what": "Whether the ETR-reconciliation percentage-point 'Restructuring charges' line (P003) is meant to stand as its own benchmark Driver fact distinct from the dollar-value restructuring charge reported elsewhere in the same event, or is only reconciliation-walk enrichment not intended as a standalone item.",
+      "why": "FINAL_DESIGN documents the non-GAAP reconciliation format but does not state whether each reconciliation line is itself a first-class Driver fact for benchmark purposes."
+    }
+  ],
+  "blocked": null
+}
+```

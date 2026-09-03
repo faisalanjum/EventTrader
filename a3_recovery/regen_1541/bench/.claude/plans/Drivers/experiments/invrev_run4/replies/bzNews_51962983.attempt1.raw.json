@@ -1,0 +1,30 @@
+```json
+{
+  "source_id": "bzNews_51962983",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_51962983#P000",
+      "decision": "keep",
+      "why": "The quote and locator are byte-correct (whole 'title' part, single occurrence). The event is a bare, non-numeric executive-appointment announcement. The supplied authority defines the fact gate's 'action' fact-type only in financial/operational terms (Driver names, units, per-X, slices, guidance) and never supplies a naming/unit/encoding rule for a personnel/leadership-change event, so whether this real, source-stated, non-boilerplate announcement can be lawfully encoded as a Driver fact is a genuinely fuzzy other-lane boundary the locked rules leave unresolved. Per the owner's explicit instruction, such a case is never guessed into real_item or negative_control; it is recorded as an abstention/ambiguity control instead.",
+      "row": {
+        "source_id": "bzNews_51962983",
+        "part_ref": "title",
+        "occurrence_in_part": null,
+        "quote": "Best Buy Appoints Jason Bonfig As CEO, Effective At End Of Q3",
+        "raw_label_or_claim": "Best Buy Appoints Jason Bonfig As CEO, Effective At End Of Q3",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [],
+  "open_issues": [
+    {
+      "what": "Whether an executive/leadership appointment announcement (no numbers, no metric, no unit, no slice) falls within the Driver system's fact-type scope (state/change/surprise/guidance/action) at all, and if so under what name/encoding, is not settled by any rule text supplied for this task.",
+      "why": "The fact gate lists 'action' as one of five fact types but the supplied authority only defines encoding rules (naming, units, per-X, slices, sign, sequential basis, surprise routing, corrections) for financial/operational Driver facts; no naming or action-state rule for personnel/corporate-governance events like a CEO appointment was supplied, so classifying this item as real_item (lawfully encodable) versus negative_control (out of gate) versus lawful_abstention_control cannot be settled without inventing a rule. I applied the owner's explicit fallback for genuinely fuzzy other-lane boundaries and recorded it as lawful_abstention_control rather than inventing a Driver identity or encoding rule for it."
+    }
+  ],
+  "blocked": null
+}
+```

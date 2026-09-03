@@ -1,0 +1,43 @@
+```json
+{
+  "source_id": "0000764478-26-000005",
+  "verdicts": [
+    {
+      "proposal_id": "0000764478-26-000005#P000",
+      "decision": "keep",
+      "why": "The quote is a byte-identical, single-occurrence copy of the 'items' part. It is the 8-K's own administrative item-type declaration, not a stated business fact (no state/change/surprise/guidance/action) — a bare/generic filing-metadata mention that fails the DU-03/Rule-1 fact gate, so the correct reader behavior is omission. It is retained as a negative_control exemplar rather than excluded from the inventory outright, since a control still needs a located row.",
+      "row": {
+        "source_id": "0000764478-26-000005",
+        "part_ref": "items",
+        "occurrence_in_part": null,
+        "quote": "ITEMS: [\"Item 2.02: Results of Operations and Financial Condition\", \"Item 9.01: Financial Statements and Exhibits\"]",
+        "raw_label_or_claim": "Item 2.02: Results of Operations and Financial Condition",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "FORM: 8-K",
+      "part_ref": "form",
+      "occurrence_in_part": null,
+      "why": "Pure filing-type metadata (the form label itself), not a stated fact about any driver; a bare mention with no business content. Adding it would not repair any declared coverage gap and would duplicate the negative-control role already carried by the kept 'items' row."
+    },
+    {
+      "quote": "DESC: Form 8-K - Current report - Item 2.02 Item 9.01",
+      "part_ref": "description",
+      "occurrence_in_part": null,
+      "why": "Restates the same administrative item-type information as the 'items' part in different formatting; no additional or distinct fact content, so it would be a duplicate non-fact, not a separate representative row."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event's supplied text_parts contain only filing-header metadata (form type, checked Items list, one-line description). Despite Item 2.02 signaling 'Results of Operations and Financial Condition,' no narrative or numeric disclosure text (e.g., an earnings-release exhibit body) is present anywhere in the supplied text_parts for this source_id.",
+      "why": "The task instructs reading 'the complete supplied event text' and binding rows only to that text; the owner rulings and step1.md do not say whether such metadata-only events are expected to be genuinely empty of real_item/lawful_abstention_control candidates (with only a negative_control available) or whether missing exhibit content is a supply gap outside this turn's authority to resolve. I have not invented a rule to close this and have treated the event as legitimately control-only given the text actually supplied."
+    }
+  ],
+  "blocked": null
+}
+```

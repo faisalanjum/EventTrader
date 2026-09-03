@@ -1,0 +1,47 @@
+{
+  "entry_point": "build_kfields_key.py::__main__",
+  "result": "completed",
+  "files_opened": 2470,
+  "child_files_opened": 69,
+  "resolved_into_dirty_main": [],
+  "unmanifested_reads": [],
+  "why_outside": {
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/a3_serial_dir.txt": "e827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 767, in <module>\n    LEDGER_BEFORE = ledger_before()\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 758, in ledger_before\n    run = _read(os.path.join(EVIDENCE, \"a3_serial_dir.txt\")).strip()\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 131, in _read\n    return io.open(path, encoding=\"utf-8\").read()\n",
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a3-one-item-196x2-serial-20260821T055948Z/finalization.json": "  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 763, in ledger_before\n    spent += _load(fin)[\"ledger\"][\"scheduled\"]\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 135, in _load\n    return json.loads(_read(path))\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 131, in _read\n    return io.open(path, encoding=\"utf-8\").read()\n",
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a3-one-item-196x2-serial-20260821T055948Z/retry/finalization.json": "  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 763, in ledger_before\n    spent += _load(fin)[\"ledger\"][\"scheduled\"]\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 135, in _load\n    return json.loads(_read(path))\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 131, in _read\n    return io.open(path, encoding=\"utf-8\").read()\n",
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.json": ".core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 939, in <module>\n    gap = historical_source_gap()\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 210, in historical_source_gap\n    if INV.sha_file(p) == named:\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/validate_benchmark_inventory.py\", line 61, in sha_file\n    return hashlib.sha256(open(path, \"rb\").read()).hexdigest()\n",
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a3-one-item-196x2-serial-20260821T055948Z/receipt.json": ".core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 939, in <module>\n    gap = historical_source_gap()\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/build_kfields_key.py\", line 210, in historical_source_gap\n    if INV.sha_file(p) == named:\n  File \"/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drivers/experiments/harness/validate_benchmark_inventory.py\", line 61, in sha_file\n    return hashlib.sha256(open(path, \"rb\").read()).hexdigest()\n"
+  },
+  "run_artifacts_read": 0,
+  "declared_search_reads": 0,
+  "home_override": "/home/faisal",
+  "evidence_root": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments",
+  "projection_rows": 1404,
+  "search_roots": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments",
+    "/home/faisal/.core827-orchestrator"
+  ],
+  "temporary_reads": [],
+  "outside_reads_covered_by_manifested_copies": 1392,
+  "entry_sha256": "a289601b0bf52f223661f63f64128717baabb9ab1d061055119474d3cc4321f9",
+  "subprocess_calls": [
+    [
+      "/home/faisal/EventMarketDB/venv/bin/python",
+      "-B",
+      "-c",
+      "\nimport hashlib, io, json, os, sys\nX = sys.argv[1]; T = sys.argv[2]\nsys.path.ins",
+      "/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drive",
+      "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200"
+    ],
+    [
+      "/home/faisal/EventMarketDB/venv/bin/python",
+      "-B",
+      "-c",
+      "\nimport hashlib, io, json, os, sys\nX = sys.argv[1]; T = sys.argv[2]\nsys.path.ins",
+      "/home/faisal/.core827_backups/recovery_1531/regen_1541/bench/.claude/plans/Drive",
+      "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200"
+    ]
+  ],
+  "unaudited_children": [],
+  "clean": true
+}

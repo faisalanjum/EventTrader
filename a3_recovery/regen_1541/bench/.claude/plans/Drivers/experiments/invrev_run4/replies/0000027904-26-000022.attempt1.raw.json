@@ -1,0 +1,116 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "verdicts": [
+    {
+      "proposal_id": "0000027904-26-000022#P000",
+      "decision": "keep",
+      "why": "Quote matches the Operating Statistics table row character-for-character, part_ref 'mdna' is correct, and the string occurs exactly once in that part. It is a real, source-stated CASM level (point shape, both years given) with a stated 13% YoY change requiring OD-11 growth-basis (percent_yoy default) determination.",
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Cost per available seat mile (\"CASM\") 22.20 \u00a2 19.69 \u00a2 13 %",
+        "raw_label_or_claim": "Cost per available seat mile (\"CASM\")",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000027904-26-000022#P001",
+      "decision": "keep",
+      "why": "Quote matches the Non-Operating Results table row character-for-character, part_ref 'mdna' is correct, and it occurs once. Negative parenthesized values are a stated loss/unfavorable variance on investments, exercising OD-12 sign convention; it is a point-shaped level fact (both years' amounts given).",
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Gain/(loss) on investments, net (550) (40) (510)",
+        "raw_label_or_claim": "Gain/(loss) on investments, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000027904-26-000022#P002",
+      "decision": "keep",
+      "why": "Quote matches the Domestic prose sentence character-for-character, part_ref 'mdna' is correct, occurs once. Domestic is a geography slice on the supplied menu (geography:domesticdestination), and the bare 8% growth stated against the same quarter one year prior exercises OD-11's dated-period YoY default.",
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Domestic passenger revenue increased 8% in the March 2026 quarter compared to the March 2025 quarter on a 1% increase in capacity.",
+        "raw_label_or_claim": "Domestic passenger revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "0000027904-26-000022#P003",
+      "decision": "keep",
+      "why": "Quote matches the opening Highlights sentence character-for-character, part_ref 'mdna' is correct, occurs once (first sentence of the section). It is a stated consolidated point value ($501 million) with a stated point-shaped dollar decrease ($68 million) versus the prior-year quarter; no percent growth-basis unit is stated so OD-11 is not exercised, and $501M is a positive operating income, not a signed loss, so OD-12 does not apply.",
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Our operating income for the March 2026 quarter was $501 million, a decrease of $68 million compared to the March 2025 quarter.",
+        "raw_label_or_claim": "operating income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "The refinery generated an operating loss of $39 million in the March 2026 quarter compared to a loss of $1 million in the March 2025 quarter.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Strong losses_and_sign + slices_and_unknown_axes (segment:refinery) candidate, but no proposal needs replacing and this event's four kept rows are not defective; adding it would be adding a row merely because another lawful fact exists (Rule 1/Rule 8), not to fix a proposal or a coverage gap declared for this event."
+    },
+    {
+      "quote": "There have been no material changes from the risk factors described in our Form 10-K.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Bare boilerplate statement with no specific current source-flagged threat; a genuine negative_control candidate, but not raised by any proposal and no declared control-coverage gap for this event authorizes adding it this turn."
+    },
+    {
+      "quote": "Excluding mark-to-market adjustments on equity investments recognized in the March 2026 quarter, we project our annual effective tax rate for 2026 will be 23% to 25%.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Only genuine closed-range (point_range_floor_ceiling) and measurement_wording (excludes MTM adjustments) candidate in this event, unlike the four kept point-shaped rows; not added since no proposal required replacement and Rule 8/Instruction 3 bar adding rows in-event to reach hard-class coverage."
+    },
+    {
+      "quote": "Remuneration to American Express was $2.2 billion in the three months ended March 31, 2026, an increase of 10% compared to the prior year period.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A distinct real_item/sequential_comparison candidate (10% YoY change) separate from the highlights-section restatement of the same $2.2B figure; not raised by any proposal and not needed to correct one, so excluded per the representative-sampling scope."
+    },
+    {
+      "quote": "In January 2026, we entered into a definitive agreement with The Boeing Company to acquire 30 Boeing 787-10 aircraft, with an option to purchase up to an additional 30 of the same aircraft.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Action-type real_item with a stated ceiling ('up to an additional 30'); a plausible point_range_floor_ceiling candidate, but excluded since no proposal needs correcting and no coverage gap was declared for this event."
+    },
+    {
+      "quote": "In the June 2025 quarter, the Board of Directors authorized a $1.0 billion opportunistic share repurchase program open through June 30, 2028. No shares have been repurchased under this program through March 31, 2026.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Action/state real_item candidate (authorization amount, zero utilization to date); excluded, not needed to replace or repair any proposal in this event."
+    },
+    {
+      "quote": "the Board of Directors approved a quarterly dividend of $0.1875 per share which we paid on March 19, 2026 for total cash dividends of $129 million.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A NAME-13 total-vs-per-X illustration (per-share dividend amount is a different fact/name from the total-dollar dividend, per Rule 3 of the general rules); excluded this turn since not raised or required by any proposal."
+    },
+    {
+      "quote": "We expect this elevated jet fuel cost to continue until recent market disruptions and geopolitical events are resolved.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Forward-looking MD&A statement referencing only generic 'market disruptions and geopolitical events' with no specific, current, source-flagged threat named; fails the DU-11 strict at_risk specificity test, so correct treatment is omission, and it was excluded rather than added as any control."
+    }
+  ],
+  "open_issues": [],
+  "blocked": null
+}
+```

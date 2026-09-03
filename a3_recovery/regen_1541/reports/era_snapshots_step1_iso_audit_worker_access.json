@@ -1,0 +1,62 @@
+{
+  "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/step1_iso/.claude/plans/Drivers/experiments/harness/audit_worker_access.py",
+  "owner": "step1_iso/.claude/plans/Drivers/experiments/harness/audit_worker_access.py",
+  "aligned_by": "transcript event order and type",
+  "snapshots": [
+    {
+      "version": 1,
+      "backup": "044d899737302ac5@v1",
+      "kind": "delta",
+      "event_line": 2906,
+      "era_bytes": 4400,
+      "replay_bytes": 4400,
+      "era_sha256": "82ff15b901c628b376b911c5f755be6aad54e896b0c1d4e9eb695ba94a99a34e",
+      "replay_sha256": "82ff15b901c628b376b911c5f755be6aad54e896b0c1d4e9eb695ba94a99a34e",
+      "exact": true
+    },
+    {
+      "version": 2,
+      "backup": "044d899737302ac5@v2",
+      "kind": "snapshot",
+      "event_line": 3770,
+      "era_bytes": 20728,
+      "replay_bytes": 20728,
+      "era_sha256": "0032e129c265a68fd0b6d9dee5ed36d08f8ac8451e7c7e612a2c948fdf616dfe",
+      "replay_sha256": "0032e129c265a68fd0b6d9dee5ed36d08f8ac8451e7c7e612a2c948fdf616dfe",
+      "exact": true
+    },
+    {
+      "version": 3,
+      "backup": "044d899737302ac5@v3",
+      "kind": "snapshot",
+      "event_line": 4931,
+      "era_bytes": 33106,
+      "replay_bytes": 33106,
+      "era_sha256": "ff152dc117e2920d9650601288878b77dc0a2a8735c216a67b6d6c9e761a3230",
+      "replay_sha256": "ff152dc117e2920d9650601288878b77dc0a2a8735c216a67b6d6c9e761a3230",
+      "exact": true
+    },
+    {
+      "version": 4,
+      "backup": "044d899737302ac5@v4",
+      "kind": "snapshot",
+      "event_line": 5314,
+      "era_bytes": 36192,
+      "replay_bytes": 36192,
+      "era_sha256": "0983585cda8ca9acfa466508d969cb07d2956bef6b3747dc523cea6b31c161ec",
+      "replay_sha256": "0983585cda8ca9acfa466508d969cb07d2956bef6b3747dc523cea6b31c161ec",
+      "exact": true
+    },
+    {
+      "version": 5,
+      "backup": "044d899737302ac5@v5",
+      "kind": "snapshot",
+      "event_line": 13563,
+      "era_bytes": 47779,
+      "replay_bytes": 47779,
+      "era_sha256": "d242dbd689589e6d0be26ef84adde3bd0173942dbc346aec56847df9a2312940",
+      "replay_sha256": "d242dbd689589e6d0be26ef84adde3bd0173942dbc346aec56847df9a2312940",
+      "exact": true
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-25-105631#P000",
+      "decision": "keep",
+      "why": "Quote is an exact, unique match in mdna (the '39 weeks' off-premise-channel sentence, distinct from the separate 'third quarter' sentence stating the same ~21% figure). It is a real, non-boilerplate, source-stated channel-mix fact.",
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during both the first nine months of fiscal 2025 and fiscal 2024.",
+        "raw_label_or_claim": "off-premise channel",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-105631#P001",
+      "decision": "keep",
+      "why": "Quote is an exact, unique match in mdna. States a point level with a stated YoY (comparable prior-year quarter) percent change, i.e. a per-restaurant-operating-week (per-X) metric distinct from the co-stated total-dollar CCF Restaurants sales figure.",
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Average sales per restaurant operating week increased 0.4% to $231,971 in the third quarter of fiscal 2025 from $231,011 in the third quarter of fiscal 2024.",
+        "raw_label_or_claim": "Average sales per restaurant operating week",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-105631#P002",
+      "decision": "keep",
+      "why": "Quote is an exact, unique match in mdna. The clause describes a contingent/hypothetical accordion capacity ('could provide ... subject to certain conditions precedent') never exercised or confirmed here, structurally like the gate's hypothetical-boilerplate example ('may affect') despite naming a specific dollar figure; correct reader behavior is omission, so this is a negative_control, not a real_item.",
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The Revolver Facility contains a commitment increase feature that, subject to certain conditions precedent, could provide for an additional $200 million in revolving loan commitments.",
+        "raw_label_or_claim": "commitment increase feature",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-105631#P003",
+      "decision": "keep",
+      "why": "Quote is an exact, unique match in mdna (the '39 weeks' Flower Child sentence, distinct from the separate 'third quarter' Flower Child sentence). 'Flower Child' is an exact menu entry (segment:flowerchild), the stated point value carries a YoY comparison against the prior-year 39-week period.",
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Flower Child sales increased 30.9% to $139.8 million for the first nine months of fiscal 2025, compared to $106.8 million for the first nine months of fiscal 2024.",
+        "raw_label_or_claim": "Flower Child sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during both the third quarter of fiscal 2025 and fiscal 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same channel-mix fact (~21%) restated for the quarter period; P000 already carries the nine-month statement of the same claim. Adding this would not replace/correct a proposal or repair a declared coverage gap, so it is left out under the representative-selection scope rule."
+    },
+    {
+      "quote": "Flower Child sales increased 31.4% to $48.1 million for the third quarter of fiscal 2025, compared to $36.6 million for the third quarter of fiscal 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same Flower Child sales fact restated for the quarter period; P003 already carries the nine-month statement. Not needed to fix a proposal or repair coverage."
+    },
+    {
+      "quote": "Certain information included in this Form 10-Q and other materials we have filed or may file with the Securities and Exchange Commission (\u201cSEC\u201d), as well as information included in oral or written statements made by us or on our behalf, may contain forward-looking statements about our current and presently expected performance trends, growth plans, business goals and other matters.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking-statements/safe-harbor boilerplate; fails the DU-03/Rule-1 fact gate outright and has no discrete stated value worth locking as a control this turn; not raised by any proposal and not needed to repair coverage."
+    },
+    {
+      "quote": "Revenues increased 4.8% to $907.2 million for the fiscal quarter ended September 30, 2025 compared to $865.5 million for the comparable prior year period, primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real, lawful consolidated-revenue fact, but no proposal raised it and it is not required to replace/correct a proposal or repair declared coverage; excluded under the representative-selection scope rule (not a census)."
+    },
+    {
+      "quote": "A description of the risk factors associated with our business is contained in Part I, Item 1A, \u201cRisk Factors,\u201d of our Annual Report on Form 10-K for the fiscal year ended December 31, 2024 (\u201cAnnual Report\u201d) and Part II, \u201cPart II, Item 1A, Risk Factors\u201d in our Quarterly Report on Form 10-Q for the quarterly period ended April 1, 2025.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Pure cross-reference to prior filings; states no current fact of its own, purely a pointer, so it is not a candidate item at all."
+    },
+    {
+      "quote": "The Revolver Facility, which terminates on October 6, 2027, provides us with revolving loan commitments that total $400 million, of which $50 million may be used for issuances of letters of credit.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real, current, stated credit-facility fact (unlike the P002 hypothetical accordion clause), but not raised by any proposal and not needed to replace/correct one or repair declared coverage this turn."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the 'sequential_comparison' tag (crosswalked to OD-11) should be applied to plain year-over-year (dated-period default) growth facts like P001 and P003, or reserved only for genuine same-year quarter-over-quarter sequential comparisons.",
+      "why": "OD-11's own text covers the full growth-basis decision (percent_sequential vs percent_yoy vs unknown, including the dated-period YoY default), but the tag's plain name suggests only the sequential sub-case. This event contains only YoY comparisons (no true sequential quarter-over-quarter statements), so I tagged the YoY rows on the basis that they exercise OD-11's basis-determination rule; the crosswalk does not explicitly resolve whether that is the intended scope of the tag."
+    },
+    {
+      "what": "Whether every plain stated point-value numeric fact (e.g. P000's ~21%, P001's $231,971) should carry the 'point_range_floor_ceiling' tag, or whether the tag should be reserved for facts whose range/floor/ceiling shape determination is the salient tested feature.",
+      "why": "FINAL_DESIGN \u00a77.1 defines point as one of four self-describing shapes, so a plain point fact literally exercises that rule, but the authority does not state a granularity rule for which point facts are representative-worthy versus routine."
+    },
+    {
+      "what": "Whether a conditional/contingent contract clause carrying a specific dollar figure but describing an unexercised, condition-gated capacity (P002's Revolver 'commitment increase feature') is a negative_control (fails DU-03/Rule 1 as hypothetical) or could instead be a real_item describing a current, factual contractual right.",
+      "why": "The fact gate's own illustrative examples ('litigation could harm us', 'weather may affect results') are generic risk language; they do not directly address a specific, dollar-quantified, condition-gated capacity clause, so this classification is a reasoned judgment call rather than one the authority text settles outright."
+    }
+  ],
+  "blocked": null
+}
+```

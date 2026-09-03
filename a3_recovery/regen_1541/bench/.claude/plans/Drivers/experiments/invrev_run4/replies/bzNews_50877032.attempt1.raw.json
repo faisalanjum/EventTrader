@@ -1,0 +1,95 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_50877032#P000",
+      "decision": "replace",
+      "why": "The body sentence states the $1 billion investment/location/structure but omits the project's start timing. The teaser part, which precedes the body in source order, states the same investment fact plus the 2027 start date in one contiguous sentence. Per the first-complete-quote/fuse-before-collision rule, the earlier COMPLETE occurrence must be used instead of the later partial one, so the locator moves to the teaser.",
+      "row": {
+        "source_id": "bzNews_50877032",
+        "part_ref": "teaser",
+        "occurrence_in_part": null,
+        "quote": "American Airlines will invest $1 billion in Miami International Airport to build a new concourse D, with the project starting in 2027.",
+        "raw_label_or_claim": "invest $1 billion in Miami International Airport to build a new concourse D, with the project starting in 2027.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "bzNews_50877032#P001",
+      "decision": "exclude",
+      "why": "The 2027 groundbreaking timing this proposal quotes from the body is the same meaning already carried, contiguously and completely, inside the teaser-based row that now stands in for P000. Under Rule 4 (one distinct fact appears once, using the first complete quote), this later partial restatement does not create a second row.",
+      "row": null
+    },
+    {
+      "proposal_id": "bzNews_50877032#P002",
+      "decision": "keep",
+      "why": "Quote and locator match the body text exactly (single occurrence). This is Benzinga's own third-party 'Edge Rankings' analytics commentary, not a company-stated fact about a driver, so it correctly serves as a negative_control (generic/non-fact per DU-03/Rule 1).",
+      "row": {
+        "source_id": "bzNews_50877032",
+        "part_ref": "body",
+        "occurrence_in_part": null,
+        "quote": "Benzinga Edge Rankings show that American Airlines scores poorly on the Momentum and Growth metrics, but offers a positive price trend in the Long term.",
+        "raw_label_or_claim": "scores poorly on the Momentum and Growth metrics, but offers a positive price trend in the Long term.",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "bzNews_50877032#P003",
+      "decision": "keep",
+      "why": "Quote and locator match the body text exactly (single occurrence). This is generic industry/market commentary from the reporter about jet-fuel volatility and geopolitical tension, not a specific current adverse threat flagged by the company itself, so it fails the strict DU-11 at_risk bar and correctly serves as a negative_control (generic risk boilerplate, owner ruling 5).",
+      "row": {
+        "source_id": "bzNews_50877032",
+        "part_ref": "body",
+        "occurrence_in_part": null,
+        "quote": "Jet fuel costs are one of the most volatile expenses for the airline as uncertainty over crude oil prices continues to loom amid rising tensions between Washington and Tehran.",
+        "raw_label_or_claim": "Jet fuel costs are one of the most volatile expenses for the airline",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "American Airlines To Invest $1 Billion In Miami Airport Expansion To Accommodate Larger Aircraft",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Earlier-positioned restatement of the investment fact, but incomplete (no 2027 timing); superseded by the complete teaser occurrence per the first-complete-quote rule; not a separate row (Rule 4)."
+    },
+    {
+      "quote": "as well as boast 17 new gates.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "A real, source-stated fact (gate count) but no proposal raised it and selecting it is not needed to replace/correct a proposal or repair hard-class/control coverage; representative selection, not a census."
+    },
+    {
+      "quote": "AAL surged 1.29% to $13.32 at Market close on Wednesday, and further surged 0.08% to 13.33 during the overnight trading session.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Market/stock-price data; not a company-stated driver fact and not needed to repair any proposal or coverage."
+    },
+    {
+      "quote": "American Airlines recently recorded a dip in its stock price as rising crude oil prices proved to be a headwind for the flight operator.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Attributes a stock-price move to a cause; stock-move attribution (EXPLAINED_BY) never enters the fact gate, so this is not eligible as a real_item; not proposed and not needed to repair coverage."
+    },
+    {
+      "quote": "The Department of Homeland Security (DHS) had earlier suspended the Transportation Security Administration 's (TSA) PreCheck and Global Entry programs as it deals with a lack of funding amid the ongoing partial government shutdown.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Unrelated regulatory/macro news bundled into the article; not a fact about American Airlines' own driver (state/change/surprise/guidance/action)."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The given text_parts order is [title, teaser, body]. I treated this as true source/reading order (standard article structure) to decide which occurrence of the investment fact is 'first' and 'complete' for the fuse rule.",
+      "why": "The authority does not explicitly state that the supplied text_parts array order is the canonical source order for the first-complete-quote rule; I made the ordinary-article-structure assumption rather than inventing a new rule, but flag it since it drove a replace decision."
+    }
+  ],
+  "blocked": null
+}
+```

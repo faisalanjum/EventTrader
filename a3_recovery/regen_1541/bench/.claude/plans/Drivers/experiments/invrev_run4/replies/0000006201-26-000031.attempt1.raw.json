@@ -1,0 +1,206 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "verdicts": [
+    {
+      "proposal_id": "0000006201-26-000031#P000",
+      "decision": "keep",
+      "why": "Quote is an exact, unique, contiguous substring of exhibit_99_1; it is a single self-contained forward-guidance fact (Q2 total revenue growth range) with its own label inside the quote.",
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+        "raw_label_or_claim": "total revenue growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P001",
+      "decision": "keep",
+      "why": "Quote is exact, unique, and self-contained (label + current value + prior-year comparison + derived percent) from the non-GAAP reconciliation table.",
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net loss excluding net special items $ (267) $ (386) (30.8%)",
+        "raw_label_or_claim": "Net loss excluding net special items",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P002",
+      "decision": "replace",
+      "why": "The proposed quote fuses three distinct facts under one label-less span: (1) total unit revenue +7.6% YoY, (2) a numberless monthly-sequential narrative, and (3) two separate geography facts (March domestic and international passenger unit revenue each up more than 10% YoY). Distinct facts must not share one row. Narrowed to the first complete, minimal, self-contained fact (total unit revenue YoY change); the fused sub-facts are logged under exclusions_considered.",
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total unit revenue was 7.6% higher year over year",
+        "raw_label_or_claim": "Total unit revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P003",
+      "decision": "keep",
+      "why": "Quote is exact and unique (only occurrence with these paired values 17.35/16.30/6.5%, distinguishing it from the per-region tables with different values). Per-ASM is a stated physical per-X denominator, a fact distinct from the total-dollar passenger revenue figure.",
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Passenger revenue per ASM (cents) 17.35 16.30 6.5 %",
+        "raw_label_or_claim": "Passenger revenue per ASM (cents)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P004",
+      "decision": "exclude",
+      "why": "Same fact as the row kept for P000 (Q2 2026 total revenue growth guidance, identical range 13.5%-16.5%, identical period/scope/measurement/state). Rule: one distinct fact appears once, using the first complete supporting quote in source order; the earlier narrative occurrence (P000) governs, this later table restatement is a duplicate, not a second row.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P005",
+      "decision": "replace",
+      "why": "The proposed quote fuses two distinct facts: (a) record Q1 revenue of $13.9 billion (a level fact, more completely and separately captured elsewhere by the income-statement Total operating revenues line, added below), and (b) the $320 million winter-storm revenue impact. Narrowed to the distinct, non-duplicate fact using its minimal complete quote.",
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "an estimated $320 million revenue impact from winter storms",
+        "raw_label_or_claim": "revenue impact from winter storms",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P006",
+      "decision": "keep",
+      "why": "Quote is exact, unique, and self-contained: a specific, source-stated (CEO-attributed) numberless full-year profitability outlook with its conditions clause intact.",
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "we still anticipate modest profitability for the year assuming the current forward fuel curve",
+        "raw_label_or_claim": "modest profitability for the year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total operating revenues 13,912 12,551 10.8",
+        "raw_label_or_claim": "Total operating revenues",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "Repairs an event-coverage gap: no proposal captured the event's single most prominent financial fact, total quarterly revenue. Earlier mentions ($13.9 billion in the headline bullet and narrative) each lack the paired prior-year comparator, so per the first-complete-quote rule the income-statement line (level + prior-year value + percent together) is the correct kept occurrence."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "American\u2019s domestic, Pacific and Atlantic entities delivered positive unit revenue growth year over year, with Atlantic passenger unit revenue up 16.7%.",
+        "raw_label_or_claim": "Atlantic passenger unit revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "sequential_comparison"]
+      },
+      "why": "Repairs hard-class coverage: none of the 7 proposals touched any slice fact despite this event containing rich geography/segment breakdowns. This is the cleanest single quantified geography-slice fact (Atlantic), with the YoY basis clause included for a complete quote."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net loss $ (382) $ (473) (19.2)",
+        "raw_label_or_claim": "Net loss",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "sequential_comparison"]
+      },
+      "why": "Repairs an event-coverage gap: no proposal captured the headline GAAP net loss (only the non-GAAP-adjusted net loss was proposed, via P001). The income-statement line is the first occurrence pairing level, prior-year comparison and percent change together; earlier bullet/prose mentions of the $382 million figure lack the paired comparator."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "improving sequentially each month in the quarter",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Distinct numberless narrative fact fused inside the original P002 sentence; real but not independently selected under representative (non-exhaustive) sampling, already adjacent to the kept total-unit-revenue row."
+    },
+    {
+      "quote": "culminating with March domestic and international passenger unit revenue both up more than 10% year over year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Two distinct geography-slice facts (domestic vs international, floor shape 'more than 10%') fused by grammar with the P002 sentence; not selected given the Atlantic slice addition already repairs slice coverage and the event's representative budget."
+    },
+    {
+      "quote": "Adjusted earnings (loss) per diluted share3 ($0.20) to $0.20",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Duplicate table restatement of the Q2 adjusted EPS guidance range already stated earlier in prose ('Second-quarter adjusted EPS3 expected to be between ($0.20) and $0.20'); one-fact-one-row rule, not independently selected."
+    },
+    {
+      "quote": "FY 2026E Adjusted earnings (loss) per diluted share3 ($0.40) to $1.10",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, distinct full-year adjusted EPS guidance range; lawful candidate but not selected within the representative (non-exhaustive) budget for this event."
+    },
+    {
+      "quote": "CASM excluding net special items, fuel and profit sharing4 Up 2.0% to 4.0%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, distinct Q2 unit-cost guidance range with a measurement qualifier; lawful candidate but not selected within the representative budget."
+    },
+    {
+      "quote": "downturns in economic conditions could adversely affect our business",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking risk boilerplate (fails DU-03/Rule-1) - a candidate negative_control, but no proposal targeted this area and no declared coverage gap directed a control addition here this turn; left for the aggregating stage."
+    },
+    {
+      "quote": "managed corporate revenue increasing 13% year over year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, distinct fact (corporate-channel revenue growth); not selected within the representative budget."
+    },
+    {
+      "quote": "record enrollments in the first quarter, up 25% year over year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, distinct loyalty-program fact; not selected within the representative budget."
+    },
+    {
+      "quote": "Basic and diluted $ (0.58) $ (0.72)",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Per-diluted-share companion to the added GAAP net loss row (Total-vs-Per-X rule makes it a separate fact); real candidate but not separately selected within the representative budget for this event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the point_range_floor_ceiling tag is meant to apply to every single-value ('point') numeric fact (since 'point' is one of the four self-describing shapes in the owning rule) or only to genuinely range/floor/ceiling-shaped facts.",
+      "why": "The owning rule text defines point/range/floor/ceiling as coequal outcomes, but tagging every plain point value would make the tag trivially universal. I applied it in this event only where the source states an explicit multi-bound or single-bound (floor/ceiling) numeric expression, leaving plain point values untagged; this is an unresolved interpretive choice, not a settled rule."
+    },
+    {
+      "what": "Whether this per-event reconciliation turn may add lawful_abstention_control / negative_control rows opportunistically when good candidates exist in the source but no proposal or declared coverage gap calls for one in this event.",
+      "why": "This event contains a strong negative_control candidate (the generic forward-looking risk-boilerplate paragraph) and no clear lawful_abstention_control candidate; the task text restricts additions to correcting proposals or repairing declared coverage, and no such declaration was supplied for controls in this event, so none were added."
+    },
+    {
+      "what": "Whether a per-share (per-X) companion to a co-stated total-dollar fact (e.g., GAAP diluted loss per share alongside the added GAAP net loss row) must be captured as its own row within the same event, or may be left unselected under representative (non-exhaustive) sampling.",
+      "why": "Rule 3 (Total vs Per-X) makes these permanently separate facts/rows when eventually included, but does not state that every event must select both forms; I left the per-share versions unselected here and flag the choice rather than assume it."
+    }
+  ],
+  "blocked": null
+}
+```

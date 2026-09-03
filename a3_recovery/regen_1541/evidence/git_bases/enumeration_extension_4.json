@@ -1,0 +1,23 @@
+{
+ "show_objects": [
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/agents/lean-probe.md",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/exp5_prompt_drafter.md",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/exp5_prompt_producer.md",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/exp5_rev4_package.md",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/launch_exp5_readers.manifest.json",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.template.js",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.workflow.js",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.workflow.template.js",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/run_launcher_fake.mjs",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/step1_inventory.json",
+  "929d6ed05acd6de66118407bd35aaef50a4988b6:.claude/plans/Drivers/experiments/harness/test_g_suite.py",
+  "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc:.claude/plans/Drivers/experiments/harness/exp5_prompt_contract.manifest.json",
+  "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc:.claude/plans/Drivers/experiments/harness/exp5_prompt_drafter.md",
+  "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc:.claude/plans/Drivers/experiments/harness/exp5_prompt_producer.md",
+  "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc:.claude/plans/Drivers/experiments/harness/launch_exp5_readers.manifest.json",
+  "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc:.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.manifest.json",
+  "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc:.claude/plans/Drivers/experiments/harness/launch_kfields_drafts.workflow.js",
+  "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc:.claude/plans/Drivers/experiments/harness/rev4_pin_inventory.md"
+ ]
+}

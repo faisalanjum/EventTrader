@@ -1,0 +1,770 @@
+{
+  "total": 109,
+  "killed": 109,
+  "survived": 0,
+  "cases": [
+    {
+      "case": "a pre-loaded bench module answers a replayed import",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an unmapped /tmp read is covered",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a schema-invalid attempt is counted as valid",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the raw prefilter misses a JSON-escaped script path",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a cut-short program always loses its write",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a stdin program keeps the synthetic argv",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the pre-filter never reads an executed script",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a sed after a cd names its file from the record start",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an in-place sed is not a route",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the sed file token keeps its quotes",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a join-form write is not a write",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a program's argument is not bound",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a replayed program sleeps real time",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a stat miss on a mount is not recorded",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the seed-tree climb never stops at the root",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a lookup is answered by a suffix match",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a bare exception class never matches",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a -c program runs to the line's last quote",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the active owner text ignores the cutoff",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a seeded tree starts from the bare commit",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an append is not a write",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a command without cd stood nowhere",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a re-entrant read ignores its cutoff",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a rejected tool call is replayed",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a -c line inside a heredoc body is a program",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "assignments on one line are not shell variables",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a nested program evicts an outer import",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a record's own sibling write stays stale",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a background record is judged by its launch notice",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a dot-dot path is a different directory",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an import root is where the command ended",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "import roots stay relative",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a program stands in the census directory",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a tree named through a variable has no origin",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "glob walks the live box",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a namespace package is not served",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a filesystem question about the side table answers from the live box",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a bare relative name matches any owner of that basename",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an import only the live filesystem provides is served",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a path outside the package counts as inside",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an executed script gets no arguments",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a bare filename matches the repository root copy",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an empty module source is absence",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "checkpoint tuple binds cutoff",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "signer prompt bound in full",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "signer chain bound",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "after-state measured after open, not after read",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a null in a required field is accepted",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a generic failure keyword stands in for the exact exception",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the prefix digest is not compared",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the cache key ignores the input identity",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a failed resume is clean",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the cache guard clears before refilling",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "sibling write mode still truncates",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "write mode still truncates",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a missing product still fails closed",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "owner append keeps its text",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "sibling append keeps its text",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the shim steps aside for its own reads",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a recovered body must match its digest",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "resume agrees with the past route",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "wrong tree",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "wrong cwd for a relative name",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "sed line insertion",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "grep-guarded sed is idempotent",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "no final newline",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "backup and restore is net zero",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "multi-file saved program",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "canonical-path alias cycle",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a file's text is not a path",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "out-of-range line insert",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "empty-file line insert",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "per-line substitution",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "guard reads the named file",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "sed command order",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": ".bak preserved for restore",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "shell termination",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "executed-script closure",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "path built inside the open call",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "git show produces its redirect target",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "absolute destination names its tree",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "binary read yields bytes",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "result found by its tool_use_id",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a cd names the tree",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "text inside a program is not a write",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "only owning processes run",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "termination decided first",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "script cached per cutoff",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an empty result is present",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "ledger accounts for every row",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "child audit crosses the boundary",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "package manifest compares content",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "heredoc opening line continues",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a module import is served",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an unknown module is not invented",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a recovered artefact has an era",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an era-less fallback may not fill a pre-series window",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a tree sibling is not a producer",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the product check is real",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a wrong product is rejected",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "termination precedes execution",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an absent result is not completed",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the two facts do not collapse",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the report lists every call state",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a history failure is not completed",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "finalization requires a completed call",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a populated call-state line is not omitted",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "owner lists exclude producer rows",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a missing pin is not correct",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    }
+  ]
+}

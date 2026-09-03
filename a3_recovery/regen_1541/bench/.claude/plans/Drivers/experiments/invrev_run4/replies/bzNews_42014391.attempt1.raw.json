@@ -1,0 +1,58 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_42014391#P000",
+      "decision": "keep",
+      "why": "Quote and locator are correct: it occurs exactly once, character-for-character, in the body part. It is a specific, source-stated, non-boilerplate company action (a $100M spending commitment tied to advertising/franchisee support), not generic boilerplate, so it passes the fact gate as real_item. The $100 million figure is a single point value.",
+      "row": {
+        "source_id": "bzNews_42014391",
+        "part_ref": "body",
+        "occurrence_in_part": null,
+        "quote": "McDonald's Corp. is spending $100 million in an effort to revive sales and support franchisees",
+        "raw_label_or_claim": "spending $100 million in an effort to revive sales and support franchisees",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "bzNews_42014391#P001",
+      "decision": "keep",
+      "why": "Quote and locator are correct: it occurs exactly once, character-for-character, in the title part. It states a specific, current, source-flagged adverse threat (an outbreak sickening a stated count of people across a stated count of states) rather than generic risk boilerplate, so under DU-11 it is a real_item (at_risk-type fact). 'More than 100' is an open floor shape (low-only), so it exercises the number-shape rule.",
+      "row": {
+        "source_id": "bzNews_42014391",
+        "part_ref": "title",
+        "occurrence_in_part": null,
+        "quote": "More Than 100 In 14 States Were Sickened By The Outbreak",
+        "raw_label_or_claim": "More Than 100 In 14 States Were Sickened By The Outbreak",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "McDonald&#39;s Corp. is spending $100 million in an effort to revive sales and support franchisees",
+      "part_ref": "teaser",
+      "occurrence_in_part": null,
+      "why": "Same fact as the kept body row, restated in a truncated form (cuts off mid-sentence at 'after a severe', omitting the outbreak cause). Under the within-event fuse-before-collision / first-complete-quote rule, the body occurrence is the complete supporting quote; this partial teaser restatement does not create a second row."
+    },
+    {
+      "quote": "McDonald's To Spend $100M To Move Past E. Coli Outbreak",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Headline restatement of the same $100M spending fact captured in the body row (same value, same action); no additional distinct meaning, scope, or value is stated here, so it fuses with the kept row rather than creating a new one."
+    },
+    {
+      "quote": "Company Is Boosting Advertising And Supporting Franchisees",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Describes the same $100M action's purpose (advertising plus franchisee support) already captured in the kept body row ('revive sales and support franchisees'). No separate dollar amount is stated per purpose, so there is no distinguishing value to split into a second fact; it fuses with the kept row."
+    }
+  ],
+  "open_issues": [],
+  "blocked": null
+}
+```

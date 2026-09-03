@@ -1,0 +1,140 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "verdicts": [
+    {
+      "proposal_id": "0000006201-26-000032#P000",
+      "decision": "keep",
+      "why": "Quote and locator are byte-exact and unique in mdna. The quote states two distinct Driver facts (pre-tax loss and net loss) sharing one contiguous span; this row is assigned to the pre-tax loss fact (first-labeled), the net loss fact is added separately per the split rule (instr. 5 / general rule 2).",
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Pre-tax loss and net loss were $476 million and $382 million, respectively, in the first quarter of 2026. This compares to first quarter of 2025 pre-tax loss and net loss of $648 million and $473 million, respectively.",
+        "raw_label_or_claim": "Pre-tax loss",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P001",
+      "decision": "keep",
+      "why": "Quote and locator are byte-exact and unique in mdna; a point CASM value with an explicit YoY percent increase framed 'from the first quarter of 2025' (OD-11 default YoY basis).",
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025.",
+        "raw_label_or_claim": "total operating cost per available seat mile (CASM)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P002",
+      "decision": "keep",
+      "why": "Quote and locator are byte-exact and unique in mdna; a point revenue value with an explicit YoY percent increase framed 'from the first quarter of 2025'.",
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In the first quarter of 2026, we reported total operating revenues of $13.9 billion, an increase of $1.4 billion, or 10.8%, from the first quarter of 2025.",
+        "raw_label_or_claim": "total operating revenues",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P003",
+      "decision": "keep",
+      "why": "Quote and locator are byte-exact and unique in mdna. This is a generic, non-quantified forward-financing-intent statement with no specific instrument, amount or timeframe; it fails DU-03/Rule 1 as boilerplate, so it is retained as a negative control (correct reader behavior = omission).",
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "We intend to finance future aircraft deliveries and option exercises using long-term debt.",
+        "raw_label_or_claim": "finance future aircraft deliveries and option exercises using long-term debt",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P004",
+      "decision": "keep",
+      "why": "Quote and locator are byte-exact and unique in mdna. This is generic reassurance language (covenant compliance confirmation, no specific adverse threat, no covenant identified), failing DU-03/Rule 1 as boilerplate; retained as a negative control.",
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "As of the most recent applicable measurement dates, we were in compliance with each of the foregoing covenants.",
+        "raw_label_or_claim": "in compliance with each of the foregoing covenants",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Pre-tax loss and net loss were $476 million and $382 million, respectively, in the first quarter of 2026. This compares to first quarter of 2025 pre-tax loss and net loss of $648 million and $473 million, respectively.",
+        "raw_label_or_claim": "net loss",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "P000's quote bundles two distinct Driver facts (pre-tax loss and net loss) under one grammatically forced shared span. Per instr. 5 and general rule 2, distinct facts split into separate rows even sharing an identical quote when labels differ; this row completes the pair the proposal only partially represented."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "market spot prices ranging from a low of approximately $1.86 per gallon to a high of approximately $4.75 per gallon during the first quarter of 2026",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Genuine closed-range fuel-price fact (point_range_floor_ceiling candidate), but no proposal raised it and it is not needed to replace/correct a proposal in this event; representative-selection scope (general rule 1) leaves it out this turn."
+    },
+    {
+      "quote": "There have been no material changes in our risk factors as previously disclosed in Part I, Item 1A in our 2025 Form 10-K.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Bare boilerplate non-fact; negative-control coverage for this event already supplied by P003/P004, so not added merely because another lawful negative-control candidate exists."
+    },
+    {
+      "quote": "There have been no material changes in our off-balance sheet arrangements as discussed in our 2025 Form 10-K.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Bare boilerplate non-fact; same reasoning as the risk-factors boilerplate above."
+    },
+    {
+      "quote": "Litigation reserve adjustments $ 12 $ 30",
+      "part_ref": "mdna",
+      "occurrence_in_part": 0,
+      "why": "A real, specific candidate fact (litigation reserve adjustment amounts), but not raised by any proposal and not needed to repair a proposal or declared coverage in this single-event turn."
+    },
+    {
+      "quote": "CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Genuine measurement-wording (non-GAAP CASM variant) candidate, but not raised by any proposal; not added per representative-selection scope (general rule 1)."
+    },
+    {
+      "quote": "prepaid in full $1.0 billion of the outstanding principal amount of the 8.50% senior secured notes",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real financing-action fact among several in the bullet list, but not raised by any proposal; representative selection does not require enumerating every action in the list."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Scope of the sequential_comparison tag: whether it applies only to true quarter-over-quarter (sequential-period) comparisons, or to any OD-11 growth-basis determination including the YoY default this event exclusively exhibits (all comparisons here are Q1 2026 vs Q1 2025).",
+      "why": "The crosswalk maps the tag name 'sequential comparisons' to OD-11 as a whole, and OD-11 governs YoY-default determination too, so I tagged explicit YoY percent-growth facts (P001, P002) with sequential_comparison; the authority does not explicitly confirm this reading, and this event has no genuine sequential-period (quarter-over-quarter) comparison to test the distinction directly."
+    },
+    {
+      "what": "How to allocate an unlabeled multi-fact proposal (P000) between a kept row and a companion addition.",
+      "why": "Proposals carry no label; P000's single quote supports two distinct facts (pre-tax loss, net loss) with no textual signal of which one the proposal intended. I kept the proposal for pre-tax loss and added net loss separately, but the authority does not state a rule for this allocation choice."
+    }
+  ],
+  "blocked": null
+}
+```
