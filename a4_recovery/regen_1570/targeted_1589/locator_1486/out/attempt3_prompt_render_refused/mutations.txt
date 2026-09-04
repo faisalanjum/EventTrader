@@ -1,0 +1,222 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.10, pytest-9.0.2, pluggy-1.6.0
+rootdir: /home/faisal/EventMarketDB-driver-recovery
+configfile: pytest.ini
+plugins: Faker-40.1.0, langsmith-0.4.8, anyio-4.9.0
+collected 14 items
+
+../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py EEEEEEEEEEEEEE
+
+==================================== ERRORS ====================================
+_____ ERROR at setup of test_lawful_control_reproduces_both_target_hashes ______
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_______________ ERROR at setup of test_population_196_rechecked ________________
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+________ ERROR at setup of test_mutation_refuses_or_misses_target[role] ________
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+__ ERROR at setup of test_mutation_refuses_or_misses_target[contract_suffix] ___
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_____ ERROR at setup of test_mutation_refuses_or_misses_target[packet_id] ______
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_ ERROR at setup of test_mutation_refuses_or_misses_target[packet_prompt_sha256] _
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_ ERROR at setup of test_mutation_refuses_or_misses_target[packet_prompt_chars] _
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+___ ERROR at setup of test_mutation_refuses_or_misses_target[arms_ids_only] ____
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_ ERROR at setup of test_mutation_refuses_or_misses_target[arms_missing_field] _
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_____ ERROR at setup of test_mutation_refuses_or_misses_target[arms_order] _____
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_ ERROR at setup of test_mutation_refuses_or_misses_target[capacity_prompt_chars_max] _
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_ ERROR at setup of test_mutation_refuses_or_misses_target[capacity_prompt_utf8_bytes_max] _
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+_ ERROR at setup of test_mutation_refuses_or_misses_target[manifest_identity] __
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+__ ERROR at setup of test_mutation_refuses_or_misses_target[freeze_identity] ___
+
+    @pytest.fixture(scope="module")
+    def world():
+        import recovery_adapter as A
+        A.derive_pointers()
+        A.derive_a1_plan()
+>       assert A.a3_proof() == []
+E       assert ['primary aud...d bytes', ...] == []
+E         
+E         Left contains 788 more items, first extra item: "primary audit: wf_f8de0038-c86.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:19: AssertionError
+=========================== short test summary info ============================
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_lawful_control_reproduces_both_target_hashes
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_population_196_rechecked
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[role]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[contract_suffix]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[packet_id]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[packet_prompt_sha256]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[packet_prompt_chars]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[arms_ids_only]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[arms_missing_field]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[arms_order]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[capacity_prompt_chars_max]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[capacity_prompt_utf8_bytes_max]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[manifest_identity]
+ERROR ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_mutation_refuses_or_misses_target[freeze_identity]
+============================== 14 errors in 0.78s ==============================

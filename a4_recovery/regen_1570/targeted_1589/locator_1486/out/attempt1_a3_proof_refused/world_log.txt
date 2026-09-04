@@ -1,0 +1,22 @@
+projected 3063 files at their historical paths
+== RED 15:43:52
+RED: the owner REFUSED the old projection: RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'primary finalization: the finalization was written against different plan bytes than the ones live now', 'the primary proves 0 of the canonical 392 A3 answers']
+red rc=0
+== GREEN 15:43:53
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 345, in tasks
+    items = _items()
+            ^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 74, in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_key.py", line 642, in phase1_items
+    raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'primary finalization: the finalization was written against different plan bytes than the ones live now', 'the primary proves 0 of the canonical 392 A3 answers']
+green rc=1
+== TESTS 15:43:53
+0
+=========================== short test summary info ============================
+FAILED ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_lawful_control_reproduces_both_target_hashes
+========================= 1 failed, 13 passed in 0.90s =========================
+tests rc=1
+== DONE 15:43:54 red=0 green=1 tests=1

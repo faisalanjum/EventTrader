@@ -1,0 +1,9 @@
+{
+ "_recovered": "only the observed capacity the locator audit reports",
+ "counts": {
+  "capacity": {
+   "prompt_chars_max": 237234,
+   "prompt_utf8_bytes_max": 237640
+  }
+ }
+}

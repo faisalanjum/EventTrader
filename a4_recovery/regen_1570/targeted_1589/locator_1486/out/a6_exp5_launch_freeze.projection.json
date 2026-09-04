@@ -1,0 +1,9 @@
+{
+ "_projection": "USED-FIELD PROJECTION of the absent /tmp/a7_a6_freeze_1479/a6_exp5_launch_freeze.json (Codex SEQ 1592 item 2); NOT the original file",
+ "counts": {
+  "capacity": {
+   "prompt_chars_max": 235419,
+   "prompt_utf8_bytes_max": 235749
+  }
+ }
+}

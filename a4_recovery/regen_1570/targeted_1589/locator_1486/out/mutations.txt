@@ -1,0 +1,22 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.10, pytest-9.0.2, pluggy-1.6.0
+rootdir: /home/faisal/EventMarketDB-driver-recovery
+configfile: pytest.ini
+plugins: Faker-40.1.0, langsmith-0.4.8, anyio-4.9.0
+collected 14 items
+
+../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py ..MUTATION role -> ('REFUSED', 'AssertionError: 0000006201-26-000031#000')
+.MUTATION contract_suffix -> ('REFUSED', 'AssertionError: 0000006201-26-000031#000')
+.MUTATION packet_id -> ('REFUSED', "KeyError: '0000006201-26-000031#000x'")
+.MUTATION packet_prompt_sha256 -> ('REFUSED', 'AssertionError: 0000006201-26-000031#000')
+.MUTATION packet_prompt_chars -> ('57306babb5af68c480619d577637eb5605c8926c61eadc3351c1b9131478da41', 'b83a3a7dcc1e961788d2a8d32ea14ee7d3df4e0419dc56cc53ff75549680b97e')
+.MUTATION arms_ids_only -> ('389f6ff076238d86d3983246f122343fe5d65f3cfa34c487194eeb738a4eed9f', '56fd87f713e171f8fc91f1ae0700422a34f38fa39c4578b158911fbd7058ea8b')
+.MUTATION arms_missing_field -> ('6aa50feeb1dabdf6e38e760a03272a79934d7d7a61b9a10423e18a512dfda304', '219fafc16823a960ed0779089e5b6cb1d29f37ff991c968fe5ae5f4e8a8a7396')
+.MUTATION arms_order -> ('0d57e56eb03d48b1920caa04c4b85d2908b966a5112738b065a60acb2d397850', 'caeb24b9b4dbe12905356e580d55879dedebe0bc34af1654037f461a942c8f7a')
+.MUTATION capacity_prompt_chars_max -> ('0d4babeeb752a383200b92e57b2140c75b4e1e8cbab5c131c2d4e60856ceaf41', '3448e0f8db2f38f12371e22467c8565bd3e1e874524a1bb8ad60fafda129b1e9')
+.MUTATION capacity_prompt_utf8_bytes_max -> ('b516ede2d6d2fdd4dc4773586b2e17c47bacd755c605d18dc6fae3441a14ece1', '51c5b79a1d6dd548b0b92b8a5ccdbf2c10c66783a5ef6c6a2e2566b24cb9b4f9')
+.MUTATION manifest_identity -> ('287f09794deb1ce70db3eb87d5378cdbcb8c4eba30844e29263a6fde27367fcc', 'b76ad96a4307892a39b18d7f2a39a895b3bdf29d31204b9d8c76a49c72a247bf')
+.MUTATION freeze_identity -> ('cc1984afeef7ed52b45e04e8a1b51acffcbae370a556bf5164b62c9e44d715ac', '98a1b687835adef44594992a377fe8e3ee57abda2ba35d9f449c04dd60680e2e')
+.
+
+============================= 14 passed in 37.37s ==============================

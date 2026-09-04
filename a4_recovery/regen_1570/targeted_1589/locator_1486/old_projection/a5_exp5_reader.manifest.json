@@ -1,0 +1,987 @@
+{
+ "_recovered": "only the fields the locator audit reads; the audit re-renders every prompt and asserts these hashes, so they cannot be wrong",
+ "prompt_role": "producer",
+ "contract_suffix": ".v3",
+ "packets": [
+  {
+   "packet_id": "0000006201-26-000031#000",
+   "prompt_sha256": "a9484ce45f2feac46f5dde98077c7dc4de6411266043cdc64a51f21eb1b32821",
+   "prompt_chars": 72256
+  },
+  {
+   "packet_id": "0000006201-26-000031#001",
+   "prompt_sha256": "4bb3af1f0d8f98779a622af13143f39c5d625142541bb35c369cd513539e5afa",
+   "prompt_chars": 72249
+  },
+  {
+   "packet_id": "0000006201-26-000031#002",
+   "prompt_sha256": "2a700a466563197a8e0b4efd574151c72bf8a315908fb94ed40491df3e0a15e4",
+   "prompt_chars": 72220
+  },
+  {
+   "packet_id": "0000006201-26-000031#003",
+   "prompt_sha256": "0ba8c5de43a920607e9fdc40ec1f3025206660fedea300d3cfbc282b1049fd68",
+   "prompt_chars": 72237
+  },
+  {
+   "packet_id": "0000006201-26-000031#004",
+   "prompt_sha256": "d97e8c40e4d45160f56014c321ced1f5e12b6644f5cd0e0912544a69c18004e3",
+   "prompt_chars": 72245
+  },
+  {
+   "packet_id": "0000006201-26-000031#005",
+   "prompt_sha256": "2e0bbd608b5e28df77a8ee3af7110e1c90fc06b243068028b9d1fbd116f61560",
+   "prompt_chars": 72279
+  },
+  {
+   "packet_id": "0000006201-26-000031#006",
+   "prompt_sha256": "2d802cc664e8aa3633dd827b2dd477a58fe752c90dc5b6ae9e6fbf540610a6e9",
+   "prompt_chars": 72220
+  },
+  {
+   "packet_id": "0000006201-26-000031#007",
+   "prompt_sha256": "ea42131ec0c3109ad60d4fb5309f5cdc9e76675f1c4578802bbc49d85ab92996",
+   "prompt_chars": 72341
+  },
+  {
+   "packet_id": "0000006201-26-000031#008",
+   "prompt_sha256": "52ab47b0c75beef0581ccf691b53dbb40e02050311e58493d46455113bac87c4",
+   "prompt_chars": 72192
+  },
+  {
+   "packet_id": "0000006201-26-000032#009",
+   "prompt_sha256": "8cbccd327aaadae0ce4eee0a803a15f3c2dea2fce58d02ae9c9c714d1c1cae38",
+   "prompt_chars": 82271
+  },
+  {
+   "packet_id": "0000006201-26-000032#010",
+   "prompt_sha256": "3266052e8fb106a0239d686d5cda270abe083954a5f23a310bb5dc8138c28a30",
+   "prompt_chars": 82250
+  },
+  {
+   "packet_id": "0000006201-26-000032#011",
+   "prompt_sha256": "20743b6bb00fc38fe52a73a2ed1139c3532ef0450c7d0c81b5812ef3bbbeedcb",
+   "prompt_chars": 82220
+  },
+  {
+   "packet_id": "0000006201-26-000032#012",
+   "prompt_sha256": "679f0f5b18e5eb9e51a36b179d3f0e3e6ec3e0be78779d3964a5133c7b0bc332",
+   "prompt_chars": 82207
+  },
+  {
+   "packet_id": "0000006201-26-000032#013",
+   "prompt_sha256": "4e2dcef8ffc79ef0ae1d1dabb364acceed001705e94f08b09a90ebc5521a1bbe",
+   "prompt_chars": 82202
+  },
+  {
+   "packet_id": "0000006201-26-000032#014",
+   "prompt_sha256": "c35c914d60a1571806f67cb3ea1216c5460e0189635659f4c29b2543d4720342",
+   "prompt_chars": 82267
+  },
+  {
+   "packet_id": "0000027904-26-000013#015",
+   "prompt_sha256": "8d09abb1296eef50db1d91f57acc6ca597b9c0e1e4e87f53bdd22fa245de7a1d",
+   "prompt_chars": 217356
+  },
+  {
+   "packet_id": "0000027904-26-000013#016",
+   "prompt_sha256": "52af4aab269e80d3daccc3d015fe9729efa12d80ab0473a1f11cf28e6939ed96",
+   "prompt_chars": 217439
+  },
+  {
+   "packet_id": "0000027904-26-000013#017",
+   "prompt_sha256": "a8cbf2a4c1afeb6738d8ecbacfb575d02b2237fd3b030b51c763d843d6ffa899",
+   "prompt_chars": 217359
+  },
+  {
+   "packet_id": "0000027904-26-000013#018",
+   "prompt_sha256": "867b92327ab27b920d794d3bec8b79c85c3486cb3d6b5126e520be7c7b32bcb0",
+   "prompt_chars": 217465
+  },
+  {
+   "packet_id": "0000027904-26-000013#019",
+   "prompt_sha256": "4454a46592486f99e67788b94dd688830ed94dc46766d33afa1a75c014000561",
+   "prompt_chars": 217377
+  },
+  {
+   "packet_id": "0000027904-26-000013#020",
+   "prompt_sha256": "3d9968a0b79676270599735db5963c6c3e16818c01e02f5845f08934c364acde",
+   "prompt_chars": 217417
+  },
+  {
+   "packet_id": "0000027904-26-000013#021",
+   "prompt_sha256": "97e0e9b22fdd619bfb318ee19a1bbb7d4dfb1bff1150480484abea5f904cdf4f",
+   "prompt_chars": 217478
+  },
+  {
+   "packet_id": "0000027904-26-000013#022",
+   "prompt_sha256": "31aa2becdc5f09bb0375f7206fbbd47c21b7ca8a2e43e19fa71b870bd008591a",
+   "prompt_chars": 217458
+  },
+  {
+   "packet_id": "0000027904-26-000013#023",
+   "prompt_sha256": "b15364de887de2e4532ecb8bb8dbc711272ea80f9edaf72cc2d1d6d7e9a9dec0",
+   "prompt_chars": 217578
+  },
+  {
+   "packet_id": "0000027904-26-000020#024",
+   "prompt_sha256": "2c05ccd5018056aa8883c41caabd71770f7e27972ae3fcb54d41b486f218a175",
+   "prompt_chars": 81286
+  },
+  {
+   "packet_id": "0000027904-26-000020#025",
+   "prompt_sha256": "42e02ebf563d6a5afe74bece28f8715ce6f872fa1685de8b81b55a6c73aa2acb",
+   "prompt_chars": 81236
+  },
+  {
+   "packet_id": "0000027904-26-000020#026",
+   "prompt_sha256": "6831e91b96df96ec137e1e7d7eb7a63ccd32296cc0b231cf25d3c8e29dc06fc0",
+   "prompt_chars": 81270
+  },
+  {
+   "packet_id": "0000027904-26-000020#027",
+   "prompt_sha256": "a6d07283c76f656d58f29b272446dd585fe2bbbf7ad8ec62068d2355cbc6cdb0",
+   "prompt_chars": 81216
+  },
+  {
+   "packet_id": "0000027904-26-000022#028",
+   "prompt_sha256": "f743c7ee0f0fe1e3fac63c183f4a57d7700c06ce40613db87373c6026ef7f143",
+   "prompt_chars": 70692
+  },
+  {
+   "packet_id": "0000027904-26-000022#029",
+   "prompt_sha256": "3da009635041de2c5fc3e4e06f38cae029a0ef158e0b52c0c9c731d4344147e7",
+   "prompt_chars": 70662
+  },
+  {
+   "packet_id": "0000027904-26-000022#030",
+   "prompt_sha256": "82cc3308422b1ec9ba4f5f976510215e8569c9fd177772b19b3a57f1af604c7e",
+   "prompt_chars": 70739
+  },
+  {
+   "packet_id": "0000027904-26-000022#031",
+   "prompt_sha256": "88dd647337b44a3444932493d9bb2165639af36801d4d4c779f1fb80390707b8",
+   "prompt_chars": 70726
+  },
+  {
+   "packet_id": "0000063908-26-000032#032",
+   "prompt_sha256": "95ed014b53ce26fa5590e1098a24cbe3f3f2130fe26435c50a48ed46dcd99027",
+   "prompt_chars": 49463
+  },
+  {
+   "packet_id": "0000063908-26-000032#033",
+   "prompt_sha256": "f303a2937bb1e21a24c301d06379f4f64ab786cef614ed3dd2539b70e67767ef",
+   "prompt_chars": 49537
+  },
+  {
+   "packet_id": "0000063908-26-000032#034",
+   "prompt_sha256": "a44e073b829d03c82d59723a14ccb623cea7f2011b2ff7dd922f87616ea8daec",
+   "prompt_chars": 49576
+  },
+  {
+   "packet_id": "0000063908-26-000032#035",
+   "prompt_sha256": "68d9e0c882e915c437dd55567be15679334459ed78a2f69de4f7fb4061291032",
+   "prompt_chars": 49541
+  },
+  {
+   "packet_id": "0000063908-26-000032#036",
+   "prompt_sha256": "91460d03aed57e34252e4759e41201a1fa25c5460e8a6ceca9c649861265b94c",
+   "prompt_chars": 49451
+  },
+  {
+   "packet_id": "0000063908-26-000032#037",
+   "prompt_sha256": "ba3184424ebdf1458d9f7195614fd95d84d4ba5ea081525383e5b6f68b9c2b5c",
+   "prompt_chars": 49514
+  },
+  {
+   "packet_id": "0000063908-26-000032#038",
+   "prompt_sha256": "567228df04fe1bf1dc5db812b662c41cdceb1040274118ef799c67af4813d7bd",
+   "prompt_chars": 49428
+  },
+  {
+   "packet_id": "0000092380-26-000044#039",
+   "prompt_sha256": "b471af98e5eb5df315a8aabc8b90cbb9b3fa49375299bd8f03f12ecac034431b",
+   "prompt_chars": 74601
+  },
+  {
+   "packet_id": "0000092380-26-000044#040",
+   "prompt_sha256": "f887bc851c027ee332cfadf1eda7a6b01417517deae0c9b3a75b28ec77aac649",
+   "prompt_chars": 74545
+  },
+  {
+   "packet_id": "0000092380-26-000044#041",
+   "prompt_sha256": "acd169fcdfd69b57861fb75eced1933c36c9eaf181634fe8fc28996ef36f6065",
+   "prompt_chars": 74524
+  },
+  {
+   "packet_id": "0000092380-26-000044#042",
+   "prompt_sha256": "e596b57dc3cf8a36aced207aa6a225b6485518237b65419eed871b6eac54ff9b",
+   "prompt_chars": 74500
+  },
+  {
+   "packet_id": "0000092380-26-000044#043",
+   "prompt_sha256": "6d2e962712a0e2302369d08ed65a55cbdeb22162fbe1d44ed59992e73ec44655",
+   "prompt_chars": 74550
+  },
+  {
+   "packet_id": "0000764478-25-000057#044",
+   "prompt_sha256": "03fe0c74fb17da150ed1d2657a283618d6732d6fee1f1d57544a582d627718a5",
+   "prompt_chars": 78021
+  },
+  {
+   "packet_id": "0000764478-25-000057#045",
+   "prompt_sha256": "ae9f5aa17eb38b27ba076df5227faab5ddd31d12d2879582ba0dfaa66a5a854b",
+   "prompt_chars": 78132
+  },
+  {
+   "packet_id": "0000764478-25-000057#046",
+   "prompt_sha256": "865cec906d603f6c3ec70c33d231274e4138981e3bb97e04e0633402a15a8931",
+   "prompt_chars": 78050
+  },
+  {
+   "packet_id": "0000764478-25-000057#047",
+   "prompt_sha256": "31b6cacfe84b4a0677a956e2f8689ad069e288f35fca4caa6e35ace4496fb7fe",
+   "prompt_chars": 78003
+  },
+  {
+   "packet_id": "0000764478-25-000057#048",
+   "prompt_sha256": "650a1516c07428589450b7dcec868f7f1d15d0d690486d6932a4517540a7dfe0",
+   "prompt_chars": 78032
+  },
+  {
+   "packet_id": "0000764478-26-000005#049",
+   "prompt_sha256": "1dca574b366fe84d81c0ffb140ae4584fb26b411b6b9afd01ea979b6c7ebb84a",
+   "prompt_chars": 33485
+  },
+  {
+   "packet_id": "0000898173-26-000006#050",
+   "prompt_sha256": "99829fe498398a9321e140fc8c4ab25942a8644733c1e4dc7e94ade2e5808a3d",
+   "prompt_chars": 64578
+  },
+  {
+   "packet_id": "0000898173-26-000006#051",
+   "prompt_sha256": "15071d0046460b52bcd2f0c37cb035f2eac64217c8652357437b06a7e9921656",
+   "prompt_chars": 64560
+  },
+  {
+   "packet_id": "0000898173-26-000006#052",
+   "prompt_sha256": "83b6db6a7c3ddde6d02139f2a0e72c43a6cc75abdc9a47f4cb7d9ab8945b17d8",
+   "prompt_chars": 64599
+  },
+  {
+   "packet_id": "0000898173-26-000006#053",
+   "prompt_sha256": "f1691f697611511e5d057d50148073aa89f2dd0dd6b82823ed00551cca714dfa",
+   "prompt_chars": 64607
+  },
+  {
+   "packet_id": "0000898173-26-000006#054",
+   "prompt_sha256": "20f69d7cb6b5fca3cf7c51f6f7b0841bc0a641e594d633a8be8eb8ebc92c183f",
+   "prompt_chars": 64471
+  },
+  {
+   "packet_id": "0000898173-26-000006#055",
+   "prompt_sha256": "6587e96393b6459a675eb1dd3b347c9439e89c02013e99bc49eab9f4f9f3adbc",
+   "prompt_chars": 64690
+  },
+  {
+   "packet_id": "0000898173-26-000006#056",
+   "prompt_sha256": "bff2e74a2c08d33aa7a71e70be8f8bd87313c24512d04ecbab2b214ea93fa530",
+   "prompt_chars": 64621
+  },
+  {
+   "packet_id": "0000898173-26-000006#057",
+   "prompt_sha256": "3b098406352034b07ce72decf8671e40beb758b4140946eeb4d98b26e74fae63",
+   "prompt_chars": 65402
+  },
+  {
+   "packet_id": "0000940944-25-000038#058",
+   "prompt_sha256": "c2366cc93bc1d54b8007a3da27da8de0cc7fa22fe37731168bb8d7ea1e44e5b1",
+   "prompt_chars": 209637
+  },
+  {
+   "packet_id": "0000940944-25-000038#059",
+   "prompt_sha256": "9e57d00f8f818fa4d7ebee912647d698a61bc15adb12eb93a78d1a6296a61e23",
+   "prompt_chars": 210204
+  },
+  {
+   "packet_id": "0000940944-25-000038#060",
+   "prompt_sha256": "beb25d66a2429fdae133f72f00217d652847aa02906e24b9631f723f848c1dba",
+   "prompt_chars": 209843
+  },
+  {
+   "packet_id": "0000940944-25-000038#061",
+   "prompt_sha256": "8ba105ca939667e0c8e6dfeddff93385882dc3e9ee33989dcbdc0baca8458abc",
+   "prompt_chars": 209766
+  },
+  {
+   "packet_id": "0000940944-25-000038#062",
+   "prompt_sha256": "7b393f793c80cb5384fd9421a9cfe756d0f1de7ff59eb9a948b0c01e29910b12",
+   "prompt_chars": 209794
+  },
+  {
+   "packet_id": "0000940944-25-000038#063",
+   "prompt_sha256": "46603d4551802dc3dc675cdb4318788477c85de7533d7af74da76672e1ddb930",
+   "prompt_chars": 209705
+  },
+  {
+   "packet_id": "0000940944-26-000005#064",
+   "prompt_sha256": "ae3f1c3c00c1bf58d1474517e9f8f2bfde0b124f483ba6a7e1556f5ab3ff0fcc",
+   "prompt_chars": 55083
+  },
+  {
+   "packet_id": "0000940944-26-000005#065",
+   "prompt_sha256": "a3e92c230d3e6041a4da25a72db45f3cc2181f8cbe44a22f40721adaec8838c7",
+   "prompt_chars": 55092
+  },
+  {
+   "packet_id": "0000940944-26-000005#066",
+   "prompt_sha256": "44f09ee360a0e336de5cb5118b9dc6f4d84127536e940aaa62b9ace75d04e30e",
+   "prompt_chars": 55125
+  },
+  {
+   "packet_id": "0000940944-26-000005#067",
+   "prompt_sha256": "7c02c8c45351f638257ff8b59d039d6f72f7ce14fe78d6c8056c41c2f44ad298",
+   "prompt_chars": 55052
+  },
+  {
+   "packet_id": "0000940944-26-000009#068",
+   "prompt_sha256": "ab111becc3ed7a37166206f80684e42dc4969dbf02315b12835cc8e3dee2cbc4",
+   "prompt_chars": 78584
+  },
+  {
+   "packet_id": "0000940944-26-000009#069",
+   "prompt_sha256": "873260669e0b761d4daf6c6ca36e489545c709d56c3790b434930dd71e9e97b6",
+   "prompt_chars": 78917
+  },
+  {
+   "packet_id": "0000940944-26-000009#070",
+   "prompt_sha256": "945e6effa975cddc5f29f70990941248d33c4bdda5df34e82d41332f25809e8b",
+   "prompt_chars": 78599
+  },
+  {
+   "packet_id": "0000940944-26-000009#071",
+   "prompt_sha256": "0c0a4b6f47ecfe1c37b8780673427d5864d105c22b55af2cecd2de98fd0b94db",
+   "prompt_chars": 78539
+  },
+  {
+   "packet_id": "0000940944-26-000009#072",
+   "prompt_sha256": "ebbebbe0b218a3f3c02b5ff1819cf812f794522a9abab5f9c565534ee8c31d73",
+   "prompt_chars": 78598
+  },
+  {
+   "packet_id": "0001041061-25-000109#073",
+   "prompt_sha256": "1b087d9679cde835b4bcfa19d0e7a81b2e78cd44d0e94ba1a2604bbc348d3297",
+   "prompt_chars": 91408
+  },
+  {
+   "packet_id": "0001041061-25-000109#074",
+   "prompt_sha256": "35a038502abe48ecfa7e369c0178eef78dd7150e00d4aca293b0d138daf04b34",
+   "prompt_chars": 91486
+  },
+  {
+   "packet_id": "0001041061-25-000109#075",
+   "prompt_sha256": "fbed437c11f359090e76a2f6fd43080f72e201308c2c5241d46d9d17119983b4",
+   "prompt_chars": 91411
+  },
+  {
+   "packet_id": "0001041061-25-000109#076",
+   "prompt_sha256": "ebf25ed1a081f45182832574155c1fd2aaecf03571497db93e7baf53f5f8940b",
+   "prompt_chars": 91674
+  },
+  {
+   "packet_id": "0001041061-26-000003#077",
+   "prompt_sha256": "31dafb3372749267a018b3812e6860ed62e6277f1898dad3b2ce75c7b3cb15aa",
+   "prompt_chars": 93968
+  },
+  {
+   "packet_id": "0001041061-26-000003#078",
+   "prompt_sha256": "e16b3a620800c79f4d14908efcfb54794633c08e17731953a50f39e5d345adad",
+   "prompt_chars": 94045
+  },
+  {
+   "packet_id": "0001041061-26-000003#079",
+   "prompt_sha256": "98338cdcae6f15a65da41b983fd1d233aae1dc98beb3d4d18dfe65990779345e",
+   "prompt_chars": 94029
+  },
+  {
+   "packet_id": "0001041061-26-000003#080",
+   "prompt_sha256": "9c51d5f5784405c95b1952d834169502a1a88766e0274c60bd49fb3cccaf4fe5",
+   "prompt_chars": 93906
+  },
+  {
+   "packet_id": "0001041061-26-000003#081",
+   "prompt_sha256": "8db4bc9251151d2ad9d39219fbed388282e8c24ad5b118b41bd19475c20ad6a8",
+   "prompt_chars": 94268
+  },
+  {
+   "packet_id": "0001041061-26-000084#082",
+   "prompt_sha256": "f9f67208571a28563004ef393c35e5cdc8d0146927d08bd51b2ccfbc4c02d02f",
+   "prompt_chars": 237174
+  },
+  {
+   "packet_id": "0001041061-26-000084#083",
+   "prompt_sha256": "cc47c3801b4eaf6d70fa06f176f9bb20f07ceb26baed0f62860d2b869d964d0d",
+   "prompt_chars": 236943
+  },
+  {
+   "packet_id": "0001041061-26-000084#084",
+   "prompt_sha256": "a87cc64a7dc321e5b14ce3c267f3c8778d522c393d5c8929731b11d79ab66ed5",
+   "prompt_chars": 236920
+  },
+  {
+   "packet_id": "0001041061-26-000084#085",
+   "prompt_sha256": "aa61b4f41f61ef1d2c9025cca9e6c41d981874d8f6f7c88d2104ff28381d4c9a",
+   "prompt_chars": 237036
+  },
+  {
+   "packet_id": "0001041061-26-000084#086",
+   "prompt_sha256": "9e34589cb11bb9a1c07435133fc1866578d4a57783ef9203e344ed05a7c7cbc8",
+   "prompt_chars": 236959
+  },
+  {
+   "packet_id": "0001041061-26-000084#087",
+   "prompt_sha256": "8fccca924308d0891d9762a8255dd3f59392e12b572a7f6408fd240077feb77c",
+   "prompt_chars": 237234
+  },
+  {
+   "packet_id": "0001041061-26-000084#088",
+   "prompt_sha256": "10dfee6a36a86d8c411921f540c24d5d52f169deedfef3262622c7c2d8472a91",
+   "prompt_chars": 236940
+  },
+  {
+   "packet_id": "0001041061-26-000084#089",
+   "prompt_sha256": "d59626802edf5fa09456e5cda170b90095be17575b602a1801d602427cfb1bf6",
+   "prompt_chars": 236913
+  },
+  {
+   "packet_id": "0001041061-26-000084#090",
+   "prompt_sha256": "7ac335e8bb890a6f9d7d4408b3d2900e35146f174c4418633f3e44e95e761b0a",
+   "prompt_chars": 236928
+  },
+  {
+   "packet_id": "0001058090-26-000007#091",
+   "prompt_sha256": "c3c972fc043e99c08de3ab152918b620bd9e837ea7752129f40a97a1ef423ce1",
+   "prompt_chars": 66481
+  },
+  {
+   "packet_id": "0001058090-26-000007#092",
+   "prompt_sha256": "30f1a9b298b3584edc013980bc0f0c07e8a83a0a0276dc272b4bc28849b1094d",
+   "prompt_chars": 66455
+  },
+  {
+   "packet_id": "0001058090-26-000007#093",
+   "prompt_sha256": "87e3da51d1f944638bf13e2eb709203e297cd7575322004133b401647bff6cec",
+   "prompt_chars": 66470
+  },
+  {
+   "packet_id": "0001058090-26-000007#094",
+   "prompt_sha256": "e96b19c140f812f40590e98274b1987c74ba0af978dd9c2127009de18931b233",
+   "prompt_chars": 66571
+  },
+  {
+   "packet_id": "0001104659-25-102611#095",
+   "prompt_sha256": "56a680d7498c9229da76fb49f3dfaddd2d6d0c3bec1253eacbd6fb6a22f7a882",
+   "prompt_chars": 182519
+  },
+  {
+   "packet_id": "0001104659-25-102611#096",
+   "prompt_sha256": "8e4d51b335e3db047ae535dd2dd77079a0b4eb256a5467a1a778b323df42accf",
+   "prompt_chars": 182615
+  },
+  {
+   "packet_id": "0001104659-25-102611#097",
+   "prompt_sha256": "720c442329111e45e591e3d58a4b06be822de5d5765c80d3f43fca253c7e6fbf",
+   "prompt_chars": 182496
+  },
+  {
+   "packet_id": "0001104659-25-102611#098",
+   "prompt_sha256": "b9517ff8134952509538f5ac41a7c3b233affa7edffc2ecc44a2981d4553c110",
+   "prompt_chars": 182608
+  },
+  {
+   "packet_id": "0001104659-25-102611#099",
+   "prompt_sha256": "3d3c3a996bd5a7c813a37e7817b8c7a111d8fa4404544d7630c90344fc55455f",
+   "prompt_chars": 182509
+  },
+  {
+   "packet_id": "0001104659-25-102611#100",
+   "prompt_sha256": "42746781906fd5ca322ce4c0a7513116a592038467ed3eb691c2d0d0a8352b49",
+   "prompt_chars": 182712
+  },
+  {
+   "packet_id": "0001104659-25-105631#101",
+   "prompt_sha256": "eb6cbb89cdd01da253ebf5af81ec5e5431283a2c493b70be88532ca408a222fe",
+   "prompt_chars": 85645
+  },
+  {
+   "packet_id": "0001104659-25-105631#102",
+   "prompt_sha256": "a3ed38783082b99e0f091870ffceb387953bd10d8c83f51c31ea6f253cd5220f",
+   "prompt_chars": 85671
+  },
+  {
+   "packet_id": "0001104659-25-105631#103",
+   "prompt_sha256": "d4cf23f8e66be8966ce204089d761bd521d35717d0ce7cbe3093482cc06ffd06",
+   "prompt_chars": 85681
+  },
+  {
+   "packet_id": "0001104659-25-105631#104",
+   "prompt_sha256": "14c34cc1c310d79a89a5abf562c39c38d62f67cb6af1532d6cfa31f63e737690",
+   "prompt_chars": 85652
+  },
+  {
+   "packet_id": "0001104659-25-118458#105",
+   "prompt_sha256": "b55e5f72d1df9451467a95ed35fd35fa138feca2ff26a76bf9914ac3d4c60416",
+   "prompt_chars": 74529
+  },
+  {
+   "packet_id": "0001104659-25-118458#106",
+   "prompt_sha256": "c8530ef2bdc4754923baa38289574e7930cff88281b9ef8acdfc467fde6341fc",
+   "prompt_chars": 74540
+  },
+  {
+   "packet_id": "0001104659-25-118458#107",
+   "prompt_sha256": "47c76c2e53a3885ffc2d523a40cf6b6f8bdcdebc35a9ae0bd509ee155a476706",
+   "prompt_chars": 74561
+  },
+  {
+   "packet_id": "0001104659-25-118458#108",
+   "prompt_sha256": "b646441a0b55e27246e14aa67b7d98bd366543cc31c021a7f9c7f4598375032d",
+   "prompt_chars": 74462
+  },
+  {
+   "packet_id": "0001104659-26-017090#109",
+   "prompt_sha256": "43ae474f389a14cb3b3c819a6a0b1b0fbd4722e263aaf1e78d3b5c793e937a23",
+   "prompt_chars": 55223
+  },
+  {
+   "packet_id": "0001104659-26-017090#110",
+   "prompt_sha256": "b893d768905dde93ed605d37835fcfb58bd76a2ac80897beb2385834318e6228",
+   "prompt_chars": 55304
+  },
+  {
+   "packet_id": "0001104659-26-017090#111",
+   "prompt_sha256": "5fac591ed509b8223f15659af2e2062053dfa2546d90375018ed4597e349d4ec",
+   "prompt_chars": 55270
+  },
+  {
+   "packet_id": "0001104659-26-017090#112",
+   "prompt_sha256": "833a48bd2e94ed1609bcc6a4ca1ba5124cebeaacd6ed2b5595171bc996973f58",
+   "prompt_chars": 55295
+  },
+  {
+   "packet_id": "0001104659-26-017090#113",
+   "prompt_sha256": "cbf5d82d000499015c69ff36fc6198927f06ccb0a7a78bb788dd0eb38ac009c7",
+   "prompt_chars": 55252
+  },
+  {
+   "packet_id": "0001104659-26-027061#114",
+   "prompt_sha256": "09c223a6d84b99c97f801754c5523084aa05d0dfce2975526e6fa0eb3baac06e",
+   "prompt_chars": 59614
+  },
+  {
+   "packet_id": "0001104659-26-027061#115",
+   "prompt_sha256": "666b18be2d2d42985588782869641b1930ac269dfd07833612f520efdd6c7375",
+   "prompt_chars": 59613
+  },
+  {
+   "packet_id": "0001104659-26-027061#116",
+   "prompt_sha256": "aedd48223a7eedc2c0de9a4876884d0fecbe7387cf27b9759492a90001da151a",
+   "prompt_chars": 59563
+  },
+  {
+   "packet_id": "0001104659-26-027061#117",
+   "prompt_sha256": "c580c6ab5f84f0f92f96702e297cfce55328dbfff6a790a20cde56b9d8b7d4db",
+   "prompt_chars": 59637
+  },
+  {
+   "packet_id": "0001104659-26-027061#118",
+   "prompt_sha256": "c5b9ca1f75a03acd2cd4a173d611799bbcf28107523c10e89ae119a2b3aebf6f",
+   "prompt_chars": 59568
+  },
+  {
+   "packet_id": "0001104659-26-027061#119",
+   "prompt_sha256": "96894aec152943222661a12134d543b9d511b7ba7bc1403031103a42f20efb0e",
+   "prompt_chars": 59538
+  },
+  {
+   "packet_id": "0001104659-26-027061#120",
+   "prompt_sha256": "534fe483915bce5640d4628a5491dd688acbda8e944ce20c08e699b096ebf34b",
+   "prompt_chars": 59733
+  },
+  {
+   "packet_id": "0001104659-26-027061#121",
+   "prompt_sha256": "69b903cb50b26538e83915b87833599ce21f92c0ecf8bde2fa3375b1d3dcd886",
+   "prompt_chars": 59533
+  },
+  {
+   "packet_id": "0001104659-26-027061#122",
+   "prompt_sha256": "410c2171f789f673508dde78ced1ddf3468720850c4ce4e69845b00b52757085",
+   "prompt_chars": 59808
+  },
+  {
+   "packet_id": "0001104659-26-027061#123",
+   "prompt_sha256": "446d7ce722f1119ac5ba1e6abf04fac63e2ccc56bf4563788982ed6d93fca8b0",
+   "prompt_chars": 59682
+  },
+  {
+   "packet_id": "0001104659-26-027061#124",
+   "prompt_sha256": "c452debaedbefe72beb216f888fefd894a55f4d4eb2e62ce65e0f4d5990d2fbc",
+   "prompt_chars": 59674
+  },
+  {
+   "packet_id": "0001104659-26-032757#125",
+   "prompt_sha256": "24c5c85ba1b261cea70cef8dc989bf4d687048f7712e0d68af67f786243c69c4",
+   "prompt_chars": 77369
+  },
+  {
+   "packet_id": "0001104659-26-032757#126",
+   "prompt_sha256": "2b751461224de063c03218a67a0e23ffaf02c832c7ded5416b4f689828a10fce",
+   "prompt_chars": 77798
+  },
+  {
+   "packet_id": "0001104659-26-032757#127",
+   "prompt_sha256": "dc5f39f85dfbe05cc996f4d3b9d8b6a249b20ec494cd2c53dc0d1cd94daa173b",
+   "prompt_chars": 77370
+  },
+  {
+   "packet_id": "0001104659-26-032757#128",
+   "prompt_sha256": "d40353280ea9d0c79a4b446fe38677f815bfd34df3e347bdfd0e88ba061de8a0",
+   "prompt_chars": 77355
+  },
+  {
+   "packet_id": "0001104659-26-032757#129",
+   "prompt_sha256": "738e3c22c73c2c9f1e028d8012f424b86abc7968521406a0e463c8aeb0448988",
+   "prompt_chars": 77482
+  },
+  {
+   "packet_id": "0001104659-26-032757#130",
+   "prompt_sha256": "376276de8be636cc39364544a63e8138558459b66fb73bcada96988a65a2c494",
+   "prompt_chars": 77369
+  },
+  {
+   "packet_id": "0001171843-26-001288#131",
+   "prompt_sha256": "979830aee9531a45a41294bce515a93deb78fff75f4b2cd63b4d32a375e52cc1",
+   "prompt_chars": 51272
+  },
+  {
+   "packet_id": "0001171843-26-001288#132",
+   "prompt_sha256": "e2cb9e61269dcec485c6e9e33ebf434f767443495e134d3378759f0eb3eb17fa",
+   "prompt_chars": 51028
+  },
+  {
+   "packet_id": "0001171843-26-001288#133",
+   "prompt_sha256": "6b9a0d591210b6e7abb04388b562e55b471f90c7a0e5f76c142d382b11675b24",
+   "prompt_chars": 51048
+  },
+  {
+   "packet_id": "0001171843-26-001288#134",
+   "prompt_sha256": "869e25a3426c6e7936343046128827ff9dba3fed6301bb9daa0bd020abd42f96",
+   "prompt_chars": 51124
+  },
+  {
+   "packet_id": "0001171843-26-001288#135",
+   "prompt_sha256": "4103bc6fea6217996a6a5f9ac40a71a82e9a1ab1874d5349720d2bb66fc885cb",
+   "prompt_chars": 51257
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#136",
+   "prompt_sha256": "d2877c9d6257d30e4048470eac0c0ab6cdc536e20d5c33c1c50334933c307122",
+   "prompt_chars": 90995
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#137",
+   "prompt_sha256": "a5cc32bb58d98e16c66f7d20b9f187722e8977098a021c0931ebf832c8fc713a",
+   "prompt_chars": 91019
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#138",
+   "prompt_sha256": "94c53dd2106b20866f8fe0f8d48fbcf1a477ec2b54547462a101f59fab1ea618",
+   "prompt_chars": 91012
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#139",
+   "prompt_sha256": "341c65547cbad52a26591553f5ca6c655dba420a3969f490542df1cf4f7b55c5",
+   "prompt_chars": 90994
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#140",
+   "prompt_sha256": "6467ce52825fc5f8ec13be4270f2e41fe0aa8da8bff939cc5734d7f1d7b34e31",
+   "prompt_chars": 92561
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#141",
+   "prompt_sha256": "8ebf08604d3b4e0da9f471ad1a07185025d3d33daa05ebc7033543bab1ff85e1",
+   "prompt_chars": 92802
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#142",
+   "prompt_sha256": "4e20452a44a3cd9f19973724068858b92ddac5c867c060f49daa28f37fb5804c",
+   "prompt_chars": 92613
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#143",
+   "prompt_sha256": "2746d48afad2c4ac3cbb35eddadc9a4fc3d7ae1ccc41db47eaeac5d71c4784ee",
+   "prompt_chars": 92649
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#144",
+   "prompt_sha256": "bdd5426ec64563f34f1bab76192d62eca18feab0246fe2222bdf71d3f2c21a6d",
+   "prompt_chars": 92596
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#145",
+   "prompt_sha256": "bf918bf14f961335687b7f0ffba95fad22f2a71669a64bec413910f41ed393b1",
+   "prompt_chars": 92604
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#146",
+   "prompt_sha256": "65e78f4dc07d7a67d3157bd5450c02b15b91b314e3e458f747b9bb7c86c17989",
+   "prompt_chars": 95404
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#147",
+   "prompt_sha256": "9d854767d5daaac3bc9e6a3e76fb38c1925a2355941a38ec1456fc73510b3d30",
+   "prompt_chars": 95414
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#148",
+   "prompt_sha256": "6803c85a0d3df97dadd863d8ad13445219a62b01c2b35e836da57e64026d0d92",
+   "prompt_chars": 95407
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#149",
+   "prompt_sha256": "9f8d2d6031dfa695945f92679e5a3bfe16cee6b0a6dae5fe3eed20f8ad6aa8cf",
+   "prompt_chars": 95429
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#150",
+   "prompt_sha256": "baa0209fa94c09c1c2e827256fba04d69153ef288d975dcd83994a1a56d62126",
+   "prompt_chars": 95417
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#151",
+   "prompt_sha256": "8565695f56b2f5f837e56b32ad8e1dc71817e3fe1305c392acb27261f096194b",
+   "prompt_chars": 95389
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#152",
+   "prompt_sha256": "8f035fa250fea6ede1950efc33f21975daf68b42da3b79c7712e4774d1999060",
+   "prompt_chars": 95413
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#153",
+   "prompt_sha256": "1139c6c0a5631fc89b67382632dbc674281b21ddf5786e27932dcb777fe2db65",
+   "prompt_chars": 92303
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#154",
+   "prompt_sha256": "9a2f25e9a6e3b2a6db0ab24c7c2abe0eef31e82a802170ca1550019e8af66d4c",
+   "prompt_chars": 92513
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#155",
+   "prompt_sha256": "4029d23ad9e101b3f63d290491a9f1f04c0bb8d3899ea35b43adace11c5609a1",
+   "prompt_chars": 92366
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#156",
+   "prompt_sha256": "ef679a01a8cffd4a5fb3f2aff06b8edf0d9b0699cf2685962d936e9d38a1f337",
+   "prompt_chars": 92369
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#157",
+   "prompt_sha256": "9142ffc7624d1eb594e7b4e1a2c095764041499d7bbc0231a064853742c57f22",
+   "prompt_chars": 114051
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#158",
+   "prompt_sha256": "0604fbfe25ed5282b7239b510452ac81c813d96858a053a8918758eb2c4eef1e",
+   "prompt_chars": 114013
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#159",
+   "prompt_sha256": "c85fc3c7905e4b3bf1482ccd8119e2a6892dc7a09f42e937769aff51b410719e",
+   "prompt_chars": 113985
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#160",
+   "prompt_sha256": "5b70319d1e47c4b4a1000109b6f905bfd53838b2adea31373f4bc1a405c4b364",
+   "prompt_chars": 114076
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#161",
+   "prompt_sha256": "33e487d79e315062f9d1b1f2248e8346090fbe74e6f9fd1254782c82401f3729",
+   "prompt_chars": 114019
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#162",
+   "prompt_sha256": "84f1a06470175f2ec90f5cf9899ae22c5d2722a2972519919aefbd0cf2beb8ae",
+   "prompt_chars": 113992
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#163",
+   "prompt_sha256": "b2fa8eba53efaccd82294267561e8e5dacd081d296f7ff89257bc00c4e52dbde",
+   "prompt_chars": 114108
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#164",
+   "prompt_sha256": "e7556716214995dc6d96d604fc012d468b1771e1c95b29dbdabf159bdfc56786",
+   "prompt_chars": 92631
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#165",
+   "prompt_sha256": "8cdcd4b9ddaf1714cedb9b285dd3ef65de095035913baef39e097c70fccc97cd",
+   "prompt_chars": 92622
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#166",
+   "prompt_sha256": "68bfc28ea352fd5fe92aaa9872c53554e7a7282c9c5cca3bc203a69f2cf287bb",
+   "prompt_chars": 92575
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#167",
+   "prompt_sha256": "2351f86079ff0ed5bb11490dfd2abe2cc1138330fbecafb9b1306d3442df519c",
+   "prompt_chars": 92632
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#168",
+   "prompt_sha256": "a3113a4edd735e1424fd59306fdf7e888dd7ae48baa4208aac1c2e9a2fbcd6ee",
+   "prompt_chars": 92560
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#169",
+   "prompt_sha256": "6f35dc311cdae926d1b8188ff3d50bf0a375faec5887f8ad119a819bd7c1e8eb",
+   "prompt_chars": 92594
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#170",
+   "prompt_sha256": "a9ebdcc12dcebc8ed2a322e558a6ff8ba1ac8ffbfb0494442d92591f1cf51fd6",
+   "prompt_chars": 92571
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#171",
+   "prompt_sha256": "3235205ed732df27f24a33cc3c3b910afc1f4811ed2029a3d492df0fd1885ce8",
+   "prompt_chars": 92596
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#172",
+   "prompt_sha256": "e3cacdf69185bfa49f69553d49bb7ebd5dcaef6c161a45716edbfd7b845d8f68",
+   "prompt_chars": 92606
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#173",
+   "prompt_sha256": "69e148020a9f35459040baddf935b31ac51a38939559f179625586ed82099147",
+   "prompt_chars": 92598
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#174",
+   "prompt_sha256": "221b6d1bc0f9207fe54cd63af92f5a7c6af0984e395bf0a917136b6fade724f1",
+   "prompt_chars": 92619
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#175",
+   "prompt_sha256": "662eb962712cbe3de5e055157bbeac1a79b098662262ca44bab49e43af5df59f",
+   "prompt_chars": 90122
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#176",
+   "prompt_sha256": "f611cba81f865382fb3e6dd675969cfb407c52660ce517ce53810f6b1d0c6486",
+   "prompt_chars": 90103
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#177",
+   "prompt_sha256": "fbeaac64b5ba4cfdfa8773f498bcb2de8e0ec55dc41480f8d518b27394bcad26",
+   "prompt_chars": 90332
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#178",
+   "prompt_sha256": "4963f5757050b17dccfe56e676bf0c1b15639dedd8dbc8758a77f28f5fb8040c",
+   "prompt_chars": 90238
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#179",
+   "prompt_sha256": "8b3d5beac87c1083f7d6fe3debc90d8e3e7c195cde61f0167b2966852c90f4f8",
+   "prompt_chars": 90279
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#180",
+   "prompt_sha256": "a1934994fa3ebad08998f425f685a0609b0231f90a6ec10dfbc4342a05926d14",
+   "prompt_chars": 90102
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#181",
+   "prompt_sha256": "5c80c4f1d231e7863246f25d7aa07689bdd976f4be59508ef6036fad1a35cf8f",
+   "prompt_chars": 90133
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#182",
+   "prompt_sha256": "de49b41ecc6c1378dbd0ea05a6b059369072334a4ec6d5cd02c3193fb0f4f495",
+   "prompt_chars": 90070
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#183",
+   "prompt_sha256": "acbe380b83d2f428dfe334c8979809a27cfe456c1d3264a8be4c18da67088432",
+   "prompt_chars": 87919
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#184",
+   "prompt_sha256": "05c438e98884274c7ef2d6e78324f975198bd0dae313d48ef2311a7fad209eb7",
+   "prompt_chars": 87911
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#185",
+   "prompt_sha256": "9354c5e022c595684a662afb9b9439765b69e2ed6e10b932bbda9d39fd5d2896",
+   "prompt_chars": 87975
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#186",
+   "prompt_sha256": "f842856afefe9fe60c42cbad9e39f0a8979400a0ab6a9f6bd69fd4d8ea88ba8a",
+   "prompt_chars": 87995
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#187",
+   "prompt_sha256": "63ff655cdc2f4d4a58f7550df8d2cefe2f7fc814379e89f39c1cef87ef2c148c",
+   "prompt_chars": 87976
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#188",
+   "prompt_sha256": "b7224c34d44ec72ca8e67a8282b6a14946ab2889e85e5d21245a590fd41b997c",
+   "prompt_chars": 88001
+  },
+  {
+   "packet_id": "bzNews_42014391#189",
+   "prompt_sha256": "46d4cc1bb05bf9de3fdfb0e5a321e984da1064616120545c6b45144cd32e86f1",
+   "prompt_chars": 33269
+  },
+  {
+   "packet_id": "bzNews_42014391#190",
+   "prompt_sha256": "7b70c2e6894ac79ce0e5eb242c72b47a49083abacd797f164c00d2c70d5c7599",
+   "prompt_chars": 33214
+  },
+  {
+   "packet_id": "bzNews_49256211#191",
+   "prompt_sha256": "474606e9d7ed87f106e6d839f49faf0d6bafa780143ba76e0e1bb9a4ef3d8288",
+   "prompt_chars": 32655
+  },
+  {
+   "packet_id": "bzNews_50877032#192",
+   "prompt_sha256": "92503e0fe8f0cd8ec3c3e86539ebf4e7e1cb3cb96564722e90c4eb107c85186e",
+   "prompt_chars": 35753
+  },
+  {
+   "packet_id": "bzNews_50877032#193",
+   "prompt_sha256": "73de5fafa655388d9c0e7f408a15c98e783e3507a51cb80c9e7023dcebd87851",
+   "prompt_chars": 35759
+  },
+  {
+   "packet_id": "bzNews_50877032#194",
+   "prompt_sha256": "348c368ad7d4486596c884df12cea37dde00e9fd45d265b47ddcb61a5a7c2622",
+   "prompt_chars": 35749
+  },
+  {
+   "packet_id": "bzNews_51962983#195",
+   "prompt_sha256": "cc048cc6dbcc21d108707ea05f795bf063bac443346d61e4a236474cb0218b30",
+   "prompt_chars": 34150
+  }
+ ]
+}

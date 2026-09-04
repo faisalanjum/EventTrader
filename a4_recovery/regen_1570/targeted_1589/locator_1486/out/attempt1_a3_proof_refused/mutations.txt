@@ -1,0 +1,37 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.10, pytest-9.0.2, pluggy-1.6.0
+rootdir: /home/faisal/EventMarketDB-driver-recovery
+configfile: pytest.ini
+plugins: Faker-40.1.0, langsmith-0.4.8, anyio-4.9.0
+collected 14 items
+
+../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py F.MUTATION role -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION contract_suffix -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION packet_id -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION packet_prompt_sha256 -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION packet_prompt_chars -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION arms_ids_only -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION arms_missing_field -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION arms_order -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION capacity_prompt_chars_max -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION capacity_prompt_utf8_bytes_max -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION manifest_identity -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.MUTATION freeze_identity -> ('REFUSED', "RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'pr")
+.
+
+=================================== FAILURES ===================================
+______________ test_lawful_control_reproduces_both_target_hashes _______________
+
+world = {'A': <module 'recovery_adapter' from '/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589...h', 'active': True}, {'arm': 'P2', 'role': 'sonnet_run2', 'tier': 'sonnet', 'effort': 'high', 'active': True}])]), ...}
+
+    def test_lawful_control_reproduces_both_target_hashes(world):
+>       assert run(world) == world["targets"]
+E       assert ('REFUSED', "...arries', 'pr") == ('ac58d2eb6e8...deec95156cb7')
+E         
+E         At index 0 diff: 'REFUSED' != 'ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57cd64f1ce7f4c20441'
+E         Use -v to get more diff
+
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED ../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/locator_1486/test_locator_1486.py::test_lawful_control_reproduces_both_target_hashes
+========================= 1 failed, 13 passed in 0.90s =========================

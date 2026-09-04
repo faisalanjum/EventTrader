@@ -1,0 +1,1 @@
+RED: the owner REFUSED the old projection: RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'primary finalization: the finalization was written against different plan bytes than the ones live now', 'the primary proves 0 of the canonical 392 A3 answers']
