@@ -1,0 +1,30 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "margin",
+        "driver_state": "unknown",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "margin",
+        "driver_state": "in_line",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

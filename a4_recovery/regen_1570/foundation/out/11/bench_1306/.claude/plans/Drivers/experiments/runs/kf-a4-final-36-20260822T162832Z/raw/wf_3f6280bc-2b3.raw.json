@@ -1,0 +1,386 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "effective_tax_rate",
+              "driver_state": "unknown",
+              "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "conditions": "with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the event confirms a genuine company-stated FY2026 tax-rate guidance range, so the proposal stands."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_restaurant_openings",
+              "driver_state": "unknown",
+              "level_low": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "measurement_raw_spans": ["approximately"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the event confirms a genuine FY2026 gross-openings target, so the proposal stands."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "unknown",
+              "change_value": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item; 'growth' is a change-noun so the name resolves to the base metric restaurant_count carrying the stated 4.5% growth, and the proposal stands."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "change_value": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "measurement_raw_spans": ["Adjusted", "constant currency basis"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the quote is a genuine prior-year metric change (not an expectation comparison), so the proposal stands as a metric fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "unknown",
+              "level_unit": "percent_sequential",
+              "value_text": "expected to accelerate sequentially versus Q4",
+              "company_confirmed": true,
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["segment:internationaloperatedmarkets"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the event confirms a genuine numberless Q1 sequential-growth guide for IOM, so the proposal stands."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "capital_expenditure",
+              "driver_state": "reported",
+              "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "capital_expenditure",
+              "driver_state": "unknown",
+              "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item; the quote is an actual-vs-own-prior-guidance comparison so it correctly yields TWO facts (metric home + surprise), both standing."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "unknown",
+              "level_unit": "percent_sequential",
+              "value_text": "sequential decrease from Q4 level",
+              "slice_parts": ["segment:internationaldevelopmentallicensedmarketsandcorporate"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the event confirms a genuine numberless Q1 sequential-decline guide for IDL, so the proposal stands."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "unknown",
+              "level_unit": "percent_sequential",
+              "value_text": "expected to decelerate sequentially from Q4",
+              "company_confirmed": true,
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:usmarket"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the event confirms a genuine numberless Q1 sequential-deceleration guide for the U.S., so the proposal stands (with a recorded slice-menu ambiguity, see open_issues)."
+    },
+    {
+      "row_index": 9,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "unknown",
+              "level_low": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2027,
+              "time_type": "instant",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the event confirms a genuine end-of-2027 cumulative restaurant-count target distinct from the 2026 openings pace, so the proposal stands."
+    },
+    {
+      "row_index": 10,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "net_restaurant_additions",
+              "driver_state": "unknown",
+              "level_low": {"value": 2100, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2100, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and the event confirms a genuine FY2026 net-additions target distinct from the unit-growth-rate fact in row 3, so the proposal stands."
+    },
+    {
+      "row_index": 11,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "capital_expenditure",
+              "driver_state": "reported",
+              "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "capital_expenditure",
+              "driver_state": "unknown",
+              "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item; this row's quote is byte-identical to row 6's quote and yields the same metric+surprise pair, so the proposal stands but the row-6/row-11 duplication is flagged in open_issues."
+    }
+  ],
+  "review": [
+    {"row_index": 1, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 2, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "measurement_wording"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 3, "fact_index": 0, "hard_classes": ["sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 4, "fact_index": 0, "hard_classes": ["measurement_wording", "sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the measurement span should extend to include the preceding preposition 'on a' before 'constant currency basis' is not fully settled by Rule 8's contiguous-span wording."},
+    {"row_index": 5, "fact_index": 0, "hard_classes": ["sequential_comparison", "slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 6, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 6, "fact_index": 1, "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": true}, "ambiguity_note": "Whether the capex overrun versus the company's own prior guidance range is favorable or unfavorable cannot be judged from this row's fixed quote alone (capex requires source_framing per Rule 9.4, and that framing sits in a sentence outside this quote's boundary), so driver_state is correctly settled as unknown rather than beat/missed."},
+    {"row_index": 7, "fact_index": 0, "hard_classes": ["sequential_comparison", "slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 8, "fact_index": 0, "hard_classes": ["sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "The menu carries two apparently-identical U.S. tokens ('segment:usmarket' and 'segment:u_s_market') with no textual signal in this item selecting one over the other, and whether the numberless growth basis belongs on level_unit or change_unit is not fully settled by Rule 5a for numberless facts."},
+    {"row_index": 9, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether 'remain on track to achieve our target of 50,000 restaurants by the end of 2027' is an explicit reaffirmation of a prior guide, versus mere continuation language with no explicit two-guide comparison, is not settled by Rule 4's text; settled as unknown, the stricter reading."},
+    {"row_index": 10, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 11, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 11, "fact_index": 1, "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": true}, "ambiguity_note": "Same unresolved-favorability issue as row 6's surprise fact: capex needs source_framing which is outside this quote's boundary, so driver_state stays unknown."}
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [2, 9],
+      "members_are_one_fact": false,
+      "reason": "The sentence states a 2026 flow target (2,600 gross restaurant openings during fiscal year 2026, a duration metric) that supports a distinct 2027 stock target (50,000 restaurants as a cumulative footprint at year-end, an instant metric); they differ in driver, value, unit meaning, and period type even though the cause-and-consequence framing shares one sentence."
+    }
+  ],
+  "lead_reconciliation": [
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#164", "agrees": true, "why": "Matches the settled effective_tax_rate guidance: range 21-23%, level_unit percent, FY2026, duration, conditions clause, company_confirmed true, state unknown."},
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#165", "agrees": true, "why": "Matches the settled gross_restaurant_openings guidance: point 2600, count, 'approximately' measurement span, FY2026, duration, company_confirmed true, state unknown."},
+    {"lead_id": "hr-034/b1/row2", "agrees": false, "why": "Member 1 (gross_restaurant_openings) matches on name/state/value/period but omits the required 'approximately' measurement-safety-sink span that Rule 8 mandates be kept when unsure."},
+    {"lead_id": "hr-034/b2/row2", "agrees": true, "why": "Member 1 matches the settled gross_restaurant_openings fact exactly, including the 'approximately' measurement span."},
+    {"lead_id": "hr-002/b1/row3", "agrees": true, "why": "Matches the settled restaurant_count guidance: change_value 4.5 percent_yoy, FY2026, duration, company_confirmed true, state unknown."},
+    {"lead_id": "hr-002/b2/row3", "agrees": true, "why": "Identical content to b1 and to the settled fact; only field order differs."},
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#167", "agrees": true, "why": "Matches the settled earnings_per_share metric: increased, change 7 percent_yoy, comparison_baseline prior_year, per_x share, FY2025 Q4, duration, adjusted/constant-currency measurement spans."},
+    {"lead_id": "hr-003/b1/row5", "agrees": false, "why": "Embeds the numeric anchor 'Q4's 5.2%' inside value_text, which Rule 11.1 forbids since numbers belong only in the value slots, not the qualitative value_text field."},
+    {"lead_id": "hr-003/b2/row5", "agrees": true, "why": "Matches the settled numberless IOM comparable_sales guidance: unknown state, percent_sequential, number-free value_text, segment:internationaloperatedmarkets slice, Q1 FY2026, duration, company_confirmed true."},
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#169", "agrees": true, "why": "Matches the settled capex metric+surprise pair exactly, including has_favorability_wording false and no polarity_proof, correctly refusing to borrow evidence from outside the quote's boundary."},
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#170", "agrees": true, "why": "Matches the settled numberless IDL comparable_sales guidance: unknown state, percent_sequential, number-free value_text, correct segment slice, Q1 FY2026, duration, company_confirmed true."},
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#171", "agrees": false, "why": "Matches the core content (driver_name, state, number-free value_text, Q1 FY2026, slice segment:usmarket) but records the sequential basis on change_unit rather than level_unit, a differing required-field choice from the settled fact."},
+    {"lead_id": "hr-027/b1/row8", "agrees": false, "why": "Stuffs the prior Q4 actual (6.8%) into comparison_low/high with a malformed unit_scale_evidence ('6.8%' instead of a scale marker) despite no stated previous_guidance baseline, and picks the segment:u_s_market token instead of segment:usmarket."},
+    {"lead_id": "hr-027/b2/row8", "agrees": false, "why": "Sets driver_state to 'introduced' with no explicit source-stated new-guide wording to support it, and picks segment:u_s_market rather than segment:usmarket."},
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#172", "agrees": false, "why": "Settles driver_state as 'reaffirmed' for the 50,000-by-2027 target, but no explicit source-stated movement wording or two-guide comparison exists in this event to support anything beyond unknown."},
+    {"lead_id": "hr-034/b1/row9", "agrees": true, "why": "Member 2 (restaurant_count, 50000, FY2027, instant, state unknown, company_confirmed true) matches the settled row-9 fact exactly."},
+    {"lead_id": "hr-034/b2/row9", "agrees": true, "why": "Member 2 matches the settled row-9 fact exactly, including state unknown and the FY2027 instant framing."},
+    {"lead_id": "phase1/MCD_2026-02-11T16.30#173", "agrees": true, "why": "Matches the settled net_restaurant_additions guidance: point 2100, count, FY2026, duration, company_confirmed true, state unknown."},
+    {"lead_id": "hr-004/b1/row11", "agrees": true, "why": "Matches the settled capex metric+surprise pair exactly, using the correct singular driver_name capital_expenditure."},
+    {"lead_id": "hr-004/b2/row11", "agrees": false, "why": "Uses the plural driver_name capital_expenditures, which is not one of the locked exception plurals (earnings/bookings/sales/receivables), contradicting the singular-by-default naming rule; otherwise the structure matches."}
+  ],
+  "open_issues": [
+    {
+      "what": "Row 9's driver_state (unknown vs reaffirmed) for the 50,000-restaurants-by-2027 target.",
+      "why": "The event only restates a previously-established target with continuation language ('remain on track') and never states an explicit reaffirmation or a two-guide comparison, so Rule 4's guidance-movement enum cannot be safely resolved beyond unknown, yet reasonable readers (including one lead) chose reaffirmed."
+    },
+    {
+      "what": "Row 8's slice token choice between 'segment:usmarket' and 'segment:u_s_market', and the level_unit-vs-change_unit field choice for numberless sequential-growth guidance.",
+      "why": "The menu contains two spelling variants of the same apparent U.S.-segment meaning with no in-quote signal to prefer one, and Rule 5a does not explicitly say which canonical field carries a stated growth basis when no numeric slot is populated; both choices materially affect the stored record."
+    },
+    {
+      "what": "Rows 6 and 11 carry byte-identical quotes ('our capital expenditure spend was 3.4 billion, slightly above the high end of the range that we provided for the year.') and therefore produce the same metric+surprise fact pair, but unlike rows 2/9 they were not presented as a shown group.",
+      "why": "Without an explicit group determination, both rows are settled independently and each yields a full metric+surprise pair; the writer's merge-on-id behavior should collapse the duplicate at collapse time, but the absence of a group entry here (versus the analogous row-2/row-9 group) is inconsistent and worth flagging."
+    },
+    {
+      "what": "The capex actual-vs-guidance surprise (rows 6 and 11) cannot be resolved past 'unknown' favorability from the fixed quote alone.",
+      "why": "Capex is a listed no-mainstream-counter-story exception requiring source_framing (Rule 9.4), and the only candidate framing sentence ('as we invested more toward our future year development pipeline...') sits outside this row's quote boundary, so no lawful polarity_proof can be built; this is a genuine, permanent block on ever calling this beat/missed from this row's evidence alone."
+    }
+  ]
+}
+```

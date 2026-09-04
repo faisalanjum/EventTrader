@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0000898173-26-000006#056",
+  "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "net_income",
+          "driver_state": "increased",
+          "level_low": {"value": 605, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": 605, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": 551, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "comparison_high": {"value": 551, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "period_end_date": "2025-12-31",
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000898173-26-000006#056/L1",
+      "exact_match": true,
+      "why": "Same driver_name/state, same point-shaped level ($605M) and comparison ($551M) with prior_year baseline, same Q4 FY2025 period with 2025-12-31 end date and duration time_type, and correctly omits change_value/change_unit since $54M/10% is arithmetically derivable from the two stated points."
+    },
+    {
+      "lane_id": "0000898173-26-000006#056/L2",
+      "exact_match": true,
+      "why": "Identical field set and values to the settled reply (only key ordering differs from L1/settled), same correct omission of change_value/change_unit and same period/unit/baseline choices."
+    }
+  ],
+  "ambiguities": []
+}
+```

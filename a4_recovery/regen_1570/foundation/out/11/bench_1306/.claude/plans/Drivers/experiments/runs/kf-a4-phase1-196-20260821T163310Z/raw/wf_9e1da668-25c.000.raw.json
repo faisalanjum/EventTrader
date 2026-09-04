@@ -1,0 +1,69 @@
+```json
+{
+  "packet_id": "0001041061-25-000109#076",
+  "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sales",
+          "driver_state": "increased",
+          "measurement_raw_spans": ["excluding the impacts of foreign currency translation"],
+          "slice_parts": ["entity_ownership:companyownedstores", "segment:kfcglobaldivision"],
+          "time_type": "duration",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2025
+        }
+      },
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "restaurant_acquisitions",
+          "driver_state": "occurred",
+          "slice_parts": ["segment:kfcglobaldivision"]
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "same_store_sales_growth",
+          "driver_state": "increased",
+          "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "slice_parts": ["entity_ownership:companyownedstores", "segment:kfcglobaldivision"],
+          "time_type": "duration",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-25-000109#076/L1",
+      "exact_match": false,
+      "why": "L1 drops the 'sales' (Company sales, ex-FX, increased) metric fact entirely, keeping only the two cause facts, and it also stamps fiscal_quarter/fiscal_year onto the restaurant_acquisitions action fact even though the quote never states when the acquisitions themselves occurred (only that they were a driver of the quarter's sales increase)."
+    },
+    {
+      "lane_id": "0001041061-25-000109#076/L2",
+      "exact_match": true,
+      "why": "L2 emits the same three facts with identical fields and values: the periodless restaurant_acquisitions action fact, the qualitative ex-FX 'sales' increase with the same slices, and the same_store_sales_growth metric at 6% percent_yoy point with matching slices and period."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the restaurant_acquisitions action fact may carry fiscal_quarter=3/fiscal_year=2025 (as L1 does) or must stay periodless (as L2 and this settlement do).",
+      "why": "The quote states the acquisitions drove the Q3 2025 sales increase, but never states when the acquisitions themselves closed; Rule 6 requires a real stated window for an action fact's period, and only the effect (the sales increase) is dated here, not the cause."
+    },
+    {
+      "what": "Whether 'same_store_sales_growth' is a lawful driver name given Rule 3.10 generally bars motion/change nouns like 'growth' from names.",
+      "why": "The source itself defines 'Same-store sales growth' as one of its own named performance metrics (in the MD&A Introduction), which arguably qualifies it as a carved-out stable metric phrase like 'bookings' or 'operating_margin' rather than a forbidden bare motion noun."
+    }
+  ]
+}
+```

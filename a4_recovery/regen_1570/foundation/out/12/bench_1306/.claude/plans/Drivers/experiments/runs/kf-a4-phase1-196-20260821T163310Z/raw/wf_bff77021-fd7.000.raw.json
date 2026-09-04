@@ -1,0 +1,26 @@
+```json
+{
+  "packet_id": "0001104659-25-118458#108",
+  "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [],
+    "abstentions": [
+      {"reason": "\"The Company has one reportable segment, which includes retail stores, salon services, and e-commerce\" is a basis-of-presentation / segment-structure disclosure describing how the company organizes its financial reporting, not a statement about a driver's state, change, surprise, guidance, or action — it fails Rule 1's fact gate as generic organizational/structural boilerplate, not a real fact about a driver."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-118458#108/L1",
+      "exact_match": true,
+      "why": "L1 also returns no facts and a single abstention on the same ground: the one-reportable-segment statement is a structural/basis-of-presentation disclosure, not a driver fact under Rule 1."
+    },
+    {
+      "lane_id": "0001104659-25-118458#108/L2",
+      "exact_match": true,
+      "why": "L2 also returns no facts and a single abstention with essentially identical reasoning: the sentence is a segment-structure/basis-of-presentation disclosure, not a fact about a driver's state, change, surprise, guidance, or action."
+    }
+  ],
+  "ambiguities": []
+}
+```

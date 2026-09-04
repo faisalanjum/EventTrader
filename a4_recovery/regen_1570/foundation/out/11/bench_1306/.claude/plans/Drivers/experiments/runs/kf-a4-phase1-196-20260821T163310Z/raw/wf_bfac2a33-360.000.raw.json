@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "0000027904-26-000020#025",
+  "settled": {
+    "source_id": "0000027904-26-000020",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "non_fuel_unit_cost",
+          "driver_state": "increased",
+          "change_value": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000020#025/L1",
+      "exact_match": true,
+      "why": "L1 has the same single metric fact: driver_name non_fuel_unit_cost, state increased, change_value 6/1/percent, change_unit percent_yoy, comparison_baseline prior_year, time_type duration, FY2026 Q1 — identical in content to the settled reply (field order differs only)."
+    },
+    {
+      "lane_id": "0000027904-26-000020#025/L2",
+      "exact_match": true,
+      "why": "L2 is byte-for-byte the same content as L1 (only key order differs) and matches the settled reply on every field."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the driver name should be non_fuel_unit_cost or a per-x form like cost_per_available_seat_mile.",
+      "why": "The document elsewhere labels this metric 'Non-fuel unit cost (CASM-Ex)' which is inherently a cost-per-available-seat-mile figure, but this item's own quote never states 'per available seat mile' — Rule 3.5/5a.3 forbid inventing an unstated per-x denominator, so per_x stays null and the name stays non_fuel_unit_cost; a reader who imports the ASM basis from elsewhere in the filing could reasonably disagree."
+    }
+  ]
+}
+```

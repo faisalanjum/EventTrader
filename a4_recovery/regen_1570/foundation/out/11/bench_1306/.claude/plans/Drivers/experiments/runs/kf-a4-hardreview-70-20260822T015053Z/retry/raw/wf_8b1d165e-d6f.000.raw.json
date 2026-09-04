@@ -1,0 +1,58 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_count",
+              "driver_state": "reported",
+              "level_low": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["segment:kfcglobaldivision"],
+              "time_type": "instant",
+              "period_end_date": "2025-12-31",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_count",
+              "driver_state": "reported",
+              "level_low": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "slice_parts": ["geography:outsidetheu_s"],
+              "time_type": "instant",
+              "period_end_date": "2025-12-31",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Member 1 reports the KFC Division's absolute unit count (33,897, unit=count, whole-division scope) while member 2 reports a distinct percentage figure (90%, unit=percent, scoped to the outside-U.S. geography slice), so they carry different values, units and slices and are two separate metric facts about unit_count rather than one restated fact."
+}
+```

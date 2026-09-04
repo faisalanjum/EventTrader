@@ -1,0 +1,39 @@
+```json
+{
+  "packet_id": "YUM_2026-02-04T08.15#183",
+  "settled": {
+    "source_id": "YUM_2026-02-04T08.15",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "tax_rate",
+          "driver_state": "unknown",
+          "level_low": {"value": 22, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+          "level_high": {"value": 24, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "YUM_2026-02-04T08.15#183/L1",
+      "exact_match": true,
+      "why": "L1 matches on every field: guidance lane, driver_name tax_rate, state unknown, range 22-24 percent with unit_scale_evidence 'percent' on both bounds, level_unit percent, time_type duration, fiscal_year 2026 alone, company_confirmed true, no other fields."
+    },
+    {
+      "lane_id": "YUM_2026-02-04T08.15#183/L2",
+      "exact_match": false,
+      "why": "L2 sets unit_scale_evidence to null on both level bounds, but the quote contains the unit marker 'percent', so per Rule 5.6 null is only lawful when no unit/scale marker exists in the quote; here it must be 'percent', matching L1 not L2."
+    }
+  ],
+  "ambiguities": []
+}
+```

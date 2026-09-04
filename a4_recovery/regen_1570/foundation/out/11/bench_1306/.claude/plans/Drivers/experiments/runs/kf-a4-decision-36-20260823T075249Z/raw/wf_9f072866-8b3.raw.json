@@ -1,0 +1,224 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 51.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 51.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 53.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 53.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "half": 1,
+              "period_end_date": "2026-02-14",
+              "period_scope": "half"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: the quote states a concrete, sourced gross-margin decrease (51.7% vs 53.4% prior-year comparable period), a genuine metric fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "tariff_policy",
+              "driver_state": "persists"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a lawful_abstention_control, but the quote reports two dated, concrete regulatory actions (the Supreme Court invalidating IEEPA tariffs, the President introducing new tariffs under different authority) plus an ongoing 'continues to evolve' condition \u2014 a real, non-boilerplate external policy-in-force fact, not generic litigation-style hedging \u2014 so it settles as a fact rather than a correctly-yielding control."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "effective_tax_rate",
+              "driver_state": "increased",
+              "level_low": {"value": 20.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 20.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 20.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 20.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "period_end_date": "2026-02-14",
+              "period_scope": "ttm"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: a concrete trailing-four-quarter effective-tax-rate increase (20.4% vs 20.3% a year earlier) is a genuine metric fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 103.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 2,
+              "period_end_date": "2026-02-14",
+              "slice_parts": ["customer:commercial", "geography:us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: domestic commercial sales are reported with a concrete stated dollar increase ($103.0 million to $1.2 billion) over the comparable prior year, sliced by geography (menu reuse geography:us) and customer (off-menu coin customer:commercial)."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic, standing description of AutoZone's overall seasonal sales pattern (higher sales February-September, lower December-January) with no period-specific state, change, surprise, guidance, or action tied to this filing; a bare background characterization of the business, failing Rule 1 gate step 2 (generic boilerplate)."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed: the seasonality sentence is generic, non-period-specific background about the nature of the business and correctly yields no fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic non-materiality hedge stating the impact of weather on sales mix 'is not significant,' with no stated direction, level, or period-bound event; recurring risk/immateriality boilerplate that fails Rule 1 gate step 2, and the banned generic effect word 'impact' blocks any lawful driver name in any case."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed: the weather/non-materiality sentence is generic risk-hedge boilerplate and correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The twenty-four-week window exactly equals AutoZone's own stated first-half structure (two 12-week quarters), so I resolved the shape field to half=1 and period_scope='half'; a 'cumulative since fiscal-year start' framing would instead support period_scope='ytd', and both readings are defensible."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Genuine tension between a metric reading (a standing, re-readable 'policy-in-force' condition, state=persists, matching the rule's own qualitative-metric example) and an action_event reading (the two discrete completed actions: the Supreme Court's invalidation and the President's new tariffs); I also treated the SCOTUS ruling and the new tariffs as one combined tariff_policy fact rather than splitting them into two separate driver facts, since both describe the same evolving regime rather than two independently reusable causes."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The 'commercial' population could be read as a customer slice (the company's own commercial-account customer base) or a channel slice (a commercial sales program/method); I resolved it as customer:commercial because the source describes it as an account/credit relationship with named customer types (garages, dealers, fleet owners), not a distribution method. I also recorded the co-stated $103.0 million and 9.8% change as one dollar-based fact rather than splitting into a second percent-based fact, since both describe the identical prior-year comparison."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001104659-26-032757#125",
+      "agrees": true,
+      "why": "Same driver, state, values, shapes, unit, prior_year baseline, half=1, fiscal_year, and period_end_date as my settled fact; I additionally emit the consistent period_scope='half' classification, a compatible refinement."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#126",
+      "agrees": false,
+      "why": "The lead abstains, treating the tariff passage as generic monitoring boilerplate; my independent settlement finds a real, dated regulatory action (SCOTUS invalidation plus new presidential tariffs) that qualifies as a policy-in-force metric fact, so it disagrees with the lead's no-fact conclusion."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#127",
+      "agrees": true,
+      "why": "Matches field for field: effective_tax_rate increased, 20.4% vs 20.3% prior-year TTM comparison, same fiscal_year, period_end_date, and period_scope=ttm."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#128",
+      "agrees": true,
+      "why": "Matches my single dollar-based net_sales fact with the same level, change, baseline, period fields, and slice parts (geography:us, customer:commercial); I settled the same single-fact-vs-split question the lead raised, in favor of one fact."
+    },
+    {
+      "lead_id": "hr-021/b1/row4",
+      "agrees": true,
+      "why": "Matches field for field, including time_type=duration and the same slice_parts."
+    },
+    {
+      "lead_id": "hr-021/b2/row4",
+      "agrees": true,
+      "why": "Same driver, state, values, baseline, period, and slice parts as my settled fact; it omits the time_type field, a minor completeness gap rather than a substantive disagreement."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#129",
+      "agrees": true,
+      "why": "Matches my no-fact/abstention conclusion and boilerplate-seasonality reasoning."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#130",
+      "agrees": true,
+      "why": "Matches my no-fact/abstention conclusion on the weather non-materiality sentence, including citing the banned generic 'impact' framing."
+    }
+  ],
+  "open_issues": []
+}
+```

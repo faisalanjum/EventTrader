@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "share_repurchase_authorization",
+        "driver_state": "reported",
+        "level_low": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "slice_parts": ["unknown:us-gaap:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram"],
+        "time_type": "instant",
+        "period_end_date": "2026-01-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

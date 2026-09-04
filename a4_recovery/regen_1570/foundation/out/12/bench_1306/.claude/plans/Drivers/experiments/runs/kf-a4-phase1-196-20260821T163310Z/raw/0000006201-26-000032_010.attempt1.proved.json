@@ -1,0 +1,49 @@
+```json
+{
+  "packet_id": "0000006201-26-000032#010",
+  "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "available_seat_mile",
+        "item": {
+          "driver_name": "operating_cost_per_available_seat_mile",
+          "driver_state": "increased",
+          "level_low": {"value": 19.38, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "level_high": {"value": 19.38, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "comparison_low": {"value": 18.34, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "comparison_high": {"value": 18.34, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000032#010/L1",
+      "exact_match": true,
+      "why": "L1 matches the settled reply field-for-field: same name, state, point-shaped level (19.38) and comparison (18.34) both in cents (usd, multiplier 0.01), prior_year baseline, duration time_type, Q1 FY2026, and no invented period dates."
+    },
+    {
+      "lane_id": "0000006201-26-000032#010/L2",
+      "exact_match": false,
+      "why": "L2 is identical to the settled item except it adds period_start_date '2026-01-01' and period_end_date '2026-03-31', which are not stated anywhere in this quote (only 'first quarter of 2026' is given) — an invented precision beyond what the source states, so it does not match."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether exact calendar-quarter dates (Jan 1 - Mar 31, 2026) may be filled in for a metric fact whose period is only stated as a fiscal quarter/year.",
+      "why": "Rule 6 allows metric facts to use a 'safely derived' real period, which could argue for inferring standard calendar-quarter dates from 'first quarter of 2026'; but the same rule's field-population instruction says fields the source does not state stay null, and this specific quote never states exact dates, so the settled reply leaves period_start_date/period_end_date unset rather than deriving them."
+    }
+  ]
+}
+```

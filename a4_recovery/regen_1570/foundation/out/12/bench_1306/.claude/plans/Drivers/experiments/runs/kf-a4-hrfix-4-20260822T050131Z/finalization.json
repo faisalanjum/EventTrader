@@ -1,0 +1,60 @@
+{
+ "door": "a4_hard_review_group_shape_correction",
+ "attempt": 1,
+ "run_id": "kf-a4-hrfix-4-20260822T050131Z",
+ "receipt_sha256": "4bcc3cc8fbaf5bddbcbd35866916cfcdef784be1eb357cc0b8bffcc4190ec56f",
+ "manifest_sha256": "f8a43013a4ad38216cc3eeba90b324490ea616e8dfd1e40a69d5a3c64ab25254",
+ "correction_of": {
+  "primary_finalization_sha256": "92e4a63c7e907656f6dbf754d5edeba3174a453578806897b26a5cb46684efad",
+  "child_finalization_sha256": "8e8ce1c7907396c836e3baee034e0b884cea675a1647bc98a266e656fab61dbd"
+ },
+ "harvested_raw": [
+  "wf_d05198c3-812.000.raw.json",
+  "wf_a94e4cb7-7b0.000.raw.json",
+  "wf_ffde5e8b-33c.000.raw.json",
+  "wf_e5efc7e3-8c1.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "hr-029/b2",
+   "valid",
+   ""
+  ],
+  [
+   "hr-033/b1",
+   "valid",
+   ""
+  ],
+  [
+   "hr-033/b2",
+   "valid",
+   ""
+  ],
+  [
+   "hr-034/b1",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 4,
+  "valid": 4,
+  "invalid_response": 0,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "budget": {
+  "ledger_before": 4307,
+  "this_attempt": 4,
+  "spent_so_far": 4,
+  "ledger_after": 4311,
+  "frozen_primaries": 4,
+  "worst_case_total": 8,
+  "global_ceiling": 4382,
+  "within_ceiling": true
+ },
+ "retry": []
+}

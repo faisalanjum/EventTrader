@@ -1,0 +1,56 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "high_efficiency_equipment_installations",
+              "driver_state": "reported",
+              "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "period_start_date": "2026-02-03",
+              "period_end_date": "2026-02-03"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "high_efficiency_equipment_installations",
+              "driver_state": "unknown",
+              "level_low": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Member 1 is a reported current-state metric (350 restaurants equipped as of today, an instant level with a bare stated value) while member 2 is a forward-looking company guide (\"we anticipate about 2,000 by year end\", an outlook verb signaling guidance for a future year-end target), so they differ in fact_type, period, and value and are two distinct facts about the same rollout driver rather than one fact."
+}
+```

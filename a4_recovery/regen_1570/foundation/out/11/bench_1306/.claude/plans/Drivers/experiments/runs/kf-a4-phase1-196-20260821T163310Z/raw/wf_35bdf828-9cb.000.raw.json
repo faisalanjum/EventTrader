@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001058090-26-000007#094",
+  "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote is the generic definitional footnote for the 'legal proceedings' non-GAAP adjustment line used across the reconciliation tables — it describes, in the abstract, what kind of item that adjustment category captures (reductions/charges tied to legal settlements exceeding typical costs for such proceedings), but states no specific value, direction, or period-bound occurrence itself; the actual dollar figures for this period sit in the reconciliation table rows outside this quote. This is boilerplate methodology/definition text, not a reportable driver fact."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001058090-26-000007#094/L1",
+      "exact_match": true,
+      "why": "L1 also emits facts=[] with a single abstention reasoning that the quote is a generic definitional/methodology footnote for the legal-proceedings adjustment category with no period-specific value or occurrence — the same substantive judgment reached here."
+    },
+    {
+      "lane_id": "0001058090-26-000007#094/L2",
+      "exact_match": true,
+      "why": "L2 also emits facts=[] with a single abstention reasoning that the quote is boilerplate footnote definition text describing the adjustment category in the abstract rather than a specific reported fact, noting the actual dollar figures live in the table, not the quote — matches the settled judgment."
+    }
+  ],
+  "ambiguities": []
+}
+```

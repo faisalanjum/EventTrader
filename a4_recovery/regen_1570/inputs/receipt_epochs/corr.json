@@ -1,0 +1,35 @@
+{
+ "manifest_sha256": "c0b76f92390bd05bb992e4409dc555a7f2be5b41ced4e6fe2f41478ef5e2e013",
+ "bound": {
+  "a4_key_owner": "a289601b0bf52f223661f63f64128717baabb9ab1d061055119474d3cc4321f9",
+  "hard_review_owner": "1f74d181b4d8746cdcca8ad9703d6340d4fbeb38f1fad5534a204babbe553611",
+  "correction_owner": "d4a0323a43ddd8e68487347652986dedf16a9ec2a277ca41d82a55db3d248ed4",
+  "final_owner_loader": "b19fb822f766f3cef72d93916b21d9704b8634f4bf63c9c06213f3de096eb057",
+  "raw_parser": "12d4aca9a7bfd9a51303271b54433ad55058dad268e771cff757a3ea0b68a14a",
+  "gold_door": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "official_evidence": "9e4762e56c527d95c68b3737dd41d1c478337ed6d38ec0017ea048a855c32229",
+  "inventory_review_owner": "fcd18139f6c1393c55b81042820c3004ec8eae362fbe4bc7e219639c5754dcf7",
+  "owner_rulings": "a925ba6ffce6ae14a47c942f5c660c626d13c1060910c2e79055680c7632dbca",
+  "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff",
+  "regrade": "f587b7ab3d08933b49bd6f04f4d9ecc9eff8e043f1d41c33a60a6faeea170b7f",
+  "conflicts": "29293450b302e7e158daef7591ccd3bf57967101b907f176ad298ae548f60728",
+  "phase1_finalization": "45e0f404506c6178a11cd455ad8e5fe3e2a466bf5cb4b29ae743df67781f277e",
+  "hard_review_finalization": "92e4a63c7e907656f6dbf754d5edeba3174a453578806897b26a5cb46684efad",
+  "hard_review_child_finalization": "8e8ce1c7907396c836e3baee034e0b884cea675a1647bc98a266e656fab61dbd",
+  "correction_finalization": "04a802d97e254fdcf8cc2023ea5e89536252745df9e23b7172f25224cf9e438e"
+ },
+ "fields": [
+  "run_id",
+  "door",
+  "phase",
+  "attempt",
+  "allowed",
+  "parent",
+  "transport",
+  "manifest_sha256",
+  "bound",
+  "v1_evidence",
+  "prompts",
+  "states"
+ ]
+}

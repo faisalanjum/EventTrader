@@ -1,0 +1,49 @@
+```json
+{
+  "packet_id": "DRI_2026-03-19T08.30#163",
+  "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "increased",
+          "level_low": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "change_value": {"value": 5.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "measurement_raw_spans": ["Adjusted diluted", "continuing operations"]
+        },
+        "per_x": "share"
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DRI_2026-03-19T08.30#163/L1",
+      "exact_match": false,
+      "why": "Matches on name, state, values, units, comparison_baseline, period and per_x, but its measurement_raw_spans entry 'from continuing operations' includes the connective preposition 'from', whereas the settled span is the bare qualifier 'continuing operations' (consistent with the rule's own examples like 'constant currency', 'adjusted', which never include a leading preposition)."
+    },
+    {
+      "lane_id": "DRI_2026-03-19T08.30#163/L2",
+      "exact_match": true,
+      "why": "Matches the settled reply field-for-field, including measurement_raw_spans ['Adjusted diluted', 'continuing operations'], values, units, comparison_baseline 'prior_year', change_unit 'percent_yoy', and per_x 'share' at the fact level."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the measurement_raw_spans entry for the continuing-operations qualifier should be copied as 'from continuing operations' (full contiguous verbatim span including the preposition) or as the bare qualifier 'continuing operations' (dropping the connective 'from').",
+      "why": "Rule 8 says spans are copied VERBATIM, which could support keeping 'from' since it is contiguous in the quote with no intervening prose; but every worked example in the rule (constant currency, organic, adjusted, GAAP) is a bare qualifier without a leading preposition, which favors dropping 'from' as mere glue rather than part of the measurement flavor itself. This is a genuine judgment call, not resolvable from the text alone."
+    }
+  ]
+}
+```

@@ -1,0 +1,41 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#069",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sales",
+          "driver_state": "increased",
+          "time_type": "duration",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "slice_parts": ["segment:longhornsteakhousesegment"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#069/L1",
+      "exact_match": true,
+      "why": "Same single metric fact: driver_name=sales, driver_state=increased, time_type=duration, fiscal_quarter=3, fiscal_year=2026, slice_parts=[segment:longhornsteakhousesegment]; key order differs but content is identical."
+    },
+    {
+      "lane_id": "0000940944-26-000009#069/L2",
+      "exact_match": true,
+      "why": "Identical field set and values to the settled fact (sales/increased/Q3 FY2026/duration/longhornsteakhousesegment slice), only key ordering differs."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "The menu offers two similar segment tokens: 'segment:longhornsteakhouse' and 'segment:longhornsteakhousesegment'.",
+      "why": "The quote's 'LongHorn Steakhouse' sits in a table explicitly labeled 'sales by segment', matching the prose-named reportable segment (Olive Garden, LongHorn Steakhouse, Fine Dining, Other Business), so 'segment:longhornsteakhousesegment' was chosen as the reportable-segment meaning rather than the bare brand-level token; a reader without that context could pick the other token."
+    }
+  ]
+}
+```

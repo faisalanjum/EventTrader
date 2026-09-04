@@ -1,0 +1,59 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#169",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "capital_expenditure",
+          "driver_state": "reported",
+          "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "item": {
+          "driver_name": "capital_expenditure",
+          "driver_state": "unknown",
+          "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": false
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#169/L1",
+      "exact_match": true,
+      "why": "L1's metric (reported, 3.4B point, m_usd, duration, FY2025) and surprise (unknown state, same value/basis, surprise_basis_hint actual, comparison_baseline previous_guidance, has_favorability_wording false, no polarity_proof) match the settled reply field for field, including the singular driver_name capital_expenditure."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#169/L2",
+      "exact_match": false,
+      "why": "L2 uses the plural driver_name capital_expenditures (not one of the listed standard financial plurals, so singular is the lawful default) and marks the surprise as beat with a polarity_proof whose sentence is drawn from text after the item's fixed quote boundary ('as we invested more toward our future year development pipeline...'), which is not available evidence for this located item; without in-quote favorability wording or source framing, Rule 9.4 requires state unknown with no polarity_proof, as settled."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether source-framing evidence for the surprise's polarity_proof may be drawn from the sentence immediately following the item's fixed quote (the pipeline-investment rationale) or must come strictly from inside the supplied quote.",
+      "why": "The full event is context for interpreting the target, but the item's located quote is fixed and not to be extended; Rule 5.6/8 require evidentiary spans to sit inside the quote, so treating the adjacent rationale sentence as usable evidence (as L2 does, yielding 'beat') versus treating it as out-of-scope (yielding 'unknown', as settled) changes the surprise outcome materially."
+    }
+  ]
+}
+```

@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#171",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "unknown",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "change_unit": "percent_sequential",
+          "value_text": "expected to decelerate sequentially from the 6.8% in Q4",
+          "company_confirmed": true,
+          "slice_parts": ["segment:usmarket"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#171/L1",
+      "exact_match": true,
+      "why": "L1 matches on lane (guidance), driver_name (comparable_sales), driver_state (unknown), period (Q1 FY2026), time_type (duration), change_unit (percent_sequential per the explicit 'sequentially' wording), company_confirmed (true), and slice (segment:usmarket); its value_text is worded slightly differently but carries the same numberless deceleration content, so it is an exact match on every rule-governed field."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#171/L2",
+      "exact_match": false,
+      "why": "L2 omits the change_unit field even though the quote explicitly says 'decelerate sequentially', which Rule 5a.4's numberless-growth-basis carve-out requires be recorded as percent_sequential, and it picks the 'segment:u_s_market' menu token instead of 'segment:usmarket' for the U.S. slice, so it is not an exact match."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "The menu lists two apparently-synonymous tokens for the U.S. segment slice: 'segment:usmarket' and 'segment:u_s_market' (and similarly duplicated under entity_ownership).",
+      "why": "Both spellings denote the same real-world U.S. market segment and the transcript gives no marker (e.g. which fiscal-year XBRL taxonomy is in force) to decide which token this period actually uses, so the choice between the two is genuinely undetermined from the source alone; 'segment:usmarket' was picked as the settled value but 'segment:u_s_market' remains equally defensible."
+    }
+  ]
+}
+```

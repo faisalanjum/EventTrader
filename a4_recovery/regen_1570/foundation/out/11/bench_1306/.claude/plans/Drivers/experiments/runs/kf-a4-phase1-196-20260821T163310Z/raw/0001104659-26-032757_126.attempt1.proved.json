@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0001104659-26-032757#126",
+  "settled": {
+    "source_id": "0001104659-26-032757",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The targeted text 'Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations' is generic risk-monitoring boilerplate: it states no company driver state, direction, size, or discrete action — only that an external policy area is unsettled and the company is watching for effects, the same hedge language used throughout the filing's forward-looking-statements section (which itself lists 'tariffs, trade policies and other geopolitical factors' as a generic risk). Fails Rule 1 gate step 2 (generic risk boilerplate) — return the one abstention."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-032757#126/L1",
+      "exact_match": false,
+      "why": "L1 emits a metric fact (driver_name tariff_policy, state persists), but the settled reply abstains: the targeted sentence is generic monitoring/hedge language with no stated direction, size, or concrete company-specific effect, so it fails the Rule 1 fact gate rather than qualifying as a persisting metric."
+    },
+    {
+      "lane_id": "0001104659-26-032757#126/L2",
+      "exact_match": true,
+      "why": "L2 abstains on the same ground — the target is generic risk/monitoring boilerplate with no stated driver state, direction, or action — matching the settled reply's empty facts list and abstention reasoning."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'tariff policy continues to evolve' should instead be read as a real, qualitative external-force metric (carve-out analogous to fed_rate) rather than boilerplate.",
+      "why": "Rule 3.10 carves out external actors whose own action IS the cause (e.g., fed_rate) as lawful metric names, and the sentence does name an external policy actor; but unlike fed_rate the sentence states no direction, level, or resolvable condition beyond 'evolving' and 'monitoring,' which is the defining shape of Rule 1's generic-boilerplate exclusion, so the abstention is the safer, rule-consistent reading."
+    }
+  ]
+}
+```

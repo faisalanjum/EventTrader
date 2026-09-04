@@ -1,0 +1,39 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#173",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "net_restaurant_additions",
+          "driver_state": "unknown",
+          "level_low": {"value": 2100, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2100, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#173/L1",
+      "exact_match": true,
+      "why": "Same fact_type guidance, same driver_name net_restaurant_additions, same unknown state, same point-shaped level of 2100 count with null scale evidence, same fiscal_year 2026, duration time_type, and company_confirmed true; field order differs but content is identical."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#173/L2",
+      "exact_match": true,
+      "why": "Identical content to the settled reply — guidance lane, net_restaurant_additions, unknown state, point level 2100/count, fiscal_year 2026, duration, company_confirmed true; only key ordering differs from L1/settled."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "0001104659-26-032757#127",
+  "settled": {
+    "source_id": "0001104659-26-032757",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "effective_tax_rate",
+          "driver_state": "increased",
+          "level_low": {"value": 20.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 20.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "comparison_low": {"value": 20.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": 20.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "period_end_date": "2026-02-14",
+          "period_scope": "ttm",
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-032757#127/L1",
+      "exact_match": true,
+      "why": "L1's driver_name, driver_state, level/comparison point values and units, comparison_baseline, period_end_date, period_scope, and time_type all match the settled reply field-for-field."
+    },
+    {
+      "lane_id": "0001104659-26-032757#127/L2",
+      "exact_match": true,
+      "why": "L2 is byte-identical to L1 and likewise matches the settled reply field-for-field."
+    }
+  ],
+  "ambiguities": []
+}
+```

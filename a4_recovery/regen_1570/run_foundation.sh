@@ -6,15 +6,17 @@
 # derive the frozen base tree); every projection row
 # is copied to its historical path and verified before and after the run. Nothing durable is written
 # under /tmp and no mount survives the namespace.
-#   run_foundation.sh run <n> [--trace]     build number n into foundation/out/<n> (strace closure optional)
+#   run_foundation.sh run <n> [--trace] [--tests]   build number n into foundation/out/<n> (strace closure optional;
+#                                             --tests runs tests/test_v6_world.py on the built world, to <n>/world_tests.txt,
+#                                             before the completion marker; a failing test is the exit status)
 #   run_foundation.sh red                   the RED probes against the preliminary A4 view
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-MODE="${1:-run}"; N="${2:-1}"; TRACE="${3:-}"
+MODE="${1:-run}"; N="${2:-1}"; TRACE="${3:-}"; TESTS="${4:-}"
 [ "$MODE" = run ] && mkdir -p "$HERE/foundation/out/$N"
-unshare -rm --propagation private /bin/bash -s "$HERE" "$MODE" "$N" "$TRACE" <<'INNER'
+unshare -rm --propagation private /bin/bash -s "$HERE" "$MODE" "$N" "$TRACE" "$TESTS" <<'INNER'
 set -u
-HERE="$1"; MODE="$2"; N="$3"; TRACE="$4"
+HERE="$1"; MODE="$2"; N="$3"; TRACE="$4"; TESTS="$5"
 PY=/home/faisal/EventMarketDB/venv/bin/python3
 export PYTHONDONTWRITEBYTECODE=1
 S=/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad
@@ -60,7 +62,16 @@ fi
 if [ -n "$TRACE" ]; then
   (cd "$HERE" && $PY -B foundation_closure.py "$OUT/closure.strace" "$TABLE" "$OUT/CLOSURE.tsv") > "$OUT/closure.txt" 2>&1 || { cat "$OUT/closure.txt"; exit 7; }
   cat "$OUT/closure.txt"
-  # the one success marker: written only after the post-run view and the closure both passed
+fi
+if [ -n "$TESTS" ]; then
+  # the real owner boundaries on the built world (each mutation restored by its test); the accepted export above is untouched;
+  # a failing test is this wrapper's exit status and no completion marker is written
+  (cd "$HERE" && $PY -B -m pytest -p no:cacheprovider --import-mode=importlib -q tests/test_v6_world.py) > "$OUT/world_tests.txt" 2>&1; trc=$?
+  echo "world tests rc=$trc : $(tail -1 "$OUT/world_tests.txt")"
+  [ $trc -eq 0 ] || exit 8
+fi
+if [ -n "$TRACE" ]; then
+  # the one success marker: written only after the post-run view, the closure and (when asked) the world tests all passed
   printf 'tree %s\n%s\n' "$(sha256sum "$OUT/TREE.tsv" | cut -d' ' -f1)" "$(head -1 "$OUT/closure.txt")" > "$OUT/COMPLETE"
 fi
 exit 0

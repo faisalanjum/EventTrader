@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#119",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "introduced",
+          "level_low": {"value": 9.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 11.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent_yoy",
+          "measurement_raw_spans": ["diluted"],
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        },
+        "per_x": "share"
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#119/L1",
+      "exact_match": true,
+      "why": "L1 has identical fact_type, driver_name (earnings_per_share), driver_state (introduced), level_low/high (9.4/11.4, mult 1, evidence '%'), level_shape_hint (range), level_unit (percent_yoy), measurement_raw_spans (['diluted']), fiscal_year (2026), time_type (duration), company_confirmed (true), and per_x (share) at the fact level."
+    },
+    {
+      "lane_id": "0001104659-26-027061#119/L2",
+      "exact_match": true,
+      "why": "L2 has the identical field set and values as the settled reply; only the JSON key order differs (per_x listed before item), which is not a semantic difference."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "driver_state = introduced vs unknown",
+      "why": "Rule 4 says guidance movement is recorded only when the source states it and a 'bare guide' defaults to unknown; here the source frames this as newly 'provided fiscal 2026 guidance' with no prior FY2026 guide mentioned, which reads as first-time issuance (introduced) rather than a movement update, but the text never uses a word like 'initiated' or 'first' to remove all doubt."
+    }
+  ]
+}
+```

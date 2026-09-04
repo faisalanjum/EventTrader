@@ -1,0 +1,138 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "interest_expense_net",
+              "driver_state": "increased",
+              "level_low": {"value": 4.1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 4.1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -1.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "period_end_date": "2025-11-01"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item; settlement confirms a genuine metric fact (interest expense, net swinging from a $1.7 million net interest income credit to a $4.1 million net interest expense charge), so the proposed kind and final outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 39.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 39.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "period_end_date": "2025-11-01",
+              "period_scope": "ytd",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 3
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item; settlement confirms a genuine metric fact (gross margin rising to 39.6% for the 39-week year-to-date period from 39.1% in the prior-year period), so the proposed kind and final outcome agree."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote states a conditional loan-covenant requirement (a minimum fixed charge coverage ratio of 1.0 the Company must maintain only when availability under the Loan Agreement falls below a specified threshold) rather than the Company's own actual reported ratio level, a stated change, guidance, a surprise versus an expectation, or a discrete action/event; it is a contract term, not a real fact about the driver's state, change, surprise, guidance, or action, so it fails Rule 1's gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item, but the quote only recites a conditional loan-covenant minimum ratio requirement rather than the Company's own actual measured ratio, so it yields no fact and is excluded rather than confirmed as a real item."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [],
+        "abstentions": [
+          {"reason": "\"The Company has one reportable segment, which includes retail stores, salon services, and e-commerce\" is a basis-of-presentation/segment-structure disclosure describing how the Company organizes its financial reporting, not a statement about a driver's state, change, surprise, guidance, or action; it is generic structural boilerplate that fails Rule 1's gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control; settlement confirms the one-reportable-segment sentence is structural basis-of-presentation disclosure carrying no driver fact, so the proposed kind and final outcome agree."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001104659-25-118458#105",
+      "agrees": true,
+      "why": "The lead's settled fact (interest_expense_net, increased, level 4.1M point vs comparison -1.7M point, m_usd, prior_year baseline, duration, FY2025 Q3, end 2025-11-01) matches my independently settled fact exactly in name, signed values, shapes, unit, baseline, and period."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-118458#106",
+      "agrees": true,
+      "why": "The lead's settled fact (gross_margin, increased, 39.6 vs 39.1 point/point, percent, prior_year baseline, ytd scope, FY2025 Q3, end 2025-11-01, no invented start date) matches my independently settled fact exactly, correctly leaving period_start_date unstated rather than back-computing it."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-118458#107",
+      "agrees": true,
+      "why": "The lead abstains on the same ground I reached: the sentence states a conditional loan-covenant minimum ratio requirement, not the Company's own reported fixed-charge-coverage level, so it fails Rule 1's fact gate."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-118458#108",
+      "agrees": true,
+      "why": "The lead abstains on the same ground I reached: the one-reportable-segment statement is a basis-of-presentation/segment-structure disclosure, not a fact about a driver's state, change, surprise, guidance, or action."
+    }
+  ],
+  "open_issues": []
+}
+```

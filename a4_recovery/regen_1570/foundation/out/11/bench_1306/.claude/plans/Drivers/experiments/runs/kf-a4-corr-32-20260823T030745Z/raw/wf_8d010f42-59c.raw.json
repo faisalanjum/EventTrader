@@ -1,0 +1,250 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "tax_rate",
+              "driver_state": "unknown",
+              "level_low": {"value": 22, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_high": {"value": 24, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the stated 22-24% tax-rate range is a genuine company-confirmed forward guidance fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 6.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 6.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["X Special"]
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: a full-year reported X Special EPS with a stated prior-year YoY change is a genuine metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "market_entry",
+              "driver_state": "reported",
+              "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:tacobellglobaldivision"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_unit_openings",
+              "driver_state": "increased",
+              "level_low": {"value": 155, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 155, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "change_value": {"value": 40, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:tacobellglobaldivision", "geography:international"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed, and per owner ruling 1 (a locator hint cannot suppress another fact in the quote) the sentence carries two independent counted facts \u2014 five new markets entered, and 155 international units opened up ~40% YoY \u2014 not just one."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "interest_expense",
+              "driver_state": "unknown",
+              "level_low": {"value": 500, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 520, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "range",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "conditions": "when excluding any potential debt issuances",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: a stated full-year interest-expense range with an explicit condition clause is a genuine company-confirmed guidance fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located text is a refusal to disclose further information about the strategic review ('we cannot share further details'); it states no new fact about the review's state, change, or outcome, so it fails the du_worthy gate as generic non-disclosure boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: the quote is a decline-to-comment statement carrying no disclosable fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The driver term 'EUV' is never expanded or defined anywhere in this transcript (it is distinct from the separately spelled-out 'average unit volume'/AUV concept used for Taco Bell), so no verified driver name can be lawfully assigned per Rule 3.5's ban on guessing an unverified acronym expansion."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a lawful-abstention control and confirmed: the unverifiable 'EUV' acronym blocks a lawful driver name, so abstention is correct."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'almost 40%' pairs an approximation qualifier with a specific digit, so whether Rule 5.4 treats it as a stated numeric value (as settled here) or an unresolvable vague quantity is not fully explicit in the rules."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/YUM_2026-02-04T08.15#183",
+      "agrees": true,
+      "why": "Matches the settled tax_rate guidance fact field-for-field: range 22-24 percent with 'percent' cited as unit_scale_evidence, level_unit percent, fiscal_year 2026 alone, company_confirmed true."
+    },
+    {
+      "lead_id": "phase1/YUM_2026-02-04T08.15#184",
+      "agrees": true,
+      "why": "Matches the settled earnings_per_share fact field-for-field: point 6.05 usd with per_x share, change 10 percent_yoy vs prior_year, measurement span 'X Special', fiscal_year 2025."
+    },
+    {
+      "lead_id": "phase1/YUM_2026-02-04T08.15#185",
+      "agrees": false,
+      "why": "Its single gross_unit_openings fact matches ours exactly, but it omits the independent 'entered five new markets' fact that owner ruling 1 requires be extracted separately."
+    },
+    {
+      "lead_id": "hr-025/b1/row3",
+      "agrees": false,
+      "why": "It abstains entirely on the theory that 'Taco Bell' alone cannot select between two bundled facts, but the quote states two independently extractable countable facts that need no such disambiguation."
+    },
+    {
+      "lead_id": "hr-025/b2/row3",
+      "agrees": false,
+      "why": "Its single gross_unit_openings fact matches one of our two settled facts exactly but likewise omits the separate market_entry fact."
+    },
+    {
+      "lead_id": "phase1/YUM_2026-02-04T08.15#186",
+      "agrees": true,
+      "why": "Matches the settled interest_expense guidance fact field-for-field: range 500-520 million usd, matching conditions clause, fiscal_year 2026, company_confirmed true."
+    },
+    {
+      "lead_id": "phase1/YUM_2026-02-04T08.15#187",
+      "agrees": false,
+      "why": "It manufactures a strategic_review action_event fact from context outside this row's own located quote; the row's own text is only a refusal-to-share-details statement that states no such fact itself, so we abstain under the du_worthy gate."
+    },
+    {
+      "lead_id": "phase1/YUM_2026-02-04T08.15#188",
+      "agrees": false,
+      "why": "It assumes the unexpanded acronym 'EUV' stands for the transcript's separately defined 'AUV' (average unit volume) and confidently names and slices a fact on that guess; we abstain because EUV is never verified in this transcript."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'almost 40%' in the row 3 gross_unit_openings fact is a stated numeric change value under Rule 5.4 or an unresolvable vague approximation.",
+      "why": "It combines a specific digit (40) with an approximation qualifier ('almost'), and treating it as vague rather than stated would drop change_value/change_unit from that fact entirely, changing the final encoding."
+    }
+  ]
+}
+```

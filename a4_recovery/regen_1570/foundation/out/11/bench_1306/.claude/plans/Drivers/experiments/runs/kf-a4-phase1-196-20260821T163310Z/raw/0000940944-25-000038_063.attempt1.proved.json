@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0000940944-25-000038#063",
+  "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restaurant_count",
+          "driver_state": "reported",
+          "level_low": {"value": 2159, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2159, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_end_date": "2025-05-25",
+          "fiscal_year": 2025,
+          "slice_parts": ["channel:entityoperatedunits", "geography:northamerica"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-25-000038#063/L1",
+      "exact_match": true,
+      "why": "L1 has the same driver_name, state, point-shaped level object {2159,2159} with count unit, instant time_type, period_end_date 2025-05-25, fiscal_year 2025, and slice_parts [channel:entityoperatedunits, geography:northamerica] -- identical to the settled reply."
+    },
+    {
+      "lane_id": "0000940944-25-000038#063/L2",
+      "exact_match": false,
+      "why": "L2 drops the geography:northamerica slice (leaving only channel:entityoperatedunits) even though the quoted clause explicitly scopes the count to 'the United States and Canada', and it adds an unneeded period_start_date equal to period_end_date, which is not required since the source states only a single as-of point, not a start/end pair."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'geography:northamerica' is the correct menu reuse token for 'the United States and Canada'.",
+      "why": "The menu has no literal 'united_states_and_canada' token; 'geography:northamerica' is the closest reuse candidate and the same phrase 'United States and Canada' recurs verbatim elsewhere in the filing (e.g., MD&A overview) describing the identical owned-and-operated restaurant population, supporting reuse, but the menu itself never defines what countries 'northamerica' covers."
+    }
+  ]
+}
+```

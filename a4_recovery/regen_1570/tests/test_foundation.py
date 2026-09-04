@@ -7,7 +7,7 @@ the baseline check refuses digest, file-count and problem drift; the inventory e
 unrestored or swapped inventory; the Git identity derives only from a store holding the frozen commit; the
 freshly built review package holds the freeze-receipt anchors and refuses each mutation; the closure classifier flags one
 application read outside the candidate; and the two exported builds hold every anchor and are
-byte-identical. The 22 corpus-freeze cases are not repeated here. No coverage framework.
+byte-identical, for the foundation builds and for the signed-V6 continuation builds alike. The 22 corpus-freeze cases are not repeated here. No coverage framework.
 """
 import hashlib
 import io
@@ -57,19 +57,37 @@ def test_a_reused_or_nonempty_output_root_refuses_before_any_build_work(tmp_path
     assert r.returncode != 0 and "not inside the projected" in r.stdout and not os.listdir(fresh)
 
 
-def test_both_fresh_builds_hold_every_anchor_and_are_byte_identical():
-    builds = _complete_builds()
+def _builds_by_kind():
+    """Complete roots by what they reached: the foundation alone, or the whole signed-V6 baseline (a lock anchor)."""
+    out = {"foundation": [], "v6": []}
+    for b in _complete_builds():
+        out["v6" if any(r[0] == "lock" for r in _anchors(b)) else "foundation"].append(b)
+    return out
+
+
+def _pinned(kind):
+    """The (scope, name) anchors a build of this kind must record: the foundation's, plus the V-chain, lock and V6 accounting."""
+    rows = [(l.split("\t")[0], l.split("\t")[1]) for l in io.open(FS.PINS, encoding="utf-8").read().split("\n")[1:] if l.strip()]
+    found = {FD.run_root(k) for k in ("phase1", "hardreview", "hrfix")}
+    base = {(sc, n) for sc, n in rows if sc in found or sc.endswith("_package") or sc == "derived" or (sc, n) == ("baseline", "a3_baseline.json")
+            or (sc, n) == ("inventory", "final") or (sc == "invrev" and n.endswith((".md", ".json")))}
+    if kind == "foundation":
+        return base
+    # a run root's "era manifest" is the receipt-epoch recipe's input pin, never an anchor the runtime records
+    return base | {(sc, n) for sc, n in rows if ((sc.startswith("kf-a4-") and sc not in found) or sc in ("lock", "v6")) and n != "era manifest"}
+
+
+@pytest.mark.parametrize("kind", ["foundation", "v6"])
+def test_both_fresh_builds_of_each_kind_hold_every_anchor_and_are_byte_identical(kind):
+    builds = _builds_by_kind()[kind]
     assert len(builds) == 2, builds
     t1 = io.open(os.path.join(R, "foundation", "out", builds[0], "TREE.tsv"), "rb").read()
     t2 = io.open(os.path.join(R, "foundation", "out", builds[1], "TREE.tsv"), "rb").read()
     assert t1 == t2 and len(t1) > 100
-    a1 = _anchors(builds[0])
-    assert a1 and all(row[4] == "ok" for row in a1), [r for r in a1 if r[4] != "ok"]
-    assert {(r[0], r[1]) for r in a1} == {(r[0], r[1]) for r in _anchors(builds[1])}
-    pinned = {(sc, n) for sc, n in ((l.split("\t")[0], l.split("\t")[1]) for l in io.open(FS.PINS, encoding="utf-8").read().split("\n")[1:] if l.strip())
-              if sc.startswith("kf-a4-") or sc.endswith("_package") or sc == "derived" or (sc, n) == ("baseline", "a3_baseline.json")
-              or (sc, n) == ("inventory", "final") or (sc == "invrev" and n.endswith((".md", ".json")))}
-    assert {(r[0], r[1]) for r in a1} == pinned
+    for b in builds:
+        a = _anchors(b)
+        assert a and all(row[4] == "ok" for row in a), [r for r in a if r[4] != "ok"]
+        assert {(r[0], r[1]) for r in a} == _pinned(kind)
 
 
 # ---- the source map on a private subset: positive control, then one mutation each ----
@@ -77,6 +95,7 @@ SUBSET = ("foundation/inventory/one_item_benchmark_inventory.b137e87e.json",
           "foundation/archives/archive_CODEX_1330.md", "foundation/archives/archive_CODEX_1333.md",
           "foundation/bench/.claude/plans/Drivers/experiments/harness/build_launch_manifest.py",
           "foundation/bench/.claude/plans/Drivers/experiments/harness/kf_lint.py",
+          "foundation/bench/.claude/plans/Drivers/experiments/harness/v6_lock_1398.py",
           "foundation/owners/build_kfields_key.13d00b1f.py", "foundation/owners/build_kfields_key.a289601b.py",
           "foundation/tools/a3_reaudit.py", "foundation/tools/a4_regrade.py", "foundation/tools/a4_conflicts.py",
           "foundation/a4_derived/regrade_1370.json", "foundation/a4_derived/conflicts_1370.json")
@@ -97,7 +116,7 @@ def _private_map(tmp_path, monkeypatch):
     io.open(table, "w", encoding="utf-8").write("\n".join(keep) + "\n")
     # the owner pins outside the subset are not at this private harness path: keep only the subset's
     pins = [l for l in io.open(FS.PINS, encoding="utf-8").read().split("\n") if l.strip()]
-    keep_pins = [pins[0]] + [l for l in pins[1:] if not (l.startswith("owner\t") and l.split("\t")[1] not in ("build_launch_manifest.py", "kf_lint.py", "build_kfields_key.py"))]
+    keep_pins = [pins[0]] + [l for l in pins[1:] if not (l.startswith("owner\t") and l.split("\t")[1] not in ("build_launch_manifest.py", "kf_lint.py", "build_kfields_key.py", "v6_lock_1398.py"))]
     ppath = root / "pins.tsv"
     io.open(ppath, "w", encoding="utf-8").write("\n".join(keep_pins) + "\n")
     monkeypatch.setattr(FS, "PINS", str(ppath))
@@ -125,6 +144,7 @@ def _flip(path):
     ("missing b137 inventory", lambda root: os.remove(root / "foundation/inventory/one_item_benchmark_inventory.b137e87e.json"), "cannot read the candidate bytes"),
     ("archive 1330 drift", lambda root: _flip(root / "foundation/archives/archive_CODEX_1330.md"), "archive_CODEX_1330.md: candidate bytes"),
     ("missing archive 1333", lambda root: os.remove(root / "foundation/archives/archive_CODEX_1333.md"), "cannot read the candidate bytes"),
+    ("lock owner drift", lambda root: _flip(root / HARNESS_REL / "v6_lock_1398.py"), "v6_lock_1398.py"),
 ])
 def test_the_source_map_refuses(name, mutate, expected, tmp_path, monkeypatch):
     root, table = _private_map(tmp_path, monkeypatch)

@@ -1,0 +1,243 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The quote 'Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM' states two bare digit figures (25.1 and 0.1) with no dollar sign, 'million', or any other scale/unit marker inside the quote itself; the table's governing '(in millions)' scale wording sits in the header of the same running table, outside this specific quoted span. Rule 5.6 requires abstention for a value-bearing fact whose scale marker sits outside the quote rather than inventing a multiplier, so no lawful numeric fact can be emitted, and the stated digits are specific (not vague), so a numberless recast is not available either."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real_item, but the quoted table cell carries two bare digits with no in-quote scale/unit marker (the '(in millions)' label lives only in the header), so Rule 5.6 forces abstention; this settles as a control that correctly yields no fact, not the proposed real item."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_sales",
+              "driver_state": "increased",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_average_check",
+              "driver_state": "increased",
+              "change_value": {"value": 3.9, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_guest_counts",
+              "driver_state": "increased",
+              "change_value": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed, but the quote actually supports FOUR distinct facts rather than the fewer captured by earlier drafts: LongHorn's consolidated segment sales increase, the same-restaurant sales increase as its own qualified population (Rule 3.8/OD-17), and its two stated sub-components (average check +3.9%, guest counts +3.3%); per Owner Ruling 1 a locator hint cannot suppress the additional facts the quote carries."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "current_liabilities",
+              "driver_state": "increased",
+              "level_low": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "comparison_high": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "sequential_period",
+              "time_type": "instant",
+              "period_end_date": "2026-02-22",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed: a specific current-liabilities balance stated with an explicit prior-balance-sheet-date comparison is a real, non-boilerplate metric fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_expenses",
+              "driver_state": "unchanged",
+              "time_type": "duration",
+              "period_scope": "ytd",
+              "period_end_date": "2026-02-22",
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed, though numberless: 'remained flat as a percent of sales' is a real, explicit direction statement about restaurant expenses for the nine-month YTD window, which Rule 1.3 counts as a fact despite carrying no numbers."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The quote 'Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM' states four bare digit figures (25.1, 0.1, (19.8), 1.1) with no dollar sign, 'million', or other scale/unit marker inside the quote; the governing '(in millions)' label sits only in the table header, outside this quoted span. Rule 5.6 requires abstention rather than assuming the multiplier, so no lawful numeric fact can be emitted."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real_item, but like row 1 this table-row extract carries only bare digits with no in-quote scale marker, so Rule 5.6 forces abstention; this settles as a control, and it substantially overlaps row 1's same three-month cells plus the nine-month columns."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu offers both 'segment:longhornsteakhouse' and 'segment:longhornsteakhousesegment'; the reportable-segment token was chosen since the quote discusses the Q3 segment-level sales result, but the bare-brand token is a plausible alternate read."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same segment-token ambiguity as fact 0 applies here; additionally, same-restaurant sales is a distinct restaurant-population metric (per the filing's own footnote definition) rather than a restatement of the consolidated segment sales fact."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 2,
+      "hard_classes": ["slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 3,
+      "hard_classes": ["slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "comparison_baseline is coded as sequential_period because the compared date is the last fiscal-year-end balance-sheet date (the standard 10-Q comparative balance), not a same-quarter prior-year date or an immediately-preceding-quarter date; the rules' two allowed metric baselines do not explicitly name this specific balance-sheet-vs-last-FYE comparison pattern."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "A bare fiscal_year is attached to a nine-month YTD window with no quarter/half/month shape field; Rule 6 says fiscal_year accompanies quarter/half/month or stands alone for a full year, and this window is neither, so whether fiscal_year is lawfully attachable here is not settled by the rule text."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000940944-26-000009#068",
+      "agrees": true,
+      "why": "The lead's abstention (facts=[], one abstention citing the scale marker sitting outside the quote) matches this settlement's row 1 outcome and Rule 5.6 reasoning exactly."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#069",
+      "agrees": false,
+      "why": "The lead captured only the qualitative segment-level 'LongHorn sales increased' fact but omitted the same-restaurant-sales fact and the two stated numeric sub-metrics (average check +3.9%, guest counts +3.3%) that this settlement adds as required distinct facts; this is a recall miss under Owner Ruling 1."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#070",
+      "agrees": true,
+      "why": "The lead's current_liabilities fact (point level/comparison values, sequential_period baseline, fiscal_quarter/fiscal_year alongside the exact date) matches this settlement field-for-field."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#071",
+      "agrees": true,
+      "why": "The lead's restaurant_expenses fact (unchanged, ytd, period_end_date, fiscal_year, no fiscal_quarter) matches this settlement field-for-field."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#072",
+      "agrees": true,
+      "why": "The lead's abstention matches this settlement's row 5 outcome and reasoning (bare digits with the scale marker outside the quote, Rule 5.6)."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Rows 1 and 5 quote overlapping spans of the identical 'Impairments and (gain) loss on disposal of assets, net' table row (row 5's quote is a superset adding the nine-month columns), with no group declared to pair them.",
+      "why": "Both settle to the same abstention outcome for the same underlying reason, so classification is unaffected, but downstream materialization should not treat these as two independent evidentiary occurrences of the same underlying table cells."
+    },
+    {
+      "what": "Row 3's comparison_baseline value 'sequential_period' for a quarter-end balance compared to the last fiscal-year-end balance.",
+      "why": "Rule 9.2 permits only prior_year or sequential_period on a metric, but neither term explicitly names the standard 10-Q convention of comparing an interim balance-sheet date to the last fiscal year-end; sequential_period is the closer fit but the mapping is not unambiguously dictated by the rule text."
+    },
+    {
+      "what": "Row 4's restaurant_expenses fact carries a bare fiscal_year=2026 on a nine-month YTD period with no quarter/half/month shape field set.",
+      "why": "Rule 6 states fiscal_year accompanies a quarter/half/month field or stands alone for a full year; a YTD nine-month window is neither case, so whether fiscal_year may lawfully appear alone alongside period_scope=ytd and period_end_date is unresolved by the rule text as written."
+    }
+  ]
+}
+```

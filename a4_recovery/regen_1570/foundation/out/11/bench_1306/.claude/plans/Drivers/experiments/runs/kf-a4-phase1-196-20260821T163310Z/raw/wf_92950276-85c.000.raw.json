@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000027904-26-000022#029",
+  "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote 'Gain/(loss) on investments, net (550) (40) (510)' states specific numeric values (-550, -40, -510) but contains no dollar sign, 'million', or any other unit/scale marker inside it; the table's scale wording '(in millions)' sits in the column header above, outside this located quote span. Per Rule 5.6, a scale multiplier other than 1 requires in-quote evidence, and a TEXT fact whose scale marker sits in a header/footnote outside the quote must abstain rather than guess the multiplier or extend the quote to reach the header."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000022#029/L1",
+      "exact_match": true,
+      "why": "L1 also returns empty facts and a single abstention for the same substantive reason: the numeric row lacks any in-quote scale marker, with '(in millions)' sitting in the header outside the quote, invoking the same Rule 5.6 header-outside-quote abstention."
+    },
+    {
+      "lane_id": "0000027904-26-000022#029/L2",
+      "exact_match": true,
+      "why": "L2 likewise returns empty facts and one abstention citing the missing in-quote scale marker and the header-only '(in millions)' evidence, matching the settled reasoning under Rule 5.6."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,18 @@
+A3 PRIMARY RE-AUDIT: CLEAN
+  ledger      {"missing": 0, "primary_invalid": 1, "primary_valid": 391, "scheduled": 392}
+  child ledger {"missing": 0, "retry_valid": 1, "scheduled": 1}
+  retry keys recomputed from the finalization: [['0000092380-26-000044#042', '0000092380-26-000044#042/L1']]
+
+LIVE BYTES A3 VERIFICATION DEPENDS ON: 45 files
+  98055e556fdb  harness/a1_reader.py
+  7ec105a6325c  harness/build_launch_manifest.py
+  b76a9de31fb2  harness/exp5_prompt_contract.manifest.json
+  a13289a8a135  harness/exp5_prompt_drafter.md
+  d65e4f877ebe  harness/launch_kfields_drafts.manifest.json
+  12d4aca9a7bf  harness/raw_transport.py
+  e083cd6a72ff  keys/K-fields/draft_inputs.hashes.json
+  b50b7ab887ec  keys/K-fields/drafting_wrapper.md
+  00a9e65271c7  keys/K-fields/protocol.md
+  ... plus 36 frozen draft_inputs/*.json named by the plan
+DEPENDENCY DIGEST c4a328ff7a77b967e9f49458b4c0ed81406fbb1545ac528cffd028475577dd22
+wrote /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4/a3_baseline.json

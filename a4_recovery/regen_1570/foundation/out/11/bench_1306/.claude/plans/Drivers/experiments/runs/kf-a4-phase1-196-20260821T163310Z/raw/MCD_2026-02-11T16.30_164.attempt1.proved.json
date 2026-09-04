@@ -1,0 +1,93 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#164",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "effective_tax_rate",
+          "driver_state": "unknown",
+          "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "conditions": "with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#164/L1",
+      "exact_match": false,
+      "why": "Matches on fact_type, driver_name, driver_state, level_low/high, shapes, unit, time_type, fiscal_year, and company_confirmed, but its conditions string drops the quote's trailing period ('...annual range' vs the settled '...annual range.'), so it is not byte-identical to the settled conditions field."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T164.30#164/L2",
+      "exact_match": true,
+      "why": "Matches the settled reply on every field, including the verbatim conditions clause with its trailing period, fiscal_year 2026, range shape/unit, time_type duration, and company_confirmed true."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the conditions field should include the sentence-final period that ends the quote.",
+      "why": "The condition clause 'with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range' is itself unambiguous, but the quote happens to end exactly there with a period; L1 omits it and L2 keeps it, and the rules do not state whether trailing sentence punctuation is part of the clause or merely the quote's own boundary marker."
+    }
+  ]
+}
+```
+
+Note: there is a typo in the second reconciliation row's lane_id above ("2026-02-11T164.30" instead of "2026-02-11T16.30") — correcting it below as the authoritative version.
+
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#164",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "effective_tax_rate",
+          "driver_state": "unknown",
+          "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "conditions": "with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#164/L1",
+      "exact_match": false,
+      "why": "Matches on fact_type, driver_name, driver_state, level_low/high, shapes, unit, time_type, fiscal_year, and company_confirmed, but its conditions string drops the quote's trailing period ('...annual range' vs the settled '...annual range.'), so it is not byte-identical to the settled conditions field."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#164/L2",
+      "exact_match": true,
+      "why": "Matches the settled reply on every field, including the verbatim conditions clause with its trailing period, fiscal_year 2026, range shape/unit, time_type duration, and company_confirmed true."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the conditions field should include the sentence-final period that ends the quote.",
+      "why": "The condition clause 'with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range' is itself unambiguous, but the quote happens to end exactly there with a period; L1 omits it and L2 keeps it, and the rules do not state whether trailing sentence punctuation is part of the clause or merely the quote's own boundary marker."
+    }
+  ]
+}
+```

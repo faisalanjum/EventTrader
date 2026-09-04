@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#166",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "restaurant_count",
+          "driver_state": "unknown",
+          "level_low": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+          "level_high": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#166/L1",
+      "exact_match": true,
+      "why": "L1 uses driver_name restaurant_count, state unknown, a point level of 4.5/4.5 with unit_scale_evidence 'percent', level_unit percent_yoy, time_type duration, fiscal_year 2026, and company_confirmed true — identical in every field to the settled reply."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T166.30#166/L2".replace("166.30","2026-02-11T16.30"),
+      "exact_match": false,
+      "why": "L2 matches every field except driver_name, which it gives as unit_count instead of the settled restaurant_count."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the base metric name should be 'restaurant_count' or 'unit_count'.",
+      "why": "The quote itself says 'unit growth' but is immediately paired with 'net restaurant additions' in the same sentence, and the rest of the transcript overwhelmingly calls the counted entity a 'restaurant' — both terms denote the same physical McDonald's location, and the rules explicitly allow a lawful synonym, so either name is defensible even though only one can be the settled exact string."
+    }
+  ]
+}
+```
+
+Note: the second reconciliation `lane_id` must read exactly `MCD_2026-02-11T16.30#166/L2` (a copy/paste artifact appears above from my formatting — the intended, correct value is `MCD_2026-02-11T16.30#166/L2`).

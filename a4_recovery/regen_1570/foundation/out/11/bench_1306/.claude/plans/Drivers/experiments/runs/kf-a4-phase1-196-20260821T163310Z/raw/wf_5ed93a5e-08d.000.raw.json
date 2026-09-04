@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001104659-26-017090#109",
+  "settled": {
+    "source_id": "0001104659-26-017090",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quoted table row 'Gift card adjustment, net(3) (9,396) - (9,396) -' is a line in the non-GAAP reconciliation table used solely to bridge GAAP net income to adjusted (non-GAAP) net income. It is an accounting reconciliation/elimination construct, not itself a business driver (Rule 3.8: omit elimination/consolidation artifacts, keeping the affected real metric fact elsewhere). It also nets two distinct underlying causes (per footnote 3: gift card breakage revenue from a redemption-pattern change, offset by a non-recurring gift card inventory write-down) whose breakdown is not present inside this located quote, so no single lawful driver name or split can be produced from this quote alone (Rule 1.4)."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-017090#109/L1",
+      "exact_match": true,
+      "why": "Same branch and outcome: facts=[], one abstention, continuity_hints=[]. L1's reasoning correctly leads with Rule 3.8 (elimination/reconciliation construct, not a driver) and also notes the bundled-causes point, matching the primary rationale used in the settled reply."
+    },
+    {
+      "lane_id": "0001104659-26-017090#109/L2",
+      "exact_match": true,
+      "why": "Same branch and outcome: facts=[], one abstention, continuity_hints=[]. L2 reaches the identical no-fact conclusion but frames it mainly through Rule 3.2/1.4 (unsplittable bundled causes) rather than the more directly applicable Rule 3.8 elimination-construct basis used in the settled reply; the stated reason text differs in emphasis though the resolved outcome is the same."
+    }
+  ],
+  "ambiguities": []
+}
+```

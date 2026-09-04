@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "bzNews_50877032#192",
+  "settled": {
+    "source_id": "bzNews_50877032",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "concourse_d_construction",
+          "driver_state": "announced",
+          "level_low": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "slice_parts": ["geography:miami international airport"],
+          "fiscal_year": 2027,
+          "time_type": "instant"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "bzNews_50877032#192/L1",
+      "exact_match": false,
+      "why": "L1 agrees on fact_type, driver_state, and the $1B level values, but its driver_name 'airport_concourse_construction' drops the stated specific instrument (Concourse D) that Rule 3.3 requires when the source names it, omits the stated 2027 start period (fiscal_year/time_type) that Rule 6 requires be captured, and formats the coined slice as underscored 'geography:miami_international_airport' rather than the natural-text form."
+    },
+    {
+      "lane_id": "bzNews_50877032#192/L2",
+      "exact_match": false,
+      "why": "L2 matches on fact_type, driver_state, level values, and the fiscal_year 2027 / time_type instant period, but it folds 'miami_airport' into the driver_name and emits no slice_parts at all; settled instead keeps Miami International Airport out of the name (Rule 3.10 bars naming a co-mentioned entity whose own action is not the cause) and carries it as a coined geography slice, and settled uses 'concourse_d_construction' (preserving the stated Concourse D instrument) rather than L2's 'miami_airport_concourse_expansion'."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'Miami International Airport' belongs in slice_parts as a coined geography value or stays inside driver_name.",
+      "why": "Rule 3.4 sends a company's own measured geography to the slice but says an external actor of unclear role stays in the name, while Rule 3.10 separately forbids naming a co-mentioned entity in driver_name unless its own action is the cause (it is not here — AA is the actor, the airport is merely the site). These two instructions point opposite directions for a specific, non-menu, third-party-owned facility like this airport, so reasonable settlers could land on either placement."
+    },
+    {
+      "what": "Whether the driver_name should preserve the specific 'Concourse D' instrument or use a generic 'concourse'/'airport expansion' form.",
+      "why": "Rule 3.3 says a stated specific instrument beats the familiar broad name, favoring 'concourse_d_construction'; but a one-off letter/terminal label could also be read as too narrow an identifier to be a reusable cause name, favoring a broader 'concourse_construction' or 'airport_expansion' form — the rules do not fully disambiguate which granularity is intended for a physical-infrastructure label like this."
+    }
+  ]
+}
+```

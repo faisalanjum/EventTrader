@@ -1,0 +1,52 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#003",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "available_seat_mile",
+        "item": {
+          "driver_name": "revenue_per_available_seat_mile",
+          "driver_state": "increased",
+          "level_low": {"value": 17.35, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "level_high": {"value": 17.35, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "comparison_low": {"value": 16.30, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "comparison_high": {"value": 16.30, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "slice_parts": ["product:passenger"],
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "period_start_date": "2026-01-01",
+          "period_end_date": "2026-03-31"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#003/L1",
+      "exact_match": false,
+      "why": "L1 folds 'passenger' into the driver_name ('passenger_revenue_per_available_seat_mile') and omits slice_parts entirely; Rule 3.4 requires the company's own measured product category (passenger, as distinct from cargo/other revenue elsewhere in this same filing) to live in slice_parts using the menu token product:passenger, with the base name reduced to revenue_per_available_seat_mile."
+    },
+    {
+      "lane_id": "0000006201-26-000031#003/L2",
+      "exact_match": true,
+      "why": "L2 matches field-for-field: base name revenue_per_available_seat_mile with per_x available_seat_mile in both the per_x field and the name, slice_parts=[product:passenger], point-shaped level (17.35) vs point-shaped prior_year comparison (16.30), level_unit usd, cents scale_multiplier 0.01, driver_state increased (prior value stated beside current), duration time_type, and Q1 FY2026 exact dates."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'passenger' belongs inside the driver_name (as the industry term PRASM would suggest) or must be stripped out into slice_parts.",
+      "why": "Rule 3.4 draws a bright line that the company's own measured product/segment goes to the slice, never the name, and the same filing's parallel 'Total revenue per ASM' row confirms passenger vs total is a slice distinction on one base metric — so this is resolved, not a live ambiguity, but it is the exact point on which the two drafts diverge."
+    }
+  ]
+}
+```

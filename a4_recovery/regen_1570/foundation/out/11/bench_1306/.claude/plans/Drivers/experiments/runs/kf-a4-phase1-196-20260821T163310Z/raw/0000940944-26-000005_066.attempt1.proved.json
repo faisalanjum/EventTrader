@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000940944-26-000005#066",
+  "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "This quote describes a change in the company's own internal financial-reporting definition — segment profit is now calculated excluding pre-opening costs — not a driver's own state, change, surprise, guidance, or action. It is a presentation/accounting-construct change (how a metric is measured/reported), and Rule 3.8 treats accounting constructs (e.g., elimination/consolidation artifacts, definitional recasts) as non-drivers; the real underlying metric (segment profit itself) is captured separately wherever the source states its actual level. No lawful fact exists for this item."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000005#066/L1",
+      "exact_match": true,
+      "why": "L1 also emits no facts and a single abstention on the same grounds — a reporting/methodology recast (segment profit redefined to exclude pre-opening costs) is an accounting construct, not a driver's state/change/action — matching the settled judgment."
+    },
+    {
+      "lane_id": "0000940944-26-000005#066/L2",
+      "exact_match": true,
+      "why": "L2 likewise emits no facts and a single abstention, stating the item is a presentation-definition change rather than a Rule 1 fact, which matches the settled judgment in substance and shape (empty facts, one abstention, empty continuity_hints)."
+    }
+  ],
+  "ambiguities": []
+}
+```

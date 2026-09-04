@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#172",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "restaurant_count",
+          "driver_state": "reaffirmed",
+          "level_low": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "fiscal_year": 2027,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#172/L1",
+      "exact_match": true,
+      "why": "Same fact_type guidance, driver_name restaurant_count, state reaffirmed, level 50000/50000 point count, fiscal_year 2027, instant, company_confirmed true, no other fields — only key order differs."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#172/L2",
+      "exact_match": true,
+      "why": "Identical content to L1 and to the settled reply; fiscal_year/time_type order swapped but all values and fields match."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "driver_state reaffirmed vs unknown",
+      "why": "The quote says the 2026 opening pace 'keeps us on track to achieve 50,000 restaurants by the end of 2027' — no second numeric guide is quoted for a midpoint comparison, and the word 'reaffirmed' is never used. Rule 4 says movement is recorded only when the source states it, illustrated concretely via a two-closed-guide comparison. 'Keeps us on track' plausibly reads as confirming an unchanged prior target (reaffirmed), but could instead be judged a bare restatement with no explicit comparison stated (unknown). I settled on reaffirmed as the more natural reading of continuation language, but a stricter literal reading of Rule 4 would produce unknown instead."
+    }
+  ]
+}
+```

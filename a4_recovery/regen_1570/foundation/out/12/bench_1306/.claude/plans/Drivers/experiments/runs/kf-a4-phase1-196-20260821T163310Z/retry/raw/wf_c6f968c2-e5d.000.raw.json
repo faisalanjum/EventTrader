@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#170",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "unknown",
+          "level_unit": "percent_sequential",
+          "value_text": "sequential decrease from Q4 level",
+          "slice_parts": ["segment:internationaldevelopmentallicensedmarketsandcorporate"],
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#170/L1",
+      "exact_match": true,
+      "why": "Same lane (guidance), same driver_name comparable_sales, same unknown state, same percent_sequential level_unit, same numberless value_text conveying 'sequential decrease from Q4 level', same IDL segment slice, same Q1 FY2026 period, same time_type duration, same company_confirmed true; no numbers were smuggled into value_text."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#170/L2",
+      "exact_match": false,
+      "why": "Matches on lane, driver_name, state, level_unit, slice, period and company_confirmed, but its value_text embeds the digit '4.5%' inside the qualitative value_text field, which Rule 11.1 explicitly forbids ('a number never goes here (numbers belong in the value slots)'); the 4.5% is the prior Q4 actual, not a stated Q1 guide value, so it must stay only in the quote, not in value_text."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether level_unit (percent_sequential) should be emitted at all here, given no level/comparison numeric slot is populated for this numberless guide.",
+      "why": "Rule 5a.1 normally requires level_unit only 'when any level/comparison slot is populated' (none are, since the Q1 value itself is unstated), but Rule 5a.4's closing sentence explicitly allows a numberless growth fact to still carry its stated basis unit from the source's own framing; both readings are defensible, though the explicit 'sequential decrease' wording supports keeping percent_sequential."
+    }
+  ]
+}
+```

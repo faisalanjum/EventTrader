@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "0000092380-26-000044#039",
+  "settled": {
+    "source_id": "0000092380-26-000044",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "unknown",
+          "level_low": {"value": 4.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 4.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "measurement_raw_spans": ["adjusted"],
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000092380-26-000044#039/L1",
+      "exact_match": false,
+      "why": "L1 matches the settled fact on name, per_x, level values/shape/unit, time_type, fiscal_year, measurement span, and company_confirmed, but sets driver_state to 'reaffirmed' where the settled answer is 'unknown' — the source only states a decision NOT to update the guidance ('would not be productive'), never a comparison of an old vs. new guide value or the word reaffirm, so Rule 4's 'bare guide → unknown' default governs rather than the two-guide equal-midpoint reaffirmed rule."
+    },
+    {
+      "lane_id": "0000092380-26-000044#039/L2",
+      "exact_match": false,
+      "why": "L2 is identical in substance to L1 (same fields, per_x merely ordered before item) and shares the same single divergence: driver_state 'reaffirmed' vs. the settled 'unknown', for the same reason — no stated movement wording and no second comparable guide value are present in the quote."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether declining to update a previously-issued full-year guidance figure counts as 'reaffirmed' or 'unknown' under Rule 4.",
+      "why": "The sentence restates the existing $4.00 full-year adjusted EPS guide and says updating it 'would not be productive at this time' given macro uncertainty — practically this leaves the number unchanged (suggesting reaffirmed), but Rule 4 only assigns 'reaffirmed' when two closed point/range guides are compared in-text, and no explicit raise/lower/reaffirm wording or second value appears here, so the more conservative 'bare guide → unknown' reading was chosen; a reasonable reader could argue the other way."
+    }
+  ]
+}
+```

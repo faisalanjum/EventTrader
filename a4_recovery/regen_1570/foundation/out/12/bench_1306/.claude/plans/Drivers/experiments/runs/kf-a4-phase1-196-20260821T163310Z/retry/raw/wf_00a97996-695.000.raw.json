@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "bzNews_50877032#193",
+  "settled": {
+    "source_id": "bzNews_50877032",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "Benzinga Edge Rankings is a generic third-party algorithmic scoring widget (Momentum/Growth/Long-term price-trend scores) routinely attached to Benzinga articles; it is not a company-stated driver state, change, surprise, guidance, or action_event about American Airlines' business — it is boilerplate editorial content under Rule 1.2, not a real fact."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "bzNews_50877032#193/L1",
+      "exact_match": true,
+      "why": "L1 also returns an empty facts list with a single abstention for the same reason: the Benzinga Edge Rankings scoring is generic third-party editorial boilerplate, not a disclosed company driver fact."
+    },
+    {
+      "lane_id": "bzNews_50877032#193/L2",
+      "exact_match": true,
+      "why": "L2 likewise returns an empty facts list with one abstention citing the same substance — the Benzinga Edge Rankings widget is a generic, non-disclosed third-party scoring mention, boilerplate under Rule 1.2."
+    }
+  ],
+  "ambiguities": []
+}
+```

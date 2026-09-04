@@ -1,0 +1,38 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#176",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "operating_income",
+          "driver_state": "reported",
+          "level_low": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#176/L1",
+      "exact_match": true,
+      "why": "Same driver_name (operating_income), driver_state (reported), level_low/high $1.5B point shape, level_unit m_usd, time_type duration, fiscal_year 2025, and no other fields — matches the settled reply exactly."
+    },
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#176/L2",
+      "exact_match": true,
+      "why": "Identical to L1 and to the settled reply in every field: driver_name, driver_state, numeric level objects, shape/unit hints, time_type, and fiscal_year."
+    }
+  ],
+  "ambiguities": []
+}
+```

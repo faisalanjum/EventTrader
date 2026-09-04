@@ -1,0 +1,57 @@
+{
+ "run_id": "retry",
+ "door": "a4_hard_review_double_blind",
+ "attempt": 2,
+ "allowed": [
+  "hr-029/b1",
+  "hr-029/b2",
+  "hr-030/b1",
+  "hr-031/b1",
+  "hr-033/b1",
+  "hr-033/b2",
+  "hr-034/b1"
+ ],
+ "parent": {
+  "run_id": "kf-a4-hardreview-70-20260822T015053Z",
+  "finalization_sha256": "92e4a63c7e907656f6dbf754d5edeba3174a453578806897b26a5cb46684efad"
+ },
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "manifest_sha256": "3666352de6f9217bfc440a1f40fb7dce1182c2c9edd71d675c2f65626e8102e0",
+ "derived_from": {
+  "owner_sha256": "a289601b0bf52f223661f63f64128717baabb9ab1d061055119474d3cc4321f9",
+  "regrade_sha256": "f587b7ab3d08933b49bd6f04f4d9ecc9eff8e043f1d41c33a60a6faeea170b7f",
+  "conflicts_sha256": "29293450b302e7e158daef7591ccd3bf57967101b907f176ad298ae548f60728",
+  "a4_receipt_sha256": "98ecc6762493a5a36a02ca785b836b2761a5dfa8602bd3789068231008573442",
+  "a4_finalization_sha256": "45e0f404506c6178a11cd455ad8e5fe3e2a466bf5cb4b29ae743df67781f277e"
+ },
+ "prompts": {
+  "hr-029/b1": "09078e226b327fef8bc2bddf87c27a7a5fdb747ae5cc42ee46a3f2dfa7fa1f2f",
+  "hr-029/b2": "09078e226b327fef8bc2bddf87c27a7a5fdb747ae5cc42ee46a3f2dfa7fa1f2f",
+  "hr-030/b1": "004961398a86329cc19580b2725c913a4aac0b769c823077067bc54a75627fca",
+  "hr-031/b1": "db05471d47e39afd67100e5899b46f8069789af989bab4b2fa773a988294ff8d",
+  "hr-033/b1": "5217c92bae78e8c358fcad7ed67d56c5467ae1d0bbb032eda82194ad2fb55c09",
+  "hr-033/b2": "5217c92bae78e8c358fcad7ed67d56c5467ae1d0bbb032eda82194ad2fb55c09",
+  "hr-034/b1": "846e9d641a26bcaf272a475d56b6e5baacda5bae2a8cf081f8e71cf273b975b2"
+ },
+ "states": [
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_654217f9-2a4.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_5c57d428-25c.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8248ba6e-7d6.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8b1d165e-d6f.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b8de6c72-ab6.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_670e5d7a-f32.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_f823b381-9e9.json"
+ ]
+}

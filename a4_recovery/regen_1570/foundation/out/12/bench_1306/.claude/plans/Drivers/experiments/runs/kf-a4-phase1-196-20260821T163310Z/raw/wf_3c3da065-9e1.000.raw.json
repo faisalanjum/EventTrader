@@ -1,0 +1,64 @@
+```json
+{
+  "packet_id": "0000898173-26-000006#055",
+  "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_store_sales",
+          "driver_state": "increased",
+          "time_type": "duration",
+          "long_range_start_year": 1993,
+          "long_range_end_year": 2025
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "revenue",
+          "driver_state": "increased",
+          "time_type": "duration",
+          "long_range_start_year": 1993,
+          "long_range_end_year": 2025
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "operating_income",
+          "driver_state": "increased",
+          "time_type": "duration",
+          "long_range_start_year": 1993,
+          "long_range_end_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000898173-26-000006#055/L1",
+      "exact_match": false,
+      "why": "L1 uses a single fiscal_year 2025 for all three drivers with no long_range fields, dropping the '33 consecutive years ... since becoming a public company in April of 1993' span that the quote explicitly states; the settled reply instead resolves the period as the stated multi-year range 1993-2025 (Rule 6 priority: explicit multi-year range over bare year)."
+    },
+    {
+      "lane_id": "0000898173-26-000006#055/L2",
+      "exact_match": true,
+      "why": "L2 uses the same three drivers, states, time_type=duration, and long_range_start_year=1993 / long_range_end_year=2025 for all three, with no fiscal_year, no numeric values, no comparison_baseline, and no abstentions/continuity_hints, matching the settled reply field-for-field."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the '33 consecutive years ... since becoming a public company in April of 1993' span (1993-2025) legitimately anchors the period for ALL THREE drivers (comparable_store_sales, revenue, operating_income), versus applying only to the 'record revenue and operating income' clause with the comp-store-sales streak resting on an independently-counted 33 years.",
+      "why": "The sentence grammatically attaches 'since becoming a public company in April of 1993' most directly to 'record revenue and operating income,' but the arithmetic (2025-1993+1=33) exactly matches the stated comp-store-sales streak length, supporting a shared 1993-2025 range for all three; a stricter reading could instead leave the comp-store-sales fact with no explicit long-range anchor."
+    },
+    {
+      "what": "Whether 'record' by itself (with no explicit word like 'increased' or 'grew') safely maps to driver_state = increased for revenue and operating_income.",
+      "why": "Rule 4 requires a stated direction to use increased/decreased; 'record' conveys an all-time-high (i.e., directionally up) but is a superlative rather than an explicit increase/decrease verb, so a stricter reader could argue for 'reported' instead."
+    }
+  ]
+}
+```

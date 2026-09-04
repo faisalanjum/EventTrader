@@ -1,0 +1,42 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "boeing_737_8_deliveries",
+          "driver_state": "unknown",
+          "level_low": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "aircraft_retirements",
+          "driver_state": "unknown",
+          "level_low": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The quote states two separate forward plans for 2026 fleet activity — expecting 66 Boeing 737-8 deliveries (a fleet addition) and planning to retire approximately 60 aircraft (a fleet reduction) — which are different causes, different directions of fleet change, and different stated quantities, so they are distinct facts rather than one underlying fact."
+}
+```

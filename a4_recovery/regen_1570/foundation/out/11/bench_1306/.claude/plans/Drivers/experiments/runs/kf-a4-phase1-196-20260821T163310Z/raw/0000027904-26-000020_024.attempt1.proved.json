@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "0000027904-26-000020#024",
+  "settled": {
+    "source_id": "0000027904-26-000020",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "revenue",
+          "driver_state": "unknown",
+          "level_unit": "percent_yoy",
+          "value_text": "low-teens",
+          "conditions": "on flat capacity growth",
+          "company_confirmed": true,
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000020#024/L1",
+      "exact_match": true,
+      "why": "L1 matches field-for-field: guidance/revenue/unknown state, level_unit percent_yoy, value_text 'low-teens', conditions 'on flat capacity growth', company_confirmed true, fiscal_quarter 2, fiscal_year 2026, time_type duration."
+    },
+    {
+      "lane_id": "0000027904-26-000020#024/L2",
+      "exact_match": false,
+      "why": "L2 diverges on two points: it uses change_unit instead of level_unit to carry the percent_yoy growth basis (change_unit only applies when change_value is populated, which it is not here since this is a numberless/qualitative guide), and its value_text 'Low-teens revenue growth' restates the driver name/growth word rather than the normalized bare value 'low-teens'."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether level_unit should be emitted at all on this numberless guidance fact.",
+      "why": "Rule 5a.1 makes level_unit required only when a level/comparison numeric slot is populated, and none is here (the value is the vague quantity 'low-teens'). Rule 5a.4's closing sentence permissively says a numberless growth fact 'may' still carry its stated basis unit — this is discretionary wording, not a hard requirement, so a reader could lawfully omit level_unit entirely instead of recording percent_yoy."
+    },
+    {
+      "what": "Exact normalized wording of value_text ('low-teens' vs 'low-teens revenue growth').",
+      "why": "Rule 11.1 calls for a short normalized qualitative value but does not fully specify whether the metric word ('revenue growth') should be folded into value_text or left implicit since driver_name already carries 'revenue' — both are lawful synonyms under Rule 3.12's synonym allowance, but they are not textually identical."
+    }
+  ]
+}
+```

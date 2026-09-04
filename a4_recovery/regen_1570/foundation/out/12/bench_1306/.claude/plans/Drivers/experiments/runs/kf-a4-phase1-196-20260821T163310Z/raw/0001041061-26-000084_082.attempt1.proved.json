@@ -1,0 +1,18 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#082",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [],
+    "abstentions": [
+      {"reason": "The quote only reports that FASB issued a new accounting standard (ASU 2025-06) and summarizes its content; this is standard new-accounting-pronouncement boilerplate, not a statement about YUM's own driver state, change, surprise, guidance, or action — no lawful fact."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {"lane_id": "0001041061-26-000084#082/L1", "exact_match": true, "why": "Same branch (no facts, one abstention) and same reasoning: boilerplate accounting-standard disclosure with no stated company driver state/change/action, so it abstains rather than yielding a fact."},
+    {"lane_id": "0001041061-26-000084#082/L2", "exact_match": true, "why": "Same branch (no facts, one abstention) and same reasoning: the ASU 2025-06 disclosure is generic pronouncement boilerplate, company only says it is 'evaluating' impact, so no fact is emitted."}
+  ],
+  "ambiguities": []
+}
+```

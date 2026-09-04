@@ -1,0 +1,40 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "gross_unit_openings",
+          "driver_state": "reported",
+          "level_low": {"value": 4567, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 4567, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "net_new_units",
+          "driver_state": "reported",
+          "level_low": {"value": 1939, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 1939, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The source itself defines gross unit openings and net new unit growth as two distinct, separately-named performance metrics (net new units being gross openings offset by closures), each carrying its own distinct stated value (4,567 vs 1,939), so the two targeted numbers describe two separate facts rather than one underlying fact."
+}
+```

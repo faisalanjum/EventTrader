@@ -1,0 +1,57 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_restaurant_openings",
+              "driver_state": "unknown",
+              "level_low": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "measurement_raw_spans": ["approximately"],
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "unknown",
+              "level_low": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2027,
+              "time_type": "instant",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Member 1 is a forward target for the annual FLOW of new restaurant openings in fiscal 2026 (2,600 gross openings, a duration metric), while member 2 is a forward target for the cumulative STOCK of total restaurants at the instant of year-end 2027 (50,000 restaurants); they differ in driver, value, unit meaning, and period type even though both appear inside the same sentence as cause-and-consequence framing."
+}
+```

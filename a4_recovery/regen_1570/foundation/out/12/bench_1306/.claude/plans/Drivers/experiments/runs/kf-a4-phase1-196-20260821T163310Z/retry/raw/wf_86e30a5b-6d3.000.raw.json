@@ -1,0 +1,18 @@
+```json
+{
+  "packet_id": "0001104659-26-032757#129",
+  "settled": {
+    "source_id": "0001104659-26-032757",
+    "facts": [],
+    "abstentions": [
+      {"reason": "Generic, standing boilerplate description of the company's inherent seasonal sales pattern (higher Feb-Sept, lower Dec-Jan) — not a stated state, change, surprise, guidance, or discrete action tied to this period; fails Rule 1 gate 2 as a generic boilerplate mention about the nature of the business."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {"lane_id": "0001104659-26-032757#129/L1", "exact_match": true, "why": "L1 abstains with the same reasoning: this is generic boilerplate about the company's standing seasonal pattern, not a period-specific stated fact, so no facts and one abstention — matches the settled reply."},
+    {"lane_id": "0001104659-26-032757#129/L2", "exact_match": true, "why": "L2 also abstains, citing the same Rule 1 gate 2 generic-boilerplate rationale for the identical seasonality description — matches the settled reply."}
+  ],
+  "ambiguities": []
+}
+```

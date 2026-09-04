@@ -1,0 +1,42 @@
+{
+ "run_id": "kf-a4-hrfix-4-20260822T050131Z",
+ "door": "a4_hard_review_group_shape_correction",
+ "attempt": 1,
+ "allowed": [
+  "hr-029/b2",
+  "hr-033/b1",
+  "hr-033/b2",
+  "hr-034/b1"
+ ],
+ "parent": null,
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "manifest_sha256": "f8a43013a4ad38216cc3eeba90b324490ea616e8dfd1e40a69d5a3c64ab25254",
+ "correction_of": {
+  "primary_finalization_sha256": "92e4a63c7e907656f6dbf754d5edeba3174a453578806897b26a5cb46684efad",
+  "child_finalization_sha256": "8e8ce1c7907396c836e3baee034e0b884cea675a1647bc98a266e656fab61dbd"
+ },
+ "prompts": {
+  "hr-029/b2": "581a4904047054b34b30edf82c9981396dea0db9191000186cab896a00252682",
+  "hr-033/b1": "8fc27faf321215ca525a593ffc7fb3d67b3f77c761d0223c97dab62138a48d61",
+  "hr-033/b2": "8fc27faf321215ca525a593ffc7fb3d67b3f77c761d0223c97dab62138a48d61",
+  "hr-034/b1": "fba16feb161ccb72ca42c609f580fe2435d8c80c79058bb46013c6fe2b63eb2a"
+ },
+ "states": [
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_d05198c3-812.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_a94e4cb7-7b0.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ffde5e8b-33c.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e5efc7e3-8c1.json"
+ ]
+}

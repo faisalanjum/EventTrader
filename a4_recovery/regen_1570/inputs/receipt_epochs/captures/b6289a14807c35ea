@@ -1,0 +1,258 @@
+{
+  "door": "a4_final_key_lock",
+  "phase": "events",
+  "attempt": 1,
+  "run_id": "kf-a4-final-36-20260822T162832Z",
+  "receipt_sha256": "ea74a48ed202f8ce8d3fbab2d761436520c6046072b32763656d3ee5a4af72f8",
+  "manifest_sha256": "40650b9cc1cb15882fe06d1fca87b8d6ef3cc8a9262700d8668fff939d922cb2",
+  "bound": {
+    "a4_key_owner": "a289601b0bf52f223661f63f64128717baabb9ab1d061055119474d3cc4321f9",
+    "hard_review_owner": "1f74d181b4d8746cdcca8ad9703d6340d4fbeb38f1fad5534a204babbe553611",
+    "correction_owner": "d4a0323a43ddd8e68487347652986dedf16a9ec2a277ca41d82a55db3d248ed4",
+    "final_owner_loader": "6bcaf0ad54e343e99beef2b4f7e4cf1f0ce8bbeb22d9158e61d0dd60605e851f",
+    "raw_parser": "12d4aca9a7bfd9a51303271b54433ad55058dad268e771cff757a3ea0b68a14a",
+    "gold_door": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+    "official_evidence": "9e4762e56c527d95c68b3737dd41d1c478337ed6d38ec0017ea048a855c32229",
+    "inventory_review_owner": "fcd18139f6c1393c55b81042820c3004ec8eae362fbe4bc7e219639c5754dcf7",
+    "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff",
+    "regrade": "f587b7ab3d08933b49bd6f04f4d9ecc9eff8e043f1d41c33a60a6faeea170b7f",
+    "conflicts": "29293450b302e7e158daef7591ccd3bf57967101b907f176ad298ae548f60728",
+    "phase1_finalization": "45e0f404506c6178a11cd455ad8e5fe3e2a466bf5cb4b29ae743df67781f277e",
+    "hard_review_finalization": "92e4a63c7e907656f6dbf754d5edeba3174a453578806897b26a5cb46684efad",
+    "hard_review_child_finalization": "8e8ce1c7907396c836e3baee034e0b884cea675a1647bc98a266e656fab61dbd",
+    "correction_finalization": "04a802d97e254fdcf8cc2023ea5e89536252745df9e23b7172f25224cf9e438e"
+  },
+  "harvested_raw": [
+    "wf_0e3373fb-0bf.raw.json",
+    "wf_fa641930-0f4.raw.json",
+    "wf_316e13cf-584.raw.json",
+    "wf_e0ed6cbc-d11.raw.json",
+    "wf_03e674b3-d9b.raw.json",
+    "wf_2a2ba0cb-6ca.raw.json",
+    "wf_d454830f-b1d.raw.json",
+    "wf_9b1d8809-b36.raw.json",
+    "wf_9862f1dd-838.raw.json",
+    "wf_2ab9a8b4-bbf.raw.json",
+    "wf_157f94c4-61d.raw.json",
+    "wf_757e9007-eff.raw.json",
+    "wf_840c9d5a-4d5.raw.json",
+    "wf_11bd71a7-463.raw.json",
+    "wf_e4900790-b5f.raw.json",
+    "wf_2f153ef0-e86.raw.json",
+    "wf_888d1243-530.raw.json",
+    "wf_b2126bfd-340.raw.json",
+    "wf_93c1f448-efb.raw.json",
+    "wf_8a701a7b-1d8.raw.json",
+    "wf_5bfb7b22-495.raw.json",
+    "wf_511bc865-7f5.raw.json",
+    "wf_f0f88157-a0d.raw.json",
+    "wf_f3bab707-245.raw.json",
+    "wf_77723dad-97e.raw.json",
+    "wf_f29fcd3a-c06.raw.json",
+    "wf_a411256f-132.raw.json",
+    "wf_b292d055-ecf.raw.json",
+    "wf_0873c3fa-7cb.raw.json",
+    "wf_3f6280bc-2b3.raw.json",
+    "wf_284f927d-07c.raw.json",
+    "wf_1c9f74f3-36e.raw.json",
+    "wf_fd7149bd-6e1.raw.json",
+    "wf_f7ae9055-08a.raw.json",
+    "wf_9c4ee830-2dd.raw.json",
+    "wf_aa99bc60-a16.raw.json"
+  ],
+  "phase_complete": true,
+  "problems": [],
+  "outcomes": [
+    [
+      "0000006201-26-000031",
+      "valid",
+      ""
+    ],
+    [
+      "0000006201-26-000032",
+      "valid",
+      ""
+    ],
+    [
+      "0000027904-26-000013",
+      "valid",
+      ""
+    ],
+    [
+      "0000027904-26-000020",
+      "valid",
+      ""
+    ],
+    [
+      "0000027904-26-000022",
+      "valid",
+      ""
+    ],
+    [
+      "0000063908-26-000032",
+      "valid",
+      ""
+    ],
+    [
+      "0000092380-26-000044",
+      "valid",
+      ""
+    ],
+    [
+      "0000764478-25-000057",
+      "valid",
+      ""
+    ],
+    [
+      "0000764478-26-000005",
+      "valid",
+      ""
+    ],
+    [
+      "0000898173-26-000006",
+      "valid",
+      ""
+    ],
+    [
+      "0000940944-25-000038",
+      "valid",
+      ""
+    ],
+    [
+      "0000940944-26-000005",
+      "valid",
+      ""
+    ],
+    [
+      "0000940944-26-000009",
+      "valid",
+      ""
+    ],
+    [
+      "0001041061-25-000109",
+      "valid",
+      ""
+    ],
+    [
+      "0001041061-26-000003",
+      "valid",
+      ""
+    ],
+    [
+      "0001041061-26-000084",
+      "valid",
+      ""
+    ],
+    [
+      "0001058090-26-000007",
+      "valid",
+      ""
+    ],
+    [
+      "0001104659-25-102611",
+      "valid",
+      ""
+    ],
+    [
+      "0001104659-25-105631",
+      "valid",
+      ""
+    ],
+    [
+      "0001104659-25-118458",
+      "valid",
+      ""
+    ],
+    [
+      "0001104659-26-017090",
+      "valid",
+      ""
+    ],
+    [
+      "0001104659-26-027061",
+      "valid",
+      ""
+    ],
+    [
+      "0001104659-26-032757",
+      "valid",
+      ""
+    ],
+    [
+      "0001171843-26-001288",
+      "valid",
+      ""
+    ],
+    [
+      "AAL_2026-04-23T08.30",
+      "valid",
+      ""
+    ],
+    [
+      "BBY_2026-03-03T08.00",
+      "valid",
+      ""
+    ],
+    [
+      "CMG_2026-02-03T16.30",
+      "valid",
+      ""
+    ],
+    [
+      "DAL_2026-04-08T10.00",
+      "valid",
+      ""
+    ],
+    [
+      "DRI_2026-03-19T08.30",
+      "valid",
+      ""
+    ],
+    [
+      "MCD_2026-02-11T16.30",
+      "valid",
+      ""
+    ],
+    [
+      "ULTA_2026-03-12T16.30",
+      "valid",
+      ""
+    ],
+    [
+      "YUM_2026-02-04T08.15",
+      "valid",
+      ""
+    ],
+    [
+      "bzNews_42014391",
+      "valid",
+      ""
+    ],
+    [
+      "bzNews_49256211",
+      "valid",
+      ""
+    ],
+    [
+      "bzNews_50877032",
+      "valid",
+      ""
+    ],
+    [
+      "bzNews_51962983",
+      "valid",
+      ""
+    ]
+  ],
+  "ledger": {
+    "scheduled": 36,
+    "valid": 36,
+    "invalid_response": 0,
+    "transport_no_answer": 0,
+    "unproved": 0,
+    "missing": 0
+  },
+  "retry": []
+}
+finalization.json 4893
+receipt.json 11035

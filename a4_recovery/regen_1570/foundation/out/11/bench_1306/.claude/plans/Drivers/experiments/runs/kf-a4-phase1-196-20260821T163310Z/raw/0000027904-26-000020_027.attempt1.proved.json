@@ -1,0 +1,47 @@
+```json
+{
+  "packet_id": "0000027904-26-000020#027",
+  "settled": {
+    "source_id": "0000027904-26-000020",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "per_x": "gallon",
+        "item": {
+          "driver_name": "fuel_price_per_gallon",
+          "driver_state": "unknown",
+          "level_low": {"value": 4.3, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 4.3, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "measurement_raw_spans": ["all-in", "approximately"],
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000020#027/L1",
+      "exact_match": false,
+      "why": "L1 matches driver_name, state, values, unit, shape, and period, but its measurement_raw_spans only captures 'all-in' and drops 'approximately', which is also a number modifier not captured by name/period/unit/slice/basis and must be a separate entry (non-contiguous, split by 'fuel price of')."
+    },
+    {
+      "lane_id": "0000027904-26-000020#027/L2",
+      "exact_match": false,
+      "why": "L2 matches driver_name, state, values, unit, shape, and period, but its measurement_raw_spans only captures 'approximately' and drops 'all-in', which is a measurement-flavor qualifier on the fuel price analogous to 'adjusted' and must also be captured as its own entry."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'approximately' belongs in measurement_raw_spans at all, versus only technical measurement-flavor terms like 'all-in'.",
+      "why": "Rule 8's named examples (constant currency, organic, adjusted, GAAP) are all technical measurement designations, but its catch-all clause ('any number modifier not captured by name/period/unit/slice/basis stays here') textually sweeps in plain hedge words like 'approximately' too; the two drafts split on exactly this point, each keeping one span and dropping the other, showing the boundary is not obviously settled from the rule text alone."
+    }
+  ]
+}
+```

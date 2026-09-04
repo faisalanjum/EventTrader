@@ -1,0 +1,44 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "units",
+          "driver_state": "reported",
+          "level_low": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "slice_parts": ["segment:kfcglobaldivision"],
+          "fiscal_year": 2025,
+          "period_end_date": "2025-12-31",
+          "time_type": "instant"
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "units",
+          "driver_state": "reported",
+          "level_low": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "slice_parts": ["geography:outside the u.s."],
+          "fiscal_year": 2025,
+          "period_end_date": "2025-12-31",
+          "time_type": "instant"
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The first quote states an absolute, unsliced total unit count for the KFC Division (33,897 units, unit type count), while the second quote states a separate geographic-distribution percentage (90% of those units located outside the U.S., unit type percent, sliced by geography), so the two differ in value, unit, and slice and must be recorded as two distinct facts rather than one."
+}
+```

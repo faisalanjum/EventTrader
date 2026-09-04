@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0000092380-26-000044#040",
+  "settled": {
+    "source_id": "0000092380-26-000044",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "boeing_737_8_aircraft_deliveries",
+          "driver_state": "unknown",
+          "level_low": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000092380-26-000044#040/L1",
+      "exact_match": true,
+      "why": "Same driver_name, guidance lane, unknown state, point 66/66 count level, fiscal_year 2026, duration time_type, and company_confirmed true; only key ordering differs, which is immaterial."
+    },
+    {
+      "lane_id": "0000092380-26-000044#040/L2",
+      "exact_match": true,
+      "why": "Identical field set and values to the settled reply (same name, state, level shape/unit/values, fiscal_year 2026, duration, company_confirmed true); only key ordering differs from L1/settled."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the trailing 'in 2026' in 'Expect 66 Boeing 737-8 aircraft deliveries and plan to retire approximately 60 aircraft in 2026' modifies only the retirement clause or both conjuncts.",
+      "why": "Grammatically the year phrase sits closest to the retirement clause, but every other fleet/capacity guidance line in this filing (net capital spending, full-year capacity growth) is framed around full-year 2026, so both blind drafts and this settlement read the shared year as applying to both the delivery and retirement expectations."
+    }
+  ]
+}
+```

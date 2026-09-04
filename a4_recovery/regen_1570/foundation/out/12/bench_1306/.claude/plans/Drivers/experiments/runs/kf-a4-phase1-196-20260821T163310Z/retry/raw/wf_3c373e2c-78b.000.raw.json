@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#072",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote 'Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM' states bare digits (25.1, 0.1, (19.8), 1.1) with no dollar sign, unit word, or scale word anywhere inside the quote itself; the governing scale marker '(in millions)' is part of the table's column-header caption that precedes this row and is not part of the located quote. Per Rule 5.6, a text/tabular fact whose scale marker sits in a header outside the quote must abstain rather than have code or the reader supply scale_multiplier/unit_scale_evidence from outside evidence. Since level_unit and the numeric objects cannot be lawfully populated, and the value is genuinely numeric (not qualitative, so it cannot be salvaged as a numberless fact either), this item cannot lawfully be resolved into a fact (Rule 1.4)."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#072/L1",
+      "exact_match": true,
+      "why": "L1 reaches the same no-fact/abstain outcome for the same substantive reason: the digits inside the quote carry no in-quote unit/scale marker, the governing '(in millions)' caption sits outside the quote in the table header, and Rule 5.6 requires abstention rather than borrowing that outside scale marker."
+    },
+    {
+      "lane_id": "0000940944-26-000009#072/L2",
+      "exact_match": true,
+      "why": "L2 states the identical determination in near-identical wording: no facts, one abstention citing Rule 5.6, because the scale marker governing these values lives in the surrounding table header/column labels rather than inside the located quote."
+    }
+  ],
+  "ambiguities": []
+}
+```

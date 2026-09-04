@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0000940944-25-000038#060",
+  "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "person",
+        "item": {
+          "driver_name": "average_check_per_person",
+          "driver_state": "reported",
+          "level_low": {"value": 24.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 24.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "slice_parts": ["segment:olivegarden"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-25-000038#060/L1",
+      "exact_match": false,
+      "why": "L1 matches on fact_type, name, state, numeric value/unit and period, but cites slice_parts as [\"segment:olivegardensegment\"] where the settled reply uses [\"segment:olivegarden\"] — the quote's own wording ('Olive Garden's sales') maps to the bare brand token used in this Item-1 brand-description context, not the Note-6 reportable-segment financial-table token."
+    },
+    {
+      "lane_id": "0000940944-25-000038#060/L2",
+      "exact_match": true,
+      "why": "L2's fact_type, driver_name, driver_state, numeric level object, shape/unit, time_type, fiscal_year and slice_parts (\"segment:olivegarden\") all match the settled reply exactly."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Choice of slice token for Olive Garden: the menu carries two distinct entries, \"segment:olivegarden\" and \"segment:olivegardensegment\", both plausibly denoting the same real-world entity (the Olive Garden brand/reportable segment).",
+      "why": "The filing's XBRL tagging appears inconsistent across tables — Note 6 segment-financial data and the goodwill reporting-unit axis use an 'OliveGardenSegment' style member, while other brand-level disclosures (e.g., restaurant counts in Item 1) plausibly use a bare 'OliveGarden' member. The quoted sentence sits in the Item-1 brand-narrative section (not the segment financial table) and says only 'Olive Garden's sales', favoring the bare token, but nothing in the supplied item conclusively rules out the segment-suffixed token, so the mapping is not fully certain from the source alone."
+    }
+  ]
+}
+```

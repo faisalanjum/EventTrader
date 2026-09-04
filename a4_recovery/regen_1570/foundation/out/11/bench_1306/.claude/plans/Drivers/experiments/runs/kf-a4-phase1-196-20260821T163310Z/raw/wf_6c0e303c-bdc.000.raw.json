@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "AAL_2026-04-23T08.30#136",
+  "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "casmx",
+          "driver_state": "unknown",
+          "level_low": {"value": 2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent_yoy",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "AAL_2026-04-23T08.30#136/L1",
+      "exact_match": true,
+      "why": "Matches on every field: driver_name 'casmx' (no per_x emitted), driver_state 'unknown', identical 2/4 percent level objects with '%' evidence, level_shape_hint 'range', level_unit 'percent_yoy', fiscal_quarter 2, fiscal_year 2026, time_type 'duration', company_confirmed true."
+    },
+    {
+      "lane_id": "AAL_2026-04-23T08.30#136/L2",
+      "exact_match": false,
+      "why": "L2 expands the name to 'cost_per_available_seat_mile' and emits per_x 'available_seat_mile', but this event never spells out 'cost per available seat mile' or 'available seat mile' anywhere (only the bare abbreviations CASM/CASMX/CASAmex appear), so Rule 3.5's 'cannot verify the acronym expansion -> skip that candidate' applies and the settled name stays the unexpanded 'casmx' with no per_x."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the per-X acronym CASMX should be expanded to driver_name 'cost_per_available_seat_mile' with per_x 'available_seat_mile', or kept as the opaque acronym 'casmx' with no per_x.",
+      "why": "CASM (cost per available seat mile) is common airline-industry shorthand, but Rule 3.5 requires the per-X denominator to be verifiable before it is written into the name; unlike 'earnings per share', which this same event spells out in full elsewhere, 'available seat mile' / 'cost per available seat mile' is never spelled out anywhere in this transcript, only abbreviated as CASM/CASMX/CASAmex, so the expansion cannot be confirmed from the source itself."
+    }
+  ]
+}
+```

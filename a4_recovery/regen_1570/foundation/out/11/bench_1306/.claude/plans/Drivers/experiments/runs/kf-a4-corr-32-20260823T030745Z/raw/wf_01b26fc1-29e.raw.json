@@ -1,0 +1,352 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 5.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "average_ticket",
+              "driver_state": "increased",
+              "level_low": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "transactions",
+              "driver_state": "increased",
+              "level_low": {"value": 1.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 1.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as one real item naming only comparable sales, but under Owner Ruling 1 the quote supports three distinct facts (comparable_sales, average_ticket, transactions), each with its own stated percentage."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quoted interest-expense figures (2,624 / 0.1% vs (1,994) / (0.1%)) carry no dollar sign, 'thousand', or any other scale marker inside the quote; the governing '(In thousands, except per share data)' caption sits in the Exhibit 1 table header outside this quote, so Rule 5.6 requires abstention rather than guessing the scale."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real item, but it settles as a control because the scale marker needed to lawfully resolve the raw figures sits outside the quote, forcing a Rule 5.6 abstention."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 1.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Diluted"],
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Confirmed as proposed: a real, source-stated diluted EPS increase for fiscal 2025 with a directly stated percent change versus the prior year."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 11.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Confirmed as proposed: a real Q4 fiscal-2025 net sales increase with a stated percent change and rounded level, tied causally to comparable sales, Space NK, and new stores in narrative only."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "unknown",
+              "level_low": {"value": 28.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 28.55, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["Diluted"],
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Confirmed as a real fact as proposed; driver_state is 'unknown' rather than 'introduced' because Owner Ruling 8 fixes a first bare guide with no explicit movement wording as unknown."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "unknown",
+              "level_low": {"value": 9.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 11.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "measurement_raw_spans": ["diluted"],
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Confirmed as proposed: the same FY2026 EPS guide restated on a percent-growth basis, lawfully split from row 5 under Rule 5a.4; driver_state is 'unknown' for the same first-bare-guide reason as row 5."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sga_expenses",
+              "driver_state": "increased",
+              "level_low": {"value": 26.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 26.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 24.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 24.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Confirmed as proposed: a real SG&A-as-percent-of-sales fact with a stated prior-year comparison; this is a static percentage level, not a growth rate."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "unknown",
+              "level_low": {"value": 6.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 7.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Confirmed as proposed: the FY2026 net sales growth guidance; driver_state is 'unknown' for the same first-bare-guide reason as rows 5 and 6."
+    },
+    {
+      "row_index": 9,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The CEO's 'better-than-planned financial performance' language names no specific metric, segment, or value; it is an ungrounded overall-beat claim with no identifiable home fact to attach a surprise to, so Rule 9.6 requires abstention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Confirmed as proposed: generic, unquantified CEO praise with no identifiable metric or home fact correctly yields no record."
+    },
+    {
+      "row_index": 10,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "share_repurchase_authorization",
+              "driver_state": "reported",
+              "level_low": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "slice_parts": ["unknown:srt:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram"],
+              "time_type": "instant",
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31"
+            }
+          },
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase_program",
+              "driver_state": "announced",
+              "level_low": {"value": 3.0, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3.0, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "slice_parts": ["unknown:srt:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram"],
+              "time_type": "instant",
+              "fiscal_year": 2024,
+              "month": 10
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as one real item and confirmed as one, but the single quote carries two distinct facts under Owner Ruling 1: the $1.8 billion remaining balance (a metric, its own scale stated) and the $3.0 billion program announced in October 2024 (an action_event, its own scale stated) — neither donates its scale to the other."
+    },
+    {
+      "row_index": 11,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic competitive-risk boilerplate from the forward-looking-statements disclaimer list, stating no specific current threat, value, or driver state; Rule 1.2 requires abstention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Confirmed as proposed: generic competitive-risk boilerplate correctly yields no fact."
+    }
+  ],
+  "review": [
+    {"row_index": 1, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 1, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 1, "fact_index": 2, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 3, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 4, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 5, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "corrections_and_amendments"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 6, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording", "corrections_and_amendments"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 7, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 8, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "corrections_and_amendments"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 10, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the 'remaining/available' population qualifier belongs inside driver_name (e.g. share_repurchase_authorization_remaining) per Rule 3.8, rather than being carried only by driver_state and period."},
+    {"row_index": 10, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the $3.0 billion authorization is better modeled as this action_event (the one-time board approval, supported by the source's own verb 'announced') or as a standing metric level, and whether a repurchase-program identifier is a legitimate Rule 7 business-population slice at all versus a bookkeeping axis."}
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {"lead_id": "phase1/0001104659-26-027061#114", "agrees": false, "why": "Correctly captures the comparable_sales fact (5.8%, percent_yoy, Q4 FY2025) but omits the two additional distinct facts the same quote supports: average_ticket (+4.2%) and transactions (+1.6%)."},
+    {"lead_id": "phase1/0001104659-26-027061#115", "agrees": true, "why": "Matches exactly: no facts, one abstention citing the scale-marker-outside-quote problem for the interest-expense figures."},
+    {"lead_id": "phase1/0001104659-26-027061#116", "agrees": true, "why": "Matches the settled earnings_per_share fact field-for-field, including the stated 1.2% change, prior_year baseline, Diluted measurement, and period_end_date."},
+    {"lead_id": "phase1/0001104659-26-027061#117", "agrees": true, "why": "Matches the settled net_sales fact field-for-field: 3.9 billion point level, 11.8% percent_yoy change vs prior_year, Q4 FY2025."},
+    {"lead_id": "phase1/0001104659-26-027061#118", "agrees": false, "why": "Matches level, shape, unit, per_x, measurement, and company_confirmed, but writes driver_state as 'introduced'; Owner Ruling 8 fixes a first bare guide as 'unknown'."},
+    {"lead_id": "phase1/0001104659-26-027061#119", "agrees": false, "why": "Same driver_state disagreement as #118 (introduced vs the settled unknown); level, shape, unit, and measurement fields otherwise match."},
+    {"lead_id": "phase1/0001104659-26-027061#120", "agrees": true, "why": "Matches the settled SG&A-expenses fact field-for-field, including the point level/comparison values and prior_year baseline."},
+    {"lead_id": "phase1/0001104659-26-027061#121", "agrees": false, "why": "Matches level, shape, unit, and company_confirmed, but writes driver_state as 'introduced' where Owner Ruling 8 fixes 'unknown' for a first bare guide."},
+    {"lead_id": "phase1/0001104659-26-027061#122", "agrees": true, "why": "Matches exactly: no facts, one abstention for the ungrounded, unquantified CEO commentary with no identifiable home fact."},
+    {"lead_id": "phase1/0001104659-26-027061#123", "agrees": false, "why": "Its action_event fact ($3.0 billion, October 2024, announced, correct srt: slice token) matches the settled reply's second fact, but it omits the first fact — the $1.8 billion remaining-authorization metric — that the same quote also supports."},
+    {"lead_id": "hr-020/b1/row10", "agrees": false, "why": "Captures a metric at $1.8 billion matching the settled reply's first fact in value and shape, but uses an incorrect slice-token namespace (us-gaap: instead of the menu's srt:) and omits the $3.0 billion October 2024 action_event fact entirely."},
+    {"lead_id": "hr-020/b2/row10", "agrees": false, "why": "Uses the correct menu slice-token namespace and the correct $3.0 billion/October 2024 figures, but classifies them as a metric ('reported') rather than the settled action_event ('announced'), and omits the $1.8 billion remaining-authorization fact entirely."},
+    {"lead_id": "phase1/0001104659-26-027061#124", "agrees": true, "why": "Matches exactly: no facts, one abstention for generic competitive-risk boilerplate."}
+  ],
+  "open_issues": [
+    {"what": "Whether the $3.0 billion October-2024 share repurchase authorization is better modeled as an action_event (the board's one-time approval, as settled here) or as a metric (a standing, re-readable authorized-capacity level, as hr-020/b2 chose).", "why": "Rule 2's persistence test can support either reading, and the rules name no bare-root default for a share-repurchase authorization; the source's own verb 'announced' favors action_event but does not conclusively foreclose the metric reading."},
+    {"what": "Whether a share-repurchase-program identifier (an XBRL bookkeeping axis, not a business population) is a legitimate Rule 7 slice at all, or whether it should be omitted and the period fields (month/fiscal_year) alone left to identify which authorization a fact concerns.", "why": "The FINAL_DESIGN slice test ('a real slice is a business population for which revenue/earnings from ___ makes sense') does not naturally fit a repurchase-program identifier, even though the menu lists it under the 'unknown:' bucket as a reusable value."},
+    {"what": "Whether 'remaining/available' should be folded into driver_name for the $1.8 billion authorization fact (e.g. share_repurchase_authorization_remaining) rather than left to driver_state and period to convey.", "why": "Rule 3.8/OD-17 says population qualifiers stay in the name and differ from the bare Driver, but 'remaining balance' could also be read as simply the current point-in-time level of the same driver rather than a distinct population."}
+  ]
+}
+```

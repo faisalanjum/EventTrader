@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000092380-26-000044#042",
+  "settled": {
+    "source_id": "0000092380-26-000044",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote 'PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m.' states digit values (58 for 2026, (43) for 2025) but carries no scale wording inside itself; the '(in millions, except per share amounts)' marker that fixes scale_multiplier lives only in the statement's table header, outside this fixed quote. Rule 5.6 requires abstaining rather than defaulting scale_multiplier to 1 or borrowing the header's scale wording into unit_scale_evidence, since a real (non-1) scale marker exists but sits outside the quote. Per Rule 1.4, this is a real fact I cannot lawfully resolve."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000092380-26-000044#042/L1",
+      "exact_match": true,
+      "why": "Same structural reply (empty facts, one abstention, empty continuity_hints) and same substantive Rule 5.6 rationale: values are present but the millions-scale marker sits in the table header outside the fixed quote, so abstention is required rather than defaulting or borrowing the scale."
+    },
+    {
+      "lane_id": "0000092380-26-000044#042/L2",
+      "exact_match": true,
+      "why": "Same structural reply and same substantive reasoning as the settled answer: no in-quote scale marker for the stated 58/(43) values, header-only 'in millions' wording outside the quote, so Rule 5.6 forces abstention rather than assuming scale_multiplier=1."
+    }
+  ],
+  "ambiguities": []
+}
+```

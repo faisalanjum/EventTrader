@@ -1,0 +1,5 @@
+prefix: 0e57eab2c86fd350fffd93c2f405af99ba47b54d9e9fd378045107c1d47cc9a1 chars=44964
+events: 36  proposals shipped: 168
+prompt chars: min=51512 max=257503 total=3849637
+limits: planned=37 retry_cap=37 abort=74
+PACKAGE: PASS

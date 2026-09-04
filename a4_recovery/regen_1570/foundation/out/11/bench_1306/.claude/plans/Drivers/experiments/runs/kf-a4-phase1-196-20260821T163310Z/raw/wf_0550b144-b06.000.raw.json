@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "CMG_2026-02-03T16.30#152",
+  "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "high_efficiency_equipment_package_restaurant_count",
+          "driver_state": "unknown",
+          "level_low": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "fiscal_year": 2026,
+          "time_type": "instant",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "CMG_2026-02-03T16.30#152/L1",
+      "exact_match": true,
+      "why": "Same fact_type (guidance), same driver_name 'high_efficiency_equipment_package_restaurant_count', same driver_state 'unknown', identical level_low/level_high (2000, point), level_unit 'count', fiscal_year 2026, time_type 'instant', and company_confirmed true."
+    },
+    {
+      "lane_id": "CMG_2026-02-03T16.30#152/L2",
+      "exact_match": false,
+      "why": "All numeric, shape, unit, period, time_type, and company_confirmed fields match the settled reply, but the driver_name 'high_efficiency_equipment_installations' differs from the settled 'high_efficiency_equipment_package_restaurant_count' — dropping the explicit 'restaurant' population qualifier and substituting a non-evidence word ('installations') for the source's literal 'restaurants have the ... package'."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Exact wording of the driver_name for this equipment-rollout headcount guide.",
+      "why": "The quote never uses the word 'installations'; it says '350 restaurants have the full equipment package.' Rule 3.8 treats 'high_efficiency_equipment_package' as a population qualifier on the bare metric, favoring 'restaurant_count' as the closer, text-grounded bare driver over the coined synonym 'installations'. Since names are provisional and lawful synonyms are allowed, this is a judgment call rather than a rule-forced unique string."
+    }
+  ]
+}
+```

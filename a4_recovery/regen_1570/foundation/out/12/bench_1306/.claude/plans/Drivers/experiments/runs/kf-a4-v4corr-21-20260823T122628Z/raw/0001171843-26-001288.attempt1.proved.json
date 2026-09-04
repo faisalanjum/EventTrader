@@ -1,0 +1,211 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The $359.1 million (with $95.7 million for Domestic Commercial) is the incremental sales contribution of one unnamed extra calendar week embedded inside the trailing-4-quarters window ended February 15, 2025 (a 53-week fiscal-year artifact); no exact date, start date, or stated dateless horizon identifies that specific week, and attaching the enclosing trailing-4-quarters period would misstate the value as covering the whole window rather than one week inside it. Rule 6 requires abstention when a required period cannot be lawfully resolved and no horizon is stated."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real item; the additional-week sales figure is genuine and non-boilerplate, but its period is a single unnamed week inside the trailing-4-quarters window with no exact date or stated horizon, so it settles as an excluded row under Rule 6 rather than a stored fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "decreased",
+              "level_low": {"value": 698.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 698.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": -1.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item, and it settles as a genuine stored metric fact for operating_profit with a stated point level and a stated year-over-year percentage decrease."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The values (813,494) and (1,196,131) for 'Net inventory (net of payables)' carry no in-quote unit or scale wording; the governing '$ in thousands' marker sits on a separate header line of the same Inventory Statistics table, outside this located quote. The multiplier here is plainly not 1, so under Rule 5.6 the fact cannot be lawfully scaled from a marker outside the quote, and the item abstains."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real item; the net-inventory values are real but the located quote carries no in-quote scale marker (the '$ in thousands' header sits on a separate line of the same table), so Rule 5.6 forces abstention rather than a stored fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "unknown",
+              "slice_parts": ["geography:nonus"],
+              "measurement_raw_spans": ["constant currency"],
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "missed",
+              "slice_parts": ["geography:nonus"],
+              "measurement_raw_spans": ["constant currency"],
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "consensus",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "unfavorable",
+                "basis": "metric_meaning",
+                "evidence": "Company sales coming in below an expectation is the uncontested unfavorable direction for a retailer's top line, with no mainstream counter-story (unlike capex, R&D, inventory or hiring).",
+                "sentence": "our international sales, in constant currency, were slightly below our expectations"
+              }
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item, and it settles as two genuine TWINS facts: a numberless metric home for international constant-currency sales and its surprise twin (missed, vs consensus) per the expectation-comparison rule."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "store",
+            "item": {
+              "driver_name": "net_inventory_per_store",
+              "driver_state": "increased",
+              "level_low": {"value": -105, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+              "level_high": {"value": -105, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": -161, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+              "comparison_high": {"value": -161, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "instant",
+              "period_end_date": "2026-02-14",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item, and it settles as a genuine per-store net-inventory metric fact with a current point value and a primary prior-year comparison; the co-stated sequential (last-quarter) value stays only in the quote."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The exact sentence states only a percent decrease without naming the comparator period; comparison_baseline=prior_year is resolved from the same release's directly governing GAAP Results table, which shows Operating profit (EBIT) for the identical 12-week quarter this year and last year."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["slices_and_unknown_axes", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The quoted sentence names only 'international sales,' not 'same store sales,' so despite the release's headline international metric being same-store sales, the numberless home is kept generically as 'sales' scoped to geography:nonus, matching only what this exact quote states."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "slices_and_unknown_axes", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'Below' is a position word, not favorability wording, so has_favorability_wording is false and the missed call rests on a metric_meaning polarity_proof (lower sales has no mainstream counter-story); separately the phrase is 'our expectations,' not 'our guidance/target,' so per the rule's own noun-based test this maps to comparison_baseline=consensus rather than previous_guidance -- the reviewer_finding proposing previous_guidance is rejected here because the own-target carve-out requires explicit guidance/target wording that this sentence does not use."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "hr-001/b1/row1",
+      "agrees": true,
+      "why": "Independently settling row 1 also abstains: the additional-week sales figure has no resolvable exact date or stated horizon under Rule 6, matching this lead's outcome and reasoning."
+    },
+    {
+      "lead_id": "hr-001/b2/row1",
+      "agrees": true,
+      "why": "Same abstention outcome and same Rule 6 period-resolution reasoning as this independent settlement of row 1."
+    },
+    {
+      "lead_id": "phase1/0001171843-26-001288#132",
+      "agrees": true,
+      "why": "Matches the settled operating_profit metric fact in driver_name/state, point level 698.5M with 'million' evidence, -1.2% percent_yoy change, prior_year baseline, and Q2 FY2026 duration period."
+    },
+    {
+      "lead_id": "phase1/0001171843-26-001288#133",
+      "agrees": true,
+      "why": "Matches the settled abstention: the net-inventory figures have no in-quote scale marker since '$ in thousands' sits in the table header outside the quote, forcing abstention under Rule 5.6."
+    },
+    {
+      "lead_id": "phase1/0001171843-26-001288#134",
+      "agrees": false,
+      "why": "Agrees on the metric home and on driver_name/state/basis/baseline for the surprise, but this lead stores has_favorability_wording=true with no polarity_proof, whereas 'below' is a position word requiring the polarity test, so the correct settlement is has_favorability_wording=false with a metric_meaning polarity_proof."
+    },
+    {
+      "lead_id": "phase1/0001171843-26-001288#135",
+      "agrees": true,
+      "why": "Matches the settled net_inventory_per_store fact exactly: per_x store, level -105k vs comparison -161k prior_year, point shapes, instant time_type, Q2 FY2026 period end 2026-02-14."
+    }
+  ],
+  "open_issues": []
+}
+```

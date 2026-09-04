@@ -1,0 +1,322 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "aircraft_fuel_operating_expense_share",
+              "driver_state": "decreased",
+              "level_low": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "aircraft_fuel_operating_expense_share",
+              "driver_state": "decreased",
+              "level_low": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2024,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "aircraft_fuel_operating_expense_share",
+              "driver_state": "reported",
+              "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "fiscal_year": 2023,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the three-year fuel-cost-share sentence splits into three distinct fiscal-year facts under the mandatory period-split rule (2025 decreased vs 2024's 19%, 2024 decreased vs 2023's 21%, 2023 reported with no prior comparison stated); named for its share-of-operating-expense meaning to keep that ratio distinct from a raw dollar fuel-cost driver."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "passenger_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["geography:pacificdestination"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "capacity",
+              "driver_state": "increased",
+              "change_value": {"value": 9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["geography:pacificdestination"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the sentence states two independent quantified metrics for the Pacific region (a 10% passenger-revenue increase and a 9% capacity increase), each captured as its own fact under the geography:pacificdestination slice per the distinct-numeric-base split rule."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "fuel_consumption",
+              "driver_state": "unknown",
+              "value_text": "increase, generally aligned with capacity",
+              "company_confirmed": true,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the company's own forward statement about 2026 fuel consumption is genuine numberless guidance, stored as an unknown-movement bare guide with the pacing phrase folded into value_text rather than a conditions gate."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "skymiles_credit_facility",
+              "driver_state": "occurred",
+              "fiscal_year": 2025,
+              "month": 9,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the September 2025 SkyMiles Credit Facility amendment is a discrete, dated, completed loan-refinancing action; the reviewer_finding suggesting a missing corrections_and_amendments tag is rejected because this amendment restates loan terms going forward, it is not a fix to a previously misstated figure."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "union_representation",
+              "driver_state": "reported",
+              "level_low": {"value": 20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "instant",
+              "period_end_date": "2025-12-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the 20% union-representation figure as of December 31, 2025 is a genuine, quantified labor metric, with no fiscal-year field added since the source states only a calendar date, not fiscal framing."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "passenger_revenue_per_available_seat_mile",
+              "driver_state": "decreased",
+              "change_value": {"value": -2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["geography:domesticdestination"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the explicit 2% domestic PRASM decrease with a stated prior-year comparison is a genuine metric fact under the domestic geography slice."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "dividend_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 0.15, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.15, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_year": 2025,
+              "half": 1,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "dividend_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 0.1875, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.1875, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 0.15, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 0.15, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "sequential_period",
+              "fiscal_year": 2025,
+              "half": 2,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact, but split into two half-year facts rather than one whole-year record: the sentence states two distinct per-share dividend rates for two distinct sub-annual periods ($0.15 for H1 2025, $0.1875 for H2 2025), which the mandatory distinct-period split rule requires as separate facts, with H2 marked increased and sequentially compared to H1's stated $0.15."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "antitrust_immunity",
+              "driver_state": "suspended",
+              "slice_parts": ["entity_ownership:grupoaeromexico"],
+              "period_start_date": "2025-11-12",
+              "period_end_date": "2025-11-12",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the court's November 12, 2025 stay of the DOT order is a genuine, dated action_event distinct from the earlier September 15 order in row 9, classified suspended (paused/resumable) and sliced under Delta's own stated equity stake rather than named after the co-mentioned partner; the reviewer_finding that Aeromexico is only a partner and not company ownership is rejected because the source directly states Delta's own ~19% equity stake in Grupo Aeromexico in the same paragraph."
+    },
+    {
+      "row_index": 9,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "antitrust_immunity",
+              "driver_state": "occurred",
+              "slice_parts": ["entity_ownership:grupoaeromexico"],
+              "period_start_date": "2025-09-15",
+              "period_end_date": "2025-09-15",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as fact: the DOT's September 15, 2025 order terminating antitrust immunity for the Aeromexico joint cooperation agreement is a genuine, dated regulatory action classified occurred at its own date (the later stay's suspended status belongs to row 8's separate, later-dated fact), with Aeromexico held out of the name and captured only via the entity_ownership:grupoaeromexico slice."
+    }
+  ],
+  "review": [
+    {"row_index": 1, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the driver should be named for its share-of-operating-expense meaning (settled here) or a plainer aircraft_fuel_cost label, since Rule 2 requires a ratio/share to keep an identity distinct from the underlying dollar cost."},
+    {"row_index": 1, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Same share-vs-absolute-cost naming ambiguity as fact 0 applies to this fiscal-year fact."},
+    {"row_index": 1, "fact_index": 2, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Same share-vs-absolute-cost naming ambiguity as fact 0 applies to this fiscal-year fact."},
+    {"row_index": 2, "fact_index": 0, "hard_classes": ["slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 2, "fact_index": 1, "hard_classes": ["slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the co-stated 9% capacity growth is its own standalone metric fact (settled here, required by the distinct-numeric-base split rule) or merely explanatory context riding on the revenue fact."},
+    {"row_index": 3, "fact_index": 0, "hard_classes": [], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether 'generally aligned with capacity' is a genuine Rule 9 conditions gate or, as settled here, descriptive pacing language folded into value_text."},
+    {"row_index": 4, "fact_index": 0, "hard_classes": [], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "The reviewer_finding proposing a corrections_and_amendments tag here is rejected: this SkyMiles Term Loan amendment restates loan terms as a substantive one-time refinancing action, not a fix to a previously misstated value."},
+    {"row_index": 5, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 6, "fact_index": 0, "hard_classes": ["slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 7, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the H1 $0.15 rate needs its own standalone fact (settled here, per the distinct-stated-period split rule) versus folding the whole year into one mixed range fact."},
+    {"row_index": 7, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the H1-to-H2 jump is a true sequential_comparison (settled here, an immediate-prior subannual comparison) or merely restates the annual dividend program without a stated comparison."},
+    {"row_index": 8, "fact_index": 0, "hard_classes": ["slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "The reviewer_finding that Aeromexico is 'a partner, not company ownership' is rejected: the same Business-section paragraph directly states Delta's own ~19% equity stake in Grupo Aeromexico, which independently satisfies Rule 3.4's owned-entity slice test regardless of the separate joint-cooperation-partner relationship."},
+    {"row_index": 9, "fact_index": 0, "hard_classes": ["slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether rows 8 and 9 should collapse into one action_event fact classified by its latest stage (suspended) or, as settled here, remain two separate point-in-time facts (occurred at issuance, suspended at the later stay), consistent with the design's point-in-time-always philosophy where the read-time layer collapses to a current view."}
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {"lead_id": "phase1/0000027904-26-000013#015", "agrees": false, "why": "Matches the three-fiscal-year decreased/decreased/reported structure and comparison values, but names the driver 'aircraft_fuel_cost' rather than a share-specific name; Rule 2's ratio/share meaning-preservation requirement means this percentage-of-operating-expense fact needs an identity distinct from a raw fuel-cost dollar amount, so aircraft_fuel_operating_expense_share was used instead."},
+    {"lead_id": "hr-006/b1/row1", "agrees": false, "why": "Captures only the FY2025 fact and omits the FY2024 and FY2023 facts the same sentence states, and uses the generic name 'fuel_cost' without the share-of-operating-expense meaning applied here."},
+    {"lead_id": "hr-006/b2/row1", "agrees": false, "why": "Same single-fact, generic-name shortfall as hr-006/b1/row1."},
+    {"lead_id": "phase1/0000027904-26-000013#016", "agrees": false, "why": "Correctly captures the passenger_revenue Pacific fact but omits the co-stated 9% capacity increase, which the distinct-numeric-base split rule requires as its own metric fact under the same slice."},
+    {"lead_id": "phase1/0000027904-26-000013#017", "agrees": false, "why": "Matches on fact_type, driver_name, unknown state, company_confirmed and fiscal_year 2026, but stores 'generally aligned with capacity' in a separate conditions field; that phrase describes pacing, not a genuine contingency/gate, so it was folded into value_text here instead."},
+    {"lead_id": "phase1/0000027904-26-000013#018", "agrees": true, "why": "Matches field-for-field: action_event, skymiles_credit_facility, occurred, instant, fiscal_year 2025, month 9."},
+    {"lead_id": "phase1/0000027904-26-000013#019", "agrees": true, "why": "Matches field-for-field: metric, union_representation, reported, point 20%, instant, period_end_date 2025-12-31, no fiscal_year."},
+    {"lead_id": "phase1/0000027904-26-000013#020", "agrees": true, "why": "Matches field-for-field: metric, passenger_revenue_per_available_seat_mile, per_x available_seat_mile, decreased, change_value -2 percent_yoy, prior_year baseline, geography:domesticdestination slice, fiscal_year 2025."},
+    {"lead_id": "phase1/0000027904-26-000013#021", "agrees": false, "why": "Codes dividend_per_share as one 'mixed' fact with a level range 0.15-0.1875 and no comparison_baseline; the mandatory distinct-stated-period split rule instead requires splitting the two explicitly distinct half-year rates into two facts (H1 reported at 0.15, H2 increased to 0.1875 vs. the stated 0.15 prior value)."},
+    {"lead_id": "phase1/0000027904-26-000013#022", "agrees": true, "why": "Matches field-for-field: action_event, antitrust_immunity, suspended, entity_ownership:grupoaeromexico slice, period 2025-11-12, instant."},
+    {"lead_id": "phase1/0000027904-26-000013#023", "agrees": false, "why": "Embeds the co-mentioned Aeromexico entity directly in the driver name (aeromexico_antitrust_immunity), which Rule 3.10 bars for a co-mentioned entity when the company's own equity stake already supplies a proper entity_ownership slice, and codes driver_state as 'suspended' for the September 15 order itself; that date's own latest stage is the order being issued (occurred), with 'suspended' reserved for the later November 12 stay captured in row 8."}
+  ],
+  "open_issues": []
+}
+```

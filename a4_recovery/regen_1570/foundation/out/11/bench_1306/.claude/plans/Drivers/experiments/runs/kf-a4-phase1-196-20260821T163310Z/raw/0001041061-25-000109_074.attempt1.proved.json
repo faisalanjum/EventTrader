@@ -1,0 +1,66 @@
+```json
+{
+  "packet_id": "0001041061-25-000109#074",
+  "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "unit_count",
+          "driver_state": "reported",
+          "level_low": {"value": 19872, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 19872, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_end_date": "2025-09-30",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2025,
+          "slice_parts": ["segment:pizzahutglobaldivision"]
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "unit_count",
+          "driver_state": "reported",
+          "level_low": {"value": 68, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 68, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "time_type": "instant",
+          "period_end_date": "2025-09-30",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2025,
+          "slice_parts": ["segment:pizzahutglobaldivision", "geography:outside_us"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-25-000109#074/L1",
+      "exact_match": true,
+      "why": "L1 reports the same two facts: total unit_count=19,872 (count, point, instant, Q3 FY2025, sliced to segment:pizzahutglobaldivision) and 68 percent-outside-US (percent, point, same period, sliced segment+geography:outside_us), with the same '%' unit_scale_evidence on the percent slot — matches field for field."
+    },
+    {
+      "lane_id": "0001041061-25-000109#074/L2",
+      "exact_match": false,
+      "why": "L2 matches the total-unit fact and the overall structure of the percent fact, but sets unit_scale_evidence to null on the 68% slot (the '%' symbol inside the quote is a citable unit marker, so it should not be null) and coins the geography slice as 'geography:outside_the_us' instead of 'geography:outside_us'."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Exact spelling of the coined off-menu geography slice for 'outside the U.S.' (e.g. geography:outside_us vs geography:outside_the_us).",
+      "why": "The menu has no matching token for the aggregate 'outside the U.S.' concept (only ch/cn/ru/other/us), so Rule 7 requires coining a kind:value string; the source wording supports more than one lawful lowercase snake_case rendering, and the rules give no further tie-breaker."
+    },
+    {
+      "what": "Whether the '%' symbol counts as a citable unit_scale_evidence marker for a percent-family value, or whether percent values should always carry null evidence since scale_multiplier is fixed at 1 by rule rather than derived from the symbol.",
+      "why": "Rule 5.6 only gives explicit examples for $ (multiplier>1 and multiplier=1) and a no-marker bare count ('14 stores'); it does not explicitly address the % symbol on a percent-family slot, leaving room for either treatment."
+    }
+  ]
+}
+```

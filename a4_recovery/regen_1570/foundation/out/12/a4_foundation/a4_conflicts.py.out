@@ -1,0 +1,14 @@
+governing rules sha256 : dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a
+valid envelopes read   : 222
+A ambiguities          : 169
+B both-drafts-rejected : 23
+C conflicting groups   : 7
+   group 0000006201-26-000032 x2 -> 2#009(a1), 2#014(a1)
+   group 0000092380-26-000044 x2 -> 4#040(a1), 4#043(a1)
+   group 0001041061-26-000084 x2 -> 4#083(a1), 4#089(a1)
+   group 0001041061-26-000084 x2 -> 4#084(a1), 4#090(a1)
+   group CMG_2026-02-03T16.30 x2 -> 0#146(a1), 0#151(a1)
+   group CMG_2026-02-03T16.30 x2 -> 0#149(a1), 0#152(a1)
+   group MCD_2026-02-11T16.30 x2 -> 0#165(a1), 0#172(a1)
+artifact               : /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-phase1-196-20260821T163310Z/conflicts_1370.json
+artifact sha256        : 29293450b302e7e158daef7591ccd3bf57967101b907f176ad298ae548f60728

@@ -1,0 +1,41 @@
+```json
+{
+  "packet_id": "0000027904-26-000013#022",
+  "settled": {
+    "source_id": "0000027904-26-000013",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "antitrust_immunity",
+          "driver_state": "suspended",
+          "slice_parts": ["entity_ownership:grupoaeromexico"],
+          "period_start_date": "2025-11-12",
+          "period_end_date": "2025-11-12",
+          "time_type": "instant"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000013#022/L1",
+      "exact_match": true,
+      "why": "L1's driver_name (antitrust_immunity), driver_state (suspended), slice_parts ([entity_ownership:grupoaeromexico]), period_start_date/period_end_date (2025-11-12), and time_type (instant) match the settled reply exactly."
+    },
+    {
+      "lane_id": "0000027904-26-000013#022/L2",
+      "exact_match": false,
+      "why": "L2 folds the co-mentioned partner entity into the name as aeromexico_antitrust_immunity, which Rule 3.10 forbids (co-mentioned entities never belong in the name), and it drops the entity_ownership:grupoaeromexico slice that Rule 7's stake-it-owns test requires since Delta holds an equity stake in Grupo Aeroméxico; driver_state and period fields otherwise agree."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether Aeroméxico's role belongs solely as the entity_ownership:grupoaeromexico slice or should instead be omitted (whole-company fact) or partially retained in the name as an external JV counterparty.",
+      "why": "Aeroméxico is both a co-mentioned JV partner (excluded from the name per Rule 3.10) and an entity in which Delta holds a ~19% equity stake (entity_ownership per Rule 7); the menu offers exactly one matching token, which supports using it as the slice rather than dropping the party reference entirely."
+    }
+  ]
+}
+```

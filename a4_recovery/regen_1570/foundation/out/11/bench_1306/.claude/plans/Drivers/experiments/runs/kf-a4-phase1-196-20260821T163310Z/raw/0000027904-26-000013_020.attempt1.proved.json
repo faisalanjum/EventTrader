@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "0000027904-26-000013#020",
+  "settled": {
+    "source_id": "0000027904-26-000013",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "available_seat_mile",
+        "item": {
+          "driver_name": "passenger_revenue_per_available_seat_mile",
+          "driver_state": "decreased",
+          "change_value": {
+            "value": -2,
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "%"
+          },
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "slice_parts": ["geography:domesticdestination"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000013#020/L1",
+      "exact_match": true,
+      "why": "Same fact_type metric, driver_name passenger_revenue_per_available_seat_mile, per_x available_seat_mile, decreased state, change_value -2/1/%, change_unit percent_yoy, comparison_baseline prior_year, time_type duration, fiscal_year 2025, and slice geography:domesticdestination; only key ordering differs, which is immaterial."
+    },
+    {
+      "lane_id": "0000027904-26-000013#020/L2",
+      "exact_match": true,
+      "why": "Identical field set and values to the settled reply (fact_type, driver_name, per_x, state, change_value, change_unit, comparison_baseline, fiscal_year, time_type, slice_parts); only key ordering differs from L1/settled."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,50 @@
+```json
+{
+  "packet_id": "0001104659-25-105631#104",
+  "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sales",
+          "driver_state": "increased",
+          "level_low": {"value": 139.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": 139.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": 106.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "comparison_high": {"value": 106.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "slice_parts": ["segment:flowerchild"],
+          "time_type": "duration",
+          "period_scope": "ytd",
+          "fiscal_year": 2025,
+          "period_end_date": "2025-09-30"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-105631#104/L1",
+      "exact_match": true,
+      "why": "Same driver_name 'sales', same state 'increased', same level/comparison point values and units, same slice segment:flowerchild, same ytd/FY2025/2025-09-30 period, same omission of change_value; only key ordering differs, which carries no meaning."
+    },
+    {
+      "lane_id": "0001104659-25-105631#104/L2",
+      "exact_match": true,
+      "why": "Content-identical to the settled reply (same fields and values as L1, just a different key order), so it matches on every substantive point."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "period_end_date (2025-09-30) and the 'ytd' framing are pinned using the surrounding section heading ('Thirty-Nine Weeks Ended September 30, 2025 Compared to Thirty-Nine Weeks Ended October 1, 2024') rather than text inside the quote itself, which only says 'first nine months of fiscal 2025'.",
+      "why": "The quote alone never states an exact date, so resolving period_end_date requires reading the immediately adjoining heading as context; this is a judgment call about how far 'context, not extension' extends, though both drafts and the settlement agree on the same resolution."
+    }
+  ]
+}
+```

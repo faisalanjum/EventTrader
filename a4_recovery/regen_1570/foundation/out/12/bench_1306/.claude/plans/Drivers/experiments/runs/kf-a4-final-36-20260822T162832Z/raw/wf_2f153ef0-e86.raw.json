@@ -1,0 +1,328 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote only reports that FASB issued a new accounting standard (ASU 2025-06) and describes its content; the company merely says it is 'currently evaluating the impact' — this is generic new-accounting-pronouncement boilerplate, not a stated fact about YUM's own driver state, change, surprise, guidance, or action."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: the ASU 2025-06 disclosure is generic new-accounting-pronouncement boilerplate, not a fact about YUM's own driver, so it correctly abstains."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_unit_openings",
+              "driver_state": "reported",
+              "level_low": {"value": 4567, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 4567, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: 4,567 gross unit openings for fiscal 2025 is a stated, concrete metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_count",
+              "driver_state": "reported",
+              "level_low": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "period_end_date": "2025-12-31",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the KFC Division's 33,897-unit count is a stated, concrete metric fact for that segment."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_store_sales",
+              "driver_state": "decreased",
+              "change_value": {"value": -1, "scale_multiplier": 1, "unit_scale_evidence": "point"},
+              "change_unit": "percent_points",
+              "time_type": "duration",
+              "fiscal_year": 2024
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the one-point same-store-sales headwind for the year ended December 31, 2024 is a stated, signed metric-change fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "change_value": {"value": 0.09, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "change_unit": "usd",
+              "measurement_raw_spans": ["53rd week"],
+              "time_type": "duration",
+              "fiscal_year": 2024
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the $0.09 favorable EPS impact from the 53rd week is a stated metric-change fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "net_leverage_ratio",
+              "driver_state": "unknown",
+              "level_low": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": "x"},
+              "level_high": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": "x"},
+              "level_shape_hint": "point",
+              "level_unit": "x",
+              "sentinel_class": "medium_term",
+              "time_type": "instant",
+              "conditions": "Subject to market conditions",
+              "company_confirmed": true,
+              "measurement_raw_spans": ["consolidated"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the ~4.0x medium-term net-leverage-ratio target is the company's own forward guidance, a genuine guidance fact."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "strategic_options_review",
+              "driver_state": "continued",
+              "slice_parts": ["segment:pizzahutglobaldivision"],
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the Pizza Hut strategic options review is a genuine, ongoing action-event fact, though its exact stage (announced vs continued) is a recorded judgment call."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_new_units",
+              "driver_state": "reported",
+              "level_low": {"value": 1939, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 1939, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: 1,939 net new units is a stated, distinct metric fact separate from gross unit openings."
+    },
+    {
+      "row_index": 9,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_count",
+              "driver_state": "reported",
+              "level_low": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "instant",
+              "period_end_date": "2025-12-31",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision", "geography:outside_us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the 90%-outside-the-U.S. composition figure is a stated metric fact, though its slice representation is a recorded ambiguity."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an instant-type point-in-time unit count should carry a period_start_date equal to its period_end_date or leave period_start_date null when the source states only a single 'as of' date."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["losses_and_sign", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the driver name/subject should be the affected metric (same_store_sales) versus the causal external event (the Middle East conflict), and whether a change-noun-bearing name is permissible under Rule 3.10's ban on motion/change nouns in names."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether driver_state should be 'announced' (reading only the located sentence 'we began a review') or 'continued' (reading the full event, which shows the review ongoing through year-end 2025 and expected to complete in 2026)."
+    },
+    {
+      "row_index": 8,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 9,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the driver_name should be 'unit_count' (the filing's own recurring table label) or the literal word 'units', and whether the 90%-outside-the-U.S. slice should combine both the segment and geography parts or use geography alone, given no menu entry exactly matches 'outside the U.S.'."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [2, 8],
+      "members_are_one_fact": false,
+      "reason": "The source itself defines gross unit openings (4,567, raw new-restaurant openings) and net new units (1,939, gross openings less permanent closures) as two distinct performance metrics with different meanings, so they are two standing variables, not one fact stated twice."
+    },
+    {
+      "member_row_indexes": [3, 9],
+      "members_are_one_fact": false,
+      "reason": "The KFC Division's absolute unit count (33,897, a count-shaped value describing division size) and the 90% outside-the-U.S. figure (a percent-shaped value describing geographic composition) are different, independently stated quantities with different units and scope, not one fact expressed twice."
+    }
+  ],
+  "lead_reconciliation": [
+    {"lead_id": "phase1/0001041061-26-000084#082", "agrees": true, "why": "Both abstain for the same reason: the ASU 2025-06 disclosure is generic new-accounting-pronouncement boilerplate with no stated company driver state, matching Rule 1.2."},
+    {"lead_id": "phase1/0001041061-26-000084#083", "agrees": true, "why": "Identical fact: gross_unit_openings, reported, point 4567/count, duration, fiscal_year 2025."},
+    {"lead_id": "hr-030/b1/row2", "agrees": true, "why": "Matches my group determination: gross_unit_openings and net_new_units are two distinct facts, not one restated fact."},
+    {"lead_id": "hr-030/b2/row2", "agrees": true, "why": "Matches my group determination and the same two-fact content as hr-030/b1/row2."},
+    {"lead_id": "phase1/0001041061-26-000084#084", "agrees": true, "why": "Identical fact: unit_count 33897, point/count, instant, period_end_date 2025-12-31, fiscal_year 2025, slice segment:kfcglobaldivision."},
+    {"lead_id": "hr-031/b1/row3", "agrees": false, "why": "The two-facts split (33,897 count vs 90% composition) matches my group call, but this lead's member 2 uses slice_parts=['geography:outsidetheu_s'] alone, dropping the segment:kfcglobaldivision context I retained, so the specific fact content differs."},
+    {"lead_id": "hr-031/b2/row3", "agrees": true, "why": "Matches my settlement exactly: member 2 uses slice_parts ['segment:kfcglobaldivision','geography:outside_us'] with '%' evidence, identical to my row-9 fact."},
+    {"lead_id": "phase1/0001041061-26-000084#085", "agrees": true, "why": "Identical fact: same_store_sales, decreased, change_value -1/percent_points with 'point' evidence, fiscal_year 2024."},
+    {"lead_id": "phase1/0001041061-26-000084#086", "agrees": true, "why": "Identical fact: earnings_per_share, increased, change_value 0.09 usd per_x share, measurement_raw_spans ['53rd week'], fiscal_year 2024."},
+    {"lead_id": "phase1/0001041061-26-000084#087", "agrees": true, "why": "Identical fact: net_leverage_ratio guidance, unknown state, point 4.0x with 'x' unit_scale_evidence, medium_term sentinel, conditions text, company_confirmed true, measurement ['consolidated']."},
+    {"lead_id": "phase1/0001041061-26-000084#088", "agrees": true, "why": "Identical fact: strategic_options_review action_event, driver_state continued, slice segment:pizzahutglobaldivision, fiscal_year 2025."},
+    {"lead_id": "phase1/0001041061-26-000084#089", "agrees": true, "why": "Identical fact: net_new_units, reported, point 1939/count, duration, fiscal_year 2025."},
+    {"lead_id": "hr-030/b1/row8", "agrees": true, "why": "Matches my group determination that gross_unit_openings and net_new_units are two distinct facts."},
+    {"lead_id": "hr-030/b2/row8", "agrees": true, "why": "Matches my group determination, identical two-fact content."},
+    {"lead_id": "phase1/0001041061-26-000084#090", "agrees": true, "why": "Identical fact: unit_count 90 percent, slice ['segment:kfcglobaldivision','geography:outside_us'], instant, period_end_date 2025-12-31, fiscal_year 2025."},
+    {"lead_id": "hr-031/b1/row9", "agrees": false, "why": "The two-facts split matches, but this lead's member 2 slice_parts=['geography:outsidetheu_s'] alone drops the segment:kfcglobaldivision context I retained, so the specific fact content differs from mine."},
+    {"lead_id": "hr-031/b2/row9", "agrees": true, "why": "Matches my settlement exactly: member 2 uses slice_parts ['segment:kfcglobaldivision','geography:outside_us'] with '%' evidence."}
+  ],
+  "open_issues": [
+    {
+      "what": "The slice representation for the 90%-outside-the-U.S. unit_count fact (row 9): whether to combine segment:kfcglobaldivision with geography:outside_us, or use a geography-only slice, and what the correct off-menu geography token should be since no menu entry exactly matches 'outside the U.S.'.",
+      "why": "Two independent reader lineages split on this exact point (one dropped the segment slice), and the menu offers no exact match for a plain 'outside the U.S.' population, so the coined value and its combination with the KFC-division scope is a genuine unresolved choice that affects the fact's identity/series key."
+    },
+    {
+      "what": "The action-event stage for the Pizza Hut strategic options review (row 7): 'announced' versus 'continued'.",
+      "why": "The located sentence alone ('we began a review') reads as a fresh announcement, but the full event shows the review ongoing through year-end 2025 into 2026; different reader lineages picked different stages, and the rules do not pin which framing (single sentence vs whole-event context) governs the LATEST-stage judgment."
+    }
+  ]
+}
+```

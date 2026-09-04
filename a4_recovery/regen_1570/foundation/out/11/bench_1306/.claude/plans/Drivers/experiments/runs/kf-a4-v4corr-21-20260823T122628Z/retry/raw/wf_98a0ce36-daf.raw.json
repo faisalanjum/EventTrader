@@ -1,0 +1,253 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The quoted reconciliation-table line 'Gift card adjustment, net(3) (9,396) - (9,396) -' is a non-GAAP bridge/elimination construct used solely to reconcile GAAP net income to adjusted net income, not itself a business driver (Rule 3.8/OD-17: eliminations and consolidation artifacts are neither names nor slices). Its own footnote (3) shows it nets two independent, oppositely-signed causes -- $17.3 million of gift card breakage revenue from a change in historical redemption patterns (a benefit) and a non-recurring $7.9 million write-down of gift card inventory (a charge) -- with no allocation between them stated in this located quote, so no single lawful driver name or split can be produced from this row alone."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real item, but the line is an accounting reconciliation/elimination construct that nets two independent, oppositely-signed causes with no lawful in-quote split, so it settles as an exclusion rather than a fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -2.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -2.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:thecheesecakefactory"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: a quantified year-over-year decline in The Cheesecake Factory brand's comparable restaurant sales is a real metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "unknown",
+              "measurement_raw_spans": ["adjusted diluted"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "in_line",
+              "measurement_raw_spans": ["adjusted diluted"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: adjusted diluted EPS measured against the company's own stated expectations produces the required twin -- a numberless metric home plus an in_line surprise."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 961.6, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 961.6, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 921.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": 921.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: total revenues with an exact prior-year dollar comparison is a straightforward metric fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "margin",
+              "driver_state": "unknown",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "margin",
+              "driver_state": "in_line",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a lawful-abstention control, but 'Margins ... finished toward the higher end of our expectations' is a real, numberless expectation comparison about margins, so it flips into a fact: a numberless margin metric home plus an in_line surprise; the reviewer_finding's claim that bare 'margin' cannot be supported is rejected because the source itself uses the undifferentiated plural 'Margins' with no qualifier, which Rule 3.3 explicitly allows the familiar broad name to cover."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the stated -2.2% belongs in level_low/level_high (treated here as the metric's own native rate, since comparable-restaurant-sales has no separate absolute level) or in change_value (treating it as a change to an unstated absolute base) is a genuine, rule-unresolved placement judgment."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording", "expectation_routing"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "driver_name is a genuine lawful-synonym choice between 'earnings_per_share' (settled here, the rule's own canonical per-share spelling) and the source's literal wording 'net income per share'."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["measurement_wording", "expectation_routing", "favourable_unfavourable_direction"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Whether 'finished toward the higher end of our expectations' counts as explicit favorability wording (settled here as false, treated as positional language, with in_line driven independently by the value sitting inside the closed range) is a genuine judgment call."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "driver_name specificity is a genuine ambiguity between the bare, undifferentiated 'margin' (settled here, since the quote states only 'Margins' with no qualifier such as gross/operating/restaurant-level) and an inferred specific margin type."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Same has_favorability_wording judgment call as the EPS surprise: 'toward the higher end of our expectations' is treated here as positional language (false) rather than explicit favorability wording."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001104659-26-017090#109",
+      "agrees": true,
+      "why": "Same branch and outcome as this settlement: facts=[], one abstention grounded in the same elimination-construct/bundled-causes reasoning."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-017090#110",
+      "agrees": true,
+      "why": "Matches this settlement on every field: driver_name, decreased, -2.2 percent_yoy point shape, prior_year baseline, Q4 FY2025, and the segment:thecheesecakefactory slice."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-017090#111",
+      "agrees": false,
+      "why": "The twin structure and in_line/previous_guidance surprise mechanics match, but this lead uses driver_name net_income_per_share instead of this settlement's earnings_per_share and sets has_favorability_wording=true where this settlement uses false."
+    },
+    {
+      "lead_id": "hr-018/b1/row3",
+      "agrees": false,
+      "why": "The surprise item itself (driver_name, in_line, previous_guidance, has_favorability_wording=false) matches this settlement exactly, but this lead omits the required numberless metric home fact for the twin, making its reply incomplete."
+    },
+    {
+      "lead_id": "hr-018/b2/row3",
+      "agrees": false,
+      "why": "driver_name earnings_per_share and the full twin structure match, but this lead sets has_favorability_wording=true where this settlement uses false for the same positional phrase."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-017090#112",
+      "agrees": true,
+      "why": "Matches this settlement on every field: revenue increased, 961.6M vs 921.0M point-vs-point, m_usd, prior_year baseline, Q4 FY2025."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-017090#113",
+      "agrees": true,
+      "why": "Matches this settlement on every field for both the numberless margin metric home and the in_line margin surprise, including time_type, baseline, and has_favorability_wording=false."
+    },
+    {
+      "lead_id": "hr-019/b1/row5",
+      "agrees": false,
+      "why": "Matches driver_name margin, driver_state unknown/in_line, previous_guidance baseline, and has_favorability_wording=false on both facts, but omits the required time_type='duration' judgment on both facts that this settlement includes."
+    },
+    {
+      "lead_id": "hr-019/b2/row5",
+      "agrees": false,
+      "why": "Matches driver_name margin and the full twin structure including time_type, but sets has_favorability_wording=true where this settlement uses false for the same positional 'higher end of expectations' phrase."
+    }
+  ],
+  "open_issues": []
+}
+```

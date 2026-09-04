@@ -1,0 +1,50 @@
+```json
+{
+  "packet_id": "0001058090-26-000007#093",
+  "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "digital_sales",
+          "driver_state": "reported",
+          "level_low": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "period_start_date": "2025-10-01",
+          "period_end_date": "2025-12-31"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001058090-26-000007#093/L1",
+      "exact_match": true,
+      "why": "L1 states driver_name digital_sales, state reported, point 37.2 percent level with '%' evidence, time_type duration, fiscal Q4 2025, and also carries the exact period_start_date/period_end_date (2025-10-01/2025-12-31) matching the settled reply field-for-field."
+    },
+    {
+      "lane_id": "0001058090-26-000007#093/L2",
+      "exact_match": false,
+      "why": "L2 agrees on driver_name, state, level values/shape/unit, time_type, and fiscal quarter/year, but omits period_start_date and period_end_date, which the settled reply includes because the surrounding header ('the three months ended December 31, 2025') fixes an exact, resolvable window that Rule 6's priority requires over bare fiscal-quarter framing."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether period_start_date/period_end_date should be emitted at all for this item.",
+      "why": "The located quote itself ('Digital sales represented 37.2%...') contains no date text; the exact end date and 'three months ended' framing come only from the surrounding section header. Including a derived start date (2025-10-01) relies on standard calendar-quarter arithmetic rather than a literally stated date, so a stricter reading could argue for fiscal_quarter/fiscal_year only, with dates left null."
+    },
+    {
+      "what": "Whether 'digital sales' should be its own driver_name or instead be modeled as a channel slice of a broader sales/revenue driver.",
+      "why": "Rule 7 defines channel as 'how it sells,' and digital could be read as a channel dimension of food-and-beverage revenue rather than a standalone metric; the menu has no channel:digital token, so an off-menu kind:value slice (channel:digital) on a driver like food_and_beverage_revenue is a plausible alternative to naming the driver itself digital_sales."
+    }
+  ]
+}
+```

@@ -1,0 +1,47 @@
+```json
+{
+  "packet_id": "0001104659-25-102611#095",
+  "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "revolving_credit_agreement",
+          "driver_state": "occurred",
+          "period_end_date": "2028-11-15",
+          "time_type": "instant"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-102611#095/L1",
+      "exact_match": false,
+      "why": "L1 matches on fact_type (action_event), driver_name (revolving_credit_agreement), and driver_state (occurred), but omits period_end_date and time_type, which the settled answer populates because the quote states a real, dateable termination point (an instant) for the agreement, following the pattern used for the document's other debt-instrument action facts (e.g. Senior Notes 'due <date>')."
+    },
+    {
+      "lane_id": "0001104659-25-102611#095/L2",
+      "exact_match": false,
+      "why": "L2 matches on fact_type, driver_state, period_end_date, and time_type, but uses driver_name 'revolving_credit_facility' instead of the specific defined term actually used in the located quote, 'the Revolving Credit Agreement' (also the exact raw_label_or_claim), so it is not an exact match even though it may be a near-synonym."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether this fact belongs in the metric lane (the termination/maturity date as a standing, re-readable contract term) or the action_event lane (the amendment that produced it).",
+      "why": "The persistence test could support metric (a termination date is a standing attribute one could re-read in later filings), but the schema has no value slot for storing a bare date as a metric's value (level_low/high require numeric objects), and the quote itself opens with the completed action 'As amended,' which grounds action_event with driver_state 'occurred' more directly from the text."
+    },
+    {
+      "what": "Whether driver_name should be the literal defined term 'revolving_credit_agreement' (matching raw_label_or_claim and the quote's capitalized defined term) or the generic synonym 'revolving_credit_facility' used elsewhere in the same paragraph for the same instrument.",
+      "why": "The document treats the two phrases as referring to the identical facility, so a reader could reasonably pick either; Rule 3.3's instruction to use the specificity the evidence supports favors the defined term actually inside this quote."
+    },
+    {
+      "what": "Whether November 15, 2028 counts as a lawful 'real window' for an action_event's period at all, versus being periodless content that happens to contain a date.",
+      "why": "Rule 6 requires a real window before an action fact may carry a period, and this single future date is arguably the agreement's own maturity content rather than a start/end window over which the amendment action itself occurred."
+    }
+  ]
+}
+```

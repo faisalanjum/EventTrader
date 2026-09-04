@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0001041061-26-000003#080",
+  "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "operating_profit",
+          "driver_state": "increased",
+          "change_value": {"value": 12, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "measurement_raw_spans": ["GAAP"],
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000003#080/L1",
+      "exact_match": true,
+      "why": "Same fact_type, driver_name, driver_state, change_value/unit, comparison_baseline, measurement_raw_spans, time_type, and fiscal period as the settled reply; only JSON key order differs."
+    },
+    {
+      "lane_id": "0001041061-26-000003#080/L2",
+      "exact_match": true,
+      "why": "Identical content to L1 and to the settled reply, differing only in key ordering within the item object."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline=prior_year is lawfully supported for this metric.",
+      "why": "The located quote ('Fourth-quarter GAAP operating profit grew 12%') does not itself say 'versus a year ago'; that framing comes from the release's document-wide note ('All comparisons are versus the same period a year ago') and the adjacent summary table (12/31/25 vs 12/31/24). Using that context to set comparison_baseline is reasonable but relies on evidence outside the immediate quote rather than words inside it."
+    }
+  ]
+}
+```

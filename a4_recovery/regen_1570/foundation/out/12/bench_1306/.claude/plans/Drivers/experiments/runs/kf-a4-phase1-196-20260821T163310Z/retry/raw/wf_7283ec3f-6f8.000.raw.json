@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001104659-25-102611#096",
+  "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "This states the number of weeks comprising each fiscal quarter (12/12/12 plus a 16-, 17-, or 16-week fourth quarter across three years) — a fiscal-calendar/reporting-period convention describing how the company's quarters are structured, not a statement about a driver's state, change, surprise, guidance, or action; it fails the Rule 1 fact gate as calendar-definition boilerplate rather than a business driver fact."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-102611#096/L1",
+      "exact_match": true,
+      "why": "L1 also emits no facts and a single abstention reasoning that this is fiscal-calendar structural disclosure (quarter week counts), not a driver fact, matching the settled reply's outcome and rationale."
+    },
+    {
+      "lane_id": "0001104659-25-102611#096/L2",
+      "exact_match": true,
+      "why": "L2 also emits no facts and a single abstention citing the fiscal-quarter week-count convention as failing the Rule 1 fact gate, matching the settled reply's outcome and rationale."
+    }
+  ],
+  "ambiguities": []
+}
+```

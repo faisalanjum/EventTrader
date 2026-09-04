@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#001",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote gives paired values ($(267) vs $(386), a 30.8% decrease) for net loss excluding net special items, but the only marker inside the quote is a bare '$'. The actual scale wording that fixes the multiplier ('in millions, except share and per share amounts') sits in the table's column header, outside this quote — and the true multiplier here is not 1 (these are millions, not raw dollars). Rule 5.6 requires unit_scale_evidence to come from inside the quote and directs abstention exactly when the scale marker sits in a header outside the quote rather than letting me import or assume it."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#001/L1",
+      "exact_match": true,
+      "why": "L1 also returns facts=[] with a single abstention citing the same root cause: the '$' inside the quote cannot support a non-1 multiplier, and the 'in millions' scale marker lives in a header outside the quote, so Rule 5.6 forces abstention."
+    },
+    {
+      "lane_id": "0000006201-26-000031#001/L2",
+      "exact_match": true,
+      "why": "L2 also returns facts=[] with a single abstention giving the identical reasoning — the header-only scale marker cannot be borrowed to scale a value whose multiplier isn't 1, so the item abstains rather than emits a fact."
+    }
+  ],
+  "ambiguities": []
+}
+```

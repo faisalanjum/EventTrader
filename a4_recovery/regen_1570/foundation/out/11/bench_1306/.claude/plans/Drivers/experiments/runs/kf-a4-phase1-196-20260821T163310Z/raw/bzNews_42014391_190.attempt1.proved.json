@@ -1,0 +1,35 @@
+```json
+{
+  "packet_id": "bzNews_42014391#190",
+  "settled": {
+    "source_id": "bzNews_42014391",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "e_coli_outbreak",
+          "driver_state": "occurred",
+          "level_low": {"value": 100, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "floor",
+          "level_unit": "count"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "bzNews_42014391#190/L1",
+      "exact_match": true,
+      "why": "L1 matches exactly: action_event, driver_name e_coli_outbreak, driver_state occurred, level_low 100 as an open floor with unit count and null scale evidence."
+    },
+    {
+      "lane_id": "bzNews_42014391#190/L2",
+      "exact_match": false,
+      "why": "L2 misclassifies the outbreak as a metric (driver_name e_coli_outbreak_illnesses, state reported) instead of a discrete completed incident (action_event, state occurred); an outbreak's sickened-count is the severity of a one-off event, not a standing re-readable variable, so the persistence test in Rule 2 routes it to action_event."
+    }
+  ],
+  "ambiguities": []
+}
+```

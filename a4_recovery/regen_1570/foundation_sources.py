@@ -7,7 +7,7 @@
 package rows (its own PROJECTION.tsv: bench inputs, the A3 run, the A3 official states and records),
 the A3 bench's repo `driver` package, skills scripts, law files and harness directory (minus the two
 files history held differently), the pinned overlays the A3 bench does not carry (hard-review owner
-from file-history; correction owner, final owner and key_lint from stage-1), the historical
+from file-history; correction owner, final owner, key_lint and the V6 lock owner from stage-1), the historical
 build_launch_manifest.py and phase-1 key owner and the three exact scratch tools preserved under
 regen_1566 (each pin-checked at copy), the corrected key owner (file-history), the five package
 texts, the two preliminary derived files (hash comparison only, never projected), the frozen
@@ -53,6 +53,7 @@ OVERLAYS = (("build_kfields_hard_review.py", FH + "/dffa453cc8971216@v2"),
             ("build_kfields_hr_correction.py", STAGE1 + "/build_kfields_hr_correction.py"),
             ("build_kfields_final.py", STAGE1 + "/build_kfields_final.py"),
             ("key_lint.py", STAGE1 + "/key_lint.py"),
+            ("v6_lock_1398.py", STAGE1 + "/v6_lock_1398.py"),
             ("build_launch_manifest.py", R66 + "/derived/harness/build_launch_manifest.py"))
 EPOCHS = (("epoch1", "phase1", R66 + "/a4/build_kfields_key.13d00b1f.py"),
           ("epoch2", "post", FH + "/bf2596971ecbb1dd@v3"))

@@ -7,7 +7,14 @@ inventory, held to the freeze receipt, then the final inventory is restored); `p
 phase-1 package, prepare, 196 records, finalize, the owner-derived retries, finalize); `bridge` (the
 one lawful swap to epoch a289601b, then the exact regrade and conflict builders); `hardreview`
 (package, prepare, 70 records, finalize, the owner-derived retries, finalize); `correction`
-(package, prepare, 4 records, finalize); `final` (the seven-file package). Every saved state is
+(package, prepare, 4 records, finalize); `final` (the seven-file package); then the signed-V6 baseline from
+the same saved answers (Codex SEQ 1585): `v1` to `v6` (each one run of the final owner: prepare, the census
+states in the owner's order, finalize, the owner-derived retry, finalize), `signer`, and `lock` (the V6 lock
+owner's document written where history published it and re-derived, the V6 composition accounting and the
+census accounting of every state recorded once). A run whose receipt bound an earlier era's package is
+re-bound by the administrative receipt-epoch seam (receipt_epoch.py, Codex SEQ 1586): the owner's own
+expected receipt with that era's pinned manifest, bound and key set, accepted only as the exact pinned
+bytes; every meaning decision stays the owner's. Every saved state is
 selected by the census join (run root, attempt, label) in the owner's returned order; before each
 record_state the owner-rendered launcher, the state's embedded script and the projected file bytes
 must be identical. Every anchor is checked where it is produced; the first mismatch refuses and
@@ -17,6 +24,7 @@ reports. A model is never called.
     foundation.py run <out_root>      run every remaining stage, then export the output tree
     foundation.py red-probe           the RED probes against the preliminary view
 """
+import collections
 import hashlib
 import io
 import json
@@ -40,8 +48,15 @@ PKG1 = X + "/kfields_key_a4/phase1"
 HRPKG = X + "/kfields_hard_review"
 FIXD = X + "/kfields_hr_correction"
 PKGF = X + "/kfields_final"
+LOCK_NAME = "a4_detailed_key_lock_v6.json"
+#: the signed-V6 baseline after the package: each run's census kind and the final owner's Bound field, in dependency order
+V = (("v1", "final", "events"), ("v2", "corr", "corrections"), ("v3", "decision", "decision"),
+     ("v4", "v4corr", "decision_correction"), ("v5", "v5corr", "decision_correction_v5"), ("v6", "v6corr", "decision_correction_v6"))
+PREPARE = {"v1": "prepare_events", "v2": "prepare_corrections", "v3": "prepare_decision", "v4": "prepare_v4", "v5": "prepare_v5",
+           "v6": "prepare_v6", "signer": "prepare_signer"}
+RUN_FILES = {"receipt": "receipt.json", "finalization": "finalization.json", "retry receipt": "retry/receipt.json", "retry finalization": "retry/finalization.json"}
 #: the two key-owner epochs and the two inventory epochs: the stage decides, the caller never does
-EPOCH_OF = {"phase1": "phase1", "bridge": "post", "hardreview": "post", "correction": "post", "final": "post"}
+EPOCH_OF = dict({"phase1": "phase1"}, **{s: "post" for s in ("bridge", "hardreview", "correction", "final") + tuple(v[0] for v in V) + ("signer", "lock")})
 INVENTORY_OF = {"inventory": "history"}              # every later stage needs the restored final inventory
 INVENTORY = FS.INVENTORY
 REVIEW = X + "/inventory_review"
@@ -80,15 +95,19 @@ def pin(scope, name):
     return v
 
 
-def anchor(scope, name, path):
-    """Record one anchor; refuse at the first mismatch."""
-    got = sha_file(path)
-    want = pin(scope, name)
+def anchor_value(scope, name, got, what=None):
+    """Record one anchor of a measured value; refuse at the first mismatch."""
+    got, want = str(got), pin(scope, name)
     os.makedirs(LOG, exist_ok=True)
     io.open(os.path.join(LOG, "ANCHORS.tsv"), "a", encoding="utf-8").write("%s\t%s\t%s\t%s\t%s\n" % (scope, name, want, got, "ok" if got == want else "MISMATCH"))
     if got != want:
-        refuse("anchor %s / %s: %s is %s, not the pinned %s" % (scope, name, path, (got or "absent")[:16], want[:16]))
+        refuse("anchor %s / %s: %s is %s, not the pinned %s" % (scope, name, what or name, got[:16], want[:16]))
     print("  anchor ok  %-36s %-28s %s" % (scope[:36], name, want[:16]))
+
+
+def anchor(scope, name, path):
+    """Record one file anchor; refuse at the first mismatch."""
+    anchor_value(scope, name, sha_file(path) or "absent", path)
 
 
 def inside_projection():
@@ -288,6 +307,15 @@ def stage():
         return "correction"
     if not all(ok("final_seven-file_package", n, PKGF + "/" + n) for n in FS.pins("final_seven-file_package")):
         return "final"
+    for st, kind, _field in V:
+        root = run_root(kind)
+        if not all(ok(root, n, X + "/runs/" + root + "/" + f) for n, f in RUN_FILES.items() if n in FS.pins(root)):
+            return st
+    sg = run_root("signer")
+    if not all(ok(sg, n, X + "/runs/" + sg + "/" + f) for n, f in RUN_FILES.items() if n in FS.pins(sg)):
+        return "signer"
+    if not ok("lock", LOCK_NAME, X + "/runs/" + sg + "/" + LOCK_NAME):
+        return "lock"
     return "done"
 
 
@@ -473,6 +501,135 @@ def stage_final():
         anchor("final_seven-file_package", name, PKGF + "/" + name)
 
 
+def bound(F, upto):
+    """The final owner's binding of every run before stage `upto`; the signer and the lock bind all six."""
+    b = F.Bound(PKGF, *(X + "/runs/" + run_root(k) for k in ("phase1", "hardreview", "hrfix")))
+    for st, kind, field in V:
+        if st == upto:
+            break
+        b = b._replace(**{field: X + "/runs/" + run_root(kind)})
+    return b
+
+
+def stage_version(idx, st):
+    """One saved run of the final owner: prepare, every census state in the owner's order, finalize, the
+    owner-derived retry where the census holds one; each anchor where it is produced."""
+    _owners()
+    import build_kfields_final as F
+    kind = dict((s, k) for s, k, _f in V).get(st, "signer")
+    root = run_root(kind)
+    run, b = X + "/runs/" + root, bound(F, st)
+    import receipt_epoch as RE
+    RE.install(F)
+    prep = getattr(F, PREPARE[st])(run, b)
+    if not prep.get("ok"):
+        refuse("%s prepare: %s" % (st, prep.get("problems")))
+    if RE.rebind(F, run):
+        print("  receipt re-bound to the %s era" % kind)
+    if "prepared receipt" in FS.pins(root):
+        anchor(root, "prepared receipt", run + "/receipt.json")
+    record_all(idx, root, "primary", run, prep["invocations"], "label", F.record_state, _script_from_owner)
+    anchor(root, "receipt", run + "/receipt.json")
+    doc = F.finalize(run, b)
+    anchor(root, "finalization", run + "/finalization.json")
+    anchor_value(root, "raw tree", F.raw_tree(run)["sha256"], "raw tree of %d files" % F.raw_tree(run)["files"])
+    print("  %s ledger: %s" % (st, dict(doc["ledger"])))
+    child, n = doc.get("child"), retry_count(idx, root)
+    if n == 0:
+        if doc.get("retry") or child:
+            refuse("the %s run names a retry the census does not hold" % st)
+        return
+    if not child or len(child["invocations"]) != n:
+        refuse("the owner derived %s %s retries, the census holds %d" % (len(child["invocations"]) if child else "no", st, n))
+    RE.rebind(F, child["dir"])
+    record_all(idx, root, "retry", child["dir"], child["invocations"], "label", F.record_state, _script_from_owner)
+    anchor(root, "retry receipt", run + "/retry/receipt.json")
+    kid = F.finalize(run + "/retry", b)
+    anchor(root, "retry finalization", run + "/retry/finalization.json")
+    anchor_value(root, "retry raw tree", F.raw_tree(run + "/retry")["sha256"], "retry raw tree of %d files" % F.raw_tree(run + "/retry")["files"])
+    print("  %s child ledger: %s" % (st, dict(kid["ledger"])))
+    if kid.get("retry") or kid.get("child"):
+        refuse("the %s child names a third attempt" % st)
+
+
+def v6_accounting_problems(order, shards, origins, counts):
+    """The V6 composition against the pins: every frozen event once, in order; every inventory row
+    accounted; the pinned origin mix; no open issue."""
+    p, bad = FS.pins("v6"), []
+    if list(shards) != list(order) or list(origins) != list(order) or len(order) != int(p["shards"]) or counts.get("events_accounted") != len(order):
+        bad.append("%d shards over %d events (%s accounted) are not the pinned %s frozen events in order" % (len(shards), len(order), counts.get("events_accounted"), p["shards"]))
+    if counts.get("rows_accounted") != int(p["rows"]):
+        bad.append("%s inventory rows accounted, not the pinned %s" % (counts.get("rows_accounted"), p["rows"]))
+    want = {k: int(v) for k, v in p.items() if k.startswith("a4_final_")}
+    mix = dict(collections.Counter(origins.values()))
+    if mix != want:
+        bad.append("origins %s, not the pinned %s" % (mix, want))
+    left = [s for s, sh in shards.items() if sh.get("open_issues")]
+    if left or counts.get("open_issues") != int(p["open_issues"]):
+        bad.append("%d events carry an open issue (%s counted), the pinned is %s" % (len(left), counts.get("open_issues"), p["open_issues"]))
+    return bad
+
+
+def recorded_states_problems(idx, roots, recorded):
+    """Every saved state of these runs recorded exactly once, nothing else, the pinned total."""
+    expected = {os.path.join(SESS, "workflows", row["wf"] + ".json") for (r, _a, _l), row in idx.items() if r in roots}
+    seen, bad = collections.Counter(recorded), []
+    for what, paths in (("saved states were never recorded", sorted(expected - set(seen))), ("recorded states are not saved ones", sorted(set(seen) - expected)),
+                        ("states were recorded twice", sorted(p for p, n in seen.items() if n > 1))):
+        if paths:
+            bad.append("%d %s: %s" % (len(paths), what, [os.path.basename(p) for p in paths[:3]]))
+    if len(expected) != int(pin("v6", "states")):
+        bad.append("the census holds %d states for these runs, not the pinned %s" % (len(expected), pin("v6", "states")))
+    return bad
+
+
+def stage_lock(idx):
+    """The V6 lock owner's document from the built world, written where history published it and
+    re-derived; then the V6 composition and the census accounting, each anchored."""
+    _owners()
+    import build_kfields_final as F
+    import v6_lock_1398 as L
+    if sha_file(L.__file__) != pin("owner", "v6_lock_1398.py"):
+        refuse("the imported lock owner %s is not the pinned bytes" % L.__file__)
+    b, SIG = bound(F, "lock"), X + "/runs/" + run_root("signer")
+    path = os.path.join(SIG, LOCK_NAME)
+    if os.path.exists(path):
+        refuse("a lock already exists at %s" % path)
+    try:
+        doc = L.v6_lock(SIG, b)
+    except ValueError as exc:
+        refuse("the v6 lock does not derive: %s" % exc)
+    F.HR._atomic(path, json.dumps(doc, indent=1))
+    anchor("lock", LOCK_NAME, path)
+    bad = L.v6_lock_problems(json.loads(io.open(path, "rb").read().decode("utf-8")), SIG, b)
+    if bad:
+        refuse("the written lock does not re-derive: %s" % bad[:2])
+    shards, _raws, origins, bad = F.v6_shards(b)
+    if bad:
+        refuse("the v6 composition: %s" % bad[:2])
+    gate = F.signing_gate(b.events, b)
+    if not gate["ok"]:
+        refuse("the signing gate: %s" % gate["stops"][:2])
+    order = [t["source_id"] for t in F.event_tasks(b.evidence)]
+    bad = v6_accounting_problems(order, shards, origins, gate["counts"])
+    if bad:
+        refuse(bad[0])
+    roots = {run_root(k) for _s, k, _f in V} | {run_root("signer")}
+    receipts = [os.path.join(X, "runs", root, rel, F.K.RECEIPT_NAME) for root in sorted(roots) for rel in ("", "retry")]
+    recorded = [s for r in receipts if os.path.isfile(r) for s in F.K._load(r)["states"]]
+    bad = recorded_states_problems(idx, roots, recorded)
+    if bad:
+        refuse(bad[0])
+    signer_wf = join(idx, run_root("signer"), "primary", F.K._load(os.path.join(SIG, F.K.RECEIPT_NAME))["allowed"][0])["wf"]
+    mix = collections.Counter(origins.values())
+    measured = dict({"shards": len(shards), "rows": gate["counts"]["rows_accounted"], "open_issues": gate["counts"]["open_issues"],
+                     "states": len(recorded), "signer_wf": signer_wf}, **{n: mix.get(n, 0) for n in FS.pins("v6") if n.startswith("a4_final_")})
+    for name in FS.pins("v6"):
+        anchor_value("v6", name, measured[name])
+    print("  v6 baseline: %d ordered shards, %s rows accounted, origins %s, %s open issues, %d states recorded once, signer %s"
+          % (len(shards), gate["counts"]["rows_accounted"], dict(mix), gate["counts"]["open_issues"], len(recorded), signer_wf))
+
+
 def step():
     if not inside_projection():
         refuse("not inside the projected historical tree (no projection marker, harness or private /tmp)")
@@ -484,15 +641,16 @@ def step():
     if bad:
         refuse(bad[0])
     idx = census_index() if st not in ("inventory", "bridge", "final") else None
-    {"inventory": stage_inventory, "phase1": lambda: stage_phase1(idx), "bridge": stage_bridge, "hardreview": lambda: stage_hardreview(idx),
-     "correction": lambda: stage_correction(idx), "final": stage_final}[st]()
+    stages = {"inventory": stage_inventory, "phase1": lambda: stage_phase1(idx), "bridge": stage_bridge, "hardreview": lambda: stage_hardreview(idx),
+              "correction": lambda: stage_correction(idx), "final": stage_final, "lock": lambda: stage_lock(idx)}
+    stages.get(st, lambda: stage_version(idx, st))()
     print("STAGE %s complete" % st)
     return 0
 
 
 def export(out_root):
     os.makedirs(out_root, exist_ok=True)
-    roots = [REVIEW, X + "/kfields_key_a4", HRPKG, FIXD, PKGF, S + "/a4", POINTER, LOG] + [X + "/runs/" + run_root(k) for k in ("phase1", "hardreview", "hrfix")]
+    roots = [REVIEW, X + "/kfields_key_a4", HRPKG, FIXD, PKGF, S + "/a4", POINTER, LOG] + [X + "/runs/" + run_root(k) for k in ("phase1", "hardreview", "hrfix", "signer") + tuple(k for _s, k, _f in V)]
     rows = []
     for root in roots:
         paths = [root] if os.path.isfile(root) else [os.path.join(dp, f) for dp, _d, fs in os.walk(root) for f in fs] if os.path.isdir(root) else []
@@ -514,7 +672,7 @@ def run(out_root):
         refuse("output root is not empty: %s" % out_root)   # a fresh empty root, before any build work
     if not inside_projection():
         refuse("not inside the projected historical tree")
-    for _ in range(9):
+    for _ in range(20):
         st = stage()
         if st == "done":
             break
