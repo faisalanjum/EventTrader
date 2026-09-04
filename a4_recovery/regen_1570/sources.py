@@ -22,6 +22,7 @@ TABLE = os.path.join(R, "inputs", "owner_recipes", "SOURCES.tsv")
 BLOBS = "/home/faisal/.core827_backups/recovery_1531/regen_1537/probe/blobs"
 STAGE1 = "/home/faisal/.core827_backups/recovery_1531/regen_1539/builds/stage1/tree/.claude/plans/Drivers/experiments/harness_g1v3"
 TRANSCRIPT = os.path.expanduser("~/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl")
+MAILBOX = os.path.expanduser("~/.core827-orchestrator")
 
 #: (logical source, role, destination relative to the root); a source of the form
 #: transcript:<line> is that one record line of the bound session transcript
@@ -30,6 +31,11 @@ ENUMERATED = [
     (BLOBS + "/2b8667dc9614c965", "A6 owner recipe source B (proven blob)", "inputs/owner_recipes/blob_2b8667dc9614c965"),
     (STAGE1 + "/raw_transport.py", "raw transport recipe base (stage-1 bytes)", "inputs/owner_recipes/stage1_raw_transport.py"),
     ("transcript:91763", "raw transport recipe: the record-91763 Edit (immutable record)", "inputs/owner_recipes/transcript_record_91763.json"),
+    (MAILBOX + "/archive_CODEX_1383.md", "owner_rulings_1383.txt recipe source (archived Codex SEQ 1383)", "inputs/package_texts/archive_CODEX_1383.md"),
+    (MAILBOX + "/archive_CODEX_1387.md", "decision_rules_1387.txt recipe source (archived Codex SEQ 1387)", "inputs/package_texts/archive_CODEX_1387.md"),
+    (MAILBOX + "/archive_CODEX_1390.md", "v4_findings_1390.txt recipe source (archived Codex SEQ 1390)", "inputs/package_texts/archive_CODEX_1390.md"),
+    (STAGE1 + "/v5_findings_1394.txt", "v5_findings_1394.txt bound as the stage-1 bytes", "inputs/package_texts/stage1_v5_findings_1394.txt"),
+    (MAILBOX + "/archive_CODEX_1396.md", "v6_findings_1396.txt recipe source (archived Codex SEQ 1396)", "inputs/package_texts/archive_CODEX_1396.md"),
 ]
 
 
