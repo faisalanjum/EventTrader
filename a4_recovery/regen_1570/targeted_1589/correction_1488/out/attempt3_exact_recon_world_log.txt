@@ -1,0 +1,33 @@
+projected 3063 files at their historical paths
+== WORLD A 16:51:09
+check correction versioned_inventory_path: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json vs /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json ok
+check correction versioned inventory bytes = final_inventory: 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 vs 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 ok
+check correction source_receipt.file_sha256: a867227f1e720b7d63e09ae1bd252d964130761a98d4c7a59338deec95156cb7 vs a867227f1e720b7d63e09ae1bd252d964130761a98d4c7a59338deec95156cb7 ok
+check correction source_receipt.receipt_sha256: ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57cd64f1ce7f4c20441 vs ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57cd64f1ce7f4c20441 ok
+check correction census: {"changed_records": 11, "other_fields": 0, "quote": 11, "raw_label_or_claim": 1, "records": 196} vs {"changed_records": 11, "other_fields": 0, "quote": 11, "raw_label_or_claim": 1, "records": 196} ok
+owner 1488 89e1e71fd345b4e9176f9fb46ac78e3a2555c35655d0bc44b3bb35ab03f1d368 want 89e1e71fd345b4e9176f9fb46ac78e3a2555c35655d0bc44b3bb35ab03f1d368 MATCH
+red rc=0; loaded modules 38
+RESULT MATCH
+adapter rc=0
+.............                                                            [100%]
+
+============================== 14 passed in 0.77s ==============================
+tests rc=0
+== DONE A 16:51:11 adapter=0 tests=0
+projected 3063 files at their historical paths
+== WORLD B 16:51:11
+check correction versioned_inventory_path: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json vs /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json ok
+check correction versioned inventory bytes = final_inventory: 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 vs 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 ok
+check correction source_receipt.file_sha256: a867227f1e720b7d63e09ae1bd252d964130761a98d4c7a59338deec95156cb7 vs a867227f1e720b7d63e09ae1bd252d964130761a98d4c7a59338deec95156cb7 ok
+check correction source_receipt.receipt_sha256: ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57cd64f1ce7f4c20441 vs ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57cd64f1ce7f4c20441 ok
+check correction census: {"changed_records": 11, "other_fields": 0, "quote": 11, "raw_label_or_claim": 1, "records": 196} vs {"changed_records": 11, "other_fields": 0, "quote": 11, "raw_label_or_claim": 1, "records": 196} ok
+owner 1488 89e1e71fd345b4e9176f9fb46ac78e3a2555c35655d0bc44b3bb35ab03f1d368 want 89e1e71fd345b4e9176f9fb46ac78e3a2555c35655d0bc44b3bb35ab03f1d368 MATCH
+red rc=0; loaded modules 38
+RESULT MATCH
+adapter rc=0
+== DONE B 16:51:12 adapter=0 tests=0
+== COMPARE
+diff rc=0
+== ALL DONE A=0 B=0 diff=0
+GATE PASS
+wrapper rc=0

@@ -1,0 +1,45 @@
+{
+ "blocks": [
+  {
+   "heading": "### A1.",
+   "sha256": "771694968d6e3872b6752bd422ae22883f894a501a1bfc155ff525f797eabe26",
+   "source": ".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md",
+   "title": "role headers"
+  },
+  {
+   "heading": "### A2.",
+   "sha256": "c100ae635f68bebcceedecb4e1992c76f4f42b9a8ff63cc9280cfcd95c04ef2c",
+   "source": ".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md",
+   "title": "active rules"
+  },
+  {
+   "heading": "### A3.",
+   "sha256": "ba97eb35e81525fe360ee8567941b85cfe9e917b91a3e031a4a7956a50886bd8",
+   "source": ".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md",
+   "title": "output envelope"
+  },
+  {
+   "heading": "### A4.",
+   "sha256": "7f812937dec5aa052c0dd2c0b22f0d6329ff03922faed297ed8a9f2b1d8c501b",
+   "source": ".claude/plans/Drivers/experiments/harness/exp5_rev4_package.md",
+   "title": "boundary"
+  }
+ ],
+ "event_placeholder": "<<EVENT>>",
+ "prompts": [
+  {
+   "bytes": 25478,
+   "file": "exp5_prompt_drafter.md",
+   "role": "drafter",
+   "sha256": "f4c556960bbb191147b7a7d6d9cffb8dee32dd790f7654ce5c8bfe486275927f"
+  },
+  {
+   "bytes": 25639,
+   "file": "exp5_prompt_producer.md",
+   "role": "producer",
+   "sha256": "060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc"
+  }
+ ],
+ "structure_owner": "driver.core (generated, not copied)",
+ "version": "v2-prompt-contract"
+}

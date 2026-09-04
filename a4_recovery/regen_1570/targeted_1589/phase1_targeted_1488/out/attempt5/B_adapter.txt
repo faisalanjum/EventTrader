@@ -1,0 +1,29 @@
+RED: the owner REFUSED without the correction directory: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/lock/candidate_v2_1488/correct
+manifest got ec065a3ae5b557693b4d390324ffd9dc687a3d0eac13a94aa5eec4f6cce49b1e want ec065a3ae5b557693b4d390324ffd9dc687a3d0eac13a94aa5eec4f6cce49b1e MATCH
+rules got dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a want dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a MATCH
+baseline rc=0 file 35f7602baf06d1b6d5a04dab96d76ba92c24395e12e204e77e62ae698b31e328 want 35f7602baf06d1b6d5a04dab96d76ba92c24395e12e204e77e62ae698b31e328 MATCH; digest 6acc681bbb24849a508e3634354c789a71e91fad8328914f4f9397aab2c81686 want 6acc681bbb24849a508e3634354c789a71e91fad8328914f4f9397aab2c81686 MATCH; files 48; problems []
+check calls: 11 vs 11 ok
+check targets in order: ['0000006201-26-000031#001', '0000006201-26-000031#006', '0000006201-26-000031#008', '0000027904-26-000022#029', '0000092380-26-000044#042', '0000940944-26-000005#065', '0000940944-26-000009#068', '00 vs ['0000006201-26-000031#001', '0000006201-26-000031#006', '0000006201-26-000031#008', '0000027904-26-000022#029', '0000092380-26-000044#042', '0000940944-26-000005#065', '0000940944-26-000009#068', '00 ok
+check correction.targets: ['0000006201-26-000031#001', '0000006201-26-000031#006', '0000006201-26-000031#008', '0000027904-26-000022#029', '0000092380-26-000044#042', '0000940944-26-000005#065', '0000940944-26-000009#068', '00 vs ['0000006201-26-000031#001', '0000006201-26-000031#006', '0000006201-26-000031#008', '0000027904-26-000022#029', '0000092380-26-000044#042', '0000940944-26-000005#065', '0000940944-26-000009#068', '00 ok
+check correction.frozen_inventory_sha256: 57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff vs 57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff ok
+check correction.correction_receipt_sha256: bc5ac688abe66763a5cc99f9fb3a3708ba15b83c9a47fd327ffaac2dcb653eab vs bc5ac688abe66763a5cc99f9fb3a3708ba15b83c9a47fd327ffaac2dcb653eab ok
+check correction.source_receipt: {'path': '/tmp/a7_source_locator_audit_1486.json', 'file_sha256': 'a867227f1e720b7d63e09ae1bd252d964130761a98d4c7a59338deec95156cb7', 'receipt_sha256': 'ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57 vs {'path': '/tmp/a7_source_locator_audit_1486.json', 'file_sha256': 'a867227f1e720b7d63e09ae1bd252d964130761a98d4c7a59338deec95156cb7', 'receipt_sha256': 'ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57 ok
+check correction.corrected_inventory_sha256: 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 vs 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 ok
+check inventory_sha256: 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 vs 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066 ok
+check budget.budget_receipt_sha256: f6904a81569b13eab92f1582d195c90d8ef6005e41ee2b58cbfe05689e7bf506 vs f6904a81569b13eab92f1582d195c90d8ef6005e41ee2b58cbfe05689e7bf506 ok
+check budget.before/after/ceiling: (5168, 5179, 6000) vs (5168, 5179, 6000) ok
+check rules_sha256: dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a vs dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a ok
+check transport block: {'model_alias': 'sonnet', 'runtime_model_id': 'claude-sonnet-5', 'effort': 'high', 'agentType': 'lean-probe', 'disallowedTools': ['Read'], 'CLAUDE_CODE_MAX_OUTPUT_TOKENS': '128000', 'parent_session_id vs {'model_alias': 'sonnet', 'runtime_model_id': 'claude-sonnet-5', 'effort': 'high', 'agentType': 'lean-probe', 'disallowedTools': ['Read'], 'CLAUDE_CODE_MAX_OUTPUT_TOKENS': '128000', 'parent_session_id ok
+check a3_binding: {'retry_receipt': '4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465', 'retry_finalization': '15cb7a2dc8c53f0d9ec093e34b816ff88f5ca678196c1896b32494a13a1f72b2', 'primary_receipt': '19ab vs {'retry_receipt': '4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465', 'retry_finalization': '15cb7a2dc8c53f0d9ec093e34b816ff88f5ca678196c1896b32494a13a1f72b2', 'primary_receipt': '19ab ok
+check package_problems: [] vs [] ok
+check items prompt/script hashes recomputed: 11 vs 11 ok
+check items drafts = a3 drafts: 11 vs 11 ok
+door green 1 ok/problems/invocations/receipt valid: (True, [], 11, True, []) vs (True, [], 11, True, []) ok
+door green 1 invocation order: ['0000006201-26-000031#001', '0000006201-26-000031#006', '0000006201-26-000031#008', '0000027904-26-000022#029', '0000092380-26-000044#042', '0000940944-26-000005#065', '0000940944-26-000009#068', '00 vs ['0000006201-26-000031#001', '0000006201-26-000031#006', '0000006201-26-000031#008', '0000027904-26-000022#029', '0000092380-26-000044#042', '0000940944-26-000005#065', '0000940944-26-000009#068', '00 ok
+door red (harness_g1v3/a1_reader.py +1 byte) ok/reason/invocations/receipt: (False, True, 0, False) vs (False, True, 0, False) ok
+door red problems: ['an A3 dependency byte moved'] vs ['an A3 dependency byte moved'] ok
+door green 2 ok/problems/invocations/receipt valid: (True, [], 11, True, []) vs (True, [], 11, True, []) ok
+door green 2 receipt allows the same keys as green 1: True vs True ok
+loaded modules 36
+RESULT MATCH
+opened files under the world 2062

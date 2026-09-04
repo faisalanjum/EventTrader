@@ -1,0 +1,9 @@
+{
+ "source": "archive_CODEX_1594.md sha256 cb9c00a9fad0bb77ff93cb61bc6acf7d5ab3898dc7b7a8e9ebe41c873e99fa33",
+ "owner_1487_sha256": "9d3644e0f1b316865188dfa21fd8d1650c73a8a426aa9137399139f209f26075",
+ "owner_1488_sha256": "89e1e71fd345b4e9176f9fb46ac78e3a2555c35655d0bc44b3bb35ab03f1d368",
+ "final_inventory": "1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066",
+ "adjudication_sidecar": "041ebf64e2dab6f6af67887d6b70b03262a5e90b82087ae630a403080c343e37",
+ "validator_receipt": "2e7afac63207d46513659a74f25c5811f04a1af40121ec82534993830e94adbb",
+ "correction_receipt": "bc5ac688abe66763a5cc99f9fb3a3708ba15b83c9a47fd327ffaac2dcb653eab"
+}

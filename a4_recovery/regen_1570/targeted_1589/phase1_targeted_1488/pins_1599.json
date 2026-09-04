@@ -1,0 +1,9 @@
+{
+ "source": "archive_CODEX_1599.md sha256 3159b6d153547ddd5ba4515f1b3c857ed7e1d6b0130465a153d6deadc9a50bb3",
+ "blm_1488_sha256": "e2a7fa9dbe6cd2eac545b22589ddbc52245e6b32fba9542ca4c7c3900378d924",
+ "aud_1488_sha256": "927446a67f804ff828d081debccc8622b17d3a2eb0d170321f71c6a197c87346",
+ "transport_sha256": "05b02f5bb67944d39fcf726da043f768d5d640bddbe18754ce3c3ef6c4bc10de",
+ "baseline_sha256": "35f7602baf06d1b6d5a04dab96d76ba92c24395e12e204e77e62ae698b31e328",
+ "baseline_digest": "6acc681bbb24849a508e3634354c789a71e91fad8328914f4f9397aab2c81686",
+ "refusal_reason": "an A3 dependency byte moved"
+}

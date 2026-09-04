@@ -1,0 +1,118 @@
+RECONCILIATION PROPOSAL (unapproved evidence, not a lock)
+artifact schema: one-item-inventory-reconciliation-proposal-v1
+
+COUNTS                       before   after
+  rows                          190     196
+  kind lawful_abstention_control      5       4
+  kind negative_control           17      20
+  kind real_item                 168     172
+  tag  point_range_floor_ceiling    120     148
+  tag  losses_and_sign            21      21
+  tag  sequential_comparison      54       5
+  tag  measurement_wording        23      23
+  tag  favourable_unfavourable_direction      7       7
+  tag  expectation_routing         7       7
+  tag  slices_and_unknown_axes     24      29
+  tag  portion_versus_whole       10       9
+  tag  ambiguous_menus             0       6
+  tag  corrections_and_amendments      2       5
+
+RESOLUTION STATUS
+  authority_resolved             72
+
+AGGREGATE AND LEDGER CHANGES (95)
+  [AGG-A-point] retag 0000006201-26-000031 | Net loss excluding net special items $ (267) $ (386) (30.8%)
+  [AGG-A-point] retag 0000006201-26-000031 | Total unit revenue was 7.6% higher year over year
+  [AGG-A-point] retag 0000006201-26-000031 | Passenger revenue per ASM (cents) 17.35 16.30 6.5 %
+  [AGG-A-point] retag 0000006201-26-000031 | an estimated $320 million revenue impact from winter storms
+  [AGG-A-point] retag 0000006201-26-000031 | Total operating revenues 13,912 12,551 10.8
+  [AGG-A-point] retag 0000006201-26-000031 | American’s domestic, Pacific and Atlantic entities delivered positive unit reven
+  [AGG-A-point] retag 0000006201-26-000031 | Net loss $ (382) $ (473) (19.2)
+  [AGG-A-point] retag 0000027904-26-000020 | Non‑fuel unit costs grew 6 percent over prior year, reflecting lower than planne
+  [AGG-A-point] retag 0000027904-26-000022 | Domestic passenger revenue increased 8% in the March 2026 quarter compared to th
+  [AGG-A-point] retag 0000898173-26-000006 | Comparable store sales increased 4.7% for the year ended December 31, 2025, on t
+  [AGG-A-point] retag 0000898173-26-000006 | The results represent 33 consecutive years of comparable store sales growth and 
+  [AGG-A-point] retag 0001104659-25-102611 | The fourth quarter of fiscal year 2025 represented 33.0% of annual sales and 33.
+  [AGG-A-point] retag 0001104659-25-102611 | in 6,098 of our domestic stores as well as the vast majority of our stores in Me
+  [AGG-A-point] retag 0001104659-25-105631 | The Revolver Facility contains a commitment increase feature that, subject to ce
+  [AGG-A-point] retag 0001104659-26-027061 | Comparable sales increased 5.8%, driven by a 4.2% increase in average ticket and
+  [AGG-A-point] retag 0001104659-26-027061 | Interest expense (income), net ​ ​ 2,624 ​ 0.1% ​ ​ (1,994) ​ (0.1%)
+  [AGG-A-point] retag 0001104659-26-027061 | Diluted earnings per share increased 1.2% to $25.64.
+  [AGG-A-point] retag 0001104659-26-027061 | Net sales increased 11.8% to $3.9 billion, primarily due to increased comparable
+  [AGG-A-point] retag 0001104659-26-027061 | As a percentage of net sales, SG&A expenses increased to 26.6% compared to 24.9%
+  [AGG-A-point] retag 0001104659-26-027061 | As of January 31, 2026, $1.8 billion remained available under the $3.0 billion s
+  [AGG-A-point] retag 0001171843-26-001288 | Trailing 4 Quarters ending February 15, 2025 include an additional week of sales
+  [AGG-A-point] retag MCD_2026-02-11T16.30 | Adjusted earnings per share on a constant currency basis increased 7% versus the
+  [AGG-A-point] retag MCD_2026-02-11T16.30 | we do expect Q1 to accelerate sequentially from the 5.2% that we had in IOM in Q
+  [AGG-A-point] retag MCD_2026-02-11T16.30 | And then IDL, again, expect a sequential decrease from the 4.5% that we had in Q
+  [AGG-A-point] retag MCD_2026-02-11T16.30 | I think we would say we expect Q1 comp sales growth to decelerate sequentially f
+  [AGG-B-sequential] retag 0000006201-26-000031 | American expects total revenue growth between 13.5% and 16.5% in the second quar
+  [AGG-B-sequential] retag 0000006201-26-000031 | Total unit revenue was 7.6% higher year over year
+  [AGG-B-sequential] retag 0000006201-26-000031 | Passenger revenue per ASM (cents) 17.35 16.30 6.5 %
+  [AGG-B-sequential] retag 0000006201-26-000031 | Total operating revenues 13,912 12,551 10.8
+  [AGG-B-sequential] retag 0000006201-26-000031 | American’s domestic, Pacific and Atlantic entities delivered positive unit reven
+  [AGG-B-sequential] retag 0000006201-26-000031 | Net loss $ (382) $ (473) (19.2)
+  [AGG-B-sequential] retag 0000006201-26-000032 | Our 2026 first quarter total operating cost per available seat mile (CASM) was 1
+  [AGG-B-sequential] retag 0000006201-26-000032 | In the first quarter of 2026, we reported total operating revenues of $13.9 bill
+  [AGG-B-sequential] retag 0000027904-26-000013 | Revenue in the Pacific region increased 10% on a 9% increase in capacity compare
+  [AGG-B-sequential] retag 0000027904-26-000013 | Domestic passenger unit revenue ("PRASM") for 2025 decreased 2% compared to 2024
+  [AGG-B-sequential] retag 0000027904-26-000020 | Guiding to low-teens revenue growth in the June quarter on flat capacity growth,
+  [AGG-B-sequential] retag 0000027904-26-000020 | Non‑fuel unit costs grew 6 percent over prior year, reflecting lower than planne
+  [AGG-B-sequential] retag 0000027904-26-000022 | Cost per available seat mile ("CASM") 22.20 ¢ 19.69 ¢ 13 %
+  [AGG-B-sequential] retag 0000027904-26-000022 | Domestic passenger revenue increased 8% in the March 2026 quarter compared to th
+  [AGG-B-sequential] retag 0000092380-26-000044 | First quarter 2026 operating expenses increased 4.0 percent year-over-year, to $
+  [AGG-B-sequential] retag 0000764478-25-000057 | Comparable online sales % change (1)   3.5 % (1.0) % 3.6 % (2.9) %
+  [AGG-B-sequential] retag 0000898173-26-000006 | Comparable store sales increased 4.7% for the year ended December 31, 2025, on t
+  [AGG-B-sequential] retag 0000898173-26-000006 | Gross profit for the year ended December 31, 2025, increased 7% to $9.17 billion
+  [AGG-B-sequential] retag 0000898173-26-000006 | Net income for the fourth quarter ended December 31, 2025, increased $54 million
+  [AGG-B-sequential] retag 0000940944-26-000009 | LongHorn Steakhouse’s sales increase for the third quarter of fiscal 2026 was pr
+  [AGG-B-sequential] retag 0001041061-26-000003 | For the quarter, company-owned restaurant margins were 12.7%, up 40 basis points
+  [AGG-B-sequential] retag 0001041061-26-000003 | Fourth-quarter GAAP operating profit grew 12%
+  [AGG-B-sequential] retag 0001104659-25-105631 | Average sales per restaurant operating week increased 0.4% to $231,971 in the th
+  [AGG-B-sequential] retag 0001104659-25-105631 | Flower Child sales increased 30.9% to $139.8 million for the first nine months o
+  [AGG-B-sequential] retag 0001104659-26-017090 | Comparable restaurant sales at The Cheesecake Factory restaurants declined 2.2% 
+  [AGG-B-sequential] retag 0001104659-26-027061 | Comparable sales increased 5.8%, driven by a 4.2% increase in average ticket and
+  [AGG-B-sequential] retag 0001104659-26-027061 | Diluted earnings per share increased 1.2% to $25.64.
+  [AGG-B-sequential] retag 0001104659-26-027061 | Net sales increased 11.8% to $3.9 billion, primarily due to increased comparable
+  [AGG-B-sequential] retag 0001104659-26-027061 | diluted EPS growth of 9.4% to 11.4%
+  [AGG-B-sequential] retag 0001104659-26-027061 | As a percentage of net sales, SG&A expenses increased to 26.6% compared to 24.9%
+  [AGG-B-sequential] retag 0001104659-26-027061 | net sales growth of 6.0% to 7.0%
+  [AGG-B-sequential] retag 0001104659-26-032757 | Domestic commercial sales increased $103.0 million to $1.2 billion, or 9.8% over
+  [AGG-B-sequential] retag 0001171843-26-001288 | Operating profit decreased 1.2% to $698.5 million.
+  [AGG-B-sequential] retag AAL_2026-04-23T08.30 | Second quarter CASMX is anticipated to be up 2% to 4% year over year
+  [AGG-B-sequential] retag AAL_2026-04-23T08.30 | We expect domestic unit revenue to grow more than 10% in the second quarter.
+  [AGG-B-sequential] retag BBY_2026-03-03T08.00 | In fiscal 26, our gross advertising collections were just over $900 million. Thi
+  [AGG-B-sequential] retag BBY_2026-03-03T08.00 | we delivered our eighth consecutive quarter of positive comparable sales in comp
+  [AGG-B-sequential] retag CMG_2026-02-03T16.30 | For the fourth quarter, sales grew 4.9% to reach $3 billion, with a comp decline
+  [AGG-B-sequential] retag CMG_2026-02-03T16.30 | Marketing costs were 3.5% of sales in Q4, an increase of about 50 basis points f
+  [AGG-B-sequential] retag CMG_2026-02-03T16.30 | For the fourth quarter, sales grew 4.9% to reach $3 billion, with a comp decline
+  [AGG-B-sequential] retag DAL_2026-04-08T10.00 | we ended the quarter with adjusted net debt of 13.5 billion down 20% from last y
+  [AGG-B-sequential] retag DRI_2026-03-19T08.30 | our annual outlook implies total sales growth of 13% to 14.5%, which includes th
+  [AGG-B-sequential] retag DRI_2026-03-19T08.30 | We generated $3.3 billion of total sales, 5.9% higher than last year
+  [AGG-B-sequential] retag DRI_2026-03-19T08.30 | At Longhorn, total sales increased 11.2%
+  [AGG-B-sequential] retag DRI_2026-03-19T08.30 | We now expect total sales growth for the year of approximately 9.5%
+  [AGG-B-sequential] retag DRI_2026-03-19T08.30 | Adjusted diluted net earnings per share from continuing operations of $2.95 were
+  [AGG-B-sequential] retag MCD_2026-02-11T16.30 | Adjusted earnings per share on a constant currency basis increased 7% versus the
+  [AGG-B-sequential] retag ULTA_2026-03-12T16.30 | diluted EPS increased 1.2% to $25.64 per share
+  [AGG-B-sequential] retag YUM_2026-02-04T08.15 | Yum X Special EPS for the year was $6.05, up 10%.
+  [AGG-B-sequential] retag YUM_2026-02-04T08.15 | Taco Bell entered five new markets in 2025 and opened 155 gross units internatio
+  [ledger#06] retag 0000027904-26-000013 | In September 2025, we and our indirect wholly-owned subsidiary SkyMiles IP Ltd. 
+  [ledger#08] retag 0000027904-26-000020 | The March quarter was the first full quarter of positive unit revenue growth in 
+  [ledger#24] retag 0001041061-25-000109 | The Pizza Hut Division has 19,872 units, 68% of which are located outside the U.
+  [ledger#26] retag 0001041061-26-000003 | For the quarter, company-owned restaurant margins were 12.7%, up 40 basis points
+  [ledger#26] retag 0001041061-26-000003 | The impact of lapping the 53rd week negatively impacted the change in company-ow
+  [ledger#27] promote 0001041061-26-000003 | In the first quarter of 2025, the Company prospectively changed its basis of pre
+  [ledger#30] retag 0001041061-26-000084 | The impact in these markets represented an approximate one-point headwind to YUM
+  [ledger#34] rekind 0001104659-25-102611 | Each of the first three quarters of our fiscal year consists of 12 weeks, and th
+  [ledger#35] retag 0001104659-25-102611 | in 6,098 of our domestic stores as well as the vast majority of our stores in Me
+  [ledger#38] rekind 0001104659-25-105631 | The Revolver Facility contains a commitment increase feature that, subject to ce
+  [ledger#40] rekind 0001104659-25-118458 | The Company has one reportable segment, which includes retail stores, salon serv
+  [ledger#54] promote BBY_2026-03-03T08.00 | Just to be clear that the 20% reference was 20% growth in labor in the second pa
+  [ledger#71] rekind bzNews_51962983 | Best Buy Appoints Jason Bonfig As CEO, Effective At End Of Q3
+  [COV-amb-1] retag MCD_2026-02-11T16.30 | we do expect Q1 to accelerate sequentially from the 5.2% that we had in IOM in Q
+  [COV-amb-2] retag MCD_2026-02-11T16.30 | And then IDL, again, expect a sequential decrease from the 4.5% that we had in Q
+  [COV-amb-3] retag 0001041061-26-000084 | The KFC Division has 33,897 units, 90% of which are located outside the U.S.
+  [COV-amb-4] promote 0000764478-25-000057 | We have two reportable segments: Domestic and International.
+  [COV-amb-5] promote BBY_2026-03-03T08.00 | In our domestic segment, revenue decreased 1.1% to $12.6 billion, driven by a co
+  [COV-amb-6] promote 0000063908-26-000032 | International Operated Markets increased 3.2%
+  [COV-seq-1] promote 0001171843-26-001288 | Net inventory, defined as merchandise inventories less accounts payable, on a pe

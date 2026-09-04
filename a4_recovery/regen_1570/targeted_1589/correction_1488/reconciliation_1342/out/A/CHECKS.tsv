@@ -1,0 +1,19 @@
+check	got	want	status
+resolutions	72	72	ok
+changes	95	95	ok
+COV-seq-1 count	1	1	ok
+COV-seq-1 source_id	0001171843-26-001288	0001171843-26-001288	ok
+COV-seq-1 part_ref	exhibit_99_1	exhibit_99_1	ok
+COV-seq-1 raw_label_or_claim	Net inventory, defined as merchandise inventories less accounts payable, on a per store basis	Net inventory, defined as merchandise inventories less accounts payable, on a per store basis	ok
+COV-seq-1 proposed_record_kind	real_item	real_item	ok
+COV-seq-1 proposed_hard_classes	['point_range_floor_ceiling', 'losses_and_sign', 'sequential_comparison']	['point_range_floor_ceiling', 'losses_and_sign', 'sequential_comparison']	ok
+COV-seq-1 occurrence_in_part	None	None	ok
+COV-seq-1 quote in archive	True	True	ok
+rows	196	196	ok
+events	36	36	ok
+kind real_item	172	172	ok
+kind negative_control	20	20	ok
+kind lawful_abstention_control	4	4	ok
+tag point_range_floor_ceiling	148	148	ok
+tag losses_and_sign	21	21	ok
+tag sequential_comparison	5	5	ok

@@ -1,0 +1,20 @@
+for_transcript_line	recorded_line
+79005	File created successfully at: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/lock/build_final_lock_v2.py (file state is current in your context — no need to Read it back)
+79333	9d3644e0f1b31686 lock/build_final_lock_v2.py
+79355	build_final_lock_v2.py patched; pin a867227f1e720b7d
+79488	L2 DEFAULT_OUT -> candidate_v2_1488
+79488	1488 adjudication_sidecar.json 041ebf64e2dab6f6af67887d6b70b03262a5e90b82087ae630a403080c343e37
+79488	1488 correction_receipt.json bc5ac688abe66763a5cc99f9fb3a3708ba15b83c9a47fd327ffaac2dcb653eab
+79488	1488 final_inventory.json 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066
+79488	1488 validator_receipt.json 2e7afac63207d46513659a74f25c5811f04a1af40121ec82534993830e94adbb
+79488	source_receipt: {"path": "/tmp/a7_source_locator_audit_1486.json", "file_sha256": "a867227f1e720b7d63e09ae1bd252d964130761a98d4c7a59338deec95156cb7", "receipt_sha256": "ac58d2eb6e86179d3551310e781c2de169c56dbb149ae57cd64
+79488	outputs: {"final_inventory.json": "1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066", "adjudication_sidecar.json": "041ebf64e2dab6f6af67887d6b70b03262a5e90b82087ae630a403080c343e37", "validator_receipt.js
+79502	89e1e71fd345b4e9  lock/build_final_lock_v2.py
+79502	b78a733cac842ca6  lock/build_final_lock.py
+79030	command cd $S/lock && PYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B build_final_lock_v2.py 2>&1 | grep -v "^WARNING" | tail -14
+79030	1487 final_inventory.json 1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066
+79030	1487 adjudication_sidecar.json 2a0164e65bd0cf16062235a09243a0035133d3de55d20406a71d6c01528ff0ee
+79030	1487 validator_receipt.json d0772374d9902bcc7bcefdb3b897821753cd55f71bb0104629c5f303053f330d
+79030	1487 correction_receipt.json 01e502346291a4602a22106727cf2c3537bdc8d452128461dd7a661de3cb3c76
+79030	out_dir /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/lock/candidate_v2_1487
+79030	versioned_inventory /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json

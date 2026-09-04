@@ -1,0 +1,26 @@
+red: projected artifact fails the pin: True
+json got 524e78c49f650bdd7cc2277c171f27180e4a011bb6b2830cd96057585f344476 want 524e78c49f650bdd7cc2277c171f27180e4a011bb6b2830cd96057585f344476 MATCH
+text got 687c49f2805ef40456921a0c4cb93a864f62c90a2092f47ee526bd1a826481e6 want 687c49f2805ef40456921a0c4cb93a864f62c90a2092f47ee526bd1a826481e6 MATCH
+check resolutions: 72 vs 72 ok
+check changes: 95 vs 95 ok
+check COV-seq-1 count: 1 vs 1 ok
+check COV-seq-1 source_id: 0001171843-26-001288 vs 0001171843-26-001288 ok
+check COV-seq-1 part_ref: exhibit_99_1 vs exhibit_99_1 ok
+check COV-seq-1 raw_label_or_claim: Net inventory, defined as merchandise inventories less accounts payable, on a per store basis vs Net inventory, defined as merchandise inventories less accounts payable, on a per store basis ok
+check COV-seq-1 proposed_record_kind: real_item vs real_item ok
+check COV-seq-1 proposed_hard_classes: ['point_range_floor_ceiling', 'losses_and_sign', 'sequential_comparison'] vs ['point_range_floor_ceiling', 'losses_and_sign', 'sequential_comparison'] ok
+check COV-seq-1 occurrence_in_part: None vs None ok
+check COV-seq-1 quote in archive: True vs True ok
+check rows: 196 vs 196 ok
+check events: 36 vs 36 ok
+check kind real_item: 172 vs 172 ok
+check kind negative_control: 20 vs 20 ok
+check kind lawful_abstention_control: 4 vs 4 ok
+check tag point_range_floor_ceiling: 148 vs 148 ok
+check tag losses_and_sign: 21 vs 21 ok
+check tag sequential_comparison: 5 vs 5 ok
+first input field the owner recorded differently from the world file: None
+control identity (archive +1 byte): json baf721973fec2d3c differs from the lawful json, text 687c49f2805ef404 equals the lawful text
+control COV-row (variant proposal): COV-seq-1 count 0, rows 195, json 3325e2eed906a6c0 differs from the lawful json
+lawful rebuild equals first: json True text True
+RESULT MATCH

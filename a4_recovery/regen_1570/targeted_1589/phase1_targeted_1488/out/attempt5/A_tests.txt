@@ -1,0 +1,11 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.10, pytest-9.0.2, pluggy-1.6.0
+rootdir: /home/faisal/EventMarketDB-driver-recovery
+configfile: pytest.ini
+plugins: Faker-40.1.0, langsmith-0.4.8, anyio-4.9.0
+collected 7 items
+
+../home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/phase1_targeted_1488/test_phase1_1488.py . [ 14%]
+......                                                                   [100%]
+
+============================== 7 passed in 26.99s ==============================

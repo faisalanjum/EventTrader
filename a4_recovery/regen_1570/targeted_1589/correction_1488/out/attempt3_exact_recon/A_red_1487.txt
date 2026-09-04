@@ -1,0 +1,14 @@
+rc=0
+--- stdout
+{
+ "hashes": {
+  "final_inventory.json": "1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066",
+  "adjudication_sidecar.json": "2a0164e65bd0cf16062235a09243a0035133d3de55d20406a71d6c01528ff0ee",
+  "validator_receipt.json": "d0772374d9902bcc7bcefdb3b897821753cd55f71bb0104629c5f303053f330d",
+  "correction_receipt.json": "01e502346291a4602a22106727cf2c3537bdc8d452128461dd7a661de3cb3c76"
+ },
+ "out_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/lock/candidate_v2_1487",
+ "versioned_inventory": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json"
+}
+
+--- stderr

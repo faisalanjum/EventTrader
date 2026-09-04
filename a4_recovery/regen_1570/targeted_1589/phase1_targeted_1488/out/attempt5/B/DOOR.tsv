@@ -1,0 +1,7 @@
+check	got	want	status
+green 1 ok/problems/invocations/receipt valid	[true, [], 11, true, []]	[true, [], 11, true, []]	ok
+green 1 invocation order	["0000006201-26-000031#001", "0000006201-26-000031#006", "0000006201-26-000031#008", "0000027904-26-000022#029", "0000092380-26-000044#042", "0000940944-26-000005#065", "0000940944-26-000009#068", "0000940944-26-000009#072", "0001041061-25-000109#075", "0001104659-26-027061#115", "0001171843-26-001288#133"]	["0000006201-26-000031#001", "0000006201-26-000031#006", "0000006201-26-000031#008", "0000027904-26-000022#029", "0000092380-26-000044#042", "0000940944-26-000005#065", "0000940944-26-000009#068", "0000940944-26-000009#072", "0001041061-25-000109#075", "0001104659-26-027061#115", "0001171843-26-001288#133"]	ok
+red (harness_g1v3/a1_reader.py +1 byte) ok/reason/invocations/receipt	[false, true, 0, false]	[false, true, 0, false]	ok
+red problems	["an A3 dependency byte moved"]	["an A3 dependency byte moved"]	ok
+green 2 ok/problems/invocations/receipt valid	[true, [], 11, true, []]	[true, [], 11, true, []]	ok
+green 2 receipt allows the same keys as green 1	true	true	ok
