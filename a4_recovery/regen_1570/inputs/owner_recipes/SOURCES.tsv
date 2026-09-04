@@ -1,0 +1,5 @@
+source	bytes	sha256	role	destination
+/home/faisal/.core827_backups/recovery_1531/regen_1537/probe/blobs/5ae25b1d9248ea60	46091	5ae25b1d9248ea607414f28775c50a404a3b61f41e1ac1757c9f18dbda1b156c	A6 owner recipe source A (proven blob)	inputs/owner_recipes/blob_5ae25b1d9248ea60
+/home/faisal/.core827_backups/recovery_1531/regen_1537/probe/blobs/2b8667dc9614c965	12048	2b8667dc9614c9655d653969a0f8069cec34a7c6e2f11b244ed925ea94b3b4fd	A6 owner recipe source B (proven blob)	inputs/owner_recipes/blob_2b8667dc9614c965
+/home/faisal/.core827_backups/recovery_1531/regen_1539/builds/stage1/tree/.claude/plans/Drivers/experiments/harness_g1v3/raw_transport.py	87148	cf22ccd6e045ff1187d996c27d3caf770c1c6bf2dd23a768b5494c5ccde00a72	raw transport recipe base (stage-1 bytes)	inputs/owner_recipes/stage1_raw_transport.py
+transcript:91763	2680	560a7a4fef50220669e1e89f27ee13486cd95de3328d7a7c82dee859f6c78c18	raw transport recipe: the record-91763 Edit (immutable record)	inputs/owner_recipes/transcript_record_91763.json

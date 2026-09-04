@@ -1,0 +1,257 @@
+            ("calls", prior)]))
+    return total, rows
+
+
+def budget(planned, run_dir=None):
+    """Derived budget. `planned` is the producer call count, itself derived."""
+    completed, rows = ledger(run_dir)
+    return collections.OrderedDict([
+        ("completed_actual", completed),
+        ("provenance", rows),
+        ("a3_measured_baseline", K.LEDGER_BEFORE),
+        ("planned_producer_primary", planned),
+        ("producer_primary_after", completed + planned),
+        ("global_abort_ceiling", F.GLOBAL_CEILING),
+        ("under_ceiling", completed + planned <= F.GLOBAL_CEILING),
+        ("rule", "every future actual call, including each retry and each "
+                 "grader sublaunch, is checked against the global ceiling "
+                 "before it is armed"),
+        ("retry_rule", "only a model-invalid/invalid-JSON reply earns the one "
+                       "canonical attempt-2 subset; a valid sibling, a refusal "
+                       "and an integrity failure never do, and attempt 2 can "
+                       "never create attempt 3")])
+
+
+def grader_staging():
+    """The grader ANSWER inventory, in the dependency order Codex SEQ 1409
+    ruling 1 fixed. A6 arms ZERO grader calls: none of these counts exists
+    before the producer replies do.
+    """
+    src = os.path.join(_HERE, "scorers", "score_exp5.py")
+    return collections.OrderedDict([
+        ("armed_grader_calls", 0),
+        ("count_is_derivable_now", False),
+        ("why", "every class below is a function of producer output, and no "
+                "producer call has been made"),
+        ("stages", [
+            collections.OrderedDict([
+                ("stage", "G1_identity"),
+                ("owner", "score_exp5.grade_unmatched"),
+                ("question", "every unmatched gold row produced by the "
+                             "deterministic matcher, ruled against that "
+                             "event/arm's unmatched produced rows"),
+                ("key", "(source_id, gold_idx)"),
+                ("none_means", "a decided miss, which still counts against "
+                               "recall")]),
+            collections.OrderedDict([
+                ("stage", "reconcile"),
+                ("owner", "score_exp5.reconcile_rulings"),
+                ("question", "two blind independent grader answers; ONLY "
+                             "agreement becomes a ruling")]),
+            collections.OrderedDict([
+                ("stage", "G2_meaning"),
+                ("owner", "score_exp5.score_arm"),
+                ("question", "every FINAL matched pair - direct deterministic "
+                             "links plus agreed G1 links - receives every "
+                             "required MEANING_FIELDS verdict"),
+                ("key", "(source_id, gold_idx)"),
+                ("meaning_fields", list(_meaning_fields()))]),
+            collections.OrderedDict([
+                ("stage", "G3_extras"),
+                ("owner", "score_exp5.classify_extras"),
+                ("question", "every route-accepted produced row still "
+                             "unmatched after G1"),
+                ("key", "(source_id, produced_idx)"),
+                ("buckets", list(_extras_buckets()))])]),
+        ("inventory", "the exact union of G1 + G2 + G3, derived by those "
+                      "existing scorer owners; it is NOT reducible to the "
+                      "unresolved rows"),
+        ("batching", "the live scorer owns QUESTIONS, not batching; "
+                     "'2*N answers' does not imply '2*N calls'"),
+        ("scorer_owner_sha256", _sha_file(src)),
+        ("a7_boundary", collections.OrderedDict([
+            ("batch_owner", GRADER_BATCH_OWNER),
+            ("batch_owner_present_now", os.path.isfile(
+                os.path.join(_HERE, GRADER_BATCH_OWNER))),
+            ("order", "G1 must COMPLETE before the final G2/G3 inventory is "
+                      "frozen"),
+            ("then", "A7 builds the smallest exact grader batch packet from "
+                     "that owner, hash-freezes its batch count, and only then "
+                     "runs exactly two blind independent Sonnet-5/high calls "
+                     "per nonempty batch"),
+            ("ceiling", F.GLOBAL_CEILING)]))])
+
+
+def _matcher_path():
+    """The matcher lives in the driver package, not the harness."""
+    from driver.core import fact_match
+    return os.path.abspath(fact_match.__file__)
+
+
+def _meaning_fields():
+    from scorers import score_exp5
+    return tuple(score_exp5.MEANING_FIELDS)
+
+
+def _extras_buckets():
+    from scorers import score_exp5
+    return tuple(score_exp5.EXTRAS_BUCKETS)
+
+
+def _launchers(run_dir, plan):
+    """Every ORDERED launcher identity, armed and unarmed, from this run."""
+    rows = []
+    for inv in json.load(io.open(os.path.join(run_dir, "receipt.json"),
+                                 encoding="utf-8"))["invocations"]:
+        armed = inv["scriptPath"]
+        name = os.path.basename(armed)
+        unarmed = os.path.join(run_dir, RT.PLAN_DIRNAME, A5.LAUNCHER_DIRNAME,
+                               name)
+        rows.append(collections.OrderedDict([
+            ("source_id", inv["source_id"]), ("launcher", name),
+            ("armed_sha256", _sha_file(armed)),
+            ("unarmed_sha256", _sha_file(unarmed)
+             if os.path.isfile(unarmed) else None)]))
+    return rows
+
+
+def freeze(run_dir):
+    """THE A6 freeze document, derived entirely from a prepared A5 run."""
+    run_dir = os.path.abspath(run_dir)
+    plan = RT.a1_plan_for_run(run_dir)
+    manifest_path, prefix = RT.a1_plan_identity(plan)
+    receipt = json.load(io.open(os.path.join(run_dir, "receipt.json"),
+                                encoding="utf-8"))
+    calls = [tuple(c) for c in receipt["allowed"]]
+    a2 = plan["a2_runtime_freeze"]
+    lock = A5.a4_lock()
+    arms = [a["arm"] for a in plan["arms"]]
+    backmap = os.path.join(run_dir, "a5_menu_backmap.json")
+
+    return collections.OrderedDict([
+        ("schema", SCHEMA),
+        ("phase", "A6 - freeze the exact EXP-5 producer launch"),
+        ("prepared_run", run_dir),
+        ("a4_lock", collections.OrderedDict([
+            ("path", A5.A4_V6_LOCK_PATH), ("sha256", A5.A4_V6_LOCK_SHA),
+            ("state", lock["state"]),
+            ("key_shards", len(lock["key_shards"]))])),
+        ("bound_artifacts", collections.OrderedDict([
+            ("manifest_path", manifest_path),
+            ("manifest_sha256", _sha_file(manifest_path)),
+            ("bundle_path", plan["bundle_path"]),
+            ("bundle_sha256", plan["bundle_sha256"]),
+            ("receipt_sha256", _sha_file(os.path.join(run_dir,
+                                                      "receipt.json"))),
+            ("menu_backmap_sha256", _sha_file(backmap)),
+            ("prompt_sha256", plan["prompt_sha256"]),
+            ("input_sha256", plan["bound_inputs"]["event_source_sha256"]),
+            ("inventory_sha256", plan["bound_inputs"]["inventory_sha256"]),
+            ("owners", plan["owners"]),
+            ("scorer_sha256", _sha_file(os.path.join(_HERE, "scorers",
+                                                     "score_exp5.py"))),
+            ("matcher_sha256", _sha_file(_matcher_path())),
+            ("reader_sha256", a1_reader.owner_sha256()),
+            ("launcher_prefix", prefix),
+            ("launchers", _launchers(run_dir, plan))])),
+        ("counts", collections.OrderedDict([
+            ("events", len(plan["events"])),
+            ("packets", len(plan["packets"])),
+            ("arms", arms),
+            ("lanes_per_packet", sorted({len(p["lanes"])
+                                         for p in plan["packets"]})),
+            ("ordered_producer_calls", len(calls)),
+            ("unique_ordered_calls", len(set(calls))),
+            ("invocations", len(receipt["invocations"])),
+            ("capacity", plan["capacity"])])),
+        ("transport", collections.OrderedDict([
+            ("runtime_model_id", a2["runtime_model_id"]),
+            ("effort", a2["effort"]), ("agentType", a2["agentType"]),
+            ("disallowedTools", a2["disallowedTools"]),
+            (BLM.OUTPUT_TOKENS_VAR, a2[BLM.OUTPUT_TOKENS_VAR]),
+            ("transport", a2["transport"]), ("door", plan["door"]),
+            ("a2_freeze_sha256", A5.A2_FREEZE_SHA)])),
+        ("absent_arms", collections.OrderedDict(
+            (name, False) for name in FORBIDDEN_ARMS)),
+        ("zeros", collections.OrderedDict([
+            ("states", len(receipt.get("states") or [])),
+            ("raw_replies", len(os.listdir(os.path.join(run_dir, "raw")))
+             if os.path.isdir(os.path.join(run_dir, "raw")) else 0),
+            ("made_calls", plan["made_calls"]),
+            ("database_writes", 0), ("activated", False)])),
+        # THE RUN THIS FREEZE IS ABOUT, through the same budget owner
+        ("budget", budget(len(calls), run_dir)),
+        ("grader", grader_staging()),
+    ])
+
+
+def render(doc):
+    """The ONE serialization, so two builds cannot differ by formatting."""
+    return json.dumps(doc, indent=1, sort_keys=True)
+
+
+def problems(doc):
+    """Why this document is not the launch it says it is. Empty = it rederives.
+
+    Every check REDERIVES from the live files; nothing is compared against
+    another field of the same document, because a document that only agrees
+    with itself proves nothing.
+    """
+    bad = []
+    if not isinstance(doc, dict):
+        return ["the freeze is %s, not an object" % type(doc).__name__]
+    run = doc.get("prepared_run")
+    if not (isinstance(run, str) and os.path.isdir(run)):
+        return ["the freeze names no prepared run directory on disk"]
+    try:
+        live = freeze(run)
+    except Exception as exc:                          # noqa: BLE001 - by design
+        return ["the freeze cannot be rederived from %s: %s" % (run, exc)]
+
+    # the budget provenance is time-invariant only if the SAME files are read,
+    # so it is compared whole, exactly like every other block
+    for key in sorted(set(live) | set(doc)):
+        if key not in doc:
+            bad.append("the freeze is missing the %r block" % key)
+        elif key not in live:
+            bad.append("the freeze carries %r, which nothing rederives" % key)
+        elif doc[key] != live[key]:
+            bad.append("%s does not rederive from the live launch" % key)
+
+    if not bad:
+        b = doc["budget"]
+        if b["completed_actual"] + b["planned_producer_primary"] \
+                != b["producer_primary_after"]:
+            bad.append("the budget arithmetic does not close")
+        if b["producer_primary_after"] > b["global_abort_ceiling"]:
+            bad.append("the planned launch exceeds the global ceiling")
+        c = doc["counts"]
+        if c["ordered_producer_calls"] != c["unique_ordered_calls"]:
+            bad.append("the ordered call list contains a duplicate")
+        if c["ordered_producer_calls"] != c["packets"] * len(c["arms"]):
+            bad.append("the call count is not packets x arms")
+        if any(doc["absent_arms"].values()):
+            bad.append("an arm recorded as absent is present")
+        if any(doc["zeros"][k] for k in ("states", "raw_replies", "made_calls",
+                                         "database_writes")):
+            bad.append("this launch has already spent something")
+        if doc["zeros"]["activated"]:
+            bad.append("the launch is recorded as activated")
+        if doc["grader"]["armed_grader_calls"] != 0:
+            bad.append("A6 armed a grader call")
+    return bad
+
+
+def write(run_dir, dest_dir):
+    """Persist the freeze. Returns (path, sha256)."""
+    doc = freeze(run_dir)
+    text = render(doc)
+    path = os.path.join(dest_dir, FREEZE_NAME)
+    if not os.path.isdir(dest_dir):
+        os.makedirs(dest_dir)
+    with io.open(path + ".tmp", "w", encoding="utf-8") as fh:
+        fh.write(text)
+    os.replace(path + ".tmp", path)
+    return path, hashlib.sha256(text.encode("utf-8")).hexdigest()
+test_a6_launch_freeze_1409.py
+test_a6_locked_rows_1476.py
