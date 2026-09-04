@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0000092380-26-000044#043",
+  "settled": {
+    "source_id": "0000092380-26-000044",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "aircraft_retirements",
+          "driver_state": "unknown",
+          "level_low": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "measurement_raw_spans": ["approximately"],
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000092380-26-000044#043/L1",
+      "exact_match": false,
+      "why": "L1 matches driver name, state, values, unit and period, but omits the required measurement_raw_spans entry for 'approximately' (Rule 8: a number modifier not captured by name/period/unit/slice/basis must be recorded there)."
+    },
+    {
+      "lane_id": "0000092380-26-000044#043/L2",
+      "exact_match": true,
+      "why": "L2 matches the settled reply field-for-field, including capturing 'approximately' in measurement_raw_spans."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the driver name should be plural 'aircraft_retirements' (a recurring count-type event, like product_returns) or singular 'aircraft_retirement' per the Rule 3.11 singular-by-default default.",
+      "why": "Retirements isn't one of the explicitly listed standard financial plurals (earnings, bookings, sales, receivables), so the plural-retention exception is not textually certain to apply, though the meaning (a recurring, re-countable fleet event) plausibly qualifies under 'plurals whose meaning differs'."
+    }
+  ]
+}
+```

@@ -1,0 +1,40 @@
+```json
+{
+  "packet_id": "DAL_2026-04-08T10.00#153",
+  "settled": {
+    "source_id": "DAL_2026-04-08T10.00",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "operating_margin",
+          "driver_state": "unknown",
+          "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_unit": "percent",
+          "level_shape_hint": "range",
+          "time_type": "duration",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DAL_2026-04-08T10.00#153/L1",
+      "exact_match": true,
+      "why": "Identical fact_type (guidance), driver_name (operating_margin), driver_state (unknown), level_low/high {6,8}% range with '%' as unit_scale_evidence, level_unit percent, time_type duration, fiscal_quarter 2, fiscal_year 2026, and company_confirmed true."
+    },
+    {
+      "lane_id": "DAL_2026-04-08T10.00#153/L2",
+      "exact_match": true,
+      "why": "Identical to L1 and to the settled reply on every emitted field: same lane, name, state, numeric range with unit_scale_evidence '%', level_unit, shape, time_type, fiscal period, and company_confirmed."
+    }
+  ],
+  "ambiguities": []
+}
+```

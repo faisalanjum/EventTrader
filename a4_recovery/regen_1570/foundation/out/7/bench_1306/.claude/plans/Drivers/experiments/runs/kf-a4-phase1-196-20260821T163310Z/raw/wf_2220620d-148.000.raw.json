@@ -1,0 +1,49 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#123",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "share_repurchase_program",
+          "driver_state": "announced",
+          "level_low": {"value": 3.0, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.0, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "instant",
+          "fiscal_year": 2024,
+          "month": 10,
+          "slice_parts": ["unknown:srt:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#123/L1",
+      "exact_match": false,
+      "why": "L1 extracted $1.8 billion (the remaining-available balance from the OTHER half of the sentence) instead of the $3.0 billion authorization size named in raw_label_or_claim, tagged it as a metric instead of action_event, and cited slice token 'unknown:us-gaap:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram' which does not exist on the menu at all (the menu only has this member under the srt: namespace)."
+    },
+    {
+      "lane_id": "0001104659-26-027061#123/L2",
+      "exact_match": false,
+      "why": "L2 also extracted $1.8 billion instead of the targeted $3.0 billion figure and used fact_type metric with state 'reported' instead of action_event/'announced'; its slice token namespace (srt:) does match the menu string exactly, but the value, fact_type, state and period (Oct 2024 vs Jan 31 2026) are all wrong for this item's target."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the $3.0 billion authorization belongs in fact_type action_event (the board's one-time approval) or metric (a standing authorized-capacity level).",
+      "why": "The persistence test could be read either way: the authorized dollar figure never changes once set (like the rule's action_event bare-root defaults corporate_restructuring/asset_impairment, which also carry fixed dollar sizes), but it is also a figure that gets re-cited unchanged in later filings, which resembles a re-readable metric level; the rules name no bare-root default for 'share repurchase program/authorization' either way."
+    },
+    {
+      "what": "Whether slice_parts should carry the ShareRepurchaseProgramAxis token at all, or whether the driver_name plus the October 2024 period already fully disambiguate which program is meant.",
+      "why": "Rule 7's six named slice kinds (segment/product/geography/customer/channel/entity_ownership) do not clearly cover a repurchase-program identifier; using it as an 'unknown:' slice is lawful but not clearly mandatory, and the menu's mixed srt:/us-gaap: variants for repurchase-program members (as seen in the two drafts' disagreement) create real risk of citing the wrong namespace prefix."
+    }
+  ]
+}
+```

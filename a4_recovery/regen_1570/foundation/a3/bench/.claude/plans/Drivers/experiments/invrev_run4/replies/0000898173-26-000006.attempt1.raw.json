@@ -1,0 +1,180 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "verdicts": [
+    {
+      "proposal_id": "0000898173-26-000006#P000",
+      "decision": "keep",
+      "why": "Exact character-for-character match to source (including the zero-width space before '5.0%'); a stated actual-vs-own-prior-guidance comparison (actual_vs_guidance) using non-favorability positional wording ('high end of') inside a closed guidance range -- exercises the range/point number-shape rule, OD-21 expectation routing, and the OD-13 rule that position words are never automatic favorability.",
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Our full-year comparable store sales result of 4.7% was at the high end of our revised guidance range of 4.0% to \u200b 5.0%.",
+        "raw_label_or_claim": "full-year comparable store sales result",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction", "expectation_routing"]
+      }
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P001",
+      "decision": "keep",
+      "why": "Exact match to source; a full-year (annual period) comparable-store-sales growth rate stated against the prior-year comparable growth rate -- exercises OD-11's annual pin (annual period forces percent_yoy).",
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable store sales increased 4.7% for the year ended December 31, 2025, on top of 2.9% for the same period one year ago.",
+        "raw_label_or_claim": "Comparable store sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P002",
+      "decision": "keep",
+      "why": "Exact match to source; a point-value annual gross profit level with an explicit YoY comparison ('for the same period one year ago') on an annual period -- exercises the point number-shape rule and OD-11's annual pin.",
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Gross profit for the year ended December 31, 2025, increased 7% to $9.17 billion (or 51.6% of sales) from $8.55 billion (or 51.2% of sales) for the same period one year ago.",
+        "raw_label_or_claim": "Gross profit",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P003",
+      "decision": "keep",
+      "why": "Exact match to source; a specific, non-boilerplate, source-stated point value ($21.0 million) -- exercises the point number-shape rule; no other tag applies.",
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Excise tax on shares repurchased, assessed at one percent of the fair market value of shares repurchased, was $21.0 million for the year ended December 31, 2025.",
+        "raw_label_or_claim": "Excise tax on shares repurchased",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P004",
+      "decision": "keep",
+      "why": "Exact match to source; forward FY2026 guidance stated as a closed range (3.0% to 5.0%) -- exercises the range number-shape rule. This is the guidance home fact itself, not a surprise (no consensus stated in this text), so expectation_routing does not apply.",
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable store sales 3.0% to 5.0%",
+        "raw_label_or_claim": "Comparable store sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P005",
+      "decision": "replace",
+      "why": "The proposed quote (Beckham's later restatement, '2025 is now O\u2019Reilly\u2019s 33rd consecutive year...') is a partial restatement of the SAME fact stated earlier and more completely in source order ('The results represent 33 consecutive years... since becoming a public company in April of 1993.'). Per the first-complete-quote / fuse-before-collision rule, the earlier complete occurrence is the correct locator, not the later paraphrase.",
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The results represent 33 consecutive years of comparable store sales growth and record revenue and operating income for O\u2019Reilly since becoming a public company in April of 1993.",
+        "raw_label_or_claim": "33 consecutive years of comparable store sales growth and record revenue and operating income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P006",
+      "decision": "keep",
+      "why": "Exact match to source; a point-value Q4 net income level with an explicit YoY comparison ('for the same period one year ago') on a quarterly period -- exercises the point number-shape rule and OD-11's YoY default on a sub-annual dated period.",
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net income for the fourth quarter ended December 31, 2025, increased $54 million, or 10%, to $605 million (or 13.7% of sales) from $551 million (or 13.5% of sales) for the same period one year ago.",
+        "raw_label_or_claim": "Net income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Such statements are subject to risks, uncertainties, and assumptions, including, but not limited to, the economy in general; inflation; consumer debt levels; product demand; a public health crisis; the market for auto parts; competition; weather; trade disputes and changes in trade policies, including the imposition of new or increased tariffs; availability of key products and supply chain disruptions; business interruptions, including terrorist activities, war and the threat of war; failure to protect our brand and reputation; challenges in international markets; volatility of the market price of our common stock; our increased debt levels; credit ratings on public debt; damage, failure, or interruption of information technology systems, including information security and cyber-attacks; historical growth rate sustainability; our ability to hire and retain qualified employees; risks associated with the performance of acquired businesses; and governmental regulations.",
+        "raw_label_or_claim": "weather",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "No proposal supplied any control row for this event, yet the requirements declare lawful-abstention and negative controls as a required part of the inventory. This is the safe-harbor generic risk-factor list -- a textbook example of the fact gate's own worked case ('weather may affect results'): a generic, non-current, non-source-flagged laundry list, so the correct reader behavior is omission (negative_control), not encoding. Added to repair this event's declared control coverage, not to correct any proposal."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Operating income for the fourth quarter increased 12% to $829 million (or 18.8% of sales) from $739 million (or 18.0% of sales) for the same period one year ago.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A genuine lawful fact (point value + YoY comparison) not raised by any proposal. Not added: this inventory is a representative selection, not a census, and this row would not correct or replace any supplied proposal."
+    },
+    {
+      "quote": "Our top-line results, coupled with strong gross margin performance, drove a 12% increase in operating profit dollars and a 13% increase in diluted earnings per share for the fourth quarter.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "An earlier, incomplete restatement (no dollar figures) of the Q4 operating income and diluted EPS facts stated more completely later in the same document; under the first-complete-quote rule this earlier partial quote would not be the correct locator even if the underlying facts were selected. Not raised by any proposal, so not added."
+    },
+    {
+      "quote": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A candidate grounded numberless surprise (SG&A vs company's own expectations, unfavorable framing via 'however'); would exercise expectation_routing and favourable_unfavourable_direction. Not raised by any proposal and not needed to correct one, so not added under the representative-sampling restraint; the correct resolvability of 'our expectations' as previous_guidance is flagged as an open issue below."
+    },
+    {
+      "quote": "Sales to do-it-yourself customers",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Revenue-disaggregation-by-customer table (DIY / professional service provider / other) maps cleanly to existing menu customer kinds, a candidate for slices_and_unknown_axes, but the source table is flattened into a single run of numbers without inline period labels, making a clean minimal exact-quote-to-period binding unreliable this turn; not raised by any proposal."
+    },
+    {
+      "quote": "Beginning Canada store count",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Store-count-by-geography table includes a Canada count not present on the supplied geography menu (mx, us only) -- a candidate off-menu slice coin. Same flattened-table quoting-ambiguity concern as the revenue disaggregation table; not raised by any proposal, not added."
+    },
+    {
+      "quote": "Adjusted debt to EBITDAR",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A non-GAAP 'adjusted' ratio metric -- a strong measurement_wording candidate -- but not raised by any proposal and no declared per-event quota requires it; not added per the restraint against adding rows merely because another lawful fact exists."
+    },
+    {
+      "quote": "The Company has repurchased a total of 1.46 billion shares of its common stock under its share repurchase program since the inception of the program in January of 2011 and through the date of this release, at an average price of $18.77, for a total aggregate investment of $27.49 billion.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A genuine cumulative/inception-to-date fact not raised by any proposal; not added, representative sampling only."
+    },
+    {
+      "quote": "As of the date of this release, the Company had approximately $2.26 billion remaining under its current share repurchase authorizations.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A genuine point-value fact not raised by any proposal; not added, representative sampling only."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Several tables in this exhibit (Store Count by geography, Revenue Disaggregation by customer, Selected Balance Sheet Ratios) present multiple period columns as a flattened run of numbers with no period label adjacent to each value.",
+      "why": "The authority requires one exact contiguous quote binding a fact to a single period/scope, but does not say how to resolve genuinely ambiguous flattened-table number-to-period binding; left unresolved rather than guessed, so no row was drawn from these tables this turn."
+    },
+    {
+      "what": "Whether 'SG&A expenses again exceeded our expectations' is a lawfully resolvable grounded numberless surprise (comparison_baseline=previous_guidance via the own-target mapping rule) or an unresolvable case better suited to a lawful_abstention_control, given no specific prior SG&A guidance figure appears anywhere in this event's text.",
+      "why": "FINAL_DESIGN's own-target mapping rule and the DU-05 numberless-facts-count rule both point toward real_item, but neither explicitly addresses a bare 'our expectations' claim with no antecedent guidance number in the same event; this is an adjudication-stage question, not settled in this inventory turn."
+    }
+  ],
+  "blocked": null
+}
+```

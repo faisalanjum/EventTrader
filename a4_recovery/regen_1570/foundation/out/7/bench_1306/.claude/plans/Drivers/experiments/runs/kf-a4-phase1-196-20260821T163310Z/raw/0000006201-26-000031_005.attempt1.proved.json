@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#005",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "net_income",
+          "driver_state": "unknown",
+          "value_text": "modest profitability",
+          "conditions": "assuming the current forward fuel curve",
+          "company_confirmed": true,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#005/L1",
+      "exact_match": true,
+      "why": "Same fact_type guidance, driver_name net_income, driver_state unknown, identical value_text, conditions, company_confirmed true, fiscal_year 2026, time_type duration, and no other fields — matches the settled reply field for field."
+    },
+    {
+      "lane_id": "0000006201-26-000031#005/L2",
+      "exact_match": true,
+      "why": "Identical to L1 and to the settled reply on every field: fact_type, driver_name, driver_state, value_text, conditions, company_confirmed, fiscal_year, time_type."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "driver_name choice of 'net_income' versus the literal word 'profitability'.",
+      "why": "The quote says 'profitability', a bare word not itself forbidden; 'net_income' is used as the lawful standard-financial-phrase synonym per Rule 3.12, but a reader could argue for keeping 'profitability' verbatim since it is not explicitly a loss/deficit/margin case covered by Rule 3.9."
+    },
+    {
+      "what": "fiscal_year = 2026 is inferred from document context ('for the year' in a Q1 2026 release) rather than stated as a literal year number in this sentence.",
+      "why": "Rule 6 allows a clearly implied period, and the whole release is framed around fiscal 2026, so this is a safe inference, but it is still an inference rather than an explicit digit in the quoted sentence itself."
+    }
+  ]
+}
+```

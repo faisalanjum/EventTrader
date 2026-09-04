@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#170",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "unknown",
+          "level_unit": "percent_sequential",
+          "value_text": "Expect Q1 IDL comparable sales growth to decrease sequentially from Q4's 4.5%.",
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "slice_parts": ["segment:internationaldevelopmentallicensedmarketsandcorporate"],
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#170/L1",
+      "exact_match": true,
+      "why": "Same fact_type (guidance), driver_name (comparable_sales), driver_state (unknown), level_unit (percent_sequential), IDL segment slice, fiscal_quarter 1 / fiscal_year 2026, time_type duration, and company_confirmed true; only the free-text value_text wording differs, which is not a substantive divergence."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T170/L2",
+      "exact_match": true,
+      "why": "Identical structural answer to the settled reply (same lane, name, state, unit, period, slice, and company_confirmed); value_text phrasing differs slightly ('IDL comp sales growth' vs settled wording) but conveys the same qualitative content."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the referenced Q4 actual value of 4.5% should be stored anywhere as a numeric slot on this guidance fact.",
+      "why": "Guidance's comparison_baseline is lawful only for previous_guidance (consensus forbidden), and 4.5% here is the company's own prior-period ACTUAL, not a prior guide value, so there is no lawful numeric-comparison home for it on this fact; it is preserved only inside the attached quote and treated as qualitative context (Rule 5a.4's numberless-growth-fact allowance), matching both drafts' choice to omit it from numeric slots."
+    }
+  ]
+}
+```

@@ -1,0 +1,51 @@
+```json
+{
+  "packet_id": "AAL_2026-04-23T08.30#138",
+  "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "total_debt",
+          "driver_state": "decreased",
+          "level_high": {
+            "value": 35,
+            "scale_multiplier": 1000000000,
+            "unit_scale_evidence": "billion"
+          },
+          "level_shape_hint": "ceiling",
+          "level_unit": "m_usd",
+          "time_type": "instant",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "AAL_2026-04-23T08.30#138/L1",
+      "exact_match": true,
+      "why": "Same driver_name (total_debt), driver_state (decreased), level_high object (35 / 1e9 / \"billion\"), ceiling shape, m_usd unit, instant time_type, and Q1 FY2026 period as the settled fact; field ordering differs but content is identical."
+    },
+    {
+      "lane_id": "AAL_2026-04-23T08.30#138/L2",
+      "exact_match": true,
+      "why": "Identical content to the settled fact (same driver_name, state, level_high values, shape hint, unit, time_type, and fiscal period); only key order differs from L1/settled, which is not meaningful."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state should be 'decreased' or the more literal 'reported'.",
+      "why": "The located quote itself ('This is the first time our total debt has been below $35 billion since mid-2015') states only a threshold position ('below') and a historical date reference, not an explicit direction verb or a stated prior debt figure adjacent to the $35 billion number. The decrease is only explicit in the immediately preceding sentence of the same speaker's remarks ('ending the quarter with total debt of $34.7 billion, a reduction of $1.8 billion in the quarter'), which belongs to a different located item/quote. Using that surrounding context to interpret the target's direction is permitted (event is context for correct interpretation) and both independent drafts did so, but a stricter reading confined to this quote alone would default to 'reported' under Rule 4's bare-value fallback."
+    },
+    {
+      "what": "Whether this quote yields a genuinely new, non-duplicate fact or restates the same total_debt level already captured by the adjacent '$34.7 billion / reduction of $1.8 billion' statement.",
+      "why": "Both sentences describe the same underlying total-debt figure (34.7B is below the 35B ceiling stated here); this item was presented as a separately located quote/target, so it is answered on its own, but whether the admission/dedup step will treat it as distinct from a sibling total_debt point-value fact from the neighboring quote is outside this item's visibility."
+    }
+  ]
+}
+```

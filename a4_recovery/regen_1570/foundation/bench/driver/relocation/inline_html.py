@@ -1,0 +1,4412 @@
+"""Route A inline-XBRL display-document evidence (FinalPlan §5A; Phase 1 corrective).
+
+Smallest reuse of THE pinned extractor (`scripts/driver_seed/relocate_probe/benchmark/
+multiaxis_pool/final/lock_row_extract.py`, sha 38690c7b…): the row/grid/header/hidden
+machinery is relocated near-verbatim; new logic = the prepare-once document index, the
+element-id join with enumerated fail-closed reasons, typed-dimension detection, the
+COMPLETE aligned header stack, and exact-Decimal reconciliation. No prose parser, no
+fuzzy logic, no registry, no vocabulary, no distant-text identity authority.
+
+inline_element_id = graph property `Fact.fact_id` (SHORT id, matches HTML `id=`).
+Pure functions; no I/O; zero channel imports.
+"""
+import collections
+import hashlib
+import re
+import unicodedata
+import warnings
+
+import tinycss2
+from decimal import Decimal
+
+
+from driver.xml_names import graph_qname_parts, xml_name_ok
+#: PRIVATE ALIASES: a plain import would re-publish the owner as
+#: `inline_html.graph_cik`, a second public path to one rule.
+from driver.core.driver_ids import (SEC_CIK_10_PATTERN as _SEC_CIK_10_PATTERN,
+                                    graph_cik as _graph_cik)
+from driver.relocation.exact_numbers import (ROUTE_A_BOOLS,
+                                             XBRL_INSTANCE_NAMESPACE,
+                                             XML_WS, ExactError,
+                                             dec as _exact_dec,
+                                             exact_scaleb, graph_unit_spelling,
+                                             filing_boundary_graph_end,
+                                             filing_boundary_graph_start,
+                                             filing_duration_ordered,
+                                             parse_filing_boundary)
+
+from bs4 import (BeautifulSoup, CData, Comment, Declaration, Doctype,
+                 NavigableString, ProcessingInstruction,
+                 XMLParsedAsHTMLWarning)
+# EU-189 (#827, SEQ 854): the SAME pinned 'lxml' builder `_soup` always used —
+# named here only so whitespace preservation can be switched on at construction.
+from bs4.builder._lxml import LXMLTreeBuilder
+from lxml import etree
+
+# xsd:integer, EXACTLY: optional sign then ASCII digits, after XML whitespace
+# collapsing. `int()` is NOT this check — it also accepts Python underscore
+# separators (`1_0`), full-width digits (`１２`), Arabic-Indic (`٦`),
+# Devanagari (`६`) and non-breaking spaces, none of which are legal here. And
+# `\d` is NOT [0-9]: it matches every Unicode decimal digit, so it would let
+# `１２` straight back in.
+# `_XML_WS` lived here too. ONE owner now: `exact_numbers.XML_WS`, imported
+# above — two spellings of one rule are two rules the day one of them is edited.
+#: `_XML_INT` STOOD HERE, a hand-written `[+-]?[0-9]+`. Its one reader now uses
+#: `_integer_pattern()` — the grammar the pinned `arelle-release` already
+#: carries from the standard — so a second, private copy of the same rule has no
+#: owner and no reason to exist.
+
+
+def xml_integer(raw):
+    """The ONE XML-integer parser: int, or None when the text is not one.
+
+    Accepts what the spec allows — `6`, `+6`, `-3`, `012`, and the same values
+    surrounded by XML whitespace. Rejects everything else, including Python
+    values: a bool or an int is not attribute TEXT.
+    """
+    if not isinstance(raw, str):
+        return None
+    s = raw.strip(XML_WS)
+    # THE OFFICIAL GRAMMAR JUDGES IT, and the conversion never re-judges it.
+    # `int(s)` refuses a digit string past CPython's 4,300-character gate, so a
+    # lawful `xs:integer` — which XSD does not bound at all — came back None and
+    # its reader announced `malformed_scale`: our runtime's limit, reported as a
+    # defect in the filing, under the SAME reason a genuinely broken `6.9` gets.
+    # `Decimal` parses the digits without that gate and `int(Decimal(...))` is a
+    # numeric conversion, not a string one, so no global limit is raised and no
+    # length of our own is invented.
+    if not _integer_pattern().fullmatch(s):
+        return None
+    return int(Decimal(s))
+
+#: THE SUPPRESSION MOVED INTO `_soup`, where the parse it belongs to happens.
+#: A module-level `filterwarnings` is PROCESS-WIDE: importing this parser
+#: silently changed how every other library in the process reported
+#: `XMLParsedAsHTMLWarning`, measured as `warnings.filters` 5 -> 6 in a clean
+#: interpreter. The warning is only ever ours to ignore for the one call that
+#: causes it.
+
+
+def sha256_text(html_text):
+    # EU-186 (#827): the F7 boundary clause's identity-anchor hash-encoding
+    # law (utf-8 + surrogatepass; graph_row_contract) — the same one law as
+    # the _semantic_parse encode (EU-126); entry 179's mutant targets THIS
+    # line and the lone-surrogate pin catches it.
+    return hashlib.sha256(html_text.encode('utf-8', 'surrogatepass')).hexdigest()
+
+
+# ---- relocated from the pinned extractor (sha 38690c7b…) ------------------------
+
+#: U+200B ZERO WIDTH SPACE, constructed by code point so no editor can hide
+#: it. EU-062 (#827): the walk REMOVES it — zero width, not a space (the
+#: standards cited at the walk); it was briefly read as a token separator,
+#: which fabricated a space no filing displays.
+_ZWSP = chr(0x200B)
+
+
+def _text(node, hidden=frozenset()):
+    """THE one renderer-text owner (#827 E / W4). This IS the visible walk:
+    Unicode whitespace runs and U+200B become token separators, tokens join
+    with U+0020, CSS-hidden subtrees are excluded by the walk itself, and
+    ix:hidden containers arrive through `hidden`. The `get_text` body that
+    stood here was a SECOND normalizer with two conflicting rules — it deleted
+    U+200B where the walk separates on it, and it leaked hidden-descendant
+    text into `displayed` — so the walk is now the only reader.
+    """
+    # EU-147 (#827): the else-'' arm is UNOBSERVABLE BY MEASUREMENT — all
+    # three callers (displayed at the fact element; row_text behind the
+    # in_table=True guarantee; block behind the find_parent-or-parent
+    # owner) pass a non-None node by construction, and a fabrication
+    # mutant (else 'X') leaves the whole primary battery green. If a
+    # future path ever reached it, '' is the explicit no-text claim
+    # (EU-092): _words('') selects nothing, so the arm can only WITHHOLD,
+    # never fabricate. No mutation entry exists for it, per the
+    # F1/entry-120 no-detector-for-unobservable precedent. Receipt
+    # g2_evid_recall_EU-147.txt carries the measurement.
+    return _visible_walk(node, hidden=hidden) if node else ''
+
+
+def _words(value):
+    # EU-150 (#827): the ASCII-only word rule is a SUPPORTED-SCOPE record
+    # under the owner's 2026-08-05 routing (rule bf3881d879cb3e3a): no spec
+    # owns "what is a label word", so the scope is the owner's — and the
+    # recall cost is now MEASURED over the whole frozen corpus
+    # (g2_evid_recall_EU-150.txt): 6,625,305 text-bearing td/th cells,
+    # 330 (0.005%) carry letters the rule cannot see AT ALL, and every
+    # sampled one is the lone Wingdings checkbox glyph 'þ' (U+00FE), not a
+    # label; 705 more are mixed and stay visible through their ASCII words.
+    # Selection-side only: the rule decides eligibility, never stored text,
+    # so its worst error WITHHOLDS (the EU-092 explicit empties). Widening
+    # to non-ASCII scripts is an owner scope extension, now decidable with
+    # these numbers in hand.
+    return re.findall(r"[A-Za-z][A-Za-z’'-]*", value)
+
+
+# EU-146 (#827) FIX-TO-STANDARD: colspan and rowspan have DIFFERENT rules in
+# the WHATWG table processing model (snapshot 2026-07-20),
+# https://html.spec.whatwg.org/multipage/tables.html#processing-model-1 — one
+# shared max(1, int()) law could express neither. colspan: default 1, clamped
+# to 1..1000. rowspan: default 1, clamped to 0..65534, and ZERO is not "one"
+# — it means the cell GROWS DOWNWARD to the end of its row group. Measured
+# before the change: the frozen 1,769-file corpus has no colspan above 1000,
+# no rowspan above 65534 and no rowspan=0, so this moves no real filing; it
+# stops absurd markup from inventing a 99,999-column grid and stops a growing
+# cell from being read as a one-row cell.
+_COLSPAN_MAX = 1000        # HTML LS: clamped to 1..1000
+_ROWSPAN_MAX = 65534       # HTML LS: clamped to 0..65534 (0 = downward growing)
+
+
+def _attr_int(value, default=1):
+    """The attribute's non-negative integer value, or the default — the
+    parse only; each caller applies its OWN clamp per the model."""
+    try:
+        n = int(value)
+    except (TypeError, ValueError):
+        return default
+    return n if n >= 0 else default
+
+
+def _colspan(value):
+    return min(max(_attr_int(value), 1), _COLSPAN_MAX)
+
+
+def _rowspan(value):
+    """0 is kept as 0 — the caller reads it as downward-growing."""
+    return min(_attr_int(value), _ROWSPAN_MAX)
+
+
+def _index_by_identity(seq, node):
+    """Position of THIS node in `seq`, or None when absent.
+
+    bs4 `Tag.__eq__` is STRUCTURAL, so `.index()`/`in` resolve a node to its
+    first structural twin: a later twin row crashed `_aligned_columns` (4
+    no-id facts in 0001193125-23-203780.htm) and a later twin cell cut the
+    label window short (#827 SEQ 246). Geometry is an identity question —
+    `is`, or absent."""
+    for number, item in enumerate(seq):
+        if item is node:
+            return number
+    return None
+
+
+def _table_grid(rows):
+    occupied_until = {}
+    grid = []
+    for row_number, row in enumerate(rows):
+        placed = []
+        column = 0
+        for cell in row.find_all(_CELL_TAGS, recursive=False):
+            width = _colspan(cell.get('colspan'))
+            while any(occupied_until.get(item, 0) > row_number
+                      for item in range(column, column + width)):
+                column += 1
+            placed.append((cell, column, column + width))
+            height = _rowspan(cell.get('rowspan'))
+            # ZERO GROWS DOWNWARD (the model): the cell occupies every
+            # remaining row of this group rather than exactly one.
+            reach = len(rows) if height == 0 else row_number + height
+            if height == 0 or height > 1:
+                for item in range(column, column + width):
+                    occupied_until[item] = reach
+            column += width
+        grid.append(placed)
+    return grid
+
+
+def _has_number_fact(row, fact_nodes):
+    """Does this renderer row contain a numeric inline fact?
+
+    THE ANSWER IS ALREADY KNOWN and is simply passed in. Which elements are
+    facts was settled once, by expanded name, in the strict view; `fact_nodes`
+    holds the identities of the renderer nodes those were bridged to. Asking the
+    renderer tree itself would mean re-deciding an identity question in the one
+    view that cannot answer it — HTML has no namespaces, so the question there
+    could only be a prefix guess.
+    """
+    # EU-077 (#827) FIX-TO-CONTRACT: a fact inside a th cell does NOT make
+    # the row a data row — th is the EXPLICIT header relation (the EU-040
+    # table-model citation) and geometry must not override it. Real filings
+    # ix-tag their column-header years; skipping such a row made the column
+    # header VANISH from evidence, violating the frozen period-signals
+    # clause (ChannelContract.md section 3, "adjacent period wording —
+    # column header", sha 1062e0fb...) and the packet FETCH row
+    # (15_CandidateFactPacket.md Part D, sha aa7239ed...). A td-contained
+    # fact still marks the row as data — fail-closed for real data rows.
+    # EU-101 (#827): the find_all(True) ANY-ELEMENT sweep is the complete-
+    # coverage half of the same contract fix — a fact nested under any
+    # wrapper is still seen, so a data row is never mistaken for a header
+    # row and its values never pollute the aligned header stack (pinned:
+    # narrowing the sweep lets a data value into columns).
+    return any(id(t) in fact_nodes and t.find_parent('th') is None
+               for t in row.find_all(True))
+
+
+#: THE OFFICIAL VALUE SETS — the STANDARDS' keyword grammars transcribed, each
+#: cited to its owner; nothing here is corpus-derived.
+#: display: W3C CSS Display Module Level 3, CR Draft 5 June 2026, §2.
+#: EU-057 (#827): exact citation — https://www.w3.org/TR/css-display-3/#the-display-properties ;
+#: run-in IS a Level-3 <display-outside> keyword (post-CSS-2.1), and a
+#: recognized later declaration must WIN the cascade over an earlier none
+#: (pinned: dropping it lets display:none win and hides real facts).
+_DISPLAY_OUTSIDE = frozenset({'block', 'inline', 'run-in'})
+_DISPLAY_INSIDE = frozenset({'flow', 'flow-root', 'table', 'flex', 'grid',
+                             'ruby'})
+_DISPLAY_SINGLE = (
+    _DISPLAY_OUTSIDE | _DISPLAY_INSIDE | {'list-item'}
+    | {'table-row-group', 'table-header-group', 'table-footer-group',
+       'table-row', 'table-cell', 'table-column-group', 'table-column',
+       'table-caption', 'ruby-base', 'ruby-text', 'ruby-base-container',
+       'ruby-text-container'}                        # <display-internal>
+    | {'contents', 'none'}                           # <display-box>
+    | {'inline-block', 'inline-table', 'inline-flex', 'inline-grid'})  # legacy
+#: visibility: CSS Display 3 §4. content-visibility: CSS Containment 2 §4.
+#: EU-056 (#827): exact citations — https://www.w3.org/TR/css-display-3/#visibility
+#: and https://www.w3.org/TR/css-contain-2/#content-visibility ; the
+#: keyword sets are transcribed, never corpus-derived.
+_VISIBILITY_VALUES = frozenset({'visible', 'hidden', 'collapse'})
+_CV_VALUES = frozenset({'visible', 'hidden', 'auto'})
+#: CSS-wide keywords: CSS Cascade Level 5 §7. initial/inherit/unset are
+#: decidable locally; revert/revert-layer roll back through origin/layer state
+#: this inline-only reader does not own.
+_WIDE_LOCAL = frozenset({'initial', 'inherit', 'unset'})
+#: EU-145 + EU-149 (#827): the white-space vocabulary, transcribed from CSS
+#: Text 3 §3 "White Space and Wrapping"
+#: (https://www.w3.org/TR/css-text-3/#white-space-property). Only these three
+#: preserve BOTH space runs and segment breaks; `pre-line` preserves segment
+#: BREAKS but collapses spaces and tabs; `normal`/`nowrap` collapse both.
+#: The property is INHERITED, so the walk threads the effective value down.
+_WS_PRESERVE_ALL = frozenset({'pre', 'pre-wrap', 'break-spaces'})
+_WS_PRESERVE_BREAKS = frozenset({'pre-line'})
+_WS_COLLAPSE = frozenset({'normal', 'nowrap'})
+_WS_VALUES = _WS_PRESERVE_ALL | _WS_PRESERVE_BREAKS | _WS_COLLAPSE
+_WIDE_ROLLBACK = frozenset({'revert', 'revert-layer'})
+
+# EU-055 (#827): FAIL-CLOSED — 'unsupported' is the style reader's OWN
+# published lane word (the EU-134/CL-039 ownership block): an official CSS
+# value this reader does not model, or an unresolvable winner, becomes a
+# TRUTHFUL refusal carried as data to the document-level unsupported_style
+# answer, never a silent visibility guess and never a T1 outcome code. A
+# drifted word makes the whole lane unreachable (measured: 5 reds).
+_UNSUPPORTED = ('unsupported', None)   # the generic unsupported winner tuple
+
+#: THE COLLAPSIBLE WHITESPACE, and nothing else. CSS Text 3 CRD 2026-06-08
+#: §4.1.1 names the space U+0020, the tab U+0009 and segment breaks; §4.1.1's
+#: segment break is the newline, and the WHATWG ASCII whitespace set this
+#: module already uses at EU-076 spells the carriage return and form feed
+#: alongside it. EU-149 (#827, SEQ 854): a NO-BREAK SPACE (U+00A0), an EM SPACE
+#: (U+2003) and every other Unicode space SEPARATOR are ordinary characters the
+#: filing chose to display — they are NOT collapsible, and Python's
+#: `str.split()` / `str.isspace()`, which range over the whole Unicode
+#: whitespace category, silently destroyed them.
+_CSS_WS_CHARS = frozenset(' \t\n\x0c\r')
+_CSS_WS = re.compile('[ \t\n\x0c\r]+')
+
+#: HTML Living Standard, Rendering §15.3.1 — the elements the user agent
+#: itself defaults to `display:none`. A UA default is a NORMAL-origin rule an
+#: author INLINE declaration lawfully overrides (same shape as the `hidden`
+#: attribute), which is why this is state inside `_advance`, never a second
+#: walker or a string scan. Deliberately NOT here:
+#:   `noscript` — this reader has NO SCRIPTING, and §15.3.1 hides noscript
+#:     only when scripting is enabled, so its contents RENDER for us;
+#:   `template` — HTML LS §4.12.3 says a template REPRESENTS NOTHING and its
+#:     contents are not ordinary rendered children, so it is pruned
+#:     UNCONDITIONALLY below, author display notwithstanding;
+#:   `input[type=hidden]` — §15.3.1 marks it `!important`, so it is not this
+#:     overridable class, and an input carries no text: no branch needed.
+# EU-058 (#827), corrected per SEQ 812 — the two halves, stated as the code
+# actually behaves:
+#   RECOGNITION is the standard's, cited above: the WHATWG HTML LS Rendering
+#   "Hidden elements" list (snapshot 2026-07-20) of UA-default display:none
+#   element names, which this set transcribes.
+#   BEHAVIOUR is UA-DEFAULT PRUNING, not a park: `_advance` prunes a member
+#   and returns NO unsupported reason, and the author's inline `display`
+#   lawfully overrides the default exactly as it does for any UA default.
+#   There is no document-level park path here, and none is invented to match
+#   older wording.
+#   SCOPE is the owner's (E-SUPPORTED-SCOPE): browser-hidden content is
+#   authorised as NOT-VISIBLE EVIDENCE, with a first-production count
+#   scheduled later — that count is the monitoring, not a refusal id.
+# The set is load-bearing on the TEXT side: dropping a member leaks its
+# content into the representation (door-measured). 'area' is a void element,
+# so its own membership can carry no text either way — unobservable by
+# construction (the EU-147 form), recorded rather than pinned.
+_UA_HIDDEN_ELEMENTS = frozenset({
+    'area', 'base', 'basefont', 'datalist', 'head', 'link', 'meta',
+    'noembed', 'noframes', 'param', 'rp', 'script', 'style', 'title'})
+
+
+def _display_valid(idents):
+    """Is this ident sequence a lawful `display` value? Display 3 §2 grammar
+    with `||`/`&&` ORDER INDEPENDENCE: a single keyword from any set above;
+    [ <display-outside> || <display-inside> ]; or
+    [ <display-outside>? && [ flow | flow-root ]? && list-item ]."""
+    # CL-051 (#827, EU-080..EU-084): FAIL-CLOSED grammar arms. Each
+    # cardinality is the Display 3 section 2 production itself — ONE
+    # keyword from a single set, or [outside || inside] as an ordered
+    # PAIR, or [outside? && [flow|flow-root]? && list-item] where each
+    # optional part appears AT MOST ONCE — and the s[0] subscript sits
+    # behind its own len==1 gate, so it can never pick among candidates
+    # (the EU-113 guarded-subscript form). Every non-matching shape falls
+    # to the final reject, so an unknown display value is never treated
+    # as lawful: the arms and the reject are pinned through the public
+    # door (a widened list-item bound and a permissive final reject were
+    # both uncovered until this row).
+    s = list(idents)
+    if len(s) == 1:
+        return s[0] in _DISPLAY_SINGLE
+    if len(set(s)) != len(s):
+        return False
+    # EU-085 (#827): the three keywords of this arm — list-item and the
+    # two inner flow values — are CSS Display 3's own <display-legacy>-free
+    # list-item production (section 2.5 "Generating Marker Boxes", the
+    # section 2 grammar cited at the keyword sets above): list-item may
+    # combine with at most one outside and at most one of flow/flow-root.
+    if 'list-item' in s:
+        rest = [x for x in s if x != 'list-item']
+        out = [x for x in rest if x in _DISPLAY_OUTSIDE]
+        ins = [x for x in rest if x in ('flow', 'flow-root')]
+        return (len(out) <= 1 and len(ins) <= 1
+                and len(out) + len(ins) == len(rest))
+    if len(s) == 2:
+        a, b = s
+        return ((a in _DISPLAY_OUTSIDE and b in _DISPLAY_INSIDE)
+                or (a in _DISPLAY_INSIDE and b in _DISPLAY_OUTSIDE))
+    return False
+
+
+#: EU-189 (#827, SEQ 854): `display:run-in`'s outside behaviour depends on the
+#: FOLLOWING box, which this element-local reader cannot see. Official, and
+#: unsupported — the same shape `visibility:force-hidden` already uses.
+_RUN_IN_UNSUPPORTED = ('unsupported',
+                       'display:run-in is official but unsupported '
+                       '(CSS Display 3 §5.3: its box depends on what follows)')
+
+
+def _display_outside(idents):
+    """The OUTSIDE display type of an already-VALID `display` value.
+
+    EU-189 (#827). CSS Display 3 §2: a display value is
+    `<display-outside>? <display-inside>?`, and "if <display-outside> is
+    omitted, the element's outside display type defaults to block". So the
+    only values that are INLINE outside are the explicit `inline` keyword and
+    the four <display-legacy> `inline-*` spellings; everything else that
+    generates a box is block outside. `none` and `contents` generate no box of
+    their own, so they have no outside type — the walker never asks about
+    `none` (already pruned) and treats `contents` as its parent's flow.
+
+    `none` and `contents` return 'nobox': neither generates a box of its own,
+    so neither can separate the text on its two sides — and 'nobox' is NOT the
+    same answer as "this element declared nothing" (None), which is what sends
+    `_advance` to the UA default. Collapsing the two was SEQ 854's red:
+    `<div style="display:contents">` fell back to div's UA block and invented a
+    boundary CSS says is not there.
+
+    `run-in` is NOT decided here. CSS Display 3 §5.3 makes a run-in box's
+    formatting depend on what FOLLOWS it — it may join the next block's inline
+    formatting context or become a block — so its boundary cannot be read off
+    this element alone. This reader does not model that, and SEQ 854 forbids
+    guessing it, so it returns the unsupported sentinel and the document takes
+    the existing fail-closed lane.
+    """
+    if 'run-in' in idents:
+        return _RUN_IN_UNSUPPORTED
+    for k in idents:
+        if k in _DISPLAY_OUTSIDE:
+            return 'inline' if k == 'inline' else 'block'
+        if k.startswith('inline-'):          # the <display-legacy> spellings
+            return 'inline'
+    if 'none' in idents or 'contents' in idents:
+        return 'nobox'
+    return 'block'
+
+
+#: HTML Living Standard, Rendering §15.3.3 "Flow content" and §15.3.8
+#: "Tables" — the elements the user agent itself defaults to a BLOCK-outside
+#: display. EU-189 (#827): the SAME UA-stylesheet authority `_UA_HIDDEN_ELEMENTS`
+#: above already rides, transcribed from the same document, and overridable by
+#: exactly the same author inline declaration. It is not a corpus-derived tag
+#: list: no filing was consulted to build it, and membership is decided by the
+#: standard, not by what happens to occur in EDGAR.
+#: `br` is here for a different clause — HTML LS §15.3.6 renders it as a
+#: FORCED LINE BREAK, which CSS Text 3 §3 makes a segment break — but the
+#: consequence for the text stream is identical: it separates.
+_UA_BLOCK_ELEMENTS = frozenset({
+    # §15.3.3 Flow content
+    'html', 'body', 'address', 'blockquote', 'center', 'dialog', 'div',
+    'figure', 'figcaption', 'footer', 'form', 'header', 'hr', 'legend',
+    'listing', 'main', 'p', 'plaintext', 'pre', 'search', 'xmp',
+    # §15.3.5 Sections and headings
+    'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hgroup', 'nav',
+    'section',
+    # §15.3.7 Lists — `li` is display:list-item, whose OUTSIDE is block
+    'dir', 'dd', 'dl', 'dt', 'menu', 'ol', 'ul', 'li',
+    # §15.3.8 Tables — every <display-internal> type is block-outside for the
+    # purpose that matters here: it is not part of a surrounding inline
+    # formatting context, so the text on its two sides is never adjacent.
+    'table', 'caption', 'colgroup', 'col', 'thead', 'tbody', 'tfoot', 'tr',
+    'td', 'th',
+    # §15.3.9 Form controls — `select` and `marquee` are deliberately ABSENT:
+    # the UA gives them display:inline-block, whose outside is INLINE (SEQ 854
+    # red — they were wrongly listed as block).
+    'fieldset', 'details', 'summary', 'optgroup', 'option',
+    # §15.3.4 Frames
+    'frameset', 'frame',
+    })
+
+#: HTML LS Rendering §15.3.4 — `br` is a FORCED LINE BREAK. SEQ 855: this is
+#: NOT a display-outside question and must not be modelled as one. It used to
+#: sit in the block set above, so a lawful author `<br style="display:inline">`
+#: turned the newline off and fused the text either side of it. The break is
+#: the element's own rendering behaviour: it separates whenever it renders at
+#: all, and only pruning (display:none) removes it. Measured: `br` occurs in
+#: 1713 of the 1769 frozen filings, so a wrong answer here is not theoretical.
+_UA_LINE_BREAK_ELEMENTS = frozenset({'br'})
+
+#: HTML LS Rendering §15.3.3 — the four elements the user agent itself gives
+#: `white-space: pre`. SEQ 855: a UA rule on the element BEATS the inherited
+#: value (a `<pre>` inside a collapsing block is still pre), and any author
+#: declaration beats the UA rule, which is exactly the precedence the `hidden`
+#: attribute and the UA display:none set already use. Corpus exposure for these
+#: four names is 0, but the reader accepts an open domain and may not knowingly
+#: misread a name the standard defines.
+#: NOT here: `textarea`, whose §15.3.9 rule is `white-space: pre-wrap` — a
+#: different value in a different section, unruled by SEQ 855 and reported
+#: rather than assumed.
+_UA_PRE_ELEMENTS = frozenset({'pre', 'listing', 'plaintext', 'xmp'})
+
+#: HTML LS Rendering §15.3.3 — `slot { display: contents }`. It generates no
+#: box, so like `display:contents` it adds no boundary; it is named because a
+#: bare UA-default lookup would otherwise fall through to inline and be right
+#: by luck rather than by the standard.
+_UA_NOBOX_ELEMENTS = frozenset({'slot'})
+
+
+def _style_state(el):
+    """The winning SPECIFIED values of the rendering properties this product
+    reads — THE one CSS reader (#827 E, SEQ 227/229). One tinycss2 pass;
+    per property the winner is chosen by (important, source order), CSS
+    Cascade Level 5 §§4-7; a DEFINITELY INVALID declaration is dropped and
+    never erases an earlier winner; a declaration this reader cannot resolve
+    (substitution `var()`/`env()`, `revert`, `revert-layer`) that WINS makes
+    the answer 'unsupported' — the one truthful lane, never silently visible
+    and never silently invalid. The `all` shorthand accepts only CSS-wide
+    keywords and feeds every property here, content-visibility included.
+
+    The HTML `hidden` attribute (HTML Living Standard §6.1) is an OVERRIDABLE
+    presentational hint: any valid author `display` declaration beats it;
+    `hidden=until-found` is an official state outside this reader and takes
+    the unsupported lane. `aria-hidden` is accessibility, not rendering, and
+    decides nothing (corpus: zero occurrences anyway).
+
+    SCOPE, frozen: inline style attributes and ancestry only — no stylesheet,
+    selector, class or browser engine.
+
+    Returns {'display': 'none'|'other'|None, 'visibility': kw|None,
+             'cv': kw|None, 'hidden_attr': bool, 'unsupported': reason|None},
+    where None means "not declared here" (inherit/absent).
+    """
+    hv = el.get('hidden') if el.has_attr('hidden') else None
+    unsupported = None
+    # ENUMERATED ATTRIBUTE, HTML LS: keywords match ASCII-case-insensitively
+    # with NO whitespace repair — ' until-found ' and NBSP-padded forms are
+    # INVALID VALUES and take the invalid-value default, the Hidden state
+    # (SEQ 231 §2). Python .lower() on a proven-ASCII string IS exact ASCII
+    # lowering; nothing is stripped.
+    if hv is not None and isinstance(hv, str) and hv.isascii() \
+            and hv.lower() == 'until-found':
+        unsupported = 'hidden=until-found is outside the supported reader'
+        hv = None
+    cand = {'display': [], 'visibility': [], 'cv': [], 'ws': [], 'outside': []}
+    # CL-090 (#827 DERIVE-CITATION, the six style-state units EU-137..142):
+    # this parse rides the PINNED tinycss2 1.4.0 API (installed pin; docs
+    # https://doc.courtbouillon.org/tinycss2/, version-matched) —
+    # parse_declaration_list; Declaration.type == 'declaration', .name,
+    # .lower_name, .important, .value; component token types 'whitespace',
+    # 'comment', 'function', 'ident' and .lower_value. The '--' custom-
+    # property prefix = CSS Custom Properties L1 §2 (below); the property
+    # vocabulary and the 'all' shorthand carry the CSS-PIN board's cited
+    # rendering law (Display 3 / Containment 2 / Cascade 4, §201-era cites).
+    for i, d in enumerate(
+    # EU-140 (#827): the or-'' is the truthful NO-INLINE-STYLE reading —
+    # an element without a style attribute declares nothing here, and an
+    # empty declaration list is exactly that (every property then stays
+    # None = "not declared", which the caller reads as inherit/absent).
+    # It can only ever ADD zero declarations: pinned by every lawful
+    # document (a fabricating default hides the whole filing — 71 reds).
+            tinycss2.parse_declaration_list(str(el.get('style') or ''))):
+        # CSS Custom Properties for Cascading Variables Level 1 §2: a custom
+        # property is ANY property whose name starts with two dashes — never
+        # a standard property, so it cannot be display/visibility/cv here.
+        if getattr(d, 'type', None) != 'declaration' or d.name.startswith('--'):
+            continue
+        nm = d.lower_name
+        if nm not in ('display', 'visibility', 'content-visibility', 'all',
+                      'white-space'):
+            continue
+        toks = [t for t in d.value if t.type not in ('whitespace', 'comment')]
+        # ANY function-valued winner is UNRESOLVED here, not just var()/env():
+        # CSS Values 5 §7.1 lets properties accept whole-value functions and
+        # §7.7.1 makes attr() a computed-time substitution too (SEQ 231 §3) —
+        # dropping an unknown function as "definitely invalid" would let an
+        # earlier hidden winner stand on a value we never understood.
+        subst = any(t.type == 'function' for t in toks)
+        idents = ([t.lower_value for t in toks]
+                  if toks and all(t.type == 'ident' for t in toks) else None)
+        # CL-091 (#827, EU-135 + EU-136): FAIL-CLOSED cascade mechanics.
+        # The sort key is (importance, source order) because that IS the
+        # cascade for one inline style block — CSS Cascade 5 sections 6.8.2
+        # and 6.9: !important declarations win over normal ones, and among
+        # equals the LAST wins; dropping the order term makes an earlier
+        # declaration beat a later one (17 reds). The token-count gates are
+        # the value grammars themselves: a CSS-wide keyword is exactly ONE
+        # ident (Cascade 5 section 7), so admitting any other count would
+        # read a multi-token value as a wide keyword (5 reds). Every value
+        # this reader cannot resolve becomes the truthful unsupported lane
+        # (EU-055), never a guess.
+        key = (bool(d.important), i)
+        if nm == 'all':
+            if subst:
+                for p in cand:
+                    cand[p].append((key, _UNSUPPORTED))
+            elif idents and len(idents) == 1 \
+                    and idents[0] in (_WIDE_LOCAL | _WIDE_ROLLBACK):
+                val = (_UNSUPPORTED if idents[0] in _WIDE_ROLLBACK
+                       else ('wide', idents[0]))
+                for p in cand:
+                    cand[p].append((key, val))
+            continue                        # non-wide `all` value: invalid
+        prop = ('cv' if nm == 'content-visibility'
+                else 'ws' if nm == 'white-space' else nm)
+        # EU-189 (#827, SEQ 854): ONE `display` declaration feeds TWO state
+        # slots — the prune law's none/other, and the OUTSIDE type the text
+        # walk needs. Every lane that records a display candidate must record
+        # both, or `display:inherit` reaches the first and leaves the second
+        # reading "declared nothing", which silently falls back to the UA
+        # default instead of the parent. (`all` already fans out over every
+        # slot below, which is why `all:inherit` was right while the single
+        # property was wrong.)
+        props = ('display', 'outside') if prop == 'display' else (prop,)
+        if subst:
+            for p in props:
+                cand[p].append((key, _UNSUPPORTED))
+            continue
+        if not idents:
+            continue                        # definitely invalid: dropped
+        if len(idents) == 1 and idents[0] in _WIDE_LOCAL:
+            for p in props:
+                cand[p].append((key, ('wide', idents[0])))
+            continue
+        if len(idents) == 1 and idents[0] in _WIDE_ROLLBACK:
+            for p in props:
+                cand[p].append((key, _UNSUPPORTED))
+            continue
+        if prop == 'ws':
+            # EU-145 (#827): CSS Text 3 §3 — the value is exactly ONE ident
+            # from the cited vocabulary; anything else is invalid and dropped
+            # (it cannot change visibility, so it never reaches the
+            # unsupported lane).
+            if len(idents) == 1 and idents[0] in _WS_VALUES:
+                cand[prop].append((key, idents[0]))
+            continue
+        if prop == 'display':
+            if _display_valid(idents):
+                cand[prop].append(
+                    (key, 'none' if idents == ['none'] else 'other'))
+                # EU-189 (#827): the SAME declaration, cascaded by the SAME
+                # loop, keeping the OUTSIDE type the prune law above throws
+                # away. `_text` needs it to know whether an element boundary
+                # separates text (block) or contributes nothing (inline) —
+                # CSS Text 3 §3: inline box boundaries are ignored by the
+                # white-space rules, block boundaries end the formatting
+                # context. No second parse and no second cascade.
+                cand['outside'].append((key, _display_outside(idents)))
+            continue                        # invalid display value: dropped
+        if prop == 'visibility' and idents == ['force-hidden']:
+            # CSS Display Module Level 4 §5: `force-hidden` skips descendants
+            # WITHOUT the self-revive `hidden` allows. An official value this
+            # reader does not model may neither hide silently nor fall back
+            # to an earlier declaration (SEQ 232 §1) — it participates in the
+            # cascade, and its refusal detail says exactly what it is
+            # (SEQ 234): official but unsupported, not "unresolvable".
+            cand[prop].append((key, ('unsupported',
+                               'visibility:force-hidden is official '
+                               'but unsupported (CSS Display 4 §5)')))
+            continue
+        if len(idents) == 1 and idents[0] in (
+                _VISIBILITY_VALUES if prop == 'visibility' else _CV_VALUES):
+            cand[prop].append((key, idents[0]))
+    # EU-145 (#827): the DECLARED white-space of THIS element, or None when it
+    # declares none — the same cascade the other properties use (importance,
+    # then source order), and an unknown value is invalid-and-dropped rather
+    # than a refusal: it cannot change visibility.
+    out = {'hidden_attr': hv is not None, 'unsupported': unsupported}
+    for p in ('display', 'visibility', 'cv', 'ws', 'outside'):
+        best = max(cand[p], default=None, key=lambda kv: kv[0])
+        v = best[1] if best else None
+        tag, payload = v if isinstance(v, tuple) else (None, v)
+        if tag == 'unsupported':
+            out[p] = None
+            # EU-134 (#827): this refusal text is the binder's own published
+            # vocabulary (the CL-039 block) — style-state refusals propagate
+            # as data to unsupported_style, never as a T1 code; the rule
+            # (an unresolvable !important-vs-normal winner refuses, never
+            # guesses) is board-cited on its own row.
+            out['unsupported'] = out['unsupported'] or (
+                payload or f'unresolvable {p} winner in inline style')
+        elif tag == 'wide':
+            kw = payload
+            if kw == 'inherit' or (kw == 'unset' and p in ('visibility', 'ws')):
+                # Cascade 5 §7.3.3: `unset` means INHERIT for an inherited
+                # property, and visibility inherits — so visibility:unset
+                # under a hidden ancestor STAYS hidden (SEQ 231 §1). display
+                # and content-visibility are not inherited: their unset is
+                # initial. inherit itself: parent state (None); display never
+                # inherits a pruned parent — that subtree is already gone —
+                # so display:inherit can never mean none here.
+                # SEQ 854: `outside` is the one property here whose `inherit`
+                # this function CANNOT answer — display is not an inherited
+                # property, so `display:inherit` means "the parent's COMPUTED
+                # outside type", and the parent is `_advance`'s business, not
+                # this element-local read. It returns the sentinel and the
+                # walker, which holds the ancestry, resolves it.
+                out[p] = ('other' if p == 'display'
+                          else 'inherit' if p == 'outside' else None)
+            else:                           # initial, or unset on non-inherited
+                # SEQ 852/853: `ws` joins this ONE owner instead of being
+                # resolved beside it. white-space INHERITS (CSS Text 3 §3), so
+                # its `unset` is `inherit` and its initial value is `normal` —
+                # the same two clauses visibility already uses. Resolving it
+                # here is what stops a ('wide', ...) tuple or the unsupported
+                # sentinel reaching `_advance`, which compared them against the
+                # keyword vocabulary and silently read every one as collapsing.
+                out[p] = {'display': 'other', 'visibility': 'visible',
+                          'cv': 'visible', 'ws': 'normal',
+                          'outside': 'inline'}[p]   # display's initial (§2)
+        elif tag is not None:
+            # an unknown internal tag is a programming defect — fail loudly,
+            # never read it as a CSS value or a lawful abstention
+            raise ValueError(f'unknown internal style winner tag: {v!r}')
+        else:
+            out[p] = payload
+    return out
+
+
+def _advance(vis, el, ws=None, outside=None):
+    """THE one state-combine owner: fold one element into the inherited
+    visibility AND the inherited white-space. Returns
+    (prune, new_vis, unsupported_reason, new_ws).
+
+    EU-145 (#827): white-space is an INHERITED property (CSS Text 3 §3), so
+    it threads through the same fold as visibility — an element's own
+    declaration wins for itself and everything below it, and absence means
+    "keep what the ancestor said". No second walk and no second parse: the
+    value comes from the SAME `_style_state` read this function already
+    does.
+
+    display:none and content-visibility:hidden prune ABSOLUTELY (Containment 2
+    §4: no descendant revive); the bare HTML hidden attribute prunes only when
+    no valid author `display` overrides it (HTML LS §6.1); visibility is
+    INHERITED state a descendant `visibility:visible` may revive (Display 3
+    §4). content-visibility:auto/visible INCLUDE — the evidence representation
+    is viewport-independent by frozen product decision (SEQ 229).
+    """
+    st = _style_state(el)
+    # CL-043 (#827, EU-068 + EU-069): FAIL-CLOSED walk actions. The
+    # unsupported arm returns the REASON and prunes nothing, so an
+    # unmodelled style can never hide or reveal text by accident — the
+    # document refuses as a whole instead (3 reds when the reason is
+    # dropped). The template arm's True is the PRUNE action, and it is
+    # unconditional because the contents are not children of the element
+    # at all (the WHATWG citation below), so no author declaration can
+    # reveal them (3 reds when the prune is withdrawn).
+    # EU-072 (#827 DERIVE-CITATION): `.name` is the PINNED bs4 element-name
+    # API — Beautiful Soup 4.13.3 (installed pin), documented Tag.name
+    # ("Every tag has a name"), https://www.crummy.com/software/
+    # BeautifulSoup/bs4/doc/#name; '' is the program-logic default for
+    # nameless nodes, owned by this function's law.
+    # It is read BEFORE the unsupported arm because EVERY exit now answers the
+    # boundary question too, and the UA default is keyed on the name.
+    name = (getattr(el, 'name', '') or '').lower()
+    if st['unsupported']:
+        # nothing is pruned here, so this element's own boundary still stands
+        return (False, vis, st['unsupported'], ws,
+                name in _UA_BLOCK_ELEMENTS, outside)
+    if name == 'template':
+        # EU-070 (#827 DERIVE-CITATION): WHATWG HTML Living Standard
+        # (census snapshot 2026-07-20) §4.12.3 The template element,
+        # https://html.spec.whatwg.org/multipage/scripting.html#the-template-element
+        # — "the template contents are not children of the element itself":
+        # a template REPRESENTS NOTHING and no author display can reveal it.
+        # Unconditional prune, nested markup included. It generates NO box, so
+        # it separates nothing: the text either side of it is adjacent.
+        return True, vis, None, ws, False, 'nobox'
+    # HTML LS Rendering §15.3.1: UA-default display:none elements — a
+    # NORMAL-origin default any valid author INLINE display declaration
+    # overrides (exactly the `hidden` attribute's shape), while an author
+    # `display:none` still wins.
+    ua_hidden = name in _UA_HIDDEN_ELEMENTS
+    # EU-071 (#827 DERIVE-CITATION), post-CSS-2.1 rendering law, version-
+    # pinned at the census snapshot 2026-07-20: display:none = W3C CSS
+    # Display Module Level 3, https://www.w3.org/TR/css-display-3/
+    # #valdef-display-none (element and descendants generate no boxes);
+    # content-visibility:hidden = W3C CSS Containment Module Level 2,
+    # https://www.w3.org/TR/css-contain-2/#propdef-content-visibility
+    # (contents are skipped); author-inline vs UA-default precedence =
+    # HTML LS Rendering §15.3.1 (the `hidden` attribute's shape).
+    prune = (st['display'] == 'none' or st['cv'] == 'hidden'
+             or ((st['hidden_attr'] or ua_hidden) and st['display'] is None))
+    # EU-189 (#827): does this element's boundary SEPARATE text? The author's
+    # own outside type wins when declared — the same author-over-UA precedence
+    # the `hidden` clause above uses — and the UA default answers otherwise.
+    own = st['outside']
+    if own == 'inherit':
+        # display does NOT inherit, so `display:inherit` (and `all:inherit`)
+        # asks for the parent's COMPUTED outside type, which only the walk
+        # knows. A missing parent value means the root: initial, i.e. inline.
+        own = outside or 'inline'
+    elif own is None:                       # the element declared nothing
+        own = ('block' if name in _UA_BLOCK_ELEMENTS else
+               'nobox' if name in _UA_NOBOX_ELEMENTS else 'inline')
+    # A PRUNED element generates no box at all (CSS Display 3, display:none),
+    # so it separates nothing and the text either side of it is adjacent —
+    # exactly like the 'nobox' answer that `contents` and `slot` give.
+    # SEQ 855: `br` separates on its OWN clause, not through the outside type —
+    # a forced line break is still a line break when the author writes
+    # `display:inline`, and only pruning silences it.
+    sep = (not prune) and (own == 'block' or name in _UA_LINE_BREAK_ELEMENTS)
+    # SEQ 855: the UA `white-space:pre` rule for pre/listing/plaintext/xmp sits
+    # HERE, between the author's own declaration (which beats it) and the
+    # inherited value (which it beats) — the one precedence ladder this
+    # function already implements for every other UA default.
+    new_ws = st['ws'] or ('pre' if name in _UA_PRE_ELEMENTS else None) or ws
+    return prune, (st['visibility'] or vis), None, new_ws, sep, own
+
+
+def _hidden_cell(cell):
+    """This ONE element's standalone answer — pruned, or declared invisible
+    here. Ancestry and descendant revive are the WALK's and
+    `_effective_hidden`'s business; sites that need "does this cell show any
+    text" read the representation slice, which the walk owns.
+
+    EU-102 (#827), CLOSED per SEQ 812 — a SUPPORTED proof-only adapter, and
+    the support is written here so it is never mistaken for an unexamined
+    keep:
+      * production callers: ZERO (two-lane trace
+        g2_fevid_call_trace_v5.tsv). This function exists for the proof lane
+        alone.
+      * proof callers: TEN live call sites in eight relocate_probe phase2
+        scripts (m1_structure_inventory ×2, m2_candidate_packets ×2,
+        m2_native_table_shadow, _r2, _r3 ×2, m2_wp1_8k_qualify,
+        m4_reader_residual), all verified to import and run at closure.
+        THEY are the support the old card lacked.
+      * it is an ADAPTER, not a second engine: no CSS vocabulary and no
+        decision of its own — it asks `_advance`, the one combine owner, a
+        DIFFERENT question (this ONE element, standalone) from the one
+        `_effective_hidden` answers (the whole ancestry folded). That is why
+        the manual proof walkers use it and why mechanically rewriting them
+        to `_effective_hidden(x)[0]` would change what they measure.
+      * the five PRODUCTION-behaviour tests correctly moved to
+        `_effective_hidden` and stay there.
+      * if those scripts are ever proved dead, they and this adapter go
+        together in the final minimality sweep.
+    """
+    prune, vis, unsup, _ws, _sep, _out = _advance('visible', cell)
+    if unsup:
+        return False                # never silently hidden; facts refuse instead
+    return prune or vis in ('hidden', 'collapse')
+
+
+def _effective_hidden(node):
+    """(hidden, unsupported_reason) for one renderer node, folding its whole
+    ancestry through the SAME `_advance` owner the walk uses — top-down, so
+    inherited visibility and revive behave exactly as in the representation."""
+    chain = []
+    n = node
+    # CL-053 (#827, EU-086): FAIL-CLOSED ancestry probe — the walk climbs
+    # only through real element nodes, and 'get' is the bs4 mapping-protocol
+    # attribute that distinguishes a Tag from a NavigableString or the
+    # document sentinel (the EU-072 pinned-API citation one owner up). A
+    # drifted probe ends the chain immediately and every CSS-hidden
+    # ancestor becomes invisible to the fact — door-measured: the hidden
+    # flag flips True to False.
+    while n is not None and getattr(n, 'get', None):
+        chain.append(n)
+        n = n.parent
+    # The fold runs TOP-DOWN (the chain is collected leaf-first, so it is
+    # reversed here): inheritance flows from ancestors to descendants, and a
+    # descendant's own visibility:visible legitimately revives text under an
+    # ancestor's visibility:hidden (CSS Display 3 section 4) — folding the
+    # other way would let the leaf decide first and lose that revival
+    # (pinned by the own-visible node).
+    vis = 'visible'
+    for el in reversed(chain):
+        # CL-053 (#827, EU-087): the True is the HIDDEN answer — a pruning
+        # ancestor hides this node absolutely (display:none and
+        # content-visibility:hidden admit no descendant revive), so the
+        # fold stops and reports hidden rather than continuing to inherit.
+        # EU-088 (#827): the fold starts at 'visible' because that is the
+        # INITIAL value of the visibility property (CSS Display 3 section
+        # 4, the cited keyword sets above) — the state before any author
+        # declaration, never an assumption of this reader.
+        prune, vis, unsup, _ws, _sep, _out = _advance(vis, el)
+        if unsup:
+            return None, unsup
+        if prune:
+            return True, None
+    return vis in ('hidden', 'collapse'), None
+
+
+# THE edge-marker rule, and its ONLY definition. Decorative characters a filing
+# puts around a heading — a dash, a space — may be ignored when DECIDING whether
+# a cell carries a heading; they are never removed from what gets STORED. It is
+# a RULE and not a set: the characters are recognised by asking Unicode, so no
+# list exists to drift, and a dash nobody has met yet is covered on arrival.
+def _is_edge_marker(ch):
+    """A space, or a character Unicode itself calls dash punctuation.
+
+    `_EDGE_MARKERS` stood here as the three characters `' —-'`, hand-picked.
+    That is a SAMPLE, not a rule: EN DASH was missing, so a cell holding only
+    `–` survived the selection test below and was counted as a column heading —
+    3,050 heading decisions across 38 filings in the frozen manifest, every one
+    a lone U+2013.
+
+    `General_Category=Dash_Punctuation` is the standard that says which
+    characters these are, and it is ASKED, never enumerated: no set is built and
+    no code point is listed. U+2212 MINUS SIGN is category `Sm`, so it is
+    content and stays — the same answer the three characters gave.
+
+    The representation is whitespace-normalised before either consumer, so
+    U+0020 is the only space that can reach here.
+    """
+    # EU-103 (#827): the Pd meaning is Unicode-owned and cited exactly —
+    # The Unicode Standard, UAX #44 (Unicode Character Database),
+    # General_Category value Pd = Dash_Punctuation,
+    # https://www.unicode.org/reports/tr44/ — ASKED via unicodedata (the
+    # pinned runtime's copy), never enumerated; U+2212 MINUS SIGN is Sm and
+    # stays content. The ' ' arm is lawful because the representation is
+    # whitespace-normalised upstream (U+0020 is the only space here). The
+    # leading-marker-drop PRODUCT rule these serve is the EU-073
+    # fail-closed adjudication (drop-only, front-only, never fabricates).
+    # Receipt g2_evid_recall_EU-103.txt: zero recall — citation only.
+    return ch == ' ' or unicodedata.category(ch) == 'Pd'
+
+
+def _evidence_owner(node):
+    """THE node whose span `_evidence_from` will read for `node`, and the ONLY
+    place that three-branch choice is written.
+
+      1. a `td`/`th` inside a `tr`   -> the row, for `row_span`
+      2. otherwise a `p`/`li`/`div`  -> that block, for `block_span`
+      3. otherwise                   -> the direct parent
+
+    Branches 1 and 2 land on tags `_SPAN_TAGS` already records. Branch 3 does
+    not, which is why `prepare` asks the walker to record exactly those parents
+    as well: without them `block_span` is None and `source_evidence` refuses the
+    fact outright. Returning the choice from one owner is what stops the walker
+    and the reader disagreeing about which node that is.
+    """
+    # EU-099 (#827): FAIL-CLOSED adjudication of the two ownership flags —
+    # True names the ROW shape, False the block/parent shape, the choice is
+    # written ONCE here (walker and reader both consume it, so they cannot
+    # disagree), and each arm's whole downstream shape is pinned by the
+    # primary battery (flag inversion reddens 24 nodes — measured). A wrong
+    # flag cannot fabricate evidence: it selects the OTHER honest shape,
+    # whose fields then carry the EU-092 explicit empty claims. Receipt
+    # g2_evid_recall_EU-099.txt: zero recall — adjudication only.
+    cell = node.find_parent(_CELL_TAGS)
+    row = cell.find_parent(_ROW_TAG) if cell is not None else None
+    if cell is not None and row is not None:
+        return True, row
+    return False, node.find_parent(_BLOCK_TAGS) or node.parent
+
+
+def _after_edge_markers(text):
+    """`text` with its LEADING markers dropped — the one place that loop lives.
+
+    Only the leading characters are examined, and it stops at the first one that
+    is not a marker.
+    """
+    # EU-073 (#827): FAIL-CLOSED adjudication of the scan mechanics — the
+    # loop examines LEADING characters only and can only ever DROP
+    # recognized markers from the front: it never touches inner text and
+    # never invents characters, so the worst drift is a marker kept (the
+    # selection then sees more text, not fabricated text). The one consumer
+    # decides whether a cell is markers-only; that behavior is pinned
+    # (the bare-parenthetical node). Measured recall receipt
+    # g2_evid_recall_EU-073.txt: zero — adjudication only, no change.
+    i = 0
+    while i < len(text) and _is_edge_marker(text[i]):
+        i += 1
+    return text[i:]
+
+
+def _visible_slice(node, prepared):
+    """A node's text EXACTLY as the pinned representation holds it — its own
+    recorded span, sliced out of that text — returned WITH the span.
+
+    THE ONE OPERATION that turns a node into evidence. `_text()` reads through
+    `get_text`, which INCLUDES hidden descendants, while the representation
+    excludes them; every defect this replaces was that single mismatch wearing a
+    different hat — a hidden-only cell becoming the row label, hidden words
+    inside a row cell, and a section whose text and span came from different
+    cells. Here the text and the span cannot disagree, because they are two
+    views of ONE fact. It adds no parser and no rule: the walker already
+    recorded both, and this only reads them together.
+    """
+    # EU-148 (#827): the span source is prepare()'s own node_spans index —
+    # the walker records each tracked node's exact extent IN the pinned
+    # representation, so text and span are two views of ONE fact (the
+    # EU-093 selection law). The empty-slice answer below is the truthful
+    # NO-RECORDED-EXTENT reading: a node the walk pruned has no extent, and
+    # returning '' with a None span says exactly that — never a guessed
+    # offset. A drifted key silently empties every extent (26 reds).
+    span = prepared.get('node_spans', {}).get(id(node))
+    if span is None:
+        return '', None
+    return prepared['text'][span[0]:span[1]], span
+
+
+#: THE STRUCTURAL GROUPS of the local-evidence contract
+#: (UniversalLocator_Design_2026-07-18.md §2 + the current FinalPlan):
+#: cells, the row, and the prose blocks. Each spelling is written ONCE and
+#: the tracked-span union is DERIVED — the walker and every reader consume
+#: these owners, so the two can never disagree about a member.
+# EU-040 (#827): the three structural names below are the WHATWG HTML
+# Living Standard's own table model (snapshot 2026-07-20), cited exactly —
+# section 4.9.5 "The tr element" (a row of cells), 4.9.9 "The td element"
+# (a data cell), 4.9.10 "The th element" (a HEADER cell — a th is a cell
+# exactly as a td is, so a header-labeled row keeps its evidence),
+# https://html.spec.whatwg.org/multipage/tables.html . Recognition only —
+# no rule is invented here.
+_CELL_TAGS = ['td', 'th']
+_ROW_TAG = 'tr'
+# EU-041 (#827): _BLOCK_TAGS is the SEMANTIC evidence-ownership set —
+# WHICH blocks own evidence text is an OWNER DECISION, blessed on the
+# certification evidence (sheet row E-EVID-SELECT; the snippet appendix
+# remains a recorded post-audit documentation debt). A standard can prove
+# a construct lawful; it can never grant permission to omit one — so this
+# set is KEPT under the owner's blessing, not derived from a spec. The
+# consequence is pinned: a fact nested under inline markup hands its
+# evidence to the nearest BLOCK owner (the whole sentence), never to the
+# inline wrapper.
+_BLOCK_TAGS = ['p', 'li', 'div']
+_SPAN_TAGS = frozenset(_CELL_TAGS) | {_ROW_TAG} | frozenset(_BLOCK_TAGS)
+
+
+def _visible_walk(root, spans=None, hidden=frozenset(), also=frozenset(),
+                  flags=None):
+    """THE hash-pinned representation walk: whitespace-normalized VISIBLE text
+    (ix:hidden + CSS/attr-hidden excluded), optionally recording each structural
+    node's EXACT character span — element-specific offsets, never global find().
+
+    `hidden` IS THE SEMANTIC ANSWER, ALREADY RESOLVED. Which nodes are Inline
+    XBRL hidden containers is a question about expanded names, and this walker
+    reads the renderer tree, where names carry no namespace at all. So it is not
+    asked here: `prepare()` resolves it in the strict view and hands over the
+    exact renderer nodes. CSS hiding stays local because it genuinely IS a
+    rendering property.
+    """
+    words = []
+    # EU-189 (#827), reopened by SEQ 853: `seps[i]` is the text that stands
+    # BETWEEN words[i-1] and words[i]. It used to be an unconditional single
+    # space supplied by the join, which FABRICATED a character the filing does
+    # not show: CSS Text 3 §3 processes a block's content as one inline box —
+    # "inline box boundaries are ignored" — so `<span>Total</span><span>
+    # revenue</span>` renders Totalrevenue, not Total revenue. The separator is
+    # now the SOURCE's: `pending` carries what the last thing walked left
+    # behind, and only real whitespace or a block/segment boundary sets it.
+    seps = []
+    pending = ''
+
+    def emit(token):
+        # the first token has nothing to be separated FROM
+        seps.append(pending if words else '')
+        words.append(token)
+
+    # EU-188 (#827): 'name' is the PINNED bs4 element-name API — Beautiful
+    # Soup 4.13.3 (installed pin), documented Tag.name, the same citation
+    # the sibling reader carries at _advance (EU-072) — and the None answer
+    # is exactly how bs4 distinguishes a NavigableString (and its Comment /
+    # CData / PI / Declaration / Doctype subclasses) from an element. That
+    # is why the text arm can be written as a single identity test rather
+    # than a type list; a drifted token makes every element look like text
+    # (42 reds).
+    def walk(node, vis, ws=None, outside=None):
+        nonlocal pending
+        name = getattr(node, 'name', None)
+        if name is None:
+            # ONLY REAL TEXT NODES ARE TEXT (#827 E, SEQ 234). `name is None`
+            # also matches BeautifulSoup's Comment / CData /
+            # ProcessingInstruction / Declaration / Doctype nodes, and none of
+            # those is rendered content — a comment or an XML declaration in
+            # the representation was fabricated evidence. Emission further
+            # requires the 'visible' state: visibility is INHERITED and a
+            # nearer visibility:visible revives (Display 3 §4).
+            if vis == 'visible' and isinstance(node, NavigableString) \
+                    and not isinstance(node, (Comment, CData,
+                                              ProcessingInstruction,
+                                              Declaration, Doctype)):
+                # EU-062 (#827) FIX-TO-STANDARD: U+200B contributes NOTHING
+                # to the visible text — it is not a space character and has
+                # no width (Unicode 17.0 core spec 23.2.1), it is the ZW
+                # line-break class (UAX #14 Table 1, LB7/LB8: a break
+                # OPPORTUNITY, not a space), and CSS Text 3 CRD 2026-06-08
+                # 3/4.1.1 collapses only spaces, tabs and segment breaks.
+                # Replacing it with U+0020 put a character in the
+                # representation that the filing never shows; separate
+                # ELEMENTS still separate tokens. Measured before the
+                # change: ZERO U+200B in the frozen 1,769-file corpus, so
+                # the reversal moves no real filing.
+                raw = str(node).replace(_ZWSP, '')
+                if ws in _WS_PRESERVE_ALL:
+                    # pre / pre-wrap / break-spaces: BOTH space runs and
+                    # segment breaks survive, so the text node enters the
+                    # representation as ONE token carrying its own inner
+                    # whitespace — the token join and the span arithmetic
+                    # below are untouched.
+                    if raw:
+                        emit(raw)
+                        pending = ''    # its own whitespace is inside `raw`
+                elif ws in _WS_PRESERVE_BREAKS:
+                    # pre-line: segment BREAKS survive, spaces and tabs
+                    # collapse (CSS Text 3 §3 — the case my first reading of
+                    # the spec got wrong, corrected by SEQ 812).
+                    # SEQ 854: the same CSS vocabulary as the collapsing lane —
+                    # spaces and tabs collapse, NBSP and friends do not.
+                    kept = '\n'.join(
+                        ' '.join(t for t in _CSS_WS.split(line) if t)
+                        for line in raw.split('\n'))
+                    if kept.strip(''.join(_CSS_WS_CHARS)):
+                        emit(kept.strip('\n') if kept.strip('\n') else kept)
+                        pending = ''
+                else:
+                    # THE COLLAPSING LANE, over CSS's whitespace, not Python's
+                    # (EU-149 correction, SEQ 854). CSS Text 3 §4.1.1 collapses
+                    # exactly the space U+0020, the tab U+0009 and segment
+                    # breaks. NBSP is a NO-BREAK SPACE and U+2003 an EM SPACE:
+                    # both are ordinary space SEPARATORS the filing chose to
+                    # show, and neither collapses. `str.split()` eats both —
+                    # it splits on the whole Unicode whitespace category — so
+                    # 'A\xa0B' came back 'A B', silently replacing a character
+                    # the filer wrote with a different one. `_CSS_WS` is the
+                    # same five-character set EU-076 uses for WHATWG ASCII
+                    # whitespace; one vocabulary, one owner.
+                    toks = [t for t in _CSS_WS.split(raw) if t]
+                    if raw[:1] in _CSS_WS_CHARS:
+                        pending = ' '
+                    for tok in toks:
+                        emit(tok)
+                        pending = ' '        # between two tokens of one node
+                    if toks and raw[-1:] not in _CSS_WS_CHARS:
+                        pending = ''
+            return
+        # THE one combine owner
+        prune, vis, unsup, ws, sep, outside = _advance(vis, node, ws, outside)
+        if unsup is not None and flags is not None:
+            # AN UNRESOLVABLE WINNER POISONS THE DOCUMENT (SEQ 231 §3): text
+            # under it can be neither claimed visible nor hidden, and a clean
+            # fact beside it could otherwise attach guessed label/section
+            # evidence. The caller turns any flag into ONE truthful
+            # document-level `unsupported_style` refusal — priced by the
+            # parsed census at zero function-valued winners corpus-wide.
+            flags.append(unsup)
+        if id(node) in hidden or prune:
+            return
+        # `also` carries the fallback owners `_evidence_owner` will read for
+        # facts that reach its third branch — identities, not a wider tag list.
+        track = spans is not None and (name.lower() in _SPAN_TAGS
+                                       or id(node) in also)
+        if track:
+            start_tok = len(words)
+        # EU-189: a BLOCK boundary ends the inline formatting context on both
+        # sides (CSS Text 3 §3), and `br` is a forced line break — either way
+        # the text either side is never adjacent, so it stays separated. An
+        # INLINE boundary adds nothing at all, which is the whole defect.
+        if sep:
+            pending = ' '
+        for child in node.children:
+            walk(child, vis, ws, outside)
+        if sep:
+            pending = ' '
+        if track:
+            spans[id(node)] = (start_tok, len(words))
+
+    walk(root, 'visible')
+    text = ''.join(s + w for s, w in zip(seps, words))
+    if spans is not None:
+        starts = []
+        pos = 0
+        for s, w in zip(seps, words):
+            pos += len(s)
+            starts.append(pos)
+            pos += len(w)
+        for k, (a, b) in list(spans.items()):
+            spans[k] = ((starts[a], starts[b - 1] + len(words[b - 1]))
+                        if b > a else (starts[a] if a < len(starts) else 0,) * 2)
+    return text
+
+
+def _aligned_columns(rows, row_number, fact_cell, prepared):
+    """The COMPLETE aligned header stack over the exact numeric cell, near→far —
+    each header returned WITH its exact source span (corrective-5: every evidence
+    piece is an exact slice, never joined text).
+
+    THE STORED TEXT IS THE CELL'S OWN SLICE. Trimming decides only whether a
+    cell carries a header at all; it never decides what is STORED, because a
+    stored string that differs from the characters at its own offsets is a claim
+    about the filing that the filing does not make. This line previously did
+    both jobs at once — reading through `_text` and stripping edge markers in
+    one expression — so it leaked hidden text AND trimmed the evidence away
+    from its span.
+    """
+    # EU-076 (#827) FIX-TO-STANDARD. WHATWG HTML LS 4.9.12.2: "If the principal
+    # cell has a headers attribute specified", its tokens ARE the header list and
+    # the automatic scan below does not run at all. Order is the attribute's own
+    # token order. A token contributes NOTHING unless the FIRST element in the
+    # document with that id is a cell in the SAME table and is not the principal
+    # cell itself — so an id that resolves outside the table, to a non-cell, to
+    # nothing, or back to this cell is silently skipped, exactly as the model says.
+    # An EMPTY headers attribute is still "specified": it yields no headers, which
+    # is the author's explicit claim and must not fall back to geometry.
+    # Measured before the change: 0 of the 1,769 frozen filings carry headers= or
+    # scope= on any td/th, so this removes a standards deviation and moves no real
+    # filing. NOT this owner's job, recorded so it is not mistaken for done: the
+    # automatic branch's left-scan lives in the row-label owner, and scope-based
+    # association is unreachable here at zero occurrences.
+    declared = fact_cell.get('headers')
+    if declared is not None:
+        # bs4 treats `headers` as a MULTI-VALUED attribute, so it hands back a
+        # list already split on ASCII whitespace — the same split the model
+        # specifies. A string arrives only from a parser that does not, so both
+        # shapes are accepted and neither is assumed. Reading .split() off the
+        # list raised AttributeError on every real filing carrying the
+        # attribute; the corpus has none, so only this row's own probe found it.
+        tokens = declared if isinstance(declared, list) else declared.split()
+        root = fact_cell
+        while root.parent is not None:
+            root = root.parent
+        own_table = fact_cell.find_parent('table')
+        # CELLS are kept, not slices: steps 4-6 below are defined over CELLS, so
+        # converting to text too early loses the identity dedup needs (SEQ 851).
+        chosen = []
+        for token in tokens:
+            if not token:
+                continue
+            found = root.find(id=token)
+            if found is None or found is fact_cell:      # step 6, principal cell
+                continue
+            if getattr(found, 'name', None) not in ('td', 'th'):
+                continue
+            if found.find_parent('table') is not own_table:
+                continue
+            chosen.append(found)
+        # 4.9.12.2 STEP 4 — "remove all the empty cells". The standard defines an
+        # empty cell as one containing NO ELEMENTS whose child text content is
+        # only ASCII WHITESPACE, and WHATWG ASCII whitespace is exactly these
+        # five code points. Python's str.strip() is NOT a substitute: it also
+        # eats U+000B, NBSP and the Unicode space separators, so a cell holding
+        # only a non-breaking space would be deleted as "empty" when the standard
+        # says it is not.
+        chosen = [c for c in chosen
+                  if c.find(True) is not None
+                  or c.get_text().strip('\t\n\x0c\r ') != '']
+        # STEP 5 — "remove any duplicates", by CELL IDENTITY, keeping the FIRST
+        # token's position: the header list order is the attribute's own order.
+        seen, unique = [], []
+        for cell in chosen:
+            if not any(cell is kept for kept in seen):
+                seen.append(cell)
+                unique.append(cell)
+        return [_visible_slice(cell, prepared) for cell in unique]
+
+    grid = _table_grid(rows)
+    # MEMBERSHIP IS GUARANTEED, so there is no absent-target branch: the
+    # caller resolved `row_number` by `_index_by_identity`, so `rows[row_number]`
+    # IS this cell's own row, and `_table_grid` enumerates
+    # `find_all(['td','th'], recursive=False)` on that SAME row object — one
+    # node list, matched here by `is`. Rowspan occupancy moves a cell's
+    # coordinates, never its membership. (#827 SEQ 246: the old equality-index
+    # caller could hand over a structural TWIN's row number, whose grid row
+    # holds no identity match — the deleted branch's "impossible" case, made
+    # real. Identity restored the invariant this bare `next` now enforces.)
+    _, target_start, target_end = next(
+        item for item in grid[row_number] if item[0] is fact_cell)
+    stack = []
+    for distance in range(1, row_number + 1):
+        prior_number = row_number - distance
+        if _has_number_fact(rows[prior_number],
+                            prepared.get('fact_nodes', frozenset())):
+            continue
+        for cell, start, end in grid[prior_number]:
+            text, span = _visible_slice(cell, prepared)
+            # The strip here is the SELECTION test only — a cell that is nothing
+            # but an edge marker carries no header. The value appended is the
+            # untrimmed slice.
+            if end <= target_start or start >= target_end \
+                    or all(_is_edge_marker(c) for c in text) \
+                    or (start == 0 and target_start > 0):
+                continue                     # numeric-only headers ('2024') RETAINED
+            stack.append((text, span))
+    return stack
+
+
+# ---- document preparation (ONE parse per filing) --------------------------------
+
+class SemanticParseError(Exception):
+    """The document is not a readable Inline XBRL report.
+
+    Raised NOWHERE outside this module: both public doors turn it into one
+    truthful refusal, so no lxml or bs4 exception ever escapes to a caller.
+    """
+
+
+#: The ONE public reason. Ours, fixed, and identical for every unreadable
+#: document: a caller must never be able to read parser wording as a finding.
+# ---------------------------------------------------------------------------
+# EU-052/EU-053 (#827, cluster CL-039): the refusal TEXTS below and the
+# abstention-reason TOKENS scattered through this module (unsupported_unit_
+# type, malformed_format, unsupported_transform_registry, unsupported_
+# official_transform, malformed_fact_content_model, malformed_decimals_or_
+# precision, 'semantic and renderer views disagree', ...) are THE BINDER'S
+# OWN PUBLISHED VOCABULARY (the EU-160 adjudication, module-wide): they are
+# consumed as data by the locator/harvest and surface Core-side only as
+# free-prose DETAIL inside Core's own T1-coded outcomes (the F3
+# document-blame park carries the refused text; adapter exclusions carry
+# reason records). No spelling here is a T1 outcome code, and none is
+# minted as one. The RULES behind each token are cited or board-tracked on
+# their own rows; the DOCTYPE prohibition's exact EDGAR clause is cited
+# in place below (SEC EDGAR XBRL Guide June 2026 §11.1; EFM v49 §5.2.5.1).
+# ---------------------------------------------------------------------------
+NOT_WELL_FORMED = 'document is not a well-formed XML Inline XBRL report'
+#: SEC EDGAR XBRL Guide June 2026 §11.1 (EFM v49 December-2018 §5.2.5.1
+#: before it): an `.htm` attachment carrying a DOCTYPE declaration is not a
+#: valid Inline XBRL document. ITS OWN REASON, because such a document can be
+#: perfectly well-formed — reporting it as NOT_WELL_FORMED would be false.
+DOCTYPE_FORBIDDEN = 'document declares a DOCTYPE, which EDGAR forbids in an Inline XBRL report'
+
+
+#: THE ONE PARSER POLICY, shared by the bounded prolog pass and the semantic
+#: tree so the two can never drift apart. EU-039 (#827, DERIVE-CITATION):
+#:  - dependency API: lxml 6.0.2 (the installed pin; drift row 5.3.1->6.0.2
+#:    recorded) — lxml.etree.XMLParser documented parameters `recover`,
+#:    `resolve_entities`, `load_dtd`, `no_network`, `encoding`
+#:    (https://lxml.de/api/lxml.etree.XMLParser-class.html, version-matched);
+#:  - product security policy (no network, no DTD, no entity resolution at
+#:    parse time): the #826-accepted zero-credential/zero-network clean-lane
+#:    law (push 4d473822, reviewer-verified) applied at the parse boundary —
+#:    a filing's bytes may never trigger a fetch or expand hidden content;
+#:  - 'utf-8' decl-encoding choice: WHOEVER MAKES THE BYTES OWNS THEIR
+#:    ENCODING (test_parser_encoding_ownership's law; EDGAR EFM note in
+#:    BOARD:EDGAR-EFM).
+_PARSER_OPTIONS = dict(recover=False, resolve_entities=False, load_dtd=False,
+                       no_network=True, encoding='utf-8')
+
+
+class _DoctypeDeclared(Exception):
+    """Internal signal: the prolog declared a DOCTYPE."""
+
+
+class _RootReached(Exception):
+    """Internal signal: the prolog ended and the root element began."""
+
+
+class _Prolog:
+    """Reads the document PROLOG ONLY. It builds nothing and decides nothing.
+
+    THE DOCTYPE MUST BE REFUSED BEFORE THE ROOT ATTRIBUTES EXPAND. Nested
+    internal entities in a single attribute reach libxml2's entity
+    amplification limit DURING that expansion, which surfaces as an
+    `XMLSyntaxError`; a boundary placed after the parse therefore reported a
+    forbidden-but-well-formed document as not-well-formed. Reporting a
+    resource limit as a grammar failure is a false statement about the filing.
+
+    IT DOES NOT BUILD THE TREE. A target-built tree was tried and rejected: in
+    target mode libxml2 does not raise on an undeclared namespace prefix, so
+    `<hid:b/>` silently became `b` — a name turning into a DIFFERENT name,
+    which is the one thing this module exists to prevent. Namespace identity
+    stays where it is decided correctly, in lxml's own tree parse.
+
+    So this pass answers exactly one question — was a DOCTYPE declared before
+    the root began — and `start` ends it at the first root element, before the
+    body is read. `close()` re-raises the stored signal because lxml calls it
+    even after a callback raises and would otherwise replace the answer.
+    """
+
+    def __init__(self):
+        self._signal = None
+
+    def doctype(self, name, pubid, system):
+        self._signal = _DoctypeDeclared()
+        raise self._signal
+
+    def start(self, tag, attrib, nsmap=None):
+        self._signal = _RootReached()
+        raise self._signal
+
+    def close(self):
+        if self._signal is not None:
+            raise self._signal
+
+
+def _semantic_parse(html_text):
+    """The strict namespace-aware tree, or SemanticParseError.
+
+    Inline XBRL Part 1 requires a conforming report to be a well-formed XML
+    document, and namespaces are defined only over XML. THIS tree therefore owns
+    IDENTITY — expanded names and the in-scope namespace map — and nothing else.
+    It never owns visible text: that is the renderer view's job, and the two are
+    kept plainly separate so neither can quietly answer the other's question.
+
+    `recover=False` so a document that is not well-formed is refused rather than
+    silently repaired into a tree nobody wrote; the DTD and the network are off
+    so nothing is fetched, and entity RESOLUTION is off. Parser safety limits
+    stay at their defaults.
+
+    THE FLAGS ALONE DO NOT CLOSE THE ENTITY CHANNEL, so the DOCTYPE itself is
+    refused — by `_Prolog`, at the declaration, before the root attribute is
+    expanded. `resolve_entities=False` governs text nodes; lxml still expands
+    an internal-subset entity inside an ATTRIBUTE value, so `contextRef="&a;"`
+    bound a fact to a context the markup never names. EDGAR forbids the
+    declaration outright (June 2026 guide §11.1; EFM v49 December-2018
+    §5.2.5.1), so refusing it at THIS boundary — before any context, unit or
+    fact is read — closes the channel at its source rather than chasing each
+    place an entity might appear.
+
+    TWO LXML INVOCATIONS, ONE TREE. The first is bounded to the prolog and
+    stops at the first root element; it builds nothing and answers only
+    "was a DOCTYPE declared". The second is the ORIGINAL native parse,
+    unchanged, and remains the only semantic tree — because namespace identity
+    must be decided by lxml's tree parse, which alone refuses an undeclared
+    prefix instead of silently renaming the element. Both read the SAME bytes
+    under the SAME `_PARSER_OPTIONS`, so they cannot drift apart.
+
+    ONLY the two internal signals and `XMLSyntaxError` become refusals. A
+    TypeError or MemoryError is OUR bug or the machine's limit, and reporting
+    either as a malformed filing would be a false finding about the document.
+    Each parser is built PER CALL because the prolog target carries
+    per-document state.
+
+    THE BYTES ARE OURS, SO THE ENCODING IS OURS TO DECLARE. This function's
+    input contract is already-decoded text, which is then encoded to UTF-8 one
+    line below. Left unstated, a lawful `encoding="ISO-8859-1"` inside the
+    document would re-decode OUR UTF-8 bytes under a different codec: `é`
+    became `Ã©`, changing the expanded names, QName values and dimension
+    members THIS tree owns. The declaration describes the filer's original
+    bytes, which we no longer hold; it cannot describe ours.
+
+    The damage stayed inside this view — the renderer parse is handed the
+    original Python string and was never re-decoded — but it was not always
+    loud: where the mojibake is still a lawful XML name, nothing raises and the
+    identity is simply wrong.
+    """
+    # EU-126 (#827): utf-8 + surrogatepass is the F7 boundary clause's
+    # identity-anchor hash-encoding law (graph_row_contract) — one encoding
+    # for both passes, lone surrogates never crash the identity.
+    data = html_text.encode('utf-8', 'surrogatepass')   # encoded ONCE, so both
+    try:                                                # passes read one input
+        etree.fromstring(data, etree.XMLParser(target=_Prolog(),
+                                               **_PARSER_OPTIONS))
+    except _DoctypeDeclared:
+        raise SemanticParseError(DOCTYPE_FORBIDDEN) from None
+    except _RootReached:
+        pass                          # the prolog is clean; read the real tree
+    except etree.XMLSyntaxError as exc:
+        raise SemanticParseError(NOT_WELL_FORMED) from exc
+    try:
+        return etree.fromstring(data, etree.XMLParser(**_PARSER_OPTIONS))
+    except etree.XMLSyntaxError as exc:
+        raise SemanticParseError(NOT_WELL_FORMED) from exc
+
+
+class _EveryElementName(frozenset):
+    """A tag-name set that contains EVERY name, custom and foreign included.
+
+    EU-189 (#827, SEQ 854). bs4's builder takes `preserve_whitespace_tags` as a
+    membership test, and its default holds two names (`pre`, `textarea`). The
+    question this reader needs answered is not "is this one of two HTML
+    elements" but "does the parse keep what the filing wrote", and the answer
+    must be yes for `x-custom`, `ix:nonFraction` and every name nobody has
+    invented yet — so membership is answered by the RULE, not by a list. A
+    literal enumeration could not be written: the domain is open.
+    """
+    def __contains__(self, name):
+        return True
+
+
+def _preserving_builder():
+    """THE one renderer tree builder: pinned parser, whitespace intact.
+
+    A fresh instance per parse — bs4 mutates builder state while parsing, so a
+    shared module-level instance would leak one document's state into the next.
+    """
+    builder = LXMLTreeBuilder()
+    builder.preserve_whitespace_tags = _EveryElementName()
+    return builder
+
+
+def _soup(html_text):
+    """THE RENDERER VIEW — how the filing APPEARS, and nothing else.
+
+    A filing is read by people through a browser, so what counts as the visible
+    text, a row, a column heading or a section is decided by HTML's own rules —
+    including the repairs a browser performs on imperfect markup. This is
+    therefore an HTML parse ON PURPOSE, and it is the sole owner of `text`,
+    `node_spans` and every span this module ever reports.
+
+    It has NO authority over meaning. HTML has no namespaces and lower-cases
+    every element and attribute name, so `contextRef` and `contextref` and
+    `xmlns:XBRLI` and `xbrli:` all arrive indistinguishable — which is exactly
+    why identity lives in `_semantic_parse` instead, and why the two views are
+    never allowed to answer each other's questions.
+
+    Parsing an XML-declared filing as HTML is this function's DELIBERATE choice,
+    so `XMLParsedAsHTMLWarning` is ours to ignore — here, for this call, and
+    nowhere else. `catch_warnings` restores the caller's filters on exit.
+    """
+    # EU-131 (#827 FAIL-CLOSED; measured recall 1,903 corpus docs / 0
+    # refusals, g2_evid_recall_EU-131.txt): every parser warning EXCEPT the
+    # one deliberate suppression is a signal about the bytes and refuses
+    # TYPED — never a silent pass.
+    with warnings.catch_warnings():
+        warnings.simplefilter('error')
+        warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)
+        try:
+            # EU-132 (#827 DERIVE-CITATION): 'lxml' is the PINNED bs4 tree
+            # builder — Beautiful Soup 4.13.3, "Installing a parser" table
+            # (https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+            # #installing-a-parser), lxml's HTML parser, backed by libxml2
+            # via lxml 6.0.2 (drift row 5.3.1->6.0.2 recorded).
+            #
+            # EU-189 (#827, SEQ 854): the builder is constructed HERE, with
+            # whitespace preservation switched on, because bs4's DEFAULT
+            # renderer squeezes a whitespace-ONLY text node down to a single
+            # character ('  ' -> ' ', '\t\n' -> '\n') before this module can
+            # see it. That default is a rendering decision, and rendering
+            # decisions belong to `_visible_walk`'s CSS rules, not to the
+            # parser: the walk cannot apply `white-space: pre` to whitespace
+            # the parse already threw away. Verified against bs4 4.13.5,
+            # 4.14.3 and 4.15.0 — the squeeze is the default at every
+            # version, so this is configuration, NOT a package upgrade.
+            return BeautifulSoup(html_text, builder=_preserving_builder())
+        except Warning as w:
+            raise SemanticParseError(
+                f"renderer parse warning: {type(w).__name__}: {w}") from w
+
+
+#: The three namespaces this parser consumes. Fixed standard URIs are the
+#: vocabulary of the contract, not a sample-derived allowlist — and they are
+#: the ONLY thing that carries identity here. No conventional prefix (`xbrli`,
+#: `ix`, `xbrldi`, `i`) appears anywhere in this module's logic.
+#: The instance-namespace URI lives at its ONE owner,
+#: `exact_numbers.XBRL_INSTANCE_NAMESPACE`.
+#: EU-051 (#827): the URI is published by XBRL Dimensions 1.0, REC
+#: 2006-09-18 with corrected errata 2012-01-25 (the xbrldi vocabulary),
+#: https://www.xbrl.org/specification/dimensions/rec-2006-09-18/dimensions-rec-2006-09-18+corrected-errata-2012-01-25.html
+_DIMENSION_NS = 'http://xbrl.org/2006/xbrldi'
+#: INLINE XBRL 1.1, AND ONLY 1.1 — a standards-bound product boundary for the
+#: SEC filing route, not a shape inferred from the filings we happen to hold.
+#: SEC EDGAR XBRL Guide, June 2026, §11.2: an Inline XBRL document must be
+#: valid against Inline XBRL 1.1. Archived EFM v38 §5.2.5.2 names both the
+#: version and this exact namespace.
+#:
+#: The #827 corpus scanner counts the Inline XBRL 1.0 namespace as well, but
+#: that is DETECTION ONLY: it exists so a 1.0 document is visible rather than
+#: silently absent from a census. Being able to identify 1.0 is not a reason to
+#: support it here, and nothing below admits it.
+#: EU-047 (#827): the URI is published by Inline XBRL 1.1 Part 1 itself
+#: (REC 2013-11-18 + errata 2026-07-14, the current edition — the exact
+#: URL is at the nonFraction reader's spec-sources note); resolution is
+#: by THIS URI, never by prefix (pinned by the any-lawful-prefix family).
+_INLINE_NS = 'http://www.xbrl.org/2013/inlineXBRL'
+
+
+#: Namespaces in XML 1.0 §3 — the one prefix bound by the standard itself.
+#: EU-048 (#827): Namespaces in XML 1.0 (Third Edition), REC 2009-12-08,
+#: section 3 — the prefix xml is BY DEFINITION bound to this URI and needs
+#: no declaration, https://www.w3.org/TR/xml-names/#ns-decl .
+_XML_PREFIX_NS = 'http://www.w3.org/XML/1998/namespace'
+
+
+def _clark(uri, local):
+    """(namespace URI, local name) written the way lxml stores a tag.
+
+    EU-078 (#827 DERIVE-CITATION): the '{namespace}local' universal-name
+    (Clark) form is the PINNED dependency's documented tag representation —
+    lxml 6.0.2 (installed pin; drift row 5.3.1->6.0.2 recorded), namespaces
+    section of the official tutorial, https://lxml.de/tutorial.html#namespaces
+    ("the ElementTree API ... uses ... {namespace}localname"); notation after
+    J. Clark, http://www.jclark.com/xml/xmlns.htm."""
+    return '{%s}%s' % (uri, local)
+
+
+def _is(el, uri, local):
+    """Element identity: (namespace URI, local name). NEVER the prefix.
+
+    `el.tag` is the expanded name the parser resolved for THIS element,
+    honouring the declaration in scope, any inner rebinding, a default `xmlns=`,
+    and case. A comment or processing instruction carries a callable tag, so it
+    can never equal a name and needs no separate guard.
+    """
+    return el.tag == _clark(uri, local)
+
+
+def _children(el):
+    """Direct child ELEMENTS.
+
+    Comments and processing instructions are markup ABOUT a document, not
+    content in it. lxml yields them as children where the previous parser did
+    not, so they are excluded exactly once — here — rather than at each of the
+    four callers that would otherwise read a lawful comment as unknown markup.
+    """
+    return [k for k in el if isinstance(k.tag, str)]
+
+
+def _kids(el, uri, local):
+    """DIRECT children of that expanded name only.
+
+    XBRL 2.1 fixes WHERE every value lives, and this parser only ever asked
+    WHETHER one existed: a subtree search read a filer id inside `period`, dates
+    inside `entity`, and a `unitNumerator` with no `divide` above it at all as
+    though correctly placed.
+    """
+    return [k for k in el if k.tag == _clark(uri, local)]
+
+
+def _all(el, uri, local):
+    """Every DESCENDANT of that expanded name — used ONLY to prove nothing of
+    ours sits outside its container. Read from the direct children, then check
+    the subtree holds no more: markup we do not understand is never evidence."""
+    return [d for d in el.iter(_clark(uri, local)) if d is not el]
+
+
+
+
+def _qname(value, el):
+    """A QName VALUE resolved where it is written: (uri, local), or None.
+
+    A measure, an axis, a member or a concept name is a QName; its meaning comes
+    from the namespace its prefix is bound to, so `notaprefix:USD` names nothing
+    at all. An UNPREFIXED value takes the in-scope default namespace, which XBRL
+    2.1 §4.8.2 as corrected by the errata to 2013-02-20 (Appendix D erratum 62)
+    permits — `measure` is simply `xsd:QName`, so the rule is resolvability, not
+    the presence of a colon.
+
+    THE IN-SCOPE MAP COMES FROM THE PARSER (EU-121, #827 DERIVE-CITATION):
+    `nsmap` is the PINNED dependency's documented attribute — lxml 6.0.2
+    (installed pin; drift row 5.3.1->6.0.2 recorded), _Element.nsmap,
+    https://lxml.de/api/lxml.etree._Element-class.html#nsmap — lxml's own view
+    of the declarations in force AT THIS ELEMENT, innermost winning, with the
+    default under the key `None` — which is exactly what XML scoping means and
+    what the hand-written ancestor walk this replaces was re-deriving by hand.
+
+    THE GRAMMAR (EU-122, #827 DERIVE-CITATION, exact form): W3C Namespaces in
+    XML 1.0 (Third Edition), W3C Recommendation 8 December 2009,
+    https://www.w3.org/TR/2009/REC-xml-names-20091208/ — §4 "Qualified Names"
+    (QName ::= PrefixedName | UnprefixedName; PrefixedName wants a NON-EMPTY
+    Prefix ':' LocalPart, so ':x' names nothing; an unprefixed name is lawful).
+
+    ONE prefix is not in that map and never can be: `xml`. The SAME REC's §3
+    ("Declaring Namespaces") binds it to the URI below BY DEFINITION and says
+    it need not — and by its reservation, effectively must not — be declared,
+    so lxml reports an empty `nsmap` for a document using it. Calling such a QName undeclared would
+    be OUR error, not the filing's. This is the standard's own fixed binding, the
+    only one, and no other prefix gets a fallback of any kind.
+    """
+    if not isinstance(value, str) or not hasattr(el, 'nsmap'):
+        return None
+    # EU-122 (#827): the separator, the unprefixed arm and the empty-prefix
+    # refusal are Namespaces in XML 1.0 3e section 4 exactly — the URL and
+    # the production are quoted in the docstring above; ':x' names nothing
+    # because PrefixedName wants a NON-EMPTY prefix, and an unprefixed name
+    # is lawful and resolves through the default binding. Pinned: the
+    # separator drift makes every prefixed QName unresolvable (86 reds).
+    prefix, sep, local = value.partition(':')
+    # A colon with NOTHING before it is not a PrefixedName: the grammar wants a
+    # non-empty Prefix. The library cannot say so on its own, because it is only
+    # ever handed one part at a time.
+    if sep and not prefix:
+        return None
+    if not sep:
+        prefix, local = '', value
+    if not xml_name_ok(local) or (prefix and not xml_name_ok(prefix)):
+        return None
+    if prefix:
+        # AN EXPLICIT PREFIX MUST BE BOUND. Nothing binds it, nothing names it.
+        uri = el.nsmap.get(prefix) or (_XML_PREFIX_NS if prefix == 'xml'
+                                       else None)
+        return None if uri is None else (uri, local)
+    # UNPREFIXED: the in-scope default namespace if one exists, and otherwise
+    # the ABSENT namespace — which XML Schema QName resolution makes a lawful
+    # value, not an error. `(None, local)` says exactly that and cannot be
+    # confused with this function's own failure, a bare `None`. Whether such a
+    # name may be USED is the consumer's contract, not this resolver's: a
+    # concept or dimension with no namespace simply cannot equal a namespaceful
+    # graph target, so it abstains truthfully at the comparison instead of
+    # being called malformed here.
+    return (el.nsmap.get(None), local)
+
+
+_PREP_CACHE = {}
+#: EU-123 (#827): ONE document at a time — the derived capacity (see
+#: `_remember`). Named so the number is a stated decision, not a literal.
+_PREP_CACHE_MAX = 1
+
+
+#: XBRL 2.1 §4.7.3 makes `scheme` REQUIRED, and it is what gives the digits
+#: their meaning: the same ten digits under another registry's scheme name a
+#: DIFFERENT entity. The SEC filer manual fixes this one URI, and the graph's
+#: `entity_cik` IS a SEC CIK — so this is the only scheme under which those
+#: digits may be read as one. Measured over the frozen cache: 733,172
+#: identifiers, every one carrying exactly this scheme and exactly ten ASCII
+#: digits, so enforcing all of it costs zero real evidence.
+# EU-042 (#827): the URI is the SEC's own published identifier scheme for
+# EDGAR filer CIKs — EDGAR Filer Manual (Volume II) / the EDGAR XBRL Guide
+# (June 2026 edition, the same edition cited at the Inline XBRL version
+# boundary above) require xbrli:identifier@scheme to be exactly this value
+# for a CIK, https://www.sec.gov/edgar/filer-information/specifications ;
+# XBRL 2.1 section 4.7.3 makes the scheme REQUIRED and it is what gives the
+# digits their meaning (the census beside this constant). A drifted URI
+# refuses every filing (216 reds).
+SEC_CIK_SCHEME = 'http://www.sec.gov/CIK'
+#: XML 1.0 S — the ONLY whitespace a document may pad a value with. Python's
+#: `.strip()` also eats NBSP, ideographic and zero-width space, which would
+#: quietly normalise ` 0000320193` into a clean CIK.
+#:
+#: THE DECLARATION IS GONE, and the rule now has ONE owner. It held the same
+#: four characters as `exact_numbers.XML_WS`, which this module already imports,
+#: so XML 1.0 5e §2.3 was written twice — `xbrl_attach` reading one name and
+#: this module the other — under a comment at that import already claiming a
+#: single owner. Editing either copy would have moved half the consumers.
+
+
+def _sec_cik(identifier):
+    """The filer's ten ASCII digits, or None when the markup does not state
+    them lawfully.
+
+    BOTH HALVES CARRY whiteSpace=COLLAPSE: XBRL 2.1 declares the identifier's
+    content as xs:token and its `scheme` as a restricted xs:anyURI. So the same
+    shared `_collapse` reads them — never `_text()`, which collapses UNICODE
+    whitespace and deletes zero-width characters, and would normalise away the
+    very padding this rule exists to catch.
+    """
+    # EU-125 (#827): the '' default makes an ABSENT scheme compare unequal —
+    # i.e. refuse. That is the whole point: XBRL 2.1 section 4.7.3 makes
+    # scheme REQUIRED and it is what gives the digits meaning (the constant
+    # above carries the clause, the SEC filer-manual URI and the 733,172-row
+    # census), so a missing scheme must never be read as "the SEC one".
+    # Measured: with the default flipped to the scheme itself, a
+    # scheme-less identifier binds the CIK — the gap this row pins.
+    if (_typed(identifier, 'scheme') or '') != SEC_CIK_SCHEME:
+        return None
+    raw = _leaf(identifier)
+    if raw is None:
+        return None
+    digits = _collapse(raw)
+    # LEXICAL ONLY, from the one owner: the all-zero non-registrant marker is a
+    # well-formed identifier in a filing, and refusing it is `graph_cik`'s job.
+    return digits if re.fullmatch(_SEC_CIK_10_PATTERN, digits) else None
+
+
+def _ordered(parent, *names):
+    """The named direct children appear in XBRL 2.1's declared sequence.
+
+    ORDER IS PART OF THE SCHEMA, not decoration. `xs:sequence` fixes entity
+    before period before scenario, identifier before segment, startDate before
+    endDate, and numerator before denominator — and none of it was checked, so
+    a reversed divide read `share/USD` as though it were `USD/share`: a
+    different unit wearing the same name.
+    """
+    seen = []
+    for t in _children(parent):
+        for rank, (uri, local) in enumerate(names):
+            if _is(t, uri, local):
+                seen.append(rank)
+                break
+    return seen == sorted(seen)
+
+
+def _only(parent, *names):
+    """Every DIRECT child of `parent` is one of these expanded names.
+
+    Markup we do not understand sitting where our own elements belong is not
+    evidence to read around — it means the shape is not the one XBRL declares.
+    """
+    return all(any(_is(t, uri, local) for uri, local in names)
+               for t in _children(parent))
+
+
+def _xml_id(value):
+    """The element's id, or None when it is not a lawful XML name.
+
+    An XML ID is an NCName, and THE GRAMMAR IS THE LIBRARY'S — `xml_name_ok`,
+    the same owner every other name in this module is asked of. The ASCII regex
+    that stood here restated it and got it wrong in both directions: it rejected
+    the lawful Unicode NCNames XML permits, and it was a second grammar to keep
+    in step with the first.
+    """
+    return value if isinstance(value, str) and xml_name_ok(value) else None
+
+
+def _leaf(el):
+    """A leaf element's complete character content, or None when it carries an
+    ELEMENT child.
+
+    Flattening markup made `<identifier><b>0000320193</b></identifier>` read as
+    a clean CIK and `<startDate><b>2026-01-01</b></startDate>` as a clean date.
+    A value with structure inside it is not a value, so an element child still
+    refuses — including an EMPTY one whose tail carries the whole value.
+
+    COMMENTS AND PIs ARE NOT CONTENT (XML 1.0 5e §2.5/§2.6: a processor must
+    not pass them as character data), so they cannot make a lawful value
+    unreadable. `len(el)` counted them, which REFUSED lawful filings at every
+    door this helper serves — identifier, instant/startDate/endDate, the
+    dimension member value and measure. The old note feared reading
+    `<startDate>2026-<!--x-->01-01</startDate>` as the truncated `2026-`; that
+    is why the runs are JOINED in document order rather than cut. Not
+    `itertext()`, which would also flatten the real element children above.
+
+    THE ONLY NON-ELEMENT CHILDREN THAT REACH HERE ARE THOSE TWO. The third
+    kind, an unresolved general entity, cannot: an UNDECLARED entity is an XML
+    syntax error, and a DECLARED one needs the DOCTYPE that `_semantic_parse`
+    refuses at the document boundary (SEC EDGAR XBRL Guide June 2026 §11.1).
+    So the rule is stated on what it actually decides — element or not — and
+    the entity case is owned once, upstream, instead of twice.
+    """
+    if any(isinstance(child.tag, str) for child in el):
+        return None
+    # EU-105 (#827): FAIL-CLOSED adjudication of the two '' arms — a leaf
+    # with no text (or a tail-less comment/PI child) reads as the truthful
+    # empty string, and every consumer validates the RESULT against its own
+    # grammar (CIK identifier, dateUnion, QName, measure), so an empty
+    # reading REFUSES at the consumer and can never fabricate a value
+    # (measured: a fabricating default reddens the rebuilt-VALUE pins).
+    return (el.text or '') + ''.join(child.tail or '' for child in el)
+
+
+def _measure_text(m):
+    """A measure's QName value, read as xs:QName declares it.
+
+    ONE reader, so the string that is VALIDATED as a QName and the string that
+    is STORED are the same string. They used to be produced by two different
+    functions, one of which collapsed UNICODE whitespace and deleted zero-width
+    characters — a repair, and a QName is never repaired.
+
+    `_collapse` is the type's own facet and nothing more: it is the SAME
+    function every other collapse-faceted value goes through, so a measure, a
+    member, an axis and a fact's name cannot drift into four spellings of one
+    rule. Internal space stays invalid.
+    """
+    # EU-107 (#827): the or-'' arm is UNOBSERVABLE BY MEASUREMENT — a
+    # measure with element structure is refused UPSTREAM by the unit
+    # content-model law (door-probed: malformed_unit_structure identically
+    # with the arm intact and with a fabricating 'iso4217:USD' default;
+    # 182 suite nodes green under the fabrication), so _leaf's None never
+    # reaches this join in a lawful flow. If a future path reached it, ''
+    # fails xs:QName validation at the one reader — withhold-only, never a
+    # fabricated measure. No mutation entry per the F1/entry-120
+    # no-detector-for-unobservable precedent (the EU-147 form).
+    return _collapse(_leaf(m) or '')
+
+
+#: THE two namespace URIs — XML Schema 1.0 Structures 2e §2.6 defines the XS
+#: vocabulary URI and the XSI instance URI. ONE definition each.
+#: EU-049 (#827): exact edition — XML Schema Part 1: Structures, Second
+#: Edition, REC 2004-10-28, section 2.6 (the xsi attribute vocabulary
+#: lives in this URI), https://www.w3.org/TR/xmlschema-1/#no-xmlns .
+_XSI_NS = 'http://www.w3.org/2001/XMLSchema-instance'
+_XS_NS = 'http://www.w3.org/2001/XMLSchema'
+#: THE context grammar's fixed types: XBRL 2.1 REC 2003-12-31 + corrected
+#: errata 2013-02-20, official instance schema lines 602-680.
+#: xbrli:dateUnion admits exactly this triad (:629-636); xsi:type may lawfully
+#: restate any member, under ANY in-scope prefix.
+# CL-028 (#827, EU-036/037/038): THE SHAPE VOCABULARY BELOW IS THE
+# INSTANCE SCHEMA'S OWN, transcribed and cited exactly — XBRL 2.1 REC
+# 2003-12-31 with corrected errata 2013-02-20, normative schema
+# xbrl-instance-2003-12-31.xsd (the EU-153 URL): element names, child
+# sets, cardinalities and the declared attributes (context/@id;
+# identifier/@scheme REQUIRED per 4.7.3; unit/@id) mirror the schema's
+# content models; the type names (contextEntityType, contextPeriodType,
+# contextScenarioType, measuresType, dateUnion = the union of xs:date and
+# xs:dateTime) are the schema's published type identities (EU-038: the
+# triad is exactly what dateUnion admits). The CONTENT-MODEL words
+# ('empty' — no character item at all; 'element-only' — XML whitespace
+# between children and nothing else; 'simple') are W3C XML Schema Part 1:
+# Structures 2e, REC 2004-10-28, section 3.4 complex type content types,
+# https://www.w3.org/TR/xmlschema-1/ . Recognition transcribed, no rule
+# invented.
+_CTX_DATE_TRIAD = frozenset({(XBRL_INSTANCE_NAMESPACE, 'dateUnion'),
+                             (_XS_NS, 'date'), (_XS_NS, 'dateTime')})
+#: Each supported element's EXACT declared type (same schema, :602-680 for the
+#: context grammar, :681-720 for the unit grammar). The EMPTY sets are the law,
+#: not a gap: those elements are declared with ANONYMOUS types, and §2.6.1 /
+#: §3.3.4 require an asserted type to be validly derived from the declared one
+#: — nothing can derive from an anonymous type, so they admit NO xsi:type at
+#: all. Re-proven identical in the 2013 Inline-XBRL modified instance schema,
+#: so no row here is a version artifact.
+_SHAPE_TYPES = {
+    'entity': frozenset({(XBRL_INSTANCE_NAMESPACE, 'contextEntityType')}),
+    'period': frozenset({(XBRL_INSTANCE_NAMESPACE, 'contextPeriodType')}),
+    'scenario': frozenset({(XBRL_INSTANCE_NAMESPACE, 'contextScenarioType')}),
+    'instant': _CTX_DATE_TRIAD, 'startDate': _CTX_DATE_TRIAD,
+    'endDate': _CTX_DATE_TRIAD,
+    'context': frozenset(), 'identifier': frozenset(),
+    'segment': frozenset(), 'forever': frozenset(),
+    # the unit grammar (XBRL 2.1 §4.8)
+    'unit': frozenset(), 'divide': frozenset(),
+    'unitNumerator': frozenset({(XBRL_INSTANCE_NAMESPACE, 'measuresType')}),
+    'unitDenominator': frozenset({(XBRL_INSTANCE_NAMESPACE, 'measuresType')}),
+    'measure': frozenset({(_XS_NS, 'QName')}),
+}
+#: The only DECLARED no-namespace attributes anywhere in the supported grammar.
+#: `unit/@id` is type="ID" use="required"; its VALUE and uniqueness stay with
+#: the existing resource-indexing door, which is why only the NAME appears here.
+_SHAPE_ATTRS = {'context': frozenset({'id'}),
+                'identifier': frozenset({'scheme'}),
+                'unit': frozenset({'id'})}
+#: The declared CONTENT MODEL. `empty` admits no character item at all, not
+#: even XML whitespace; `element-only` admits XML whitespace between children
+#: and nothing else; `simple` means the characters ARE the value and belong to
+#: the reader that owns them.
+_SHAPE_CONTENT = {
+    'context': 'element-only', 'entity': 'element-only',
+    'period': 'element-only', 'segment': 'element-only',
+    'scenario': 'element-only', 'forever': 'empty',
+    'identifier': 'simple', 'instant': 'simple',
+    'startDate': 'simple', 'endDate': 'simple',
+    'unit': 'element-only', 'divide': 'element-only',
+    'unitNumerator': 'element-only', 'unitDenominator': 'element-only',
+    'measure': 'simple',
+}
+#: The elements whose asserted xs: member must also match the VALUE's kind.
+_SHAPE_TYPED_VALUE = frozenset({'instant', 'startDate', 'endDate'})
+#: A unit element asserts a RESOLVED non-standard type. Its own reason, not
+#: `unsupported_context_type` and not "malformed": the declaration resolves, so
+#: the filing may be perfectly valid — we simply cannot prove the derivation
+#: without the foreign schema, and calling a filing malformed because we cannot
+#: check it would be a false finding about the document.
+UNSUPPORTED_UNIT_TYPE = 'unsupported_unit_type'
+
+
+def _shape(el, local):
+    """THE instance-schema shape law for ONE element: its xsi:type, its
+    attributes and its declared character content. 'malformed', 'unsupported',
+    or None when the element is well shaped.
+
+    ONE OWNER FOR TWO GRAMMARS (#827 B12 SEQ 369, extended B16). Contexts and
+    units are judged by the same three questions against the same pinned
+    schema; only the TABLE differs, so this is one rule with data rather than
+    two rules that could drift apart. It judges ONLY those three things — it is
+    not, and must not become, a general XML validator.
+
+    xsi:type is judged FIRST, so a lawful custom-derived type parks as
+    unsupported BEFORE its unknown attributes could be mislabeled malformed.
+    """
+    # CL-085 (#827, EU-130): the Clark-form read is xsi:type exactly — XML
+    # Schema Part 1: Structures 2e, REC 2004-10-28, section 2.6.1 (the
+    # instance attribute that ASSERTS a type),
+    # https://www.w3.org/TR/xmlschema-1/#xsi_type ; the asserted type must
+    # be validly derived from the declared one, which is why an anonymous
+    # declared type admits no replacement (section 3.3.4, quoted below).
+    # A drifted read makes every asserted type invisible (32 reds).
+    t = el.get('{%s}type' % _XSI_NS)
+    if t is not None:
+        q = _qname(_collapse(t), el)       # THE one QName owner — never a
+        if q is None:                      # second strip/partition parser
+            return 'malformed'             # malformed/undeclared QName
+        ns, lname = q                      # resolved even when ns is None
+        allowed = _SHAPE_TYPES[local]
+        if not allowed:
+            # AN ANONYMOUS DECLARED TYPE ADMITS NO REPLACEMENT AT ALL: an
+            # asserted type must be validly DERIVED FROM the declared one
+            # (XML Schema 1.0 Structures 2e §2.6.1, §3.3.4), and nothing
+            # can reference an anonymous type. Not a custom-park case.
+            return 'malformed'
+        if (ns, lname) not in allowed:
+            if ns in (XBRL_INSTANCE_NAMESPACE, _XS_NS):
+                return 'malformed'         # a DIFFERENT known official type
+            return 'unsupported'           # resolved non-standard type
+        if ns == _XS_NS and local in _SHAPE_TYPED_VALUE:
+            # THE TYPE CONSTRAINS THE VALUE (SEQ 373 B, XSD-proven): the
+            # one shared dateUnion owner classifies the raw leaf, and the
+            # declared member must match its kind. Outside the lexical
+            # space entirely -> the existing downstream law owns it; a
+            # lawful-but-unrepresentable date (.park) stays lawful here.
+            try:
+                if parse_filing_boundary(el.text or '').kind != lname:
+                    return 'malformed'
+            except ExactError:
+                pass
+    for k in el.attrib:
+        qk = etree.QName(k)
+        if qk.namespace is None:
+            if qk.localname not in _SHAPE_ATTRS.get(local, ()):
+                return 'malformed'         # ordinary undeclared attribute
+        elif qk.namespace == _XSI_NS and (qk.localname in _XSI_PASS
+                                          or qk.localname == 'type'):
+            continue                       # xsi specials; type judged above
+        else:
+            return 'malformed'             # xsi:nil, xml:*, any foreign
+    # CL-086 (#827, EU-127 + EU-128): FAIL-CLOSED shape mechanics — every
+    # verdict this function can emit is a REFUSAL ('malformed' for broken
+    # markup, 'unsupported' for a resolved non-standard type) and the only
+    # ok-path is falling through to None, so a drifted verdict word makes
+    # a refusal INVISIBLE to the caller (measured: 15 reds) rather than
+    # inventing one. The two '' defaults here are the truthful
+    # no-character-data reading of an absent text/tail — fabricating any
+    # character there would make every lawful element-only container look
+    # malformed (measured: 119 reds).
+    texts = [el.text or ''] + [c.tail or '' for c in el]
+    kind = _SHAPE_CONTENT[local]
+    # CL-085 (#827, EU-129): the two content-kind words are the XML Schema
+    # Part 1 2e section 3.4 content-type vocabulary (empty / element-only;
+    # the CL-028 block above carries the URL), and each is enforced exactly
+    # as the spec defines it — 'empty' admits NO character item, not even
+    # XML whitespace; 'element-only' admits XML whitespace between children
+    # and nothing else. A drifted word silently skips its check (4 reds).
+    if kind == 'empty':                    # NO character item at all,
+        if any(texts) or any(isinstance(c.tag, str) for c in el):
+            return 'malformed'             # XML whitespace included
+    elif kind == 'element-only':
+        if any(s.strip(XML_WS) for s in texts):
+            return 'malformed'             # non-XML-whitespace character data
+    return None                            # 'simple': the text IS the value,
+                                           # owned by its own reader
+#: The two schema-location hints §2.6.3 permits on ANY element. `xsi:type`
+#: (§2.6.1) is judged separately above and is NEVER unconditional — the
+#: asserted type must be validly derived from the declared one. The fourth
+#: schema-related attribute, `xsi:nil`, is excluded HERE because none of these
+#: XBRL context declarations is nillable.
+#: EU-050 (#827): exact clause — XML Schema Part 1 2e section 2.6.3
+#: xsi:schemaLocation / xsi:noNamespaceSchemaLocation MAY appear on any
+#: element (hints, not admissions),
+#: https://www.w3.org/TR/xmlschema-1/#xsi_schemaLocation .
+_XSI_PASS = frozenset({'schemaLocation', 'noNamespaceSchemaLocation'})
+
+
+def _parse_context(context):
+    """The XBRL 2.1 §4.7 context: a usable evidence DICT, a truthful refusal
+    REASON STRING, or None for malformed structure (the caller names that one).
+
+    The shape law is ONE entity (ONE identifier, at most one segment), ONE
+    period holding exactly one form, at most one scenario, dimension members
+    only inside a segment or scenario, and — per element — its declared
+    attributes, its declared type, and its declared character content."""
+    I, D = XBRL_INSTANCE_NAMESPACE, _DIMENSION_NS
+    # CL-075 (#827, EU-115 + EU-116): THE ELEMENT AND ATTRIBUTE NAMES read
+    # in this function are the two specs' own vocabulary, transcribed:
+    # entity / identifier@scheme / segment / period / instant / startDate /
+    # endDate / forever / scenario are the XBRL 2.1 section 4.7 context
+    # grammar as the normative instance schema declares it (the CL-028
+    # citation block above carries the exact edition, errata and schema
+    # name); explicitMember / typedMember and their @dimension attribute
+    # are XBRL Dimensions 1.0, REC 2006-09-18 with corrected errata
+    # 2012-01-25, section 3.1.4 (the xbrldi vocabulary whose URI is cited
+    # at _DIMENSION_NS). Every name is asked for in its OWN namespace (I =
+    # instance, D = xbrldi), never by prefix; a drifted name silently
+    # empties its list, so both are pinned (measured: 119 and 3 reds).
+    entities, periods = _kids(context, I, 'entity'), _kids(context, I, 'period')
+    scenarios = _kids(context, I, 'scenario')
+    if len(entities) != 1 or len(periods) != 1 or len(scenarios) > 1:
+        return None
+    entity, period = entities[0], periods[0]
+    idents = _kids(entity, I, 'identifier')
+    segments = _kids(entity, I, 'segment')
+    if len(idents) != 1 or len(segments) > 1:
+        return None
+    boxes = segments + scenarios
+    members = [m for b in boxes for m in _kids(b, D, 'explicitMember')]
+    typed = [t for b in boxes for t in _kids(b, D, 'typedMember')]
+    inst = _kids(period, I, 'instant')
+    start = _kids(period, I, 'startDate')
+    end = _kids(period, I, 'endDate')
+    ever = _kids(period, I, 'forever')
+    # (the `placed` table went with the descendant check it fed — see below)
+    # EXACTLY ONE PERIOD FORM (§4.7.2). One tuple states the whole law that the
+    # old arithmetic spread over a `kinds` sum plus four duplicate guards — and
+    # it closes the case that sum could not see, TWO `forever` collapsing to one.
+    if tuple(map(len, (inst, start, end, ever))) not in (
+            (1, 0, 0, 0), (0, 1, 1, 0), (0, 0, 0, 1)):
+        return None
+
+    for el, name in ((context, 'context'), (entity, 'entity'),
+                     (idents[0], 'identifier'), (period, 'period'),
+                     *((s, 'segment') for s in segments),
+                     *((s, 'scenario') for s in scenarios),
+                     *((d, 'instant') for d in inst),
+                     *((d, 'startDate') for d in start),
+                     *((d, 'endDate') for d in end),
+                     *((f, 'forever') for f in ever)):
+        # CL-076 (#827, EU-113): FAIL-CLOSED adjudication of this ladder's
+        # mechanics — the two words compared are _shape's OWN published
+        # verdict vocabulary (its docstring names all three), and BOTH
+        # arms REFUSE: 'malformed' returns None so the caller names the
+        # structural failure, 'unsupported' returns the named reason
+        # verbatim; nothing binds on a non-'ok' verdict. The [0]
+        # subscripts above are reachable only AFTER the exactly-one
+        # cardinality gates (len(...) != 1 -> return None), so they can
+        # never pick among candidates. Either word drifting is loud
+        # (measured: 37 and 3 reds).
+        verdict = _shape(el, name)
+        if verdict == 'malformed':
+            return None
+        if verdict == 'unsupported':           # the string IS the reason — the
+            return 'unsupported_context_type'  # caller stores it verbatim
+    # THE DESCENDANT `placed` CHECK IS DELETED. It compared each direct-child
+    # list against EVERY same-named descendant, which the XBRL content model
+    # does not license: `segment`/`scenario` are open and a `typedMember` value
+    # may lawfully nest arbitrary markup, so a nested element merely SHARING a
+    # local name refused the whole context — and refused it as malformed,
+    # taking the naming decision away from the typed and open-content rules
+    # that own it.
+    #
+    # Its job is already done, and by rules that are true: the direct-child
+    # checks above close the supported tree, `_ordered` fixes the sequence,
+    # and both open-content classes (typed, non-XDT) park BEFORE anything
+    # inside them is interpreted — so no arbitrary descendant is ever read as
+    # evidence. The regression lane is what holds that claim up.
+    # UNKNOWN DIRECT CHILDREN. Measured on DIRECT children only — a descendant
+    # scan counts the 2,112 lawful typedMember VALUES in the cache and would
+    # have argued for refusing real contexts. Direct children of a context are
+    # exactly entity and period (733,172/733,172); of an entity, identifier and
+    # segment; of a period, its one form; of segment/scenario, members only.
+    if not _only(context, (I, 'entity'), (I, 'period'), (I, 'scenario')):
+        return None
+    if not _only(entity, (I, 'identifier'), (I, 'segment')):
+        return None
+    if not _only(period, (I, 'instant'), (I, 'startDate'), (I, 'endDate'),
+                 (I, 'forever')):
+        return None
+    # ONE CONTENT-MODEL RULE FOR THE OPEN CONTAINERS, replacing a restriction
+    # the standard does not impose. XBRL 2.1 declares `segment` and
+    # `scenario` OPEN (`xs:any`, `##other`) and XBRL Dimensions 1.0 §3.1.4.4
+    # says plainly that not every element in them is a dimension element — so
+    # `_only(box, explicitMember, typedMember)` refused lawful filings, and
+    # refused them as MALFORMED, which accuses the filer of an error they did
+    # not make.
+    #
+    # What the schema DOES fix is cardinality: the open content is
+    # `minOccurs="1"`, so a container that is present must hold at least one
+    # element. Present-and-empty is genuinely malformed — and it used to
+    # ATTACH, stating a dimension set it did not carry.
+    #
+    #   absent            -> allowed (the container is optional)
+    #   present, empty    -> malformed, here
+    #   present, members  -> handled below
+    #   present, other    -> LAWFUL but unrepresentable; recorded as
+    #                        `non_xdt` and named by the caller, never dropped —
+    #                        ignoring it would merge two distinct contexts.
+    # `##other` MEANS OTHER — it admits any namespace EXCEPT the instance
+    # namespace itself. So a child in the xbrli namespace is not lawful open
+    # content at all; it is markup in a place the schema forbids, and that is
+    # genuinely malformed. An existing attack case (`xbrli:notAMember` inside a
+    # segment) is exactly this, and it caught my first rule treating every
+    # non-member child as lawful.
+    kids = [child for box in boxes for child in _children(box)]
+    if any(not _children(box) for box in boxes):
+        return None                       # present and empty: minOccurs="1"
+    # THE LIBRARY'S NAMESPACE IDENTITY, not a prefix-match on the serialised
+    # tag. `startswith('{uri}')` re-implements namespace parsing with string
+    # matching — the exact habit this audit exists to remove — and would also
+    # match a longer URI that merely begins with this one.
+    if any(etree.QName(c).namespace == I for c in kids):
+        return None                       # instance-namespace child: not `##other`
+    non_xdt = any(not (_is(child, D, 'explicitMember')
+                       or _is(child, D, 'typedMember')) for child in kids)
+    if any(_leaf(d) is None for d in inst + start + end):
+        return None
+    if not (_ordered(context, (I, 'entity'), (I, 'period'), (I, 'scenario'))
+            and _ordered(entity, (I, 'identifier'), (I, 'segment'))
+            and _ordered(period, (I, 'startDate'), (I, 'endDate'))):
+        return None
+    # VALIDATE, THEN SORT. A member with no `dimension=` contributed `None`, and
+    # sorting `None` against a string raises TypeError — so ONE nameless
+    # dimension beside a lawful one CRASHED the public door instead of parking
+    # the fact. A crash is not a refusal: it takes the whole event down rather
+    # than one number. Lawful values are passed through UNCHANGED; only the
+    # missing and the blank are refused.
+    cik = _sec_cik(idents[0])
+    if cik is None:
+        return None
+    # TWO VIEWS OF ONE READING, built in this single loop from the same two
+    # values, so they can never describe different dimensions:
+    #   `spellings` — the QNames AS THE FILING WROTE THEM, collapsed. This is
+    #       the frozen product output and nothing else; a prefix is this
+    #       document's private alias and proves no identity.
+    #   `dims`      — the EXPANDED (namespace URI, local name) pairs. This is
+    #       the only thing any semantic comparison may look at.
+    # Naming them apart is what stops the older mistake from returning: one
+    # field serving both purposes must be wrong for one of them.
+    spellings, dims = [], []
+    for member in members:
+        # SIMPLE TEXT ONLY, and both halves must be QNames this document
+        # declares: `<explicitMember><b>a:M</b></explicitMember>` was flattened
+        # by `get_text` into a clean member name.
+        # BOTH ARE xs:QName, so both go through the ONE collapse the facet
+        # calls for — the same function the fact's own name uses.
+        axis, value = _typed(member, 'dimension'), _leaf(member)
+        if value is None or axis is None:
+            return None
+        value = _collapse(value)          # content, not an attribute
+        # BOTH HALVES ARE QNAMES, resolved in the scope of the member that
+        # writes them — and the EXPANDED NAME is what the filing publishes.
+        #
+        # The raw spelling used to travel instead, because "that is the graph's
+        # contract". It is not, and could not be: `srt:` is a prefix THIS
+        # document chose, and the graph's `srt:` is a prefix some other document
+        # chose. Comparing them is comparing two unrelated aliases and calling
+        # the result identity. The graph's own expanded name is now available
+        # (its namespace is decoded at the adapter boundary), so both sides can
+        # state the same thing.
+        axis_name, member_name = _qname(axis, member), _qname(value, member)
+        if axis_name is None or member_name is None:
+            return None
+        spellings.append((axis, value))
+        dims.append((axis_name, member_name))
+    # ONE VALUE PER DIMENSION, and the dimension is the EXPANDED axis.
+    #
+    # XBRL Dimensions 1.0 §3.1.4.2: a context MUST NOT contain more than one
+    # value for the same dimension — `xbrldie:RepeatedDimensionInInstanceError`.
+    #   https://www.xbrl.org/specification/dimensions/per-2011-11-20/
+    #   dimensions-per-2011-11-20.html
+    #
+    # Checked on the RESOLVED axis, because that is what a dimension IS. Two
+    # members writing `srt:GeographicalAxis` and `s2:GeographicalAxis` with both
+    # prefixes bound to one URI give the SAME axis two values, and a uniqueness
+    # test on the spelling sees two different axes and lets it through.
+    if len({axis for axis, _member in dims}) != len(dims):
+        return None
+    # THE RAW LEAF TEXT reaches the strict dateUnion parser. `_text()`
+    # collapses UNICODE whitespace and deletes zero-width characters, so an
+    # NBSP- or ZWSP-padded date was normalised into a clean one before the
+    # parser could refuse it. The parser strips XML whitespace itself.
+    # CL-076 (#827, EU-114): the emitted pair's POSITIONS carry the
+    # meaning downstream — ('', instant) IS the instant form (empty start),
+    # (start, end) the duration form, ('', '') the no-datable-period form
+    # (<forever> and friends park at their own owner). Every consumer reads
+    # the pair positionally, so a swap would silently retype an instant as
+    # a start-only duration (measured: 5 reds); the [0] subscripts are
+    # guarded by the same exactly-one gates as above.
+    return {'period': ('', _leaf(inst[0])) if inst else
+                      (_leaf(start[0]), _leaf(end[0])) if start else ('', ''),
+            # `dims` KEEPS ITS ORIGINAL MEANING — the written spellings, which
+            # the frozen product output publishes unchanged. Identity moved to
+            # its own field instead of being smuggled into this one, so no
+            # consumer silently changed shape.
+            'dims': tuple(sorted(spellings)),
+            'dims_expanded': tuple(sorted(dims)),
+            'typed': bool(typed),
+            # LAWFUL OPEN CONTENT, carried out truthfully. The caller
+            # names the refusal; this parser never drops the content,
+            # because dropping it would merge two distinct contexts.
+            'non_xdt': non_xdt,
+            'entity': cik}
+
+
+def _parse_unit(u):
+    """The XBRL 2.1 §4.8 unit shape, or None: EITHER direct measures OR exactly
+    one divide with one numerator and one denominator.
+
+    CONTAINERS ARE COUNTED, MEASURES ARE NOT. A container may lawfully carry
+    several measures — a compound unit — and those must keep binding; refusing
+    them is the classifier's job downstream, never the parser's.
+    """
+    I = XBRL_INSTANCE_NAMESPACE
+    # CL-078 (#827, EU-120): the unit element names are XBRL 2.1's own —
+    # section 4.8 unit: EITHER one or more xbrli:measure children OR exactly
+    # one xbrli:divide holding exactly one xbrli:unitNumerator and one
+    # xbrli:unitDenominator, each holding measures (the normative instance
+    # schema; edition/errata/URL at the CL-028 block). Asked in the
+    # instance namespace, never by prefix; a drifted name silently empties
+    # its list (measured: the measure drift reds 80 nodes).
+    divides = _kids(u, I, 'divide')
+    plain = _kids(u, I, 'measure')
+    if len(divides) > 1 or (divides and plain) or not (divides or plain):
+        return None
+    n_meas = d_meas = []
+    if divides:
+        nums = _kids(divides[0], I, 'unitNumerator')
+        dens = _kids(divides[0], I, 'unitDenominator')
+        if len(nums) != 1 or len(dens) != 1:
+            return None
+        n_meas = _kids(nums[0], I, 'measure')
+        d_meas = _kids(dens[0], I, 'measure')
+        if not n_meas or not d_meas:
+            return None
+        if not _ordered(divides[0], (I, 'unitNumerator'), (I, 'unitDenominator')):
+            return None
+        # UNKNOWN CHILDREN INSIDE THE RATIO ITSELF. The unit's own children
+        # were checked; the divide's were not, so anything could ride inside.
+        if not _only(divides[0], (I, 'unitNumerator'), (I, 'unitDenominator')):
+            return None
+        if any(not _only(side, (I, 'measure')) for side in (nums[0], dens[0])):
+            return None
+        num, den = (tuple(_measure_text(m) for m in n_meas),
+                    tuple(_measure_text(m) for m in d_meas))
+        # A MEASURE ON BOTH SIDES cancels. Comparing whole TUPLES only caught
+        # the exact `USD/USD` case, so `USD·shares / shares` — which is USD
+        # wearing a fake ratio — passed. The test is OVERLAP, and it is taken on
+        # the EXPANDED names: two prefixes may lawfully alias ONE namespace, so
+        # `iso4217:USD` over `cur:USD` is the same measure on both sides wearing
+        # different spellings, and comparing the raw strings could not see it.
+        # That ratio cancels to nothing and would attach a fabricated unit.
+        if (set(_qname(_measure_text(m), m) for m in n_meas)
+                & set(_qname(_measure_text(m), m) for m in d_meas)):
+            return None
+    else:
+        num = den = ()
+    # NO CONTAINMENT COUNT HERE, and its absence is proven rather than assumed
+    # (#827 round 7b, owner ruling). A unit's own subtree is closed by the
+    # direct-children rules above: a unit may hold only measures or a divide, a
+    # divide only its two sides, each side only measures — and every measure
+    # must be a LEAF, so nothing can nest below one. There is nowhere left for
+    # a stray element of ours to hide, which is why the `_all`-vs-`placed`
+    # count could no longer fail: probed with it disabled, NINE stray
+    # placements (a measure between the two sides, a numerator inside a
+    # numerator, a divide inside a numerator, a denominator and a measure
+    # inside a measure, a numerator beside a plain measure, and measures,
+    # divides and numerators under `<div>` wrappers at two depths) were ALL
+    # still refused, none of them by the count.
+    #
+    # THE CONTEXT VERSION IS NOT REDUNDANT AND STAYS: a `typedMember` carries
+    # arbitrary value markup, so an explicitMember, a period or an identifier
+    # really can hide inside one — measured, three such cases are caught by
+    # that count ALONE.
+    if not _only(u, (I, 'measure'), (I, 'divide')):
+        return None
+    measures = _all(u, I, 'measure')
+    if any(_leaf(m) is None for m in measures):
+        return None
+    # A MEASURE IS A QNAME — `xsd:QName`, per XBRL 2.1 §4.8.2 as CORRECTED by
+    # the errata to 2013-02-20 (Appendix D erratum 62, which removed the older
+    # redundant wording). So the rule is resolvability, NOT the presence of a
+    # colon: `notaprefix:USD` names nothing because no declaration binds that
+    # prefix, while an UNPREFIXED value is lawful wherever a default namespace
+    # is in scope and names nothing only when none is. `_qname` applies exactly
+    # that, so both cases fall out of one rule and neither is special-cased.
+    if any(_qname(_measure_text(m), m) is None for m in measures):
+        return None
+    # THE SHAPE LAW, from the SAME owner the context grammar uses (#827 B16).
+    # The structural gates above say which elements may appear and where; this
+    # says what each of them may CARRY — its xsi:type, its attributes and its
+    # declared character content — against the pinned instance schema.
+    for el, name in ((u, 'unit'),
+                     *((d, 'divide') for d in divides),
+                     *((s, 'unitNumerator') for s in
+                       (_kids(divides[0], I, 'unitNumerator') if divides else ())),
+                     *((s, 'unitDenominator') for s in
+                       (_kids(divides[0], I, 'unitDenominator') if divides else ())),
+                     *((m, 'measure') for m in measures)):
+        verdict = _shape(el, name)
+        # CL-079 (#827, EU-118): the unit ladder's twin of the EU-113
+        # adjudication — the two words are _shape's own published verdicts
+        # and BOTH arms REFUSE (malformed -> None so the caller names it;
+        # unsupported -> the named reason verbatim); nothing binds on a
+        # non-'ok' verdict, and the drift is loud (32 reds).
+        if verdict == 'malformed':
+            return None
+        if verdict == 'unsupported':           # the string IS the reason — the
+            return UNSUPPORTED_UNIT_TYPE       # caller stores it verbatim
+    # THE GRAPH'S OWN SPELLING, computed HERE because this is the only place the
+    # namespaces are known. The graph drops the prefix of a measure in the
+    # INSTANCE namespace and keeps every other measure exactly as written. That
+    # is a rule about the NAMESPACE, not about the five letters `xbrli`: a
+    # filing that lawfully binds the instance namespace to `i:` writes
+    # `i:shares`, which is the same measure and must reach the graph as
+    # `shares`. Matching the literal prefix threw such a filing away.
+    return {'measures': num + den if divides else tuple(_measure_text(m)
+                                                       for m in plain),
+            # CL-079 (#827, EU-119): FAIL-CLOSED record shape — every key is
+            # emitted from the SAME parse (no key can disagree with another),
+            # and the two halves are kept in their own named slots rather than
+            # one ordered blob, so a consumer cannot mistake a denominator for
+            # a numerator; the swap is pinned by the lawful-divide door.
+            # CONSUMER CENSUS (repo-wide), CORRECTED per SEQ 812 — my first
+            # census called the plain spellings unread; that was WRONG.
+            # graph_numerator / graph_denominator / expanded_* / measures /
+            # is_divide are read by the binder and the locator, and the plain
+            # 'numerator'/'denominator' have TWO proof consumers, not zero:
+            # test_context_content_model.py:890-891 (the shape assertion) and
+            # receipts_827/divide_unit_numerators.py:323-325, which keys on
+            # BOTH the written spellings and the expanded identities — its own
+            # note says keying on spellings alone would merge two taxonomies
+            # sharing a local name and split one namespace written under two
+            # prefixes. Mutation entry 267 also targets this shape. So these
+            # fields are NOT dead surface: at the final minimality sweep the
+            # first question is whether that receipt's question is fully
+            # answered by expanded_numerator/expanded_denominator — if yes,
+            # delete the plain fields, update the receipt and the shape test,
+            # regenerate its output and reconcile entry 267; if the raw
+            # spelling is demonstrably required, record that exact proof
+            # contract instead.
+            'is_divide': bool(divides), 'numerator': num, 'denominator': den,
+            'graph_numerator': tuple(_graph_measure(m) for m in n_meas),
+            'graph_denominator': tuple(_graph_measure(m) for m in d_meas),
+            'graph_measures': tuple(_graph_measure(m) for m in plain),
+            # THE SEMANTIC IDENTITIES — (namespace URI, local name) per measure,
+            # resolved where each measure is written. THESE are what a unit
+            # policy must read. The graph cannot supply them: `Unit.namespace`
+            # is the Unit Type Registry's `nsUnit`, absent for every divide unit
+            # and for 6,752 unregistered simple units, and `Unit.name` is a
+            # prefixed string that is concatenated for divides. The filing
+            # declares the unit unambiguously, so once the fact and unitRef
+            # joins are proven the FILING is the authority on what it means.
+            'expanded_numerator': tuple(_qname(_measure_text(m), m)
+                                        for m in n_meas),
+            'expanded_denominator': tuple(_qname(_measure_text(m), m)
+                                          for m in d_meas),
+            'expanded_measures': tuple(_qname(_measure_text(m), m)
+                                       for m in plain)}
+
+
+def _graph_measure(m):
+    """One measure in the GRAPH's spelling: the INSTANCE namespace's prefix
+    dropped, every other measure kept exactly as the filing wrote it.
+
+    Raw spelling is preserved deliberately — the graph stores prefixed measure
+    names and this value is compared against them, which is the one place the
+    contract requires the text rather than the identity.
+    """
+    raw = _measure_text(m)
+    resolved = _qname(raw, m)
+    # THE LOCAL NAME, not "the text after a colon". Those coincide only when the
+    # value happens to be written with a prefix. An unprefixed value resolved
+    # through an in-scope DEFAULT namespace has no colon at all, so slicing
+    # produced the EMPTY STRING and every such fact refused as
+    # `unit_name_not_the_filings_measure` — a lawful filing rejected by a rule
+    # about punctuation. The resolver already knows the local name; it is asked
+    # for it here rather than re-derived from the spelling.
+    # EU-100 (#827): this branch IS the F7 boundary clause's unit_name
+    # spelling law — the prefix drop is decided by NAMESPACE (the instance
+    # namespace only), never by prefix text; an unresolvable measure keeps
+    # its RAW spelling (fail-closed pass-through: a mismatch refuses
+    # downstream at the storage-integrity compare, never silently binds).
+    return (resolved[1]
+            if resolved is not None
+            and resolved[0] == XBRL_INSTANCE_NAMESPACE else raw)
+
+
+#: One inline fact seen through BOTH views at once. `sem` is the strict XML
+#: element and owns IDENTITY — its expanded name and the namespaces in scope
+#: where it is written. `ren` is the renderer node and owns APPEARANCE — the
+#: visible text, its row, its table, its offsets. Pairing them here, once and
+#: only when the two views provably agree, is what stops either from quietly
+#: answering the other's question.
+_Fact = collections.namedtuple('_Fact', 'sem ren')
+
+#: The bridge's own refusal. The two views read the SAME bytes, so they should
+#: describe the same facts in the same order; when they do not, this parser
+#: cannot say which node shows which number and abstains for the document.
+VIEWS_DISAGREE = 'semantic and renderer views disagree'
+
+
+#: THE ATTRIBUTES WHOSE DECLARED TYPE COLLAPSES WHITESPACE. The Inline XBRL 1.1
+#: schema (`xhtml-inlinexbrl-1_1-definitions.xsd`) declares `id` as xs:NCName,
+#: `contextRef`/`unitRef` as restrictions of xs:NCName, `name`/`format` as
+#: xs:QName and `scale` as xs:integer; XBRL 2.1 declares a context's and a
+#: unit's `id` as xs:ID, a measure's and an explicitMember's content and its
+#: `dimension` as xs:QName, an identifier's content as xs:token and its
+#: `scheme` as a restricted xs:anyURI.
+#:
+#: These do NOT all derive from xs:token — xs:ID and xs:NCName do, xs:QName,
+#: xs:integer and xs:anyURI do not. What they share is the FACET: each one
+#: independently carries whiteSpace=COLLAPSE (XML Schema Part 2 §4.3.6), so XML
+#: whitespace around such a value carries no meaning and a schema-aware reader
+#: never sees it. Refusing a padded id was OUR rule, not the standard's.
+#:
+#: `sign` is deliberately ABSENT: it restricts xs:string, which PRESERVES
+#: whitespace, so ' -' is not '-' and must not be made into it.
+#: EVERY collapse-faceted ATTRIBUTE this module reads, in one place. Two of
+#: them used to call `_collapse` directly instead of going through `_typed`,
+#: which meant there were two ways to declare "this value collapses" and this
+#: set was silently incomplete — the exact drift a two-way coverage check
+#: exists to catch. Element CONTENT (a measure, a member, an identifier) is not
+#: an attribute and is read by `_leaf`, so it collapses at its own reader.
+# EU-043 (#827, cluster CL-031): the attribute vocabulary below is Inline
+# XBRL 1.1's own — Part 1, REC 2013-11-18 with approved errata corrections
+# to 2026-07-14 (the current edition; the exact URL is at the nonFraction
+# reader's spec-sources note): the ix fact attributes name / contextRef /
+# unitRef / format / scale / sign / id, ix:hidden, ix:header/ix:resources.
+# WHICH of them carry the collapse facet is the schema's declaration per
+# attribute (the whiteSpace facet, XSD Part 2 2e section 4.3.6), and the
+# two-way coverage node in the bridge suite holds this set equal to the
+# tested pairs — a dropped member reds both.
+_COLLAPSED = frozenset({'id', 'name', 'contextRef', 'unitRef', 'format',
+                        'scale', 'dimension', 'scheme',
+                        # THE NIL FLAG. `xsi:nil` is `xs:boolean`, which really
+                        # does collapse, so ` true ` IS `true`.
+                        #
+                        # `decimals` and `precision` ARE NOT HERE, and the
+                        # comment that used to put them here was half right.
+                        # They are UNIONS: `xbrli:decimalsType` over
+                        # `xs:integer` and a restriction of **`xs:string`**
+                        # enumerated `INF` (`precisionType` the same over
+                        # `xs:nonNegativeInteger`). A union has no single
+                        # whitespace facet — the member that validates the
+                        # value carries it — and `xs:string` PRESERVES, for the
+                        # same reason `sign` is excluded above. Collapsing the
+                        # whole union turned the malformed ` INF ` into the
+                        # value `INF`. Their one reader, `_accuracy_ok`, now
+                        # takes the raw spelling and applies the right facet per
+                        # member.
+                        _clark(_XSI_NS, 'nil')})
+
+
+#: XML 1.0 3e §3.3.3 / XSD P2 §4.3.6 step one: each #x9, #xA and #xD becomes
+#: a space. Consumed ONLY by `_collapse` below — the VALUE-side law. (The
+#: renderer-pairing copy of this normalization died with the deleted
+#: fingerprint, SEQ 264 §2d; this one reads what values MEAN and stays.)
+#: EU-045 (#827): exact citations for the two steps already named above —
+#: XML 1.0 5e section 3.3.3 attribute-value normalization,
+#: https://www.w3.org/TR/xml/#AVNormalize, and XSD Part 2 2e section 4.3.6
+#: whiteSpace (replace: each #x9 #xA #xD becomes #x20; collapse then
+#: trims and merges), https://www.w3.org/TR/xmlschema-2/#rf-whiteSpace.
+_ATTR_WS = str.maketrans('\t\r\n', '   ')
+
+
+def _collapse(value):
+    """XML Schema Part 2 §4.3.6 whiteSpace=COLLAPSE, and nothing more.
+
+    ONLY the four characters XML calls space are touched. Python's own
+    `.split()` would also eat U+00A0, U+000B, U+000C and U+3000 — characters
+    XML does not call space at all — and a value padded with those is NOT
+    padded: it is a different value, and it must stay one.
+    """
+    # EU-079 (#827): the single-space join IS collapse's merge step — XSD
+    # Part 2 2e section 4.3.6 (collapse: after replace, contiguous
+    # sequences of #x20 collapse to a SINGLE #x20 and leading/trailing
+    # #x20 are removed; the EU-045 URLs one owner up). Fusing instead of
+    # joining would weld inner tokens together (pinned: 18 padding-family
+    # reds under the fuse mutant).
+    return ' '.join(part for part in value.translate(_ATTR_WS).split(' ')
+                    if part)
+
+
+def _typed(el, name):
+    """One attribute of `el`, read as its DECLARED SCHEMA TYPE, or None.
+
+    THE ONE PLACE the schema's whitespace facet is applied, and EVERY attribute
+    is read through it — including the ones whose type preserves whitespace. A
+    value that skipped this reader would be protected only by the absence of a
+    line of code, which no test can hold onto; routed through it, `_COLLAPSED`
+    becomes the single declaration of which types collapse, and getting that
+    set wrong is a change a control can catch.
+
+    It reads what the VALUE means, and no pairing normalization is ever
+    mixed in — so a normalization meant for comparing two parsers' spellings
+    (the deleted fingerprint's job) can never quietly change a fact's
+    content.
+    """
+    value = el.get(name)
+    if value is None:
+        return None
+    return _collapse(value) if name in _COLLAPSED else value
+
+
+def _lexical(el):
+    """How the DOCUMENT spelled this element's name, as HTML would hold it.
+
+    NOT an identity and never used as one. The strict view has already decided,
+    by expanded name, which elements these are; this is only the handle needed
+    to ask the renderer for the same source nodes, because HTML has no
+    namespaces and offers no other. It is read off each element the strict view
+    selected — so a filing that binds Inline XBRL to `i:` is asked for `i:` —
+    and no prefix is ever assumed, listed or preferred.
+    """
+    # EU-106 (#827): the prefix:local template is the QName lexical form
+    # itself — Namespaces in XML 1.0 (Third Edition), REC 2009-12-08,
+    # section 4 "Qualified Names" (QName ::= PrefixedName | UnprefixedName;
+    # PrefixedName ::= Prefix ':' LocalPart),
+    # https://www.w3.org/TR/xml-names/#ns-qualnames — transcribed for the
+    # renderer handle only, never as identity (the docstring law above).
+    q = etree.QName(el)
+    return ('%s:%s' % (el.prefix, q.localname) if el.prefix
+            else q.localname).lower()
+
+
+def _resources(root):
+    """Every `ix:resources` this report declares — and only those.
+
+    Inline XBRL 1.1 (Recommendation 2013-11-18) §14.1 fixes the content of
+    `ix:resources` to the named resource children, `xbrli:context` and
+    `xbrli:unit` among them, and §14.1.1 requires `ix:resources` to be a CHILD
+    of `ix:header`. So the ancestry is the rule, not the tag name: an element
+    spelled `ix:resources` sitting anywhere else is not this report's resources
+    container, and a context or unit outside one is not a declaration the report
+    makes.
+
+    Reading them from the whole document — which is what a descendant scan does
+    — meant a context buried in a `<div>`, or inside `ix:hidden` (a container
+    for FACT markup, not for resources), was indexed and bound exactly like a
+    real one. This is a rule about WHERE THIS PARSER LOOKS, not a validator: it
+    checks the two links the spec names and nothing else.
+    """
+    return [r for h in root.iter(_clark(_INLINE_NS, 'header'))
+            # EU-124 (#827): the two element names are Inline XBRL 1.1's own —
+            # sections 12/14.1.1 (ix:header holds ix:resources; the resource
+            # children live there), current edition with errata to 2026-07-14,
+            # the exact URL at the nonFraction reader's spec-sources note. The
+            # ANCESTRY is the rule (the docstring above), not the tag name;
+            # a drifted name empties every report (220 reds).
+            for r in _children(h) if _is(r, _INLINE_NS, 'resources')]
+
+
+def _kids_of(parents, uri, local):
+    """The named DIRECT children of each container, in document order."""
+    return [k for p in parents for k in _kids(p, uri, local)]
+
+
+def _align_views(root, soup, names):
+    """{(uri, local): (strict elements, renderer nodes)} in source order, or None.
+
+    THE ALIGNMENT IS BY SOURCE POSITION, NOT BY NAME LOOKUP. For each spelling
+    the document uses, EVERY strict element carrying it is counted — whatever
+    namespace it resolves to — and the renderer must report the same total for
+    that spelling. A selected element is then paired with the renderer node at
+    its own ordinal among them.
+
+    Counting the unselected ones is the whole point. A report may lawfully hold
+    a real Inline XBRL element AND an unrelated element spelled the same way,
+    under a prefix rebound locally to another namespace. Counting only the real
+    ones would find a surplus in the renderer and refuse a lawful filing;
+    counting all of them lines the two parses up exactly, and the impostor is
+    simply never selected — it is not one of these names.
+
+    The spelling is a SOURCE HANDLE ONLY, used to align two parses of one set of
+    bytes because HTML offers nothing else. It decides nothing: which elements
+    matter is settled entirely by expanded name in the strict tree.
+    """
+    picked = {name: [] for name in names}
+    totals = {}
+    for el in root.iter():
+        if not isinstance(el.tag, str):          # comments and PIs are not it
+            continue
+        spelling = _lexical(el)
+        # CL-045 (#827, EU-074 + EU-075): FAIL-CLOSED adjudication of the
+        # pairing mechanics — the never-seen ordinal is 0 and the census
+        # steps by exactly 1, so the Nth strict element of a spelling pairs
+        # with the Nth renderer element of the SAME spelling, and the
+        # count-equality guard below refuses the whole pairing when the two
+        # views disagree about what exists. Either drift is LOUD, never a
+        # silent mispair: measured, off-by-one and double-step each redden
+        # 161 nodes across the two suites.
+        ordinal = totals.get(spelling, 0)
+        totals[spelling] = ordinal + 1
+        for name in names:
+            if _is(el, *name):
+                picked[name].append((spelling, ordinal, el))
+                break
+    seen, out = {}, {}
+    for name, rows in picked.items():
+        sem, ren = [], []
+        for spelling, ordinal, el in rows:
+            if spelling not in seen:
+                found = soup.find_all(spelling)
+                if len(found) != totals[spelling]:
+                    return None          # the two views disagree about what is
+                seen[spelling] = found   # there; no pairing can be trusted
+            sem.append(el)
+            ren.append(seen[spelling][ordinal])
+        out[name] = (sem, ren)
+    return out
+
+
+def _bridge(sem_facts, ren_facts):
+    """Pair semantic facts with renderer nodes, or None to abstain.
+
+    THIS IS SOURCE-ORDER ALIGNMENT — not a key lookup, and the invariant
+    is stated once, honestly: for the DECLARED parser stack, strict and
+    renderer traversal preserve the tested per-spelling source order, and
+    the per-spelling totals plus the length check below fail CLOSED on
+    any count divergence. Nothing is ever paired by a prefix or by page
+    text, and no attribute fingerprint exists here.
+
+    WHAT THIS DELIBERATELY DOES NOT DO is refuse the document when two
+    facts are indistinguishable. Such a pair does not need to be told
+    apart here: two facts sharing an id give `duplicate_id` at the id
+    door, two id-less facts sharing an identity give `ambiguous_identity`
+    at the fallback — truthful per-fact reasons, not one blunt one.
+    """
+    if len(sem_facts) != len(ren_facts):
+        return None
+    return [_Fact(sem, ren) for sem, ren in zip(sem_facts, ren_facts)]
+
+
+def prepare(html_text):
+    """Parse and index a display filing EXACTLY ONCE — memoized by content sha so
+    repeated locate() calls (one per anchor) share ONE parse per filing.
+
+    EU-179/EU-180 (#827): the poison tokens this function writes into its
+    records (duplicate_context_id, malformed_context_structure,
+    duplicate_unit_id, malformed_unit_structure — the binder's own
+    vocabulary, the CL-039 block; the id-uniqueness and structural rules
+    are the instance schema's, cited on their board rows) and the
+    prepared-record/refusal-record key spellings it WRITES (contexts,
+    elements, fact_nodes, hidden_nodes, units,
+    text/text_sha, refused, sha, ...) are its OWN output vocabulary — every
+    reader lives in this module or consumes the record through it, so the
+    owner is in-file; no Fiscal packet clause fixes these spellings
+    (verified against 15_CandidateFactPacket, ChannelContract and the
+    contract sheet). Core's two consumed members (text_sha, refused) travel
+    through xbrl_attach's prepare()/refused() calls unchanged.
+
+    TWO VIEWS, each with one job. A document that is not well-formed XML, or
+    whose two views disagree, comes back as a refusal dict that every public
+    door turns into one truthful reason — no parser exception ever escapes.
+    """
+    sha = sha256_text(html_text)
+    hit = _PREP_CACHE.get(sha)
+    if hit is not None:
+        return hit
+    try:
+        root = _semantic_parse(html_text)
+    except SemanticParseError as exc:
+        return _remember(sha, {'refused': str(exc), 'sha': sha})
+    soup = _soup(html_text)
+    id_counts = {}
+    for el in root.iter():
+        eid = _typed(el, 'id') if isinstance(el.tag, str) else None
+        if eid is not None:
+            # EU-176 (#827): FAIL-CLOSED counting — the census starts at 0
+            # for a never-seen id and steps by exactly 1, because the
+            # downstream law reads it as an EXACT population (0 = absent,
+            # 1 = the one lawful bearer, >1 = the XML 1.0 VC:ID breach the
+            # EU-162 bounds refuse). Any other step silently retypes lawful
+            # ids as duplicates (measured: 314 reds).
+            id_counts[eid] = id_counts.get(eid, 0) + 1
+    # RESOURCES COME FROM ONE PLACE, because the spec puts them in one place.
+    declared = _resources(root)
+    contexts = {}
+    # EU-177 + EU-178 (#827): the resource element names and the id
+    # attribute are the specs' own — xbrli:context and xbrli:unit are the
+    # XBRL 2.1 sections 4.7/4.8 resources (the CL-028 schema citation),
+    # each carrying an xs:ID `id` (Inline XBRL 1.1 places them under
+    # ix:resources, the EU-124 citation), and every fact's `id` is that
+    # same xs:ID attribute (XML Schema Part 2 2e section 3.3.8, an
+    # NCName). Asked in the instance namespace, never by prefix; a drift
+    # empties the whole resource index (166 and 203 reds).
+    for context in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'context'):
+        cid = _xml_id(_typed(context, 'id'))
+        if not cid:
+            continue
+        # THE POISON CARRIES ITS OWN REASON. Both refusals used to be the same
+        # bare `None`, so the consumer reported malformed structure as a
+        # REPEATED ID — a safe abstention under a false name, and no
+        # outcome-only test could ever see the lie. The value IS the reason: a
+        # string means refused-and-why, a dict means usable evidence.
+        if cid in contexts:              # a duplicated context id is AMBIGUOUS
+            contexts[cid] = 'duplicate_context_id'   # evidence; last-wins had
+            continue                                 # silently picked one
+        parsed = _parse_context(context)
+        contexts[cid] = 'malformed_context_structure' if parsed is None else parsed
+    units = {}
+    # EU-181 (#827): xbrli:unit is the XBRL 2.1 section 4.8 resource name
+    # (the CL-028 schema citation; placed under ix:resources per the
+    # EU-124 citation), asked in the instance namespace and never by
+    # prefix — a drift empties the unit index and every fact loses its
+    # declared unit (measured: 213 reds).
+    for u in _kids_of(declared, XBRL_INSTANCE_NAMESPACE, 'unit'):
+        uid = _xml_id(_typed(u, 'id'))
+        if not uid:
+            continue
+        if uid in units:                 # a duplicated unit id is AMBIGUOUS
+            units[uid] = 'duplicate_unit_id'         # evidence exactly as a
+            continue                                 # duplicated context is
+        parsed = _parse_unit(u)
+        units[uid] = 'malformed_unit_structure' if parsed is None else parsed
+    # THE BRIDGE, in ONE aligned pass. The strict view selects BY EXPANDED NAME —
+    # facts, and the containers whose content is not rendered — and the renderer
+    # nodes are then taken at the matching source positions. An element merely
+    # SPELLED like a fact or a hidden container, but bound to another namespace,
+    # is counted for alignment and selected as neither.
+    aligned = _align_views(root, soup, ((_INLINE_NS, 'nonFraction'),
+                                        (_INLINE_NS, 'hidden')))
+    facts = None
+    if aligned is not None:
+        facts = _bridge(*aligned[(_INLINE_NS, 'nonFraction')])
+        ren_hidden = aligned[(_INLINE_NS, 'hidden')][1]
+    if facts is None:
+        return _remember(sha, {'refused': VIEWS_DISAGREE, 'sha': sha})
+    elements = {}
+    noid_elements = []
+    for fact in facts:
+        eid = element_id(fact)           # xs:NCName — the collapsed value, and
+        if eid:                          # the SAME key `id_counts` is built on
+            elements.setdefault(eid, fact)
+        else:
+            noid_elements.append(fact)       # null-graph-id facts live HERE
+    node_spans = {}
+    hidden_nodes = frozenset(id(n) for n in ren_hidden)
+    # THE BRIDGED RENDERER NODES, by identity. Every later question of the form
+    # "is this rendered thing a fact / hidden?" is answered from these, never by
+    # re-inspecting the renderer tree, which cannot tell.
+    fact_nodes = frozenset(id(f.ren) for f in facts)
+    # THE FALLBACK OWNERS, from the consumer itself. `_evidence_owner` names the
+    # node whose span each fact's evidence will read; the ones that are not
+    # already a `_SPAN_TAGS` tag are the third branch, and without them that
+    # fact has no span and `source_evidence` refuses it. Measured over the
+    # frozen manifest: 0 facts reach that branch, so this adds 0 of 23,423,401
+    # spans there — the cost belongs to documents the corpus has not seen.
+    fallback_owners = frozenset(
+        id(owner) for owner in
+        (_evidence_owner(f.ren)[1] for f in facts)
+        if owner is not None and getattr(owner, 'name', '') not in _SPAN_TAGS)
+    style_flags = []
+    text = _visible_walk(soup, node_spans, hidden_nodes, fallback_owners,
+                         style_flags)
+    if style_flags:
+        # ONE truthful document-level refusal (SEQ 231 §3): an unresolvable
+        # inline-style winner anywhere makes every visibility claim in this
+        # filing a guess, so nothing in it may bind or quote.
+        return _remember(sha, {'refused': 'unsupported_style: '
+                               + style_flags[0], 'sha': sha})
+    # TWO PROVEN-DEAD OUTPUTS REMOVED (#827 round 5): `raw_sha` was the same
+    # value as `sha` under a second name, and `soup` held the whole parse tree
+    # alive in a memoized cache. Exhaustive grep: no reader anywhere.
+    prepared = {'ids': id_counts, 'contexts': contexts,
+                'node_spans': node_spans, 'hidden_nodes': hidden_nodes,
+                'fact_nodes': fact_nodes,
+                'units': units, 'elements': elements,
+                'noid_elements': noid_elements,
+                'sha': sha,
+                'text': text,               # THE representation (visible text)
+                'text_sha': hashlib.sha256(text.encode('utf-8',
+                                           'surrogatepass')).hexdigest()}
+    return _remember(sha, prepared)
+
+
+def _remember(sha, prepared):
+    """Memoize by content sha. A REFUSAL is remembered exactly like a reading:
+    re-parsing an unreadable document cannot make it readable, and the refusal
+    is the cheap, stable answer every later call must get."""
+    # EU-123 (#827) REMOVE-OR-FAIL-CLOSED: the capacity was the bare literal
+    # 4, derived from nothing. REMOVING the bound entirely is not the answer —
+    # a prepared document holds the whole filing's text, spans and element
+    # index, so an unbounded memo grows without limit in any long-running
+    # reader; that is the real failure a bound prevents, and it is now stated.
+    # The SIZE is derived instead of guessed: every production caller works
+    # one filing at a time (the binder and the locator take one document and
+    # ask it many questions), so ONE slot serves the whole proven access
+    # pattern — the extra three were never derived from any caller. A caller
+    # that interleaves two documents simply re-parses: slower, never wrong.
+    while len(_PREP_CACHE) >= _PREP_CACHE_MAX:
+        _PREP_CACHE.pop(next(iter(_PREP_CACHE)))
+    _PREP_CACHE[sha] = prepared
+    return prepared
+
+
+def _prepared(doc_or_html):
+    return doc_or_html if isinstance(doc_or_html, dict) else prepare(doc_or_html)
+
+
+def element_id(fact):
+    """A bridged fact's own id as the SCHEMA declares it, or ''.
+
+    Public because the locator needs it and must not reach into the pair to
+    read a raw attribute: `id` is xs:NCName, so its value is the collapsed one,
+    and one reader means the binder and the locator cannot drift into two
+    different ideas of what a fact's id is.
+    """
+    # EU-165 (#827): the '' default is the truthful NO-ID answer — xs:ID is
+    # OPTIONAL on an ix fact (Inline XBRL 1.1 section 10.1.1; the id type
+    # itself is XML Schema Part 2 2e section 3.3.8 xs:ID, an NCName), and
+    # a fact carrying none must read as "no id", never as a fabricated
+    # handle: blankness is exactly what routes a fact to the
+    # identity-fallback path (the EU-173 law), so any invented default
+    # would silently claim an exact-id match. Pinned: a fabricating
+    # default reddens the fallback-uniqueness nodes.
+    return _typed(fact.sem, 'id') or ''
+
+
+def refused(prepared):
+    """The reason this document could not be read, or None when it was.
+
+    ONE state, checked at every public door, so an unreadable filing is answered
+    the same truthful way everywhere instead of raising a parser exception out
+    of whichever door happened to be called first.
+
+    EU-185 (#827): the 'refused' spelling read here is prepare()'s own
+    refusal-record vocabulary (EU-180) — reader and writer share this one
+    module; no packet clause fixes it.
+    """
+    return prepared.get('refused') if isinstance(prepared, dict) else None
+
+
+def _evidence_from(fact, prepared):
+    """Evidence for ONE bridged fact.
+
+    `fact.sem` answers WHAT the fact is — its name, the context and unit it
+    refers to, its scale and sign — because those are XML names and values that
+    only the strict view spells correctly. `fact.ren` answers HOW it appears —
+    its displayed text, its row, its table, its offsets — because that is a
+    question about the rendered page. Neither is ever asked the other's half.
+
+    EU-097 (#827): the eleven refusal/acceptance tokens this function
+    publishes (malformed_concept_name, missing/malformed_context_ref,
+    undefined_context, missing/malformed_unit_ref, undefined_unit,
+    malformed_sign, malformed_scale, unsupported_style, 'ok') are the
+    BINDER'S OWN published vocabulary (the CL-039 ownership block above the
+    refusal texts) — never T1 outcome codes; each token's RULE carries its
+    citation in place or on its board row.
+    """
+    el, node = fact.sem, fact.ren
+    # A CONCEPT IS A QNAME, and nothing validated it. The door only compared
+    # the document's `name` string to the graph's `concept` string, so the two
+    # merely had to agree on the same junk — `Revenues` with no prefix at all,
+    # and `zz:Revenues` naming a namespace this document never declared, both
+    # bound as readily as the real name. THE ONE FUNNEL: the exact-id path and
+    # the identity-fallback path both end here, so one check covers both.
+    if _qname(_typed(el, 'name'), el) is None:
+        return None, 'malformed_concept_name'
+    # A REQUIRED REFERENCE HAS EXACTLY THREE FAILING STATES, and each gets its
+    # own name because each needs a different fix:
+    #   ABSENT            the fact states no reference at all
+    #   PRESENT, UNLAWFUL not a reference — `contextRef` is a restriction of
+    #                     xs:NCName, and `c 1` or `` is not one
+    #   LAWFUL, UNMATCHED a reference this filing never declared
+    # Collapsing the first two into one reason ("missing") said the attribute
+    # was absent when it was there and wrong; collapsing the last two said the
+    # FILING lacked a context when the fault was in the MARKUP.
+    ctx_ref = _typed(el, 'contextRef')
+    if ctx_ref is None:
+        return None, 'missing_context_ref'
+    if _xml_id(ctx_ref) is None:
+        return None, 'malformed_context_ref'
+    # A STRING IS THE REFUSAL AND ITS REASON; a dict is usable evidence; absent
+    # is a context this filing never declared. Three states, one lookup — the
+    # old pair of tests reported every poisoned context as a duplicated id.
+    # EU-089 (#827): FAIL-CLOSED adjudication of the three internal
+    # spellings here — 'contexts' is prepare()'s own key (the EU-161 form:
+    # hard outer key behind the refused() door, drift loud at first use)
+    # and 'typed'/'non_xdt' are _parse_context's own dict keys, hard-read
+    # so a producer-consumer drift raises rather than silently skipping a
+    # refusal; even the silent .get form is caught by the own-reason pins
+    # (measured: the typed drift reddens the keeps-its-own-reason node).
+    ctx = prepared['contexts'].get(ctx_ref)
+    if isinstance(ctx, str):
+        return None, ctx
+    if ctx is None:
+        return None, 'undefined_context'
+    if ctx['typed']:
+        return None, 'typed_dimensions_unsupported'
+    # LAWFUL, AND STILL UNREPRESENTABLE. `segment`/`scenario` are open content
+    # (XBRL 2.1; Dimensions 1.0 §3.1.4.4), so a company element beside the
+    # dimensions is valid markup this product cannot yet carry. It refuses —
+    # ignoring it would merge two genuinely different contexts — but it says
+    # the true thing rather than calling the filer's markup malformed.
+    # EU-090 + EU-091 + EU-117 (#827) PARK-NAMED-REASON+MONITOR: these three
+    # spellings are SCOPE refusals, not malformed-markup verdicts, and each
+    # is the binder's OWN published token (the EU-160/CL-039 ownership block)
+    # naming WHICH lawful construct this reader does not carry — open
+    # segment/scenario content beside the dimensions (here), typed dimensions
+    # (above), and a resolved non-standard context type (at _shape's caller).
+    # The owner's E-SUPPORTED-SCOPE ruling governs all three: a standard
+    # proves a construct lawful, never permission to omit it, so each refusal
+    # PARKS under its named id and the pile is counted by the
+    # first-production census — never a silent drop and never "malformed",
+    # which would blame the filer for our scope. Each token is pinned by its
+    # own keeps-its-reason node.
+    if ctx['non_xdt']:
+        return None, 'unsupported_non_xdt_context'
+    # `unitRef` IS REQUIRED on a numeric fact, and the same three states apply
+    # as to `contextRef`: absent is a missing reference, unlawful is not a
+    # reference at all, and lawful-but-unmatched is one the filing never
+    # declared. Treating absence as "no unit" let a numeric fact bind with no
+    # statement of what its number measures.
+    #
+    # THE RULE COMES FROM THE SCHEMA, not from the corpus. Inline XBRL 1.1,
+    # `xhtml-inlinexbrl-1_1-definitions.xsd`, declares `unitRef` on the
+    # `ix:nonFraction` element as REQUIRED (a restriction of xs:NCName) — that
+    # is what makes it required here. The measurement below says only what the
+    # change COSTS, and is a sample, stated as one: across 300 files of the
+    # frozen cache, 0 of 458,986 ix:nonFraction elements were missing or blank
+    # on `unitRef`. A census can never establish a requirement; it can only
+    # price one.
+    unit_ref = _typed(el, 'unitRef')
+    if unit_ref is None:                     # the same three states, by name
+        return None, 'missing_unit_ref'
+    if _xml_id(unit_ref) is None:
+        return None, 'malformed_unit_ref'
+    unit = prepared['units'].get(unit_ref)
+    if unit is None:
+        return None, 'undefined_unit'
+    if isinstance(unit, str):                # refused; the string says why
+        return None, unit
+    # OPTIONAL MEANS ABSENT OR LAWFUL — never "present and empty".
+    #
+    # The Inline XBRL 1.1 schema declares `sign` as a restriction of xs:string
+    # whose pattern is exactly `-`, and `format` as xs:QName. Both are OPTIONAL:
+    # no `sign` is the positive case and no `format` means no transform. But an
+    # attribute that IS present must satisfy its type, and `sign=""` satisfies
+    # nothing — it is neither absent nor `-`. Accepting it let a fixture state a
+    # sign it did not have, and let a document assert a transform by a name that
+    # resolves to nothing.
+    # EU-096 (#827): the nine attribute reads in this region consume the
+    # Inline XBRL 1.1 nonFraction attribute definitions exactly (Part 1,
+    # section 10.1 family — name / contextRef / unitRef / sign / format /
+    # scale / id; the current-edition URL is at the nonFraction reader's
+    # spec-sources note): sign's only lawful value is '-' (negates; the
+    # whitespace-preserving xs:string law in the note above), an ABSENT
+    # scale means 10^0 (pinned through the bind door), and ix:hidden
+    # membership arrives through the veiled set (EU-095).
+    raw_sign = _typed(el, 'sign')
+    if raw_sign is not None and raw_sign != '-':
+        return None, 'malformed_sign'
+    raw_format = _typed(el, 'format')
+    if raw_format is not None and _qname(raw_format, el) is None:
+        return None, MALFORMED_FORMAT
+    raw_scale = _typed(el, 'scale')
+    # ABSENT means 0 (the spec default); PRESENT means it must parse as an XML
+    # integer — `''`, `6.9`, `1_0` and full-width digits are malformed markup.
+    scale = 0 if raw_scale is None else xml_integer(raw_scale)
+    if scale is None:
+        return None, 'malformed_scale'
+    # HIDDEN IS TWO DIFFERENT QUESTIONS. `ix:hidden` is a SEMANTIC container —
+    # an expanded name, asked of the strict view. CSS is a RENDERING instruction
+    # and is asked of the renderer. Neither view can answer both.
+    # THE VALUE COMES FROM THE FACT, not from the page. One reader, at the one
+    # boundary both binding paths already funnel through, so neither the binder
+    # nor the locator can reconcile against rendered characters again.
+    value_input, why_value = fact_value_input(el)
+    if value_input is None:
+        return None, why_value
+    css_hidden, unsup = _effective_hidden(node)
+    if unsup is not None:
+        # THE ONE TRUTHFUL UNSUPPORTED LANE (SEQ 227/229): a winning value the
+        # inline reader cannot resolve must never be guessed visible or hidden
+        # for a FACT — the fact refuses with the named reason and parks.
+        return None, 'unsupported_style'
+    hidden = any(_is(a, _INLINE_NS, 'hidden') for a in el.iterancestors()) \
+        or css_hidden
+    # EU-095 (#827): FAIL-CLOSED — these are prepare()'s own complete-shape
+    # keys (both unconditional in the one literal, the EU-161 law), so they
+    # are read HARD: the old .get(..., frozenset()) defaults would have
+    # turned a drifted key into an EMPTY set — ix:hidden text silently
+    # LEAKING into evidence (measured: the drift was blind until the
+    # ix:hidden pin below existed). Loud beats silent here.
+    veiled = prepared['hidden_nodes']
+    numeric = prepared['fact_nodes']
+    ev = {
+        'name': _typed(el, 'name') or '',
+        # THE CONCEPT'S SEMANTIC IDENTITY, resolved in the scope of the fact
+        # element that writes it. The raw text is kept beside it because the
+        # graph stores a prefixed string; the identity is what may be compared.
+        'name_expanded': _qname(_typed(el, 'name'), el),
+        # TWO STRINGS, TWO JOBS, and they must never be swapped again.
+        # `value_input` is the fact's own content and is what reconciliation
+        # transforms; `displayed` is how the page renders and is only ever
+        # quoted back as evidence.
+        'value_input': value_input,
+        'displayed': _text(node, veiled),
+        'scale': scale,
+        'sign': raw_sign or '',
+        # TWO FIELDS, TWO JOBS. `fmt` is the filing's own spelling and stays
+        # exactly as written for evidence and product output; `fmt_expanded` is
+        # the (namespace URI, local name) identity, and it is the ONLY thing any
+        # semantic decision may read.
+        #
+        # THERE IS NO THIRD FIELD. A `fmt_raw` sat here to keep ABSENT
+        # distinguishable from present — but this record only exists once the
+        # boundary has already refused every present-and-malformed `format`, so
+        # `fmt_expanded is None` can only mean ABSENT. The extra field was
+        # duplicate state, and its job was to let a caller pass a raw string
+        # where an identity belongs.
+        'fmt': raw_format or '',
+        'fmt_expanded': None if raw_format is None else _qname(raw_format, el),
+        'unit_ref': unit_ref,
+        'context_ref': ctx_ref,
+        'period': ctx['period'],
+        # BOTH VIEWS TRAVEL TOGETHER, exactly as `name`/`name_expanded` do:
+        # the written spellings for the product output, the expanded pairs for
+        # every comparison. Carrying only one would force some consumer to
+        # re-derive the other from a prefix it cannot resolve here.
+        'dims': ctx['dims'],
+        'dims_expanded': ctx['dims_expanded'],
+        'entity': ctx.get('entity', ''),
+        'hidden': hidden,
+        # EU-092 (#827): FAIL-CLOSED adjudication — the record is BORN
+        # COMPLETE at this one literal: every key exists from birth, and a
+        # default that survives the fill sites below IS the explicit
+        # no-such-evidence claim (in_table False, empty strings/lists, None
+        # spans) — the packet contract's verified-empty philosophy
+        # (explicit emptiness, never absence). Consumers read hard keys;
+        # deleting any default breaks them LOUDLY (measured: 8 primary
+        # nodes red under a deleted in_table). Receipt
+        # g2_evid_recall_EU-092.txt: zero recall — adjudication only.
+        'in_table': False,
+        'row_span': None,
+        'block_span': None,
+        'row_text': '',
+        'row_cells': [],
+        'row_label': '',
+        'row_label_span': None,
+        'columns': [],
+        'column_spans': [],
+        'section': '',
+        'section_span': None,
+        'block': '',
+    }
+    # EU-093 (#827): FAIL-CLOSED adjudication of the WHOLE selection walk
+    # below (row/label/section/column picking) — the E-EVID-SELECT family
+    # rule. Every step (1) selects only from the fact's OWN structural
+    # context (its row, its cells left of the fact, its table's prior rows,
+    # its ancestors), (2) stores only exact slices at their recorded spans
+    # (_visible_slice — text and span are two views of one fact), and
+    # (3) on absence yields the record's explicit empty claim (EU-092),
+    # never a guess and never invented text. The family's authority record
+    # is the owner's certification-evidence blessing (the EU-041 ruling);
+    # the walk's behavior is pinned by the primary battery, and the
+    # first-left label law is pinned by the twice-label node (which reddens
+    # under a nearest-left drift — the recorded detector). Receipt
+    # g2_evid_recall_EU-093.txt: zero recall — adjudication only.
+    # ONE call decides row-vs-block AND names the owner whose span is read, so
+    # the walker and this reader can never disagree about which node that is.
+    in_table, owner = _evidence_owner(node)
+    if in_table:
+        row = owner
+        cell = node.find_parent(_CELL_TAGS)   # the cell, for table detail only
+        ev['in_table'] = True
+        ev['row_text'] = _text(row, veiled)
+        ev['row_span'] = prepared.get('node_spans', {}).get(id(row))
+        cells = row.find_all(_CELL_TAGS, recursive=False)
+        # THE WALK OWNS VISIBILITY (#827 E). A cell hidden by inheritance, or
+        # revived by a descendant visibility:visible, is answered by its own
+        # representation slice — a per-cell standalone test here would both
+        # leak and drop revived text. Pruned cells simply have no span.
+        ev['row_cells'] = [_visible_slice(item, prepared)[0] for item in cells]
+        fact_cell = _index_by_identity(cells, cell)
+        if fact_cell is not None:
+            # SELECT ON VISIBLE TEXT, and take the value and the span from the
+            # SAME cell. Selecting on `_text` let a cell whose only content is
+            # hidden become the label — a label that appears nowhere in the
+            # filing, carrying a span that covers nothing. `find()` stays
+            # deleted: the chosen cell already knows its own extent.
+            left = [item for item in cells[:fact_cell]
+                    if _words(_visible_slice(item, prepared)[0])]
+            if left:                                     # digits in labels LEGAL
+                ev['row_label'], ev['row_label_span'] = \
+                    _visible_slice(left[0], prepared)
+        table = row.find_parent('table')
+        if table is not None:
+            table_rows = [r for r in table.find_all(_ROW_TAG)
+                          if r.find_parent('table') is table]
+            row_number = _index_by_identity(table_rows, row)
+            if row_number is not None and fact_cell is not None:
+                col_pairs = _aligned_columns(table_rows, row_number, cell,
+                                             prepared)
+                ev['columns'] = [c for c, _ in col_pairs]
+                ev['column_spans'] = [sp for _, sp in col_pairs]
+                for prior in reversed(table_rows[:row_number]):
+                    prior_cells = prior.find_all(_CELL_TAGS, recursive=False)
+                    # ONE eligible list decides BOTH the text and the span. They
+                    # were chosen by two DIFFERENT filters — the text skipped
+                    # digit-bearing cells and the span did not — so a row like
+                    # "Q1 2023 | Segment detail" reported one cell's words at
+                    # the other cell's offsets.
+                    # EU-094 (#827) REMOVED: an unauthorized digit exclusion
+                    # sat here. Discarding a digit-bearing candidate could
+                    # leave exactly one candidate where the row had two, so it
+                    # turned AMBIGUITY INTO ACCEPTANCE rather than only
+                    # withholding as its comment claimed. The existing
+                    # exactly-one-candidate rule below now owns ambiguity;
+                    # nothing replaces the filter. Measured counterfactual:
+                    # receipts_827/16_two_view_census.json.
+                    eligible = [(t, sp) for t, sp in
+                                (_visible_slice(item, prepared)
+                                 for item in prior_cells)
+                                if _words(t)]
+                    first = (_visible_slice(prior_cells[0], prepared)[0]
+                             if prior_cells else '')
+                    if prior_cells and not _has_number_fact(prior, numeric) \
+                            and first and len(eligible) == 1 \
+                            and not _after_edge_markers(
+                                eligible[0][0]).startswith('('):
+                        # A parenthetical is not a heading. The test ran on the
+                        # UNTRIMMED text, so a leading dash walked `— (Loss)`
+                        # straight past it. Leading markers are ignored for THIS
+                        # DECISION only — the stored text below is untouched.
+                        # STORED EXACT. The trim lived here and made the section
+                        # a prettified string beside an untrimmed span — the
+                        # same defect as the headers, 133 of them corpus-wide.
+                        ev['section'], ev['section_span'] = eligible[0]
+                        break
+    else:
+        ev['block'] = _text(owner, veiled)
+        ev['block_span'] = prepared.get('node_spans', {}).get(id(owner))
+    return ev, 'ok'
+
+
+def element_evidence(doc_or_html, element_id):
+    """(evidence, 'ok') for the exact element carrying id=element_id, else
+    (None, reason). Accepts a prepare()d document or raw HTML text.
+
+    EU-164 (#827): the blank_id/malformed_id tokens below are the binder's
+    own published vocabulary (the CL-039 block); their rules — a blank id
+    means look-up-by-identity, id lexical validity is XML 1.0 — are cited
+    in place. Never T1 outcome codes.
+    """
+    # XML 1.0 S, not Python's Unicode set: a bare `.strip()` called an id of
+    # U+00A0 blank, and blank here means "look me up by identity instead".
+    prepared = _prepared(doc_or_html)
+    if refused(prepared):
+        return None, refused(prepared)
+    if not element_id or not str(element_id).strip(XML_WS):
+        return None, 'blank_id'
+    # AN XML ID IS AN NCName, and this is the ONE door both consumers use —
+    # the binder and the locator — so the rule lives here rather than being
+    # written twice. Contexts and units have been held to it since round 5;
+    # the fact's own id never was, so `id="1 2"` and `id="a<b"` resolved and
+    # bound through BOTH callers.
+    if _xml_id(str(element_id)) is None:
+        return None, 'malformed_id'
+    # EU-162 (#827): the two bounds below are the target-resolution law's own
+    # numbers, never tunables — XML 1.0 (Fifth Edition) section 3.3.1,
+    # validity constraint ID: "Values of type ID must uniquely identify the
+    # elements which bear them", https://www.w3.org/TR/xml/#id . A count of 0
+    # means no such element (id_not_found); a count above 1 means the
+    # document broke that constraint and the target is AMBIGUOUS — under the
+    # frozen refuse-never-repair law (the EU-154 block) the binder refuses
+    # (duplicate_id) rather than picking one. 'ids' is prepare()'s own
+    # internal spelling under the EU-161 adjudication (hard key behind the
+    # refused() guard); the 0 default is the lawful never-seen count.
+    count = prepared['ids'].get(element_id, 0)
+    if count == 0:
+        return None, 'id_not_found'
+    if count > 1:
+        return None, 'duplicate_id'
+    # EU-161 (#827): FAIL-CLOSED adjudication — 'elements' is prepare()'s own
+    # internal spelling: the ONE complete-shape return literal sets it
+    # unconditionally, and the refusal shapes are guarded out above by
+    # refused(). The hard outer key makes a producer-consumer spelling drift
+    # fail LOUDLY at first use, never a silent misread; the inner .get
+    # abstains under its named reason below. Measured recall receipt
+    # g2_evid_recall_EU-161.txt: ZERO recall loss by construction
+    # (structural census + the live fixture corpus).
+    el = prepared['elements'].get(element_id)
+    if el is None:
+        return None, 'unsupported_element_kind'
+    return _evidence_from(el, prepared)
+
+
+def graph_concept_target(concept_key, concept_namespace, graph_concept_qname):
+    """THE graph Concept record as ONE expanded name, or None when it cannot be
+    trusted. The single owner both the binder and the locator earn their target
+    from — written once so the two cannot drift into different rules.
+
+    A concept is a QName: what identifies it is (namespace URI, local name), and
+    the prefix is only an alias the filing chose. `concept_key` is the concept
+    the caller is asking about; the Concept record's OWN qname must agree with
+    it exactly before either half is trusted, because combining a namespace from
+    one record with a local part taken from somewhere else would assert an
+    expanded name that no single source ever made.
+
+    Returns None — never a guess — when the identity is missing, unusable, or
+    disagrees. The caller turns that into a truthful refusal.
+
+    EU-151 (#827): the namespace-presence check is FAIL-CLOSED at this one
+    owner — a missing/blank namespace returns None (the binder publishes
+    missing_graph_concept_namespace), never an empty-string default
+    participating in the expanded-name compare (the review-disproof this
+    row records); the graph-side requirement is the F7 row contract's
+    required-non-blank concept identity.
+    """
+    if not isinstance(concept_namespace, str) or not concept_namespace.strip():
+        return None
+    if not isinstance(graph_concept_qname, str) or not graph_concept_qname.strip():
+        return None
+    if graph_concept_qname != concept_key:
+        return None
+    # EU-172 (#827): the census member here (the parts[1] prefix subscript)
+    # was DELETED by the XMLNAME-MIN refactor (its own reviewed row, entry
+    # 105): graph_qname_parts now returns only the local name. The surviving
+    # rule is the None guard below — FAIL-CLOSED: a stored qname that is not
+    # a QName refuses under this identity's own reason rather than flowing
+    # on as an empty local name. Measured recall receipt
+    # g2_evid_recall_EU-172.txt: 0 of 13,775,616 stored graph qnames are
+    # refused (the contract-sheet census) — the guard only catches
+    # corruption.
+    local = graph_qname_parts(graph_concept_qname)
+    if local is None:
+        return None
+    return (concept_namespace, local)
+
+
+def one_concept_target(concept_key, records):
+    """The ONE target a set of graph Concept records agrees on, or None.
+
+    Identical records may collapse — the same fact read twice is not a conflict.
+    DISAGREEMENT MUST PARK: silently taking the first of several disagreeing
+    Concept identities would let row order decide what a fact means.
+    """
+    # EU-174 (#827): the exactly-one bound below consumes the frozen
+    # refuse-never-repair law (the EU-154 block) — a set of graph Concept
+    # records must AGREE on one expanded target; disagreement refuses (None)
+    # rather than letting row order pick a meaning. Reach lane:
+    # PROOF_ONLY_REACHED (g2_fevid_call_trace_v5.tsv) — proof-lane behavior,
+    # held to the same law.
+    targets = {graph_concept_target(concept_key, ns, qn)
+               for ns, qn in records}
+    if len(targets) != 1:
+        return None                      # none usable, or they disagree
+    return targets.pop()                 # may itself be None -> refuse
+
+
+def identity_fallback(doc_or_html, target, context_ref, unit_ref):
+    """Complete-identity fallback (FinalPlan §5A.3) — searches BOTH id-carrying and
+    id-less elements (a null graph fact_id usually MEANS the element has no id).
+    Returns (element, 'ok') only when exactly one matches.
+
+    THE CONCEPT HALF IS AN EXPANDED NAME, not the prefixed text. `concept_target`
+    is (namespace URI, local name), resolved once by the caller from the graph's
+    own Concept record. Comparing the raw `name` attribute instead made the
+    "complete identity" incomplete: a document may lawfully bind two prefixes to
+    ONE taxonomy, and a fact written `gaap:Revenues` then failed to match a graph
+    concept stored as `us-gaap:Revenues` even though they are the same concept —
+    so a blank-id fact refused as `no_identity_match` while its exact-id twin
+    bound. `contextRef` and `unitRef` stay EXACT: they are document-local IDREFs,
+    not QNames, and nothing may normalise them.
+    """
+    prepared = _prepared(doc_or_html)
+    if refused(prepared):
+        return None, refused(prepared)
+    # EU-173 (#827): the identity attrs compared below (name, contextRef,
+    # unitRef) and the (or '') no-unit/no-context normalizations consume the
+    # frozen equality law cited at the EU-154 block; the outcome spellings
+    # (no_identity_match / ambiguous_identity / ok) are this binder's OWN
+    # published vocabulary (the EU-160 precedent); 'elements'/'noid_elements'
+    # stand under the EU-161 fail-closed adjudication.
+    #
+    # OPEN-RECORDED (SEQ 553, in force): the exactly-one bound below
+    # implements the SUFFICIENCY claim — a unique (expanded concept,
+    # contextRef, unitRef) triple binds an ID-less graph fact. That claim
+    # has NO frozen product-contract clause (searched: FINAL_DESIGN,
+    # ChannelContract, BUILD_AND_OPERATIONS, 15_CandidateFactPacket, the
+    # Core-Fiscal contract sheet) and per SEQ 553 it STAYS OPEN until an
+    # owner-frozen contract row exists; FinalPlan section 5A.3 is history
+    # prose, lead only. Both refusal sides are fail-closed meanwhile
+    # (0 matches refuse, more than one refuses) — the open question is the
+    # product-level sufficiency of the triple, never a silent bind.
+    pool = list(prepared['elements'].values()) + prepared['noid_elements']
+    hits = [f for f in pool
+            if _qname(_typed(f.sem, 'name'), f.sem) == target
+            and (_typed(f.sem, 'contextRef') or '') == context_ref
+            and (_typed(f.sem, 'unitRef') or '') == unit_ref]
+    if not hits:
+        return None, 'no_identity_match'
+    if len(hits) > 1:
+        return None, 'ambiguous_identity'
+    return hits[0], 'ok'
+
+
+def evidence_for_element(doc_or_html, fact):
+    """Evidence for an already-bridged fact (the fallback path)."""
+    prepared = _prepared(doc_or_html)
+    if refused(prepared):
+        return None, refused(prepared)
+    return _evidence_from(fact, prepared)
+
+
+def find_by_identity(doc_or_html, target, unit_ref):
+    """Candidate ids by EXPANDED concept identity, for the same reason
+    `identity_fallback` uses one: a prefix is an alias, so raw-name equality
+    both misses a lawful second binding of one taxonomy and cannot tell two
+    taxonomies apart. `unitRef` stays exact — it is a document-local IDREF."""
+    prepared = _prepared(doc_or_html)
+    if refused(prepared):
+        return []            # an unreadable filing offers no candidates
+    # EU-171 (#827): the '' below is the no-unit identity — an element whose
+    # unitRef attribute is ABSENT claims no unit, and the binder's
+    # unit_ref_mismatch arm applies the IDENTICAL (unit_ref or '')
+    # normalization, both consuming the frozen equality law cited at the
+    # EU-154 block (unitRef stays an exact document-local IDREF otherwise).
+    # 'elements' stands under the EU-161 fail-closed adjudication. Reach
+    # lane: PROOF_ONLY_REACHED — production callers do not reach this
+    # function (g2_fevid_call_trace_v5.tsv, sha256 a92244ef95...); proof-lane
+    # behavior, held to the same law.
+    return [eid for eid, f in prepared['elements'].items()
+            if _qname(_typed(f.sem, 'name'), f.sem) == target
+            and (_typed(f.sem, 'unitRef') or '') == unit_ref]
+
+
+# ---- exact Decimal reconciliation ----------------------------------------------
+
+# EXACT ASCII, not `\d`: Python's `\d` matches every Unicode decimal digit and
+# `Decimal()` accepts those too, so '７２６' and '٧٢٦' were read as 726 by a rule
+# whose only job is the SOURCE's ASCII printed syntax (#827 finding 1, proven
+# live before the fix). This validates syntax; it infers no meaning.
+# ---------------------------------------------------------------------------
+# THE OFFICIAL TRANSFORM REGISTRIES, and nothing else.
+#
+# `_NUM_DOT` and `_KNOWN_FMT` are GONE. They compared the raw text `ixt:...`,
+# which is a prefix — an alias the FILING chooses — so they answered the wrong
+# question in both directions, both reproduced through the public door:
+#
+#   a filing binding its own prefix to the OFFICIAL 2020 registry was REFUSED;
+#   a filing binding `ixt` to a near-miss URI was ACCEPTED as an official
+#   transform.
+#
+# ...and they hand-wrote a number grammar beside it, which is the transform
+# registry's job, not ours.
+#
+# SEC EDGAR admits registries only through its release process. Release 26.1's
+# machine-readable list names exactly these four; Arelle exposes SEVEN, and the
+# extra three (2008, 2010, 2011, WGWD) are NOT admitted here merely because the
+# library can reach them. No URI is case-repaired, slash-repaired or spelling-
+# repaired: a near-miss is a different registry.
+#
+# Sources:
+#   SEC EDGAR release 26.1 registry list
+#   https://www.sec.gov/files/ixbrl-transform-registries.json
+#   Inline XBRL 1.1 Part 1 §§10.1.2, 10.2.3, 16.1 — Recommendation 2013-11-18
+#   with approved errata corrections to 2026-07-14 (the current edition)
+#   https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18+errata-2026-07-14/inlineXBRL-part1-REC-2013-11-18+corrected-errata-2026-07-14.html
+# EU-060 (#827): the three URIs are the registries' OWN published
+# namespaces — XBRL Transformation Registry 3, REC 2015-02-26 ·
+# Registry 4, REC 2020-02-12 · Registry 5, REC 2022-02-16 (each REC date
+# is embedded in its URI; spec index
+# https://specifications.xbrl.org/spec-group-index-inline-xbrl.html) —
+# admitted for SEC filings by the release-26.1 registry list above.
+# Constants equal the published URIs verbatim; a drifted registry is a
+# DIFFERENT registry (pinned: the approved-registry node).
+_TR3 = 'http://www.xbrl.org/inlineXBRL/transformation/2015-02-26'
+_TR4 = 'http://www.xbrl.org/inlineXBRL/transformation/2020-02-12'
+_TR5 = 'http://www.xbrl.org/inlineXBRL/transformation/2022-02-16'
+#: The SEC's OWN registry. Official and admitted by release 26.1, but stock
+#: Arelle does not implement it — so a fact using it is lawful and unsupported,
+#: which is a different and kinder statement than malformed.
+# EU-059 (#827, the CL-032 member that split to its own slot): this URI is
+# the SEC's OWN transformation registry as published in the EDGAR release
+# 26.1 registry list already cited above
+# (https://www.sec.gov/files/ixbrl-transform-registries.json) — official and
+# admitted for filings, but not implemented by stock Arelle, which is why a
+# fact using it is lawful-and-unsupported rather than malformed. A drifted
+# URI silently reclassifies those facts (2 reds, the official-but-
+# unimplemented node).
+_SEC_REGISTRY = 'http://www.sec.gov/inlineXBRL/transformation/2015-08-31'
+#: The three whose transforms an implementation must supply.
+_IMPLEMENTED_REGISTRIES = frozenset({_TR3, _TR4, _TR5})
+
+MALFORMED_FORMAT = 'malformed_format'
+UNSUPPORTED_TRANSFORM_REGISTRY = 'unsupported_transform_registry'
+UNSUPPORTED_OFFICIAL_TRANSFORM = 'unsupported_official_transform'
+
+
+def _ixt_registry(uri):
+    """Arelle's function table for ONE approved registry, or None.
+
+    Arelle owns the transform grammar and behaviour; this only asks it for the
+    registry the FILING named. Imported lazily — `arelle` is a large package and
+    the transform path is the only place in the driver that needs it.
+    """
+    from arelle import FunctionIxt
+    return FunctionIxt.ixtNamespaceFunctions.get(uri)
+
+
+def _ixt_refusal():
+    """The transform API's DECLARED refusal type, with its translator armed.
+
+    Arelle raises through `XPathContext`, whose `_` gettext name is unbound
+    until something initialises it — so an invalid input surfaced as `NameError`
+    rather than as the library's own refusal. Only that one hook is set, on the
+    module: no process-wide `builtins` install, which would change behaviour for
+    every other consumer in the process.
+
+    EU-104 (#827) PIN-API-OR-REMOVE — the pin and the proven need, measured
+    on the installed release rather than assumed:
+      * PINNED API: arelle-release 2.38.20 (the installed pin; the
+        2.35.0 -> 2.38.20 drift row stays recorded), module
+        `arelle.formula.XPathContext`, two attributes only —
+        `FunctionArgType` (the declared refusal type this reader catches)
+        and `_` (the module's own gettext hook, which the library reads
+        when it formats that refusal).
+      * PROVEN NEED, measured 2026-08-08 in a FRESH interpreter on 2.38.20:
+        `getattr(XPathContext, '_', None)` is None on import, and raising
+        the library's own `FunctionArgType` then dies with
+        `NameError: name '_' is not defined`. With the hook armed the same
+        raise yields the library's real message
+        ("[err:XPTY0004]: Arg 2 expected type str"). So without this one
+        line an INVALID transform input surfaces as a NameError from inside
+        a dependency instead of as the refusal this reader is written to
+        catch — the fail-closed path would be unreachable.
+      * CONTAINMENT: the hook is set on the MODULE and only when absent —
+        never a process-wide builtins install, so no other consumer in the
+        process changes behaviour, and re-arming is idempotent.
+    """
+    from arelle.formula import XPathContext
+    if getattr(XPathContext, '_', None) is None:
+        import gettext
+        XPathContext._ = gettext.gettext
+    return XPathContext.FunctionArgType
+
+
+def transform_status(fmt_expanded):
+    """Classify a fact's `format`, or None when it may be applied.
+
+    Returns a truthful refusal reason rather than letting an unreadable
+    transform fall through to a generic "the number did not match": every one
+    of the six legacy/near-miss/SEC cases used to end in
+    `value_does_not_reconcile`, which names the arithmetic and hides the cause.
+
+    ONE ARGUMENT, and no raw spelling. This took `fmt_raw` as well, to tell
+    ABSENT from present — but the boundary already refuses every present-and-
+    malformed `format` before an evidence record exists, so by the time anything
+    calls this, `None` can only mean ABSENT. Carrying the raw text as a second
+    source of truth let a caller passing `''` be read as "no format", which is
+    the raw-string compatibility path this round exists to remove.
+    """
+    if fmt_expanded is None:                  # ABSENT is lawful and distinct
+        return None
+    uri, local = fmt_expanded
+    if uri == _SEC_REGISTRY:
+        # Official under release 26.1, unimplemented by the pinned library. Not
+        # malformed, not silently dropped, and NOT hand-written here.
+        return UNSUPPORTED_OFFICIAL_TRANSFORM
+    if uri not in _IMPLEMENTED_REGISTRIES:
+        return UNSUPPORTED_TRANSFORM_REGISTRY
+    if local not in (_ixt_registry(uri) or {}):
+        # An approved registry that names no such signature: the filing states
+        # a transform this version does not define, which is malformed markup.
+        return MALFORMED_FORMAT
+    return None
+
+
+# GRAPH VALUE READING — who owns what, after GRAPH-DECIMAL (#827) deleted the
+# project-authored `_GRAPH_NUMBER` grammar that used to live here.
+#
+# LEXICAL OWNER — XSD decimal, reused through Arelle's pinned `decimalPattern`.
+#   There is NO project-authored production regex. Every finite XSD decimal
+#   spelling is lawful input, INCLUDING ungrouped digit runs, `+1234`, `01234`,
+#   trailing fraction zeros, and fractions longer than three digits.
+#
+# WHAT THE WRITER EMITS — the two identical `neograph/Neo4jManager.py`
+#   formatters (`f"{v:,}"` for int, `f"{v:,.3f}".rstrip('0').rstrip('.')` for
+#   float) produce comma-grouped text with at most a 3-digit fraction. That is
+#   a fact about the WRITER, not a licence to refuse other spellings on read.
+#   Comma-bearing text is outside XSD, so it is admitted only when it round-
+#   trips exactly through the runtime's canonical grouped formatting at the
+#   input's stated precision.
+#
+# CENSUS — 12,402,201 graph values (2026-08-01: underscores 0, exponents 0, NaN
+#   letters 0, parentheses 0). Compatibility evidence about what the corpus
+#   happens to hold; never the source of a rule.
+#
+# SOURCE accounting signs and parentheses are FinalPlan §6 / source-reader law:
+#   that lane owns the visible accounting-negative case, not graph `Fact.value`
+#   spelling — so parentheses are refused here and handled where the source is
+#   read.
+#
+# `Decimal()` IS NOT A LEXICAL GATE — it reads Python underscore separators
+#   (`1_0` -> 10), full-width and Arabic-Indic digits, exponents, Infinity, and
+#   sNaN, a SIGNALLING NaN that raises as soon as anything touches it. That is
+#   exactly why `decimalPattern` must run BEFORE the finite-number owner. The
+#   same lesson `xml_integer` already carries, on the graph's side of the join.
+def parse_raw(raw):
+    """Graph raw value string → exact Decimal, or None when it is not one.
+
+    GRAPH-ONLY. The accepted language is XSD decimal, owned by Arelle's
+    pinned `decimalPattern` (see above), so ungrouped digit runs, `+1234`,
+    `01234`, trailing fraction zeros and long fractions all READ. Comma-
+    bearing text is outside XSD and is admitted only on an exact round-trip
+    through the runtime's canonical grouped formatting. Parentheses,
+    whitespace padding, underscores, Unicode digits, exponents and
+    non-finite spellings are not XSD decimals and refuse here. The SOURCE
+    lane's accounting-negative law (visible parentheses with the schema's
+    `sign`) lives with the source readers, not in this parser.
+    """
+    if not isinstance(raw, str):
+        return None
+    # SEQ 923: the custom `_GRAPH_NUMBER` grammar is DELETED. Reproduced on the
+    # public path, it filtered PRESENTATION rather than numeric correctness: it
+    # refused exact finite numbers — `1234`, `12345.6`, `0.0001`, and even the
+    # writer's own `1,234.50` (a trailing fraction zero) — purely on spelling,
+    # while its own docstring conceded the accepted language rested on "corpus
+    # evidence ... compatibility, not legality". A parser that carries digits,
+    # sign and point through untouched cannot defend correctness by refusing
+    # digits. The ONE exact finite-number owner decides now; only its declared
+    # refusal is caught, and no second grammar replaces it.
+    bare = raw.replace(',', '')
+    # XSD decimal is the OFFICIAL lexical owner here — Arelle's pinned
+    # `decimalPattern`, already this module's grammar for no-format facts, not a
+    # rule written by us. It must run BEFORE the finite-number owner, because
+    # `Decimal()` itself reads whitespace padding, Python underscores, Unicode
+    # digits and exponents; routing straight to `dec` admitted all of those
+    # (measured: 8 of 8 hostile spellings accepted).
+    from arelle.XmlValidate import decimalPattern
+    if not decimalPattern.fullmatch(bare):
+        return None
+    try:
+        value = _exact_dec(bare)
+    except ExactError:
+        return None
+    if ',' in raw:
+        # Grouping is validated by RE-RUNNING THE WRITER'S OWN formatting
+        # mechanic (documented above: `f"{v:,}"` / `f"{v:,.Nf}"`), never by a
+        # second handwritten grouping grammar. Malformed grouping fails to
+        # round-trip; digits, sign and decimal position are never altered.
+        # NO ARITHMETIC HERE. `abs(value)` is context-sensitive and raised
+        # decimal.Overflow on the million-digit door case — a crash on the
+        # public path, in the very formatter meant to validate it. Formatting
+        # alone carries the sign and needs no context widening.
+        places = -value.as_tuple().exponent
+        if format(value, "," if places <= 0 else f",.{places}f") != raw:
+            return None
+    return value
+
+def _no_format_value(text):
+    """Inline XBRL 1.1 §10.1.2 — a fact with NO `format` states the number
+    itself, and it must be a NON-NEGATIVE XSD decimal.
+
+    XML Schema whitespace collapse ONLY, through the one XML-whitespace owner:
+    a blanket Python `.strip()` also eats U+00A0, U+000B, U+000C and U+3000,
+    which XML does not call space, so padding with those was silently accepted
+    as if the filing had written a clean number.
+
+    The grammar is Arelle's `decimalPattern`, not one written here. `Decimal()`
+    is NOT that grammar — it reads Python underscores, Unicode digits,
+    exponents, Infinity and signalling NaN. `+0` and `-0` are the value zero and
+    lawful; a negative NONZERO value is not.
+    """
+    from arelle.XmlValidate import decimalPattern
+    # EU-111 (#827): the or-'' arm is UNOBSERVABLE BY MEASUREMENT — an
+    # empty no-format fact is refused UPSTREAM by the content-model law
+    # (door-probed: malformed_fact_content_model identically with the arm
+    # intact and with a fabricating '0' default; the suite green under the
+    # fabrication), and if a future path reached it, '' fails the
+    # NON-NEGATIVE xs:decimal grammar below — withhold-only, never a
+    # fabricated value. No mutation entry per the F1/entry-120 precedent
+    # (the EU-147 form).
+    collapsed = _collapse(text or '')
+    if not decimalPattern.fullmatch(collapsed):
+        return None
+    value = Decimal(collapsed)
+    # EU-112 (#827): the 0 bound is the clause's own number — Inline XBRL
+    # 1.1 section 10.1.2 (the current-edition URL at the spec-sources
+    # note): a fact with NO format states the number itself and it MUST be
+    # a NON-NEGATIVE decimal; Arelle's decimalPattern admits a sign, so
+    # this gate is LOAD-BEARING (measured: weakening it BINDS a negative
+    # no-format fact), and -0 compares equal to 0 and stays lawful.
+    if value < 0:                       # -0 compares equal to 0 and is lawful
+        return None
+    return value
+
+
+def printed_value(displayed, fmt_expanded, sign):
+    """The SIGNED, UNSCALED source-printed value (the emission value), or None.
+
+    `fmt_expanded` is the format's (namespace URI, local name) — the identity —
+    or None when the fact states no format at all. The filing's raw spelling is
+    never passed here and never compared: it is a prefix the filer chose, and
+    comparing it both refused lawful official transforms and accepted
+    imitations of them.
+    """
+    # EU-182 (#827): FAIL-CLOSED — the '' default is the truthful
+    # NOTHING-WAS-PRINTED reading, and every transform grammar refuses it
+    # (the fixed-zero family ignores its input by definition and is the
+    # only lawful exception), so an empty display can never become a
+    # value. A fabricating default would mint one out of nothing: pinned
+    # directly at the public function.
+    shown = displayed or ''
+    # The sign attribute carries the LITERAL '-' or is absent. It is NOT
+    # stripped: repairing ' - ' into '-' invents a reading of malformed markup,
+    # the same class as repairing a padded element id. Evidence that strictness
+    # is free: 254,351 sign attributes across 1,769 real filings, every one
+    # exactly '-'. (Unlike `scale`, whose spec type collapses whitespace — the
+    # rule follows each attribute's own lexical space, not a blanket policy.)
+    #
+    # THIS CHECK NOW RUNS BEFORE THE FIXED-ZERO RETURN. `fixed-zero` returned
+    # Decimal(0) first, so `sign="x"` and `sign=" - "` yielded a VALUE from
+    # malformed markup instead of abstaining — reachable through the public
+    # event door. Moving the existing lines up IS the whole fix: no new code,
+    # no new refusal path, and it covers every branch at once. Lawful cases
+    # that must keep working, and do: sign absent (193,026 fixed-zero tags in
+    # the cache) and sign='-' (936).
+    # EU-183 (#827): an ABSENT sign is the POSITIVE case — Inline XBRL 1.1
+    # declares @sign as a restriction of xs:string whose only lawful value
+    # is '-' (the negation flag; section 10.1.1, current-edition URL at the
+    # spec-sources note), so absence means "not negated" and is normalised
+    # to '' here for the one comparison below. Both callers can pass None
+    # (the locator hands through a record field), so this arm is live:
+    # pinned directly at the public function.
+    sign = '' if sign is None else sign
+    if sign not in ('', '-'):          # a malformed sign is MALFORMED EVIDENCE:
+        return None                    # reading it as positive invented a value
+    if fmt_expanded is None:
+        value = _no_format_value(shown)
+    else:
+        if transform_status(fmt_expanded) is not None:
+            return None                # the caller reports the truthful reason
+        # THE REGISTRY TRANSFORMS IT. We do not reimplement `num-dot-decimal`,
+        # `fixed-zero` or any other signature, and we do not pre-screen the
+        # input: the registry owns which text it accepts — `fixed-zero` lawfully
+        # accepts ANY string — and second-guessing it here is how the old
+        # hand-written grammar refused lawful facts.
+        uri, local = fmt_expanded
+        # THE REFUSAL TYPE IS RESOLVED **BEFORE** THE CALL. `except _ixt_refusal():`
+        # looks equivalent, but Python evaluates that expression only once an
+        # exception is already propagating — so the gettext hook it arms was
+        # armed too late for the very refusal it exists to catch, and the FIRST
+        # invalid input in a process surfaced as `NameError: name '_' is not
+        # defined` instead of an abstention. Resolving it first also means the
+        # `except` clause is a plain type, with no work left to fail.
+        refusal = _ixt_refusal()
+        try:
+            out = _ixt_registry(uri)[local](shown)
+        except refusal:
+            return None                # the API's DECLARED refusal, and only it
+        # A TRANSFORM NEED NOT PRODUCE A NUMBER. Date, boolean and word
+        # transforms are lawful members of these registries; their output simply
+        # cannot become a numeric fact, so it is checked against the same
+        # official decimal grammar rather than handed to `Decimal()`.
+        if not isinstance(out, str):
+            return None
+        from arelle.XmlValidate import decimalPattern
+        if not decimalPattern.fullmatch(out):
+            return None
+        value = Decimal(out)
+    if value is None:
+        return None
+    # SIGN LAST, exactly as §10.1.2 orders it: the transform supplies neither
+    # sign nor scale, and scale is applied later still, in reconciliation.
+    return -value if sign == '-' else value
+
+
+#: (the ONE `_XSI_NS` definition lives beside the context shape law above —
+#: XML Schema instance, where both `nil` and `type` live)
+#: The XML Schema boolean lexical space, and ONLY it. `xs:boolean` collapses
+#: whitespace and then admits exactly these four spellings; `TRUE`, `yes` and
+#: `''` are not among them, so a nil claim written any other way is markup this
+#: parser must refuse rather than quietly read as false.
+#: https://www.w3.org/TR/xmlschema-2/#boolean
+#: EU-044 (#827): the four spellings are W3C XML Schema Part 2: Datatypes,
+#: Second Edition, REC 2004-10-28, section 3.2.2 boolean — the lexical
+#: space is exactly {true, false, 1, 0} (the URL above); admitting any
+#: other spelling would read a misspelled nil claim as a value claim.
+_XS_TRUE, _XS_FALSE = ('true', '1'), ('false', '0')
+
+#: EVERY way a nonFraction can fail to state ONE value, each named for the rule
+#: it breaks. Kept beside the reader so a refusal can never be vaguer than the
+#: law it enforces.
+#: `malformed`, not `unsupported`: these shapes violate the Inline XBRL content
+#: model, so the markup is wrong — this product is not merely declining to
+#: support something lawful, which is a different and much kinder claim.
+MALFORMED_FACT_CONTENT = 'malformed_fact_content_model'
+# EU-046 (#827): the nil-on-ix-fact clause is NOT unresolved — the exact
+# current-edition citation (REC 2013-11-18 + errata 2026-07-14, section
+# 10.1.1 quoted, full URL) lives at the nonFraction reader's spec-sources
+# note, and these tokens are the binder's own vocabulary naming WHICH of
+# its rules broke (nil outside the boolean space; nil stating accuracy —
+# the XBRL 2.1 section 4.6.3 contradiction; a true-nil below a nonFraction
+# ancestor). Both contradiction arms are pinned.
+MALFORMED_FACT_NIL = 'malformed_nil'
+MALFORMED_NESTED_NIL = 'malformed_nested_nil'
+MALFORMED_FACT_ACCURACY = 'malformed_decimals_or_precision'
+NESTED_FACT_DISAGREES = 'nested_fact_disagrees'
+NIL_FACT_HAS_NO_VALUE = 'nil_fact_has_no_value'
+
+
+def _integer_pattern():
+    """ARELLE OWNS THE OFFICIAL INTEGER GRAMMAR; this only borrows it.
+
+    `xml_integer` CONVERTS, so CPython's 4,300-digit ceiling made it refuse
+    integers the schema permits — a limit of our runtime reported as a defect in
+    the filing. The pinned `arelle-release` already carries the lexical pattern
+    the standard defines, and matching text against it never converts.
+
+    Imported lazily: `arelle` is a large package and this is the one place in
+    the driver that needs it, so nothing else pays to load it.
+    """
+    from arelle.XmlValidate import integerPattern
+    return integerPattern
+
+
+def _nil_true(el):
+    """`xsi:nil` read as the `xs:boolean` it is: True, False, or None when the
+    attribute is absent — and `_typed` has already applied the collapse facet,
+    so ` true ` is `true`. A spelling outside the lexical space raises, because
+    reading a misspelled nil claim as "not nil" would bind a value the filing
+    says does not exist."""
+    # EU-110 (#827): the Clark-form read is xsi:nil exactly — the attribute
+    # vocabulary is XML Schema Part 1 2e section 2.6.2 (xsi:nil),
+    # https://www.w3.org/TR/xmlschema-1/#xsi_nil , and the clause governing
+    # nil ON AN IX FACT is the current-edition Inline XBRL 1.1 section
+    # 10.1.1 sentence already quoted with its URL at the nonFraction
+    # reader's spec-sources note (the EU-046 record) — the applicability
+    # question the census left open is CLOSED by that citation.
+    raw = _typed(el, '{%s}nil' % _XSI_NS)
+    if raw is None:
+        return None
+    # CL-072 (#827, EU-108 + EU-109): the two returns are the xs:boolean
+    # reading's own arms (the cited lexical space above): true/1 asserts
+    # the fact is NIL (lawful, no value), false/0 asserts a NORMAL fact,
+    # anything else raises — both directions pinned (a true nil states no
+    # value; an explicit false nil is a normal fact).
+    if raw in _XS_TRUE:
+        return True
+    if raw in _XS_FALSE:
+        return False
+    raise _MalformedNil()
+
+
+class _MalformedNil(Exception):
+    """`xsi:nil` outside the boolean lexical space — internal to the reader."""
+
+
+def _accuracy_ok(dec, prec):
+    """XBRL 2.1 §4.6.3: a NON-NIL numeric fact states EXACTLY ONE of `decimals`
+    or `precision`, each in its own lexical type.
+
+    `xbrli:decimalsType` is the union of `xs:integer` and `INF`;
+    `xbrli:precisionType` is the union of `xs:nonNegativeInteger` and `INF`.
+    Both are checked as TEXT against Arelle's official pattern, so an integer of
+    any length is judged by the standard rather than by a conversion limit.
+
+    NON-NEGATIVE WITHOUT CONVERTING: the sign and the presence of a nonzero
+    digit decide it. `-0`, `-00` and arbitrarily long runs of zeros are all the
+    value zero and lawful; only a negative with a nonzero digit is not.
+
+    Takes the two VALUES rather than the element: the caller has already read
+    them to settle the nil rules, and reading an attribute twice is how the two
+    readings drift apart.
+    """
+    # CL-041 (#827, EU-063 + EU-064): the two returns below are the accept
+    # and reject arms of the ALREADY-CITED accuracy law (XBRL 2.1 section
+    # 4.6.3, the union facets, Arelle's official integer grammar — the
+    # docstring above). FAIL-CLOSED shape: acceptance is reachable ONLY
+    # through the cited gates (exactly one attribute; the exact
+    # three-character INF member; the official integer pattern; a
+    # non-negative precision) and every other path rejects — the reject
+    # arm is the default, never the exception. Both arms pinned (padded
+    # INF; both-or-neither).
+    if (dec is None) == (prec is None):        # both, or neither
+        return False
+    raw = dec if dec is not None else prec
+    # THE UNION'S TWO MEMBERS CARRY TWO DIFFERENT FACETS, so the value is read
+    # RAW and each member applies its own. The `INF` member restricts
+    # `xs:string`, which PRESERVES whitespace, so only the exact three
+    # characters are that member's value — ` INF ` is not `INF`, it is
+    # malformed markup. The numeric member restricts `xs:integer`, which
+    # COLLAPSES, so ` -6 ` is `-6` and is collapsed here, once, by the one
+    # XML-whitespace owner.
+    if raw == 'INF':                           # the exact string-union member
+        return True
+    collapsed = _collapse(raw)
+    # `fullmatch`, NOT `match`: the pattern ends `$`, which in this engine also
+    # matches before a trailing newline, so `6\n` passed.
+    if not _integer_pattern().fullmatch(collapsed):
+        return False
+    raw = collapsed
+    if dec is not None:
+        return True
+    # CL-040 (#827, EU-065/066/067): the union members' exact citations —
+    # W3C XML Schema Part 2 Datatypes 2e, REC 2004-10-28: xs:integer
+    # section 3.3.13 (any sign; decimals' numeric member),
+    # xs:nonNegativeInteger section 3.3.20 (value space >= 0, so '-0'
+    # DENOTES ZERO and is lawful while a negative with any nonzero digit
+    # is not — decided below without converting),
+    # https://www.w3.org/TR/xmlschema-2/#nonNegativeInteger ; the INF arm
+    # above is the exact three-character string-union member (entry 243
+    # pins it for EU-066 as well) and the official integer grammar arm is
+    # fullmatch-anchored (the recorded trailing-newline defect stays
+    # caught).
+    return not (raw.startswith('-') and any(c in '123456789' for c in raw))
+
+
+def fact_value_input(el):
+    """THE TRANSFORM INPUT for one `ix:nonFraction`, read from the STRICT fact.
+
+    Returns `(text, None)` or `(None, reason)`.
+
+    WHY THIS EXISTS. Reconciliation used to consume the RENDERER's `displayed`
+    text — the visible characters of whatever the browser lays out under the
+    element. Inline XBRL 1.1 §§10.1.1-10.1.2 defines the value from the XML
+    fact instead, and the difference is not academic: any markup child rendered
+    to the same characters bound just as readily as the real value, and a
+    NESTED fact declaring a different scale or unitRef bound while contributing
+    a number that means something else.
+
+    THE CONTENT MODEL, and it is small: exactly one child — text, or one nested
+    `ix:nonFraction` that AGREES with its ancestor on the three properties that
+    change what the number means. Format is compared as an EXPANDED name,
+    because a prefix is an alias; scale is compared as a parsed integer,
+    because `06` and `6` are the same scale; `unitRef` is an NCName reference
+    and is compared exactly.
+
+    MEASURED before it was written, read-only over 150 frozen filings and
+    282,604 facts: 98.87% carry text alone, 1.13% (3,206) carry ONE nested
+    nonFraction — with ZERO attribute disagreements — and NOT ONE carries a
+    markup child. So refusing markup costs nothing real, and the nested case
+    had to keep working or the rule would have broken 3,206 lawful facts.
+
+    Spec sources:
+      Inline XBRL 1.1 Part 1 §10.1.1 nonFraction, §10.1.2 value —
+      Recommendation 2013-11-18 with approved errata corrections to
+      2026-07-14, the current edition, read and confirmed unchanged on these
+      sections: "exactly one child which SHALL be either an `ix:nonFraction`
+      element or a text node, unless it has an `xsi:nil` attribute with the
+      value true", the nested element in the SAME namespace, and a text-node
+      child that "MUST be a non-empty string".
+      https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18+errata-2026-07-14/inlineXBRL-part1-REC-2013-11-18+corrected-errata-2026-07-14.html
+    """
+    # CL-113 + CL-114 (#827, EU-166/167/169/170): the descent loop and its
+    # bounds. The nesting law is Inline XBRL 1.1 section 10.1.1/10.1.2 —
+    # quoted verbatim with its current-edition URL in the spec-sources note
+    # above: exactly ONE child, either an ix:nonFraction or a text node; a
+    # nested fact must AGREE on format, scale and unitRef, and the accuracy
+    # attributes are 'decimals'/'precision' (XBRL 2.1 section 4.6.3, read
+    # at EVERY level). FAIL-CLOSED bounds: depth starts at 0 so the OUTER
+    # fact is not mistaken for a nested one (a true nil at depth 0 is a
+    # lawful no-value fact, at depth>0 it is malformed — 2 reds), the loop
+    # descends only through that exactly-one lawful child (its removal
+    # collapses every read — 54 reds), and any other shape refuses.
+    node, depth = el, 0
+    while True:
+        # NIL IS READ ONCE PER LEVEL, and the whole nil/accuracy combination is
+        # settled before any "lawful no-value" answer is given. Returning early
+        # on `nil=true` skipped both checks below, so a fact carrying a
+        # contradiction was reported as a lawful empty one — a refusal that
+        # sounds like a fact about the filer's data when it is a fact about
+        # their markup.
+        try:
+            nil = _nil_true(node)
+        except _MalformedNil:
+            return None, MALFORMED_FACT_NIL
+        dec, prec = _typed(node, 'decimals'), _typed(node, 'precision')
+        if nil:
+            # XBRL 2.1 §4.6.3 — a nil item asserts NO value, so it may bound
+            # no accuracy either. Stating both is a contradiction in the markup.
+            if dec is not None or prec is not None:
+                return None, MALFORMED_FACT_ACCURACY
+            # Inline XBRL 1.1 §10.1.1 — a true-nil nonFraction MUST NOT sit
+            # below a nonFraction ancestor: the outer fact would then have a
+            # child that supplies nothing.
+            if depth:
+                return None, MALFORMED_NESTED_NIL
+            # 4,656 facts in the frozen cache (0.202%) reach here: lawful
+            # filings that simply cannot supply the value a non-nil graph row
+            # asserts.
+            return None, NIL_FACT_HAS_NO_VALUE
+        # EVERY CHILD NODE COUNTS, including the ones that render as nothing.
+        # `isinstance(c.tag, str)` skipped comments and processing instructions,
+        # so `<ix:nonFraction><!--x--></ix:nonFraction>` looked childless and,
+        # with `format="ixt:fixed-zero"`, transformed into a clean 0.
+        # ACCURACY IS PER FACT, at EVERY level of the chain. XBRL 2.1 §4.6.3
+        # binds each numeric item, so checking only the leaf let an outer fact
+        # with no `decimals` and no `precision` travel on its child's.
+        if not _accuracy_ok(dec, prec):
+            return None, MALFORMED_FACT_ACCURACY
+        kids = list(node)
+        elements = [c for c in kids if isinstance(c.tag, str)]
+        if not kids:
+            # THE LEAF, and the question is HOW MANY CHILDREN — not what they
+            # say. `<f/>` has NO text node and `or ''` used to mint an empty one
+            # for it. `<f>   </f>` has ONE, exactly as `390` does.
+            #
+            # THE TEXT IS NOT STRIPPED, HERE OR ANYWHERE IN THIS READER. An
+            # earlier version judged non-emptiness after removing XML whitespace,
+            # which refused a lawful shape: `ixt:fixed-zero` accepts ANY string,
+            # so whether spaces are a lawful INPUT belongs to the transform. The
+            # value is handed on exactly as written.
+            if node.text is None:
+                return None, MALFORMED_FACT_CONTENT
+            return node.text, None
+        if len(kids) != 1 or len(elements) != 1 \
+                or not _is(elements[0], _INLINE_NS, 'nonFraction'):
+            return None, MALFORMED_FACT_CONTENT
+        child = elements[0]
+        # EXACTLY ONE CHILD, so ANY text node beside the nested fact is a
+        # SECOND child — including whitespace, which is a text node like any
+        # other. Stripping it first made ` <ix:nonFraction/> ` look like one
+        # child when the document plainly holds three.
+        if node.text is not None or child.tail is not None:
+            return None, MALFORMED_FACT_CONTENT
+        # THE THREE PROPERTIES THAT CHANGE THE MEANING OF THE NUMBER. Each is
+        # compared in the form that decides identity, not in the form written.
+        outer_fmt, inner_fmt = _typed(node, 'format'), _typed(child, 'format')
+        if (outer_fmt is None) != (inner_fmt is None):
+            return None, NESTED_FACT_DISAGREES
+        if outer_fmt is not None and \
+                _qname(outer_fmt, node) != _qname(inner_fmt, child):
+            return None, NESTED_FACT_DISAGREES
+        outer_scale = _typed(node, 'scale')
+        inner_scale = _typed(child, 'scale')
+        # EU-168 (#827): both defaults are the ix absent-scale law (10^0,
+        # the EU-096/EU-112 citation) applied to the AGREEMENT test, so an
+        # outer and inner that BOTH omit scale agree at zero and bind —
+        # measured: a drifted default refuses that lawful pair.
+        outer_n = 0 if outer_scale is None else xml_integer(outer_scale)
+        inner_n = 0 if inner_scale is None else xml_integer(inner_scale)
+        if outer_n is None or inner_n is None or outer_n != inner_n:
+            return None, NESTED_FACT_DISAGREES
+        if _typed(node, 'unitRef') != _typed(child, 'unitRef'):
+            return None, NESTED_FACT_DISAGREES
+        node, depth = child, depth + 1
+
+
+def reconcile(displayed, fmt_expanded, scale, sign, raw_value):
+    """displayed ∘ (format, scale, sign) == graph raw value (COMPARISON ONLY).
+
+    THE FORMAT ARRIVES AS ITS EXPANDED IDENTITY, never as the filing's prefix.
+
+    EXACT. The multiply used to run under the DEFAULT decimal context, so at 29
+    significant digits it REJECTED the correct value and ACCEPTED a rounded
+    wrong one — the worst possible pair. A power-of-ten shift never changes the
+    coefficient, so `scaleb` under a precision derived from the operands is
+    exact; an unrepresentable magnitude simply fails to reconcile."""
+    # EU-184 (#827): the four False returns in this function are the refusal
+    # side of the frozen value-reconciliation law — the exactness law owns
+    # value reconciliation (the EU-154 block; the binder publishes
+    # value_does_not_reconcile). COMPARISON ONLY: an unresolvable raw,
+    # printed value, scale type, or magnitude FAILS to reconcile; nothing is
+    # repaired, rounded, or guessed at this owner.
+    # The exact scale type-gate below is a RETAINED fail-closed safety net
+    # (the EU-016/S8 precedent): measured, exact_scaleb ITSELF refuses a
+    # non-real-int exponent with its own named ExactError ("scale exponent
+    # must be a real int"), so a weakened gate here is shadow-equivalent at
+    # this depth — the load-bearing mutation for this unit is the raw arm
+    # (entry 198), and the bool behavior is pinned through the public
+    # function either way.
+    raw = parse_raw(raw_value)
+    if raw is None:
+        return False
+    base = printed_value(displayed, fmt_expanded, sign)
+    if base is None:
+        return False
+    # The scale was ALREADY parsed once, at the HTML boundary, by the one XML
+    # integer parser. Here it must be a real Python int and nothing else:
+    # `int(6.9)` silently TRUNCATED to 6 and reconciled, and `isinstance(True,
+    # int)` is True, so only an exact type check is strict enough.
+    if type(scale) is not int:
+        return False
+    try:
+        return exact_scaleb(base, scale) == raw
+    except ExactError:
+        return False            # unrepresentable simply fails to reconcile
+
+# ---------------------------------------------------------------------------
+# THE ONE complete Route-A binding operation (FinalPlan §5A Route A, steps 2-7).
+# Exposed here, in the binder, so no caller re-implements any part of it: a Core
+# verifier that called these pieces by hand got the identity law INVERTED and
+# re-imported an arithmetic defect it had already fixed elsewhere.
+# ---------------------------------------------------------------------------
+
+# EU-054 (#827): these Core-facing spellings REUSE the frozen packet
+# vocabulary — the exact clause is the Core-Fiscal contract sheet
+# (Core_Fiscal_ContractSheet_2026-07-31.md) section 2, "source_evidence —
+# exactly four keys": representation_sha256 (SHA-256 of the PREPARED text,
+# harvest-time) · quote_span ([start, end) character offsets) ·
+# raw_label_span (inside the quote span, or null) · pieces (ordered
+# {kind, text, span}; kind in ('header', 'section'); order CARRIED, never
+# chosen). Nothing here invents a spelling; the sheet is the owner.
+SOURCE_EVIDENCE_KEYS = ('representation_sha256', 'quote_span',
+                        'raw_label_span', 'pieces')
+PIECE_KEYS = ('kind', 'text', 'span')
+PIECE_KINDS = ('header', 'section')
+
+
+def source_evidence(prepared, ev):
+    """THE filing-side evidence for ONE already-resolved element — the four
+    approved keys — built once and used by BOTH the locator and Core.
+
+    EU-187 (#827): the record WRITTEN here is exactly the contract-sheet
+    section-2 shape (see the SOURCE_EVIDENCE_KEYS citation below — the
+    EU-054 clause); the element-evidence keys READ here (block, in_table,
+    row_text, row_span, row_label_span, columns, column_spans, section,
+    section_span) are element_evidence()'s own in-module vocabulary. No
+    spelling is invented at this site.
+
+    It was written only inside the locator, so Core had no way to check a
+    submitted claim against the filing except by trusting it. Two copies of this
+    would be two definitions of what the filing says, which is the one thing a
+    verifier may not have.
+
+    PURE over an already-prepared document and already-resolved element
+    evidence: it parses nothing, resolves nothing, searches nothing, and creates
+    no second representation hash. Every value is an EXACT slice of the pinned
+    text at its own recorded span; a piece whose span does not reproduce its
+    text is DROPPED rather than corrected. Returns None when the element has no
+    reproducible VISIBLE row/block evidence — evidence is never invented.
+
+    "Visible evidence", not "span": there are two ways to have none, and only
+    one of them is a missing span. A fact whose owner was never walked has
+    `span is None`; a lawful fact that DISPLAYS nothing — whitespace under
+    `ixt:fixed-zero`, say — has a real span of zero width and an empty quote.
+    Both mean the filing cannot show where this number is, and the guard below
+    covers both in one test.
+    """
+    quote = ev['row_text'] if ev['in_table'] else ev['block']
+    span = ev['row_span'] if ev['in_table'] else ev['block_span']
+    if not quote or span is None or prepared['text'][span[0]:span[1]] != quote:
+        return None
+    label_span = ev['row_label_span']
+    # EU-189 (#827, SEQ 855): a column whose text is nothing but SPACE
+    # CHARACTERS is a spacer cell, not a label, and is not evidence. Before
+    # NBSP was preserved this arm never saw one — the old reader flattened
+    # U+00A0 to U+0020 and `.split()` then dropped it, so the column came back
+    # empty and fell out here. Now a spacer survives as '\xa0' and would be
+    # emitted as a piece with a blank label, which Core rightly rejects
+    # ("each evidence piece needs non-blank string text"). Both owners answer
+    # the SAME question — "is there a label here" — so both use the same
+    # test; this is the label question, not the CSS collapsing question.
+    pieces = [{'kind': 'header', 'text': text, 'span': [sp[0], sp[1]]}
+              for text, sp in zip(ev['columns'], ev.get('column_spans', []))
+              if sp is not None and prepared['text'][sp[0]:sp[1]] == text
+              and text.strip()]
+    sec_span = ev.get('section_span')
+    if ev['section'] and sec_span is not None \
+            and prepared['text'][sec_span[0]:sec_span[1]] == ev['section']:
+        # ORDER IS CARRIED, NOT CHOSEN: aligned headers near→far, then the
+        # section. Core compares the sequence exactly; nothing may reorder it.
+        pieces.append({'kind': 'section', 'text': ev['section'],
+                       'span': [sec_span[0], sec_span[1]]})
+    return {'representation_sha256': prepared['text_sha'],
+            'quote_span': [span[0], span[1]],
+            'raw_label_span': ([label_span[0], label_span[1]]
+                               if label_span else None),
+            'pieces': pieces}
+
+
+def bind_graph_fact(doc_or_html, *, inline_element_id, concept, context_id,
+                    unit_ref, unit_name, is_divide, period_type, start_date,
+                    end_date, dims, entity_cik, raw_value,
+                    concept_namespace, graph_concept_qname):
+    """Bind ONE graph Fact to its exact inline element, or abstain.
+
+    EU-160 (#827), the key vocabularies this function reads and writes:
+    the element-field keys it reads (name_expanded, context_ref, unit_ref,
+    entity, period, dims_expanded, units, is_divide, fmt_expanded, scale,
+    sign, value_input) are `prepare()`'s OWN output vocabulary — writer and
+    reader live in this one module, so the owner is in-file, not a packet
+    clause; the RESULT keys it writes are the four-key contract stated
+    below in this docstring (Core consumes them in xbrl_attach); the
+    abstention-reason strings are this binder's own published vocabulary
+    (EU-159 closes its four tokens — malformed_element_id/period_type/
+    period/is_divide — under this same ownership; the rules behind each
+    are cited on their board rows). Nothing here restates a Fiscal packet
+    spelling.
+
+    Returns (bound, 'ok') or (None, reason). `bound` carries exactly FOUR
+    keys — `evidence` (the element-local record), `unit_measures_expanded`
+    and `unit_numerator_expanded` (the filing's declared unit as semantic
+    identities), and `printed_value`. Reconciliation has already proven the
+    graph value against what the filing prints, so the record does not carry
+    a Decimal copy of the graph's own input back to the caller.
+
+    SUPPORTED INPUT: `doc_or_html` is raw HTML text or the exact mapping
+    `prepare()` returned — never an arbitrary caller-built dict. The keyword
+    arguments are graph-row values and are validated here; the mapping's
+    internals are `prepare()`'s own guarantees, which is why this function
+    carries no second copy of `prepare()`'s refusals.
+
+    The law, in order:
+      * a NON-BLANK short id must resolve EXACTLY — missing, duplicate or
+        unsupported abstains and never falls through (step 2/7);
+      * the (name, contextRef, unitRef) fallback is permitted ONLY when the
+        short id is null/blank, and only when unique (step 3);
+      * the bound element's own concept, context, period, dimensions, entity and
+        unit must match the graph fact — a member elsewhere in the filing proves
+        nothing (steps 5/6);
+      * hidden without local evidence abstains (step 7);
+      * displayed ∘ (format, scale, sign) must equal the graph value under EXACT
+        Decimal arithmetic (step 4).
+    """
+    prepared = _prepared(doc_or_html)
+    if refused(prepared):
+        return None, refused(prepared)
+    # A non-string id is MALFORMED input, not something to coerce: an int id
+    # used to crash on .strip(). Blank (None/''/whitespace) is LAWFUL and means
+    # "this element has no id", which is a lawful shape. The dated, scoped
+    # measurement of how many such facts exist has ONE owner in
+    # `xbrl_attach`; repeating a bare count here made it look corpus-wide.
+    if inline_element_id is not None and not isinstance(inline_element_id, str):
+        return None, 'malformed_element_id'
+    # BLANKNESS IS AN XML QUESTION, and `.strip()` is not the XML answer: it
+    # also eats U+000B, U+000C, U+00A0 and U+3000, so an id made only of those
+    # read as "this element carries no id" and was routed to the identity
+    # fallback — a law that applies ONLY when the element genuinely has none.
+    # XML 1.0 S is the whole set a document may lawfully pad a value with.
+    # Blankness decides WHICH path. Whether a non-blank id is a lawful XML name
+    # is `element_evidence`'s rule, stated once at the door both callers share;
+    # the lookup itself still uses the id EXACTLY as stored, because a padded or
+    # re-cased id is a DIFFERENT id, not a typo to repair.
+    # THE GRAPH'S CONCEPT BECOMES ONE EXPANDED TARGET BEFORE EITHER PATH RUNS,
+    # because BOTH paths need it: the exact-id path compares it to the element
+    # it resolved, and the fallback SEARCHES by it. Computing it here is what
+    # stops the fallback matching on prefixed text — a document may lawfully
+    # bind two prefixes to one taxonomy, and `gaap:Revenues` is then the SAME
+    # concept as `us-gaap:Revenues`, which raw string equality calls a miss.
+    # EARNED FROM THE ONE OWNER, not rebuilt here — the locator earns its target
+    # from the same function, so the two consumers cannot drift into different
+    # rules about what a concept IS.
+    target = graph_concept_target(concept, concept_namespace,
+                                  graph_concept_qname)
+    if target is None:
+        return None, 'missing_graph_concept_namespace'
+
+    if (inline_element_id or '').strip(XML_WS):
+        evidence, why = element_evidence(prepared, inline_element_id)
+        if evidence is None:
+            return None, f'exact_id_{why}'          # NEVER a fallback
+    else:
+        el, why = identity_fallback(prepared, target, context_id, unit_ref)
+        if el is None:
+            return None, f'fallback_{why}'
+        evidence, why = evidence_for_element(prepared, el)
+        if evidence is None:
+            return None, f'fallback_{why}'
+
+    # EU-154 (#827): THE LAW THIS LADDER ENFORCES IS THE FROZEN PRODUCT
+    # CONTRACT'S, NOT THIS FUNCTION'S. The field-by-field equality rule below
+    # — and the two route-provenance prefixes above — consume the R12 family
+    # law, BUILD_AND_OPERATIONS.md:822-830: every ref verifies FACT-LEVEL
+    # against the current filing (concept + time_type + exact dates + the
+    # COMPLETE dimension set including [], entity-scoped, never trusted), and
+    # a disagreement refuses rather than repairs. The binder-facing
+    # restatement is Core_Fiscal_ContractSheet_2026-07-31.md section 4: row
+    # binding = concept + period + the COMPLETE dimension set; a duration
+    # must run FORWARDS ('period_not_forward'); the exactness law owns value
+    # reconciliation ('value_does_not_reconcile'). The fifteen outcome
+    # spellings ('exact_id_'/'fallback_' + the mismatch/refusal tokens) are
+    # this binder's OWN published outcome vocabulary naming WHICH field of
+    # that law disagreed — no rule and no spelling is invented at this site.
+    # THE CONCEPT IS COMPARED BY IDENTITY, AND THE IDENTITY IS REQUIRED.
+    # `Concept.namespace` is the taxonomy URI the filing declared. Measured
+    # read-only over the adapter's numeric non-nil population: 12,402,201 of
+    # 12,402,201 facts carry exactly one Concept edge, none missing a namespace
+    # and none holding the literal string "null". So there is no lawful case to
+    # fall back for, and falling back to a prefixed-text comparison would have
+    # quietly restored the very defect this replaces — a prefix is an alias, and
+    # the SAME local name under a DIFFERENT taxonomy namespace is a different
+    # concept that string equality accepts.
+    #
+    # THE PAIR COMES FROM ONE RECORD. Combining `namespace` from the Concept
+    # with a local part sliced off some other qname would FABRICATE an expanded
+    # name that no single source ever asserted. Both halves are taken from the
+    # Concept node, and its own qname must agree with the concept the caller
+    # asked for before either half is trusted.
+    if evidence.get('name_expanded') != target:
+        return None, 'concept_mismatch'
+    if (evidence.get('context_ref') or '') != context_id:
+        return None, 'context_mismatch'
+    if (evidence.get('unit_ref') or '') != (unit_ref or ''):
+        return None, 'unit_ref_mismatch'
+    doc_entity = (evidence.get('entity') or '')
+    # LEADING ZEROS ARE PRESERVED. Both sides used to be `lstrip('0')`-ed, so
+    # `1` and `0000000001` named the same filer and the exact ten-digit form
+    # the document states was thrown away. NOTHING IS PADDED HERE, in either
+    # direction: the graph's measured form is already exactly ten ASCII digits
+    # (census 2026-08-01, all 796 Company nodes) and so is the form the
+    # document must state, so the two are compared exactly. This comment used
+    # to say the graph stores the CIK unpadded and is padded up to match —
+    # both halves untrue, and contradicted by the census recorded in
+    # `graph_cik` twenty lines up in this same file.
+    want_entity = _graph_cik(entity_cik)
+    if want_entity is None:
+        return None, 'malformed_entity_cik'
+    # A BLANK doc entity cannot slip through: `_parse_context` :766-768 refuses
+    # any context whose identifier is not the lawful ten-digit CIK, and even a
+    # hypothetical '' mismatches the ten digits below.
+    if doc_entity != want_entity:
+        return None, 'entity_mismatch'
+    # THE STORED PERIOD END IS EXCLUSIVE (Fable ruling 2026-07-09, 140/140
+    # verified, and the law `match_xbrl_fact` already applies): the graph keeps
+    # the claimed end PLUS ONE DAY, and an instant is stored in start_date the
+    # same way. The DOCUMENT declares the inclusive dates, so the document's own
+    # period is converted UP to the stored form before comparison. Real data
+    # caught this: the 726 fact is 2023-01-01..2023-06-30 in the filing and
+    # ..2023-07-01 in the graph.
+    # THE GRAPH'S PERIOD KIND IS TWO WORDS, and every use below asks only
+    # `== 'instant'` — so ANY other value, `None` included, fell through as
+    # DURATION and bound a fact against a kind the graph never stated. Measured
+    # read-only: `Period.period_type` holds exactly duration (8,358) and
+    # instant (3,058). This is the same law `is_divide` already carries.
+    # EU-153 (#827), the exact citation upgrading the recorded lead: the
+    # {instant, duration} vocabulary is xbrli:periodType and the boundary
+    # triad is xbrli:dateUnion (union of xs:date, xs:dateTime) — XBRL 2.1
+    # REC 2003-12-31 with corrected errata 2013-02-20, §4.7.2 "Periods",
+    # normative schema xbrl-instance-2003-12-31.xsd,
+    # https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/
+    # XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html — the seven
+    # instant/duration literals in this function all speak that vocabulary
+    # (Core's twin is driver_period_resolver.PERIOD_TIME_TYPES, F9).
+    if period_type not in ('instant', 'duration'):
+        return None, 'malformed_period_type'
+    # ALWAYS a 2-tuple: `_parse_context` :821-822 yields one in every arm,
+    # forever included — the unpack is the contract, not a hazard.
+    doc_start, doc_end = tuple(evidence.get('period') or ('', ''))
+    # `<forever>` is LAWFUL source data carrying no dated boundary, so it can
+    # never back a dated fact. It parks under its own named reason rather than
+    # being reported as malformed (#827 blocker 2).
+    if not doc_end and not doc_start:
+        return None, 'forever_or_undated_period'
+    try:
+        # THE ONE dateUnion parser: the FILING may lawfully state xs:date or
+        # xs:dateTime, so BOTH boundaries are read by the shared parser — the
+        # start used to be compared as a RAW STRING and was never validated.
+        # A start means MIDNIGHT OF ITS DAY (no day added); an end means the
+        # FOLLOWING midnight (one day added). A lawful boundary this graph
+        # cannot represent is UNBINDABLE — a different, honest answer from
+        # malformed.
+        stored_end = filing_boundary_graph_end(doc_end)
+        stored_start = (None if period_type == 'instant'
+                        else filing_boundary_graph_start(doc_start))
+    # ONLY THE DECLARED MALFORMED-INPUT SIGNAL. This caught TypeError and
+    # ValueError too, so a genuine code defect became an ordinary refusal —
+    # a bug wearing a park's clothes. `ExactError` is the parser's one declared
+    # malformed signal and already covers the non-string case explicitly, so
+    # the other two names never earned their place. Measured before deleting
+    # them: 2,400 real contexts driven through the narrowed binder, ZERO bare
+    # TypeError/ValueError escapes — nothing lawful depended on the width.
+    except ExactError:
+        return None, 'malformed_period'
+    if stored_end is None or (period_type != 'instant' and stored_start is None):
+        return None, 'unbindable_period'
+    # THE PERIOD KIND ITSELF MUST AGREE, and nothing here checked it. A LAWFUL
+    # duration context bound a graph row typed `instant`: asking for an instant
+    # set `stored_start=None` and compared only the end, so the document's own
+    # kind was never read. This is the one shape in the class that needs NO
+    # malformed markup — a wrong graph row alone was enough, and it attached
+    # through the public door. The document declares an instant exactly when it
+    # states no start (`period` is ('', instant)); the reverse direction was
+    # refused only by accident, as a blank start reading 'malformed_period'.
+    if (not doc_start) != (period_type == 'instant'):
+        return None, 'period_kind_disagrees_with_the_filing'
+    if period_type != 'instant':
+        # A duration must run FORWARDS. Equal or reversed boundaries are not a
+        # period, and a comparison that cannot be settled without inventing a
+        # timezone is indeterminate — both refuse rather than guess.
+        # EU-152 (#827): `is not True` is the FAIL-CLOSED three-state
+        # compare — filing_duration_ordered answers True/False/None, and
+        # None must refuse exactly like False. MEASURED 2026-08-08: the
+        # None arm is door-UNREACHABLE (representability refuses the edge
+        # first — the graph cannot store the exclusive end), so this form
+        # is the RETAINED safety net (the EU-016 precedent), not a live
+        # branch; the ordering rule itself is XBRL 2.1, cited at its owner.
+        if filing_duration_ordered(doc_start, doc_end) is not True:
+            return None, 'period_not_forward'
+    stored = ((stored_end,) if period_type == 'instant'
+              else (stored_start, stored_end))
+    want = (start_date,) if period_type == 'instant' else (start_date, end_date)
+    if stored != want:
+        return None, 'period_mismatch'
+    # THE EXPANDED VIEW, never the spellings. `dims` arrives from the graph as
+    # (namespace URI, local name) pairs, so both sides state the same thing;
+    # comparing the written prefixes would be comparing two documents' private
+    # aliases and calling the result identity.
+    if (tuple(sorted(evidence.get('dims_expanded') or ()))
+            != tuple(sorted(dims or ()))):
+        return None, 'dimension_set_mismatch'
+    # EXISTENCE AND POISON ARE `_evidence_from`'s LAW (:1404-1408), proven on
+    # this same prepared object before any evidence exists: an undefined or
+    # poisoned unitRef never reaches this line, so `declared` is the parsed
+    # unit dict by contract — a second check here could never fire.
+    # EU-098 (#827): 'units' is prepare()'s own complete-shape key (the
+    # EU-161/EU-095 law) and the contract note above already proves the
+    # object — so the read is HARD: the old (.get or {}) softness turned a
+    # drifted key into refuse-everything; a hard key makes it a loud
+    # KeyError at first use instead. Both consumers now agree (:2196 was
+    # already hard).
+    declared = prepared['units'].get(unit_ref)
+    # THE CERTIFIED BOOLEAN LAW: only the exact graph strings. My own
+    # `str(is_divide) in ('0','1')` accepted the Python ints 0 and 1, which this
+    # map deliberately abstains on.
+    divide_flag = ROUTE_A_BOOLS.get(is_divide) if isinstance(is_divide, str) \
+        else None
+    if divide_flag is None:
+        return None, 'malformed_is_divide'
+    if divide_flag != declared['is_divide']:
+        return None, 'is_divide_disagrees_with_the_filing'
+    # SIDE VALIDITY IS THE PARSER'S LAW. `_parse_unit` refuses a non-1x1
+    # divide, a non-leaf measure, and any measure whose text is not a
+    # resolvable QName (:848-867, :901-912) — so both sides here are non-blank
+    # by construction, and a second non-blankness check could never fire.
+    # Cache census 2026-07-27 stands: 2,086 divide declarations, all 1x1 and
+    # non-blank. Plurality is LAWFUL; a compound side is the caller's policy.
+    # THE FILING'S OWN MEASURES, rendered in the GRAPH's spelling — and the
+    # rendering is decided by NAMESPACE, never by the letters of a prefix. The
+    # graph drops the prefix of a measure in the INSTANCE namespace, so a filing
+    # that lawfully binds that namespace to `i:` writes `i:shares` for the very
+    # same measure the graph stores as `shares`; matching the literal text
+    # `xbrli:` threw such a filing away. `_parse_unit` resolved each measure
+    # where it was written and already produced these strings.
+    #
+    # KNOWN CONTRACT GAP, recorded rather than papered over: for a SIMPLE unit
+    # the graph carries `Unit.namespace`, so this comparison can be made on
+    # expanded names. For a DIVIDE unit it does not — `Unit.namespace` is the
+    # string "null" and `Unit.name` is the numerator and denominator
+    # CONCATENATED (`iso4217:USDshares`, `iso4217:USDiso4217:EUR`), which is not
+    # invertible. So a divide unit is still compared on the stored spelling, and
+    # that comparison cannot be proven alias-independent from the fields the
+    # graph has today. The concatenated name is NEVER split to pretend
+    # otherwise. 336,327 facts ride on this; the gap is the owner's to close.
+    spelled = (''.join(declared['graph_numerator'])
+               + ''.join(declared['graph_denominator']) if divide_flag
+               else graph_unit_spelling(declared['graph_measures'], (), (), False))
+    if spelled != unit_name:
+        return None, 'unit_name_not_the_filings_measure'
+    # NO UNIT-NAMESPACE CORROBORATION LIVES HERE, and the attempt is recorded
+    # because it was WRONG rather than merely unnecessary. `Unit.namespace`
+    # stores the LITERAL STRING "null" — not a Neo4j null — on 6,753 simple and
+    # all 113 divide Unit nodes, and a non-empty string is truthy, so a
+    # `if unit_namespace` guard would have compared a real namespace against
+    # "null" and refused 137,600 lawful simple-unit facts. A sentinel exception
+    # for that string would be exactly the kind of machinery this audit exists
+    # to delete. The filing's EXPANDED measures, published above, are the
+    # semantic authority once the fact and unitRef joins are proven; `unit_name`
+    # stays as the storage-integrity comparison and nothing more.
+    # THE BINDER REPORTS, IT DOES NOT DECIDE. Its job is finished once the
+    # unit is VERIFIED against the filing's own declaration (above); which
+    # canonical unit a fact may then claim is POLICY, and the two callers have
+    # different policies — the dormant no-AI materializer's narrow whitelist vs
+    # the AI-interpreted candidate path, which lawfully covers `pure`. This
+    # module is shared, so applying either policy here would impose it on both,
+    # and a second copy of the check would then run in the caller anyway.
+    # EU-157 + EU-158 (#827): FAIL-CLOSED hidden-evidence policy, and its
+    # token is the binder's OWN published vocabulary (the CL-039/EU-160
+    # ownership block) naming THIS rule: a fact inside ix:hidden has a
+    # lawful VALUE but no visible text of its own (Inline XBRL 1.1 section
+    # 13 hidden facts; the current-edition URL at the nonFraction reader's
+    # spec-sources note), so it may bind ONLY when the document still
+    # offers local evidence at its position — a row it sits in or a block
+    # span. With neither, quoting it would fabricate visible evidence the
+    # filing never shows, so the binder refuses. The three keys read are
+    # the EU-092 born-complete record's own (never absent, so .get can
+    # only see a real value or an explicit empty). Pinned: a vacuous gate
+    # reddens the hidden-without-local-evidence node.
+    if evidence.get('hidden') and not (evidence.get('row_text')
+                                       or evidence.get('block_span')):
+        return None, 'hidden_without_local_evidence'
+    # THE FACT'S OWN CONTENT, never the rendered characters. `displayed` is
+    # whatever the browser lays out under this element, so any markup child
+    # printing the same glyphs reconciled just as well as the real value.
+    # THE FORMAT IS CLASSIFIED BEFORE THE ARITHMETIC, so its refusal keeps its
+    # own name. Six distinct cases — the 2008/2010/2011/WGWD legacy registries,
+    # a transform leaking across registry versions, and the SEC's own
+    # unimplemented registry — all used to end as `value_does_not_reconcile`,
+    # which names the subtraction and hides the cause.
+    why_fmt = transform_status(evidence.get('fmt_expanded'))
+    if why_fmt is not None:
+        return None, why_fmt
+    if not reconcile(evidence.get('value_input'), evidence.get('fmt_expanded'),
+                     evidence.get('scale'), evidence.get('sign'), raw_value):
+        return None, 'value_does_not_reconcile'
+    # THE BINDER REPORTS WHAT THE FILING PRINTS AND DECLARES — nothing more.
+    # A caller still binds the FIELDS rather than a final total, because
+    # {390, 10^6}, {390000000, 1} and {0.39, 10^9} all convert to the same
+    # number while only one describes what this filing prints. Reconciliation
+    # above already proved the graph value against those fields, so the record
+    # does not hand the caller a Decimal copy of the caller's own input — and
+    # every other echo (the unit spelling, the raw flag, the duplicate scale,
+    # the hash the caller already holds) is gone with it: FOUR keys, each with
+    # a real production reader, none with two owners (#827 bundle B).
+    return {'evidence': evidence,
+            # THE FILING'S DECLARED UNIT AS SEMANTIC IDENTITIES — (namespace
+            # URI, local name) per measure, resolved where each is written. A
+            # prefix is an alias: `iso4217:USD` and `cur:USD` are the same
+            # measure, and the same text under a rebound prefix is a DIFFERENT
+            # one. Divide-ness needs no flag: a parsed unit cannot be
+            # measureless, so `unit_measures_expanded == ()` holds exactly for
+            # divide units.
+            'unit_measures_expanded': tuple(declared['expanded_measures']),
+            'unit_numerator_expanded': tuple(declared['expanded_numerator']),
+            'printed_value': printed_value(evidence.get('value_input'),
+                                           evidence.get('fmt_expanded'),
+                                           evidence.get('sign'))}, 'ok'

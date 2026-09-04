@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000940944-26-000005#065",
+  "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote states the discontinued-operations loss figures as bare parenthetical numbers (3.8), (0.3), (4.1), (1.2) with no scale word or unit marker anywhere inside the quoted span itself; the table's '(In millions, except per share data)' header that fixes the scale for this row sits outside the supplied quote. Per Rule 5.6, when a TEXT fact's scale marker sits in a header outside the quote, the multiplier cannot be lawfully resolved from the quote alone, so the item must abstain rather than borrow or assume the scale."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000005#065/L1",
+      "exact_match": true,
+      "why": "L1 also emits facts=[] with a single abstention grounded in Rule 5.6, citing that the bare parenthetical numbers have no in-quote scale marker because the '$ in millions' header lies outside the quote — the same conclusion and same rule basis as the settled reply."
+    },
+    {
+      "lane_id": "0000940944-26-000005#065/L2",
+      "exact_match": true,
+      "why": "L2 likewise emits facts=[] with one abstention for the identical reason: the loss figures lack an in-quote scale marker and the table header establishing 'millions' sits outside the quote, matching the settled reply's conclusion and rationale."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The quoted sentence is a generic, boilerplate statement of routine financing policy ('we intend to finance future aircraft deliveries and option exercises using long-term debt') with no specific instrument, amount, timing, or condition attached — it names no measurable state, change, guidance target, or discrete action beyond standard recurring capital-structure language, so it fails the non-boilerplate fact gate (Rule 1.2)."}
+  ],
+  "continuity_hints": []
+}
+```

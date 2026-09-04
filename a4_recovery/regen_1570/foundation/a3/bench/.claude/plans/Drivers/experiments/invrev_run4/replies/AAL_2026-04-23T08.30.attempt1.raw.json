@@ -1,0 +1,113 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "verdicts": [
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P000",
+      "decision": "keep",
+      "why": "Exact contiguous quote verified in prepared_remarks (Devin May's remarks), occurs once, label 'CASMX' lies inside the quote, and it is a real forward guidance statement.",
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Second quarter CASMX is anticipated to be up 2% to 4% year over year",
+        "raw_label_or_claim": "CASMX",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P001",
+      "decision": "keep",
+      "why": "Exact contiguous quote verified in prepared_remarks, occurs once, label 'domestic unit revenue' lies inside the quote; a real forward guidance floor statement on a geography slice with bare (default-YoY) growth wording.",
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We expect domestic unit revenue to grow more than 10% in the second quarter.",
+        "raw_label_or_claim": "domestic unit revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P002",
+      "decision": "keep",
+      "why": "Exact contiguous quote verified in prepared_remarks, occurs once, label 'total debt' lies inside the quote; a real, specific, quantified historical-threshold fact (ceiling-shaped: below $35 billion).",
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "This is the first time our total debt has been below $35 billion since mid-2015.",
+        "raw_label_or_claim": "total debt",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P003",
+      "decision": "keep",
+      "why": "Exact contiguous quote verified in qa (Matt's entity run-through), occurs once, label 'Latin America' lies inside the quote; a real, specific geography-slice statement (capacity share point value plus qualitative RASM state) matching menu entry geography:latinamericadestination.",
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "Latin America, roughly 15%, mixed bag with break-even RASM on the quarter",
+        "raw_label_or_claim": "Latin America",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "American reported a first quarter adjusted loss per diluted share of 40 cents",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, non-boilerplate actual-EPS fact (negative sign), but none of the supplied proposals is wrong or missing this to require replace, and no declared coverage gap for this event is visible from this single-event turn; not added per the representative-not-exhaustive rule."
+    },
+    {
+      "quote": "Total revenue grew 10.8% year-over-year, reflecting strong demand for our product and the continued returns of our multi-year commercial initiatives.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real actual-revenue growth fact (the richer restatement of Isom's earlier 'First quarter revenue grew 10.8%.'); not added for the same non-repair reason as above."
+    },
+    {
+      "quote": "The midpoint of the full year earnings guidance is 35 cents per share, approximately flat to 2025, despite jet fuel prices increasing fuel expense by over $4 billion year over year.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real guidance point-value fact with a YoY comparison; not added, no repair need shown for this event."
+    },
+    {
+      "quote": "we expect to deliver adjusted earnings per diluted share of between a loss of 20 cents and a profit of 20 cents",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real Q2 EPS guidance, zero-crossing range; not added, no repair need shown for this event."
+    },
+    {
+      "quote": "numerous risks and uncertainties could cause actual results to differ from those projected",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking-statement boilerplate, a plausible negative_control candidate, but not added absent a demonstrated control-coverage gap for this event."
+    },
+    {
+      "quote": "a $320 million revenue impact from winter storms",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, specific quantified adverse-event fact; not added, no repair need shown for this event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Prepared remarks state Latin America unit revenue 'was slightly negative' while the Q&A states Latin America RASM was 'break-even' for the same quarter.",
+      "why": "Two speaker statements characterize the same entity/period metric differently; the fuse-before-collision / refuse-on-conflict rule does not say whether non-identical qualitative characterizations from different speakers count as one fact, two facts, or an unresolved conflict. Kept only the QA statement as a single row rather than fusing or inventing a resolution rule."
+    },
+    {
+      "what": "Whether the bare acronym 'CASMX' in the Q2 guidance sentence (no exclusion wording repeated in that sentence itself) exercises measurement_wording (FS-25/NAME-14), given its exclusion basis was spelled out only earlier in the same call for the actual-quarter unit-cost figure.",
+      "why": "The authority does not state whether an acronym whose measurement basis is defined elsewhere in the same event, but not restated in the row's own quote, counts as exercising the measurement tag. Tagged conservatively as applicable; flagged for review."
+    }
+  ],
+  "blocked": null
+}
+```

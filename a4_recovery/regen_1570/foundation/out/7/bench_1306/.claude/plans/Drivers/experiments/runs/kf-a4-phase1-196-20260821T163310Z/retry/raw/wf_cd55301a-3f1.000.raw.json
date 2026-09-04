@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000006201-26-000032#013",
+  "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote reports covenant-compliance status only 'as of the most recent applicable measurement dates' — a vague, plural, instrument-specific reference (the surrounding text explains LTV/collateral covenants are appraised annually or semiannually on differing schedules), not a stated exact date, fiscal period, or dateless horizon. Covenant compliance is a standing, re-readable condition (metric lane) and therefore requires a period under Rule 6; since the stated period phrase cannot be lawfully resolved to period_start/end, fiscal_quarter/year, or a sentinel_class, and no horizon is given, the item abstains rather than guessing the quarter-end date."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000032#013/L1",
+      "exact_match": true,
+      "why": "L1 reaches the same lawful branch (no facts, one abstention, empty continuity_hints) for the same substantive reason: the covenant-compliance statement is a period-requiring metric fact whose only period anchor — 'the most recent applicable measurement dates' — is vague and unresolvable, forcing abstention under Rule 6."
+    },
+    {
+      "lane_id": "0000006201-26-000032#013/L2",
+      "exact_match": true,
+      "why": "L2 also abstains on the identical ground, additionally noting the source text itself flags that measurement dates vary by covenant (annual/semiannual), reinforcing that the phrase cannot be safely mapped to the quarter-end and no horizon is stated — matching the settled reply's facts=[], one abstention, continuity_hints=[]."
+    }
+  ],
+  "ambiguities": []
+}
+```

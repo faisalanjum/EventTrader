@@ -1,0 +1,76 @@
+```json
+{
+  "packet_id": "0001041061-25-000109#073",
+  "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "special_items_per_share",
+          "driver_state": "decreased",
+          "level_low": {"value": -0.16, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": -0.16, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "comparison_low": {"value": -0.02, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "comparison_high": {"value": -0.02, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2025,
+          "period_start_date": "2025-07-01",
+          "period_end_date": "2025-09-30",
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "special_items_per_share",
+          "driver_state": "decreased",
+          "level_low": {"value": -0.67, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": -0.67, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "comparison_low": {"value": -0.14, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "comparison_high": {"value": -0.14, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "fiscal_year": 2025,
+          "period_scope": "ytd",
+          "period_start_date": "2025-01-01",
+          "period_end_date": "2025-09-30",
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-25-000109#073/L1",
+      "exact_match": false,
+      "why": "L1 matches the settled YTD fact exactly but omits period_start_date/period_end_date on the Q3 fact, even though it derived the analogous exact window (Jan 1-Sep 30) for the YTD fact from the same document; the quarter's exact window (Jul 1-Sep 30, 2025) is equally derivable since the doc fixes the quarter end at Sept 30, 2025 and the fiscal year as calendar-year, so L1 is incomplete on that one field."
+    },
+    {
+      "lane_id": "0001041061-25-000109#073/L2",
+      "exact_match": true,
+      "why": "L2's two facts (special_items_per_share, per_x=share, metric, decreased, signed point values -0.16/-0.02 for Q3 and -0.67/-0.14 for YTD, comparison_baseline prior_year, usd level_unit, duration time_type) with exact period dates for both the Q3 window (2025-07-01/2025-09-30) and the YTD window (2025-01-01/2025-09-30) match the settled reply field-for-field."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the Q3 period_start_date (2025-07-01) may be emitted given it is never literally written in the source, only derived from 'quarter' + the stated end date (September 30, 2025) + the confirmed calendar fiscal year.",
+      "why": "The document explicitly notes some subsidiaries run on a weekly periodic calendar rather than a clean calendar month/quarter, which slightly undercuts certainty that the consolidated Q3 window is exactly July 1-Sept 30; but the same class of derivation (calendar-year fiscal year -> YTD start Jan 1) is used without objection for the YTD fact in both drafts, so treating the quarter start date differently would be inconsistent."
+    },
+    {
+      "what": "Whether 'Special Items' is itself a lawful driver cause (special_items_per_share) or should instead be folded into earnings_per_share as a measurement_raw_spans annotation (e.g., 'excluding Special Items').",
+      "why": "This quoted row is the deduction line itself (GAAP EPS minus this equals the non-GAAP EPS), not the 'EPS Excluding Special Items' row; 'Special Items' is a company-defined, size/nature-based exclusion bucket, which sits ambiguously between a real recurring reconciling metric and a bare accounting-construct category that Rule 3.8 says to omit in favor of the affected real metric."
+    }
+  ]
+}
+```

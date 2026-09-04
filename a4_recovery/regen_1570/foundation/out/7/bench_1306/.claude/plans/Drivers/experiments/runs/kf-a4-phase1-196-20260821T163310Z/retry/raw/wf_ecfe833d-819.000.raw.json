@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001171843-26-001288#133",
+  "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote 'Net inventory (net of payables) (813,494 ) (1,196,131 )' states two signed numeric values (a net-inventory metric, current vs. prior-year) but carries no unit/scale marker of its own; the governing scale wording '($ in thousands)' belongs to the table's shared header, which sits outside this supplied quote and cannot be copied, extended, or repaired into it. Per Rule 5.6, unit_scale_evidence must be the smallest span from inside the quote supporting the multiplier, and a scale marker sitting only in a header outside the quote requires abstention rather than a guessed or unsupported multiplier. Since the numeric slots cannot lawfully be populated (value+scale_multiplier+unit_scale_evidence must travel together per Rule 5.3) and the fact is a stated quantity rather than a qualitative one, no lawful fact can be emitted for this item."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001171843-26-001288#133/L1",
+      "exact_match": true,
+      "why": "L1 reaches the identical settled outcome: no facts, one abstention, empty continuity_hints, grounded in the same underlying fact — the '$ in thousands' scale marker sits only in the table header outside the supplied quote, so Rule 5.6 bars a lawful numeric slot and abstention is required."
+    },
+    {
+      "lane_id": "0001171843-26-001288#133/L2",
+      "exact_match": true,
+      "why": "L2 also reaches the identical settled outcome: no facts, one abstention, empty continuity_hints, citing the same Rule 5.6 clause that a scale marker sitting in a header outside the quote (rather than inside it) forces abstention instead of extending the quote."
+    }
+  ],
+  "ambiguities": []
+}
+```

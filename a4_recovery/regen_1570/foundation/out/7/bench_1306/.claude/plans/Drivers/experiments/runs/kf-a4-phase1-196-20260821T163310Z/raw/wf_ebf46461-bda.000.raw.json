@@ -1,0 +1,63 @@
+```json
+{
+  "packet_id": "0001041061-26-000003#079",
+  "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "foreign_currency_translation",
+          "driver_state": "reported",
+          "level_low": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "fiscal_quarter": 4,
+          "slice_parts": ["segment:kfcglobaldivision"]
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "foreign_currency_translation",
+          "driver_state": "reported",
+          "level_low": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "slice_parts": ["segment:kfcglobaldivision"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000003#079/L1",
+      "exact_match": true,
+      "why": "L1 names the cause foreign_currency_translation, uses reported/point/m_usd for both the $10M Q4 and $12M FY levels, ties both to segment:kfcglobaldivision, and matches the settled answer field-for-field."
+    },
+    {
+      "lane_id": "0001041061-26-000003#079/L2",
+      "exact_match": true,
+      "why": "L2 is substantively identical to L1 (only key order differs internally) and matches the settled answer field-for-field."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether exact calendar dates (quarter/year ended 12/31/2025, stated elsewhere in this same press release) should be attached alongside the fiscal_quarter/fiscal_year framing per Rule 6's date-priority language.",
+      "why": "The quote itself only says 'for the quarter' and 'for the year' with no dates; the exact end date appears only in other tables of the same exhibit, not inside this item's own quote, so it is unclear whether Rule 6's priority requires pulling it in or whether fiscal framing alone is the safe, source-grounded choice."
+    },
+    {
+      "what": "Whether the favorable FX impact value should be signed positive (as a favorable addition to profit) or treated under the benefit/credit/reversal-negative convention in Rule 5.1.",
+      "why": "Rule 5.1's benefit/credit/reversal-negative convention is written for expense-line credits, while this fact is a favorable (additive) impact on operating profit stated in plain positive terms ('favorably impacted... by $10 million'), so a positive value was judged correct, but the rule's exact scope for a favorable non-expense impact is not fully explicit."
+    }
+  ]
+}
+```

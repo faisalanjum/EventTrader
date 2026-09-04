@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states a dollar value of sales ($359.1 million total / $95.7 million for Domestic Commercial) attributable to a single unnamed 'additional week' embedded inside the trailing-4-quarters window ending February 15, 2025 (a 53rd fiscal week). This is a real, non-boilerplate quantitative statement, but the value belongs to that one specific week, not to the stated trailing-4-quarters period itself, and no exact date, start date, or stated dateless horizon for that week is given anywhere in the quote or surrounding text. Per Rule 6 a metric fact whose period cannot be resolved to exact dates and carries no stated horizon must abstain rather than have a period guessed or borrowed from the surrounding TTM framing."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [
+    {
+      "fact_type": "surprise",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "in_line",
+        "measurement_raw_spans": ["adjusted diluted"],
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

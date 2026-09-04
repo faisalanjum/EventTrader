@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Quote is the bare table row 'Net loss $ (382) $ (473) (19.2)' with no scale wording inside it. The values are stated in millions per the table header ('In millions, except share and per share amounts'), but that scale marker sits outside my fixed quote span, so scale_multiplier cannot be lawfully resolved from inside the quote (Rule 5.6: scale marker in a header outside the quote -> abstain)."
+    }
+  ],
+  "continuity_hints": []
+}
+```

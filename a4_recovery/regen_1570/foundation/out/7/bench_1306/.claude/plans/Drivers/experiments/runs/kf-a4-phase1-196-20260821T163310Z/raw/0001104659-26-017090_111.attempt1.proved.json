@@ -1,0 +1,61 @@
+```json
+{
+  "packet_id": "0001104659-26-017090#111",
+  "settled": {
+    "source_id": "0001104659-26-017090",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "net_income_per_share",
+          "driver_state": "unknown",
+          "measurement_raw_spans": ["adjusted diluted"],
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "per_x": "share",
+        "item": {
+          "driver_name": "net_income_per_share",
+          "driver_state": "in_line",
+          "measurement_raw_spans": ["adjusted diluted"],
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "time_type": "duration",
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-017090#111/L1",
+      "exact_match": false,
+      "why": "L1 matches driver_name, the metric home state (unknown), and the surprise state/baseline (in_line, previous_guidance), but sets has_favorability_wording to false where the settled reply requires true because 'higher end' is explicit favorable positioning language."
+    },
+    {
+      "lane_id": "0001104659-26-017090#111/L2",
+      "exact_match": false,
+      "why": "L2 uses driver_name earnings_per_share instead of the settled net_income_per_share, and marks the surprise state as beat instead of in_line, even though 'finished toward the higher end of our expectations' places the actual inside the expected band (favorable position within range), which Rule 9.3 forces to in_line rather than beat."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "driver_name: net_income_per_share vs earnings_per_share",
+      "why": "The source literally says 'net income per share' (the definition of EPS); Rule 3.5's explicit example maps the acronym 'EPS' or the literal phrase 'earnings per share' to earnings_per_share, but does not explicitly cover 'net income per share' wording, and Rule 3.12 allows a lawful synonym of equal meaning, so both namings are defensible for the same cause."
+    },
+    {
+      "what": "has_favorability_wording true vs false for 'toward the higher end of our expectations'",
+      "why": "The phrase signals a comparatively favorable position but is positional/range language rather than an explicit beat word like 'exceeded'; whether it counts as 'explicit favorability wording' under Rule 9.5, versus neutral positional wording that is separately forced to in_line by Rule 9.3's closed-range correction, is a genuine judgment call."
+    }
+  ]
+}
+```

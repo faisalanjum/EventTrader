@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0000027904-26-000013#021",
+  "settled": {
+    "source_id": "0000027904-26-000013",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "dividend_per_share",
+          "driver_state": "mixed",
+          "level_low": {"value": 0.15, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 0.1875, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "range",
+          "level_unit": "usd",
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        },
+        "per_x": "share"
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000013#021/L1",
+      "exact_match": false,
+      "why": "L1 agrees on fact_type, driver_name, driver_state (mixed), fiscal_year, time_type and per_x, but omits the two explicitly stated per-share dollar amounts ($0.15 and $0.1875) as level_low/level_high with their shape and unit, which Rule 5.4 requires since every stated digit must be captured."
+    },
+    {
+      "lane_id": "0000027904-26-000013#021/L2",
+      "exact_match": true,
+      "why": "L2 matches exactly: same driver_name, mixed state, level_low 0.15 and level_high 0.1875 each with scale_multiplier 1 and '$' evidence, range shape, usd unit, fiscal_year 2025, duration, per_x share."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state should be 'mixed' (treating the March/June vs September/December quarters as differing 'parts' of the same fiscal year) or 'increased' (treating $0.15 as the prior value stated beside the new $0.1875 value, per the 'prior value stated beside the value' clause of Rule 4).",
+      "why": "Rule 4's first-match-wins ordering places 'same driver differs across parts → mixed' before the 'prior value stated beside the value → increased' clause, but it is not settled whether sequential quarters within one fiscal year count as 'parts' in the sense Rule 4 intends (which more naturally reads as slice-based parts like segments/geographies) versus a temporal before/after progression of one whole-company value."
+    }
+  ]
+}
+```

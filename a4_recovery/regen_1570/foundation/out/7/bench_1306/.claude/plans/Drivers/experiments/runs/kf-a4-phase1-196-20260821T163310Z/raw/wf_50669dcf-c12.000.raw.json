@@ -1,0 +1,36 @@
+```json
+{
+  "packet_id": "0001058090-26-000007#091",
+  "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "comparable_restaurant_sales",
+          "driver_state": "unknown",
+          "value_text": "about flat",
+          "company_confirmed": true,
+          "time_type": "duration",
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001058090-26-000007#091/L1",
+      "exact_match": true,
+      "why": "Same fact_type guidance, driver_name comparable_restaurant_sales, driver_state unknown, value_text 'about flat', company_confirmed true, time_type duration, fiscal_year 2026 with no other fields; matches the settled reply exactly."
+    },
+    {
+      "lane_id": "0001058090-26-000007#091/L2",
+      "exact_match": true,
+      "why": "Identical content to L1 (field order differs only), matching the settled reply exactly."
+    }
+  ],
+  "ambiguities": []
+}
+```

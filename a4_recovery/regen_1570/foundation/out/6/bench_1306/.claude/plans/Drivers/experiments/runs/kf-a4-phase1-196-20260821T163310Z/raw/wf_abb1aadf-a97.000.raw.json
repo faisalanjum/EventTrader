@@ -1,0 +1,42 @@
+```json
+{
+  "packet_id": "BBY_2026-03-03T08.00#143",
+  "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "gross_profit_rate",
+          "driver_state": "introduced",
+          "change_value": {"value": 30, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+          "change_unit": "basis_points",
+          "company_confirmed": true,
+          "fiscal_year": 2027,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "BBY_2026-03-03T08.00#143/L1",
+      "exact_match": true,
+      "why": "Same single guidance fact: driver_name gross_profit_rate, state introduced, change_value {30,1,\"basis points\"}, change_unit basis_points, company_confirmed true, fiscal_year 2027, time_type duration — field order differs only."
+    },
+    {
+      "lane_id": "BBY_2026-03-03T08.00#143/L2",
+      "exact_match": true,
+      "why": "Identical content to the settled fact; nested change_value object matches exactly and all optional fields match — only formatting/whitespace and key order differ."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "driver_state = introduced vs unknown",
+      "why": "Rule 4 says a 'bare guide' (no stated movement vs a prior guide) maps to unknown, and the sentence only compares to the prior YEAR actual, not to any earlier FY27 guide. 'introduced' is used here on the reasoning that this is the first-ever FY27 full-year guide (no prior FY27 guide exists to compare against), which both independent drafts also chose, but a stricter literal reading of Rule 4 could argue for unknown since no explicit 'first time'/'new guidance' language is used."
+    }
+  ]
+}
+```

@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#168",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "unknown",
+          "level_unit": "percent_sequential",
+          "value_text": "IOM Q1 comp sales expected to accelerate sequentially from Q4's 5.2%",
+          "company_confirmed": true,
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "slice_parts": ["segment:internationaloperatedmarkets"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#168/L1",
+      "exact_match": true,
+      "why": "Same fact_type (guidance), driver_name (comparable_sales), driver_state (unknown), level_unit (percent_sequential), company_confirmed true, time_type duration, FY2026/Q1, and the IOM segment slice; value_text differs only in wording, not meaning."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T168/L2".replace("168/L2","168/L2"),
+      "exact_match": false,
+      "why": "L2 sets driver_state to 'introduced', but the source states no explicit movement/introduction language for this bare forward guide (Rule 4 default for an unmarked guide is 'unknown'), so the settled reply differs on this required field despite matching everything else."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state for this first-stated Q1 2026 IOM comp-sales guide should be 'unknown' (bare guide, no explicit movement/introduction wording) or 'introduced' (it is factually the first guide given for that period).",
+      "why": "Rule 4 says guidance movement states are recorded only when the source states them and defaults a bare guide to 'unknown', but does not explicitly clarify whether 'introduced' should apply automatically whenever a period is being guided for the first time; the quote itself contains no explicit newness/movement language."
+    }
+  ]
+}
+```

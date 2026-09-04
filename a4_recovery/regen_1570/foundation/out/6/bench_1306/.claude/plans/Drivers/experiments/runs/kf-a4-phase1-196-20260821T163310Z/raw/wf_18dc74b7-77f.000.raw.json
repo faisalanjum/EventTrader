@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0000063908-26-000032#038",
+  "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 3.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 3.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "slice_parts": ["segment:internationaloperatedmarkets"],
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000063908-26-000032#038/L1",
+      "exact_match": true,
+      "why": "Matches on all fields: comparable_sales/increased, point-shaped 3.2% level with percent_yoy unit and % evidence, comparison_baseline prior_year, segment:internationaloperatedmarkets slice, fiscal_year 2025, time_type duration, no fabricated period dates."
+    },
+    {
+      "lane_id": "0000063908-26-000032#038/L2",
+      "exact_match": false,
+      "why": "Drops the required comparison_baseline (comparable sales is explicitly defined in the release as compared to the same period in the prior year), and instead adds period_start_date/period_end_date (2025-01-01/2025-12-31) that are not explicitly stated in the source — the release only states the year-end date, not a start date, so fiscal_year alone should stand without invented exact dates."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline='prior_year' is properly 'stated' for this specific bullet.",
+      "why": "The prior-year comparison basis for 'comparable sales' is stated once in the release's general definitions section (applying document-wide) rather than repeated next to this particular International Operated Markets figure; treating that document-wide definition as satisfying Rule 9.2's 'source states that comparison' is a judgment call, though the most defensible one given comparable sales has no other meaning in this filing."
+    }
+  ]
+}
+```

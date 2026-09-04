@@ -1,0 +1,166 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "verdicts": [
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P000",
+      "decision": "keep",
+      "why": "Quote is an exact, contiguous, single-fact span (Q4-implied total sales growth range) already correctly trimmed; locator verified in prepared_remarks.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "our annual outlook implies total sales growth of 13% to 14.5%, which includes the extra fiscal week",
+        "raw_label_or_claim": "total sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P001",
+      "decision": "replace",
+      "why": "Original quote bundled a second, distinct Driver fact (company same-restaurant sales growth of 4.2%) into the same span via 'driven by...'. Trimmed to the smallest complete contiguous span supporting only the total-sales fact; the bundled fact is logged separately as excluded from this proposal per the representative-sample scope (rule 3), not added as a new row.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We generated $3.3 billion of total sales, 5.9% higher than last year",
+        "raw_label_or_claim": "total sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P002",
+      "decision": "replace",
+      "why": "Original quote bundled two further distinct facts (Longhorn same-restaurant sales growth 7.2% -- itself a duplicate of Rick Cardenas's earlier complete statement of the same fact -- and Longhorn's 22-net-new-restaurant count). Trimmed to the smallest complete span for the Longhorn total-sales fact; both bundled items logged as exclusions.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "At Longhorn, total sales increased 11.2%",
+        "raw_label_or_claim": "total sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P003",
+      "decision": "keep",
+      "why": "Quote and locator correct for the stated actual-vs-expectations surprise ('in line with our expectations'). Own-target phrasing routes comparison_baseline to previous_guidance per OD-21, giving surprise=actual_vs_guidance. Its required ordinary home fact (ISS-16/OD-21 'two gold facts'; A4 requirement) is supplied as an addition, located at the richer, fully-quantified restatement later in the same part rather than the partial 'mid-single-digit' clause inside this quote.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Third quarter earnings were in line with our expectations, delivering mid-single-digit earnings per share growth.",
+        "raw_label_or_claim": "in line with our expectations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P004",
+      "decision": "keep",
+      "why": "Quote is an exact, contiguous, single-fact span (FY26 total sales growth guidance, annual period -- annual pin forces percent_yoy) already correctly trimmed before the next guided item; locator verified.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We now expect total sales growth for the year of approximately 9.5%",
+        "raw_label_or_claim": "total sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P005",
+      "decision": "replace",
+      "why": "Original quote bundled a second, distinct Driver fact (total labor inflation rate of 3.3%) via 'as pricing was in line with...'. Trimmed to the smallest complete span for the restaurant-labor basis-point change fact; the bundled inflation fact is logged as an exclusion. Not tagged losses_and_sign: this is an ordinary cost-margin bps change, not a loss/charge/provision/benefit context that OD-12 addresses.",
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Restaurant labor was 20 basis points lower",
+        "raw_label_or_claim": "Restaurant labor",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Adjusted diluted net earnings per share from continuing operations of $2.95 were 5.4% higher than last year.",
+        "raw_label_or_claim": "Adjusted diluted net earnings per share from continuing operations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      },
+      "why": "Required ordinary home fact for the actual-vs-expectations surprise kept at P003 (A4: 'each surprise includes its required ordinary fact'; ISS-16/OD-21 two-gold-facts routing). Also the richer, fully-quantified restatement of the partial EPS-growth clause embedded in P003's quote ('mid-single-digit earnings per share growth'); selected as the kept occurrence under general rule 2 (first-complete-occurrence / fuse-before-collision), since the earlier partial mention lacks the exact value and measurement qualifiers (adjusted, diluted, continuing operations) this later span supplies."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "These statements are subject to risks and uncertainties that could cause actual results to differ materially from our expectations and projections.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking-statements/risk boilerplate; no specific current source-flagged adverse threat named, so it fails DU-03/Rule 1 (negative_control territory). No proposal raised it; not selected as a row this turn -- noted for completeness, not added since this is a representative sample, not a census (rule 3)."
+    },
+    {
+      "quote": "driven by same-restaurant sales growth of 4.2%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct Driver fact (company-wide same-restaurant sales growth) bundled into P001's sentence; a real fact in its own right but not the item P001 targets -- excluded from this proposal's row per representative-sample scope (rule 3), not per any fact-gate defect."
+    },
+    {
+      "quote": "same restaurant sales growth of 7.2%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": 1,
+      "why": "This is the second (Raj Vinam) restatement of a fact already completely stated earlier in the same part by Rick Cardenas ('...they delivered same restaurant sales growth of 7.2%.'). Rule 4 (one distinct fact appears once, first complete quote in source order) routes any Longhorn-comp-growth row to Rick's earlier occurrence; this later restatement, embedded in P002's sentence, is excluded as a duplicate rather than turned into a new row."
+    },
+    {
+      "quote": "and the addition of 22 net new restaurants",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct Driver fact (Longhorn net-new-restaurant unit count) bundled into P002's sentence; not the item P002 targets -- excluded per representative-sample scope (rule 3)."
+    },
+    {
+      "quote": "delivering mid-single-digit earnings per share growth",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Partial, qualitative statement of the EPS-growth fact embedded in P003's quote; superseded by the richer, fully-quantified restatement later in the same part, which is captured as an addition per general rule 2 (fuse-before-collision / first-complete-occurrence). Not kept as its own row to avoid a second, weaker row for the same fact."
+    },
+    {
+      "quote": "as pricing was in line with total labor inflation of 3.3%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct Driver fact (total labor inflation rate, 3.3%) bundled into P005's sentence; not the item P005 targets -- excluded per representative-sample scope (rule 3)."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the sequential_comparison tag should be read broadly (any percent growth-basis fact, including trivial default-YoY cases, since OD-11 classifies every percent growth series) or narrowly (reserved for genuine sequential/QoQ facts and OD-11 edge cases like the annual pin or static-percent gate).",
+      "why": "The crosswalk names only the rule (OD-11), not its breadth of application; I applied it broadly (to every percent-based growth fact needing basis classification, e.g. total sales +5.9% YoY, Longhorn +11.2%, annual guidance ~9.5%, EPS +5.4% YoY) but excluded plain basis-point (bps) margin changes as outside OD-11's percent_yoy/percent_sequential decision tree entirely. A narrower authoritative reading would change several of the above tag assignments."
+    },
+    {
+      "what": "Whether the point_range_floor_ceiling tag should apply to every row carrying a stated numeric point value (as I did) or be reserved for non-trivial shapes (range/floor/ceiling), since 7.1's 'self-describing' framing treats point as the trivial default.",
+      "why": "The tag's own name lists 'point' alongside range/floor/ceiling, which I treated as inclusive; a narrower reading would remove this tag from several rows here (e.g. the trimmed total-sales and restaurant-labor rows)."
+    },
+    {
+      "what": "Whether compound sentences that state two or three distinct Driver facts in one clause (e.g. 'total sales increased X%, driven by same-restaurant sales growth of Y%, and the addition of Z net new restaurants') should be split into one representative row per fact (rule 5's explicit shared-quote-different-label allowance) rather than trimmed to a single primary fact with the rest excluded as out-of-scope (rule 3's representative-not-exhaustive instruction).",
+      "why": "Both rules are stated as authority; I chose the conservative trim-and-exclude reading for P001/P002/P005 since rule 3 explicitly forbids adding a row 'merely because another lawful fact exists,' but the same bundling pattern recurs across many of the 36 events, so a resolution matters for consistency at the final turn."
+    },
+    {
+      "what": "Whether 'in line with our expectations' (P003) should route as surprise=actual_vs_guidance (own-target phrasing, my reading) or actual_vs_consensus, given that CFO scripted remarks sometimes use 'expectations' loosely for Street consensus.",
+      "why": "OD-21's exact rule ('own-target phrasing maps to previous_guidance, else null... no internal_target value') supports my reading, but the source phrase itself does not explicitly say 'our own guidance' or 'consensus,' so the classification rests on the rule's default rather than an unambiguous source label."
+    },
+    {
+      "what": "Whether an ordinary cost-margin basis-point change stated with directional wording ('lower') falls under OD-12's signed-axis framing (losses_and_sign) at all, or only applies to literal loss/charge/provision/benefit line items as its worked examples show.",
+      "why": "OD-12's text is partly general ('Bounds follow algebra', comparative sign signals) and partly loss-specific (net loss, charge/provision, benefit/credit); I excluded the restaurant-labor bps row from this tag on the loss-specific reading, but a broader reading of the signed-axis section would include it."
+    }
+  ],
+  "blocked": null
+}
+```

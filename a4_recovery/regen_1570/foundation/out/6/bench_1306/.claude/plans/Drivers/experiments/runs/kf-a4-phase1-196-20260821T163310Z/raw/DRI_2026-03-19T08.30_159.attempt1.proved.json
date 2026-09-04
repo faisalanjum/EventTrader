@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "DRI_2026-03-19T08.30#159",
+  "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "total_sales",
+          "driver_state": "increased",
+          "change_value": {"value": 11.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "slice_parts": ["segment:longhornsteakhousesegment"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DRI_2026-03-19T08.30#159/L1",
+      "exact_match": false,
+      "why": "L1 omits comparison_baseline even though the call's own framing (\"$3.3 billion of total sales, 5.9% higher than last year\") establishes this growth figure as a prior-year comparison, and L1 sets unit_scale_evidence to null when the quote literally contains the '%' marker that must be cited under Rule 5.6 (bare unit marker rule, multiplier=1)."
+    },
+    {
+      "lane_id": "DRI_2026-03-19T08.30#159/L2",
+      "exact_match": true,
+      "why": "L2's driver_name, driver_state, change_value (including unit_scale_evidence '%'), change_unit, comparison_baseline, time_type, fiscal period, and slice_parts all match the settled reply exactly."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline='prior_year' is lawful here.",
+      "why": "The quoted sentence itself ('At Longhorn, total sales increased 11.2%') never says 'than last year'; that phrase only appears explicitly for the company-wide total sales figure earlier in the same remarks. Treating every parallel '[segment] total sales increased X%' line as the same year-over-year comparison is a reasonable but not textually explicit inference from the surrounding event context."
+    },
+    {
+      "what": "Choice between menu tokens segment:longhornsteakhouse vs segment:longhornsteakhousesegment.",
+      "why": "Both appear on the menu as apparently equivalent labels for the same Longhorn business segment; I picked the '...segment' form by analogy with finediningsegment/allothersegments (which have no bare-name counterpart), but the menu itself does not disambiguate which token is the correct reference for a segment-level total-sales fact."
+    }
+  ]
+}
+```

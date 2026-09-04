@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#164",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "effective_tax_rate",
+          "driver_state": "unknown",
+          "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "conditions": "with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#164/L1",
+      "exact_match": false,
+      "why": "Matches on fact_type, driver_name, driver_state, both level values/shapes/unit, time_type, fiscal_year, and company_confirmed, but its conditions string omits the trailing period that is part of the quote's final sentence, so the string is not identical to the settled reply."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#164/L2",
+      "exact_match": true,
+      "why": "Identical fact_type, driver_name, driver_state, level_low/level_high objects, level_shape_hint, level_unit, time_type, fiscal_year, conditions (including trailing period), and company_confirmed, with no abstentions or continuity hints, matching the settled reply exactly."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the `conditions` field should include the quote's trailing period.",
+      "why": "The condition clause is a substring of the quote that happens to end at the quote's final character (a sentence-ending period); the rules require the clause to 'remain inside the quote' but do not state whether trailing sentence punctuation should be kept or trimmed, so both with- and without-period renderings are defensible."
+    }
+  ]
+}
+```

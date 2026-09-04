@@ -1,0 +1,200 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "verdicts": [
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P000",
+      "decision": "keep",
+      "why": "Quote and locator are exact and complete; a single closed FY2026 tax-rate guidance range with no other fact conflated in.",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "expect our full year effective tax rate to be between 21% and 23%, with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+        "raw_label_or_claim": "full year effective tax rate",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P001",
+      "decision": "keep",
+      "why": "Quote/locator accurate for the 2026 gross-openings target. The same clause also states a second, distinct fact (the 50,000-by-2027 cumulative target); per owner rule 5 that fact gets its own row sharing this quote (see addition), rather than being folded into this one.",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we target approximately 2,600 gross restaurant openings in 2026, which keeps us on track to achieve 50,000 restaurants by the end of 2027.",
+        "raw_label_or_claim": "approximately 2,600 gross restaurant openings in 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P002",
+      "decision": "keep",
+      "why": "Quote/locator accurate for the unit-growth-rate figure. The same sentence also states a distinct count fact (net restaurant additions); split per owner rule 5 (see addition).",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Overall, we anticipate about 4.5 percent unit growth from the approximately 2,100 net restaurant additions in 2026.",
+        "raw_label_or_claim": "about 4.5 percent unit growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P003",
+      "decision": "keep",
+      "why": "Quote/locator exact and complete for one fact: adjusted, constant-currency EPS up 7% YoY.",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Adjusted earnings per share on a constant currency basis increased 7% versus the prior year quarter, reflecting sales driven margin contribution.",
+        "raw_label_or_claim": "Adjusted earnings per share on a constant currency basis",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P004",
+      "decision": "keep",
+      "why": "Quote/locator exact; a numberless, IOM-segment, sequential-basis Q1 guidance-direction statement.",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "we do expect Q1 to accelerate sequentially from the 5.2% that we had in IOM in Q4",
+        "raw_label_or_claim": "Q1 to accelerate sequentially from the 5.2% that we had in IOM",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P005",
+      "decision": "keep",
+      "why": "Quote/locator accurate for the actual FY2025 capex level (3.4B). The same sentence states an actual-vs-prior-guidance comparison ('above the high end of the range that we provided'); per ISS-16/OD-21 that is a second, required surprise fact tied to this home metric (see addition).",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "our capital expenditure spend was 3.4 billion, slightly above the high end of the range that we provided for the year.",
+        "raw_label_or_claim": "our capital expenditure spend was 3.4 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P006",
+      "decision": "keep",
+      "why": "Quote/locator exact; a numberless, IDL-segment, sequential-basis Q1 guidance-direction statement.",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "And then IDL, again, expect a sequential decrease from the 4.5% that we had in Q4.",
+        "raw_label_or_claim": "IDL, again, expect a sequential decrease from the 4.5% that we had in Q4",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P007",
+      "decision": "keep",
+      "why": "Quote/locator exact; a numberless, US-segment, sequential-basis Q1 guidance-direction statement.",
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "I think we would say we expect Q1 comp sales growth to decelerate sequentially from the 6.8% in Q4 that you saw.",
+        "raw_label_or_claim": "Q1 comp sales growth to decelerate sequentially from the 6.8% in Q4",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "slices_and_unknown_axes"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we target approximately 2,600 gross restaurant openings in 2026, which keeps us on track to achieve 50,000 restaurants by the end of 2027.",
+        "raw_label_or_claim": "50,000 restaurants by the end of 2027",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Distinct fact (cumulative total-restaurant-count target, a different series than the annual gross-opening pace in P001) forced by source grammar to share P001's smallest complete quote; owner rule 5 requires it as a separate row, told apart by its own label. This target also recurs standalone later in the call, confirming it is its own fact, not mere supporting clause."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Overall, we anticipate about 4.5 percent unit growth from the approximately 2,100 net restaurant additions in 2026.",
+        "raw_label_or_claim": "approximately 2,100 net restaurant additions in 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Distinct fact (net restaurant-additions count vs. the unit-growth-rate in P002) forced by source grammar to share P002's quote; separated per owner rule 5 by its own label."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "our capital expenditure spend was 3.4 billion, slightly above the high end of the range that we provided for the year.",
+        "raw_label_or_claim": "slightly above the high end of the range that we provided for the year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "ISS-16/OD-21: a reported actual compared to prior company guidance writes a surprise (actual_vs_guidance) PLUS its metric home fact (P005). No favorability wording is stated for capex coming in above the guided range, only a position ('above the high end'); this exercises the rule that position words are never automatic favorability absent stated framing, landing at unknown."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "the forward-looking statements on our earnings release and 8-K filing also apply to our comments on the call today.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Procedural/legal disclaimer boilerplate, no Driver state/change/surprise/guidance/action content; fails DU-03/Rule 1, correct behavior is omission, not a benchmark row."
+    },
+    {
+      "quote": "adjusted earnings per share was $3.12 for the quarter, which includes a 10-cent benefit from foreign currency translation.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Genuine real fact (quarterly adjusted EPS point value plus FX benefit) but not selected; the adjacent constant-currency EPS growth fact (P003) already anchors this event's EPS/measurement-wording coverage, and this is a representative sample, not a census."
+    },
+    {
+      "quote": "We sold about 50 million pairs globally across the first few days of the campaign.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Promotional merchandise volume; genuinely unclear whether this is a real Driver fact (a tracked business metric) or out-of-scope marketing color. No rule cited settles this boundary, so it is left out rather than guessed into real_item or negative_control (see open_issues)."
+    },
+    {
+      "quote": "We estimate that weather impact to be about 100 basis points for the full quarter",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Real, quantified adverse-impact fact for Q1 2026 US comps, not raised by any proposal; not added because the representative sample's US-sequential coverage is already anchored by P007, and adding every adjacent lawful figure would exceed the representative-not-exhaustive mandate."
+    },
+    {
+      "quote": "we almost doubled those sales with nearly 210 million 90-day active users across 70 markets",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real loyalty-program fact, not selected; not needed to correct any proposal or repair a declared coverage gap for this event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'unit growth' percentages and comp-sales-growth-basis statements (P002's 4.5% unit growth; the sequential comp-growth statements P004/P006/P007) are themselves the Driver's LEVEL value (giving them a number shape and eligibility for point_range_floor_ceiling) or a change_value of an underlying absolute-count Driver (which per FINAL_DESIGN §7.1 has no shape-hint field).",
+      "why": "FINAL_DESIGN's rule ('change-flavored unit... in the level slots when the Driver itself is the rate/growth metric') is a general principle with a worked example for percent-only guidance, not specifically for unit-growth or comp-growth percentages; I inferred a level-typed treatment by analogy to comp sales growth being tracked as its own %-based series, but this is an inference, not a cited worked example."
+    },
+    {
+      "what": "Whether promotional/engagement volume statistics (e.g., 50 million sock pairs sold, 500 million Monopoly games played) fall inside the Driver catalog's fact gate at all, or are categorically out of scope regardless of DU-03/Rule 1.",
+      "why": "The supplied fact gate defines a bare mention/generic boilerplate exclusion but does not state whether marketing-engagement counts qualify as facts 'about the driver'; treated as an unresolved other-lane boundary and excluded rather than guessed, per owner ruling 3 on fuzzy other-lane cases."
+    }
+  ],
+  "blocked": null
+}
+```

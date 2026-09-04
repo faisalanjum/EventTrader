@@ -1,0 +1,126 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "verdicts": [
+    {
+      "proposal_id": "0001171843-26-001288#P000",
+      "decision": "replace",
+      "why": "The supplied quote combines two distinct co-stated facts (Total AutoZone Stores extra-week sales vs. Domestic Commercial extra-week sales) sharing one sentence. General rule 3 requires each row to use its own smallest complete contiguous span rather than combining facts merely because one sentence contains them. The Total AutoZone Stores fact has its own shorter complete span (it does not need the trailing Domestic Commercial clause), so the quote is trimmed to that span; the Domestic Commercial fact is logged in exclusions_considered rather than added.",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Trailing 4 Quarters ending February 15, 2025 include an additional week of sales of approximately $359.1 million for Total AutoZone Stores",
+        "raw_label_or_claim": "Total AutoZone Stores",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P001",
+      "quote_check": null,
+      "decision": "keep",
+      "why": "Quote and locator are correct as supplied and occur once; it is a single self-contained fact (point value $698.5M with a bare, unqualified 1.2% decrease). The bare percentage change with no explicit basis wording is exactly the OD-11 dated-period YoY-default scenario.",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating profit decreased 1.2% to $698.5 million.",
+        "raw_label_or_claim": "Operating profit",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P002",
+      "decision": "keep",
+      "why": "Quote and locator are correct as supplied and occur once; it is a single metric (Net inventory, net of payables) with a current value and a prior-year comparison, both expressed via parenthetical accounting notation for negative amounts (OD-12 sign signal).",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net inventory (net of payables) (813,494 ) (1,196,131 )",
+        "raw_label_or_claim": "Net inventory (net of payables)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P003",
+      "decision": "replace",
+      "why": "The supplied quote combines two distinct facts across a comma (international constant-currency sales below expectations; a separate qualitative Mexico/Brazil market-share claim). Per general rule 3, each row must use its own smallest complete span rather than combining facts merely because one sentence contains them. Trimmed to the expectations-comparison clause, which is complete and self-contained (numberless surprise home fact); the market-share clause is logged in exclusions_considered.",
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "our international sales, in constant currency, were slightly below our expectations",
+        "raw_label_or_claim": "international sales, in constant currency",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "favourable_unfavourable_direction", "expectation_routing", "slices_and_unknown_axes"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Trailing 4 Quarters ending February 15, 2025 include an additional week of sales of approximately $359.1 million for Total AutoZone Stores with $95.7 million for Domestic Commercial.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Distinct fact (Domestic Commercial extra-week sales) from the kept Total AutoZone Stores row, sharing the whole sentence only because grammar forces it; not added since representative selection does not require every co-stated fact and no coverage repair was declared for this event."
+    },
+    {
+      "quote": "we believe our market share continues to grow as we outpace our competition in both Mexico and Brazil",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Qualitative hedged claim ('we believe') without quantification, distinct from the kept expectations-comparison fact; borderline against generic opinion language and not needed to repair P003 or any declared coverage gap, so left unselected."
+    },
+    {
+      "quote": "Net inventory, defined as merchandise inventories less accounts payable, on a per store basis, was negative $105 thousand versus negative $161 thousand last year and negative $145 thousand last quarter.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Per-store form of net inventory is a separate fact from the kept total-dollar table row (total-vs-per-X), and also carries a genuine sequential ('last quarter') comparison; not added since no proposal raised it and no coverage repair was declared for this event."
+    },
+    {
+      "quote": "in line with our expectations to open approximately 350-360 stores for the full fiscal year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Forward store-count guidance stated as a closed range; a plausible representative candidate not raised by any proposal, excluded under the representative-not-exhaustive mandate absent a declared repair need."
+    },
+    {
+      "quote": "The decrease in gross margin was driven by a 138 basis point non-cash LIFO charge.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, specific stated charge fact not raised by any proposal; excluded under representative-not-exhaustive scope."
+    },
+    {
+      "quote": "AutoZone, Inc. (NYSE: AZO) today reported net sales of $4.3 billion for its second quarter (12 weeks) ended February 14, 2026, an increase of 8.1% from the second quarter of fiscal 2025 (12 weeks).",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Top-line point value plus YoY percentage fact not raised by any proposal; excluded under representative-not-exhaustive scope."
+    },
+    {
+      "quote": "product demand, due to changes in fuel prices, miles driven or otherwise; energy prices; weather, including extreme temperatures and natural disasters; competition",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking risk-factor boilerplate; fails DU-03/Rule 1 (omission, not abstention); illustrative negative-control-type text, but not added as a row since no control-coverage repair was declared for this event."
+    },
+    {
+      "quote": "As of February 14, 2026, the Company had 6,709 stores in the U.S., 913 in Mexico and 152 in Brazil for a total store count of 7,774.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Geography-sliced store-count fact (matches menu geography:us/mx/br) not raised by any proposal; excluded under representative-not-exhaustive scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a comparability footnote describing an extra calendar week of PRIOR-PERIOD sales (used only to explain trailing-4-quarter figures) qualifies as a 'real fact about the driver' under the DU-03 gate (state/change/surprise/guidance/action), or is closer to out-of-gate methodological metadata.",
+      "why": "The fact gate's five named categories do not explicitly cover calendar/comparability disclosures; the authority does not settle this boundary. P000 was kept as real_item on the most defensible reading (a stated fact about sales in a specific period) rather than guessed into negative_control, per the rule that a genuinely fuzzy other-lane boundary is never guessed."
+    },
+    {
+      "what": "Whether a scope-only split (e.g., Total AutoZone Stores vs. Domestic Commercial channel, or the international-sales-vs-market-share split in P003) that shares one sentence purely by grammar is governed by the general 'distinct facts stay separate' instruction, or only by the NAME-13 total-vs-per-X rule whose stated worked example is a share-denominator split.",
+      "why": "General rule 3 is headed 'TOTAL VERSUS PER-X' and its only worked example concerns per-share denominators; applying its 'own smallest complete span' language to population/channel-scope splits (as done for P000 and P003) is a reasonable but not explicitly authorized generalization, so it is recorded here rather than treated as fully settled."
+    }
+  ],
+  "blocked": null
+}
+```

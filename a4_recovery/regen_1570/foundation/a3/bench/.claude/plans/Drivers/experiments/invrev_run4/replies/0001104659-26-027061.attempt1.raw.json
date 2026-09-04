@@ -1,0 +1,177 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-26-027061#P000",
+      "decision": "keep",
+      "why": "Quote and locator are correct and unique in exhibit_99_1; a real, source-stated Q4 comparable-sales growth fact with a stated (implicit YoY) basis and a qualified subset population versus consolidated net sales.",
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable sales increased 5.8%, driven by a 4.2% increase in average ticket and a 1.6% increase in transactions.",
+        "raw_label_or_claim": "Comparable sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P001",
+      "decision": "keep",
+      "why": "Quote and locator are correct and, with the attached figures, unique in exhibit_99_1; a real, source-stated net interest expense/income fact whose sign flips from a parenthetical benefit to a positive expense, a clean OD-12 sign case.",
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Interest expense (income), net \u200b \u200b 2,624 \u200b 0.1% \u200b \u200b (1,994) \u200b (0.1%)",
+        "raw_label_or_claim": "Interest expense (income), net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P002",
+      "decision": "keep",
+      "why": "Quote and locator are correct and unique (Full Year section); a real EPS growth fact with a measurement qualifier (diluted).",
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Diluted earnings per share increased 1.2% to $25.64.",
+        "raw_label_or_claim": "Diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P003",
+      "decision": "keep",
+      "why": "Quote and locator are correct and unique (Q4 section); a real net sales growth fact with stated (implicit YoY, dated period) basis.",
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net sales increased 11.8% to $3.9 billion, primarily due to increased comparable sales, the acquisition of Space NK, and sales from new stores.",
+        "raw_label_or_claim": "Net sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P004",
+      "decision": "keep",
+      "why": "Quote and locator are correct and unique (Fiscal 2026 Outlook table); a real closed-range guidance fact with a measurement qualifier (diluted).",
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Diluted earnings per share \u200b \u200b $28.05 to $28.55",
+        "raw_label_or_claim": "Diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P005",
+      "decision": "replace",
+      "why": "The supplied quote bundles two distinct guidance facts (net sales growth and diluted EPS growth) under one label-carrying span; distinct facts must stay separate even when grammar forces sharing a quote. This row is narrowed to the diluted-EPS-growth guidance fact (not otherwise captured, since the Outlook table only states diluted EPS guidance in absolute dollars, a different measurement/series); the net-sales-growth guidance fact is supplied separately as an addition.",
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "diluted EPS growth of 9.4% to 11.4%",
+        "raw_label_or_claim": "diluted EPS growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "point_range_floor_ceiling", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P006",
+      "decision": "keep",
+      "why": "Quote and locator are correct and unique (Full Year section); a real SG&A-as-percentage-of-net-sales level fact using explicit 'to X%' framing, exercising OD-11's static-percentage gate.",
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "As a percentage of net sales, SG&A expenses increased to 26.6% compared to 24.9%, primarily due to higher incentive compensation, higher store payroll and benefits, and higher corporate overhead due to strategic enterprise investments.",
+        "raw_label_or_claim": "SG&A expenses",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "net sales growth of 6.0% to 7.0%",
+        "raw_label_or_claim": "net sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "point_range_floor_ceiling"]
+      },
+      "why": "Completes the split of proposal P005's conflated sentence; the FY2026 net-sales-growth guidance is a distinct fact from the diluted-EPS-growth guidance sharing that sentence, and from the Outlook table's less-precise restatement ('6% to 7%'), which is the same fact and stays out under fuse-before-collision/first-complete-quote."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Our better-than-planned financial performance reflects our continued focus on serving our guests and consistently delivering great experiences through better execution, compelling newness, more seamless and convenient experiences, and bold new merchandising and marketing strategies",
+        "raw_label_or_claim": "better-than-planned financial performance",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      },
+      "why": "Repairs coverage: no proposal in this event touches favourable_unfavourable_direction or expectation_routing. This CEO-quote claim of outperformance names no identifiable metric or comparison baseline ('plan' is not consensus, previous_guidance, or prior_year); per the fact gate an ungrounded 'results beat' with no identifiable metric is parked, and per OD-13 a loosely-used favorability claim with no valid polarity proof resolves to unknown -> correct reader behavior is abstention, not a guessed surprise fact and not omission."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "As of January 31, 2026, $1.8 billion remained available under the $3.0 billion share repurchase program announced in October 2024.",
+        "raw_label_or_claim": "the $3.0 billion share repurchase program announced in October 2024",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "Repairs coverage: no proposal in this event touches slices_and_unknown_axes. The named program corresponds exactly to the menu's unknown:...october2024sharerepurchaseprogram entry (unambiguous rung-1 menu reuse), a clean real-item test of the unknown-axis slice mechanism."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "the possibility that we may be unable to compete effectively in our highly competitive markets;",
+        "raw_label_or_claim": "the possibility that we may be unable to compete effectively in our highly competitive markets",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Repairs record-kind coverage: no proposal supplies a negative_control. This forward-looking risk-factor bullet is generic competitive boilerplate with no specific current source-flagged adverse threat, the textbook DU-03/Rule-1 omission case."
+    }
+  ],
+  "exclusions_considered": [
+    {"quote": "Gross profit increased 11.2% to $1.5 billion.", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Real lawful fact, but representative sampling does not require every actual metric; not needed to repair any declared coverage gap this event."},
+    {"quote": "Operating income was $476.9 million, or 12.2% of net sales.", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; not needed for coverage repair."},
+    {"quote": "Cash and cash equivalents at the end of fiscal 2025 were $424.2 million.", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; not needed for coverage repair."},
+    {"quote": "Merchandise inventories, net at the end of fiscal 2025 increased 10.8% to $2.2 billion.", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; sequential_comparison already covered by other rows this event."},
+    {"quote": "During fiscal 2025, the Company invested $434.8 million in capital expenditures to support new stores, relocations, and remodels, investments in information technology systems, and supply chain optimization.", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; not needed for coverage repair."},
+    {"quote": "Returned $890.5 million of capital to shareholders through planned share repurchases for the fiscal year", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; the related remaining-authorization fact (October 2024 program) already added for slices_and_unknown_axes coverage."},
+    {"quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; point_range_floor_ceiling, sequential_comparison, and portion_versus_whole already covered by other rows this event."},
+    {"quote": "Operating income growth \u200b \u200b 6% to 9%", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; not needed for coverage repair."},
+    {"quote": "Capital expenditures \u200b \u200b $400 million to $450 million", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; not needed for coverage repair."},
+    {"quote": "Net sales growth \u200b \u200b 6% to 7%", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Duplicate/less-precise restatement of the same net-sales-growth guidance fact already kept from the earlier bullet under fuse-before-collision and the first-complete-quote rule."},
+    {"quote": "Equity net loss of affiliate \u200b \u200b 1,647 \u200b 0.0%", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; losses_and_sign already covered by P001 this event."},
+    {"quote": "Cosmetics \u200b 35% \u200b 36%", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Representative sampling; slices_and_unknown_axes already covered by the added share-repurchase-program row this event."},
+    {"quote": "Opened \u200b 5 \u200b 2", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Store-count operational table; representative sampling, not needed for any declared coverage repair."},
+    {"quote": "macroeconomic conditions, including inflation and elevated interest rates, as well as prior and/or future labor, transportation, and shipping cost pressures (including future uncertain impacts);", "part_ref": "exhibit_99_1", "occurrence_in_part": null, "why": "Additional generic risk boilerplate; one negative_control example already added for coverage repair this event."}
+  ],
+  "open_issues": [
+    {"what": "Whether bare financial-statement table line items with no surrounding narrative sentence (e.g., the kept 'Interest expense (income), net' row) qualify as representative-benchmark source-stated facts on the same footing as narrative bullet-point facts.", "why": "The fact gate and A4 requirements describe source-stated non-boilerplate facts generally but do not explicitly rule on bare table cells versus prose; resolved here by inclusion as a reasonable but unsettled reading."},
+    {"what": "Whether the point_range_floor_ceiling tag should apply to every stated single-number (point-shape) fact, or only to items presenting an explicit range/floor/ceiling shape.", "why": "FINAL_DESIGN \u00a77.1 defines point as one of four self-describing shapes, so a literal reading could require tagging nearly every numeric fact; this turn tagged only explicit ranges to keep the tag discriminating, but the crosswalk does not settle which reading is intended."},
+    {"what": "Whether sequential_comparison (OD-11) should tag every percent-of-net-sales level comparison (e.g., SG&A % of net sales point change, tagged here via P006) or only genuine growth-rate statements.", "why": "OD-11's static-percentage-gate text covers both the 'to X%' level case and true growth-rate cases; the boundary between a level fact and a growth fact for tagging purposes is not explicitly settled by the crosswalk."}
+  ],
+  "blocked": null
+}
+```

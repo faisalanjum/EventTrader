@@ -1,0 +1,75 @@
+```json
+{
+  "packet_id": "0000764478-25-000057#044",
+  "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "comparison_low": {"value": -1.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": -1.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "period_end_date": "2025-11-01",
+          "slice_parts": ["segment:domesticsegment", "channel:online"]
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "comparison_low": {"value": -2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": -2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "period_scope": "ytd",
+          "period_start_date": "2025-02-02",
+          "period_end_date": "2025-11-01",
+          "slice_parts": ["segment:domesticsegment", "channel:online"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000764478-25-000057#044/L1",
+      "exact_match": false,
+      "why": "L1 matches the settled reply's values, units, states, baselines and slices, but omits period_end_date on the Q3 fact, whereas the settled reply includes it because the November 1, 2025 column-header date is explicit context for this exact row; the two replies are not identical."
+    },
+    {
+      "lane_id": "0000764478-25-000057#044/L2",
+      "exact_match": false,
+      "why": "L2 matches the settled reply's values, units, states, baselines and slices, and includes period_end_date on both facts, but omits period_start_date on the YTD fact; the settled reply requires it (fiscal 2026 start = 2025-02-02, safely derived from the repeatedly stated fiscal-2025 end date of 2025-02-01) per Rule 6's instruction that YTD windows keep their exact dates rather than collapsing to a bare fiscal-year label."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether period_end_date may/should be attached to the quarter (non-YTD) fact when the exact date comes only from the table's column header, not from words inside the literally quoted label-and-numbers span.",
+      "why": "Rule 6 says exact dates 'MAY coexist' with fiscal framing (permissive, not mandatory), so a reader could lawfully leave the Q3 fact's period_end_date null and rely on fiscal_quarter+fiscal_year alone; the two drafts disagree on this point (L1 omits it, L2 includes it) and both readings are defensible."
+    },
+    {
+      "what": "Whether the YTD fact's period_start_date (2025-02-02) counts as a lawful 'safe derivation' or an unlawful guess, since no sentence in the document states the fiscal-2026 start date directly - it is inferred as the day after the explicitly stated fiscal-2025 end date (February 1, 2025).",
+      "why": "Rule 6 allows metric facts to use a 'safely derived' real period, and retail fiscal calendars are contiguous with no stated gap, but the derivation still relies on an unstated contiguity assumption rather than an explicit sentence, so a stricter reading could require leaving period_start_date null."
+    }
+  ]
+}
+```

@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "fuel_consumption",
+        "driver_state": "unknown",
+        "value_text": "increase",
+        "conditions": "generally aligned with capacity",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

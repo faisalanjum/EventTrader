@@ -1,0 +1,51 @@
+```json
+{
+  "packet_id": "CMG_2026-02-03T16.30#149",
+  "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "high_efficiency_equipment_package_installations",
+          "driver_state": "reported",
+          "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_end_date": "2026-02-03"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "CMG_2026-02-03T16.30#149/L1",
+      "exact_match": false,
+      "why": "L1 matches the settled reply on fact_type, state, level values/shape, unit, time_type, and period_end_date, but its driver_name 'high_efficiency_equipment_installations' drops the 'package' term that the source explicitly uses ('high efficiency equipment package'), making it a less specific name than the settled one."
+    },
+    {
+      "lane_id": "CMG_2026-02-03T16.30#149/L2",
+      "exact_match": false,
+      "why": "L2's driver_name 'high_efficiency_equipment_package_installations' matches the settled name exactly, and its numeric/level fields match, but it additionally emits period_start_date equal to period_end_date; for an instant-type fact where only the moment ('today') is stated, period_start_date's truthful value is null, so this extra populated field is a mismatch against the sparse-emission rule."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'package' belongs in the driver_name (e.g. 'high_efficiency_equipment_installations' vs 'high_efficiency_equipment_package_installations').",
+      "why": "Rule 3.12 allows lawful synonyms since names are provisional and reconciled later against a catalog, so both forms could be judged as the same meaning even though only one was chosen as canonical here."
+    },
+    {
+      "what": "Whether period_start_date should ever be populated (equal to period_end_date) for an instant-type fact derived from the word 'today'.",
+      "why": "Rule 6 permits equal start/end dates for instant facts but does not mandate populating both; it is unclear whether emitting a redundant period_start_date is a lawful restatement of the instant or an unnecessary field that violates the sparse-emission rule."
+    },
+    {
+      "what": "Whether it is lawful to set period_end_date to the call's calendar date (2026-02-03) when the quote itself only says 'today' with no date literal in the quoted text.",
+      "why": "Rule 6 allows a 'clearly implied' real period, and the call date is known from the event/source_id, but one could argue the date is not literally 'inside' the quote and so is an extension rather than a implication, which would instead require leaving the period null or abstaining."
+    }
+  ]
+}
+```

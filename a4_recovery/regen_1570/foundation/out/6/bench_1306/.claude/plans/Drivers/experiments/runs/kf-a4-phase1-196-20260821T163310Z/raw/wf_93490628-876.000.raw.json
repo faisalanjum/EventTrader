@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "BBY_2026-03-03T08.00#140",
+  "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "introduced",
+          "level_low": {"value": 6.30, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 6.60, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "range",
+          "level_unit": "usd",
+          "measurement_raw_spans": ["adjusted diluted"],
+          "fiscal_year": 2027,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "BBY_2026-03-03T08.00#140/L1",
+      "exact_match": false,
+      "why": "L1 matches every field except driver_state, which it sets to 'unknown' instead of the correct 'introduced' — this is the very first full-year fiscal-27 guide given, with no prior fiscal-27 guide to compare against, so it is a fresh guidance issuance rather than an unresolvable bare guide."
+    },
+    {
+      "lane_id": "BBY_2026-03-03T08.00#140/L2",
+      "exact_match": true,
+      "why": "L2 matches the settled reply exactly: same driver_name, driver_state 'introduced', level range 6.30-6.60 usd with '$' evidence, measurement span 'adjusted diluted', fiscal_year 2027, time_type duration, and company_confirmed true."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the guidance state should be 'introduced' or 'unknown'.",
+      "why": "Rule 4 says movement is recorded 'ONLY when the source states it' and 'a bare guide -> unknown', but the passage never uses an explicit word like 'introducing' or 'first time'. I resolved this as 'introduced' because context makes it unambiguous this is the first-ever full-year fiscal-27 outlook (given at the FY26 Q4 call, with no prior FY27 guide mentioned anywhere in the transcript to compare against), rather than a genuinely unclear/ambiguous-status guide."
+    }
+  ]
+}
+```

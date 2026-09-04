@@ -1,0 +1,64 @@
+[
+ {
+  "class": "transport_proof_replacement",
+  "authorized_by": "Codex SEQ 1338",
+  "source_id": "0000764478-25-000057",
+  "quarantined_call": {
+   "run_id": "wf_fbc31592-96f",
+   "agent_id": "a4e52fcde13596c77",
+   "why": "terminal assistant record carries stop_reason null; completion unproved",
+   "semantic_credit": "none",
+   "counts_against_74_ceiling": true,
+   "state_sha256": "eb1c0290fc4cd60ccd5fbf15225c17f985ba6a88c2643672ff481b2be9002c7c",
+   "transcript_sha256": "cf7e36f58289dc1c917951381056126f57ea06815037327b1de41389a3d2c388",
+   "journal_sha256": "06840d23f57c85078feeff3d2d252f54c436a90b99ab11162c6f0a0809ed3106"
+  },
+  "replacement_call": {
+   "run_id": "wf_5df49ac2-7ed",
+   "is_accepted_attempt": 1,
+   "outside_retry_class": "not an invalid-JSON or invalid-schema retry"
+  }
+ },
+ {
+  "class": "transport_proof_replacement",
+  "authorized_by": "Codex SEQ 1339 standing rule",
+  "source_id": "0000940944-26-000005",
+  "quarantined_call": {
+   "run_id": "wf_18257095-c36",
+   "agent_id": "acd75b17149149fd4",
+   "why": "terminal assistant record carries stop_reason null; completion unproved",
+   "semantic_credit": "none",
+   "counts_against_74_ceiling": true,
+   "state_sha256": "7529a8a94a4a7d6554dcdfc2feebed9a86255c8101c211cf237750e08f97f471",
+   "transcript_sha256": "ff8c3cbe5a4c0bfdf49ef7ad2f95322c8f1b8a581a1b6906d83019a8f8af0be6",
+   "journal_sha256": "97f675e1efd97679b1fc9a3b76d89ab7585565f47c34ae6355a279d628772a4d"
+  },
+  "replacement_call": {
+   "run_id": "wf_76911211-8a4",
+   "agent_id": "a7a949820bc205e4a",
+   "is_accepted_attempt": 1,
+   "outside_retry_class": "not an invalid-JSON or invalid-schema retry"
+  }
+ },
+ {
+  "class": "transport_proof_replacement",
+  "authorized_by": "Codex SEQ 1339 standing rule",
+  "source_id": "MCD_2026-02-11T16.30",
+  "quarantined_call": {
+   "run_id": "wf_cd72cee8-ca0",
+   "agent_id": "a7f6ebf18d15d50dd",
+   "why": "terminal assistant record carries stop_reason null; completion unproved",
+   "semantic_credit": "none",
+   "counts_against_74_ceiling": true,
+   "state_sha256": "393ba2af7ad869a40885b5770369d99356d5f9f01a3c79ea07e78eb032c29f02",
+   "transcript_sha256": "e6d5f3603961246b1a59fdd1ef1aa6616ce617dc1f827a19bd80cc0cb0c873b1",
+   "journal_sha256": "8b7d7ff0bd541e3804a54a8ea772036af09c495f672decf7a0191a9065ecfe90"
+  },
+  "replacement_call": {
+   "run_id": "wf_d6ba234b-0b2",
+   "agent_id": "a5360f1a7404d2b61",
+   "is_accepted_attempt": 1,
+   "outside_retry_class": "not an invalid-JSON or invalid-schema retry"
+  }
+ }
+]

@@ -1,0 +1,178 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "verdicts": [
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P000",
+      "decision": "keep",
+      "why": "Exact substring found once in prepared_remarks (Chris's FY2025 recap: 'Gross margin increased 30 basis points to 39.1% of sales The increase was primarily due to...'). Quote and locator are correct; it is a real, source-stated point value (annual gross margin).",
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Gross margin increased 30 basis points to 39.1% of sales",
+        "raw_label_or_claim": "Gross margin increased 30 basis points to 39.1% of sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P001",
+      "decision": "keep",
+      "why": "Exact substring found once in prepared_remarks (Keisha's FY2025 summary). This sentence co-states operating income ($1.5B/12.4% of sales) and EPS ($25.64); per the split rule this row is scoped to the operating-income point fact only (raw_label narrows it), the EPS fact is handled separately (see additions). Quote and locator correct as supplied.",
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "delivered operating income of $1.5 billion, or 12.4% of sales",
+        "raw_label_or_claim": "operating income of $1.5 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P002",
+      "decision": "replace",
+      "why": "The proposed quote is a terse causal-offset clause ('lower inventory shrink and leverage of supply chain fixed costs') that conflates two distinct causes with no clean single label. The very next sentences in the same paragraph are a richer, more complete restatement of the same inventory-shrink-improvement fact, naming the specific mechanisms and full scope ('every quarter this year', 'across every category'). Per the partial-then-richer-restatement rule, the richer contiguous occurrence is used and the original narrower span is not.",
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our team's relentless focus on reducing inventory shrink has delivered meaningful benefits every quarter this year. Our investments in fixtures and process improvements, targeted efforts in high-risk markets, and focused associate training have resulted in shrink reductions across every category.",
+        "raw_label_or_claim": "reducing inventory shrink",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P003",
+      "decision": "keep",
+      "why": "Exact substring found once in prepared_remarks. A real, numberless, specific FY2026 SG&A-growth guidance statement (comparative to net sales growth and to fiscal 2025); quote and locator correct as supplied.",
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we are planning SG&A growth to be in line with to slightly below net sales growth and significantly lower than fiscal 2025",
+        "raw_label_or_claim": "SG&A growth to be in line with to slightly below net sales growth and significantly lower than fiscal 2025",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "These statements are subject to risks and uncertainties that could cause our actual results to differ materially from our expectations and projections.",
+        "raw_label_or_claim": "risks and uncertainties that could cause our actual results to differ materially from our expectations and projections",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Canonical generic forward-looking-statements boilerplate; a bare, non-specific risk disclaimer with no current source-flagged adverse threat, failing DU-03/Rule 1. Added because the task explicitly requires negative controls and no proposal supplied one for this event."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "diluted EPS increased 1.2% to $25.64 per share",
+        "raw_label_or_claim": "diluted EPS increased 1.2% to $25.64 per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      },
+      "why": "Home/ordinary fact for the FY2025 diluted-EPS surprise below: a point value with an explicit 'diluted' measurement qualifier and an annual YoY growth percentage (exercises the OD-11 annual pin). Fuses the earlier partial mention ('EPS of $25.64') per the richer-restatement rule; needed as the required ordinary-fact sibling of the surprise fact added next, and repairs missing sequential_comparison/measurement_wording coverage in this event."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "diluted EPS increased 1.2% to $25.64 per share above our previously provided guidance",
+        "raw_label_or_claim": "above our previously provided guidance",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "A stated actual-vs-previous-guidance surprise (favorable, per OD-21/DU-15 the guidance comparison lands on its own surprise fact, separate from the prior-year home fact above). No proposal captured any surprise/expectation-routing item in this event; added to repair that coverage gap with the required paired ordinary fact."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "the makeup category decreased to 35% of sales",
+        "raw_label_or_claim": "makeup category",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "A product-category slice with a stated point value; 'makeup' has no exact menu match (menu has 'product:cosmetics', not 'makeup'), so kind is clear (product) but the value is off-menu (FS-15/T1-05 rung 3 coin). No proposal supplied any slices_and_unknown_axes example for this event; added to repair that coverage gap."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Operating profit was $1.5 billion or 12.4% of sales",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Duplicate restatement of the same FY2025 operating-income fact already captured (verbatim values, same period, same meaning) via P001's earlier first-complete quote; excluded under the one-distinct-fact-appears-once rule."
+    },
+    {
+      "quote": "EPS of $25.64",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Partial/incomplete earlier mention of the diluted-EPS fact (no growth% or measurement word); superseded by the richer restatement used in the additions row per the partial-then-richer rule."
+    },
+    {
+      "quote": "net sales increased 9.7% or $1.1 billion to $12.4 billion",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real, well-evidenced FY2025 net-sales growth fact (point value + YoY %, annual pin). Not selected: this event's representative sample already carries point_range_floor_ceiling and sequential_comparison coverage via the EPS rows; adding it would be padding rather than a needed correction/coverage repair."
+    },
+    {
+      "quote": "the skincare and wellness category increased to 24% of sales",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A second, similarly-shaped product-category slice fact. Not selected: the makeup-category row already gives this event a clean slices_and_unknown_axes representative; a second instance is not required for coverage repair."
+    },
+    {
+      "quote": "our expectation for the beauty category growth is in line with the average historical growth rate with expected growth in the 2% to 4% range",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A stated numeric range, but describes the industry/macro beauty category, not a company-specific Driver fact for ULTA. Scope for macro commentary is not settled by the supplied authority; excluded rather than guessed into a class, and flagged as an open issue."
+    },
+    {
+      "quote": "The company undertakes no obligation to revise any forward-looking statements.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Additional generic forward-looking-statements boilerplate, same negative-control theme as the added disclaimer sentence; excluded as a duplicate of that control rather than a second row."
+    },
+    {
+      "quote": "we see pricing increases every year. They typically impact about 10% to 15% of the overall assortment.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Considered as a possible real_item (a stated numeric range) but has no clear period anchor and describes an ongoing/generic yearly practice rather than a dated fact; not selected given representative, non-exhaustive scope."
+    },
+    {
+      "quote": "we did see some impact from the weather at the end of January this year",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A specific, past-tense, non-boilerplate statement (not generic risk language), but numberless and vague ('some impact') with no clear hard-class utility; not selected given representative, non-exhaustive scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a single-event reconciliation turn should proactively add rows purely to help meet the ten hard-class 5-instance-across-36-events quotas (done here for expectation_routing, favourable_unfavourable_direction, sequential_comparison, measurement_wording, slices_and_unknown_axes, and for the negative control), versus leaving all such coverage decisions strictly to the aggregate 'final turn'.",
+      "why": "The authority states totals/quotas are settled at the final turn and warns against adding rows merely because another lawful fact exists, but also frames this turn as deciding 'which source items and controls belong' for this event. I resolved the tension by adding only a small number of very clean, unambiguous examples and logging weaker or redundant candidates as exclusions instead of forcing them; the authority does not explicitly settle which reading is correct."
+    },
+    {
+      "what": "No unambiguous lawful_abstention_control candidate was identified in this event's supplied text.",
+      "why": "Several borderline items (pricing-increase range, weather impact, SG&A-vs-guidance color) were considered but each resolved cleanly to real_item or was excluded rather than genuinely blocked by a locked rule; forcing one into lawful_abstention_control would be inventing ambiguity rather than recording it. Left open rather than manufactured."
+    },
+    {
+      "what": "Whether the industry/beauty-category macro growth guidance (2% to 4% range) is in-scope as a company Driver fact for ULTA or out-of-scope macro commentary.",
+      "why": "Not settled by the supplied authority; excluded from this inventory rather than guessed into a record kind."
+    }
+  ],
+  "blocked": null
+}
+```

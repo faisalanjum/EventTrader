@@ -1,0 +1,39 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#088",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "strategic_options_review",
+          "driver_state": "continued",
+          "slice_parts": ["segment:pizzahutglobaldivision"],
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000084#088/L1",
+      "exact_match": false,
+      "why": "L1 sets driver_state to 'announced' and adds a 'time_type': 'instant' field; the settled reply uses driver_state 'continued' (the event's fuller text shows the review begun in 2025 is still ongoing into 2026 with no resolution) and omits time_type since no exact dates are stated, so L1 differs on both the state value and an extra field."
+    },
+    {
+      "lane_id": "0001041061-26-000084#088/L2",
+      "exact_match": true,
+      "why": "L2's fact_type, driver_name, driver_state ('continued'), fiscal_year (2025), and slice_parts (segment:pizzahutglobaldivision) all match the settled reply exactly, with no abstentions or continuity hints in either."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state should be 'announced' (reading only the located sentence 'we began a review') or 'continued' (reading the fuller event, which shows the review started in 2025, is still in progress, incurring costs, and expected to complete in 2026).",
+      "why": "Rule 4 requires classifying the LATEST stage using the whole event as context; the surrounding MD&A and risk-factor text ('currently intend to complete... in 2026', 'as this strategic options review progresses') supports an ongoing action, but a reader anchored tightly to the single located quote's 'began' wording could reasonably default to 'announced' instead."
+    }
+  ]
+}
+```

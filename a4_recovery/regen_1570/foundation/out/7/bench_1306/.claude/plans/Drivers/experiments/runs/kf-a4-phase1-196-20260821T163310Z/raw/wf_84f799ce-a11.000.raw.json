@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#122",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote is CEO-commentary praise ('better-than-planned financial performance') naming no specific metric, segment, or value — it is an ungrounded overall beat-the-plan claim with no identifiable home fact inside this quote to attach a surprise to, so per Rule 9.6 it abstains."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#122/L1",
+      "exact_match": true,
+      "why": "L1 returns an empty facts list with a single abstention citing the generic, unquantified CEO claim and Rule 9.6's ungrounded-beat-with-no-home rule, matching the settled reply's branch and reasoning."
+    },
+    {
+      "lane_id": "0001104659-26-027061#122/L2",
+      "exact_match": true,
+      "why": "L2 also returns an empty facts list with a single abstention giving the same substantive reasoning (generic commentary, no specific metric/value, no home fact, Rule 9.6 ungrounded beat-the-plan claim), matching the settled reply's branch and reasoning."
+    }
+  ],
+  "ambiguities": []
+}
+```

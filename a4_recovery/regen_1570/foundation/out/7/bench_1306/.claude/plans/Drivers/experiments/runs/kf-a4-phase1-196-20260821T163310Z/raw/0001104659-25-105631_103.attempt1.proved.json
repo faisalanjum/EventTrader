@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "0001104659-25-105631#103",
+  "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "revolving_credit_facility_commitment_increase_feature",
+          "driver_state": "reported",
+          "level_shape_hint": "ceiling",
+          "level_high": {"value": 200, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_unit": "m_usd"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-105631#103/L1",
+      "exact_match": false,
+      "why": "Agrees on fact_type (metric), driver_state (reported), level_shape_hint (ceiling), level_high object (200/1000000/'million'), and level_unit (m_usd), but names the driver 'revolving_credit_facility_accordion' — introducing the word 'accordion,' which never appears in the source — instead of staying with the source's own phrase 'commitment increase feature.'"
+    },
+    {
+      "lane_id": "0001104659-25-105631#103/L2",
+      "exact_match": false,
+      "why": "L2 abstains entirely on the theory that a contingent, unexercised loan-agreement feature can't be a fact, but the sentence gives a specific, quantified, company-specific credit-facility term ('an additional $200 million') of the same character as the immediately surrounding $400 million commitment and $50 million letter-of-credit sublimit, which are plainly factual; the conditions-precedent language limits certainty of activation, not the lawfulness of recording the stated ceiling amount, so a metric fact exists rather than a pure abstention."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the 'commitment increase feature' / accordion amount qualifies as a lawful fact at all, given it is expressly contingent on unstated 'conditions precedent' and has never been exercised.",
+      "why": "It can reasonably be read as a real, quantified standing capacity (like an authorized share-buyback ceiling, which the same document treats as fact-worthy), or as generic, templated credit-agreement mechanics describing a hypothetical future negotiation right rather than an actual current driver state."
+    },
+    {
+      "what": "Whether this fact requires period fields (e.g., time_type instant, period_end_date 2025-09-30) or lawfully carries none.",
+      "why": "The quote itself states no date, but it sits inside the 'Credit Facility' discussion that is otherwise anchored to 'As of September 30, 2025'; Rule 6 requires a period only when one is stated or clearly implied, and readers could reasonably disagree on whether that ambient anchoring counts as 'clearly implied' for this specific sentence."
+    },
+    {
+      "what": "Whether 'accordion' is a lawful synonym for the source's own phrase 'commitment increase feature' in the driver name.",
+      "why": "Rule 3.12 allows a lawful synonym since meaning (not spelling) governs, and 'accordion' is the standard finance-industry term for exactly this credit-facility clause, but it is a word never used anywhere in the source text, so a stricter reading would require keeping the source's own wording instead."
+    }
+  ]
+}
+```

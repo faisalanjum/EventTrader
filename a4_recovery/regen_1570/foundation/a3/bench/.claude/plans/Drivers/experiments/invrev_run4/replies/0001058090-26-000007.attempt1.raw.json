@@ -1,0 +1,113 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "verdicts": [
+    {
+      "proposal_id": "0001058090-26-000007#P000",
+      "decision": "keep",
+      "why": "Quote is byte-identical to the Outlook bullet, unique in exhibit_99_1, and is a real numberless full-year guidance fact (comparable restaurant sales); the source's own label 'Full year comparable restaurant sales' lies inside the quote.",
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Full year comparable restaurant sales to be about flat",
+        "raw_label_or_claim": "Full year comparable restaurant sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001058090-26-000007#P001",
+      "decision": "keep",
+      "why": "Quote is byte-identical to the full-year highlights bullet, unique in exhibit_99_1, states a point margin value with a stated prior-year comparison (exercises the number-shape/point rule); label 'Operating margin' lies inside the quote.",
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating margin was 16.2%, a decrease from 16.9%",
+        "raw_label_or_claim": "Operating margin",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001058090-26-000007#P002",
+      "decision": "keep",
+      "why": "Quote is byte-identical, unique in exhibit_99_1 (the full-year figure elsewhere is 36.7%, a different string), states a point value; digital sales is a qualified subset of total food-and-beverage revenue (OD-17 portion vs whole). Label 'Digital sales' lies inside the quote.",
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Digital sales represented 37.2% of total food and beverage revenue.",
+        "raw_label_or_claim": "Digital sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0001058090-26-000007#P003",
+      "decision": "keep",
+      "why": "Quote is byte-identical and unique in exhibit_99_1, but it is a generic definitional footnote describing a non-GAAP adjustment category, stating no specific value or event-tied claim itself (the numeric legal-proceedings amounts sit elsewhere in the table). This is a bare/generic non-fact under DU-03/Rule 1, so it is retained as a negative_control rather than a real_item. 'legal proceedings' (the label) lies inside the quote.",
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "(Reduction)/charges for estimated settlements for distinct legal matters that exceeded or are expected to exceed typical costs for these types of legal proceedings.",
+        "raw_label_or_claim": "legal proceedings",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Total revenue for 2025 was $11.9 billion, an increase of 5.4% compared to 2024.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful, non-boilerplate fact but this event's proposal set is already reconciled; representative-selection rule forbids adding a row merely because another lawful fact exists, and no declared coverage gap requires it."
+    },
+    {
+      "quote": "Diluted earnings per share was $1.14, a 2.7% increase from $1.11",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same reason: lawful full-year EPS fact, not needed to replace/correct a proposal or repair coverage in this event."
+    },
+    {
+      "quote": "Adjusted diluted earnings1 per share was $1.17, a 4.5% increase from $1.12",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Good NAME-13 total-vs-per-share candidate, but not needed to repair this event's four-proposal coverage; adding it would exceed representative scope."
+    },
+    {
+      "quote": "During the fourth quarter of 2025 we repurchased $741.6 million of stock at an average price per share of $34.14.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful buyback fact, excluded for the same representative-scope reason; no proposal pointed here and no coverage repair required it."
+    },
+    {
+      "quote": "As of December 31, 2025, $1.7 billion remained available under share repurchase authorizations from our Board of Directors.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful floor-type authorization-remaining fact, excluded for the same representative-scope reason."
+    },
+    {
+      "quote": "Legal proceedings(5) (4,387) 4,387 (4,387) 21,437",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Considered as a possible replace-target for P003 (the actual quantified legal-proceedings adjustment). Decided against: P003's footnote text is itself a legitimate negative_control, this table row spans four period columns needing extra header context to bind to one period, and adding it is not required to repair this event's declared coverage under the representative-selection rule."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a generic accounting-methodology footnote (non-risk boilerplate) like P003 counts as negative_control under DU-03/Rule 1's 'generic ... boilerplate' prong, or should instead never be treated as a benchmark candidate at all.",
+      "why": "The fact gate's own worked examples are all risk boilerplate ('litigation could harm us', 'weather may affect results'); the authority never states whether a definitional non-GAAP reconciliation footnote is the same class. I classified it as negative_control since it is a testable bare/generic non-fact, but the rule text does not crisply settle this."
+    },
+    {
+      "what": "Whether 'Digital sales represented X% of total food and beverage revenue' is governed by OD-17 portion_versus_whole, or is a plain ratio metric outside all ten tags.",
+      "why": "OD-17's worked examples are population qualifiers (current/funded/network/systemwide/GMV); digital sales as a percent of total revenue is analogous but not a named example, so tagging it portion_versus_whole is my judgment, not settled by the quoted text."
+    }
+  ],
+  "blocked": null
+}
+```

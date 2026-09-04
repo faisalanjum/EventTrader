@@ -1,0 +1,113 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "verdicts": [
+    {
+      "proposal_id": "0000027904-26-000020#P000",
+      "decision": "keep",
+      "why": "Quote is verbatim and appears once in exhibit_99_1; it is the first complete occurrence of the June-quarter revenue-growth guidance (already states the low-teens bucket and period), so under the partial-then-richer-restatement rule the later guidance-table line ('Total Revenue YoY (%) Up low-teens') and the Esposito restatement fuse into this earlier complete quote rather than replacing it. Real, source-stated guidance, not boilerplate -> real_item. Bare growth guidance with no explicit basis word in this span invokes OD-11's default-to-YoY rule -> sequential_comparison.",
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Guiding to low-teens revenue growth in the June quarter on flat capacity growth, reflecting strong demand momentum, meaningful capacity reductions, and rapid actions to recapture higher fuel",
+        "raw_label_or_claim": "low-teens revenue growth in the June quarter",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0000027904-26-000020#P001",
+      "decision": "keep",
+      "why": "Quote is verbatim, single occurrence in exhibit_99_1, and is a complete source-stated fact (6% YoY non-fuel unit cost growth, explicit 'over prior year' basis) -> real_item, sequential_comparison (explicit YoY wording, OD-11). 'Non-fuel unit cost' is the release's own named non-GAAP unit-cost measure (CASM-Ex), a measurement-adjustment modifier on the base cost metric -> measurement_wording.",
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Non\u2011fuel unit costs grew 6 percent over prior year, reflecting lower than planned capacity growth and higher recovery costs.",
+        "raw_label_or_claim": "Non\u2011fuel unit costs grew 6 percent over prior year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0000027904-26-000020#P002",
+      "decision": "keep",
+      "why": "Quote is verbatim, single occurrence in exhibit_99_1, a specific source-stated trend fact (not generic boilerplate) -> real_item. 'Main cabin' is a population qualifier (a subset of total passenger revenue, not the consolidated whole and not an entry on the supplied slice menu) -> portion_versus_whole (OD-17).",
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The March quarter was the first full quarter of positive unit revenue growth in main cabin since the end of 2024, reflecting strong demand and continued supply rationalization.",
+        "raw_label_or_claim": "positive unit revenue growth in main cabin",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0000027904-26-000020#P003",
+      "decision": "keep",
+      "why": "Quote is verbatim, single occurrence in exhibit_99_1, a real forward guidance fact -> real_item. A single approximate value with no range/floor/ceiling wording is a point shape -> point_range_floor_ceiling (FINAL_DESIGN 7.1). 'All-in' is a number modifier describing how the projected price is computed (net of refinery benefit), an open measurement token -> measurement_wording.",
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "This results in a projected all-in fuel price of approximately $4.30 per gallon for the second quarter.",
+        "raw_label_or_claim": "projected all-in fuel price of approximately $4.30 per gallon",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "the possible effects of serious accidents involving our aircraft or aircraft of our airline partners",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic Forward Looking Statements risk boilerplate, a plausible negative_control shape, but no proposal raised it and it is not needed to correct or repair any of the four proposed rows in this event; representative-sampling scope leaves it out here."
+    },
+    {
+      "quote": "We delivered earnings that were more than 40 percent higher than last year, even with a significant increase in fuel costs and operational disruptions across the industry",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, lawful CEO-quoted YoY earnings-growth fact, but not proposed and not needed to fix any proposed row; excluded under the representative-not-exhaustive rule, not added merely because another lawful fact exists."
+    },
+    {
+      "quote": "Earnings Per Share $1.00 - $1.50",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real closed-range guidance fact from the Financial Guidance table, a plausible point_range_floor_ceiling candidate, but not proposed and not needed to repair the four supplied proposals; left out under representative sampling."
+    },
+    {
+      "quote": "Operating Margin 6% - 8%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real closed-range guidance fact, not proposed; excluded on the same representative-sampling basis as the EPS guidance range."
+    },
+    {
+      "quote": "Loss per share of ($0.44)",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real signed GAAP result (a losses_and_sign candidate), not proposed and not needed to correct the four supplied rows; excluded under representative sampling."
+    },
+    {
+      "quote": "flat capacity growth",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "2Q26 flat-capacity guidance is a distinct metric from the revenue-growth guidance kept under P000, but it sits inside P000's already-kept quote span and no proposal raised it separately; not added as its own row because a lawful additional fact inside kept context is not grounds for a new row under the representative-selection rule."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'Non-fuel unit cost (CASM-Ex)' / 'all-in fuel price' style modifiers count as NAME-14/FS-25 measurement tokens on a base metric, or are themselves the canonical Driver identity (an established industry non-GAAP metric name), is not settled by the quoted authority for composite named non-GAAP metrics; this affects the measurement_wording tag on the P001 and P003 rows.",
+      "why": "NAME-14/FS-25 describe measurement as an open token set (adjusted, diluted, constant currency...) attached to a base metric, but do not state whether an established composite non-GAAP metric name (CASM-Ex, all-in fuel price) is itself the Driver name versus a measurement-qualified version of a plainer base metric; resolving this changes whether the tag applies."
+    },
+    {
+      "what": "Whether a cabin-class population qualifier like 'main cabin' (not present on the supplied product/segment menu) is governed by OD-17's portion-versus-whole treatment or by the FS-05..24 slice-kind ladder as an off-menu 'product' kind slice is not settled by the quoted crosswalk, which lists the two rules separately without stating precedence for this case.",
+      "why": "This affects whether the P002 row should carry only portion_versus_whole, or also slices_and_unknown_axes, since 'main cabin' could plausibly be read either as a name-qualifying population (OD-17) or as an unmapped product-axis slice value (FS-05..24)."
+    }
+  ],
+  "blocked": null
+}
+```

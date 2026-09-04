@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "same_store_sales",
+        "driver_state": "missed",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "consensus",
+        "has_favorability_wording": true,
+        "slice_parts": ["geography:nonus"],
+        "measurement_raw_spans": ["in constant currency"],
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 2
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

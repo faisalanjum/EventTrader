@@ -1,0 +1,133 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-25-102611#P000",
+      "decision": "replace",
+      "why": "Item and location are correct, but the supplied quote drops a stray space before the final period that is present in the source ('2028 .' not '2028.'); corrected to an exact character match. Assigned record kind and hard class.",
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "As amended, the Revolving Credit Agreement will terminate, and all amounts borrowed will be due and payable, on November 15, 2028 .",
+        "raw_label_or_claim": "Revolving Credit Agreement",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["corrections_and_amendments"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P001",
+      "decision": "keep",
+      "why": "Quote is an exact, contiguous character match to the source; a specific, source-stated, non-boilerplate fact about fiscal quarter length by year, with its own label inside the quote.",
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Each of the first three quarters of our fiscal year consists of 12 weeks, and the fourth quarter consisted of 16 weeks in 2025, 17 weeks in 2024 and 16 weeks in 2023.",
+        "raw_label_or_claim": "the fourth quarter consisted of 16 weeks in 2025, 17 weeks in 2024 and 16 weeks in 2023",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P002",
+      "decision": "replace",
+      "why": "The supplied quote splices, across a mid-sentence line break, the unlabeled tail of the fiscal-2024 fact ('33.6% of annual sales and 33.9% of net income') onto the fully-labeled fiscal-2023 fact; the FY2024 item's own distinguishing label ('the fourth quarter of fiscal year 2024 represented') was left outside the quote, and two distinct-period facts were fused into one row. Replaced with the single complete, contiguous, correctly labeled fiscal-2025 (current-period) fact from the same sentence.",
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The fourth quarter of fiscal year 2025 represented 33.0% of annual sales and 33.5% of net income",
+        "raw_label_or_claim": "The fourth quarter of fiscal year 2025",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P003",
+      "decision": "keep",
+      "why": "Exact character match; specific, source-stated fact (authorization raised by a stated point amount to a stated point total), label inside the quote.",
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "On June 19, 2024, the Board voted to increase the repurchase authorization by $1.5 billion, bringing the total authorization to $39.2 billion.",
+        "raw_label_or_claim": "increase the repurchase authorization by $1.5 billion, bringing the total authorization to $39.2 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P004",
+      "decision": "keep",
+      "why": "Exact character match; a general regulatory/environment observation about labor-relations trends, not a specific current source-flagged adverse threat to AutoZone itself \u2014 fails the DU-11 at_risk boundary, correct behavior is omission (negative_control).",
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "the National Labor Relations Board (NLRB) has issued decisions making it easier for employees to organize.",
+        "raw_label_or_claim": "the National Labor Relations Board (NLRB)",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P005",
+      "decision": "keep",
+      "why": "Exact character match; a specific, source-stated, non-boilerplate operational fact (store count with commercial sales program) with its own label inside the quote.",
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "business",
+        "occurrence_in_part": null,
+        "quote": "in 6,098 of our domestic stores as well as the vast majority of our stores in Mexico and Brazil, we had a commercial sales program that provides prompt delivery of parts and other products and commercial credit to local, regional and national repair garages, dealers, service stations, fleet owners and other accounts.",
+        "raw_label_or_claim": "6,098 of our domestic stores",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "For fiscal 2025, net sales increased to $18.9 billion, a 2.4% increase over the prior year.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Prominent headline YoY growth fact and strong sequential_comparison/point-shape candidate, but no proposal needed correction here and this event's coverage requirement is not visible from this task; per Rule 1 (representative, not exhaustive) a row is added only to replace/correct a proposed item or repair a declared gap, not merely because another lawful fact exists."
+    },
+    {
+      "quote": "diluted earnings per share decreased 3.1% to $144.87 for the year.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Strong losses_and_sign / sequential_comparison candidate (signed YoY EPS decline), excluded for the same reason \u2014 no proposal to fix, and per-event addition is not warranted absent a declared coverage gap."
+    },
+    {
+      "quote": "The inclusion of the 53 rd week in fiscal 2024 resulted in an increase to net sales of $365.9 million and an increase in operating profit of $86.7 million.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Rich measurement/comparability-adjustment fact (53rd-week effect), excluded for the same reason \u2014 no proposal required replacement and it is not needed to fix the supplied set."
+    },
+    {
+      "quote": "Our business could also be materially affected by additional factors that are presently unknown to us or that we currently believe to be immaterial to our business.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Textbook generic risk boilerplate (negative_control candidate under DU-11), but not raised by any proposal; P004 already supplies a negative_control example from this event's risk section, so no replacement/repair need was identified."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a revolving-credit-facility maturity-date amendment (a one-off contract term change) is the kind of fact the corrections_and_amendments tag/OD-14 is meant to mark, versus OD-14 being specifically about how successive DATA VALUES for the same fact series are source-ranked and superseded over time (e.g. restated metrics, revised guidance).",
+      "why": "The owner crosswalk maps corrections_and_amendments to 'OD-14/current-view correction rules'; OD-14's own text concerns source ranking and latest-wins supersession of repeated facts, not a single contractual amendment event. Applied the tag to P000 as the closest available exemplar in this event, but the fit is not settled by the supplied authority."
+    },
+    {
+      "what": "Whether an administrative/calendar fact (e.g. the number of weeks in each fiscal quarter by year) counts as 'a real fact about the driver' under the DU-03 fact gate, since it describes reporting-period structure rather than a specific business/financial metric's state, change, surprise, guidance, or action.",
+      "why": "Kept P001 as real_item because it is specific and source-stated rather than generic boilerplate, but the fact gate's 'driver' language does not explicitly address calendar/administrative facts of this kind, and no rule in the supplied authority settles it either way."
+    },
+    {
+      "what": "Whether a store-count fact tied to geography (domestic vs. Mexico/Brazil, as in P005) is itself a slices_and_unknown_axes fact under FS-05..24, given slices are defined as a business population for which 'revenue/earnings from ___' makes sense, and this item is an operational store count rather than a revenue/earnings figure.",
+      "why": "Left the hard-class list empty for P005 on this basis, but the boundary between an operational geography-tagged count and a true FS-05..24 slice fact is not explicitly settled by the supplied rule text."
+    }
+  ],
+  "blocked": null
+}
+```

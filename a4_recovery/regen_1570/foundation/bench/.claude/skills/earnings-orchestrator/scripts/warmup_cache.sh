@@ -1,0 +1,34 @@
+#!/bin/bash
+# Shell wrapper for warmup_cache.py — pre-fetches extraction caches via direct Bolt
+# Called by extraction agents via:
+#   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER")
+#   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER --transcript TID")
+#   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER --8k-packet ACC [--out-path PATH]")
+#   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER --guidance-history [--pit ISO8601] [--out-path PATH]")
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+
+# Neo4j connection default: kube-proxy routes ClusterIP 10.102.222.120:7687
+# to the in-cluster neo4j-bolt Service (NodePort 30687 was the old flaky path).
+# Override with GUIDANCE_NEO4J_URI if you need a different target (pods set
+# it to bolt://neo4j-bolt.neo4j.svc.cluster.local:7687).
+export NEO4J_URI="${GUIDANCE_NEO4J_URI:-bolt://10.102.222.120:7687}"
+export NEO4J_USERNAME="${GUIDANCE_NEO4J_USERNAME:-neo4j}"
+export NEO4J_PASSWORD="${GUIDANCE_NEO4J_PASSWORD:-${NEO4J_PASSWORD:-}}"
+export NEO4J_DATABASE="${GUIDANCE_NEO4J_DATABASE:-neo4j}"
+
+# Python interpreter: default to repo venv, allow PYTHON= override.
+# No system python3 fallback — system python3 lacks the project deps
+# (neo4j package, etc.) and would ImportError at module-load.
+PYTHON_BIN="${PYTHON:-$REPO_ROOT/venv/bin/python}"
+
+if [ ! -x "$PYTHON_BIN" ]; then
+    echo "Error: Python interpreter not found or not executable: $PYTHON_BIN" >&2
+    echo "Set PYTHON=/path/to/python, or create $REPO_ROOT/venv." >&2
+    exit 127
+fi
+
+exec "$PYTHON_BIN" "$SCRIPT_DIR/warmup_cache.py" "$@"

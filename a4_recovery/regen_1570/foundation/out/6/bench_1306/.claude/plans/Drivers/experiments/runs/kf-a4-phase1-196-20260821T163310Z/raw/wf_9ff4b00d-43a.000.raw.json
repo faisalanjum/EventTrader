@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#084",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "unit_count",
+          "driver_state": "reported",
+          "level_low": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_end_date": "2025-12-31",
+          "fiscal_year": 2025,
+          "slice_parts": ["segment:kfcglobaldivision"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000084#084/L1",
+      "exact_match": false,
+      "why": "L1 matches driver_name, state, values, unit, shape, time_type, fiscal_year and slice, but adds an extra period_start_date of 2025-12-31 that the settled reply omits (this is a point-in-time balance stated only 'as of' a single date, so a start date is not a stated or implied fact and should stay null under the sparse rule)."
+    },
+    {
+      "lane_id": "0001041061-26-000084#084/L2",
+      "exact_match": true,
+      "why": "L2's item object is field-for-field identical to the settled reply: same driver_name (unit_count), state (reported), level_low/level_high (33897, scale 1, null evidence), level_unit (count), level_shape_hint (point), time_type (instant), period_end_date (2025-12-31), fiscal_year (2025), and slice_parts (segment:kfcglobaldivision), with no extra fields."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether a point-in-time (instant) unit-count fact should carry a period_start_date equal to its period_end_date, or leave period_start_date null.",
+      "why": "Rule 6 says equal start/end dates are lawful for instant facts but does not require them; the source states only 'as of December 31, 2025' with no distinct start date, so under the sparse-field rule the settled reply treats period_start_date as unstated (null/omitted) rather than mirroring the end date, which is the one point where the two drafts diverge."
+    }
+  ]
+}
+```

@@ -1,0 +1,26 @@
+```json
+{
+  "packet_id": "0001104659-25-118458#108",
+  "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [],
+    "abstentions": [
+      {"reason": "\"The Company has one reportable segment, which includes retail stores, salon services, and e-commerce\" is a basis-of-presentation / segment-structure disclosure describing how the company organizes its financial reporting, not a statement about any driver's state, change, surprise, guidance, or action — it fails Rule 1's fact gate as a structural/organizational description, not a substantive business fact."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-118458#108/L1",
+      "exact_match": true,
+      "why": "L1 abstains with facts=[] and an equivalent reason (segment-structure disclosure fails the Rule 1 fact gate as boilerplate), matching the settled reply's branch and substance."
+    },
+    {
+      "lane_id": "0001104659-25-118458#108/L2",
+      "exact_match": true,
+      "why": "L2 abstains with facts=[] and an equivalent reason (basis-of-presentation/segment-structure disclosure is not a driver fact), matching the settled reply's branch and substance."
+    }
+  ],
+  "ambiguities": []
+}
+```

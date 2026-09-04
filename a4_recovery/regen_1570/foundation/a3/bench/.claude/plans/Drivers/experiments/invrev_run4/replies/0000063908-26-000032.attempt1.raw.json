@@ -1,0 +1,135 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "verdicts": [
+    {
+      "proposal_id": "0000063908-26-000032#P000",
+      "decision": "keep",
+      "why": "Quote is exact and unique in exhibit_99_1; it is a complete point-value fact (diluted EPS $3.03, +8% / +5% constant-currency) with its label inside the quote.",
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Diluted earnings per share was $3.03, an increase of 8% (5% in constant currencies).",
+        "raw_label_or_claim": "Diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P001",
+      "decision": "replace",
+      "why": "The proposed table is a later, redundant restatement of the same Q4-2025 total comparable-sales fact; its 2024 column is a different period's own value, not new information about 2025. Under fuse-before-collision / first-complete-quote, the correct location is the opening bullet 'Global comparable sales in the fourth quarter increased 5.7%...', which is earlier in source order and already complete on its own.",
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Global comparable sales in the fourth quarter increased 5.7%, with positive global comparable guest counts and strong comparable sales growth across all segments",
+        "raw_label_or_claim": "Global comparable sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P002",
+      "decision": "keep",
+      "why": "Quote is exact and unique; a source-stated FY2024 restructuring pre-tax charge fact (quarter and year figures given together as one contiguous disclosure).",
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Pre-tax charges of $74 million, or $0.10 per share, for the quarter and $221 million, or $0.25 per share, for the year, primarily related to restructuring charges associated with Accelerating the Organization",
+        "raw_label_or_claim": "Pre-tax charges",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P003",
+      "decision": "keep",
+      "why": "Quote is exact and unique; complete FY Systemwide-sales fact with a floor shape ('over $139 billion'), a constant-currency measurement token, and 'Systemwide' as an OD-17 qualified (non-consolidated) population.",
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Global Systemwide sales* for the full year increased 7% (5% in constant currencies) to over $139 billion, or growth of $9 billion ($7 billion in constant currencies)",
+        "raw_label_or_claim": "Global Systemwide sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P004",
+      "decision": "keep",
+      "why": "Quote is exact and unique; correctly isolates the 90-day active loyalty-users fact from the adjoining loyalty-sales fact in the same compound sentence; '90-day active' is an OD-17-style population qualifier.",
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "90-day active loyalty users up 19% to nearly 210 million as of year-end",
+        "raw_label_or_claim": "90-day active loyalty users",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P005",
+      "decision": "keep",
+      "why": "Quote is exact and unique; a complete FY2025 restructuring pre-tax charge point-value fact.",
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Results included net pre-tax charges of $229 million primarily related to restructuring charges associated with Accelerating the Organization.",
+        "raw_label_or_claim": "net pre-tax charges",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Increase/(Decrease) Quarters Ended December 31, 2025 2024 U.S. 6.8 % (1.4) % International Operated Markets 5.2 0.1 International Developmental Licensed Markets 4.5 4.1 Total Company 5.7 % 0.4 %",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Superseded location for the P001 fact: a later, redundant restatement of the already-complete Q4-2025 comparable-sales fact; its 2024 column is a separate period's own value, not new information for the 2025 fact."
+    },
+    {
+      "quote": "Global comparable sales increased 3.1%: \u2022U.S. increased 2.1% \u2022International Operated Markets increased 3.2% \u2022International Developmental Licensed Markets increased 4.6%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same fact pattern as the corrected P001 item, different period (full year vs Q4); already represented via P001. No proposal needs correcting here and no declared coverage gap requires it."
+    },
+    {
+      "quote": "The Company declared a 5% increase in its quarterly cash dividend to $1.86 per share.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, distinct capital-return fact not raised by any proposal; not added because it does not correct a proposal or repair a declared coverage gap this turn (representative selection, not a census)."
+    },
+    {
+      "quote": "\u201cMcDonald's value leadership is working,\u201d said Chairman and CEO Chris Kempczinski.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic promotional management narrative, no quantified driver fact; a possible negative-control candidate but not added since no proposal needed fixing and no declared control-coverage repair was required here."
+    },
+    {
+      "quote": "Consolidated revenues increased 10% (6% in constant currencies).",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real fact not raised by any proposal; its hard-class pattern (point value, constant-currency measurement) is already represented in this event via P000/P003, so it was not added merely because it exists."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a prior-year comparative figure disclosed inside a current filing (P002's 2024 restructuring-charge sentence) is a standalone dated fact of this event or an enrichment field (comparison_baseline) of the 2025 fact.",
+      "why": "The supplied authority does not settle this field-binding question for the representative-inventory turn; P002 was kept as a real_item row under the plain source-stated fact-gate test, but the deeper binding question is unresolved."
+    },
+    {
+      "what": "Whether a single sentence stating both a quarterly and an annual value for the same restructuring item (e.g. P002: $74M/quarter and $221M/year) must be split into two period-scoped rows under the split/fusion law, or may stay one representative row.",
+      "why": "General rule 3 permits (does not mandate) splitting on a real period difference and instructs against adding rows merely because another lawful fact exists; P002 was kept as one smallest-span row, an interpretive choice rather than a rule the authority resolves explicitly."
+    }
+  ],
+  "blocked": null
+}
+```

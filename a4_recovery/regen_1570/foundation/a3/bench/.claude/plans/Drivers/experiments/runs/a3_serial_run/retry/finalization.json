@@ -1,0 +1,31 @@
+{
+ "attempt": 2,
+ "audit_problems": [],
+ "classification": [
+  [
+   [
+    "0000092380-26-000044#042",
+    "0000092380-26-000044#042/L1"
+   ],
+   "served"
+  ]
+ ],
+ "ledger": {
+  "missing": 0,
+  "retry_valid": 1,
+  "scheduled": 1
+ },
+ "manifest_sha256": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+ "receipt_sha256": "4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465",
+ "retry": [],
+ "run_id": "retry",
+ "validity": [
+  [
+   [
+    "0000092380-26-000044#042",
+    "0000092380-26-000044#042/L1"
+   ],
+   true
+  ]
+ ]
+}

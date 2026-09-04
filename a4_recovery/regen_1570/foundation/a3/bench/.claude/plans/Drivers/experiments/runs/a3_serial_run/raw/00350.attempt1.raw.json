@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "gross_margin",
+        "driver_state": "increased",
+        "level_low": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "change_value": {"value": 30, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+        "change_unit": "basis_points",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "bzNews_42014391#189",
+  "settled": {
+    "source_id": "bzNews_42014391",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "advertising_spending",
+          "driver_state": "announced",
+          "level_low": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "bzNews_42014391#189/L1",
+      "exact_match": true,
+      "why": "Identical driver_name ('advertising_spending'), driver_state ('announced'), fact_type, and numeric level object (100, x1,000,000, evidence 'million', point shape, m_usd) to the settled reply."
+    },
+    {
+      "lane_id": "bzNews_42014391#189/L2",
+      "exact_match": false,
+      "why": "All fields match the settled reply except driver_name, which this draft writes as 'advertising_spend' instead of the settled 'advertising_spending' — a spelling/form difference, not a literal match."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'support franchisees' should be a second, separate action_event fact (e.g. a franchisee financial-support program) distinct from the sales-revival/advertising effort, since the quote states one combined $100 million figure covering both purposes with no dollar split between them.",
+      "why": "Rule 3.2 requires splitting independent causes into separate facts, but Rule 5 forbids inventing a value split the source never states; attaching the full $100M to two facts would double-count it, and attaching it to neither loses the only stated number. Both drafts silently dropped the franchisee-support purpose rather than flagging this trade-off, so a second fact was treated as unavailable here."
+    },
+    {
+      "what": "Whether naming this driver 'advertising_spending' is safely grounded, given the word 'advertising' appears only in the article's title ('Company Is Boosting Advertising And Supporting Franchisees'), not inside this item's own body quote ('spending $100 million in an effort to revive sales and support franchisees').",
+      "why": "The task instructions permit using the full event as context to interpret the located quote, but other grounding rules (e.g. unit_scale_evidence must be verbatim inside the quote) suggest name specificity ideally traces to the quote text itself; pulling the specific mechanism ('advertising') from a different part_ref (title) than the one supplying this item's quote (body) is a judgment call, not a certainty."
+    }
+  ]
+}
+```

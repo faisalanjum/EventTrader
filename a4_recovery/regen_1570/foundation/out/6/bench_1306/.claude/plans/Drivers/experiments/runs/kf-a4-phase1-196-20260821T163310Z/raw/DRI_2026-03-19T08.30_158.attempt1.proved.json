@@ -1,0 +1,47 @@
+```json
+{
+  "packet_id": "DRI_2026-03-19T08.30#158",
+  "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "total_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 3.3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "change_value": {"value": 5.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DRI_2026-03-19T08.30#158/L1",
+      "exact_match": true,
+      "why": "L1 matches the settled reply on every field, including citing '%' as the unit_scale_evidence for the 5.9% change value."
+    },
+    {
+      "lane_id": "DRI_2026-03-19T08.30#158/L2",
+      "exact_match": false,
+      "why": "L2 is identical to the settled reply except it sets change_value.unit_scale_evidence to null instead of '%', omitting the bare unit marker present in the quote that Rule 5.6 requires when a marker exists even at multiplier 1."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether change_value.unit_scale_evidence should be the literal '%' span or null for a bare stated percent like '5.9%'.",
+      "why": "Rule 5.6 says a bare unit marker (its own example is '$' in '$850,000') suffices as evidence when the multiplier is 1, and null applies only when no unit/scale marker exists at all (e.g. '14 stores'). '%' fits the same 'bare unit marker' pattern by analogy, but the rule's worked examples are all currency symbols, so extending it to percent signs is an inference rather than a directly stated case."
+    }
+  ]
+}
+```

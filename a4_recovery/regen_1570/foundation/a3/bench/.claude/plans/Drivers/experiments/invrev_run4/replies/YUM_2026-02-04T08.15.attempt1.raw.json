@@ -1,0 +1,128 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "verdicts": [
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P000",
+      "decision": "keep",
+      "why": "Quote verified verbatim in prepared_remarks, unique occurrence; closed-range tax-rate guidance (point/range/floor/ceiling shape).",
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We expect our tax rate to be in the range of 22 to 24 percent.",
+        "raw_label_or_claim": "our tax rate",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P001",
+      "decision": "keep",
+      "why": "Quote verified verbatim in prepared_remarks, unique occurrence; point EPS value, annual YoY growth (OD-11 annual pin), and 'X Special' ex-item measurement qualifier.",
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Yum X Special EPS for the year was $6.05, up 10%.",
+        "raw_label_or_claim": "Yum X Special EPS",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P002",
+      "decision": "keep",
+      "why": "Quote verified verbatim in prepared_remarks, unique occurrence; point unit count with explicit 'from the prior year' comparison (percent_yoy).",
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Taco Bell entered five new markets in 2025 and opened 155 gross units internationally, up almost 40% from the prior year.",
+        "raw_label_or_claim": "Taco Bell",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P003",
+      "decision": "keep",
+      "why": "Quote verified verbatim in prepared_remarks including the source's own lowercase 'we', unique occurrence; closed-range interest-expense guidance.",
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we expect interest expense to fall in the range of $500 to $520 million for the full year when excluding any potential debt issuances.",
+        "raw_label_or_claim": "interest expense",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "why": "No proposal supplied a negative control for this event. This line is a bare non-disclosure about the Pizza Hut strategic review, not a stated fact about any driver, so DU-03/Rule 1 correct behavior is omission.",
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Given the ongoing nature of the process, at this time, we cannot share further details on the strategic review.",
+        "raw_label_or_claim": "the strategic review",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "why": "No proposal supplied a lawful abstention control. 'EUVs' is a real candidate metric mention whose per-X acronym expansion is not certain from the supplied text (it never appears spelled out, unlike AUV which is used elsewhere in the same call); NAME-13 requires abstention on an uncertain expansion, never a guess.",
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "They're going after consumers with models that have strong paybacks, delivering positive transactions and same-store sales growth, but with mathematically lower EUVs.",
+        "raw_label_or_claim": "EUVs",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, lawful forward-guidance fact with signed percentage decline, but not proposed; representative selection does not require adding it merely because it exists (a candidate for losses_and_sign/point shape left for cross-event reconciliation)."
+    },
+    {
+      "quote": "Please note that during today's call, system sales and operating profit growth will exclude the impact of foreign currency.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Procedural call-convention disclaimer, not a fact about a specific driver; considered as an alternate negative_control but the Pizza Hut non-disclosure line was selected instead, avoiding a redundant addition."
+    },
+    {
+      "quote": "We also completed a 128 unit Taco Bell acquisition for $668 million in Q4.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, lawful stated fact (unit count and price) but not proposed; not added merely because another lawful fact exists in this representative-selection turn."
+    },
+    {
+      "quote": "Our net leverage ended the year at approximately four times.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, lawful stated fact (approximate point ratio) but not proposed; excluded per representative-selection rule, not a coverage repair."
+    },
+    {
+      "quote": "Including delivering over 5% net new unit growth, we expect Taco Bell us restaurant level margins of between 24 and 25%.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, lawful range-guidance fact, but redundant with the already-kept tax-rate and interest-expense range items for point/range/floor/ceiling coverage in this event; not added."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'EUVs' in the Ranjith Roy Q&A answer is a genuine but ambiguous per-X acronym or an ASR transcription artifact of 'AUV' (used spelled-out and abbreviated elsewhere in the same call) is not settled by the supplied text.",
+      "why": "The authority (NAME-13) settles the disposition once an uncertain expansion is identified (abstain, never guess), but does not settle whether this specific token is a real per-X candidate at all versus a transcription error outside the fact gate; recorded conservatively as a lawful_abstention_control exemplar rather than resolved either way."
+    }
+  ],
+  "blocked": null
+}
+```

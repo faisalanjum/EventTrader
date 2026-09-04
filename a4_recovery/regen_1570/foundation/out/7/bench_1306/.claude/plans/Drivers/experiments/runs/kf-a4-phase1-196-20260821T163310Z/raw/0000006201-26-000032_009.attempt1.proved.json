@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "0000006201-26-000032#009",
+  "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "pretax_income",
+          "driver_state": "increased",
+          "level_low": {"value": -476, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": -476, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": -648, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "comparison_high": {"value": -648, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000032#009/L1",
+      "exact_match": true,
+      "why": "L1's single metric fact for pretax_income, values, shapes, unit, prior_year baseline, duration, and Q1 FY2026 period all match the settled reply exactly (key order differences are immaterial)."
+    },
+    {
+      "lane_id": "0000006201-26-000032#009/L2",
+      "exact_match": true,
+      "why": "L2 is identical in content to L1 and to the settled reply, differing only in field ordering, which is immaterial."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,175 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "verdicts": [
+    {
+      "proposal_id": "0000940944-25-000038#P000",
+      "decision": "replace",
+      "why": "The supplied quote spans four distinct segment-profit-margin facts (Olive Garden, LongHorn Steakhouse, Fine Dining, Other Business) under four competing labels, so no single raw_label_or_claim can be assigned to it as one row. Each segment is itself a complete, independently quotable point-plus-change fact. Replaced with the smallest complete contiguous span for one representative segment (Fine Dining), whose parenthetical negative notation also exercises the sign rule.",
+      "row": {
+        "source_id": "0000940944-25-000038",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Fine Dining 18.6% 19.0% (40) BP",
+        "raw_label_or_claim": "Fine Dining",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "0000940944-25-000038#P001",
+      "decision": "exclude",
+      "why": "Duplicate restatement of the same Fine Dining segment-profit-margin decrease already captured, with complete numeric values, by the kept table row (see P000's replacement). Same period/scope/measurement/state, no new distinct stated value; per the within-event fuse-before-collision / first-complete-quote rule this narrative sentence does not create a second row.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000940944-25-000038#P002",
+      "decision": "replace",
+      "why": "The supplied quote is an exact excerpt but is a later restatement of a covenant fact that is stated completely earlier in source order: the September 16, 2024 Amendment No. 1 sentence, which states the same 3.50-to-1.00 ceiling (plus its 4.00 conditional ceiling) and identifies it as an amendment replacing a prior covenant. Per the first-complete-quote rule the earlier occurrence is the correct locator.",
+      "row": {
+        "source_id": "0000940944-25-000038",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "On September 16, 2024, we entered into Amendment No. 1 (Amendment) to the Revolving Credit Agreement, which replaced the prior financial covenant (which provided for a maximum consolidated total debt to total capitalization ratio) with a new financial covenant requiring us to maintain, measured as of the end of each fiscal quarter, a maximum consolidated leverage ratio of 3.50 to 1.00 (which may be temporarily increased to 4.00 to 1.00 upon the election as a result of a covered acquisition, subject to customary limitations set forth in the Revolving Credit Agreement).",
+        "raw_label_or_claim": "maximum consolidated leverage ratio",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "corrections_and_amendments"]
+      }
+    },
+    {
+      "proposal_id": "0000940944-25-000038#P003",
+      "decision": "keep",
+      "why": "Quote and locator are exact and correct, and this span is the smallest complete contiguous evidence for the stated average-check-per-person fact. The co-stated alcoholic-beverage percentage in the same sentence is a distinct fact sharing this quote by grammar (period anchor 'During fiscal 2025' cannot be dropped without breaking contiguity) but is not added as a second row absent a coverage-repair need.",
+      "row": {
+        "source_id": "0000940944-25-000038",
+        "part_ref": "business",
+        "occurrence_in_part": null,
+        "quote": "During fiscal 2025, the average check per person (defined as total sales divided by number of entr\u00e9es sold) was approximately $24.00, with alcoholic beverages accounting for 4.7 percent of Olive Garden\u2019s sales.",
+        "raw_label_or_claim": "average check per person",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0000940944-25-000038#P004",
+      "decision": "exclude",
+      "why": "Genuinely unsettled fact-gate boundary: a specific, non-hedged, dated claim (a TRAC agreement with the IRS since 1995) that is not classic hedged risk boilerplate but also has no clear quantifiable driver (state/change/surprise/guidance/action) connection. Owner ruling 3 forbids guessing a fuzzy other-lane boundary into real_item or negative_control, so this is excluded rather than force-classified; recorded as an open issue.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000940944-25-000038#P005",
+      "decision": "keep",
+      "why": "Quote and locator are exact and correct. Read in context this sentence is descriptive background inside a Risk Factors paragraph whose actual risk claim is hedged/hypothetical ('if we are unable to fully implement...we may experience...') with no specific, current, source-flagged adverse threat stated in this sentence itself — fails the DU-11 at_risk strict test, so it is correctly-omitted generic risk-adjacent boilerplate (negative_control).",
+      "row": {
+        "source_id": "0000940944-25-000038",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "Many of our corporate systems and processes and corporate support for our restaurant operations are centralized at one Florida location.",
+        "raw_label_or_claim": "centralized at one Florida location",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0000940944-25-000038#P006",
+      "decision": "keep",
+      "why": "Quote and locator are exact and correct. The sentence affirmatively states NO material impact has occurred to date, so it cannot itself be a specific current adverse threat under DU-11 — classic risk-factor hedge boilerplate, correctly omitted (negative_control).",
+      "row": {
+        "source_id": "0000940944-25-000038",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "To date, interruptions of these information systems as a result of unauthorized infiltration attempts have not had a material impact on our operations.",
+        "raw_label_or_claim": "have not had a material impact on our operations",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0000940944-25-000038#P007",
+      "decision": "replace",
+      "why": "Quote is exact but the mdna occurrence is not the first complete occurrence of this restaurant-count fact in source order: an identical-wording occurrence exists earlier, in the business part's Introduction. Corrected part_ref to business at occurrence index 0 (a second identical-wording occurrence also exists later in the business part's Franchises section, so occurrence_in_part could not be left null).",
+      "row": {
+        "source_id": "0000940944-25-000038",
+        "part_ref": "business",
+        "occurrence_in_part": 0,
+        "quote": "we owned and operated 2,159 restaurants through subsidiaries in the United States and Canada",
+        "raw_label_or_claim": "2,159 restaurants",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Olive Garden 22.3% 22.1% 20 BP",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same table as the kept Fine Dining row; not added because the representative sample for this event does not require every segment and no proposal or declared coverage gap calls for it."
+    },
+    {
+      "quote": "LongHorn Steakhouse 19.3% 18.4% 90 BP",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same table as the kept Fine Dining row; not added for the same representative-sampling reason."
+    },
+    {
+      "quote": "Other Business 15.7% 15.3% 40 BP",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same table as the kept Fine Dining row; not added for the same representative-sampling reason."
+    },
+    {
+      "quote": "alcoholic beverages accounting for 4.7 percent of Olive Garden\u2019s sales",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "Distinct fact from the kept average-check-per-person row, sharing that sentence only because grammar forces it; not added absent a coverage-repair need."
+    },
+    {
+      "quote": "Prior to the Amendment, the ratio was calculated as adjusted debt to adjusted total capital and the maximum permitted was 75 percent.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, superseded pre-amendment covenant fact and a good corrections_and_amendments candidate, but not added — representative sampling, no proposal or repair need calls for it in this event."
+    },
+    {
+      "quote": "As of May 25, 2025, our adjusted debt to EBITDAR ratio was 2.1.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Distinct current-level fact (actual measured ratio) versus the kept covenant-ceiling fact (required maximum); not added — representative sampling."
+    },
+    {
+      "quote": "We expect fiscal 2026 sales from continuing operations to increase between 7.0 to 8.0 percent, driven by growth of 2.0 percent related to the fifty-third week in fiscal 2026, same-restaurant sales growth (1) of 2.0 to 3.5 percent, and sales from 60 to 65 new restaurant openings.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Strong real_item/guidance range-shape candidate not raised by any proposal; not added in this reconciliation pass since no proposal requires correction here — left for cross-event coverage reconciliation at the final turn."
+    },
+    {
+      "quote": "On October 11, 2024, we acquired 100 percent of the equity interest of Chuy\u2019s Holdings, Inc. (Chuy\u2019s Holdings) in an all-cash transaction of $649.1 million in total consideration, $613.7 million in net cash consideration, inclusive of $35.4 million of cash on Chuy\u2019s Holdings balance sheet at closing.",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "Real, well-evidenced acquisition/action fact not raised by any proposal; not added — representative sampling, no repair need identified in this pass."
+    },
+    {
+      "quote": "Impairments and disposal of assets, net increased as a percent of sales primarily due to the decision to close twenty-two underperforming restaurant locations during the fourth quarter of fiscal 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real closure/action fact and a plausible portion-of-fleet candidate; not added — representative sampling, no proposal or repair need calls for it."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Record-kind classification of the TRAC/IRS agreement sentence (P004) is unsettled.",
+      "why": "It is a specific, non-hedged, dated factual claim, unlike the classic hedged risk-boilerplate pattern, yet it has no evident connection to a quantifiable Driver state/change/surprise/guidance/action. The authority (DU-03/Rule 1, DU-11) does not give a locked boundary for this kind of non-risk, non-financial operational-compliance mention, and owner ruling 3 forbids guessing such fuzzy cases into real_item or negative_control."
+    },
+    {
+      "what": "Cross-part 'source order' for the within-event first-complete-quote dedup rule is assumed from the supplied text_parts array order (business, then mdna, then risk), not from true SEC 10-K page order (which normally places Item 1A Risk Factors before Item 7 MD&A).",
+      "why": "The authority does not specify how to order text_parts for dedup/locator purposes when parts are supplied out of true document sequence; this affects which occurrence of a repeated fact (e.g., the 2,159-restaurant count) is treated as 'first'. I used the given array order as the only available ordering signal."
+    },
+    {
+      "what": "Whether a contractual/covenant amendment (Revolving Credit Agreement Amendment No. 1 changing the covenant ratio) is a genuine exercise of the corrections_and_amendments (OD-14) hard class.",
+      "why": "OD-14's quoted text addresses DriverUpdate fact corrections, restatements and guidance-movement history, not literally a company's contract-amendment business event. I tagged the kept P002 row corrections_and_amendments per the owner's crosswalk as the closest match, but the fit is interpretive rather than exact, and the authority does not explicitly settle it."
+    }
+  ],
+  "blocked": null
+}
+```

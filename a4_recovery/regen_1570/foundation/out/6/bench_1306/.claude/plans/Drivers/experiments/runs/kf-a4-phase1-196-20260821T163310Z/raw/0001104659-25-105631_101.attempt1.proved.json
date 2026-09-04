@@ -1,0 +1,55 @@
+```json
+{
+  "packet_id": "0001104659-25-105631#101",
+  "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restaurant_sales",
+          "driver_state": "unchanged",
+          "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "comparison_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "measurement_raw_spans": ["approximately"],
+          "slice_parts": ["segment:thecheesecakefactory", "channel:off_premise"],
+          "time_type": "duration",
+          "period_end_date": "2025-09-30",
+          "period_scope": "ytd",
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-105631#101/L1",
+      "exact_match": false,
+      "why": "L1 uses the broader driver_name 'sales' instead of the filing's own specific line-item term 'restaurant_sales', and omits comparison_low/comparison_high/comparison_shape_hint and the 'approximately' measurement span even though the source explicitly states the same 21% value held in the prior-year period too; its segment+channel slice_parts and period fields otherwise match the settled answer."
+    },
+    {
+      "lane_id": "0001104659-25-105631#101/L2",
+      "exact_match": false,
+      "why": "L2 matches driver_name, comparison values, and the 'approximately' measurement span, but its slice_parts drops the segment:thecheesecakefactory reuse (keeping only channel:off_premise) even though the quote sits inside the Cheesecake Factory Restaurants-specific paragraph, and it wrongly assigns fiscal_quarter=3 to a nine-month (39-week) year-to-date period that is not a single quarter."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the driver_name should be the generic 'sales' or the more specific 'restaurant_sales'.",
+      "why": "The filing distinguishes 'restaurant sales' from total company 'revenues' (which also include bakery and licensing revenue), so the specific term is arguably required by Rule 3.3, but a reader could reasonably default to the broader 'sales' root."
+    },
+    {
+      "what": "Whether comparison_low/comparison_high should be populated with the repeated 21% figure.",
+      "why": "The source states one number ('approximately 21%') that it says held true 'during both' fiscal 2025 and fiscal 2024 YTD periods, rather than stating two separately-quoted numbers; this can be read either as an explicit source-stated prior-year comparison value (populate the slot) or as a single flat-level description with no distinct second stated value (leave comparison slots null)."
+    }
+  ]
+}
+```

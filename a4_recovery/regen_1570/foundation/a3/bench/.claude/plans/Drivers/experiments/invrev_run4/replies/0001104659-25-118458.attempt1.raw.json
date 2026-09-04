@@ -1,0 +1,101 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-25-118458#P000",
+      "decision": "keep",
+      "why": "Quote is an exact contiguous substring of the mdna part, occurs once, and states a real source fact: the interest expense/income line flipped sign year over year (net expense this period vs net income the prior-year period).",
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Interest expense, net was $4.1 million for the 13 weeks ended November 1, 2025, compared to interest income, net of $1.7 million for the 13 weeks ended November 2, 2024.",
+        "raw_label_or_claim": "Interest expense, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-118458#P001",
+      "decision": "keep",
+      "why": "Quote is an exact contiguous substring of the mdna part (39-week comparison section), occurs once (the 13-week analogue uses different numbers), and states a real gross-margin-percentage fact with a prior-year comparison.",
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Gross profit as a percentage of net sales increased to 39.6% for the 39 weeks ended November 1, 2025, compared to 39.1% for the 39 weeks ended November 2, 2024.",
+        "raw_label_or_claim": "Gross profit as a percentage of net sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-118458#P002",
+      "decision": "keep",
+      "why": "Quote is an exact contiguous substring of the mdna part, occurs once, and states a real, specific, non-boilerplate covenant floor (minimum fixed charge coverage ratio of 1.0).",
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The Loan Agreement requires the Company to maintain a minimum fixed charge coverage ratio of 1.0 whenever availability under the Loan Agreement falls below the specified threshold.",
+        "raw_label_or_claim": "minimum fixed charge coverage ratio of 1.0",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-25-118458#P003",
+      "decision": "keep",
+      "why": "Quote is an exact contiguous substring of the mdna part (Basis of presentation section), occurs once, and states a specific, company-particular (non-boilerplate) segment-structure fact that directly supports the whole-company/no-additional-slice reading reflected in the menu's single segment entry.",
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The Company has one reportable segment, which includes retail stores, salon services, and e-commerce.",
+        "raw_label_or_claim": "one reportable segment",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "macroeconomic conditions, including inflation and elevated interest rates, as well as prior labor, transportation, and shipping cost pressures, have had, and may continue to have, a negative impact on our business, financial condition, profitability, and cash flows (including future uncertain impacts, especially when combined with increased tariffs)",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking-statement risk boilerplate; fails the DU-03/Rule-1 gate (no specific, current, source-flagged fact) so the correct treatment is omission (a negative_control candidate), and no proposal raised it, so it is not added as a representative row this turn."
+    },
+    {
+      "quote": "Net sales increased $327.5 million, or 12.9%, to $2.9 billion for the 13 weeks ended November 1, 2025, compared to $2.5 billion for the 13 weeks ended November 2, 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Lawful real fact (net sales YoY level and percent change) but not needed to replace or correct any proposal and not a declared coverage gap; the inventory is representative, not a census, so it is excluded this turn."
+    },
+    {
+      "quote": "The comparable sales increase of 6.3% was driven by a 3.8% increase in average ticket and a 2.4% increase in transactions.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Lawful real fact (comparable-sales decomposition) but not needed to replace/correct a proposal or repair a declared gap; excluded under representative-sampling scope."
+    },
+    {
+      "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company\u2019s common stock.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Lawful real action/authorization fact (share repurchase program) but not needed to replace/correct a proposal or repair a declared gap; excluded under representative-sampling scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the point_range_floor_ceiling tag is meant to apply to any plain point-valued numeric fact (as applied here to P000 and P001) or should be reserved for rows that specifically exercise floor/ceiling/range determination.",
+      "why": "The owning §7.1 text defines point/range/floor/ceiling as self-describing shapes but the authority does not state whether ordinary point comparisons count as 'exercising' the shape rule for tagging purposes; resolved here by inclusive reading, flagged for the final turn."
+    },
+    {
+      "what": "Whether a qualitative, numberless segment-structure disclosure with no explicit state/change/surprise/guidance/action verb (e.g. P003, 'one reportable segment') meets the DU-03 fact gate as a real_item, versus being out-of-gate structural metadata.",
+      "why": "DU-05 confirms numberless/qualitative facts count, but the gate's five listed fact types (state/change/surprise/guidance/action) do not explicitly name organizational/segment-structure disclosures; resolved here as real_item under a 'state' reading, flagged for the final turn."
+    }
+  ],
+  "blocked": null
+}
+```

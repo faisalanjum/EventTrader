@@ -1,0 +1,337 @@
+{
+ "door": "a4_phase1_one_item_key",
+ "attempt": 2,
+ "run_id": "retry",
+ "receipt_sha256": "ec6f58b6ead6764e792e303613a566ecfc418b972a5abee17b75641a31a5875c",
+ "rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "a3_binding": {
+  "retry_receipt": "4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465",
+  "retry_finalization": "15cb7a2dc8c53f0d9ec093e34b816ff88f5ca678196c1896b32494a13a1f72b2",
+  "primary_receipt": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+  "primary_finalization": "92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7"
+ },
+ "harvested_raw": [
+  "wf_8677e422-4cd.000.raw.json",
+  "wf_980991db-695.000.raw.json",
+  "wf_d3246bb9-4f8.000.raw.json",
+  "wf_121913b1-efc.000.raw.json",
+  "wf_cd55301a-3f1.000.raw.json",
+  "wf_84d7580d-7f3.000.raw.json",
+  "wf_54c88ae7-be4.000.raw.json",
+  "wf_472f06d1-2ec.000.raw.json",
+  "wf_2a975416-5fe.000.raw.json",
+  "wf_262232f1-9f2.000.raw.json",
+  "wf_dcd101b0-529.000.raw.json",
+  "wf_a8d09328-090.000.raw.json",
+  "wf_477b1ea0-035.000.raw.json",
+  "wf_08f7ad05-715.000.raw.json",
+  "wf_84ee85cb-3e8.000.raw.json",
+  "wf_3c373e2c-78b.000.raw.json",
+  "wf_ef812870-f39.000.raw.json",
+  "wf_9bfd5989-a4f.000.raw.json",
+  "wf_93faaa29-b88.000.raw.json",
+  "wf_f1c12f31-e3f.000.raw.json",
+  "wf_7283ec3f-6f8.000.raw.json",
+  "wf_2f1c011e-0e8.000.raw.json",
+  "wf_e7aa6475-f02.000.raw.json",
+  "wf_523d2513-483.000.raw.json",
+  "wf_cd191eb0-23f.000.raw.json",
+  "wf_821fac13-12e.000.raw.json",
+  "wf_1a56935c-7dc.000.raw.json",
+  "wf_03a630fa-0ac.000.raw.json",
+  "wf_71a53df2-97e.000.raw.json",
+  "wf_86e30a5b-6d3.000.raw.json",
+  "wf_40abaea6-4aa.000.raw.json",
+  "wf_ecfe833d-819.000.raw.json",
+  "wf_643a63e2-391.000.raw.json",
+  "wf_2c124c28-60a.000.raw.json",
+  "wf_7e4b68d7-5d1.000.raw.json",
+  "wf_c6f968c2-e5d.000.raw.json",
+  "wf_947c0575-261.000.raw.json",
+  "wf_3b72ba98-ec7.000.raw.json",
+  "wf_147d2002-77b.000.raw.json",
+  "wf_b1765753-809.000.raw.json",
+  "wf_4a139059-e4e.000.raw.json",
+  "wf_1a1192a4-2a1.000.raw.json",
+  "wf_00a97996-695.000.raw.json",
+  "wf_5c8efa6d-a3a.000.raw.json"
+ ],
+ "primary_complete": false,
+ "problems": [
+  "0000006201-26-000031#001: the manifest pins a different launcher for this key",
+  "0000006201-26-000031#006: the manifest pins a different launcher for this key",
+  "0000006201-26-000031#008: the manifest pins a different launcher for this key",
+  "0000006201-26-000032#012: the manifest pins a different launcher for this key",
+  "0000006201-26-000032#013: the manifest pins a different launcher for this key",
+  "0000027904-26-000022#029: the manifest pins a different launcher for this key",
+  "0000092380-26-000044#042: the manifest pins a different launcher for this key",
+  "0000764478-25-000057#048: the manifest pins a different launcher for this key",
+  "0000764478-26-000005#049: the manifest pins a different launcher for this key",
+  "0000898173-26-000006#057: the manifest pins a different launcher for this key",
+  "0000940944-25-000038#061: the manifest pins a different launcher for this key",
+  "0000940944-25-000038#062: the manifest pins a different launcher for this key",
+  "0000940944-26-000005#065: the manifest pins a different launcher for this key",
+  "0000940944-26-000005#066: the manifest pins a different launcher for this key",
+  "0000940944-26-000009#068: the manifest pins a different launcher for this key",
+  "0000940944-26-000009#072: the manifest pins a different launcher for this key",
+  "0001041061-25-000109#075: the manifest pins a different launcher for this key",
+  "0001041061-26-000003#081: the manifest pins a different launcher for this key",
+  "0001041061-26-000084#082: the manifest pins a different launcher for this key",
+  "0001058090-26-000007#094: the manifest pins a different launcher for this key",
+  "0001104659-25-102611#096: the manifest pins a different launcher for this key",
+  "0001104659-25-102611#097: the manifest pins a different launcher for this key",
+  "0001104659-25-118458#107: the manifest pins a different launcher for this key",
+  "0001104659-25-118458#108: the manifest pins a different launcher for this key",
+  "0001104659-26-017090#109: the manifest pins a different launcher for this key",
+  "0001104659-26-027061#115: the manifest pins a different launcher for this key",
+  "0001104659-26-027061#122: the manifest pins a different launcher for this key",
+  "0001104659-26-027061#124: the manifest pins a different launcher for this key",
+  "0001104659-26-032757#126: the manifest pins a different launcher for this key",
+  "0001104659-26-032757#129: the manifest pins a different launcher for this key",
+  "0001104659-26-032757#130: the manifest pins a different launcher for this key",
+  "0001171843-26-001288#133: the manifest pins a different launcher for this key",
+  "MCD_2026-02-11T16.30#164: the manifest pins a different launcher for this key",
+  "MCD_2026-02-11T16.30#166: the manifest pins a different launcher for this key",
+  "MCD_2026-02-11T16.30#168: the manifest pins a different launcher for this key",
+  "MCD_2026-02-11T16.30#170: the manifest pins a different launcher for this key",
+  "MCD_2026-02-11T16.30#171: the manifest pins a different launcher for this key",
+  "MCD_2026-02-11T16.30#174: the manifest pins a different launcher for this key",
+  "ULTA_2026-03-12T16.30#178: the manifest pins a different launcher for this key",
+  "ULTA_2026-03-12T16.30#179: the manifest pins a different launcher for this key",
+  "ULTA_2026-03-12T16.30#180: the manifest pins a different launcher for this key",
+  "ULTA_2026-03-12T16.30#181: the manifest pins a different launcher for this key",
+  "bzNews_50877032#193: the manifest pins a different launcher for this key",
+  "bzNews_50877032#194: the manifest pins a different launcher for this key"
+ ],
+ "outcomes": [
+  [
+   "0000006201-26-000031#001",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000006201-26-000031#006",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000006201-26-000031#008",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000006201-26-000032#012",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000006201-26-000032#013",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000027904-26-000022#029",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000092380-26-000044#042",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000764478-25-000057#048",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000764478-26-000005#049",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000898173-26-000006#057",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000940944-25-000038#061",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000940944-25-000038#062",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000940944-26-000005#065",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000940944-26-000005#066",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000940944-26-000009#068",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0000940944-26-000009#072",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001041061-25-000109#075",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001041061-26-000003#081",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001041061-26-000084#082",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001058090-26-000007#094",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-25-102611#096",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-25-102611#097",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-25-118458#107",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-25-118458#108",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-26-017090#109",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-26-027061#115",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-26-027061#122",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-26-027061#124",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-26-032757#126",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-26-032757#129",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001104659-26-032757#130",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "0001171843-26-001288#133",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "MCD_2026-02-11T16.30#164",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "MCD_2026-02-11T16.30#166",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "MCD_2026-02-11T16.30#168",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "MCD_2026-02-11T16.30#170",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "MCD_2026-02-11T16.30#171",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "MCD_2026-02-11T16.30#174",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "ULTA_2026-03-12T16.30#178",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "ULTA_2026-03-12T16.30#179",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "ULTA_2026-03-12T16.30#180",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "ULTA_2026-03-12T16.30#181",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "bzNews_50877032#193",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ],
+  [
+   "bzNews_50877032#194",
+   "unproved",
+   "the manifest pins a different launcher for this key"
+  ]
+ ],
+ "ledger": {
+  "scheduled": 44,
+  "valid": 0,
+  "invalid_response": 0,
+  "transport_no_answer": 0,
+  "unproved": 44,
+  "missing": 0
+ },
+ "retry": []
+}

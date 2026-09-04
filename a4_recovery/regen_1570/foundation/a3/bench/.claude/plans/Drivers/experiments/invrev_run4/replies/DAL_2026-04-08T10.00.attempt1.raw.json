@@ -1,0 +1,123 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "verdicts": [
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P000",
+      "decision": "keep",
+      "why": "Quote and locator are verbatim/contiguous and correctly located in prepared_remarks. The sentence co-states a second distinct Driver (pre-tax profit of $1 billion); per Rule 5 two rows may share one quote when labels differ, so this proposal is kept for the operating-margin range fact specifically; the co-stated pre-tax-profit fact is logged as a considered exclusion rather than added, per the representative-selection scope (Rule 3).",
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we expect to deliver a 6% to 8% operating margin with a pre-tax profit of $1 billion.",
+        "raw_label_or_claim": "6% to 8% operating margin",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P001",
+      "decision": "replace",
+      "why": "The supplied quote opens with the pronoun 'This', whose antecedent ('double-digit passenger unit revenue growth' for the June quarter) sits in the immediately preceding sentence and is not inside the supplied quote, so the label distinguishing the fact is not self-contained (Rule 5 requires contiguous extension until it is). Extended backward to the start of the compound sentence that supplies the antecedent, still one contiguous span in the same part.",
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we expect second quarter total revenue growth of low teens on flat capacity growth, reflecting double-digit passenger unit revenue growth. This is meaningful acceleration from mid-single-digit unit revenue growth in the March quarter.",
+        "raw_label_or_claim": "meaningful acceleration from mid-single-digit unit revenue growth in the March quarter",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P002",
+      "decision": "keep",
+      "why": "Quote and locator are verbatim/contiguous and correctly located in prepared_remarks. The sentence co-states a second distinct Driver (gross leverage of 2.4 times); kept here for the adjusted-net-debt level+YoY-change fact specifically; the co-stated gross-leverage fact is logged as a considered exclusion rather than added, per Rule 3.",
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we ended the quarter with adjusted net debt of 13.5 billion down 20% from last year and gross leverage of 2.4 times.",
+        "raw_label_or_claim": "adjusted net debt of 13.5 billion down 20% from last year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P003",
+      "decision": "replace",
+      "why": "Dan Jenke's quote restates the same fact (>$2 billion fuel cost headwind for the June quarter) already completely and contiguously stated earlier by Ed Bastian in prepared_remarks. Per Rule 4/Rule 2 (partial-then-richer restatement / first-complete-quote), the earlier complete occurrence must be used, not the later duplicate.",
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we expect low teens revenue growth in the June quarter, recapturing 40% to 50% of the more than $2 billion of fuel headwind in the quarter.",
+        "raw_label_or_claim": "more than $2 billion of fuel headwind",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "we expect low teens revenue growth in the June quarter",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct Driver (Q2 total revenue growth guidance) co-located with the fuel-headwind fact kept under P003; no proposal raised it; representative-selection scope (Rule 3) forbids adding a row merely because another lawful fact exists in the same sentence."
+    },
+    {
+      "quote": "recapturing 40% to 50% of the more than $2 billion of fuel headwind in the quarter",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct Driver (fuel-cost recapture percentage guidance) co-located with the fuel-headwind fact kept under P003; no proposal raised it; excluded under Rule 3."
+    },
+    {
+      "quote": "we expect to deliver a 6% to 8% operating margin with a pre-tax profit of $1 billion.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct total-dollar Driver (pre-tax profit guidance, $1 billion point) co-located with the operating-margin fact kept under P000; no proposal separately raised it; excluded under Rule 3."
+    },
+    {
+      "quote": "we ended the quarter with adjusted net debt of 13.5 billion down 20% from last year and gross leverage of 2.4 times.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct Driver (gross leverage ratio, 2.4x point) co-located with the adjusted-net-debt fact kept under P002; no proposal separately raised it; excluded under Rule 3."
+    },
+    {
+      "quote": "Based on those components, we expect a second quarter operating margin of 6% to 8%, with earnings per share of $1 to $1.50.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Restates the already-captured operating-margin guidance (duplicate, first occurrence already used under P000) and adds a new per-share Driver (EPS guidance $1 to $1.50); no proposal raised this location; excluded under Rule 3 (representative selection, not a census)."
+    },
+    {
+      "quote": "All forward-looking statements involve risks and uncertainties that could cause actual results to differ materially from the forward-looking statements.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Generic legal/risk boilerplate with no specific current source-flagged adverse threat; fails DU-03/Rule 1 fact gate; a negative_control candidate in shape but not raised by any proposal, so not added here per Rule 3 (control-quota decisions are made at the final aggregation turn per instruction 8)."
+    },
+    {
+      "quote": "We delivered earnings that were 40% higher than last year and consistent with our January guidance, even with the significant step up in fuel and several external headwinds.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Strong real-fact candidate (actual earnings YoY comparison plus an implicit in-line-vs-guidance framing) not raised by any proposal; representative-selection scope (Rule 3) leaves it out of this turn; whether it is needed to repair declared hard-class coverage is for the final aggregation turn (instruction 8), not this event's turn."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'mid-single-digit unit revenue growth in the March quarter' (kept row under P001) is the same fact as the earlier 'Domestic and international unit revenue grew mid single digits' statement, or a distinct total/passenger-unit-revenue metric.",
+      "why": "The two phrasings could denote the same underlying Q1 growth figure (duplicate under Rule 4) or a different scope (domestic+international vs. total/passenger). The supplied authority does not name a rule that resolves metric-scope identity between these two passages; recorded as unsettled rather than guessed."
+    },
+    {
+      "what": "Whether the sequential_comparison tag (OD-11) is meant to cover an explicit YoY balance-sheet change ('adjusted net debt ... down 20% from last year') the same way it covers P&L growth-rate basis determination.",
+      "why": "OD-11's quoted text is framed around growth-basis (percent_sequential vs percent_yoy) for growth-type metrics; its extension to a debt-level YoY percentage change is not explicitly settled by the quoted rule text, though the crosswalk names 'sequential comparisons -> OD-11' without qualification."
+    },
+    {
+      "what": "Several co-located lawful facts in this event (pre-tax profit $1B, gross leverage 2.4x, low-teens Q2 revenue growth, 40-50% fuel recapture, EPS $1-$1.50 guidance) were identified but not added as rows.",
+      "why": "Instruction 3 forbids adding a row merely because another lawful fact exists, and instruction 8 states hard-class/count totals are settled only at the final, cross-event turn; this turn cannot determine whether any of these are needed to repair declared coverage."
+    }
+  ],
+  "blocked": null
+}
+```

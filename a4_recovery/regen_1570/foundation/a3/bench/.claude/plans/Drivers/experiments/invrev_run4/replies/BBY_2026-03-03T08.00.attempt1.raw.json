@@ -1,0 +1,125 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "verdicts": [
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P000",
+      "decision": "keep",
+      "why": "Quote and locator are verbatim from prepared_remarks (Matt Balunis's FY27 guidance list); it is a closed range (6.30 low, 6.60 high) and the distinguishing label 'adjusted diluted earnings per share' lies inside the quote itself.",
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "adjusted diluted earnings per share of $6.30 to $6.60",
+        "raw_label_or_claim": "adjusted diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P001",
+      "decision": "replace",
+      "why": "The proposed quote 'In fiscal 27, we anticipate growth of approximately 10%.' is verbatim but its subject is only carried by the pronoun 'these collections'; the distinguishing label 'gross advertising collections' is not inside it. Extended the quote contiguously backward through the intervening sentences to the point the label appears, per the extend-or-refuse rule; same part.",
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "In fiscal 26, our gross advertising collections were just over $900 million. This is up more than 7% versus last year. Today, these collections show up mostly as an offset to our cost of goods sold, with a small amount flowing through revenue. In fiscal 27, we anticipate growth of approximately 10%.",
+        "raw_label_or_claim": "gross advertising collections",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P002",
+      "decision": "keep",
+      "why": "Quote and locator are verbatim from prepared_remarks and occur once; the distinguishing label 'computing' lies inside the quote; this is a real, source-stated (numberless) growth-streak fact.",
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we delivered our eighth consecutive quarter of positive comparable sales in computing driven by laptops, desktops, and accessories.",
+        "raw_label_or_claim": "computing",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P003",
+      "decision": "replace",
+      "why": "The proposed Q&A quote is verbatim, but it restates the same fact (gross profit rate guide, approx. 30 basis points YoY improvement driven by ads/marketplace) that Matt Balunis already stated completely in prepared_remarks earlier in source order. Per the owner's first-complete-quote rule, the row binds to that earlier occurrence instead.",
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We expect our gross profit rate to improve by approximately 30 basis points compared to the prior year due to growth from Best Buy ads in our U.S. marketplace.",
+        "raw_label_or_claim": "gross profit rate",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Some of the statements we will make today are considered forward-looking within the meaning of the Private Securities Litigation Reform Act of 1995.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking-statements safe-harbor boilerplate; a bare disclaimer, not a source-stated fact about a driver; fails the DU-03/Rule-1 gate. Not selected as a row (representative sampling; no proposal or coverage repair required it)."
+    },
+    {
+      "quote": "our gross advertising collections were just over $900 million.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real FY26 actual-level fact, distinct from the FY27 growth guide row (P001); it rides along inside that row's necessary contiguous span but is not itself selected as a separate row (representative sampling, no proposal raised it)."
+    },
+    {
+      "quote": "This is up more than 7% versus last year.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real FY26 YoY growth fact (floor shape) for ad collections, also riding inside the P001 span; not selected as its own row for the same representative-sampling reason."
+    },
+    {
+      "quote": "In our domestic segment, revenue decreased 1.1% to $12.6 billion, driven by a comparable sales decline of 0.8%.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real segment-level fact; no proposal raised it and no declared coverage gap required it, so it stays out under the representative-not-exhaustive scope."
+    },
+    {
+      "quote": "we are increasing our quarterly dividend to 96 cents per share, which is a 1% increase. This increase represents the 13th straight year we have raised our regular quarterly dividend.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real dividend-action fact with a streak claim; not raised by any proposal; excluded under representative-sampling scope."
+    },
+    {
+      "quote": "During fiscal 26, total capital expenditures of $704 million were essentially flat to fiscal 25.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real fact; not raised by any proposal; excluded under representative-sampling scope."
+    },
+    {
+      "quote": "we'll probably remove about $100 million of incentive compensation at the minus one sales guide.",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Real conditional-guidance fact from Q&A; not raised by any proposal; excluded under representative-sampling scope."
+    },
+    {
+      "quote": "the 20% reference was 20% growth in labor in the second part of last year",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Restates/clarifies the same vendor-labor-growth fact already stated in prepared_remarks ('after growing 20% in the second half of last year'); same series/period/scope/value, so under the first-complete-quote rule this is a duplicate, not a separate row; not selected since no proposal or coverage repair required it."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The corrected quote for the FY27 ad-collections growth guide must span three intervening sentences (the FY26 actual level and its own YoY growth) to reach the label 'gross advertising collections'.",
+      "why": "The authority requires both the row's own smallest complete contiguous span and that the distinguishing label lie inside the quote, but does not resolve which controls when the label sits several sentences from the value with unrelated facts in between; no shorter contiguous path containing the label exists."
+    },
+    {
+      "what": "Whether Matt Balunis's same-call clarification ('the 20% reference was 20% growth in labor in the second part of last year') is a `corrections_and_amendments` exhibit or simply a duplicate restatement.",
+      "why": "OD-14 defines corrections/amendments as new facts at their own public time or a typo-fix with no business-change wording; this is an intra-call clarification of an already-correct antecedent stated earlier in the same event, and the authority does not explicitly classify that case, so no hard-class tag was assigned to avoid inventing a rule."
+    }
+  ],
+  "blocked": null
+}
+```

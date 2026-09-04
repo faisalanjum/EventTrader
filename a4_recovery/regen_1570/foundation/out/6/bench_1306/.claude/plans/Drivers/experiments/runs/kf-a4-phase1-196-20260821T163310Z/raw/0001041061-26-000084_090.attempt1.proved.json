@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#090",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "unit_count",
+          "driver_state": "reported",
+          "level_low": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "time_type": "instant",
+          "fiscal_year": 2025,
+          "period_end_date": "2025-12-31",
+          "slice_parts": ["segment:kfcglobaldivision", "geography:outside_us"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000084#090/L1",
+      "exact_match": true,
+      "why": "L1's item matches the settled reply field-for-field: driver_name 'unit_count', driver_state 'reported', identical level_low/level_high objects (90, scale 1, '%'), level_shape_hint 'point', level_unit 'percent', time_type 'instant', fiscal_year 2025, period_end_date 2025-12-31, and the same two slice_parts."
+    },
+    {
+      "lane_id": "0001041061-26-000084#090/L2",
+      "exact_match": false,
+      "why": "L2 is identical to the settled reply in every field except it names the driver 'units' instead of the settled 'unit_count', which the document's own 'Unit Count' table label supports as the more specific, source-grounded name."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the driver name should be the literal quoted noun 'units' or the source's own canonical metric label 'unit_count' (used as a table header elsewhere in this same 10-K for this identical restaurant-count metric).",
+      "why": "Both are lawful, quote-consistent, source-grounded names for the same cause (restaurant unit count); the quote itself only says 'units', but the filing's own recurring table header for this exact metric is 'Unit Count', creating a genuine naming ambiguity resolved here by preferring the document's canonical label for consistency and specificity."
+    }
+  ]
+}
+```

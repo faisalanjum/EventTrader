@@ -1,0 +1,56 @@
+```json
+{
+  "packet_id": "DRI_2026-03-19T08.30#160",
+  "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "increased",
+          "change_unit": "percent_yoy",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "in_line",
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": true,
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DRI_2026-03-19T08.30#160/L1",
+      "exact_match": false,
+      "why": "L1's metric item omits change_unit; Rule 5a.4 (\"bare growth on a dated period defaults to percent_yoy\", extended to numberless growth facts) requires change_unit:'percent_yoy' on the metric home fact since 'mid-single-digit ... growth' is bare, dated-period growth with no stated basis, so L1 is missing a rule-required field."
+    },
+    {
+      "lane_id": "DRI_2026-03-19T08.30#160/L2",
+      "exact_match": true,
+      "why": "L2's metric item includes change_unit:'percent_yoy' and both facts otherwise match the settled driver_name, driver_state, per_x, period fields, and surprise fields exactly."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline for the surprise should be 'previous_guidance' or 'consensus'.",
+      "why": "The quote says 'in line with our expectations.' Rule 9.2 gives 'exceeded our guidance/target' -> previous_guidance and 'exceeded expectations' -> consensus as its two anchor examples; 'our expectations' blends the possessive of the first with the noun of the second. I settled on previous_guidance (CFO speaking of the company's own internally-set expectations, i.e. its own prior guide) as the more natural earnings-call reading, but the rule text does not unambiguously resolve which noun/possessive combination controls."
+    }
+  ]
+}
+```

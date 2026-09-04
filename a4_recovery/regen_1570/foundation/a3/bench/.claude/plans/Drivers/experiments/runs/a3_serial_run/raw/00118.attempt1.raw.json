@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "leverage_ratio",
+        "driver_state": "reported",
+        "level_high": {
+          "value": 3.5,
+          "scale_multiplier": 1,
+          "unit_scale_evidence": null
+        },
+        "level_unit": "x",
+        "level_shape_hint": "ceiling",
+        "time_type": "instant",
+        "period_start_date": "2024-09-16",
+        "period_end_date": "2024-09-16",
+        "measurement_raw_spans": ["consolidated"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

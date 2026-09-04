@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0001171843-26-001288#131",
+  "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The $359.1 million (and $95.7 million domestic-commercial) figure is stated as the sales attributable to a single extra fiscal week embedded inside the 'Trailing 4 Quarters ending February 15, 2025' window, not as that window's own sales level; the source gives no exact start/end dates for that extra week, no fiscal-quarter/half/month placement for it, and no stated dateless horizon. Attaching the stated trailing-4-quarters period to this one-week amount would misstate a partial-week figure as the level for that whole period, which Rule 6 forbids; with the true period unresolvable and no horizon stated, this required-period fact abstains."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001171843-26-001288#131/L1",
+      "exact_match": false,
+      "why": "L1 agrees on the no-facts/abstain outcome and on the core reasoning (period of the extra week cannot be resolved and cannot be lawfully mapped onto the stated trailing-4-quarters window), but its abstention 'reason' string is worded differently from the settled one, so the replies are not textually identical."
+    },
+    {
+      "lane_id": "0001171843-26-001288#131/L2",
+      "exact_match": false,
+      "why": "L2 also lands on no-facts/abstain with the same substantive period-unresolvable rationale, and additionally frames the sentence as a comparability footnote rather than a driver fact; the conclusion matches but the reason text differs from the settled reply, so it is not an exact match."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the extra-week sales figure could instead be treated as a lawful periodless fact (e.g., an action-like calendar event) rather than a period-requiring metric that must abstain.",
+      "why": "The number describes a standing quantity (net sales) which the rules classify as a metric requiring a real or implied period; because a specific one-week amount inside a stated four-quarter window is neither a full stated period nor an explicit horizon, reasonable readers could disagree on whether Rule 6's abstain-on-unresolved-period clause applies here versus treating it as some other lawful periodless form — the rules as written support abstention, but the underlying calendar-quirk framing is unusual enough to note as a genuine edge case."
+    }
+  ]
+}
+```

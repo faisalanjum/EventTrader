@@ -1,0 +1,174 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "verdicts": [
+    {
+      "proposal_id": "0001041061-26-000084#P000",
+      "decision": "keep",
+      "why": "Verbatim, correctly located, single occurrence in mdna. This is a forward-looking accounting-pronouncement note ('currently evaluating the impact') with no quantified current effect on any driver state/change/surprise/guidance/action — a bare mention that fails the DU-03/Rule-1 fact gate, so record kind is negative_control (omit, not abstain). No hard-class rule is exercised.",
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In September 2025, the FASB issued ASU 2025-06, Intangibles — Goodwill and Other — Internal-Use Software (Subtopic 350-40): Targeted Improvements to the Accounting for Internal-Use Software",
+        "raw_label_or_claim": "ASU 2025-06, Intangibles — Goodwill and Other — Internal-Use Software (Subtopic 350-40): Targeted Improvements to the Accounting for Internal-Use Software",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P001",
+      "decision": "keep",
+      "why": "Quote/locator correct and complete. The sentence states two distinct facts (gross unit openings=4,567 and net new units=1,939) fused by grammar into one span; per THE ONE LAW and step-5 splitting rule this row is scoped to the 'Gross unit openings' fact only (label inside quote). The 'net new units' fact is captured separately as an addition sharing the same quote (rule permits two rows on one identical quote when labels differ). Point-shaped number.",
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Gross unit openings for the year were 4,567 units resulting in 1,939 net new units.",
+        "raw_label_or_claim": "Gross unit openings for the year were 4,567 units",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P002",
+      "decision": "keep",
+      "why": "Quote/locator verbatim-correct and self-contained. This sentence fuses two distinct facts (KFC Division unit count=33,897 and %-outside-U.S.=90%) via 'of which'; per the anti-merge law this row is scoped to the unit-count fact only, with the geography fact split out as an addition on the identical quote. KFC Division is a segment-slice scope (menu: segment:kfcglobaldivision) so slices_and_unknown_axes applies; point-shaped unit count.",
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The KFC Division has 33,897 units, 90% of which are located outside the U.S.",
+        "raw_label_or_claim": "The KFC Division has 33,897 units",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P003",
+      "decision": "keep",
+      "why": "Verbatim, unique occurrence, correctly located. A real, specific, quantified adverse impact (not generic boilerplate) to a named metric (same-store sales growth). Point-shaped magnitude (~1 point); 'headwind' is a context/comparative sign signal on a change figure, tentatively mapped to the OD-12 signed-axis family (see open issue on exact vocabulary fit).",
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The impact in these markets represented an approximate one-point headwind to YUM's overall same-store sales growth in the year ended December 31, 2024.",
+        "raw_label_or_claim": "an approximate one-point headwind to YUM's overall same-store sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P004",
+      "decision": "keep",
+      "why": "Verbatim, unique occurrence (a differently-worded restatement using 'Diluted EPS' appears later in the same part; this exact wording occurs once and is the first complete occurrence in source order). Real, point-shaped stated impact.",
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In 2024, the 53rd week favorably impacted EPS by approximately $0.09 per share.",
+        "raw_label_or_claim": "the 53rd week favorably impacted EPS by approximately $0.09 per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P005",
+      "decision": "keep",
+      "why": "Verbatim; this is the first complete occurrence in source order (an abbreviated restatement without 'consolidated'/spelled-out EBITDA appears later in the same part, so the earlier occurrence is correctly selected). Real stated forward target, point-shaped (~4.0x). Explicitly framed as 'consolidated' (true whole-company population, OD-17's omit-slice branch), so portion_versus_whole applies.",
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Subject to market conditions, we expect to maintain our consolidated net leverage ratio at approximately 4.0x Earnings Before Interest, Taxes, Depreciation and Amortization (\u201cEBITDA\u201d) over the medium term by issuing incremental debt as our business grows.",
+        "raw_label_or_claim": "consolidated net leverage ratio at approximately 4.0x Earnings Before Interest, Taxes, Depreciation and Amortization (\u201cEBITDA\u201d) over the medium term",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P006",
+      "decision": "keep",
+      "why": "Verbatim; the business part occurs before mdna in source order and this exact wording is repeated verbatim under 'Pizza Hut Strategic Options Review' in mdna, so the business-part occurrence is correctly the first complete occurrence. Real, source-stated corporate action, scoped to the Pizza Hut segment via unambiguous menu reuse (segment:pizzahutglobaldivision).",
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "business",
+        "occurrence_in_part": null,
+        "quote": "In 2025, we began a review of strategic options for the Pizza Hut brand.",
+        "raw_label_or_claim": "a review of strategic options for the Pizza Hut brand",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      }
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Gross unit openings for the year were 4,567 units resulting in 1,939 net new units.",
+        "raw_label_or_claim": "1,939 net new units",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Corrects P001, which conflated two distinct facts (gross openings vs net new units) in one proposal. Per step-5 anti-merge rule, split into its own row sharing the identical quote, distinguished by its own label."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The KFC Division has 33,897 units, 90% of which are located outside the U.S.",
+        "raw_label_or_claim": "90% of which are located outside the U.S.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "Corrects P002, which conflated two distinct facts (unit count vs %-outside-U.S.) in one proposal. Split into its own row sharing the identical quote; the geography split exercises the slice rule (menu geography axis)."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "The IRS asserts an underpayment of tax of approximately $2.1 billion plus $418 million in penalties for fiscal year 2014.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Real, specific, non-boilerplate contingency fact; not selected — no proposal defect to correct and no declared coverage gap to repair in this event; representative sampling, not a census."
+    },
+    {
+      "quote": "Changes in the fair value of our ownership interest in Devyani prior to the date of sale resulted in pre-tax investment losses of \n\n$ 20 million in the year ended December 31, 2024 and pre-tax investment income of $ 8 million in the year ended December 31, 2023.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Genuine losses_and_sign candidate (loss/income sign pair); not selected — no proposal to correct, representative sampling only."
+    },
+    {
+      "quote": "As a result, 283 KFC restaurants and 254 Pizza Hut restaurants in Turkey were closed during the first quarter of 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, specific action fact (franchise termination/closures); not selected — no proposal defect or declared gap to repair here."
+    },
+    {
+      "quote": "In February 2026, our Board of Directors declared a quarterly dividend of $0.75 per share of Common Stock, a 6% increase from the quarterly dividend of $0.71 per share of Common Stock paid in 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real per-share fact with a stated sequential increase; a plausible sequential_comparison/NAME-13 candidate, but not selected — no proposal defect to correct in this event."
+    },
+    {
+      "quote": "on January 18, 2023, we announced a ransomware attack that impacted certain IT Systems which resulted in the closure of fewer than 300 restaurants in one market for one day",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "A specific, source-flagged, non-generic adverse event (possible at_risk exemplar), but not selected — outside the scope of any supplied proposal and this turn adds rows only to correct/repair, not to build a census."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "For P002 (KFC Division 33,897 units, 90% outside U.S.), the Item 1 Business table row ('KFC Division 33,897 90 % 149 99 % $ 36,434') states the same numbers earlier in source order than the MD&A prose sentence used here.",
+      "why": "The owner's first-complete-quote rule does not say whether a bare table row — numerically complete but lacking its column headers within the quoted span itself — counts as a 'complete' earlier occurrence versus the self-contained MD&A prose. Resolving this could require replacing the mdna location with a business-part table quote; left unresolved rather than guessed."
+    },
+    {
+      "what": "For P003, whether a 'headwind' framing (a comparative/context sign word for a growth-metric impact, not a loss/charge/benefit noun) is within OD-12's signed-axis vocabulary, or is an unaddressed boundary case.",
+      "why": "OD-12's worked examples and vocabulary (loss/charge/benefit/credit, worse/better, narrower/wider) do not explicitly list 'headwind' or growth-impact framing; tagged losses_and_sign as the closest fit but the exact rule scope is not settled by the supplied text."
+    }
+  ],
+  "blocked": null
+}
+```

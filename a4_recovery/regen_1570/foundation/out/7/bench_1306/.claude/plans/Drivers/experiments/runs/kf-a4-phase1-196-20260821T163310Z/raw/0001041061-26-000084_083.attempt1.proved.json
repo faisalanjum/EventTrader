@@ -1,0 +1,38 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#083",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "gross_unit_openings",
+          "driver_state": "reported",
+          "level_low": {"value": 4567, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 4567, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000084#083/L1",
+      "exact_match": true,
+      "why": "L1 emits the identical single metric fact: driver_name gross_unit_openings, driver_state reported, point-shaped level 4567 with count unit and null scale evidence, duration time_type, fiscal_year 2025 - matches the settled reply field-for-field."
+    },
+    {
+      "lane_id": "0001041061-26-000084#083/L2",
+      "exact_match": true,
+      "why": "L2 is byte-identical to L1 and to the settled reply: same driver_name, state, level values/shape/unit, time_type, and fiscal_year, with no abstentions or continuity hints."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,39 @@
+```json
+{
+  "packet_id": "CMG_2026-02-03T16.30#151",
+  "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_restaurant_sales",
+          "driver_state": "decreased",
+          "level_low": {"value": -2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": -2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "CMG_2026-02-03T16.30#151/L1",
+      "exact_match": true,
+      "why": "Same driver_name, driver_state, signed -2.5 point-shaped level with percent_yoy unit, duration time_type, and Q4 FY2025 period as the settled reply; key ordering differs but content is identical."
+    },
+    {
+      "lane_id": "CMG_2026-02-03T16.30#151/L2",
+      "exact_match": true,
+      "why": "Identical content to the settled reply (same fields and values), differing only in JSON key order, which is immaterial."
+    }
+  ],
+  "ambiguities": []
+}
+```

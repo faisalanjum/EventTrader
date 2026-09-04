@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "AAL_2026-04-23T08.30#137",
+  "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "unit_revenue",
+          "driver_state": "unknown",
+          "level_low": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "floor",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "slice_parts": ["geography:domesticdestination"],
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "AAL_2026-04-23T08.30#137/L1",
+      "exact_match": true,
+      "why": "L1's fact matches on every field including citing '%' as unit_scale_evidence, which is required per Rule 5.6 since a unit marker exists in the quote and multiplier is 1."
+    },
+    {
+      "lane_id": "AAL_2026-04-23T08.30#137/L2",
+      "exact_match": false,
+      "why": "L2 is identical to the settled fact except it sets unit_scale_evidence to null; Rule 5.6 requires citing the '%' marker present in the quote since it supports the (required) multiplier of 1 for a percent-family unit, so null is unlawful here."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether level_unit should be percent_yoy vs percent_sequential (or unknown)",
+      "why": "The located quote itself only says 'grow more than 10% in the second quarter' without repeating 'year over year'; the YoY basis is inferred from the immediately preceding sentence in the same speaker turn ('domestic year over year PRASM... we expect domestic year over year performance to accelerate'). This is a reasonable contextual read but not self-contained within the quote alone."
+    }
+  ]
+}
+```

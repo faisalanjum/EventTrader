@@ -1,0 +1,18 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#179",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [],
+    "abstentions": [
+      {"reason": "Generic forward-looking-statements safe-harbor boilerplate — not a real, non-boilerplate statement about a driver's state, change, surprise, guidance, or action (Rule 1.2)."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {"lane_id": "ULTA_2026-03-12T16.30#179/L1", "exact_match": true, "why": "Same conclusion: no facts, one abstention citing Rule 1.2 generic risk boilerplate, empty continuity_hints."},
+    {"lane_id": "ULTA_2026-03-12T16.30#179/L2", "exact_match": true, "why": "Same conclusion: no facts, one abstention citing the same boilerplate/Rule 1.2 reasoning, empty continuity_hints."}
+  ],
+  "ambiguities": []
+}
+```

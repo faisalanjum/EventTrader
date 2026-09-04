@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#006",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote 'Total operating revenues 13,912 12,551 10.8' is a bare table row with no unit or scale marker inside it (no '$', no 'million'). The only scale wording that would justify a scale_multiplier of 1,000,000 ('In millions, except share and per share amounts') sits in the table header outside this quote. Rule 5.6 requires abstention when a TEXT fact's scale marker sits in a header/footnote outside the quote, since unit_scale_evidence must be copied verbatim from inside the quote and a multiplier of 1 would misstate the value by six orders of magnitude."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#006/L1",
+      "exact_match": true,
+      "why": "L1 abstains for the same reason: the scale marker ('millions') needed to support any level_unit/scale_multiplier lives in the table header outside the supplied quote, which Rule 5.6 treats as a mandatory abstention rather than a guess."
+    },
+    {
+      "lane_id": "0000006201-26-000031#006/L2",
+      "exact_match": false,
+      "why": "L2 emits a metric fact using scale_multiplier 1 with level_unit m_usd, which contradicts itself (unit says millions but multiplier says raw dollars) and, more fundamentally, fabricates a multiplier/unit the in-quote text does not support, which Rule 5.6 forbids when the scale marker sits outside the quote."
+    }
+  ],
+  "ambiguities": []
+}
+```

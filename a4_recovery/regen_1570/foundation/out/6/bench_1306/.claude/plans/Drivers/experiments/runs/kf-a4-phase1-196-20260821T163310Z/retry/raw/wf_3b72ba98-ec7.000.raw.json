@@ -1,0 +1,65 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#174",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "capital_expenditures",
+          "driver_state": "reported",
+          "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "item": {
+          "driver_name": "capital_expenditures",
+          "driver_state": "beat",
+          "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": false,
+          "polarity_proof": {
+            "polarity": "favorable",
+            "basis": "source_framing",
+            "evidence": "The sentence immediately explains the above-range spend as a deliberate choice to invest more in the future development pipeline, 'setting us up for success' as new-unit openings accelerate — capital spending has no mainstream default direction (Rule 9.4 names it explicitly), so this company framing is what fixes favorable polarity, not the word 'above' itself.",
+            "sentence": "our capital expenditure spend was 3.4 billion, slightly above the high end of the range that we provided for the year. as we invested more toward our future year development pipeline, setting us up for success as we continue to increase our pace of openings in our wholly owned markets."
+          }
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#174/L1",
+      "exact_match": true,
+      "why": "L1's metric home and surprise twin match the settled reply field-for-field: same driver_name, same reported/beat states, same 3.4B point-shaped level on both facts (matching per Rule 9.6's value-bearing home requirement), same m_usd unit, same actual/previous_guidance baseline pairing, has_favorability_wording false, and an equivalent favorable/source_framing polarity_proof quoting the same adjoining sentence."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#174/L2",
+      "exact_match": false,
+      "why": "L2's surprise twin omits level_low, level_high, level_shape_hint, and level_unit; since its home fact is value-bearing (3.4B, point, m_usd), Rule 9.6 requires the paired surprise to carry the matching normalized value and unit, so L2's surprise is under-populated relative to the settled reply even though its state, baseline, and polarity_proof otherwise agree."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether a surprise fact whose home is value-bearing but whose comparison side (the guided range's own numbers) is unstated should itself carry level_low/level_high, or stay numberless like the unstated comparison side.",
+      "why": "Rule 9.6 states matching normalized value/unit applies 'when value-bearing' and that 'a numberless surprise needs a numberless home' — it does not say in so many words that a value-bearing home forces a value-bearing surprise; I inferred that requirement from the converse of the numberless-pairing rule rather than from an explicit instruction, so a stricter reading could keep the surprise numberless (matching L2) despite its value-bearing home."
+    }
+  ]
+}
+```

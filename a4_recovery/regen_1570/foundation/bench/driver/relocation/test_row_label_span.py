@@ -1,0 +1,1352 @@
+"""#824 structural-span step — the raw-label offset comes from the SELECTED
+CELL'S OWN structural span, never from searching the text for its string.
+
+WHAT THE MEASUREMENT ACTUALLY SHOWED, recorded because it differs from the
+stated concern. The audit's reason for removing `find()` was that "a label may
+lawfully appear twice in one row". Probed directly, that case does NOT diverge:
+`row_label` is by construction the FIRST word-bearing, non-hidden cell left of
+the fact, so it is always the FIRST occurrence in the row, and a bounded
+forward `find()` lands on it. Four separate shapes were tried — label twice, a
+digits-only cell first, an earlier cell containing the label as a substring, and
+the label repeated in an earlier HIDDEN cell — and all four agreed.
+
+The shape that DOES diverge is a label cell carrying hidden markup. `_text()`
+uses `get_text()`, which includes hidden descendants, while the pinned
+representation excludes them: the cell reads "Net XX sales" but the document
+reads "Net sales", so `find()` returns -1 and the span is silently dropped to
+null. The defect is LOST evidence, not wrong evidence — and a structural span
+cannot have it, because the cell's extent is recorded when the text is walked.
+"""
+import json
+import os
+
+import pytest
+
+from driver.relocation.inline_html import _evidence_from, prepare
+
+_HEAD = ('<html xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:utr="http://example.org/utr" xmlns:us-gaap="http://example.org/us-gaap" xmlns:dei="http://example.org/dei" xmlns:srt="http://example.org/srt" xmlns:a="http://example.org/a" xmlns:x="http://example.org/x" xmlns:aapl="http://example.org/aapl" xmlns:slg="http://example.org/slg" xmlns:accd="http://example.org/accd" xmlns:ed="http://example.org/ed" xmlns:dvn="http://example.org/dvn" xmlns:fcx="http://example.org/fcx" xmlns:nog="http://example.org/nog" xmlns:inst="http://example.org/inst" xmlns:dimns="http://example.org/dimns" xmlns:nope="http://example.org/nope" xmlns:geo="http://example.org/geo" xmlns:eqt="http://example.org/eqt" xmlns:geography="http://example.org/geography" xmlns:seg="http://example.org/seg" xmlns:country="http://example.org/country"><body><ix:header><ix:resources><xbrli:context id="c1"><xbrli:entity><xbrli:identifier scheme="http://www.sec.gov/CIK">'
+         '0000320193</xbrli:identifier></xbrli:entity><xbrli:period>'
+         '<xbrli:startDate>2024-01-01</xbrli:startDate><xbrli:endDate>'
+         '2024-06-30</xbrli:endDate></xbrli:period></xbrli:context></ix:resources></ix:header>'
+         '<ix:header><ix:resources><xbrli:unit id="u1"><xbrli:measure>iso4217:USD</xbrli:measure>'
+         '</xbrli:unit></ix:resources></ix:header>')
+_FACT = ('<ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
+         'unitRef="u1" scale="6" decimals="-6">726</ix:nonFraction>')
+
+
+def _ev(body):
+    prep = prepare(_HEAD + body + '</body></html>')
+    ev, why = _evidence_from(prep['elements']['fA'], prep)
+    assert ev is not None, why          # premise: the probe reached the code
+    return prep, ev
+
+
+def test_the_SELECTED_CELL_owns_the_span_when_a_label_appears_twice():
+    """THE CONTROL the audit asked for. Stated honestly: this is GREEN under
+    string search too, because the selected label is the first occurrence. It is
+    kept because it pins WHICH cell owns the span — if selection ever changes to
+    a later cell, string position would quietly disagree and this would fail."""
+    prep, ev = _ev('<table><tr><td>Total</td><td>Total</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    span = ev['row_label_span']
+    assert prep['text'][span[0]:span[1]] == 'Total'
+    # it is the FIRST 'Total', and it is that cell's own recorded extent
+    assert span[0] == prep['text'].index('Total')
+    second = prep['text'].index('Total', span[1])
+    assert span[1] <= second, "the span must not run into the second cell"
+
+
+def test_a_label_cell_with_HIDDEN_MARKUP_keeps_its_span():
+    """THE REAL RED CASE. `_text()` reads 'Net XX sales' (hidden text included);
+    the representation reads 'Net sales'. A string search for the former finds
+    nothing and drops the label span to null — evidence that structurally
+    exists, lost to a lookup. The structural span cannot miss it."""
+    prep, ev = _ev('<table><tr><td>Net <span style="display:none">XX</span>'
+                   f'sales</td><td>{_FACT}</td></tr></table>')
+    span = ev['row_label_span']
+    assert span is not None, "the label cell exists; its span must survive"
+    assert prep['text'][span[0]:span[1]] == 'Net sales'
+    # The old route searched for the cell's LEAKY reading — the string WITH
+    # the hidden words in it, which `get_text` still produces and `_text` no
+    # longer does (#827 E made `_text` the visible walk). Proving that leaky
+    # string is absent from the representation is what shows the span could
+    # only ever have been dropped, so this test cannot pass for the wrong
+    # reason. `.ren` is the RENDERER half of the bridged fact.
+    cell0 = (prep['elements']['fA'].ren.find_parent('tr')
+             .find_all(['td', 'th'], recursive=False)[0])
+    leaky = ' '.join(cell0.get_text(' ', strip=True).split())
+    assert leaky == 'Net XX sales'
+    assert prep['text'].find(leaky, *ev['row_span']) == -1
+    # ...and the ONE renderer-text owner now agrees with the representation:
+    from driver.relocation.inline_html import _text
+    assert _text(cell0) == 'Net sales'
+
+
+def test_no_label_cell_yields_the_approved_null_rather_than_a_guess():
+    prep, ev = _ev(f'<table><tr><td>{_FACT}</td><td>Total</td></tr></table>')
+    assert ev['row_label'] == '' and ev['row_label_span'] is None
+
+
+def test_a_prose_element_has_no_row_label_span():
+    prep, ev = _ev(f'<p>Revenue was {_FACT} million.</p>')
+    assert ev['row_label_span'] is None
+
+
+def test_the_label_EQUALS_the_visible_text_at_its_own_span():
+    """CORRECTED at the structural-evidence step. This used to assert the
+    OPPOSITE — that the span length differs from the label length — which
+    pinned the very defect Fiscal's audit then measured: the label carried
+    hidden text its own span did not cover. The law is now that the two ARE the
+    same text, so the old assertion was the law we had to fix, not a proof."""
+    prep, ev = _ev('<table><tr><td>Net <span style="display:none">XX</span>'
+                   f'sales</td><td>{_FACT}</td></tr></table>')
+    a, b = ev['row_label_span']
+    assert ev['row_label'] == prep['text'][a:b] == 'Net sales'
+
+
+# --- the structural-evidence step: one visible-text rule for every field ----
+
+def test_a_HIDDEN_ONLY_cell_cannot_become_the_label():
+    """The sharpest of the three: a cell whose only text is hidden was eligible,
+    so the label became a string that does not appear in the filing at all,
+    carrying a span that covers nothing."""
+    prep, ev = _ev('<table><tr><td><span style="display:none">GHOST</span></td>'
+                   f'<td>Real</td><td>{_FACT}</td></tr></table>')
+    assert 'GHOST' not in prep['text']
+    assert ev['row_label'] == 'Real'
+    a, b = ev['row_label_span']
+    assert prep['text'][a:b] == 'Real'
+
+
+def test_row_cells_exclude_hidden_descendants():
+    """The hidden-percent row. The cell itself is visible, so it survived the
+    cell-level hidden check, but its TEXT was read with `get_text` and carried
+    the hidden word into evidence."""
+    prep, ev = _ev('<table><tr><td>Margin <span style="display:none">HIDDEN'
+                   f'</span>%</td><td>{_FACT}</td></tr></table>')
+    assert not any('HIDDEN' in c for c in ev['row_cells']), ev['row_cells']
+    assert ev['row_cells'][0] == 'Margin %'
+    # every cell must be text the representation actually holds
+    for c in ev['row_cells']:
+        assert c in ev['row_text'], (c, ev['row_text'])
+
+
+def test_an_AMBIGUOUS_section_row_is_not_resolved_by_discarding_a_candidate():
+    """EU-094 (#827). TWO word-bearing candidates is an AMBIGUOUS row, and the
+    only lawful answer is no section.
+
+    This row used to yield 'Segment detail', because a digit filter discarded
+    'Q1 2023' first and left exactly one candidate. That is a FABRICATED single
+    choice: the selection rule requires one unambiguous candidate, and here
+    there were two. The filter's claim that it could only ever withhold was
+    disproved by counterfactual over the frozen corpus — exact counts live in
+    receipts_827/16_two_view_census.json, not restated here where they would go
+    stale. It carried no standards or frozen-contract authority, so it is gone
+    and ambiguity is answered as ambiguity.
+    """
+    prep, ev = _ev('<table><tr><td>Q1 2023</td><td>Segment detail</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert not ev['section'], (
+        f"an ambiguous two-candidate row produced {ev['section']!r} — a "
+        "discarded candidate must not manufacture a single choice")
+    assert not ev['section_span']
+
+
+def test_a_unique_DIGIT_BEARING_heading_stays_eligible():
+    """CONTROL. With the filter gone, a lone word-bearing heading that happens
+    to carry a digit is a lawful section — it was previously discarded for
+    containing a digit, which is the recall cost the census counted."""
+    prep, ev = _ev('<table><tr><td>Q1 2023 Results</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    a, b = ev['section_span']
+    assert prep['text'][a:b].strip(' —-') == ev['section'] == 'Q1 2023 Results'
+
+
+def test_a_unique_NON_DIGIT_heading_is_unchanged_and_shares_one_cell():
+    """CONTROL, unchanged by this edit: the ordinary single-candidate row still
+    yields its section, and TEXT and SPAN still come from the SAME cell."""
+    prep, ev = _ev('<table><tr><td>Segment detail</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    a, b = ev['section_span']
+    assert prep['text'][a:b].strip(' —-') == ev['section'] == 'Segment detail'
+
+
+def test_a_hidden_only_cell_does_not_COUNT_as_a_section_label():
+    """The same visible-text rule, applied to the section's own selection.
+
+    A section is taken only when the row has EXACTLY ONE eligible label cell.
+    Reading hidden text made the ghost cell eligible, so the count came to two
+    and a real section heading was lost — the hidden markup did not corrupt the
+    answer, it suppressed it. The cell placement matters: the ghost sits AFTER
+    the heading, because a hidden-only FIRST cell is an empty first cell under
+    either rule and cannot tell the two apart."""
+    prep, ev = _ev('<table><tr><td>Segment detail</td>'
+                   '<td><span style="display:none">GHOST</span></td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert 'GHOST' not in prep['text']
+    a, b = ev['section_span']
+    assert prep['text'][a:b].strip(' —-') == ev['section'] == 'Segment detail'
+
+
+# --- evidence exactness: stored text IS the slice, for every piece ----------
+#
+# Fiscal's full-corpus audit: 413 headers and 133 sections stored TRIMMED text
+# beside an UNTRIMMED span. Trimming may decide whether a cell is worth keeping;
+# it may never decide what gets stored, because the stored text is supposed to
+# be the filing's own characters at that offset.
+
+def test_a_header_with_a_LEADING_DASH_stores_the_EXACT_slice():
+    prep, ev = _ev('<table><tr><td>Segment</td><td>— Americas</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    pairs = list(zip(ev['columns'], ev['column_spans']))
+    assert pairs, "the header stack must still be selected"
+    for text, span in pairs:
+        assert span is not None
+        assert text == prep['text'][span[0]:span[1]], (text, span)
+    assert '— Americas' in ev['columns'], ev['columns']
+
+
+def test_a_header_with_a_TRAILING_DASH_stores_the_EXACT_slice():
+    prep, ev = _ev('<table><tr><td>Segment</td><td>Americas —</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    for text, span in zip(ev['columns'], ev['column_spans']):
+        assert text == prep['text'][span[0]:span[1]], (text, span)
+    assert 'Americas —' in ev['columns'], ev['columns']
+
+
+def test_a_DASHES_ONLY_header_is_still_skipped():
+    """SELECTION may trim — only selection. A cell that is nothing but a dash
+    carries no header, and must stay skipped exactly as before."""
+    prep, ev = _ev('<table><tr><td>Segment</td><td>—</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert '—' not in ev['columns'] and '' not in ev['columns'], ev['columns']
+
+
+@pytest.mark.parametrize('cp', [0x2010, 0x2011, 0x2012, 0x2013, 0x2015,
+                                0x2014, 0x002D])
+def test_a_DASH_ONLY_header_is_skipped_whatever_the_DASH_IS(cp):
+    """The set was hand-written as three characters — space, EM DASH,
+    HYPHEN-MINUS — so a cell holding only EN DASH survived the selection test
+    and was counted as a column heading. Measured over the frozen manifest:
+    3,050 heading decisions across 38 filings, every one a lone U+2013.
+
+    Unicode's own `General_Category=Dash_Punctuation` is the standard that says
+    which characters these are; the hand-written three were a sample."""
+    dash = chr(cp)
+    prep, ev = _ev(f'<table><tr><td>Segment</td><td>{dash}</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert dash not in ev['columns'] and '' not in ev['columns'], \
+        f'U+{cp:04X} alone was counted as a heading: {ev["columns"]}'
+
+
+def test_a_MINUS_SIGN_is_content_not_a_dash_marker():
+    """MUST-ALLOW twin, and the honest limit of the rule. U+2212 MINUS SIGN is
+    category `Sm`, not `Pd` — neither the old three characters nor the Unicode
+    category treats it as a marker, so a cell holding one is real content and
+    stays selected."""
+    prep, ev = _ev('<table><tr><td>Segment</td><td>−</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert '−' in ev['columns'], ev['columns']
+
+
+def test_a_header_with_hidden_markup_stores_only_visible_text():
+    prep, ev = _ev('<table><tr><td>Segment</td>'
+                   '<td>Amer<span style="display:none">ZZ</span>icas</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert 'ZZ' not in prep['text']
+    for text, span in zip(ev['columns'], ev['column_spans']):
+        assert text == prep['text'][span[0]:span[1]], (text, span)
+
+
+def test_a_section_with_a_LEADING_DASH_stores_the_EXACT_slice():
+    prep, ev = _ev('<table><tr><td>— Segment detail</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    a, b = ev['section_span']
+    assert ev['section'] == prep['text'][a:b] == '— Segment detail'
+
+
+def test_a_MARKER_PREFIXED_parenthetical_is_not_selected_as_a_section():
+    """The parenthetical filter tested the UNTRIMMED text, so a leading dash
+    walked a parenthetical straight past it. Markers are ignored for the
+    SELECTION decision only."""
+    prep, ev = _ev('<table><tr><td>— (Loss)</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert ev['section'] == '' and ev['section_span'] is None
+
+
+def test_a_BARE_parenthetical_is_still_not_selected():
+    """The pre-existing half of the same rule, pinned so the fix cannot be
+    mistaken for the whole of it."""
+    prep, ev = _ev('<table><tr><td>(Loss)</td></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert ev['section'] == '' and ev['section_span'] is None
+
+
+@pytest.mark.parametrize('open_t,close_t', [
+    ('<span>', '</span>'), ('<h2>', '</h2>'),
+    ('<blockquote>', '</blockquote>'), ('', '')])
+def test_a_fact_in_ANY_lawful_container_can_still_be_DESCRIBED(open_t, close_t):
+    """`_evidence_from` reads `node.parent` when a fact has no `td`/`th` inside
+    a `tr` and no `p`/`li`/`div` ancestor — but the walker was only ever asked
+    to record those six tags, so that parent had no span, `block_span` came back
+    None and `source_evidence` refused the fact ENTIRELY. Not a missing field: a
+    lawful fact that cannot be described at all.
+
+    Seen first on the official conformance document
+    `PASS-relationship-with-xml-base.html`. The last case is direct body
+    content, with no wrapper at all."""
+    from driver.relocation.inline_html import source_evidence
+    prep, ev = _ev(f'{open_t}Revenue {_FACT}{close_t}')
+    assert ev['block_span'] is not None, 'the fact has no reproducible block'
+    assert source_evidence(prep, ev) is not None, \
+        'no lawful evidence can be built for this fact'
+
+
+@pytest.mark.parametrize('open_t,close_t', [
+    ('<p>', '</p>'), ('<div>', '</div>'), ('<li>', '</li>'),
+    ('<table><tr><td>', '</td></tr></table>'),
+    ('<table><tr><th>', '</th></tr></table>')])
+def test_the_EXISTING_container_owners_are_untouched(open_t, close_t):
+    """MUST-ALLOW twin: the six tags keep working exactly as before, so the
+    change adds owners rather than replacing the rule."""
+    from driver.relocation.inline_html import source_evidence
+    prep, ev = _ev(f'{open_t}Revenue {_FACT}{close_t}')
+    span = ev['row_span'] if ev['in_table'] else ev['block_span']
+    assert span is not None
+    assert source_evidence(prep, ev) is not None
+
+
+def test_a_HIDDEN_fact_still_has_NO_visible_evidence():
+    """MUST-REFUSE control. A fact inside a CSS-hidden block is not displayed,
+    so it has no visible evidence and must not acquire one — the corpus's 6,091
+    span-less facts are all of exactly this kind, and they are correct."""
+    from driver.relocation.inline_html import source_evidence
+    prep, ev = _ev(f'<div style="display:none">Revenue {_FACT}</div>')
+    assert ev['block_span'] is None
+    assert source_evidence(prep, ev) is None
+
+
+# `test_the_edge_marker_set_has_exactly_ONE_owner` STOOD HERE and is DELETED,
+# not replaced. It counted the literal `' —-'` in the source and required
+# exactly one. That set no longer exists — the rule asks Unicode for the
+# character's category — so the test was passing only because the retired
+# literal still appears inside `_is_edge_marker`'s docstring, explaining its own
+# removal. A test that green-lights on a comment is worse than no test. What
+# proves the rule now is behavioural: the dash-only bad cases, the MINUS SIGN
+# twin, and the final mutation battery.
+
+
+def test_the_XML_S_production_has_exactly_ONE_owner():
+    """DERIVED from source, and the same rule as the edge-marker pin above.
+
+    XML 1.0 5e §2.3 defines S as exactly #x20, #x9, #xD, #xA. That set was
+    written twice — `exact_numbers.XML_WS` and `inline_html.XML_S` — with
+    `inline_html` importing the first while still declaring the second, and a
+    comment above the import claiming there was only one owner. `xbrl_attach`
+    imports one name and `inline_html` uses the other, so a change to either
+    would silently move half the consumers.
+
+    The literal is assembled from fragments so this test can never match
+    itself.
+    """
+    import pathlib
+    ws = " " + "\\" + "t" + "\\" + "r" + "\\" + "n"
+    found = []
+    for rel in ('driver/relocation/inline_html.py',
+                'driver/relocation/exact_numbers.py'):
+        src = pathlib.Path(rel).read_text()
+        found += [rel] * (src.count('"' + ws + '"') + src.count("'" + ws + "'"))
+    assert len(found) == 1, (
+        f"the XML S production is declared {len(found)}x, in {found} — "
+        "it must have exactly one owner")
+
+
+def test_the_locator_compares_evidence_EXACTLY_not_after_trimming():
+    """DERIVED from source: a comparison that trims before comparing accepts a
+    stored string that is not what the span holds, which is the defect."""
+    import pathlib
+    src = pathlib.Path('driver/relocation/locator.py').read_text()
+    banned = "strip(' " + "—-')"        # built from parts: never self-match
+    assert banned not in src, "locator still trims before comparing evidence"
+
+
+# --- the real-data parity proof -------------------------------------------
+
+_PACKETS = ("data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl",
+            "data/driver_catalog_seed/wp3_aci_stream/packets.jsonl")
+_CACHE = os.path.join("scripts", "driver_seed", "relocate_probe",
+                      "inline_html_cache")
+
+
+def _saved_items():
+    out = []
+    for path in _PACKETS:
+        if not os.path.exists(path):
+            continue
+        for line in open(path, encoding="utf-8"):
+            if line.strip():
+                pkt = json.loads(line)
+                out += [(pkt["source_id"], it) for it in pkt["items"]]
+    return out
+
+
+@pytest.mark.skipif(not os.path.isdir(_CACHE), reason="filing cache absent")
+def test_ALL_ELEVEN_saved_packet_label_spans_are_reproduced_EXACTLY():
+    """Output parity on the pinned corpus: the structural span must reproduce
+    every saved `raw_label_span` byte-for-byte, so the change cannot move a
+    single published packet. Premises asserted first — 11 items, and each item's
+    representation hash must reproduce from its cached filing, or nothing below
+    is measuring the document the packet declares."""
+    items = _saved_items()
+    assert len(items) == 11, f"the pinned corpus is 11 items, got {len(items)}"
+    checked = 0
+    for source_id, it in items:
+        path = os.path.join(_CACHE, f"{source_id}.htm")
+        assert os.path.exists(path), source_id
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            prep = prepare(fh.read())
+        se = it["xbrl"]["source_evidence"]
+        assert se["representation_sha256"] == prep["text_sha"], source_id
+        want_row = tuple(se["quote_span"])
+        # the element whose ROW is this item's quote row; every fact in that row
+        # shares the row's label cell, which is the value under test
+        spans = []
+        for el in prep["elements"].values():
+            ev, _why = _evidence_from(el, prep)
+            if ev and ev.get("row_span") == want_row:
+                spans.append((ev["row_label_span"],
+                              (ev["section"], ev["section_span"])))
+        assert spans, f"no element found on the saved row for {source_id}"
+        saved = se["raw_label_span"]
+        want = None if saved is None else tuple(saved)
+        for got, _sec in spans:
+            assert (None if got is None else tuple(got)) == want, \
+                f"{source_id}: label span moved {want} -> {got}"
+        # AND the section piece, because the same step changed how a section's
+        # text and span are chosen. A saved section piece must still be produced
+        # exactly — same text, same span.
+        saved_sections = [p for p in se["pieces"] if p["kind"] == "section"]
+        for piece in saved_sections:
+            assert any(text == piece["text"] and list(span) == list(piece["span"])
+                       for _lab, (text, span) in spans), \
+                f"{source_id}: section piece moved: {piece}"
+        checked += 1
+    assert checked == 11
+
+# The seven speculative #827-D pins that stood here are DELETED with the
+# half-applied D implementation they pinned (SEQ 220 §1): neither the
+# three-shape nor the conservative geometry is approved, production is
+# restored to the exact pre-D rule, and the final pins land only with the
+# ruling the complete 49-file loss/change classification produces.
+
+
+# --- #827 E: the inline-style visibility law (SEQ 220 §2, approved) ---------
+# ONE tinycss2 declaration read at the one boundary. Per property the winner is
+# (important, then later source order); the value must be the single ident;
+# display:none and visibility:hidden|collapse hide. Inline style attributes and
+# ancestry ONLY — no stylesheet or selector engine, and aria-hidden is an
+# accessibility property, not a visual one (0 occurrences in 1,769 filings).
+
+@pytest.mark.parametrize("style,want", [
+    ("display:none", True),
+    ("DISPLAY : NoNe", True),
+    ("visibility:hidden", True),
+    ("visibility:collapse", True),                 # CSS 2.2 §11.2 — the regex
+    ("color:red;display:none", True),              # missed all 11,053 of these
+    ("display:none !important; display:block", True),   # Cascade 4 §6.1
+    ("display:none; display:block !important", False),  # important wins
+    ("display:none !important; display:block !important", False),  # later wins
+    ("visibility:hidden;visibility:visible", False),     # later source order
+    ("display:none;display:block", False),
+    ("--x:display:none", False),                   # custom property is not a decl
+    ('content:"display:none"', False),             # a string is not the ident
+    ("display:none-x", False),                     # an ident PREFIX is not none
+    ("display:block", False),
+    ('display: none "x"', False),                  # SEQ 221: a string BESIDE the
+    ("visibility: hidden 1px", False),             # ident, or a dimension, means
+                                                   # no supported hiding value
+    ("display: /* why */ none /* not */", True),   # comments/space still hide
+    # SEQ 222/224: an INVALID later declaration never enters the cascade, so
+    # it cannot erase an earlier VALID winner — while a valid later one wins.
+    ('display:none; display:none "x"', True),
+    ("visibility:hidden; visibility:hidden 1px", True),
+    ("display:none; display:block", False),        # the lawful override twin
+])
+def test_E_the_inline_style_law_decides_by_DECLARATION_not_substring(style, want):
+    from bs4 import BeautifulSoup
+    # the attribute is SET, never interpolated into markup: a style value that
+    # itself contains quotes must reach the parser intact, not truncate the
+    # HTML attribute it rides in
+    cell = BeautifulSoup('<td>x</td>', 'lxml').td
+    cell['style'] = style
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(cell)[0] is want, (style, want)
+
+
+def test_E_aria_hidden_no_longer_pretends_to_be_CSS():
+    """ARIA removes content from the accessibility tree; it is not a visual
+    rendering rule, no frozen contract owns it, and the corpus count is zero."""
+    from bs4 import BeautifulSoup
+    from driver.relocation.inline_html import _effective_hidden
+    cell = BeautifulSoup('<td aria-hidden="true">x</td>', 'lxml').td
+    assert _effective_hidden(cell)[0] is False
+    hard = BeautifulSoup('<td hidden>x</td>', 'lxml').td   # the HTML attribute stays
+    assert _effective_hidden(hard)[0] is True
+
+
+def test_E_displayed_EXCLUDES_a_hidden_descendant():
+    """`displayed` used to read `get_text`, which leaks text the walker
+    excludes — the two-normalizer split SEQ 220 closes: `_text` IS the visible
+    walk now, honoring the hidden argument. The only LAWFUL hidden descendant
+    a nonFraction can carry is a NESTED nonFraction (Inline XBRL 1.1 §10.1.1
+    admits exactly one child, itself a nonFraction), so the twin nests one and
+    hides it with CSS: the page shows nothing, and `displayed` must agree —
+    the old reader reported the hidden '726'."""
+    prep, ev = _ev('<table><tr><td>Revenue</td>'
+                   '<td><ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1"'
+                   ' unitRef="u1" scale="0" decimals="0">'
+                   '<ix:nonFraction id="fInner" name="us-gaap:A" contextRef="c1"'
+                   ' unitRef="u1" scale="0" decimals="0"'
+                   ' style="display:none">726</ix:nonFraction>'
+                   '</ix:nonFraction></td></tr></table>')
+    assert ev['displayed'] == '', repr(ev['displayed'])
+    # the STRICT fact content is untouched by rendering: the value still reads
+    assert ev['value_input'] == '726'
+
+
+# --- #827 E final: the official-grammar state law (SEQ 227/229) -------------
+# Owners: CSS Display Module Level 3 (CR Draft 5 June 2026) §1.2/§2 (display
+# grammar, ||/&& order independence, legacy), §4 (visibility, including the
+# visibility:visible descendant REVIVE under a hidden ancestor); CSS Cascade
+# Level 5 §§4-7 (declaration filtering, cascade, CSS-wide keywords, `all`);
+# CSS Containment Level 2 §4 (content-visibility, viewport-independent product
+# reading: auto INCLUDES); HTML Living Standard §6.1 (the hidden attribute is
+# an OVERRIDABLE presentational hint, not an absolute prune).
+
+def _cellE(style=None, **attrs):
+    from bs4 import BeautifulSoup
+    cell = BeautifulSoup('<td>x</td>', 'lxml').td
+    if style is not None:
+        cell['style'] = style
+    for k, v in attrs.items():
+        cell[k] = v
+    return cell
+
+
+@pytest.mark.parametrize("style,want", [
+    # two-keyword Display-3 values are LAWFUL and win by cascade order
+    ("display:none; display:block flow", False),
+    ("display:block flow; display:none", True),
+    ("display:flow block", False),                 # || is order-independent
+    ("display:list-item", False),
+    ("display:block flow list-item", False),
+    # EU-083/EU-084 (#827): the &&-arm allows AT MOST ONE outside and one
+    # inside keyword beside list-item, and any other 3+ ident sequence is
+    # not display at all — both were uncovered until this row.
+    ("display:none; display:block inline list-item", True),
+    ("display:none; display:block flow ruby", True),
+    ("display:none; display:block flow list-item", False),
+    ("display:contents", False),
+    # a DEFINITELY INVALID later declaration never erases an earlier winner
+    ("display:none; display:block hidden", True),  # 'hidden' is not a display kw
+    ("display:none; display:1px", True),
+    # CSS-wide keywords, decidable locally (Cascade L5 §7)
+    ("display:none; display:initial", False),      # initial display is inline
+    ("display:none; display:unset", False),
+    ("visibility:hidden; visibility:initial", False),
+    ("visibility:hidden; visibility:unset", False),
+])
+def test_E2_the_display_grammar_is_the_SPEC_not_a_single_ident(style, want):
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE(style))[0] is want, style
+
+
+@pytest.mark.parametrize("style", [
+    "display: var(--d)",            # substitution — winner unknowable here
+    "display:none; display: var(--d)",
+    "visibility: revert",           # rollback needs cascade state we do not own
+    "visibility: revert-layer",
+])
+def test_E2_an_UNRESOLVABLE_winner_is_the_truthful_unsupported_lane(style):
+    """Never silently visible, never silently invalid: the reader must answer
+    'unsupported', and a FACT whose chain carries it must refuse with the one
+    named reason rather than guess."""
+    from driver.relocation.inline_html import _style_state
+    st = _style_state(_cellE(style))
+    assert st.get('unsupported'), st
+
+
+def test_E2_content_visibility_official_values():
+    """Containment L2 §4 + the frozen viewport-independent product reading:
+    auto INCLUDES (all 714 real declarations), hidden PRUNES absolutely,
+    visible includes."""
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE("content-visibility:auto"))[0] is False
+    assert _effective_hidden(_cellE("content-visibility:visible"))[0] is False
+    assert _effective_hidden(_cellE("content-visibility:hidden"))[0] is True
+
+
+def test_E2_content_visibility_hidden_has_NO_revive():
+    """Unlike visibility, a cv:hidden subtree is skipped absolutely —
+    a descendant visibility:visible cannot bring it back."""
+    prep, ev = _ev('<table><tr>'
+                   '<td style="content-visibility:hidden">'
+                   '<span style="visibility:visible">GONE</span>Revenue</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert 'GONE' not in prep['text']
+    assert ev['row_label'] == ''
+
+
+def test_E2_the_hidden_ATTRIBUTE_is_overridable_per_HTML_LS():
+    """HTML Living Standard §6.1: CSS can override the hidden state."""
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE(None, hidden=""))[0] is True          # bare: hidden
+    assert _effective_hidden(_cellE("display:block", hidden=""))[0] is False   # revealed
+    assert _effective_hidden(_cellE("display:block; display:none",
+                                    hidden=""))[0] is True        # author none wins
+    from driver.relocation.inline_html import _style_state
+    st = _style_state(_cellE(None, hidden="until-found"))
+    assert st.get('unsupported'), st       # official case, zero incidence lane
+
+
+def test_E2_visibility_visible_REVIVES_under_a_hidden_ancestor():
+    """CSS Display 3 §4 — the walk carries inherited visibility state."""
+    prep, ev = _ev('<table><tr>'
+                   '<td style="visibility:hidden">dark '
+                   '<span style="visibility:visible">LIT</span></td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert 'LIT' in prep['text']
+    assert 'dark' not in prep['text']
+    assert ev['row_label'] == 'LIT'
+
+
+def test_E2_display_none_ancestor_prunes_with_NO_revive():
+    prep, ev = _ev('<table><tr>'
+                   '<td style="display:none">gone '
+                   '<span style="visibility:visible">ALSO GONE</span></td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert 'ALSO GONE' not in prep['text'] and 'gone' not in prep['text']
+
+
+def test_E2_a_vis_hidden_FACT_with_its_own_visible_is_not_hidden():
+    prep = prepare(_HEAD + '<table><tr><td>Revenue</td>'
+                   '<td style="visibility:hidden">'
+                   '<ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
+                   'unitRef="u1" scale="0" decimals="0" '
+                   'style="visibility:visible">7</ix:nonFraction>'
+                   '</td></tr></table></body></html>')
+    ev, why = _evidence_from(prep['elements']['fA'], prep)
+    assert ev is not None, why
+    assert ev['hidden'] is False
+    assert ev['displayed'] == '7'
+
+
+def test_E2_an_UNRESOLVABLE_winner_parks_the_WHOLE_document():
+    """SEQ 231 §3: doc-level, not span-level. An unresolvable style anywhere
+    makes every visibility claim in the filing a guess — including a CLEAN
+    fact whose LABEL SIBLING carries the bad style — so the document refuses
+    once, truthfully, and nothing in it binds or quotes."""
+    from driver.relocation.inline_html import refused
+    # the fact itself carries the unresolvable winner
+    prep = prepare(_HEAD + '<table><tr><td>Revenue</td>'
+                   '<td style="display:var(--d)">'
+                   '<ix:nonFraction id="fA" name="us-gaap:A" contextRef="c1" '
+                   'unitRef="u1" scale="0" decimals="0">7</ix:nonFraction>'
+                   '</td></tr></table></body></html>')
+    assert str(refused(prep)).startswith('unsupported_style'), refused(prep)
+    # THE SIBLING ATTACK: the fact's ancestry is clean; only the label cell
+    # beside it is unresolvable. Guessed-visible label text must not attach.
+    prep = prepare(_HEAD + '<table><tr>'
+                   '<td style="display:attr(data-d)">Revenue</td>'
+                   f'<td>{_FACT}</td></tr></table></body></html>')
+    assert str(refused(prep)).startswith('unsupported_style'), refused(prep)
+
+
+def test_E2_unset_INHERITS_for_visibility_per_Cascade_5():
+    """Cascade 5 §7.3.3: unset = inherit for an inherited property. Under a
+    hidden ancestor, visibility:unset STAYS hidden; visibility:initial (and a
+    real visibility:visible) revive. `all:unset` behaves like unset."""
+    prep, ev = _ev('<table><tr>'
+                   '<td style="visibility:hidden">dark '
+                   '<span style="visibility:unset">STILL DARK</span>'
+                   '<span style="visibility:initial">BRIGHT</span>'
+                   '<span style="all:unset">ALSO DARK</span></td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert 'STILL DARK' not in prep['text']
+    assert 'ALSO DARK' not in prep['text']
+    assert 'BRIGHT' in prep['text']
+
+
+def test_E2_the_hidden_value_match_is_EXACT_ASCII_no_repair():
+    """HTML enumerated attributes match keywords ASCII-case-insensitively with
+    NO whitespace repair: UPPERCASE UNTIL-FOUND is the official state; a
+    padded ' until-found ' is an INVALID VALUE and takes the invalid-value
+    default — the Hidden state — never the unsupported lane."""
+    from driver.relocation.inline_html import _style_state, _advance
+    st = _style_state(_cellE(None, hidden="UNTIL-FOUND"))
+    assert st.get('unsupported'), st
+    prune, _vis, unsup, _ws, _sep, _out = _advance('visible', _cellE(None, hidden=" until-found "))
+    assert unsup is None and prune is True
+    prune, _vis, unsup, _ws, _sep, _out = _advance('visible', _cellE(None, hidden=" until-found"))
+    assert unsup is None and prune is True
+
+
+def test_E2_force_hidden_is_UNSUPPORTED_never_a_fallback():
+    """CSS Display 4 §5: `visibility:force-hidden` denies descendant
+    self-revive — a state this reader does not model. It must NOT be dropped
+    so that an earlier `hidden` quietly wins (SEQ 232 §1), and no descendant
+    `visibility:visible` may mint guessed evidence under it: the document
+    takes the one truthful unsupported refusal."""
+    from driver.relocation.inline_html import refused
+    prep = prepare(_HEAD + '<table><tr>'
+                   '<td style="visibility:hidden; visibility:force-hidden">'
+                   'dark <span style="visibility:visible">TEMPTING</span></td>'
+                   f'<td>{_FACT}</td></tr></table></body></html>')
+    assert str(refused(prep)).startswith('unsupported_style'), refused(prep)
+
+
+def test_E2_a_REVIVED_cell_can_still_be_a_column_header():
+    """`_aligned_columns` no longer asks a standalone per-cell question: the
+    slice owns visibility, so a header cell hidden by inheritance but revived
+    by visibility:visible keeps its place in the stack."""
+    prep, ev = _ev('<table>'
+                   '<tr><td>a</td><td style="visibility:hidden">'
+                   '<span style="visibility:visible">H1</span></td></tr>'
+                   f'<tr><td>x</td><td>{_FACT}</td></tr></table>')
+    assert 'H1' in ev['columns'], ev['columns']
+
+
+def test_E2_the_all_shorthand_resets_both_properties():
+    """Cascade L5: `all` accepts only CSS-wide keywords and feeds every
+    property's cascade — including content-visibility."""
+    from driver.relocation.inline_html import _effective_hidden
+    assert _effective_hidden(_cellE("visibility:hidden; all:initial"))[0] is False
+    assert _effective_hidden(_cellE("all:initial; visibility:hidden"))[0] is True
+    assert _effective_hidden(_cellE("content-visibility:hidden; all:unset"))[0] is False
+    # `all` with a non-wide value is INVALID and erases nothing
+    assert _effective_hidden(_cellE("visibility:hidden; all:none"))[0] is True
+
+
+# (SEQ 234: the assert-True "census pin" that stood here is DELETED — prose
+# is not a test. The census lives in its receipts, not in a green checkmark.)
+
+
+def test_E3_comments_scripts_and_declarations_are_NOT_text():
+    """SEQ 234: `name is None` also matches Comment/CData/PI/Declaration/
+    Doctype nodes, and HTML LS Rendering §15.3.1 defaults script/style/
+    template (and friends) to display:none. None of it is displayed evidence."""
+    prep, ev = _ev('<table><tr>'
+                   '<td><!--COMMENT--><script>GHOST</script>'
+                   '<style>.secret{display:none}</style>'
+                   '<template>SPOOK</template>Label</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert ev['row_label'] == 'Label', repr(ev['row_label'])
+    for ghost in ('COMMENT', 'GHOST', '.secret', 'SPOOK'):
+        assert ghost not in prep['text'], ghost
+
+
+def test_E3_ua_defaults_are_NORMAL_origin_and_inline_display_overrides():
+    """The MUST-ALLOW twin: `rp` is UA-hidden by §15.3.1, and a lawful inline
+    display reveals it — a UA default never outranks an author declaration."""
+    prep, ev = _ev('<table><tr>'
+                   '<td><rp>HIDDEN RP</rp>'
+                   '<rp style="display:inline">SHOWN RP</rp>Label</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert 'HIDDEN RP' not in prep['text']
+    assert 'SHOWN RP' in prep['text']
+    assert ev['row_label'].startswith('SHOWN RP')
+
+
+def test_E3_noscript_renders_because_this_reader_has_NO_scripting():
+    """Stated, not guessed: with scripting disabled, HTML LS does not hide
+    noscript — its contents are ordinary rendered text here."""
+    prep, ev = _ev('<table><tr><td><noscript>NS</noscript>Label</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert ev['row_label'] == 'NSLabel'   # SEQ 853: the element boundary
+    # adds no character (CSS Text 3 3). The old 'NS Label' rode on the
+    # token join's fabricated space, not on noscript rendering at all.
+    prep2, ev2 = _ev('<table><tr><td><noscript>NS</noscript> Label</td>'
+                     f'<td>{_FACT}</td></tr></table>')
+    assert ev2['row_label'] == 'NS Label'   # TWIN: one SOURCE space
+
+
+# --- #827 SEQ 246: BeautifulSoup equality is NOT identity -------------------
+# Tag.__eq__ is STRUCTURAL, so `.index()`/`in` on rows and cells can resolve a
+# fact into a look-alike sibling: wrong headers, wrong spans, wrong column —
+# shipping silently until the falsified-invariant crash exposed it on the
+# real filing 0001193125-23-203780.htm (4 no-id facts, row 22-by-equality vs
+# row 40-by-identity). Both tests target the LATER of two structurally equal
+# twins through the PUBLIC id-less door and demand the fact's OWN geometry,
+# never merely "no crash"; each carries a non-equal lawful twin beside it.
+
+_EQ_FACT = ('<ix:nonFraction name="us-gaap:A" contextRef="c1" unitRef="u1" '
+            'scale="0" decimals="0">7</ix:nonFraction>')
+
+
+def test_SEQ246_equal_ROWS_the_later_fact_keeps_its_OWN_header_and_span():
+    prep = prepare(_HEAD + '<table>'
+                   '<tr><td>x</td><td>H-ONE</td></tr>'
+                   f'<tr><td>lbl</td><td>{_EQ_FACT}</td></tr>'
+                   '<tr><td>x</td><td>H-TWO</td></tr>'
+                   f'<tr><td>lbl</td><td>{_EQ_FACT}</td></tr>'
+                   '</table></body></html>')
+    later = prep['noid_elements'][1]
+    ev, why = _evidence_for(prep, later)
+    assert ev is not None, why
+    # ITS OWN header — the stack is COMPLETE near→far (SEQ 247), so H-ONE
+    # farther above lawfully appears too; the pin is that H-TWO is NEAREST
+    # (first) and that its stored span slices exactly its own characters.
+    assert ev['columns'][0] == 'H-TWO', ev['columns']
+    a, b = ev['column_spans'][0]
+    assert prep['text'][a:b] == 'H-TWO', prep['text'][a:b]
+    # ITS OWN row span — the twin rows hold identical text at different spans
+    own_row = later.ren.find_parent('tr')
+    assert ev['row_span'] == prep['node_spans'][id(own_row)], \
+        (ev['row_span'], prep['node_spans'][id(own_row)])
+    # the NON-EQUAL lawful twin beside it: distinct rows still attach normally
+    prep2 = prepare(_HEAD + '<table>'
+                    '<tr><td>x</td><td>H-A</td></tr>'
+                    f'<tr><td>alpha</td><td>{_EQ_FACT}</td></tr>'
+                    '<tr><td>x</td><td>H-B</td></tr>'
+                    f'<tr><td>beta</td><td>{_EQ_FACT}</td></tr>'
+                    '</table></body></html>')
+    ev2, why2 = _evidence_for(prep2, prep2['noid_elements'][1])
+    assert ev2 is not None, why2
+    assert 'H-B' in ev2['columns'] and ev2['row_label'] == 'beta'
+
+
+def test_SEQ246_equal_CELLS_the_later_fact_keeps_its_OWN_label_window():
+    """The cell-level face of the same defect: `cells.index(cell)` by
+    EQUALITY resolves the later twin cell to the earlier position, so the
+    left-of-fact label window ends too early — the label between the twins
+    vanishes. The window must end at the fact's OWN cell.
+
+    THE LABEL WINDOW IS THE ONLY FACE THAT BITES THIS SITE. The aligned
+    column stack receives the identity `cell` object and matches it with
+    `is`, so a column-header pin passes in BOTH states (probed: the later
+    twin already reports the fourth header pre-fix). And 'beta' is not a
+    "nearest-cell" claim: the contract takes the FIRST ELIGIBLE cell of the
+    window, and '1' has no letters, so `_words` rejects it — 'beta' is the
+    first eligible of the CORRECTED window [1, fact, beta]."""
+    prep = prepare(_HEAD + '<table><tr>'
+                   f'<td>1</td><td>{_EQ_FACT}</td><td>beta</td>'
+                   f'<td>{_EQ_FACT}</td></tr></table></body></html>')
+    later = prep['noid_elements'][1]
+    ev, why = _evidence_for(prep, later)
+    assert ev is not None, why
+    # ITS OWN window: 'beta' sits left of the LATER fact — equality cut the
+    # window at the earlier twin (index 1) and returned no label at all
+    assert ev['row_label'] == 'beta', repr(ev['row_label'])
+    a, b = ev['row_label_span']
+    assert prep['text'][a:b] == 'beta'
+    # the NON-EQUAL lawful twin: distinct sibling cells keep their labels
+    prep2 = prepare(_HEAD + '<table><tr>'
+                    f'<td>1</td><td>{_EQ_FACT}</td><td>gamma</td>'
+                    '<td><ix:nonFraction name="us-gaap:B" contextRef="c1" '
+                    'unitRef="u1" scale="0" decimals="0">8</ix:nonFraction>'
+                    '</td></tr></table></body></html>')
+    ev2, why2 = _evidence_for(prep2, prep2['noid_elements'][1])
+    assert ev2 is not None, why2
+    assert ev2['row_label'] == 'gamma', repr(ev2['row_label'])
+
+
+def _evidence_for(prep, fact):
+    from driver.relocation.inline_html import evidence_for_element
+    return evidence_for_element(prep, fact)
+
+
+def test_E3_a_hidden_type_input_is_not_text():
+    """No special case exists for it (SEQ 235: §15.3.1 marks it !important —
+    not the overridable class — and an input carries no text anyway)."""
+    prep, ev = _ev('<table><tr><td><input type="hidden" value="x"/>Label</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert ev['row_label'] == 'Label'
+
+
+def test_E3_template_represents_NOTHING_even_with_author_display():
+    """HTML LS §4.12.3: template contents are not rendered children, so
+    `style="display:block"` cannot leak them — unlike `rp`, whose reveal is
+    the legitimate normal-UA-rule override (SEQ 235 MUST-REFUSE/MUST-ALLOW
+    pair)."""
+    prep, ev = _ev('<table><tr>'
+                   '<td><template style="display:block">GHOST'
+                   '<div>NESTED GHOST</div></template>Label</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert 'GHOST' not in prep['text']
+    assert ev['row_label'] == 'Label'
+
+
+def test_EU062_zero_width_space_is_ZERO_WIDTH_not_a_separator():
+    """EU-062 (#827) FIX-TO-STANDARD, reversing a recorded earlier reading.
+
+    U+200B is NOT a space character and has NO WIDTH (Unicode 17.0 core
+    spec section 23.2.1); it is the ZW line-break class, a break
+    OPPORTUNITY with no visible space (UAX #14 Table 1 / LB7-LB8); and CSS
+    Text 3 (CRD 2026-06-08) sections 3 / 4.1.1 collapse only spaces, tabs
+    and segment breaks — ZWSP is none of those. So a filing writing
+    `Total<ZWSP>revenue` SHOWS "Totalrevenue", and turning it into a space
+    would put a character in the representation that the filing never
+    displays. The earlier note called deletion a defect ("fusing two
+    tokens"); the standards say the fusion is what a reader sees, and the
+    old assertion was evidence, not law. Measured before the change: the
+    frozen 1,769-file corpus contains ZERO U+200B, so this reversal moves
+    no real filing — it removes a fabricated space that could only ever
+    appear in future markup.
+
+    THE OLD CONTROL — "separate ELEMENTS still separate tokens" — WAS FALSE
+    and is replaced (SEQ 853). CSS Text 3 §3 processes a block's content as
+    one inline box, "inline box boundaries are ignored", so two adjacent
+    spans with no whitespace between them fuse exactly as the ZWSP case does.
+    It passed only because the token join fabricated a space at every element
+    boundary. The replacement is the TWIN: the same two elements, source
+    whitespace present or absent, which is the only thing that decides it."""
+    zwsp = chr(0x200B)               # ZERO WIDTH SPACE, named — never invisible
+    prep, ev = _ev(f'<table><tr><td>Total{zwsp}revenue</td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert ev['row_label'] == 'Totalrevenue', repr(ev['row_label'])
+    # TWIN A — two elements, NO source whitespace: nothing separates them.
+    prep2, ev2 = _ev('<table><tr><td><span>Total</span><span>revenue</span>'
+                     f'</td><td>{_FACT}</td></tr></table>')
+    assert ev2['row_label'] == 'Totalrevenue', repr(ev2['row_label'])
+    # TWIN B — the SAME two elements with one real space between them.
+    prep3, ev3 = _ev('<table><tr><td><span>Total</span> <span>revenue</span>'
+                     f'</td><td>{_FACT}</td></tr></table>')
+    assert ev3['row_label'] == 'Total revenue', repr(ev3['row_label'])
+
+
+def test_EU040_a_th_label_cell_is_a_cell_exactly_as_the_table_model_says():
+    """_CELL_TAGS transcribes the WHATWG table model: td AND th are cells
+    (4.9.9/4.9.10), so a HEADER-cell label is selected exactly like a
+    data-cell label — dropping th would silently lose every header-labeled
+    row's evidence."""
+    prep, ev = _ev(f'<table><tr><th>Total</th><td>{_FACT}</td></tr></table>')
+    span = ev['row_label_span']
+    assert prep['text'][span[0]:span[1]] == 'Total'
+
+
+def test_EU041_a_div_owns_its_prose_evidence_block():
+    """_BLOCK_TAGS is the semantic evidence-ownership set (owner decision,
+    KEEP-PER-CERT-EVIDENCE): a fact nested below inline markup still hands
+    its evidence to the nearest BLOCK owner — the div owns the whole
+    sentence, never the inline wrapper's three characters."""
+    prep, ev = _ev(f'<div>Quarterly revenue was <b>{_FACT}</b> million.</div>')
+    assert ev['block'] == 'Quarterly revenue was 726 million.'
+
+
+def test_EU077_a_tagged_th_header_row_still_supplies_the_column_header():
+    """FIX-TO-CONTRACT (ChannelContract section 3 period-signals row +
+    packet Part D FETCH): real filings ix-tag their column-header years; a
+    th row is the EXPLICIT header relation and row-contains-a-number
+    geometry must not override it — the tagged header is returned exactly
+    like the untagged control, and a td-tagged DATA row is still skipped."""
+    hdr = ('<ix:nonFraction id="hY" name="us-gaap:Y" contextRef="c1" '
+           'unitRef="u1" scale="0" decimals="0" '
+           'format="ixt:num-dot-decimal">2024</ix:nonFraction>')
+    prep, ev = _ev(f'<table><tr><th>Label</th><th>{hdr}</th></tr>'
+                   f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
+    assert ev['columns'] == ['2024']
+    prep2, ev2 = _ev(f'<table><tr><th>Label</th><th>2024</th></tr>'
+                     f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
+    assert ev2['columns'] == ['2024']
+
+
+def test_EU101_a_data_row_between_header_and_target_is_skipped_not_a_header():
+    """The any-element sweep in _has_number_fact is the complete-coverage
+    half of the EU-077 contract fix: a DATA row between the header row and
+    the target row is recognized by its facts (wherever they nest) and
+    SKIPPED — its values never pollute the aligned header stack."""
+    d1 = ('<ix:nonFraction id="d1" name="us-gaap:B" contextRef="c1" '
+          'unitRef="u1" scale="0" decimals="0" '
+          'format="ixt:num-dot-decimal">5</ix:nonFraction>')
+    prep, ev = _ev(f'<table><tr><th>Label</th><th>2024</th></tr>'
+                   f'<tr><td>Other</td><td>{d1}</td></tr>'
+                   f'<tr><td>Total</td><td>{_FACT}</td></tr></table>')
+    assert ev['columns'] == ['2024']
+
+
+def test_EU057_run_in_wins_the_cascade_AND_the_representation_refuses():
+    """EU-057 (#827) REOPENED and RECLOSED by reviewer SEQ 855.
+
+    Two DIFFERENT questions were fused into one assertion, and the fusion was
+    the defect. They are separated here.
+
+    1 THE CASCADE QUESTION — unchanged law, and still load-bearing.
+      `_DISPLAY_OUTSIDE` transcribes CSS Display 3: run-in IS a lawful
+      <display-outside> keyword, so a later `display:run-in` WINS over an
+      earlier `display:none`. Drop it from the set and the none declaration
+      wins instead, silently hiding real facts. That is why the winner must
+      still be lawful AND not none.
+
+    2 THE TEXT-BOUNDARY QUESTION — new, and the reason the old proof was
+      false. CSS Display 3 §5.3 makes a run-in box's formatting depend on the
+      box that FOLLOWS it: it may join the next block's inline formatting
+      context or become a block. This reader is element-local and cannot see
+      that, so it cannot say whether the run-in separates the text around it.
+      The old test asserted the fact stays VISIBLE with an exact `block`
+      string — which quietly claimed a boundary answer the reader had not
+      earned. Under SEQ 855 the public representation REFUSES instead,
+      through the document-level unsupported lane that already exists.
+
+    Corpus exposure, measured read-only over the frozen 1,769 filings:
+    ZERO declare display:run-in, so the refusal costs no real document.
+    """
+    from driver.relocation.inline_html import _style_state, prepare
+
+    # 1 the cascade winner is LAWFUL and NOT none — the original guarantee
+    st = _style_state(_cellE('display:none;display:run-in'))
+    assert st['display'] == 'other', st          # not 'none': run-in won
+    assert st['display'] != 'none'
+
+    # 2 the public representation refuses rather than guessing the boundary
+    doc = (_HEAD + '<div>Total was <span style="display:none;display:run-in">'
+           f'{_FACT}</span> now.</div></body></html>')
+    prep = prepare(doc)
+    assert 'text' not in prep, prep.get('text')
+    assert 'run-in' in prep['refused'], prep['refused']
+
+    # 3 CONTROL — the neighbouring lawful value is untouched and still binds
+    prep2, ev2 = _ev('<div>Total was <span style="display:none;display:inline">'
+                     f'{_FACT}</span> now.</div>')
+    assert ev2['hidden'] is False
+    assert ev2['block'] == 'Total was 726 now.'
+
+
+def test_EU095_ix_hidden_text_never_leaks_into_row_evidence():
+    """The veiled set is prepare()'s own complete-shape key, read HARD: an
+    ix:hidden fragment inside a visible row is EXCLUDED from the row's
+    evidence text — under the old soft default a drifted key made the
+    veiled set empty and the hidden text silently leaked into row_text
+    (the measured blind spot this pin closes)."""
+    prep, ev = _ev('<table><tr><td>Total<ix:hidden>SECRET</ix:hidden></td>'
+                   f'<td>{_FACT}</td></tr></table>')
+    assert ev['row_text'] == 'Total 726'
+    assert 'SECRET' not in ev['row_text'] and ev['row_label'] == 'Total'
+
+
+def test_EU086_a_css_hidden_ancestor_still_hides_the_fact():
+    """The ancestry fold climbs real element nodes and reports a pruning
+    ancestor as HIDDEN: a fact under display:none is hidden, the same fact
+    without it is not — both the probe that finds the ancestors and the
+    prune answer are load-bearing."""
+    prep, ev = _ev(f'<div style="display:none"><p>Total was {_FACT}</p></div>')
+    assert ev['hidden'] is True
+    prep2, ev2 = _ev(f'<div><p>Total was {_FACT}</p></div>')
+    assert ev2['hidden'] is False
+
+
+def test_EU146_colspan_and_rowspan_follow_the_table_processing_model():
+    """EU-146 (#827) FIX-TO-STANDARD. The WHATWG table processing model
+    gives the two attributes DIFFERENT rules, and one shared max(1, int())
+    law cannot express either: colspan is clamped to 1..1000, while
+    rowspan is 0..65534 where ZERO means downward-growing (the cell spans
+    to the end of its row group). Measured before the change: the frozen
+    1,769-file corpus contains no colspan above 1000, no rowspan above
+    65534 and no rowspan=0 — so this row moves no real filing and only
+    stops absurd markup from inventing a 99,999-column grid or reading a
+    growing cell as a one-row cell."""
+    from driver.relocation.inline_html import _table_grid
+    from bs4 import BeautifulSoup
+    html = ('<table><tr><td colspan="99999">A</td></tr>'
+            '<tr><td rowspan="0">B</td><td>C</td></tr>'
+            '<tr><td>D</td></tr></table>')
+    rows = BeautifulSoup(html, 'html.parser').find_all('tr')
+    grid = _table_grid(rows)
+    # colspan clamps at the model's 1000, never the literal 99999
+    assert grid[0][0][2] - grid[0][0][1] == 1000
+    # rowspan=0 grows downward: the third row's own cell cannot take
+    # column 0, which the growing cell still occupies
+    assert grid[2][0][1] == 1, grid[2]
+
+
+def test_EU123_the_memo_capacity_is_derived_and_bounded():
+    """EU-123 (#827) REMOVE-OR-FAIL-CLOSED: the memo keeps a WHOLE parsed
+    filing, so an unbounded one grows without limit — that is the real
+    failure the bound prevents, and the size is derived rather than
+    guessed: production works one filing at a time, so ONE slot serves the
+    proven pattern. Pinned: the same document hits (no re-parse, the same
+    object comes back), a second document evicts the first, and the memo
+    never exceeds its stated capacity."""
+    from driver.relocation import inline_html as IH
+    IH._PREP_CACHE.clear()
+    a = IH.prepare(_HEAD + '<p>Alpha</p></body></html>')
+    assert IH.prepare(_HEAD + '<p>Alpha</p></body></html>') is a
+    IH.prepare(_HEAD + '<p>Beta</p></body></html>')
+    assert len(IH._PREP_CACHE) <= IH._PREP_CACHE_MAX == 1
+    assert IH.prepare(_HEAD + '<p>Alpha</p></body></html>') is not a
+
+
+def test_EU145_149_white_space_is_honoured_exactly_as_CSS_Text_3_defines_it():
+    """EU-145 + EU-149 (#827), FULL STANDARD per SEQ 812.
+
+    CSS Text 3 white-space (https://www.w3.org/TR/css-text-3/
+    #white-space-property): `pre`, `pre-wrap` and `break-spaces` preserve
+    BOTH space runs and segment breaks; `pre-line` preserves segment
+    breaks but COLLAPSES spaces and tabs; `normal` and `nowrap` collapse
+    both. The property is INHERITED, so a declaration on an ancestor
+    governs the text below it."""
+    def cell(style, body):
+        prep, ev = _ev(f'<table><tr><td style="{style}">{body}</td>'
+                       f'<td>{_FACT}</td></tr></table>')
+        return ev['row_cells'][0]
+
+    # preserving values keep the run AND the break
+    assert cell('white-space:pre', 'A  B') == 'A  B'
+    assert cell('white-space:pre-wrap', 'A  B') == 'A  B'
+    assert cell('white-space:break-spaces', 'A  B') == 'A  B'
+    assert cell('white-space:pre', 'A\nB') == 'A\nB'
+
+    # pre-line: the BREAK survives, the space run collapses
+    assert cell('white-space:pre-line', 'A  B') == 'A B'
+    assert cell('white-space:pre-line', 'A\nB') == 'A\nB'
+
+    # collapsing values are today's behaviour, unchanged
+    assert cell('white-space:normal', 'A  B') == 'A B'
+    assert cell('white-space:nowrap', 'A  B') == 'A B'
+    assert cell('', 'A  B') == 'A B'
+
+    # INHERITED: an ancestor's declaration governs
+    prep, ev = _ev('<div style="white-space:pre"><table><tr><td>A  B</td>'
+                   f'<td>{_FACT}</td></tr></table></div>')
+    assert ev['row_cells'][0] == 'A  B', ev['row_cells']
+
+
+def test_EU076_an_explicit_headers_attribute_REPLACES_the_automatic_scan():
+    """EU-076 (#827) FIX-TO-STANDARD. WHATWG HTML LS 4.9.12.2: "If the
+    principal cell has a headers attribute specified", its tokens ARE the
+    header list — the automatic geometry scan does not run at all. Order is
+    the attribute's own token order, and a token contributes nothing unless
+    the first element in the document with that id is a cell in the SAME
+    table and is not the principal cell.
+
+    Measured before the change: 0 of the 1,769 frozen filings carry headers=
+    or scope= on any td/th, so this removes a standards deviation and moves
+    no real filing. The RED it fixes: geometry put the WRONG header over the
+    fact while the cell explicitly named another one.
+
+    NOT claimed by this row, stated so it is not mistaken for done: the
+    AUTOMATIC branch's left-scan lives in the row-label owner, and
+    scope-based association is unreachable here at zero occurrences.
+    """
+    # the fact cell sits under 'Alt' by geometry but DECLARES 'hGeo'
+    prep, ev = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo">{_FACT}</td></tr></table>')
+    assert ev['columns'] == ['Geo'], ev['columns']
+
+    # every stored header is still its own exact slice (the suite's §10.1 law)
+    for text, span in zip(ev['columns'], ev['column_spans']):
+        assert span is not None
+        assert text == prep['text'][span[0]:span[1]], (text, span)
+
+    # CONTROL: with no headers attribute the automatic scan is untouched
+    _p2, ev2 = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td>{_FACT}</td></tr></table>')
+    assert 'Alt' in ev2['columns'], ev2['columns']
+
+    # a token that resolves to nothing yields NO header — never a geometry guess
+    _p3, ev3 = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="absent">{_FACT}</td></tr></table>')
+    assert ev3['columns'] == [], ev3['columns']
+
+    # STEP 5 — "remove any duplicates". The same id twice is ONE header, and the
+    # surviving copy keeps the FIRST token's position (reviewer SEQ 851/852:
+    # the first implementation returned ['Geo', 'Geo']).
+    _p4, ev4 = _ev('<table><tr><th id="hGeo">Geo</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo hGeo">{_FACT}</td></tr></table>')
+    assert ev4['columns'] == ['Geo'], ev4['columns']
+
+    # STEP 4 — "remove all the empty cells". An EMPTY resolved cell contributes
+    # nothing; it must not enter the evidence as a blank header (the first
+    # implementation returned ['']).
+    _p5, ev5 = _ev('<table><tr><th id="hGeo"> </th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo">{_FACT}</td></tr></table>')
+    assert ev5['columns'] == [], ev5['columns']
+
+    # CONTROL for step 4's EXACT definition: WHATWG ASCII whitespace is five code
+    # points, and U+00A0 is NOT one of them. Python's str.strip() would delete
+    # this cell as "empty"; the standard keeps it. Pinned so a future tidy-up
+    # cannot quietly widen the predicate to Unicode.
+    _p6, ev6 = _ev('<table><tr><th id="hGeo">\u00a0</th><th>Alt</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="hGeo">{_FACT}</td></tr></table>')
+    assert len(ev6['columns']) == 1, ev6['columns']
+
+    # multi-token order is the ATTRIBUTE's own order, not document order
+    _p7, ev7 = _ev('<table><tr><th id="h1">One</th><th id="h2">Two</th></tr>'
+                   f'<tr><td>Revenue</td><td headers="h2 h1">{_FACT}</td></tr></table>')
+    assert ev7['columns'] == ['Two', 'One'], ev7['columns']
+
+
+def test_EU145_149_white_space_obeys_the_SHARED_css_wide_and_unresolved_law():
+    """EU-145/EU-149 (#827), reopened by reviewer SEQ 852/853.
+
+    The six ordinary keywords were right, but `white-space` was resolved
+    BESIDE the shared style-winner owner instead of through it, so a
+    ('wide', ...) tuple or the unsupported sentinel reached `_advance`,
+    which compared them against the keyword vocabulary, matched nothing,
+    and silently read every one as COLLAPSING. Public reproductions before
+    the change: inherit, unset, all:inherit, var() and revert all gave
+    'A B' where the law requires preserved or refused.
+
+    The law, all of it already owned by that one mechanism:
+      white-space INHERITS (CSS Text 3 §3), so `inherit` and `unset` take
+      the parent value; `initial` is `normal`; an unresolved substitution or
+      an unsupported rollback (var()/function, revert, revert-layer)
+      propagates the document-level unsupported refusal and never guesses.
+    """
+    from driver.relocation.inline_html import prepare
+
+    def run(inner):
+        p = prepare(_HEAD + '<div style="white-space:pre">'
+                    f'<span style="{inner}">A  B</span></div></body></html>')
+        if 'text' not in p:                       # the refusal lane
+            return 'REFUSED'
+        t = p['text']
+        return t[t.index('A'):t.index('B') + 1]
+
+    # inherited: the parent's `pre` survives
+    assert run('white-space:inherit') == 'A  B'
+    assert run('white-space:unset') == 'A  B'     # unset == inherit when inherited
+    assert run('all:inherit') == 'A  B'           # `all` reaches white-space
+    # initial is `normal`, which collapses — NOT the parent's pre
+    assert run('white-space:initial') == 'A B'
+    # unresolved / rollback REFUSE rather than silently collapsing
+    assert run('white-space:var(--x)') == 'REFUSED'
+    assert run('white-space:revert') == 'REFUSED'
+    assert run('white-space:revert-layer') == 'REFUSED'
+    # CONTROL: the six ordinary keywords keep their existing lawful outputs
+    assert run('white-space:pre') == 'A  B'
+    assert run('white-space:pre-wrap') == 'A  B'
+    assert run('white-space:break-spaces') == 'A  B'
+    assert run('white-space:pre-line') == 'A B'
+    assert run('white-space:normal') == 'A B'
+    assert run('white-space:nowrap') == 'A B'
+
+
+def test_EU189_the_separator_comes_from_the_SOURCE_not_from_the_join():
+    """EU-189 (#827), reopened by reviewer SEQ 853 and completed under 855.
+
+    THE DEFECT: the walk built a list of word tokens and joined them with a
+    single space, so a separator appeared at EVERY element boundary whether or
+    not the filing wrote one. CSS Text 3 §3 processes a block's content as one
+    inline box — "inline box boundaries are ignored" — so
+    `<span>Total</span><span>revenue</span>` renders Totalrevenue. The join
+    fabricated ~1.2M spaces across the frozen corpus; the visible symptom was
+    filers' own typography, where '(', ')' and '$' sit in their own spans and
+    came back as '( 1 )' and '$ 1'.
+
+    THE LAW, all of it at owners that already existed:
+      * a separator comes from SOURCE whitespace, or from a boundary the
+        standard defines — never from the join;
+      * white-space processing collapses ONLY U+0020, U+0009 and segment
+        breaks (CSS Text 3 §4.1.1), so NBSP and other space separators are
+        ordinary characters and survive exactly;
+      * a BLOCK boundary ends the inline formatting context and separates;
+        an INLINE one contributes nothing; `display:contents` and a pruned
+        element generate no box and so add no phantom boundary;
+      * `br` is a forced line break (HTML LS §15.3.4) on its own clause, so a
+        lawful `display:inline` does not silence it;
+      * pre/listing/plaintext/xmp carry the UA `white-space:pre` rule
+        (HTML LS §15.3.3), which beats inheritance and loses to the author.
+
+    The parse had to be corrected too: bs4's default squeezes a
+    whitespace-ONLY text node ('  ' -> ' '), which is a RENDERING decision the
+    walk owns, so the builder preserves it and `_visible_walk` applies the CSS.
+    """
+    from driver.relocation.inline_html import prepare
+
+    H = '<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"><body>'
+
+    def t(body):
+        p = prepare(H + body + '</body></html>')
+        return p['text'] if 'text' in p else 'REFUSED'
+
+    # --- the join no longer invents a separator, and source whitespace rules
+    assert t('<div><span>Total</span><span>revenue</span></div>') == 'Totalrevenue'
+    assert t('<div><span>Total</span> <span>revenue</span></div>') == 'Total revenue'
+    assert t('<div><span>Total </span><span>revenue</span></div>') == 'Total revenue'
+    # the filer-typography case this actually fixes
+    assert t('<div><span>(</span><span>1</span><span>)</span></div>') == '(1)'
+    assert t('<div><span>$</span><span>1</span></div>') == '$1'
+
+    # --- white-space:pre keeps the EXACT characters, including across elements
+    assert t('<div style="white-space:pre">A  B</div>') == 'A  B'
+    assert t('<div style="white-space:pre"><span>A</span>  <span>B</span></div>') == 'A  B'
+    assert t('<div style="white-space:pre"><span>A</span>\t\n<span>B</span></div>') == 'A\t\nB'
+    assert t('<div><span>A</span>  <span>B</span></div>') == 'A B'   # normal collapses
+
+    # --- CSS whitespace is not Python whitespace: these are NOT collapsible
+    assert t('<div>A\xa0B</div>') == 'A\xa0B'          # NO-BREAK SPACE
+    assert t('<div>A B</div>') == 'A B'      # EM SPACE
+
+    # --- boundaries: what separates, what does not
+    assert t('<div>A</div><div>B</div>') == 'A B'                     # block
+    # a block boundary separates at BOTH of its ends, so text that merely
+    # PRECEDES a block is separated from it too. Without the leading clause
+    # only the trailing one fires and inline-then-block silently fuses —
+    # mutation 328 survived until this control existed.
+    assert t('<div><span>A</span><div>B</div></div>') == 'A B'         # in->blk
+    assert t('<div><div>A</div><span>B</span></div>') == 'A B'         # blk->in
+    assert t('<table><tr><td>A</td><td>B</td></tr></table>') == 'A B'  # cells
+    assert t('<div style="display:inline">A</div>'
+             '<div style="display:inline">B</div>') == 'AB'            # author inline
+    assert t('<div style="display:contents"><span>A</span></div>'
+             '<span>B</span>') == 'AB'                                 # no box
+    assert t('<div><span style="display:inherit">A</span>'
+             '<span>B</span></div>') == 'A B'                          # parent block
+    assert t('<div><span style="all:inherit">A</span><span>B</span></div>') == 'A B'
+    assert t('<div><span style="display:initial">A</span>'
+             '<span>B</span></div>') == 'AB'                           # initial inline
+    assert t('<div><span>A</span><span style="display:none">X</span>'
+             '<span>B</span></div>') == 'AB'                           # pruned
+    assert t('<div><span>A</span><span hidden="">X</span>'
+             '<span>B</span></div>') == 'AB'                           # hidden attr
+
+    # --- br is a LINE BREAK, not a display-outside question
+    assert t('<div>A<br/>B</div>') == 'A B'
+    assert t('<div>A<br style="display:inline"/>B</div>') == 'A B'
+    assert t('<div>A<br style="display:none"/>B</div>') == 'AB'        # CONTROL
+
+    # --- the four UA white-space:pre elements
+    for tag in ('pre', 'listing', 'xmp'):
+        assert t(f'<{tag}>A  B</{tag}>') == 'A  B', tag
+    assert t('<pre style="white-space:normal">A  B</pre>') == 'A B'    # CONTROL
+    assert t('<div style="white-space:normal"><pre>A  B</pre></div>') == 'A  B'
+
+
+def test_EU189_a_SPACER_column_is_not_a_label_and_never_becomes_a_piece():
+    """EU-189 (#827, SEQ 855) — the one interaction the NBSP fix created.
+
+    Filers pad tables with cells holding a single NO-BREAK SPACE. The old
+    reader flattened U+00A0 to U+0020 and `.split()` then dropped it, so the
+    column came back EMPTY and fell out of the piece list by accident. Once
+    NBSP is preserved (correctly — CSS Text 3 §4.1.1 does not collapse it) the
+    spacer survives as '\\xa0' and would be emitted as evidence whose label is
+    nothing but a space. Core refuses exactly that ("each evidence piece needs
+    non-blank string text"), so the two owners have to agree; both now answer
+    the same question — is there a label here — the same way.
+
+    Measured: this is not hypothetical. Two such pieces reached Core on the
+    real EPS fact of 0000320193's cached filing and rejected a lawful fact.
+    """
+    from driver.relocation.inline_html import source_evidence
+
+    # THE FACT'S OWN column must be the spacer — that is the only arrangement
+    # in which a blank header reaches the piece list at all.
+    doc = (_HEAD + '<table>'
+           '<tr><th>Six months</th><th>\xa0</th></tr>'
+           f'<tr><td>Total</td><td>{_FACT}</td></tr>'
+           '</table></body></html>')
+    prep = prepare(doc)
+    ev, why = _evidence_from(prep['elements']['fA'], prep)
+    assert ev is not None, why
+    assert ev['columns'] == ['\xa0'], ev['columns']    # PREMISE: it IS a spacer
+    se = source_evidence(prep, ev)
+    assert all(p['text'].strip() for p in se['pieces']), se['pieces']
+    assert not any(p['kind'] == 'header' for p in se['pieces']), se['pieces']
+    # CONTROL: a real label in that same slot DOES become a header piece, so
+    # the rule drops spacers rather than headers in general.
+    prep2 = prepare(doc.replace('<th>\xa0</th>', '<th>Q2 2024</th>'))
+    ev2, why2 = _evidence_from(prep2['elements']['fA'], prep2)
+    assert ev2 is not None, why2
+    se2 = source_evidence(prep2, ev2)
+    assert any(p['kind'] == 'header' and p['text'] == 'Q2 2024'
+               for p in se2['pieces']), se2['pieces']

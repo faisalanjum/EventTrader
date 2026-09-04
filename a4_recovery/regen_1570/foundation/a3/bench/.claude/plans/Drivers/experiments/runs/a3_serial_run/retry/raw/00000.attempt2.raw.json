@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states raw provision/benefit values (58 and (43)) with no scale marker inside the quote itself; the 'in millions' scale wording appears only in the statement's column header, outside this quote. Rule 5.6 requires abstaining when the scale marker for a stated numeric value sits in a header/footnote outside the quote rather than guessing or defaulting the multiplier."
+    }
+  ],
+  "continuity_hints": []
+}
+```

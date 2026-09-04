@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000940944-26-000005#065",
+  "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote's four discontinued-operations loss figures (3.8), (0.3), (4.1), (1.2) carry no scale wording inside the quote itself — the '$ in millions' table header that fixes their scale sits above this row, outside the supplied quote span; the '$' markers present inside the quote attach only to the tax-benefit amounts ($1.3, $0.2, $1.6, $0.7), not to the loss figures, and cannot substitute for the missing scale. Per Rule 5.6, a scale marker sitting in a header outside the quote requires abstention rather than borrowing or guessing the multiplier."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000005#065/L1",
+      "exact_match": true,
+      "why": "Same branch (no facts, one abstention, empty continuity_hints) and same rationale: the millions scale marker sits in the table header outside the quoted span, so Rule 5.6 forces abstention rather than an assumed multiplier."
+    },
+    {
+      "lane_id": "0000940944-26-000005#065/L2",
+      "exact_match": true,
+      "why": "Same branch and same rationale as the settled reply: bare parenthetical loss figures with the scale marker ('$ in millions') outside the quote force abstention under Rule 5.6, not a guessed or borrowed scale."
+    }
+  ],
+  "ambiguities": []
+}
+```

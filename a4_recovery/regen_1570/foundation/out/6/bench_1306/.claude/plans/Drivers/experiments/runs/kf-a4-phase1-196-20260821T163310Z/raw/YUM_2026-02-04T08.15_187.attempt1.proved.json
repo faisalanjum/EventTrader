@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "YUM_2026-02-04T08.15#187",
+  "settled": {
+    "source_id": "YUM_2026-02-04T08.15",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "strategic_review",
+          "driver_state": "continued",
+          "slice_parts": ["segment:pizzahutglobaldivision"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "YUM_2026-02-04T08.15#187/L1",
+      "exact_match": true,
+      "why": "Matches on fact_type action_event, driver_name strategic_review, driver_state continued, and slice_parts [segment:pizzahutglobaldivision], with no other fields populated."
+    },
+    {
+      "lane_id": "YUM_2026-02-04T08.15#187/L2",
+      "exact_match": true,
+      "why": "Identical to L1 and to the settled reply on all fields: fact_type, driver_name, driver_state, and slice_parts."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,39 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "comparable_store_sales",
+        "driver_state": "increased",
+        "time_type": "duration",
+        "long_range_start_year": 1993,
+        "long_range_end_year": 2025
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "increased",
+        "time_type": "duration",
+        "long_range_start_year": 1993,
+        "long_range_end_year": 2025
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "operating_income",
+        "driver_state": "increased",
+        "time_type": "duration",
+        "long_range_start_year": 1993,
+        "long_range_end_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "fuel_cost",
+        "driver_state": "decreased",
+        "level_low": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "comparison_low": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_high": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

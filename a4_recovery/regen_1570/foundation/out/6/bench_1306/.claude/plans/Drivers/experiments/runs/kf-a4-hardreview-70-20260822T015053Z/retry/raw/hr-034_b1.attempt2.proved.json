@@ -1,0 +1,42 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "gross_restaurant_openings",
+          "driver_state": "unknown",
+          "level_low": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "restaurant_count",
+          "driver_state": "unknown",
+          "level_low": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "fiscal_year": 2027,
+          "company_confirmed": true
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Item 1 is the company's forward target for annual gross restaurant openings in FY2026 (a yearly flow of ~2,600 openings), while item 2 is the separate cumulative target for the total restaurant count standing at 50,000 by the end of FY2027 (a point-in-time level); they name different metrics, carry different values and different period types (duration vs. instant), so they are two distinct guidance facts, not one."
+}
+```

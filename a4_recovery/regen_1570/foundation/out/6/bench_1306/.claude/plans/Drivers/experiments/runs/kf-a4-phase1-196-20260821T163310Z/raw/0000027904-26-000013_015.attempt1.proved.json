@@ -1,0 +1,77 @@
+```json
+{
+  "packet_id": "0000027904-26-000013#015",
+  "settled": {
+    "source_id": "0000027904-26-000013",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "aircraft_fuel_cost",
+          "driver_state": "decreased",
+          "level_low": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "comparison_low": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "aircraft_fuel_cost",
+          "driver_state": "decreased",
+          "level_low": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "comparison_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "fiscal_year": 2024,
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "aircraft_fuel_cost",
+          "driver_state": "reported",
+          "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "fiscal_year": 2023,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000013#015/L1",
+      "exact_match": false,
+      "why": "L1 marks all three years 'reported' with no comparison fields, but the sentence states each year's value beside its immediate prior year's value (2025 beside 2024's 19%, 2024 beside 2023's 21%), which Rule 4's 'prior value stated beside the value' clause requires reading as increased/decreased with a prior_year comparison for 2025 and 2024; L1 also uses the generic name 'fuel_cost' rather than the context-specific 'aircraft_fuel_cost'."
+    },
+    {
+      "lane_id": "0000027904-26-000013#015/L2",
+      "exact_match": false,
+      "why": "L2's state pattern (decreased/decreased/reported) and comparison structure (prior_year, comparison values 19/21) match the settled answer, but its driver_name 'aircraft_fuel_costs' is pluralized, violating Rule 3.11's singular-by-default requirement (fuel cost is not one of the listed standard financial plurals)."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the driver name should be the generic 'fuel_cost' (literal wording of this quote, 'Fuel costs') or the more specific 'aircraft_fuel_cost' (the instrument this document consistently uses, e.g. 'the price of aircraft fuel', 'Aircraft Fuel and Related Taxes').",
+      "why": "Rule 3.3 says a stated specific instrument beats the familiar broad name, with the broad form reserved for undifferentiated mentions; this quote itself says only 'Fuel costs,' but it sits in the same risk-factor paragraph that has already established 'aircraft fuel' as the specific instrument, so the mention is arguably not undifferentiated. I settled on 'aircraft_fuel_cost' but a reasonable reader could keep the bare 'fuel_cost' from the literal quote text."
+    }
+  ]
+}
+```

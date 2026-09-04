@@ -1,0 +1,58 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_restaurant_openings",
+              "driver_state": "unknown",
+              "level_low": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true,
+              "slice_parts": []
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "unknown",
+              "level_low": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2027,
+              "time_type": "instant",
+              "company_confirmed": true,
+              "slice_parts": []
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Member 1 is a 2026 flow target (2,600 gross restaurant openings during fiscal year 2026), while member 2 is a 2027 point-in-time stock target (a cumulative footprint of 50,000 restaurants by the end of fiscal year 2027); they differ in metric nature (duration vs instant), value, and period, and the quote merely states that the first target's pace supports reaching the second, distinct target."
+}
+```

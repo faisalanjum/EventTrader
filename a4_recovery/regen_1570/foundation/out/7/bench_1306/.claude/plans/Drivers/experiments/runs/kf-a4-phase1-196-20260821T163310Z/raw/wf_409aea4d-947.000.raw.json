@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0000006201-26-000032#013",
+  "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "Covenant compliance is a qualitative metric (a standing condition readable again over time, like 'policy-in-force'), so it requires a period since the quote itself states one ('as of the most recent applicable measurement dates') rather than framing this as periodless. But that phrase is plural and non-specific — the surrounding covenant discussion states different instruments have annual, semiannual, or other measurement cadences — so it cannot be safely resolved to an exact date, a fiscal quarter, or any other period field, and no dateless horizon (short/medium/long-term/undefined) is stated either. Per Rule 6, a fact requiring a period whose stated period is unresolvable and carries no horizon must abstain rather than guessing the filing's own quarter-end (March 31, 2026) as the measurement date."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000032#013/L1",
+      "exact_match": true,
+      "why": "Same structural outcome (no facts, one abstention, empty continuity_hints) and same substantive reason: the quote's 'most recent applicable measurement dates' is a stated-but-unresolvable period, triggering Rule 6 abstention rather than a guessed date."
+    },
+    {
+      "lane_id": "0000006201-26-000032#013/L2",
+      "exact_match": true,
+      "why": "Same structural outcome and same substantive reason, additionally citing that measurement dates vary by covenant (annual/semiannual per the surrounding text), which is the same evidence I relied on for unresolvability."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'the most recent applicable measurement dates' should be treated as safely resolvable to the filing's own quarter-end (March 31, 2026) rather than abstained on.",
+      "why": "A reader could argue the 10-Q's reporting date is a reasonable stand-in for 'most recent,' but the surrounding covenant text explicitly ties different measurement dates to different instruments (some annual, some semiannual, some ratio-triggered), so treating them as one uniform quarter-end date would be an invented resolution rather than a source-stated one — genuine ambiguity, not resolved by guessing."
+    }
+  ]
+}
+```

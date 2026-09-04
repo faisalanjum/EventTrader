@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000940944-26-000005#066",
+  "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "This is a disclosure/reporting-methodology change (the definition of segment profit was redefined to exclude pre-opening costs), not a statement about a driver's own state, change, surprise, guidance, or action. Like the elimination/consolidation-artifact carve-out in Rule 3.8, a change to how a metric is CALCULATED or PRESENTED is an accounting construct, not itself a business driver fact; the underlying segment-profit levels are captured as their own separate metric facts elsewhere in this event. No lawful fact for this item."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000005#066/L1",
+      "exact_match": true,
+      "why": "Same conclusion: facts=[], exactly one abstention with empty continuity_hints, on the same ground — a segment-profit reporting/methodology redefinition is an accounting presentation construct, not a driver fact."
+    },
+    {
+      "lane_id": "0000940944-26-000005#066/L2",
+      "exact_match": true,
+      "why": "Same conclusion: facts=[], exactly one abstention with empty continuity_hints, reasoning that this is a reporting/presentation-definition change rather than a driver's state, change, surprise, guidance, or action."
+    }
+  ],
+  "ambiguities": []
+}
+```

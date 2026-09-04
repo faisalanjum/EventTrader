@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "increased",
+        "level_unit": "percent_yoy",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "slice_parts": ["product:computing"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

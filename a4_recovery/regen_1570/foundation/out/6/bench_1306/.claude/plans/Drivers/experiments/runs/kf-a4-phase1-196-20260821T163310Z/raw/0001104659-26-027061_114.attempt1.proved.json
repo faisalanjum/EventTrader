@@ -1,0 +1,40 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#114",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 5.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 5.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "period_end_date": "2026-01-31"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#114/L1",
+      "exact_match": true,
+      "why": "L1's fact_type, driver_name, driver_state, level_low/high (5.8, mult 1, evidence '%'), level_shape_hint point, level_unit percent_yoy, time_type duration, and the fiscal_quarter 4 / fiscal_year 2025 / period_end_date 2026-01-31 all match the settled reply exactly."
+    },
+    {
+      "lane_id": "0001104659-26-027061#114/L2",
+      "exact_match": true,
+      "why": "L2 is byte-for-byte identical to L1 in every field and thus matches the settled reply exactly for the same reasons."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0001058090-26-000007#092",
+  "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "operating_margin",
+          "driver_state": "decreased",
+          "level_low": {"value": 16.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 16.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "comparison_low": {"value": 16.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": 16.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "period_start_date": "2025-01-01",
+          "period_end_date": "2025-12-31"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001058090-26-000007#092/L1",
+      "exact_match": true,
+      "why": "L1 matches the settled reply on every field: same driver_name/state, identical level and comparison point objects (16.2 vs 16.9, percent, '%' evidence), same comparison_baseline (prior_year), time_type duration, and FY2025 full-year dates."
+    },
+    {
+      "lane_id": "0001058090-26-000007#092/L2",
+      "exact_match": true,
+      "why": "L2 is content-identical to L1 and to the settled reply (only key ordering differs, which is not meaningful); all values, units, shapes, baseline, time_type and period fields match."
+    }
+  ],
+  "ambiguities": []
+}
+```

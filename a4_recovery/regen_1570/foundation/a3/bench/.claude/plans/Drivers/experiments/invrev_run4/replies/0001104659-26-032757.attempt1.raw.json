@@ -1,0 +1,135 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-26-032757#P000",
+      "decision": "keep",
+      "why": "Quote and locator are correct as supplied; a stated, unique point value (51.7% vs 53.4% prior year) for the twenty-four-week gross-margin ratio, distinct from the twelve-week (52.5%/53.9%) figure elsewhere in the same part.",
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Gross profit, as a percentage of sales, was 51.7% compared to 53.4% during the comparable prior year period.",
+        "raw_label_or_claim": "Gross profit, as a percentage of sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P001",
+      "decision": "replace",
+      "why": "Locator is correct but the supplied quote is only the bare recitation of the SCOTUS ruling, with no company-specific threat/impact language inside it. The next two sentences are the source-flagged, current, dated tariff development and its explicit 'monitoring potential impacts on our business and results' framing; extending the quote to the full paragraph is required so the distinguishing claim sits inside the quote (rule 5). The source itself states the outcome and scope 'remain uncertain', so whether this meets DU-11's strict adverse-threat test cannot be lawfully resolved from the evidence alone -- treated as a lawful abstention control, not guessed into real_item or negative_control.",
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "On February 20, 2026, the U.S. Supreme Court invalidated tariffs imposed under the International Emergency Economic Powers Act. The President immediately introduced new tariffs under different statutory authority, though their scope and duration, and the likelihood and outcome of further legal challenges to these tariffs, remain uncertain. Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations.",
+        "raw_label_or_claim": "Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P002",
+      "decision": "keep",
+      "why": "Quote and locator are correct as supplied; a distinct, unique point value (trailing-four-quarter effective tax rate, 20.4% vs 20.3%), a different period scope from the twelve-week and twenty-four-week effective-tax-rate sentences elsewhere in the same part.",
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Effective tax rate over trailing four quarters ended February 14, 2026, and February 15, 2025, was 20.4% and 20.3%, respectively.",
+        "raw_label_or_claim": "Effective tax rate",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P003",
+      "decision": "keep",
+      "why": "Quote and locator are correct as supplied and unique. States a point level ($1.2 billion) plus a stated growth percentage explicitly framed 'over the comparable prior year', which exercises OD-11's growth-basis determination (yielding percent_yoy).",
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Domestic commercial sales increased $103.0 million to $1.2 billion, or 9.8% over the comparable prior year.",
+        "raw_label_or_claim": "Domestic commercial sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P004",
+      "decision": "keep",
+      "why": "Quote and locator are correct as supplied. Hedged, generic, evergreen seasonality description ('somewhat seasonal', 'generally occurring') with no specific current value or threat -- fails DU-03/Rule 1 as a bare/generic statement, correct behavior is omission, so recorded as a negative_control rather than excluded outright.",
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Our business is somewhat seasonal in nature, with the highest sales generally occurring during the months of February through September, and the lowest sales generally occurring in the months of December and January.",
+        "raw_label_or_claim": "Our business is somewhat seasonal in nature",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P005",
+      "decision": "keep",
+      "why": "Quote and locator are correct as supplied. Hedged disclaimer ('we believe ... is not significant') with no specific current value or threat -- fails DU-03/Rule 1, correct behavior is omission, recorded as a negative_control.",
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Over the long-term, we believe the impact of weather on our sales mix is not significant.",
+        "raw_label_or_claim": "the impact of weather on our sales mix is not significant",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Net sales increased to $4.3 billion, an 8.1% increase over the comparable prior year period.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, lawful headline net-sales growth fact, but no proposal raised it and no declared event/hard-class coverage gap in this single-event turn requires it; representative sampling (Rule 1) does not require adding every lawful fact found."
+    },
+    {
+      "quote": "Net income decreased 3.9% to $468.9 million and diluted earnings per share decreased 2.3% to $27.63 for the quarter.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, lawful facts (a total net-income figure and a separate per-share EPS figure per NAME-13); the richer, complete restatement appears later in the same part ('Net income for the twelve weeks ended ... decreased by $19.1 million ... to $468.9 million ... diluted earnings per share decreased by 2.3% to $27.63 from $28.29'), which would be the correct quote under the partial-then-richer rule if this fact were ever added; not added here since no proposal raised it and no coverage gap is declared."
+    },
+    {
+      "quote": "The second quarter operating profit comparison was negatively impacted by $59.0 million due to an unfavorable non-cash LIFO charge in the current quarter.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, losses_and_sign-eligible fact (a charge is a positive-signed value per OD-12); not added -- no proposal raised it and repairing hard-class coverage totals is a cross-event decision reserved for the final turn, not this single event."
+    },
+    {
+      "quote": "We had an accounts payable to inventory ratio of 110.9% at February 14, 2026, and 118.2% at February 15, 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, lawful point-comparison fact; not added -- no proposal raised it, representative sampling does not require it."
+    },
+    {
+      "quote": "As of the date of this filing, there have been no material changes in our risk factors from those disclosed in Part I, Item 1A, of our Annual Report on Form 10-K for the fiscal year ended August 30, 2025.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Boilerplate incorporation-by-reference statement with no specific current stated fact, value, or threat -- fails DU-03/Rule 1 as a bare non-fact; no proposal raised it and it was not added as an additional control."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the `sequential_comparison` hard-class tag covers any row that exercises OD-11's growth-basis determination generally (including a `percent_yoy` outcome, as in P003's 'over the comparable prior year' framing), or only rows that specifically resolve to `percent_sequential`.",
+      "why": "The crosswalk labels the tag 'sequential comparisons -> OD-11' but quotes the FULL OD-11 paragraph, which governs percent_yoy, percent_sequential, and unknown outcomes together; nothing in the supplied authority narrows the tag to the sequential outcome alone. I applied the broader reading to P003; flagging so the final turn can correct if the narrow reading was intended."
+    },
+    {
+      "what": "Whether the Tariffs/Supreme-Court paragraph meets DU-11's strict 'adverse' requirement given the source's own hedges ('remain uncertain', 'continues to evolve') and the fact that invalidating old tariffs could be favorable while new tariffs could be unfavorable.",
+      "why": "DU-11 is stated as the one locked lane-level boundary, but its text does not resolve a case where the source itself declines to state a direction. I recorded it as lawful_abstention_control rather than guessing real_item or negative_control, per the no-guessing instruction for genuinely unresolved cases; flagging since the authority does not explicitly settle this instance."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "restaurant_count",
+        "driver_state": "reported",
+        "level_low": {"value": 2159, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 2159, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "period_end_date": "2025-05-25",
+        "fiscal_year": 2025,
+        "slice_parts": ["channel:entityoperatedunits", "geography:northamerica"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

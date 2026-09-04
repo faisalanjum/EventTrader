@@ -1,0 +1,138 @@
+"""THE durable read-only Fiscal Route-A source adapter (Phase 1 corrective item 4).
+
+Builds ONE locate()-ready source dict per accession from the ACTUAL graph — Facts
+(fact_id, value, context_id, unit_ref, period) + their semantic Unit (name, is_divide,
+exact strings as stored) — plus the display inline HTML from the in-repo cache.
+READ-ONLY toward the graph (zero Neo4j writes, zero Core imports, zero
+public-schema changes). Display HTML comes from the in-repo cache; ON A CACHE MISS
+the pinned lock_cell helper fetches it once from EDGAR (corrective-4 order).
+
+    venv/bin/python -m pytest scripts/driver_seed/test_route_a_source.py -q
+"""
+import hashlib
+import json
+import os
+import sys
+
+from dotenv import dotenv_values
+from neo4j import GraphDatabase
+
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, os.path.join(_ROOT, 'scripts', 'driver_seed', 'relocate_probe'))
+sys.path.insert(0, os.path.join(_ROOT, 'driver', 'relocation'))
+import inline_html as IH
+
+_CACHE = os.path.join(_ROOT, 'scripts', 'driver_seed',
+                      'relocate_probe', 'inline_html_cache')
+
+_Q = """
+MATCH (x:XBRLNode {accessionNo:$acc})<-[:REPORTS]-(f:Fact)-[:HAS_PERIOD]->(p:Period)
+WHERE f.is_numeric='1' AND f.is_nil='0'
+MATCH (f)-[:HAS_UNIT]->(u:Unit)
+OPTIONAL MATCH (f)-[:HAS_CONCEPT]->(con:Concept)
+RETURN f.qname AS qname, f.fact_id AS fact_id, f.context_id AS context_id,
+       f.value AS value, f.unit_ref AS unit_ref,
+       u.name AS unit_name, u.is_divide AS is_divide,
+       con.namespace AS concept_namespace, con.qname AS graph_concept_qname,
+       p.period_type AS ptype, p.start_date AS start, p.end_date AS end
+"""
+# THE CONCEPT'S REAL IDENTITY TRAVELS WITH ITS FACT. A concept is a QName, so
+# what identifies it is (namespace URI, local name) — the prefix in `f.qname`
+# is only an alias the filing chose. The locator used to authorise a match on
+# that prefixed string, which meant a filing lawfully binding two prefixes to
+# one taxonomy could not be read at all.
+#
+# OPTIONAL MATCH is deliberate and required: a fact whose Concept edge is
+# missing must stay VISIBLE as a row with no identity, so the consumer can
+# refuse it by name. An inner MATCH would delete it from the result set and the
+# refusal would look like "no such fact".
+
+
+def _driver():
+    cfg = dotenv_values(os.path.join(_ROOT, '.env'))
+    return GraphDatabase.driver(cfg['NEO4J_URI'],
+                                auth=(cfg['NEO4J_USERNAME'], cfg['NEO4J_PASSWORD']))
+
+
+_META_Q = """
+MATCH (x:XBRLNode {accessionNo:$acc})<-[:HAS_XBRL]-(r:Report)
+OPTIONAL MATCH (r)-[:PRIMARY_FILER]->(c:Company)
+RETURN x.id AS url, r.formType AS form, c.id AS cik
+"""
+
+
+_FORMS = {'10-Q': '10q', '10-K': '10k', '10-Q/A': '10q', '10-K/A': '10k',
+          '8-K': '8k', '8-K/A': '8k'}
+
+
+def normalize_form(form):
+    """THE one shared form law (WP3 corrective): amendments keep the base
+    source_type (Design: 10-Q/A -> 10q); unknown forms FAIL CLOSED."""
+    up = (form or '').strip().upper()
+    for bare, dashed in (('10Q', '10-Q'), ('10K', '10-K'), ('8K', '8-K')):
+        if up.startswith(bare):              # symmetric repair for the bare
+            up = dashed + up[len(bare):]     # lowercase convention ('10q', '8k')
+            break
+    got = _FORMS.get(up)
+    if got is None:
+        raise ValueError(f'unknown report form {form!r} — no source, fail closed')
+    return got
+
+
+def build_source(accession, source_type=None, driver=None):
+    """One locate()-ready source for the accession, or None (fail-closed).
+    True report form + primary-filer CIK from the graph; display HTML from the
+    cache, fetched ONCE via the pinned lock_cell helper on a miss; raw byte sha
+    recorded."""
+    own = driver is None
+    drv = driver or _driver()
+    try:
+        with drv.session() as s:
+            metas = list(s.run(_META_Q, acc=accession))
+            rows = list(s.run(_Q, acc=accession))
+    finally:
+        if own:
+            drv.close()
+    if len(metas) != 1 or not rows:
+        return None                          # FAIL-CLOSED: exactly one
+    meta = metas[0]                          # Report/form/company or nothing
+    if not meta['cik']:
+        return None
+    try:                                     # THE one gate, before any fetch use:
+        source_type = normalize_form(         # missing or unknown form -> None
+            meta['form'] if source_type is None else source_type)
+    except ValueError:                        # (an explicit override is normalized
+        return None                           #  too — no bypass path exists)
+    path = os.path.join(_CACHE, accession + '.htm')
+    if not os.path.isfile(path):
+        from lock_cell import fetch_inline_html
+        path = fetch_inline_html(meta['url'], accession)
+        if not path or not os.path.isfile(path):
+            return None
+    raw = open(path, 'rb').read()
+    html = raw.decode('utf-8', errors='replace')
+    prepared = IH.prepare(html)             # THE existing filing-representation owner
+    text_parts = ([] if prepared.get('refused') else
+                  [{'part': accession, 'content': prepared['text']}])
+    by_concept = {}
+    for r in rows:
+        period = ({'instant': r['start']} if r['ptype'] == 'instant'
+                  else {'startDate': r['start'], 'endDate': r['end']})
+        by_concept.setdefault(r['qname'], []).append({
+            'value': r['value'], 'period': period, 'unitRef': r['unit_ref'],
+            'fact_id': r['fact_id'], 'context_id': r['context_id'],
+            'unit_name': r['unit_name'], 'is_divide': r['is_divide'],
+            # carried per fact, from the SAME Concept record the row was read
+            # with — never recombined with a qname from anywhere else
+            'concept_namespace': r['concept_namespace'],
+            'graph_concept_qname': r['graph_concept_qname']})
+    return {'source_id': accession, 'source_type': source_type,
+            'xbrls': [json.dumps(by_concept)], 'texts': [],
+            'text_parts': text_parts,
+            'inline_html': html,
+            # THE GRAPH'S STORED FORM, PASSED THROUGH. This stripped the
+            # padding off a value the graph holds as exactly ten digits
+            # (census: 796/796 Company nodes), so the consumer had to
+            # re-pad and `1` could stand in for `0000000001`.
+            'company_cik': str(meta['cik'] or ''),
+            'raw_sha256': hashlib.sha256(raw).hexdigest()}

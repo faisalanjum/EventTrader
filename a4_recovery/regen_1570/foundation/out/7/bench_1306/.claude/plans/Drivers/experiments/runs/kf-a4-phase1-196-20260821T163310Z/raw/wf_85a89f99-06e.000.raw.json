@@ -1,0 +1,18 @@
+```json
+{
+  "packet_id": "bzNews_50877032#193",
+  "settled": {
+    "source_id": "bzNews_50877032",
+    "facts": [],
+    "abstentions": [
+      {"reason": "Benzinga Edge Rankings scores (Momentum, Growth, Long-term price trend) are a third-party editorial/algorithmic ranking widget's generic scoring of AAL's stock, not a company-stated driver state, change, guidance, surprise, or discrete action; this is generic boilerplate commentary, not a real fact under Rule 1.2."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {"lane_id": "bzNews_50877032#193/L1", "exact_match": true, "why": "Same lawful branch (no facts, one abstention) with the same core reasoning that Benzinga Edge Rankings is generic third-party scoring, not a company-disclosed driver fact."},
+    {"lane_id": "bzNews_50877032#193/L2", "exact_match": true, "why": "Same lawful branch (no facts, one abstention) with the same core reasoning that this is a generic third-party algorithmic scoring widget, not a real disclosed driver fact."}
+  ],
+  "ambiguities": []
+}
+```

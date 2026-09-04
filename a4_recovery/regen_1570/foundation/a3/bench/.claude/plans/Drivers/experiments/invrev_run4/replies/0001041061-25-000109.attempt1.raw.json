@@ -1,0 +1,111 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "verdicts": [
+    {
+      "proposal_id": "0001041061-25-000109#P000",
+      "decision": "keep",
+      "why": "Quote is verbatim and unique in mdna (Quarterly/YTD Financial Highlights EPS block); row label 'Less Special Items EPS' lies inside the quote; values are point figures shown with accounting-notation negative sign for the Special Items EPS adjustment.",
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Less Special Items EPS \n\n$(0.16) $(0.02) NM $(0.67) $(0.14) NM",
+        "raw_label_or_claim": "Less Special Items EPS",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-25-000109#P001",
+      "decision": "keep",
+      "why": "Quote is verbatim and unique in mdna (Pizza Hut Division narrative); the full sentence is the source's own claim about unit count and geographic split, and this is a Pizza Hut Division (segment) fact.",
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The Pizza Hut Division has 19,872 units, 68% of which are located outside the U.S.",
+        "raw_label_or_claim": "The Pizza Hut Division has 19,872 units, 68% of which are located outside the U.S.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-25-000109#P002",
+      "decision": "keep",
+      "why": "Quote is verbatim and unique in mdna (Habit Burger & Grill Division quarterly table, distinct from the earlier GAAP/Core reconciliation table which uses different wording/values); row label 'Operating Profit (Loss)' lies inside the quote; parenthetical negative values are a signed loss under a stated segment with Reported/Ex-FX comparison columns.",
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Operating Profit (Loss) $ (2) $ 1 (572) (572) $ \u2014 $ (2) 82 82",
+        "raw_label_or_claim": "Operating Profit (Loss)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording", "slices_and_unknown_axes"]
+      }
+    },
+    {
+      "proposal_id": "0001041061-25-000109#P003",
+      "decision": "keep",
+      "why": "Quote is verbatim and unique in mdna (KFC Division 'Company sales and Company restaurant margin %' narrative); complete causal sentence stating a 6% same-store sales growth figure with an explicit ex-FX measurement qualifier, for the KFC Division segment.",
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The quarterly increase in Company sales, excluding the impacts of foreign currency translation, was driven by restaurant acquisitions and Company same-store sales growth of 6%.",
+        "raw_label_or_claim": "The quarterly increase in Company sales, excluding the impacts of foreign currency translation, was driven by restaurant acquisitions and Company same-store sales growth of 6%.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "slices_and_unknown_axes"]
+      }
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "There have been no material changes from the risk factors disclosed in Part I, Item 1A \u201cRisk Factors\u201d in our Annual Report on Form 10-K for the year ended December 31, 2024.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Boilerplate cross-reference stating no material change; no specific current source-flagged adverse threat (DU-11 at_risk strict boundary fails); not raised by any proposal, and representative scope does not require adding it merely because it is a lawful negative-control example."
+    },
+    {
+      "quote": "During the quarter ended March 31, 2024, we sold our approximate 5% minority investment in Devyani International Limited (\"Devyani\"), a franchise entity that operates KFC and Pizza Hut restaurants in India, for pre-tax proceeds of $104 million.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, source-stated fact but not raised by any proposal and not needed to replace/correct a proposal or repair declared coverage; representative-selection scope forbids adding solely because another lawful fact exists."
+    },
+    {
+      "quote": "On July 4, 2025, H.R.1, commonly known as the One Big Beautiful Bill Act (\"OBBBA\") was enacted into law in the U.S.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, source-stated regulatory/tax-law fact; not raised by any proposal; excluded per representative-only scope, not for failing the fact gate."
+    },
+    {
+      "quote": "As of September 30, 2025, approximately 96%, including the impact of interest rate swaps, of our $11.5 billion of total debt outstanding, excluding finance leases and debt issuance costs and discounts, is fixed with an effective overall interest rate of approximately 4.5%.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, source-stated debt/liquidity fact; not raised by any proposal; excluded per representative-only scope."
+    },
+    {
+      "quote": "Gross unit openings for the quarter were 1,131 units resulting in 744 net new units.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, source-stated unit-growth fact; not raised by any proposal; excluded per representative-only scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "P002's slices_and_unknown_axes and measurement_wording tags rely on the 'Habit Burger & Grill Division' heading and the 'Reported/Ex FX' column header, neither of which is literally inside the bound quote (only the numeric twin columns and the row label 'Operating Profit (Loss)' are).",
+      "why": "The authority does not settle whether hard-class tag eligibility requires the triggering text to be literally inside the row's own quote, or may rely on the full event text the reader model also receives per the canonical call shape. I tagged using full-event context; a stricter quote-only standard would drop both tags for this row."
+    },
+    {
+      "what": "Whether P001's '68% of which are located outside the U.S.' is governed by slices_and_unknown_axes (FS-05..24 geography kind) or portion_versus_whole (OD-17 population qualifier).",
+      "why": "The authority's worked examples for each rule do not cover this exact plain-percentage geography-split wording; I tagged slices_and_unknown_axes as the closer match, but the boundary is not crisply settled."
+    },
+    {
+      "what": "P000 and P002 each bundle multiple periods (quarter and year-to-date, each with its own prior-year comparator) inside one quote/one row, which the general split law would treat as separate facts by period_scope.",
+      "why": "This benchmark row schema has no period_scope field and this turn is location/inventory-only, not adjudication; I kept each as one located row rather than splitting, since the authority does not direct how per-period splitting should be reflected in this specific row schema."
+    }
+  ],
+  "blocked": null
+}
+```

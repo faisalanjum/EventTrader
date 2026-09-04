@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#167",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "increased",
+          "change_value": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "fiscal_quarter": 4,
+          "measurement_raw_spans": ["Adjusted", "constant currency basis"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#167/L1",
+      "exact_match": true,
+      "why": "Same driver_name (earnings_per_share), driver_state increased, change_value 7/1/%, change_unit percent_yoy, comparison_baseline prior_year, per_x share, time_type duration, FY2025/Q4, and identical two-entry measurement_raw_spans (Adjusted; constant currency basis); only key ordering differs, which is not meaningful."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#167/L2",
+      "exact_match": true,
+      "why": "Identical content to the settled fact (same fields and values, per_x at fact level as required); only key ordering within the item object differs from the settled reply, which is not meaningful."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Exact boundary of the second measurement_raw_spans entry — whether the glue preposition 'on a' preceding 'constant currency basis' should be folded into the span.",
+      "why": "Rule 8 requires a verbatim contiguous qualifier span but does not specify whether leading function words like 'on a' count as qualifier text or as separating prose; both untrusted drafts and this settlement chose the narrower 'constant currency basis' as the more defensible flavor-only span, but the rule text alone does not fully foreclose including 'on a'."
+    }
+  ]
+}
+```

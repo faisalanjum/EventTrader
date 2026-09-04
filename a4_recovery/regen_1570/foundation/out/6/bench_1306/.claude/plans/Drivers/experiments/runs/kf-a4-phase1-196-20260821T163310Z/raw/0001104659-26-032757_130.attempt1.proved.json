@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0001104659-26-032757#130",
+  "settled": {
+    "source_id": "0001104659-26-032757",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "This quote is a generic non-materiality/risk-hedge disclaimer ('we believe the impact of weather on our sales mix is not significant') recurring boilerplate language paired with a short-term counterpart sentence, stating no company-specific direction, level, or period-bound event for this filing — it fails Rule 1.2's boilerplate gate. It also cannot be lawfully named: 'impact' is a banned effect word under Rule 3.10, and stripping it leaves no stated cause-state pairing (weather is not described as itself changing, only as generically non-material to sales mix), so no lawful driver_name/driver_state combination can be built even if it passed the gate."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-032757#130/L1",
+      "exact_match": false,
+      "why": "L1 emits a metric fact with driver_name 'weather', driver_state 'persists', sentinel_class 'long_term'; the settled reply abstains because this sentence is a generic non-materiality disclaimer with no company-specific direction/level/event, and 'sentinel_class' additionally requires an explicit dateless-horizon framing rather than a background narrative aside — 'long-term' here is descriptive prose, not a stated forward horizon for a driver fact."
+    },
+    {
+      "lane_id": "0001104659-26-032757#130/L2",
+      "exact_match": true,
+      "why": "L2 abstains on the same boilerplate/immateriality grounds — no company-specific quantification, direction, or event, and 'impact' blocks a lawful name — matching the settled no-fact/abstention branch."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether this weather/sales-mix non-materiality sentence should be captured as a real qualitative-condition metric fact (Rule 2 explicitly lists 'weather' as a valid qualitative metric example) or rejected as generic risk boilerplate under Rule 1.2.",
+      "why": "The rules simultaneously invite weather as a lawful metric subject and forbid boilerplate/effect-word framing; this sentence states no direction, level, or period-specific occurrence and uses 'impact ... is not significant' — the same hedge shape as the rule's own boilerplate example — so reasonable readers could disagree on which instruction wins."
+    }
+  ]
+}
+```
