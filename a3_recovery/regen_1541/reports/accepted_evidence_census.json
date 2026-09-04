@@ -9,7 +9,9 @@
   "unique_sources": 36,
   "schema_valid_attempts": 36,
   "schema_invalid_attempts": 2,
-  "final_source_results": 36,
+  "sources_with_schema_valid_latest_attempt": 36,
+  "meaning_finalized_answers_at_a3": 0,
+  "meaning_adjudication_owner": "A4",
   "chain_mismatches": 0,
   "files_bound": 114
  },

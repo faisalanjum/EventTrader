@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "gross_profit_rate",
+        "driver_state": "introduced",
+        "change_value": {
+          "value": 30,
+          "scale_multiplier": 1,
+          "unit_scale_evidence": "basis points"
+        },
+        "change_unit": "basis_points",
+        "fiscal_year": 2027,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

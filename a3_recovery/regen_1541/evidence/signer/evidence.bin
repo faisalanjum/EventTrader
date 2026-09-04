@@ -1,0 +1,17 @@
+{
+ "run_id": "wf_7ea32abb-e53",
+ "agent_id": "ada3465d3d2797347",
+ "attempt": 1,
+ "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_7ea32abb-e53.json",
+ "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_7ea32abb-e53/agent-ada3465d3d2797347.jsonl",
+ "state_sha256": "0743cdb4bfda1c4d61a1a081504781a927c77b48240740223bcc393a8d7b1afd",
+ "transcript_sha256": "d394d83dcdd1ef8ed34ff72babe4da77b48349d7a490dce209192af36c3dc901",
+ "raw_sha256": "722d35e6a42e7e9c4bf74ea5a1308769760c9eaad973a0e05268021ea8a9fbc1",
+ "raw_chars": 520,
+ "prompt_sha256": "29a4ebaac03c585359a8a6d7fc3a4a79eee6f93d78b4377eae1a137f57a6cdfa",
+ "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "model": "claude-sonnet-5",
+ "effort": "high",
+ "agent_type": "lean-probe",
+ "tool_calls": 0
+}

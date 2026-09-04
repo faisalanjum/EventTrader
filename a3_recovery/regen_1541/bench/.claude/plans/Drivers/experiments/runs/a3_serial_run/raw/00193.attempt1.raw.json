@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This states the number of weeks in each fiscal quarter (12/12/12/16,17,16) — a fiscal-calendar reporting-period convention, not a real statement about a business driver's state, change, surprise, guidance, or action; it fails the Rule 1 fact gate."
+    }
+  ],
+  "continuity_hints": []
+}
+```

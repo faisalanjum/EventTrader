@@ -1,0 +1,16 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "nlrb_organizing_decisions",
+        "driver_state": "occurred"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

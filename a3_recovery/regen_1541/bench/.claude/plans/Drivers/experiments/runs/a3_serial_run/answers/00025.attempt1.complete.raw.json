@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote 'We intend to finance future aircraft deliveries and option exercises using long-term debt' uses an outlook verb ('intend to', equivalent to 'plan to'), which Rule 2 forces into the guidance lane rather than a metric/policy state. Guidance always requires a target period (Rule 6), but the source states no exact dates, no fiscal period, and no explicit dateless horizon (short/medium/long-term or undefined) for this financing intent — it only says 'future aircraft deliveries' with no bounded timeframe. Since the period is unresolvable and no horizon is stated, this guidance-lane fact must abstain rather than guess or default a period."
+    }
+  ],
+  "continuity_hints": []
+}
+```

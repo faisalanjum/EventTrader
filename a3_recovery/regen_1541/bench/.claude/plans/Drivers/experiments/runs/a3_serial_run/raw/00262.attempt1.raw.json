@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The extra-week sales figures (approximately $359.1 million total, $95.7 million domestic commercial) belong to one specific calendar week embedded inside the trailing-4-quarters window ending 2025-02-15, but the source states only that window's end date, never the extra week's own start/end dates or which quarter it fell in; assigning the trailing-4-quarter period to a one-week figure would misstate the value's real period, so the period cannot be lawfully resolved and no stated horizon exists to substitute."
+    }
+  ],
+  "continuity_hints": []
+}
+```

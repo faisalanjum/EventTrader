@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote gives bare loss figures for discontinued operations (3.8), (0.3), (4.1), (1.2) with no scale marker (e.g. 'million') inside the quoted span itself — the table's '$ in millions' header sits outside this quote — so scale_multiplier/unit_scale_evidence cannot be lawfully resolved from inside the quote alone; abstaining rather than borrowing the scale marker from outside the quoted span."
+    }
+  ],
+  "continuity_hints": []
+}
+```

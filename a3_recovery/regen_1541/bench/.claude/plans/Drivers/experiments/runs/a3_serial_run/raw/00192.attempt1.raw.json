@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This is fiscal-calendar structural disclosure (number of weeks in each quarter) — not a statement about any driver's state, change, surprise, guidance, or action; it fails Rule 1's fact gate as boilerplate reporting-period mechanics rather than a business driver."}
+  ],
+  "continuity_hints": []
+}
+```

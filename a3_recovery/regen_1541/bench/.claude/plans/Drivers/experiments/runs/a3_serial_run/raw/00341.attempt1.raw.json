@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "unknown",
+        "value_text": "Expected sequential decrease in IDL comp sales growth from Q4's 4.5%.",
+        "company_confirmed": true,
+        "level_unit": "percent_sequential",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "slice_parts": [
+          "segment:internationaldevelopmentallicensedmarketsandcorporate"
+        ]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,29 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "gross_margin",
+        "driver_state": "increased",
+        "level_low": {"value": 39.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 39.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_low": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_high": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "comparison_shape_hint": "point",
+        "level_unit": "percent",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "period_end_date": "2025-11-01",
+        "period_scope": "ytd",
+        "fiscal_year": 2025,
+        "fiscal_quarter": 3
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -976,6 +976,204 @@
       "test": "test_the_producer_boundary_is_exact",
       "mutation": "a recovered artefact has an era",
       "control_only": null
+    },
+    {
+      "branch": "strict identity by the one existing owner",
+      "test": "test_a_wrong_model_in_the_state_fails_for_its_own_reason",
+      "mutation": "the strict owner is never called",
+      "control_only": null
+    },
+    {
+      "branch": "strict identity only inside the projection",
+      "test": "test_the_strict_proof_refuses_outside_the_projection",
+      "mutation": "strict mode runs outside the projection",
+      "control_only": null
+    },
+    {
+      "branch": "one official parent session",
+      "test": "test_rows_of_two_sessions_have_no_parent_session",
+      "mutation": "rows of two sessions get a parent session",
+      "control_only": null
+    },
+    {
+      "branch": "an absent official directory refuses, nothing created",
+      "test": "test_a_foreign_session_directory_is_never_created",
+      "mutation": "an absent official directory is not refused",
+      "control_only": null
+    },
+    {
+      "branch": "projected bytes hash to the mount authority",
+      "test": "test_a_stale_pin_refuses_before_any_owner_call",
+      "mutation": "a projected file need not hash to its mount authority",
+      "control_only": null
+    },
+    {
+      "branch": "a pin's path is the row's official path",
+      "test": "test_a_pin_at_another_path_refuses",
+      "mutation": "a pinned path need not be the row's official path",
+      "control_only": null
+    },
+    {
+      "branch": "schema validity is the latest attempt's",
+      "test": "test_the_exact_accounting_on_the_package",
+      "mutation": "schema validity counts any attempt, not the latest",
+      "control_only": null
+    },
+    {
+      "branch": "every resume input is a projection row",
+      "test": "test_a_resume_input_that_disagrees_with_the_projection_is_refused",
+      "mutation": "a resume input outside the projection passes",
+      "control_only": null
+    },
+    {
+      "branch": "fixed inputs carry projection conflicts",
+      "test": "test_a_resume_input_that_disagrees_with_the_projection_is_refused",
+      "mutation": "fixed-input verification ignores projection conflicts",
+      "control_only": null
+    },
+    {
+      "branch": "the projection carries the strict proof's states",
+      "test": "test_the_projection_carries_the_strict_proofs_38_states_and_38_transcripts",
+      "mutation": "the projection omits the saved attempts' states",
+      "control_only": null
+    },
+    {
+      "branch": "the copy keeps the executable bit",
+      "test": "test_copy_file_preserves_the_executable_bit",
+      "mutation": "the copy drops the executable bit",
+      "control_only": null
+    },
+    {
+      "branch": "checkout mode equals the manifest mode",
+      "test": "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses",
+      "mutation": "an export with a lost executable bit passes",
+      "control_only": null
+    },
+    {
+      "branch": "every shipped script is executable",
+      "test": "test_an_export_missing_the_executable_bit_is_refused",
+      "mutation": "a non-executable script passes the export",
+      "control_only": null
+    },
+    {
+      "branch": "every ./invocation resolves in the checkout",
+      "test": "test_an_export_missing_the_executable_bit_is_refused",
+      "mutation": "an unresolvable ./invocation passes the export",
+      "control_only": null
+    },
+    {
+      "branch": "every checked-out file is in the publication manifest",
+      "test": "test_an_export_missing_the_executable_bit_is_refused",
+      "mutation": "an unmanifested staged file passes the export",
+      "control_only": null
+    },
+    {
+      "branch": "the shipped ordered log hashes to its pin",
+      "test": "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses",
+      "mutation": "a shipped ordered log need not hash to its pin",
+      "control_only": null
+    },
+    {
+      "branch": "the publication manifest describes the index",
+      "test": "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses",
+      "mutation": "the publication manifest hashes the working file",
+      "control_only": null
+    },
+    {
+      "branch": "the index takes the working file's mode under core.fileMode=false",
+      "test": "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses",
+      "mutation": "the index keeps the mode git recorded",
+      "control_only": null
+    },
+    {
+      "branch": "fault flag restored exactly under nesting",
+      "test": "test_nested_applied_faults_restore_the_exact_prior_flag",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the fault applier itself"
+    },
+    {
+      "branch": "fault setup failure leaves no trace",
+      "test": "test_a_fault_whose_setup_fails_leaves_the_flag_as_it_was",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the fault applier itself"
+    },
+    {
+      "branch": "restore keeps the snapshot's flag",
+      "test": "test_restore_puts_back_the_snapshot_value_of_the_flag",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the snapshot/restore pair"
+    },
+    {
+      "branch": "the pre-import control leaves no trace",
+      "test": "test_the_pre_import_control_leaves_no_trace",
+      "mutation": null,
+      "control_only": "a control's own cleanup, proven by a second control"
+    },
+    {
+      "branch": "arming failure restores the host",
+      "test": "test_a_replay_whose_arming_fails_leaves_the_host_unpatched",
+      "mutation": "an arming failure leaves the host patched",
+      "control_only": null
+    },
+    {
+      "branch": "a host leak is charged to its case",
+      "test": "test_a_host_leak_is_charged_to_its_case",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the fence itself"
+    },
+    {
+      "branch": "a served namespace package does not linger",
+      "test": "test_a_namespace_package_the_world_served_does_not_linger",
+      "mutation": "a served namespace package lingers",
+      "control_only": null
+    },
+    {
+      "branch": "repeated snapshot/restore does not grow the host",
+      "test": "test_repeated_snapshot_and_restore_does_not_grow_the_host",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the snapshot/restore pair"
+    },
+    {
+      "branch": "in-place host mutations are charged and restored",
+      "test": "test_in_place_host_mutations_are_charged_and_restored",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the fence itself"
+    },
+    {
+      "branch": "a replaced registry entry is charged and restored",
+      "test": "test_a_replaced_registry_entry_is_charged_and_restored",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the fence itself"
+    },
+    {
+      "branch": "the staged closure carries the traced code",
+      "test": "test_the_closure_alone_executes_the_real_path_and_a_missing_file_refuses",
+      "mutation": "the closure reader drops the traced files",
+      "control_only": null
+    },
+    {
+      "branch": "the checkout executes the real path",
+      "test": "test_the_closure_alone_executes_the_real_path_and_a_missing_file_refuses",
+      "mutation": "the checkout is never executed",
+      "control_only": null
+    },
+    {
+      "branch": "added host state is charged and removed",
+      "test": "test_added_host_state_is_charged_and_removed",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the fence itself"
+    },
+    {
+      "branch": "one fenced runner for harness and audit",
+      "test": "test_the_fenced_runner_charges_a_leaky_base_run_and_restores",
+      "mutation": null,
+      "control_only": "a harness-isolation control on the fenced runner itself"
+    },
+    {
+      "branch": "the checkout verifies its own internal manifest",
+      "test": "test_a_stale_internal_manifest_in_the_export_is_refused_and_a_fresh_one_verifies",
+      "mutation": "the internal manifest is never verified",
+      "control_only": null
     }
   ],
   "untested_branches": [],
@@ -983,6 +1181,16 @@
   "control_only_branches": [
     "boundary owner",
     "era cutoff kind",
-    "owner pins"
+    "owner pins",
+    "fault flag restored exactly under nesting",
+    "fault setup failure leaves no trace",
+    "restore keeps the snapshot's flag",
+    "the pre-import control leaves no trace",
+    "a host leak is charged to its case",
+    "repeated snapshot/restore does not grow the host",
+    "in-place host mutations are charged and restored",
+    "a replaced registry entry is charged and restored",
+    "added host state is charged and removed",
+    "one fenced runner for harness and audit"
   ]
 }

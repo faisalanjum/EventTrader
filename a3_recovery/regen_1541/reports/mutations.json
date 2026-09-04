@@ -1,6 +1,6 @@
 {
-  "total": 109,
-  "killed": 109,
+  "total": 132,
+  "killed": 132,
   "survived": 0,
   "cases": [
     {
@@ -761,6 +761,167 @@
     },
     {
       "case": "a missing pin is not correct",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the internal manifest is never verified",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the closure reader drops the traced files",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the checkout is never executed",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a served namespace package lingers",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an arming failure leaves the host patched",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the strict owner is never called",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "strict mode runs outside the projection",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "rows of two sessions get a parent session",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an absent official directory is not refused",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a projected file need not hash to its mount authority",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a pinned path need not be the row's official path",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "schema validity counts any attempt, not the latest",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a resume input outside the projection passes",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "fixed-input verification ignores projection conflicts",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the copy drops the executable bit",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an export with a lost executable bit passes",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a non-executable script passes the export",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an unresolvable ./invocation passes the export",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "an unmanifested staged file passes the export",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "a shipped ordered log need not hash to its pin",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the publication manifest hashes the working file",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the index keeps the mode git recorded",
+      "positive_control": true,
+      "mutant_detected": true,
+      "killed": true,
+      "error": null
+    },
+    {
+      "case": "the projection omits the saved attempts' states",
       "positive_control": true,
       "mutant_detected": true,
       "killed": true,

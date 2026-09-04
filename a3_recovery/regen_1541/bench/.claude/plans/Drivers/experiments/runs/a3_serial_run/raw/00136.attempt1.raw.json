@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote 'Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM' reports a dollar-value P&L line (25.1 vs 0.1) but its scale marker ('in millions') appears only in the surrounding table header, outside this quote, with no unit or scale wording inside the quote itself. Per Rule 5.6, a TEXT fact whose scale marker sits in a header/footnote outside the quote must abstain rather than guess or default the multiplier."
+    }
+  ],
+  "continuity_hints": []
+}
+```

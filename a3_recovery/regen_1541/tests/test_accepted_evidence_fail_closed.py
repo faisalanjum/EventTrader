@@ -92,7 +92,8 @@ def test_the_exact_accounting(package):
     assert rep["defects"] == []
     a = rep["accounting"]
     assert (a["paid_calls"], a["saved_attempt_rows"], a["quarantined_calls"]) == (41, 38, 3)
-    assert a["unique_sources"] == 36 and a["final_source_results"] == 36
+    assert a["unique_sources"] == 36 and a["sources_with_schema_valid_latest_attempt"] == 36
+    assert "final_source_results" not in a and a["meaning_finalized_answers_at_a3"] == 0
     assert a["schema_valid_attempts"] == 36 and a["schema_invalid_attempts"] == 2
     assert a["chain_mismatches"] == 0 and a["files_bound"] == 114
     # the two invalid replies are attempt 1 of their sources, each replaced by a
@@ -151,7 +152,7 @@ def test_a_parseable_same_source_reply_missing_a_required_field_stays_invalid(pa
     assert rep["defects"] == []                         # bound and preserved as paid evidence
     assert any(x["source_id"] == valid_sid and x["attempt"] == 1 for x in rep["schema_invalid"])
     assert rep["accounting"]["schema_invalid_attempts"] == 3
-    assert rep["accounting"]["final_source_results"] == 35     # that source has no final result now
+    assert rep["accounting"]["sources_with_schema_valid_latest_attempt"] == 35     # that source has no final result now
 
 
 def test_a_parseable_same_source_reply_with_an_extra_nested_field_stays_invalid(package, tmp_path):
@@ -182,6 +183,6 @@ def test_the_exact_accounting_on_the_package():
     assert rep["defects"] == []
     a = rep["accounting"]
     assert (a["paid_calls"], a["saved_attempt_rows"], a["quarantined_calls"]) == (41, 38, 3)
-    assert a["unique_sources"] == 36 and a["final_source_results"] == 36
+    assert a["unique_sources"] == 36 and a["sources_with_schema_valid_latest_attempt"] == 36
     assert a["schema_valid_attempts"] == 36 and a["schema_invalid_attempts"] == 2
     assert len(rep["lawful_attempt2_replacements"]) == 2

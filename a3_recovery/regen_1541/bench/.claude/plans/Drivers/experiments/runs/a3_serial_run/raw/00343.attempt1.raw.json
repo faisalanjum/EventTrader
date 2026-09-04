@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "unknown",
+        "value_text": "expected to decelerate sequentially from Q4",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true,
+        "slice_parts": ["segment:u_s_market"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -21,7 +21,7 @@ def _sha(b):
 
 def _root(tmp_path):
     """A lawful small root: prefix + ACCEPTED.tsv, one git object + GIT_BASES.tsv,
-    one resume input + RESUME_INPUTS.tsv."""
+    one resume input + RESUME_INPUTS.tsv + the projection inventory that carries it."""
     t = tmp_path / "evidence" / "transcript"; t.mkdir(parents=True)
     prefix = b'{"a":1}\n{"b":2}\n'
     (t / "p.jsonl").write_bytes(prefix)
@@ -40,6 +40,9 @@ def _root(tmp_path):
     (tmp_path / "in.json").write_bytes(b"{}")
     (tmp_path / "evidence" / "RESUME_INPUTS.tsv").write_text(
         "path\tbytes\tsha256\tsource\nin.json\t2\t%s\tnote\n" % _sha(b"{}"))
+    # the ONE inventory of what the resume path reads: every resume input is a row of it
+    (tmp_path / "evidence" / "PROJECTION.tsv").write_text(
+        "phase\thistorical_path\tpackage_path\tbytes\tsha256\ninput\t/h/in.json\tin.json\t2\t%s\n" % _sha(b"{}"))
     return str(tmp_path)
 
 

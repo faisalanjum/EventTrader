@@ -1,0 +1,34 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "operating_margin",
+        "driver_state": "unknown",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "period_end_date": "2025-12-30"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "operating_margin",
+        "driver_state": "beat",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "period_end_date": "2025-12-30",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

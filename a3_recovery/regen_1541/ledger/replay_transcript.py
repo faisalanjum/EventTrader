@@ -254,6 +254,34 @@ class _NoSubprocess(object):
         return _refuse
 
 
+class _HostState(object):
+    """Every host name the replay patches, captured BEFORE the first patch and restorable
+    unconditionally. Between the first patch and the try/finally that restores it stand a
+    hundred lines of arming; a mutant that raised there once left io.open, builtins.open,
+    the os questions, time.sleep and sys.modules["subprocess"] patched for every later
+    harness case (13 harness errors, none of them the cases' own; Codex SEQ 1562 round).
+    """
+    NAMES = (("io", "open"), ("builtins", "open"), ("os.path", "isfile"), ("os.path", "exists"),
+             ("os.path", "isdir"), ("os.path", "lexists"), ("os", "listdir"), ("os", "walk"),
+             ("os", "scandir"), ("os", "getcwd"), ("time", "sleep"))
+
+    def __init__(self):
+        self.values = [(sys.modules[m], n, getattr(sys.modules[m], n)) for m, n in self.NAMES]
+        self.argv = sys.argv
+        self.subprocess = sys.modules.get("subprocess")
+        self.meta_path = list(sys.meta_path)
+
+    def restore(self):
+        for mod, name, value in self.values:
+            setattr(mod, name, value)
+        sys.argv = self.argv
+        if self.subprocess is None:
+            sys.modules.pop("subprocess", None)
+        else:
+            sys.modules["subprocess"] = self.subprocess
+        sys.meta_path[:] = self.meta_path
+
+
 def _sha(text):
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
@@ -1510,7 +1538,8 @@ class _SiblingFinder(object):
                 with _shim_off():
                     is_dir = _world_isdir(os.path.join(root, last), self.side)
                 if is_dir:
-                    spec = importlib.machinery.ModuleSpec(name, None, is_package=True)
+                    spec = importlib.machinery.ModuleSpec(
+                        name, _SiblingNamespace(name, os.path.join(root, last)), is_package=True)
                     spec.submodule_search_locations = [os.path.join(root, last)]
                     return spec
         # nothing durable provides it; if the live filesystem would, refuse rather
@@ -1538,6 +1567,20 @@ class _SiblingLoader(object):
         SERVED_MODULES.append(self.name)
         exec(compile(self.source, "<sibling:%s>" % self.name, "exec"),
              module.__dict__)
+
+
+class _SiblingNamespace(_SiblingLoader):
+    """A namespace package the world serves - a directory with no __init__.py. It has
+    no source to run, but a loader that RECORDS it as served, so the per-program cleanup
+    removes it by name with the modules: served with NO loader, `driver.relocation` was
+    recorded nowhere, lingered in sys.modules, and the next real import of a module under
+    it searched the world's stale path and failed (Codex SEQ 1562 round)."""
+
+    def __init__(self, name, path):
+        _SiblingLoader.__init__(self, name, "", path)
+
+    def exec_module(self, module):
+        SERVED_MODULES.append(self.name)
 
 
 class _WorldEntry(object):
@@ -1890,117 +1933,124 @@ def _replay(state, records, basename, prepare, side, result):
                 side[_dst] = state["text"]
         _at[0] = len(cmd_text)
 
-        io.open = fake_open
-        builtins.open = fake_open
-        # the filesystem questions, answered by the same world as the opens
-        _real_isfile, _real_exists, _real_isdir = os.path.isfile, os.path.exists, os.path.isdir
-        _real_listdir, _real_walk = os.listdir, os.walk
+        # THE HOST IS RESTORED EVEN WHEN ARMING FAILS: everything below this line up to the
+        # try/finally that normally restores it runs under a guard that puts the host back
+        _host = _HostState()
+        try:
+            io.open = fake_open
+            builtins.open = fake_open
+            # the filesystem questions, answered by the same world as the opens
+            _real_isfile, _real_exists, _real_isdir = os.path.isfile, os.path.exists, os.path.isdir
+            _real_listdir, _real_walk = os.listdir, os.walk
 
-        def _w(path):
-            sp = str(path)
-            if not os.path.isabs(sp):
-                _d = _cwd_now()
-                if _d:
-                    sp = os.path.join(_d, sp)
-            # `harness/../keys/K-fields` names the same directory as `keys/K-fields`,
-            # but a suffix match against the commit's file list never sees a `..`:
-            # the harvest program's INPUTS was answered "absent" for exactly this
-            return os.path.normpath(sp) if os.path.isabs(sp) else sp
+            def _w(path):
+                sp = str(path)
+                if not os.path.isabs(sp):
+                    _d = _cwd_now()
+                    if _d:
+                        sp = os.path.join(_d, sp)
+                # `harness/../keys/K-fields` names the same directory as `keys/K-fields`,
+                # but a suffix match against the commit's file list never sees a `..`:
+                # the harvest program's INPUTS was answered "absent" for exactly this
+                return os.path.normpath(sp) if os.path.isabs(sp) else sp
 
-        def w_isfile(path):
-            sp = _w(path)
-            if _MACHINERY[0] or not _outside(sp):
-                return _real_isfile(path)
-            return _is_owner(sp) or _world_isfile(sp, side)
+            def w_isfile(path):
+                sp = _w(path)
+                if _MACHINERY[0] or not _outside(sp):
+                    return _real_isfile(path)
+                return _is_owner(sp) or _world_isfile(sp, side)
 
-        def w_isdir(path):
-            sp = _w(path)
-            if _MACHINERY[0] or not _outside(sp):
-                return _real_isdir(path)
-            return _world_isdir(sp, side)
+            def w_isdir(path):
+                sp = _w(path)
+                if _MACHINERY[0] or not _outside(sp):
+                    return _real_isdir(path)
+                return _world_isdir(sp, side)
 
-        def w_exists(path):
-            return w_isfile(path) or w_isdir(path)
+            def w_exists(path):
+                return w_isfile(path) or w_isdir(path)
 
-        def w_listdir(path="."):
-            sp = _w(path)
-            if _MACHINERY[0] or not _outside(sp):
-                return _real_listdir(path)
-            return _world_listdir(sp, side)
+            def w_listdir(path="."):
+                sp = _w(path)
+                if _MACHINERY[0] or not _outside(sp):
+                    return _real_listdir(path)
+                return _world_listdir(sp, side)
 
-        def w_walk(top, topdown=True, onerror=None, followlinks=False):
-            sp = _w(top)
-            if _MACHINERY[0] or not _outside(sp):
-                return _real_walk(top, topdown, onerror, followlinks)
+            def w_walk(top, topdown=True, onerror=None, followlinks=False):
+                sp = _w(top)
+                if _MACHINERY[0] or not _outside(sp):
+                    return _real_walk(top, topdown, onerror, followlinks)
 
-            def _gen(d):
-                try:
-                    names = _world_listdir(d, side)
-                except OSError as exc:
-                    if onerror is not None:
-                        onerror(exc)
-                    return
-                dirs = [nm for nm in names if _world_isdir(os.path.join(d, nm), side)]
-                files = [nm for nm in names if nm not in dirs]
-                if topdown:
-                    yield d, dirs, files
-                for nm in dirs:
-                    for item in _gen(os.path.join(d, nm)):
-                        yield item
-                if not topdown:
-                    yield d, dirs, files
-            return _gen(sp)
+                def _gen(d):
+                    try:
+                        names = _world_listdir(d, side)
+                    except OSError as exc:
+                        if onerror is not None:
+                            onerror(exc)
+                        return
+                    dirs = [nm for nm in names if _world_isdir(os.path.join(d, nm), side)]
+                    files = [nm for nm in names if nm not in dirs]
+                    if topdown:
+                        yield d, dirs, files
+                    for nm in dirs:
+                        for item in _gen(os.path.join(d, nm)):
+                            yield item
+                    if not topdown:
+                        yield d, dirs, files
+                return _gen(sp)
 
-        _real_scandir, _real_lexists = os.scandir, os.path.lexists
+            _real_scandir, _real_lexists = os.scandir, os.path.lexists
 
-        def w_scandir(path="."):
-            sp = _w(path)
-            if _MACHINERY[0] or not _outside(sp):
-                return _real_scandir(path)
-            return _world_scandir(sp, side)
+            def w_scandir(path="."):
+                sp = _w(path)
+                if _MACHINERY[0] or not _outside(sp):
+                    return _real_scandir(path)
+                return _world_scandir(sp, side)
 
-        def w_lexists(path):
-            sp = _w(path)
-            if _MACHINERY[0] or not _outside(sp):
-                return _real_lexists(path)
-            return w_exists(path)
+            def w_lexists(path):
+                sp = _w(path)
+                if _MACHINERY[0] or not _outside(sp):
+                    return _real_lexists(path)
+                return w_exists(path)
 
-        os.path.isfile, os.path.exists, os.path.isdir = w_isfile, w_exists, w_isdir
-        os.listdir, os.walk = w_listdir, w_walk
-        os.scandir, os.path.lexists = w_scandir, w_lexists
-        _real_getcwd = os.getcwd
+            os.path.isfile, os.path.exists, os.path.isdir = w_isfile, w_exists, w_isdir
+            os.listdir, os.walk = w_listdir, w_walk
+            os.scandir, os.path.lexists = w_scandir, w_lexists
+            _real_getcwd = os.getcwd
 
-        def w_getcwd():
-            # THE PROGRAM STANDS WHERE ITS COMMAND cd-ED, not where the census runs.
-            # `os.path.abspath` and `Path.cwd()` ask this; a served module's `__file__`
-            # built from a relative sys.path root was absolutised against the census's
-            # own directory, and every path derived from it then pointed nowhere.
-            d = _cwd_now()
-            return d if d and not _MACHINERY[0] else _real_getcwd()
-        os.getcwd = w_getcwd
-        # THE WORLD IS FIXED, SO A WAIT DECIDES NOTHING. The harvest program polled a
-        # workflow state 360 times with `time.sleep(10)` between tries; what it found
-        # is the same on the first try as on the last, and a replay that slept the
-        # hour on an absent file was not computing anything.
-        import time as _time
-        _real_sleep = _time.sleep
-        _time.sleep = w_sleep
-        saved_argv = sys.argv
-        sys.argv = ["-", os.path.join("/replay", basename.lstrip("/"))]
-        before = state["text"]
-        failure = None
-        env_limited = False
-        saved_sub = sys.modules.get("subprocess")
-        sys.modules["subprocess"] = _NoSubprocess()
-        # A PROGRAM MAY IMPORT A SIBLING, NOT ONLY OPEN IT. The roots are this
-        # program's own: the directory it cd-ed into and the owner's own
-        # directory, which is where a sibling of the era lived.
-        # ONE cd PER PROCESS, IN ORDER: the program's own directory is where the
-        # command stood when THIS program ran (the finder asks `_cwd_now` per import),
-        # never where the command ended up after a later cd
-        _roots = [os.path.dirname("/replay/" + basename.lstrip("/"))]
-        _finder = _SiblingFinder(_roots, side, n, cwd=_cwd_now)
-        sys.meta_path.insert(0, _finder)
+            def w_getcwd():
+                # THE PROGRAM STANDS WHERE ITS COMMAND cd-ED, not where the census runs.
+                # `os.path.abspath` and `Path.cwd()` ask this; a served module's `__file__`
+                # built from a relative sys.path root was absolutised against the census's
+                # own directory, and every path derived from it then pointed nowhere.
+                d = _cwd_now()
+                return d if d and not _MACHINERY[0] else _real_getcwd()
+            os.getcwd = w_getcwd
+            # THE WORLD IS FIXED, SO A WAIT DECIDES NOTHING. The harvest program polled a
+            # workflow state 360 times with `time.sleep(10)` between tries; what it found
+            # is the same on the first try as on the last, and a replay that slept the
+            # hour on an absent file was not computing anything.
+            import time as _time
+            _real_sleep = _time.sleep
+            _time.sleep = w_sleep
+            saved_argv = sys.argv
+            sys.argv = ["-", os.path.join("/replay", basename.lstrip("/"))]
+            before = state["text"]
+            failure = None
+            env_limited = False
+            saved_sub = sys.modules.get("subprocess")
+            sys.modules["subprocess"] = _NoSubprocess()
+            # A PROGRAM MAY IMPORT A SIBLING, NOT ONLY OPEN IT. The roots are this
+            # program's own: the directory it cd-ed into and the owner's own
+            # directory, which is where a sibling of the era lived.
+            # ONE cd PER PROCESS, IN ORDER: the program's own directory is where the
+            # command stood when THIS program ran (the finder asks `_cwd_now` per import),
+            # never where the command ended up after a later cd
+            _roots = [os.path.dirname("/replay/" + basename.lstrip("/"))]
+            _finder = _SiblingFinder(_roots, side, n, cwd=_cwd_now)
+            sys.meta_path.insert(0, _finder)
+        except BaseException:
+            _host.restore()
+            raise
         try:
             for i, src in enumerate(progs):
                 # EACH PROGRAM IS ITS OWN PROCESS. One that raises does not prevent the

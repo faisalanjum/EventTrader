@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The value (813,494)/(1,196,131) is stated under the table's shared '($ in thousands)' scale header, which is a header outside my supplied quote ('Net inventory (net of payables) (813,494 ) (1,196,131 )'). Rule 5.6 requires the scale marker to be verbatim inside the quote to support scale_multiplier for a TEXT fact, and requires abstention when that marker sits in a header outside the quote; I cannot extend or repair the quote to include it, so the net_inventory metric cannot be lawfully emitted."}
+  ],
+  "continuity_hints": []
+}
+```

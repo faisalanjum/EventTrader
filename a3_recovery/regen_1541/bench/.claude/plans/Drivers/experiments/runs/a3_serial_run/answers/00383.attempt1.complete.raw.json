@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "bzNews_49256211",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "share_repurchase_authorization",
+        "driver_state": "announced",
+        "level_low": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "B"},
+        "level_high": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "B"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

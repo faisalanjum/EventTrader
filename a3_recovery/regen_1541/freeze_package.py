@@ -32,6 +32,21 @@ SKIP_DIRS = {"logs", "__pycache__", ".pt", ".pytest_tmp"}
 SKIP_NAMES = {NAME, "tests.json"}
 
 
+def paths():
+    """-> sorted relpaths of every file and symlink in the package, from the same walk as
+    `entries()` but WITHOUT reading a byte: a caller that needs the set of manifested
+    paths must not open every file of the package to learn it (the resume's classifier
+    once did, so a trace of the real path showed it reading the whole package)."""
+    out = []
+    for dp, dirs, files in os.walk(R):
+        dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS)
+        for f in sorted(files):
+            if f in SKIP_NAMES or f.endswith(".pyc"):
+                continue
+            out.append(os.path.relpath(os.path.join(dp, f), R))
+    return out
+
+
 def entries():
     """-> sorted [(kind, relpath, value)] for every file and symlink in the package."""
     out = []

@@ -1,0 +1,16 @@
+{
+ "rows": 38,
+ "parent_session": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "owner": "build_inventory_review._attempt_evidence",
+ "retry_owner": "build_inventory_review._retry_lawful",
+ "failures": [],
+ "unique": {
+  "run": 38,
+  "agent": 38,
+  "transcript": 38,
+  "raw": 38,
+  "response": 38
+ },
+ "retries": 2,
+ "unlawful_retries": []
+}

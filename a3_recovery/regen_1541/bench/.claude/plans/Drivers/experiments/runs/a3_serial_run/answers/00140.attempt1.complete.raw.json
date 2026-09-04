@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "current_liabilities",
+        "driver_state": "increased",
+        "level_low": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "comparison_high": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "sequential_period",
+        "time_type": "instant",
+        "period_end_date": "2026-02-22"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

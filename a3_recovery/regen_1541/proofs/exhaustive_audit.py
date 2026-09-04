@@ -53,7 +53,11 @@ def run_test(fn):
     import tempfile
     names = fn.__code__.co_varnames[:fn.__code__.co_argcount]
     mp = MonkeyPatch() if "monkeypatch" in names else None
-    tmp = tempfile.mkdtemp(prefix="audit_") if "tmp_path" in names else None
+    # outside the package and outside /tmp (mutations.TEMP_ROOT), for the same two reasons the harness's cases are
+    if "tmp_path" in names:
+        os.makedirs(MU.TEMP_ROOT, exist_ok=True)
+    tmp = tempfile.mkdtemp(prefix="audit_", dir=MU.TEMP_ROOT) if "tmp_path" in names else None
+    saved_path = list(sys.path)      # the control's product calls may extend the path for their imports
     if set(names) - {"monkeypatch", "tmp_path", "emitted"}:
         return "UNSUPPORTED-FIXTURE"
     args = []
@@ -93,6 +97,7 @@ def run_test(fn):
             raise
         return "AssertionError" if type(exc).__name__ == "Failed" else type(exc).__name__
     finally:
+        sys.path[:] = saved_path
         if mp:
             mp.undo()
         if tmp:
@@ -132,8 +137,17 @@ for row in report["branches"]:
     # every base/fault pair runs inside the same fence the case harness uses: one
     # shared process is only an isolated measurement if each row hands back the caches
     # it was given (Codex SEQ 1556 item 1)
-    with replay_caches.preserved(CR, RT):
-        base = run_test(fn)
+    def _row_run(fault=None):
+        with replay_caches.preserved(CR, RT):
+            if fault is None:
+                return run_test(fn)
+            with fault.applied(True):
+                return run_test(fn)
+    base, leak = MU.fenced(_row_run)                 # the SAME fence for the base run as for the fault run
+    if leak:
+        totals["ERROR"] += 1
+        lines.append("ERROR   %-40s base run leaves the host changed: %s" % (branch[:40], ", ".join(leak)[:60]))
+        continue
     if base is not None:
         totals["ERROR"] += 1
         lines.append("ERROR   %-40s fails unmodified (%s)" % (branch[:40], base))
@@ -146,8 +160,11 @@ for row in report["branches"]:
         totals["ERROR"] += 1
         lines.append("ERROR   %-40s no declared fault for %r" % (branch[:40], mut))
         continue
-    with replay_caches.preserved(CR, RT), MU.FAULTS[mut].applied(True):
-        under = run_test(fn)
+    under, leak = MU.fenced(lambda: _row_run(MU.FAULTS[mut]))
+    if leak:
+        totals["ERROR"] += 1
+        lines.append("ERROR   %-40s leaves the host patched: %s" % (branch[:40], ", ".join(leak)[:60]))
+        continue
     if under is None:
         totals["FALSE"] += 1
         lines.append("FALSE   %-40s test still passes under %s" % (branch[:40], mut[:26]))

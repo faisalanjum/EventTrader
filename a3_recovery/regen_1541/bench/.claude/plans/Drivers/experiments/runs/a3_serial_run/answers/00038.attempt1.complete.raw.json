@@ -1,0 +1,22 @@
+```json
+{
+ "source_id": "0000027904-26-000013",
+ "facts": [
+  {
+   "fact_type": "metric",
+   "item": {
+    "driver_name": "union_representation",
+    "driver_state": "reported",
+    "level_low": {"value": 20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+    "level_high": {"value": 20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+    "level_shape_hint": "point",
+    "level_unit": "percent",
+    "time_type": "instant",
+    "period_end_date": "2025-12-31"
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}
+```

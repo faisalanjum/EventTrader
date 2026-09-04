@@ -3,7 +3,9 @@
 
   evidence/transcript/ACCEPTED.tsv   the accepted transcript prefix: bytes, rows, sha
   evidence/git_bases/GIT_BASES.tsv   every committed object the routes resolve
-  evidence/RESUME_INPUTS.tsv         every input materialised for the resume path
+  evidence/RESUME_INPUTS.tsv         the PROVENANCE of each restored or reproduced input;
+                                     evidence/PROJECTION.tsv is the one inventory of what the
+                                     resume path reads, and every row here must agree with it
 
 Each authority is read only; each named file must exist and hash to the recorded
 identity. Nothing is searched, nothing is rebuilt, and a mismatch is an exit status.
@@ -113,6 +115,29 @@ def failures(root=R):
             bad.append("resume inputs authority names no files")
     except (IOError, OSError, ValueError) as exc:
         bad.append("resume inputs authority unusable: %s" % exc)
+    bad += projection_conflicts(root)
+    return bad
+
+
+def projection_conflicts(root=R):
+    """RESUME_INPUTS.tsv rows that evidence/PROJECTION.tsv - the ONE inventory of what the
+    resume path reads at a historical path - does not carry with the same identity."""
+    proj = {}
+    for rel in ("PROJECTION.tsv", "RESUME_INPUTS.tsv"):
+        if not os.path.isfile(os.path.join(root, "evidence", rel)):
+            return ["evidence/%s is absent: the resume inputs cannot be checked against the one inventory" % rel]
+    for ln in io.open(os.path.join(root, "evidence", "PROJECTION.tsv"), encoding="utf-8").read().split("\n")[1:]:
+        if ln.strip():
+            _ph, _h, p, b, s = ln.split("\t")
+            proj[p] = (int(b), s)
+    bad = []
+    for ln in io.open(os.path.join(root, "evidence", "RESUME_INPUTS.tsv"), encoding="utf-8").read().split("\n")[1:]:
+        if ln.strip():
+            p, b, s, _src = ln.split("\t")
+            if p not in proj:
+                bad.append("resume input %s is not a projection row; the projection is the one inventory of what the path reads" % p)
+            elif proj[p] != (int(b), s):
+                bad.append("resume input %s disagrees with the projection's identity of the same file" % p)
     return bad
 
 
@@ -120,7 +145,7 @@ def main():
     bad = failures()
     for b in bad:
         print("FAIL " + b)
-    print("FIXED INPUTS %s" % ("OK: transcript prefix, git store, workflow-state copies and resume inputs all hash to their authorities" if not bad else "REJECTED (%d defects)" % len(bad)))
+    print("FIXED INPUTS %s" % ("OK: transcript prefix, git store, workflow-state copies and resume inputs all hash to their authorities, and every resume input agrees with the projection" if not bad else "REJECTED (%d defects)" % len(bad)))
     return 1 if bad else 0
 
 

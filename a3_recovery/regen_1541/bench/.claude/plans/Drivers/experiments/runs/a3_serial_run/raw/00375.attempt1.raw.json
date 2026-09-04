@@ -1,0 +1,17 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "strategic_review",
+        "driver_state": "continued",
+        "slice_parts": ["segment:pizzahutglobaldivision"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

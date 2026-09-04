@@ -173,12 +173,14 @@ def test_glob_walks_directories_through_the_world():
 
 def test_a_namespace_package_is_served_from_the_committed_tree():
     """`driver.relocation` has no __init__.py; the finder serves it as a namespace
-    package whose search path is the world's directory, never the live one."""
+    package whose search path is the world's directory, never the live one - with a
+    loader that records it as served, so it never lingers in sys.modules."""
     finder = RT._SiblingFinder(["/tmp/claude-1000/t"], {}, 1)
     spec = finder.find_spec("driver")
     assert spec is not None
     sub = finder.find_spec("driver.relocation", path=spec.submodule_search_locations)
-    assert sub is not None and sub.loader is None and sub.submodule_search_locations == ["/tmp/claude-1000/t/driver/relocation"]
+    assert sub is not None and isinstance(sub.loader, RT._SiblingNamespace)
+    assert sub.submodule_search_locations == ["/tmp/claude-1000/t/driver/relocation"]
     leaf = finder.find_spec("driver.relocation.exact_numbers", path=sub.submodule_search_locations)
     assert leaf is not None and leaf.loader is not None
 

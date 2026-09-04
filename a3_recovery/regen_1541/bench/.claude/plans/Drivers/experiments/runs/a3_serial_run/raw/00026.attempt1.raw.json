@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states covenant-compliance status only 'as of the most recent applicable measurement dates' — a vague, plural, instrument-specific phrase, not a stated exact date, fiscal period, or dateless horizon. This metric fact requires a period since one is stated but not safely resolvable to period_start/end, fiscal_quarter, or a sentinel_class; per Rule 6 an unresolvable stated period with no horizon forces abstention."
+    }
+  ],
+  "continuity_hints": []
+}
+```

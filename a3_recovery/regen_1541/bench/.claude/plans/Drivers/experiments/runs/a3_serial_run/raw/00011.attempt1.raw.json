@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "net_income",
+        "driver_state": "unknown",
+        "value_text": "modest profitability",
+        "conditions": "assuming the current forward fuel curve",
+        "company_confirmed": true,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

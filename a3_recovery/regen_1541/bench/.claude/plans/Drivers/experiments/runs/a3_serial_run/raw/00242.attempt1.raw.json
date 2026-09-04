@@ -1,0 +1,23 @@
+```json
+{
+ "source_id": "0001104659-26-027061",
+ "facts": [
+  {
+   "fact_type": "guidance",
+   "item": {
+    "driver_name": "net_sales",
+    "driver_state": "introduced",
+    "level_low": {"value": 6.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+    "level_high": {"value": 7.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+    "level_shape_hint": "range",
+    "level_unit": "percent_yoy",
+    "fiscal_year": 2026,
+    "time_type": "duration",
+    "company_confirmed": true
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}
+```

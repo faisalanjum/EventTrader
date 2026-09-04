@@ -24,6 +24,9 @@ R = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(R, "ledger"))
 import chrono_replay as CR
 import replay_caches
+# RUN AS A SCRIPT THIS MODULE IS `__main__`: a control that imports `mutations` to consult
+# the installed faults must find THIS instance, never a second copy with an empty registry
+sys.modules.setdefault("mutations", sys.modules[__name__])
 import replay_transcript as RT
 
 BENCH = "bench_1306/.claude/plans/Drivers/experiments/harness"
@@ -60,6 +63,31 @@ def case_wrong_tree(mutate):
     finally:
         CR._names_owner = saved
 
+
+def _path_clean(fn):
+    """A case whose product calls import lazily with the harness dir first (the product
+    check, the checkpoint verifier) leaves sys.path exactly as it found it: the fence
+    charges any other host change."""
+    def wrapped(mutate):
+        saved = list(sys.path)
+        try:
+            return fn(mutate)
+        finally:
+            sys.path[:] = saved
+    wrapped.__name__ = fn.__name__
+    return wrapped
+
+
+def _imp(name, *roots):
+    """Import `name` with `roots` first on sys.path FOR THE IMPORT ONLY: a case leaves the
+    host's path exactly as it found it (the fence charges what it does not)."""
+    import importlib
+    saved = list(sys.path)
+    sys.path[:0] = [r for r in roots if r not in sys.path]
+    try:
+        return importlib.import_module(name)
+    finally:
+        sys.path[:] = saved
 
 def case_wrong_cwd(mutate):
     """A relative name belongs to the `cd` that PRECEDES it, not to any other."""
@@ -582,8 +610,7 @@ def case_child_audit_crosses_the_boundary(mutate):
     because its child was invisible proves nothing about the package."""
     import subprocess
     import tempfile
-    sys.path.insert(0, R)
-    import run_resume_path as RRP
+    RRP = _imp("run_resume_path", R)
     d = tempfile.mkdtemp(prefix="childmut_", dir=os.path.join(R, "logs"))
     dep = os.path.join(d, "dep.json")
     io.open(dep, "w", encoding="utf-8").write("{}\n")
@@ -616,8 +643,7 @@ def case_package_manifest_compares_content(mutate):
     """
     import shutil
     import tempfile
-    sys.path.insert(0, R)
-    import freeze_package as FP
+    FP = _imp("freeze_package", R)
     stage = tempfile.mkdtemp(prefix="pkgmut_", dir=os.path.join(R, "logs"))
     saved_R, saved_entries = FP.R, FP.entries
     try:
@@ -745,7 +771,6 @@ def case_the_product_check_is_real(mutate):
     producer's side file is never consulted, so a real product reads as no change.
     """
     import contextlib
-    sys.path.insert(0, R)
     src = io.open(os.path.join(R, "branch_inventory.py"), encoding="utf-8").read()
     if mutate:
         src = FAULTS['the product check is real'].patched_source(src)
@@ -769,7 +794,6 @@ def case_a_wrong_product_is_rejected(mutate):
     not merely to exist.
     """
     import contextlib
-    sys.path.insert(0, R)
     src = io.open(os.path.join(R, "branch_inventory.py"), encoding="utf-8").read()
     if mutate:
         src = FAULTS['a wrong product is rejected'].patched_source(src)
@@ -801,7 +825,6 @@ def case_a_wrong_product_is_rejected(mutate):
 def _classify_audit(src_edit=None):
     """Run the REAL report on the live audit route, optionally with one edited rule."""
     import contextlib
-    sys.path.insert(0, R)
     src = io.open(os.path.join(R, "branch_inventory.py"), encoding="utf-8").read()
     if src_edit is not None:
         old, new_ = src_edit
@@ -838,8 +861,7 @@ def case_termination_precedes_execution(mutate):
 
 def case_absent_result_is_not_completed(mutate):
     """Local replay producing bytes may not credit a call history never answered."""
-    sys.path.insert(0, R)
-    import branch_inventory as BI
+    BI = _imp("branch_inventory", R)
     saved = BI.call_outcome
     if mutate:
         FAULTS['an absent result is not completed'].install()
@@ -851,15 +873,20 @@ def case_absent_result_is_not_completed(mutate):
         BI.call_outcome = saved
 
 
+#: THE BENCH OWNER PRE-LOADED, at declaration: case_bench_module_hidden proves a replayed
+#: import is served from its world even when the process holds the real kf_lint; the
+#: pre-load happens here, before any snapshot, so its 59 modules and the guidance
+#: environment key are the shared world, not growth charged to that case
+os.environ.setdefault("GUIDANCE_SCRIPTS_DIR", os.path.join(R, "bench", ".claude", "skills", "earnings-orchestrator", "scripts"))
+_imp("kf_lint", os.path.join(R, "bench", ".claude", "plans", "Drivers", "experiments", "harness"))
+
+
 def case_bench_module_hidden(mutate):
     """A replayed import is served from its world even when the process pre-loaded the bench owner."""
     import contextlib, io as _io, sys as _sys
     if mutate:
         FAULTS['a pre-loaded bench module answers a replayed import'].install()
-    bench_h = os.path.join(R, "bench", ".claude", "plans", "Drivers", "experiments", "harness")
-    _sys.path.insert(0, bench_h)
-    os.environ.setdefault("GUIDANCE_SCRIPTS_DIR", os.path.join(R, "bench", ".claude", "skills", "earnings-orchestrator", "scripts"))
-    import kf_lint                                             # noqa: F401 - pre-loaded on purpose
+    assert "kf_lint" in _sys.modules                        # pre-loaded when this case was declared (below)
     H = "/tmp/claude-1000/x/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness"
     side = {H + "/kf_lint.py": "def part_lookup(source_id, inputs_dir):\n    return {'ok': source_id}\n"}
     cmd = ("cd %s\npython3 - <<'PY'\nimport io\nimport kf_lint\n"
@@ -875,8 +902,7 @@ def case_bench_module_hidden(mutate):
 
 def case_unmapped_tmp_refuses(mutate):
     """An unmapped /tmp read is a temporary read, never covered."""
-    sys.path.insert(0, R)
-    import run_resume_path as RRP
+    RRP = _imp("run_resume_path", R)
     if mutate:
         FAULTS['an unmapped /tmp read is covered'].install()
     return (RRP.classify_read("/tmp/claude-1000/x/unmapped.json", set(), None) == "temporary"
@@ -886,20 +912,22 @@ def case_unmapped_tmp_refuses(mutate):
 def case_invalid_attempt_not_valid(mutate):
     """The owner's shape refusal keeps the two invalid attempt-1 replies invalid."""
     import contextlib, io as _io
-    sys.path.insert(0, os.path.join(R, "proofs"))
-    import accepted_evidence_census as AEC
+    AEC = _imp("accepted_evidence_census", os.path.join(R, "proofs"))
     if mutate:
         FAULTS['a schema-invalid attempt is counted as valid'].install()
-    with contextlib.redirect_stdout(_io.StringIO()):
-        rep = AEC.census(R)
+    saved_path = list(sys.path)                    # the census imports its owners with the harness dir on the path
+    try:
+        with contextlib.redirect_stdout(_io.StringIO()):
+            rep = AEC.census(R)
+    finally:
+        sys.path[:] = saved_path
     a = rep["accounting"]
     return a["schema_invalid_attempts"] == 2 and a["schema_valid_attempts"] == 36 and len(rep["lawful_attempt2_replacements"]) == 2
 
 
 def case_raw_prefilter_escaped_script(mutate):
     """The raw prefilter sees a script run whose quoted path carries the JSON escape."""
-    sys.path.insert(0, os.path.join(R, "ledger"))
-    import chrono_replay as CR
+    CR = _imp("chrono_replay", os.path.join(R, "ledger"))
     if mutate:
         FAULTS['the raw prefilter misses a JSON-escaped script path'].install()
     return bool(CR._RUNS_SCRIPT.search('{"command":"S=/tmp/x\\nPYTHONDONTWRITEBYTECODE=1 /v/bin/python -B \\"$S/harvest.py\\" 11 sid wf_1 1"}')) and not CR._RUNS_SCRIPT.search("python3 - <<'PY'")
@@ -938,8 +966,7 @@ def case_stdin_argv(mutate):
 
 def case_prefilter_reads_scripts(mutate):
     """The pre-filter admits a command whose executed script names the file."""
-    sys.path.insert(0, os.path.join(R, "ledger"))
-    import chrono_replay as CR
+    CR = _imp("chrono_replay", os.path.join(R, "ledger"))
     if mutate:
         FAULTS['the pre-filter never reads an executed script'].install()
     saved = CR._executed_script_texts
@@ -953,8 +980,7 @@ def case_prefilter_reads_scripts(mutate):
 
 def case_sed_after_cd(mutate):
     """A sed after a same-line cd names its file from where the shell stood."""
-    sys.path.insert(0, os.path.join(R, "ledger"))
-    import chrono_replay as CR
+    CR = _imp("chrono_replay", os.path.join(R, "ledger"))
     if mutate:
         FAULTS['a sed after a cd names its file from the record start'].install()
     cmd = "cd /tmp/claude-1000/x/scratchpad/step1_envelope/.claude/plans/Drivers/experiments && sed -i 's|old_guard|new_guard|' harness/test_harness_guards.py\n"
@@ -964,8 +990,7 @@ def case_sed_after_cd(mutate):
 
 def case_sed_in_place_route(mutate):
     """sed -i on a quoted file is a route of that file."""
-    sys.path.insert(0, os.path.join(R, "ledger"))
-    import chrono_replay as CR
+    CR = _imp("chrono_replay", os.path.join(R, "ledger"))
     if mutate:
         FAULTS['an in-place sed is not a route'].install()
     cmd = 'S=/tmp/claude-1000/x/scratchpad\nsed -i \'s#/scratchpad/invrev_run3#/scratchpad/invrev_run4#\' "$S/harvest.py"\n'
@@ -988,8 +1013,7 @@ def case_sed_file_token_unquoted(mutate):
 
 def case_join_write(mutate):
     """A write through os.path.join(literal directory, name) names that file."""
-    sys.path.insert(0, os.path.join(R, "ledger"))
-    import chrono_replay as CR
+    CR = _imp("chrono_replay", os.path.join(R, "ledger"))
     if mutate:
         FAULTS['a join-form write is not a write'].install()
     S = "/tmp/claude-1000/x/scratchpad"
@@ -1001,8 +1025,7 @@ def case_join_write(mutate):
 
 def case_argv_bound(mutate):
     """A write through os.path.join(sys.argv[1], name) names the file under the passed directory."""
-    sys.path.insert(0, os.path.join(R, "ledger"))
-    import chrono_replay as CR
+    CR = _imp("chrono_replay", os.path.join(R, "ledger"))
     if mutate:
         FAULTS["a program's argument is not bound"].install()
     S = "/tmp/claude-1000/x/scratchpad"
@@ -1073,8 +1096,7 @@ def case_exact_path_lookup(mutate):
 
 def case_bare_exception_class(mutate):
     """A saved traceback ending in a bare exception class is the same failure."""
-    sys.path.insert(0, R)
-    import branch_inventory as BI
+    BI = _imp("branch_inventory", R)
     saved = BI.call_outcome
     if mutate:
         FAULTS['a bare exception class never matches'].install()
@@ -1121,8 +1143,7 @@ def case_the_two_facts_do_not_collapse(mutate):
 def case_the_report_lists_every_call_state(mutate):
     """Every state must appear even when empty: a live zero only means something if the
     bucket exists at all."""
-    sys.path.insert(0, R)
-    import branch_inventory as BI
+    BI = _imp("branch_inventory", R)
     saved = BI.producer_report
     if mutate:
         FAULTS['the report lists every call state'].install()
@@ -1146,8 +1167,7 @@ def case_the_report_lists_every_call_state(mutate):
 def case_history_failure_is_not_completed(mutate):
     """A saved historical failure may not be credited as a completed call, however
     cleanly the local replay went through."""
-    sys.path.insert(0, R)
-    import branch_inventory as BI
+    BI = _imp("branch_inventory", R)
     saved = BI.call_outcome
     if mutate:
         FAULTS['a history failure is not completed'].install()
@@ -1179,8 +1199,7 @@ def case_finalization_requires_a_completed_call(mutate):
 def case_a_populated_call_state_line_is_not_omitted(mutate):
     """Removing a POPULATED producer line must be caught - the empty-key check alone
     cannot reveal the omission class."""
-    sys.path.insert(0, R)
-    import branch_inventory as BI
+    BI = _imp("branch_inventory", R)
     saved = BI.producer_report
     if mutate:
         FAULTS['a populated call-state line is not omitted'].install()
@@ -1195,8 +1214,7 @@ def case_a_populated_call_state_line_is_not_omitted(mutate):
 
 def case_a_missing_pin_is_not_treated_as_correct(mutate):
     """A present product with no pinned identity is `unpinned`, never `correct`."""
-    sys.path.insert(0, R)
-    import branch_inventory as BI
+    BI = _imp("branch_inventory", R)
     saved = BI.product_status
     if mutate:
         FAULTS['a missing pin is not correct'].install()
@@ -1666,9 +1684,11 @@ def case_empty_module_is_present(mutate):
         spec = f.find_spec("driver")
     except ModuleNotFoundError:
         return False
-    # a REGULAR package: its empty __init__.py is served, so the spec carries a loader;
-    # an "absent" __init__ falls to the namespace-package branch, whose loader is None
-    return spec is not None and bool(spec.submodule_search_locations) and spec.loader is not None
+    # a REGULAR package: its empty __init__.py is served, so the spec carries the source
+    # loader itself; an "absent" __init__ falls to the namespace-package branch, whose
+    # loader is the namespace subclass
+    return spec is not None and bool(spec.submodule_search_locations) \
+        and spec.loader.__class__ is RT._SiblingLoader
 
 
 def case_bare_name_needs_a_bare_owner(mutate):
@@ -1890,7 +1910,10 @@ def case_namespace_package_served(mutate):
     if spec is None:
         return False
     sub = f.find_spec("driver.relocation", path=spec.submodule_search_locations)
-    return sub is not None and sub.loader is None
+    # served as a NAMESPACE package: a search path and the namespace loader (it once had
+    # no loader at all, which is how it lingered in sys.modules after a replay)
+    return sub is not None and bool(sub.submodule_search_locations) \
+        and isinstance(sub.loader, RT._SiblingNamespace)
 
 
 CASES = [
@@ -1996,18 +2019,17 @@ CASES = [
     ("an era-less fallback may not fill a pre-series window",
      case_era_less_fallback_may_not_fill_a_pre_series_window),
     ("a tree sibling is not a producer", case_tree_sibling_is_not_a_producer),
-    ("the product check is real", case_the_product_check_is_real),
-    ("a wrong product is rejected", case_a_wrong_product_is_rejected),
-    ("termination precedes execution", case_termination_precedes_execution),
+    ("the product check is real", _path_clean(case_the_product_check_is_real)),
+    ("a wrong product is rejected", _path_clean(case_a_wrong_product_is_rejected)),
+    ("termination precedes execution", _path_clean(case_termination_precedes_execution)),
     ("an absent result is not completed", case_absent_result_is_not_completed),
-    ("the two facts do not collapse", case_the_two_facts_do_not_collapse),
+    ("the two facts do not collapse", _path_clean(case_the_two_facts_do_not_collapse)),
     ("the report lists every call state", case_the_report_lists_every_call_state),
     ("a history failure is not completed", case_history_failure_is_not_completed),
-    ("finalization requires a completed call",
-     case_finalization_requires_a_completed_call),
+    ("finalization requires a completed call", _path_clean(case_finalization_requires_a_completed_call)),
     ("a populated call-state line is not omitted",
      case_a_populated_call_state_line_is_not_omitted),
-    ("owner lists exclude producer rows", case_owner_lists_exclude_producer_rows),
+    ("owner lists exclude producer rows", _path_clean(case_owner_lists_exclude_producer_rows)),
     ("a missing pin is not correct", case_a_missing_pin_is_not_treated_as_correct),
 ]
 
@@ -2059,6 +2081,17 @@ def main():
 #: exhaustive credit audit. A second patch table is how the audit came to measure a
 #: different thing from the harness.
 FAULTS = {}
+#: the faults installed in THIS process. A control that runs a script in a subprocess
+#: consults it and runs a shadow copy carrying exactly these source edits, so the
+#: subprocess sees the same mutant an in-process control would (the strict census).
+INSTALLED = []
+
+
+def installed_edits(prefix):
+    return [(f.make.anchor, f.make.replacement) for f in INSTALLED
+            if f.module == prefix and hasattr(f.make, "anchor")]
+
+
 import time as _time_mod
 _real_time_sleep = _time_mod.sleep
 #: the stale era-less body the fallback fault serves; set by its control
@@ -2088,14 +2121,23 @@ class Fault(object):
             import verify_accepted_checkpoints
             import verify_signer_handoff
             import verify_fixed_inputs
-            sys.path.insert(0, os.path.join(R, "proofs"))
+            import copy_accepted_package
+            import verify_checkout
+            import write_publication_manifest
+            import project_historical_tree
+            import closure_trace
+            if os.path.join(R, "proofs") not in sys.path:
+                sys.path.insert(0, os.path.join(R, "proofs"))
             import census_rules
             import accepted_evidence_census
             Fault.ALIASES.update({"CR": CR, "RT": RT, "BI": branch_inventory,
                                   "FP": freeze_package, "RRP": run_resume_path,
                                   "RC": replay_caches, "VAC": verify_accepted_checkpoints,
                                   "VSH": verify_signer_handoff, "VFI": verify_fixed_inputs,
-                                  "CRU": census_rules, "AEC": accepted_evidence_census})
+                                  "CRU": census_rules, "AEC": accepted_evidence_census,
+                                  "CAP": copy_accepted_package, "VC": verify_checkout,
+                                  "WPM": write_publication_manifest, "PHT": project_historical_tree,
+                                  "CT": closure_trace})
         if self.module not in Fault.ALIASES:
             raise KeyError("no module registered for fault target prefix %r"
                            % self.module)
@@ -2103,26 +2145,32 @@ class Fault(object):
 
     @contextlib.contextmanager
     def applied(self, active=True):
-        CR.DISK_CACHE_WRITES = False        # no disk-cache write under any applied fault
-        owner = self._owner()
+        owner = self._owner()               # resolved BEFORE anything changes: a failed lookup leaves no trace
         saved = getattr(owner, self.attr)
-        if active:
-            setattr(owner, self.attr, self.make(saved))
+        prior = CR.DISK_CACHE_WRITES
+        CR.DISK_CACHE_WRITES = False        # no disk-cache write under any applied fault
         try:
+            if active:
+                setattr(owner, self.attr, self.make(saved))
+                INSTALLED.append(self)
             yield saved
         finally:
             setattr(owner, self.attr, saved)
-            CR.DISK_CACHE_WRITES = True          # writes resume once no fault is applied
+            if self in INSTALLED:
+                INSTALLED.remove(self)
+            CR.DISK_CACHE_WRITES = prior    # the EXACT prior value: an outer fault stays read-only
 
 
     def install(self):
         """Apply the fault to the live module and -> the original, for callers that
         already own a save/restore (every case control does)."""
-        # no disk-cache write may come from a mutant namespace (chrono_replay.DISK_CACHE_WRITES)
-        CR.DISK_CACHE_WRITES = False
         owner = self._owner()
         saved = getattr(owner, self.attr)
+        # no disk-cache write may come from a mutant namespace (chrono_replay.DISK_CACHE_WRITES);
+        # the flag turns only once the owner is resolved, and the caller's snapshot restores it
+        CR.DISK_CACHE_WRITES = False
         setattr(owner, self.attr, self.make(saved))
+        INSTALLED.append(self)
         return saved
 
     def source_edit(self):
@@ -2169,7 +2217,9 @@ def recompiled(module_path, anchor, replacement, symbol):
         # revert of the ONE targeted attribute left them there. Every attribute of the
         # live modules is put back exactly as it was before the exec.
         lives = {m: dict(vars(m)) for m in (RT, live) if m is not None}
+        host_path = list(sys.path)                 # a module body may insert into sys.path
         exec(compile(src.replace(anchor, replacement, 1), "<mutant>", "exec"), ns)
+        sys.path[:] = host_path                    # the exec leaves the host's path as it found it
         for m, was in lives.items():
             for k, v in was.items():
                 if vars(m).get(k, was) is not v:
@@ -2663,8 +2713,8 @@ fault('a background record is judged by its launch notice', "RT.background_outco
 
 fault('a dot-dot path is a different directory', "RT._replay",
       recompiled(os.path.join(R, 'ledger', 'replay_transcript.py'),
-                 '            return os.path.normpath(sp) if os.path.isabs(sp) else sp\n',
-                 '            return sp\n', '_replay'),
+                 '                return os.path.normpath(sp) if os.path.isabs(sp) else sp\n',
+                 '                return sp\n', '_replay'),
       note='the world is asked about `harness/../keys` verbatim; the suffix match never sees a `..`, so the directory reads as absent')
 
 
@@ -2683,8 +2733,8 @@ fault('import roots stay relative', "RT._root_dir",
 
 fault('a program stands in the census directory', "RT._replay",
       recompiled(os.path.join(R, 'ledger', 'replay_transcript.py'),
-                 '            return d if d and not _MACHINERY[0] else _real_getcwd()\n',
-                 '            return _real_getcwd()\n', '_replay'),
+                 '                return d if d and not _MACHINERY[0] else _real_getcwd()\n',
+                 '                return _real_getcwd()\n', '_replay'),
       note='os.getcwd() inside a replayed program answers with the live process directory, not where the record cd-ed')
 
 
@@ -3106,6 +3156,89 @@ def _outcome(run, catching):
         return ("RAISED", type(exc).__name__)
 
 
+#: WHERE A CONTROL'S TEMP DIRECTORY LIVES when the harness or the audit calls it: OUTSIDE
+#: the package (the read classifier and the sibling finder treat a package path as inside,
+#: and two controls prove the outside case) and OUTSIDE /tmp (the real path masks /tmp
+#: inside its namespace and would not see an export there) - a sibling of the package.
+TEMP_ROOT = os.path.join(os.path.dirname(R), "pt_harness")
+
+#: THE HOST THE REPLAY PATCHES. Its names are snapshotted with the owners and any
+#: change a case leaves behind is a HARNESS ERROR for that case, never repaired in
+#: silence: the arming leak surfaced only because thirteen later cases died of it.
+HOST_MODULES = ("io", "builtins", "os", "os.path", "time", "sys")
+
+
+def _contents(value):
+    """A copy of a mutable container's contents, or None. A shallow snapshot of bindings
+    saw the same list object after an in-place change, so sys.path, sys.meta_path and
+    sys.argv were neither charged nor restored (Codex SEQ 1563 item 1). Lists and sets are
+    compared and restored whole; a mapping by its EXISTING keys - a registry such as
+    sys.modules grows by import, and an added key is not a mutation of the world, while a
+    changed or removed one (the replay's subprocess stand-in) is."""
+    if isinstance(value, list):
+        return list(value)
+    if isinstance(value, set):
+        return set(value)
+    if isinstance(value, collections.abc.MutableMapping):
+        try:
+            return dict(value)
+        except Exception:                                      # noqa: BLE001 - not a plain mapping
+            return None
+    return None
+
+
+def _drift(key, value, contents):
+    """-> a short description of how `value`'s contents differ from the snapshot, or None."""
+    if contents is None:
+        return None
+    if isinstance(contents, dict):
+        # by EQUALITY, not identity: os.environ hands out a fresh str on every read; and
+        # ADDED keys count - a module imported or an environment key set inside a case
+        # is hidden state for every later case that shares the process (Codex SEQ 1564)
+        changed = [k for k, v in contents.items() if k not in value or value[k] != v]
+        added = [k for k in value if k not in contents]
+        if changed or added:
+            return "%s[%s]" % (key, ",".join([str(k) for k in changed[:3]] + ["+" + str(k) for k in added[:3]]))
+        return None
+    if isinstance(contents, set):
+        return "%s (contents)" % key if value != contents else None
+    return "%s (contents)" % key if list(value) != contents else None
+
+
+def fenced(fn):
+    """Run `fn` inside the host fence: -> (its result, what it left changed, by name). The
+    host is put back exactly either way - the same runner serves the harness's control and
+    mutant runs and the audit's base and fault runs, so no run is fenced differently."""
+    shot = _snapshot()
+    try:
+        result = fn()
+    finally:
+        leak = _leaked(shot)
+        _restore(shot)
+    return result, leak
+
+
+def _leaked(shot):
+    """-> the host names whose binding OR contents differ from the snapshot - a case that
+    leaves any is charged with the leak before the snapshot is restored."""
+    out = []
+    host = [(n, sys.modules[n]) for n in HOST_MODULES]     # by identity: os.path IS posixpath
+    for module, before in shot:
+        label = next((n for n, m in host if m is module), None)
+        if label is None:
+            continue
+        now = vars(module)
+        for k, (v, contents) in before.items():
+            if now.get(k, _MISSING) is not v:
+                out.append("%s.%s" % (label, k))
+                continue
+            d = _drift(k, v, contents)
+            if d:
+                out.append("%s.%s" % (label, d))
+        out += ["%s.%s" % (label, k) for k in now if k not in before]     # an attribute the case added
+    return out
+
+
 def _snapshot():
     """Every module attribute a case could swap, so nothing leaks into the next case.
 
@@ -3113,7 +3246,6 @@ def _snapshot():
     `CR._recovered` and restored only `_RECOVERED_DIR` left the mutated callable in
     place for every case after it.
     """
-    sys.path.insert(0, R)
     # DERIVED FROM THE REGISTRY, not listed. A module that can be MUTATED must be a
     # module that gets RESTORED, so the set to restore is exactly the set of owners
     # the declared faults name. A hand list is how `replay_caches` came to be mutable
@@ -3124,22 +3256,40 @@ def _snapshot():
         owner = f._owner()
         if owner not in mods:
             mods.append(owner)
-    return [(m, dict(vars(m))) for m in mods]
+    mods += [sys.modules[m] for m in HOST_MODULES]
+    return [(m, {k: (v, _contents(v)) for k, v in vars(m).items()}) for m in mods]
 
 
 def _restore(shot):
     for module, before in shot:
         now = vars(module)
-        for key, value in before.items():
+        for key, (value, contents) in before.items():
             if now.get(key, _MISSING) is not value:
                 setattr(module, key, value)
+            if contents is None:
+                continue
+            if isinstance(contents, dict):
+                for k2, v2 in contents.items():
+                    if k2 not in value or value[k2] != v2:
+                        value[k2] = v2
+                for k2 in [k for k in value if k not in contents]:
+                    del value[k2]                            # an added key is removed: the exact pre-state
+            elif isinstance(contents, set):
+                if value != contents:
+                    value.clear()
+                    value.update(contents)
+            elif list(value) != contents:
+                value[:] = contents
         for key in [k for k in list(now) if k not in before]:
             delattr(module, key)
-    CR.DISK_CACHE_WRITES = True
+    del INSTALLED[:]
+    # DISK_CACHE_WRITES is a chrono_replay attribute, so the loop above already put back
+    # the snapshot's exact value; forcing True here once re-enabled writes under an outer fault
 
 
 
 _MISSING = object()
+import collections.abc
 
 
 def _call(fn, mutate):
@@ -3168,12 +3318,12 @@ def _run():
     RT.result_ledger()
     rows, survived, errors = [], 0, 0
     for name, fn in CASES:
-        shot = _snapshot()
-        control, control_err = _call(fn, False)
-        _restore(shot)
-        shot = _snapshot()
-        mutant, mutant_err = _call(fn, True)
-        _restore(shot)
+        (control, control_err), leak = fenced(lambda: _call(fn, False))
+        if leak and control_err is None:
+            control_err = "HOST LEAK after the control: %s" % leak
+        (mutant, mutant_err), leak = fenced(lambda: _call(fn, True))
+        if leak and mutant_err is None:
+            mutant_err = "HOST LEAK after the mutant: %s" % leak
         error = control_err or mutant_err
         killed = bool(control) and mutant is False and error is None
         if error is not None:
@@ -3199,6 +3349,193 @@ def _run():
                 ("total", len(rows)), ("killed", len(rows) - survived),
                 ("survived", survived), ("cases", rows)]), indent=2) + "\n")
     return 1 if survived else 0
+
+
+
+
+# ------------------------------------------ Codex SEQ 1562: strict identity, one input
+# authority, executable checkpoints. Every fault is a one-anchor source edit on the owner.
+_CENSUS = os.path.join(R, "proofs", "accepted_evidence_census.py")
+_VFI = os.path.join(R, "verify_fixed_inputs.py")
+_CAP = os.path.join(R, "copy_accepted_package.py")
+_VC = os.path.join(R, "verify_checkout.py")
+_WPM = os.path.join(R, "write_publication_manifest.py")
+_PHT = os.path.join(R, "project_historical_tree.py")
+
+fault('the strict owner is never called', "AEC.strict", recompiled(_CENSUS,
+      '        bad = BIR._attempt_evidence(r, where, BIR.prompt_text(r["source_id"]), replies, session, seen)\n',
+      '        bad = []\n', 'strict'),
+      note='every saved attempt passes the strict identity without the owner reading a byte')
+fault('strict mode runs outside the projection', "AEC.strict", recompiled(_CENSUS,
+      '    if not (_tmpfs(sroot) and _tmpfs(rroot)):\n        return {"refused"',
+      '    if False:\n        return {"refused"', 'strict'),
+      note='the owner would read LIVE session records at the official paths')
+fault('rows of two sessions get a parent session', "AEC.official_roots", recompiled(_CENSUS,
+      '    if len(locs) != 1 or (None, None) in locs:\n', '    if (None, None) in locs:\n', 'official_roots'),
+      note='one of two sessions is silently taken as the parent')
+fault('an absent official directory is not refused', "AEC.official_roots", recompiled(_CENSUS,
+      '    if not (os.path.isdir(sroot) and os.path.isdir(rroot)):\n'
+      '        raise SystemExit("REFUSED: the official session directory %s does not exist; nothing is created" % session_dir)\n',
+      '    pass\n', 'official_roots'),
+      note='a foreign session is accepted as the parent')
+fault('a projected file need not hash to its mount authority', "AEC.project_official", recompiled(_CENSUS,
+      '            if len(data) != pin[0] or hashlib.sha256(data).hexdigest() != pin[1]:\n'
+      '                raise SystemExit("REFUSED: %s does not hash to its mount authority" % rel)\n',
+      '            pass\n', 'project_official'),
+      note='unpinned bytes are projected to an official path')
+fault("a pinned path need not be the row's official path", "AEC.project_official", recompiled(_CENSUS,
+      '            if hist != want:\n'
+      '                raise SystemExit("REFUSED: %s is pinned at %s, not at the row\'s official path %s" % (rel, hist, want))\n',
+      '            pass\n', 'project_official'),
+      note='a state is projected wherever its pin says, not where the row says')
+fault('schema validity counts any attempt, not the latest', "AEC.census", recompiled(_CENSUS,
+      '        if r["attempt"] >= latest.get(r["source_id"], (0,))[0]:\n',
+      '        if r["attempt"] <= latest.get(r["source_id"], (99,))[0]:\n', 'census'),
+      note="a source's FIRST attempt decides, so a lawfully retried source is counted invalid")
+fault('a resume input outside the projection passes', "VFI.projection_conflicts", recompiled(_VFI,
+      '    bad = []\n    for ln in io.open(os.path.join(root, "evidence", "RESUME_INPUTS.tsv"), encoding="utf-8").read().split("\\n")[1:]:\n',
+      '    return []\n    for ln in io.open(os.path.join(root, "evidence", "RESUME_INPUTS.tsv"), encoding="utf-8").read().split("\\n")[1:]:\n',
+      'projection_conflicts'),
+      note='the resume inputs are never compared with the projection')
+fault('fixed-input verification ignores projection conflicts', "VFI.failures", recompiled(_VFI,
+      '    bad += projection_conflicts(root)\n', '    pass\n', 'failures'),
+      note='a conflicting resume input verifies')
+fault('the copy drops the executable bit', "CAP.copy_file", recompiled(_CAP,
+      '    shutil.copymode(src, dst)\n', '    pass\n', 'copy_file'),
+      note='a runnable file arrives 644, as commit c89c6225 did')
+fault('an export with a lost executable bit passes', "VC.check_export", recompiled(_VC,
+      '        elif os.access(fp, os.X_OK) != (mode == "100755"):\n'
+      '            bad.append("executable bit differs from the manifest mode %s: %s" % (mode, path))\n',
+      '        elif False:\n            pass\n', 'check_export'),
+      note='the manifest mode is never compared with the checkout')
+fault('a non-executable script passes the export', "VC.check_export", recompiled(_VC,
+      '                if not os.access(fp, os.X_OK):\n                    bad.append("%s is not executable" % rel)\n',
+      '                pass\n', 'check_export'),
+      note='a shipped shell script may be unrunnable')
+fault('an unresolvable ./invocation passes the export', "VC.check_export", recompiled(_VC,
+      '                    if not (os.path.isfile(t) and os.access(t, os.X_OK)):\n'
+      '                        bad.append("%s runs ./%s, which is not an executable file in the checkout" % (rel, name))\n',
+      '                    pass\n', 'check_export'),
+      note='a script may invoke a file the checkout cannot run')
+fault('an unmanifested staged file passes the export', "VC.check_export", recompiled(_VC,
+      '            if rel != MANIFEST and rel not in rows:\n'
+      '                bad.append("%s is not in the publication manifest" % rel)\n',
+      '            pass\n', 'check_export'),
+      note='the checkout may carry files the publication manifest does not name')
+fault('a shipped ordered log need not hash to its pin', "VC.check_export", recompiled(_VC,
+      '                    if os.path.isfile(t) and _sha(t) != s:\n'
+      '                        bad.append("%s does not hash to ORDERED_LOG.sha256" % os.path.relpath(t, dest))\n',
+      '                    if False:\n                        pass\n', 'check_export'),
+      note='the ordered log may differ from the bytes the chain pinned')
+fault('the index keeps the mode git recorded', "WPM.stage_modes",
+      recompiled(_WPM,
+                 '            subprocess.run(["git", "-C", worktree, "update-index", "--chmod=" + ("+x" if want == "100755" else "-x"), path], check=True)\n',
+                 '            pass\n', 'stage_modes'),
+      note='under core.fileMode=false every staged script stays 100644 and a clean checkout cannot run it')
+fault('the publication manifest hashes the working file', "WPM.build", recompiled(_WPM,
+      '        data = subprocess.run(["git", "-C", worktree, "cat-file", "blob", blob], capture_output=True, check=True).stdout\n',
+      '        data = io.open(os.path.join(worktree, path), "rb").read()\n', 'build'),
+      note='the manifest describes the working tree, not what a commit would carry')
+fault("the projection omits the saved attempts' states", "PHT.state_paths", recompiled(_PHT,
+      '    fp = os.path.join(R, ATTEMPTS)\n    if os.path.isfile(fp):\n'
+      '        out.extend(a["state_path"] for a in json.load(io.open(fp, encoding="utf-8")))\n',
+      '    pass\n', 'state_paths'),
+      note='the strict proof reads states the projection never declared')
+
+
+def _test_case(fault_name, module_name, test_name):
+    """-> a case that runs ONE named control with the fault installed: the control passing
+    is the positive control; the control failing by its own assertion is the kill. Any
+    other exception is a harness error, never a credit."""
+    # WARMED AT ITS CAUSE: the control module is imported when the case is declared -
+    # before the first snapshot - so the import's modules are the world every case shares,
+    # never growth the fence would charge to whichever case happened to run first
+    T = _imp(module_name, os.path.join(R, "tests"))
+
+    def case(mutate):
+        import pathlib
+        import shutil
+        import tempfile
+        # THE PATH IS THE CASE'S TO RESTORE: the product code a control calls (the census
+        # imports its owners with the harness dir first) extends sys.path for its own
+        # imports; the case puts back exactly what it found, and the fence charges any
+        # other host change. The temp dir lives at TEMP_ROOT, outside the package and /tmp.
+        saved_path = list(sys.path)
+        os.makedirs(TEMP_ROOT, exist_ok=True)
+        tmp = tempfile.mkdtemp(prefix="case_", dir=TEMP_ROOT)
+        try:
+            if mutate:
+                FAULTS[fault_name].install()
+            fn = getattr(T, test_name)
+            names = fn.__code__.co_varnames[:fn.__code__.co_argcount]
+            with contextlib.redirect_stdout(io.StringIO()):
+                fn(*[pathlib.Path(tmp) for n in names if n == "tmp_path"])
+            return True
+        except AssertionError:
+            return False
+        finally:
+            sys.path[:] = saved_path
+            shutil.rmtree(tmp, ignore_errors=True)
+    case.__name__ = "case_" + "".join(c if c.isalnum() else "_" for c in fault_name)
+    return case
+
+
+fault('an arming failure leaves the host patched', "RT._replay",
+      recompiled(os.path.join(R, 'ledger', 'replay_transcript.py'),
+                 '        except BaseException:\n            _host.restore()\n            raise\n',
+                 '        except BaseException:\n            raise\n', '_replay'),
+      note='a replay that fails while arming leaves io.open, the os questions and subprocess patched for the whole process')
+
+@fault('a served namespace package lingers', 'RT._SiblingNamespace',
+       note='a namespace package the world served records nothing, so the per-program cleanup never removes it and it shadows the real one for the next import')
+def _m_namespace_lingers(saved):
+    class Silent(saved):
+        def exec_module(self, module):
+            pass
+    return Silent
+
+fault('the closure reader drops the traced files', "CT.load",
+      recompiled(os.path.join(R, 'closure_trace.py'),
+                 '            rel, b, s, src = ln.split("\\t")\n            out[rel] = (int(b), s, src)\n',
+                 '            rel, b, s, src = ln.split("\\t")\n            if src.startswith("projection"):\n                out[rel] = (int(b), s, src)\n', 'load'),
+      note='only the projection rows are staged: the harness code the real path imports is left untracked and a clean checkout cannot run')
+fault('the checkout is never executed', "VC.execute",
+      recompiled(os.path.join(R, 'verify_checkout.py'),
+                 '    pkg = os.path.join(dest, PACKAGE)\n    shutil.rmtree(os.path.join(pkg, "sibling_cache"), ignore_errors=True)\n    bad = []\n',
+                 '    return []\n    pkg = os.path.join(dest, PACKAGE)\n    shutil.rmtree(os.path.join(pkg, "sibling_cache"), ignore_errors=True)\n    bad = []\n', 'execute'),
+      note='the static checks pass and the real path is never run in the checkout, so a checkout that cannot run is accepted')
+
+fault('the internal manifest is never verified', "VC.check_export",
+      recompiled(os.path.join(R, 'verify_checkout.py'),
+                 '    bad += internal_manifest_defects(dest)\n    return bad\n',
+                 '    return bad\n', 'check_export'),
+      note="the checkout's own freeze_package.py --verify is never run, so a stale internal manifest ships")
+
+CASES.extend([(name, _test_case(name, mod, test)) for name, mod, test in [
+    ('the internal manifest is never verified', "test_clean_export_executes", "test_a_stale_internal_manifest_in_the_export_is_refused_and_a_fresh_one_verifies"),
+    ('the closure reader drops the traced files', "test_clean_export_executes", "test_the_closure_alone_executes_the_real_path_and_a_missing_file_refuses"),
+    ('the checkout is never executed', "test_clean_export_executes", "test_the_closure_alone_executes_the_real_path_and_a_missing_file_refuses"),
+    ('a served namespace package lingers', "test_module_imports", "test_a_namespace_package_the_world_served_does_not_linger"),
+    ('an arming failure leaves the host patched', "test_fault_isolation", "test_a_replay_whose_arming_fails_leaves_the_host_unpatched"),
+    ('the strict owner is never called', "test_strict_attempt_identity", "test_a_wrong_model_in_the_state_fails_for_its_own_reason"),
+    ('strict mode runs outside the projection', "test_strict_attempt_identity", "test_the_strict_proof_refuses_outside_the_projection"),
+    ('rows of two sessions get a parent session', "test_strict_attempt_identity", "test_rows_of_two_sessions_have_no_parent_session"),
+    ('an absent official directory is not refused', "test_strict_attempt_identity", "test_a_foreign_session_directory_is_never_created"),
+    ('a projected file need not hash to its mount authority', "test_strict_attempt_identity", "test_a_stale_pin_refuses_before_any_owner_call"),
+    ("a pinned path need not be the row's official path", "test_strict_attempt_identity", "test_a_pin_at_another_path_refuses"),
+    ('schema validity counts any attempt, not the latest', "test_accepted_evidence_fail_closed", "test_the_exact_accounting_on_the_package"),
+    ('a resume input outside the projection passes', "test_resume_input_authority", "test_a_resume_input_that_disagrees_with_the_projection_is_refused"),
+    ('fixed-input verification ignores projection conflicts', "test_resume_input_authority", "test_a_resume_input_that_disagrees_with_the_projection_is_refused"),
+    ('the copy drops the executable bit', "test_publication_checkout", "test_copy_file_preserves_the_executable_bit"),
+    ('an export with a lost executable bit passes', "test_publication_checkout", "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses"),
+    ('a non-executable script passes the export', "test_publication_checkout", "test_an_export_missing_the_executable_bit_is_refused"),
+    ('an unresolvable ./invocation passes the export', "test_publication_checkout", "test_an_export_missing_the_executable_bit_is_refused"),
+    ('an unmanifested staged file passes the export', "test_publication_checkout", "test_an_export_missing_the_executable_bit_is_refused"),
+    ('a shipped ordered log need not hash to its pin', "test_publication_checkout", "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses"),
+    ('the publication manifest hashes the working file', "test_publication_checkout", "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses"),
+    ('the index keeps the mode git recorded', "test_publication_checkout", "test_a_staged_index_exports_byte_exact_and_runnable_and_a_lost_mode_refuses"),
+    ("the projection omits the saved attempts' states", "test_resume_input_authority", "test_the_projection_carries_the_strict_proofs_38_states_and_38_transcripts"),
+]])
 
 
 if __name__ == "__main__":

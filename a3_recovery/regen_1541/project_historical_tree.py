@@ -61,11 +61,18 @@ def historical_roots():
     return ev, ev + "/runs/" + run_id
 
 
+ATTEMPTS = os.path.join(EXPERIMENTS, "invrev_run4", "attempts.json")
+
+
 def state_paths():
-    """-> the official workflow-state paths the receipts record, historical and absolute."""
+    """-> the official workflow-state paths the receipts record, plus the 38 saved
+    attempts' states the strict identity proof reads - historical and absolute."""
     out = []
     for r in _receipts():
         out.extend(r.get("states") or [])
+    fp = os.path.join(R, ATTEMPTS)
+    if os.path.isfile(fp):
+        out.extend(a["state_path"] for a in json.load(io.open(fp, encoding="utf-8")))
     return sorted(set(out))
 
 
@@ -92,6 +99,17 @@ def record_paths():
             if row.get("type") == "workflow_agent":
                 out.append(os.path.join(records_root(), st["runId"], "agent-%s.jsonl" % row["agentId"]))
     return sorted(set(out))
+
+
+def _authority_paths(rel_tsv):
+    """{package relpath: historical path} from a mount authority's own column."""
+    out = {}
+    base = os.path.dirname(rel_tsv)
+    for ln in io.open(os.path.join(R, rel_tsv), encoding="utf-8").read().split("\n")[1:]:
+        if ln.strip():
+            f, _b, _s, hist = ln.split("\t")[:4]
+            out[os.path.join(base, f)] = os.path.expanduser(hist)
+    return out
 
 
 def rows():
@@ -124,6 +142,13 @@ def rows():
         assert rel in manifested, "a record the states name is not manifested: %s" % rel
         fp = os.path.join(R, rel)
         out.append(("record", hist, rel, os.path.getsize(fp), _sha(fp)))
+    # ONE AUTHORITY FOR WHERE A STATE OR RECORD STOOD: the mount authority that pinned it
+    # at recovery must name the very path the receipts and the saved rows name
+    auth = _authority_paths(os.path.join("evidence", "workflow_states", "WORKFLOW_STATES.tsv"))
+    auth.update(_authority_paths(os.path.join("evidence", "subagent_records", "SUBAGENT_RECORDS.tsv")))
+    for ph, hist, rel, _b, _s in out:
+        if ph in ("state", "record"):
+            assert auth.get(rel) == hist, "%s is pinned at %s by its mount authority, not at %s" % (rel, auth.get(rel), hist)
     return sorted(out, key=lambda r: r[1])
 
 

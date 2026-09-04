@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted line 'Gift card adjustment, net(3) (9,396) - (9,396) -' is a non-GAAP reconciliation adjustment used only to bridge GAAP net income to adjusted (non-GAAP) net income. It is an accounting reconciliation construct, not a standalone driver (Rule 3.8: omit elimination/reconciliation artifacts, keep the affected real metric). The single netted figure also merges two distinct underlying causes (gift card breakage revenue and a gift card inventory write-down per footnote 3), and that breakdown sits outside this quote, so it cannot be lawfully split or attributed here without merging two meanings into one fact."
+    }
+  ],
+  "continuity_hints": []
+}
+```

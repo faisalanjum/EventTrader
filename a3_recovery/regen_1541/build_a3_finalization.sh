@@ -127,6 +127,7 @@ after = sha(kp)
 eprobs = list(ev.get("problems") or [])
 print("BOUNDARY owner %s unchanged=%s answers %d problems %d" % (before[:16], after == before, len(ev.get("answers") or {}), len(eprobs)))
 for p_ in eprobs[:5]: print("  BOUNDARY-PROBLEM", str(p_)[:160])
+os.makedirs(os.path.join(here, "reports"), exist_ok=True)      # a clean checkout stages no report
 io.open(os.path.join(here, "reports", "a3_evidence_boundary.json"), "w", encoding="utf-8").write(json.dumps({
     "owner": "build_kfields_key.py", "owner_sha256": before, "owner_unchanged_by_the_call": after == before,
     "callable": "a3_evidence", "answers": len(ev.get("answers") or {}), "problems": [str(x) for x in eprobs],

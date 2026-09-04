@@ -113,7 +113,7 @@ def manifested():
     have read as unmanifested and halted the chain on a stale list."""
     sys.path.insert(0, R)
     import freeze_package as FP
-    return {os.path.join(R, rel) for _kind, rel, _v in FP.entries()}
+    return {os.path.join(R, rel) for rel in FP.paths()}      # the walk alone: no byte is read to know the set
 
 
 def projection_inputs(argv):
@@ -199,6 +199,8 @@ def main(argv=None):
     # the receipts' historical paths under it, and the namespace masks the live session
     # records and the mailbox directory so every read there is a projected package byte
     sys.addaudithook(_hook)
+    for sub in ("logs", "reports"):                         # a clean checkout stages neither
+        os.makedirs(os.path.join(R, sub), exist_ok=True)
     unpatch = instrument_children(os.path.join(R, "logs", "child_audit.txt"))
     cwd = os.getcwd()
     os.chdir(HARNESS)

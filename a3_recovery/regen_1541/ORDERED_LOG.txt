@@ -1,0 +1,449 @@
+== 2026-09-04 03:05:45.887 HYGIENE: sibling_cache emptied, bytecode purged
+== 2026-09-04 03:05:46.790 DECISION INPUTS FROZEN: 2647 files
+== 2026-09-04 03:05:46.793 BEGIN 1 restore the replacement ledger from the exact surviving bytes, by identity
+assembled 2511 bytes sha256 22cd6305041ba19df1631c1eaa2d82174ccaf2c8d5af62aff0a33820bb56856e
+written bench/.claude/plans/Drivers/experiments/invrev_run4/transport_proof_replacements.json
+RESUME_INPUTS.tsv: ledger row written (10 rows)
+== 2026-09-04 03:05:48.415 END   rc=0
+== 2026-09-04 03:05:48.417 BEGIN 2 exact attempt/evidence accounting against its binding (owners decide parse and shape)
+attempt-evidence accounting: 41 paid calls = 38 saved attempt rows + 3 quarantined | 36 unique sources | 36 schema-valid + 2 schema-invalid attempts | 36 sources with a schema-valid latest attempt, 0 meaning-finalized answers at A3 (meaning is A4's) | chain mismatches 0 | 114 files bound | quarantine: 9 ledger-pinned + 3 metadata (1 distinct hash) | defects 0
+  schema-invalid: 0001171843-26-001288 attempt 1: 0001171843-26-001288: verdict 1 keys are not exactly the contract (extra ["'quote_check'"], missing [])
+  schema-invalid: DRI_2026-03-19T08.30 attempt 1: DRI_2026-03-19T08.30: exclusion 1 keys are not exactly the contract (extra ["'quote_context'"], missing [])
+== 2026-09-04 03:05:48.558 END   rc=0
+== 2026-09-04 03:05:48.560 BEGIN 3 focused controls, every test file (output-readers by marker later)
+........................................................................ [ 19%]
+........................................................................ [ 38%]
+........................................................................ [ 57%]
+........................................................................ [ 77%]
+........................................................................ [ 96%]
+.............                                                            [100%]
+373 passed, 8 deselected in 2234.39s (0:37:14)
+== 2026-09-04 03:43:04.036 END   rc=0
+== 2026-09-04 03:43:04.037 BEGIN 3b strict 38-row attempt identity, by the existing owner, inside the projection
+projected 76 official files from the package copies
+attempt-evidence accounting: 41 paid calls = 38 saved attempt rows + 3 quarantined | 36 unique sources | 36 schema-valid + 2 schema-invalid attempts | 36 sources with a schema-valid latest attempt, 0 meaning-finalized answers at A3 (meaning is A4's) | chain mismatches 0 | 114 files bound | quarantine: 9 ledger-pinned + 3 metadata (1 distinct hash) | defects 0
+  schema-invalid: 0001171843-26-001288 attempt 1: 0001171843-26-001288: verdict 1 keys are not exactly the contract (extra ["'quote_check'"], missing [])
+  schema-invalid: DRI_2026-03-19T08.30 attempt 1: DRI_2026-03-19T08.30: exclusion 1 keys are not exactly the contract (extra ["'quote_context'"], missing [])
+strict attempt identity: 38 rows by build_inventory_review._attempt_evidence | parent session 5ae9b86b-f0f6-4449-beee-9cac7cfa7200 | failures 0 | unique run 38 agent 38 transcript 38 raw 38 response 38 | retries 2 by build_inventory_review._retry_lawful, unlawful 0
+== 2026-09-04 03:43:04.353 END   rc=0
+== 2026-09-04 03:43:04.355 BEGIN 4 verify the accepted-checkpoint inventory
+  raw_transport.py         @32847  12d4aca9a7bfd9a5     75368 bytes  archive_CODEX_1557.md
+  audit_worker_access.py   @33828  9e4762e56c527d95     50510 bytes  archive_CODEX_1557.md
+  test_harness_guards.py   @23131  85a5b9e81e2b2904    274607 bytes  archive_CODEX_1557.md
+  test_harness_guards.py   @26760  c042371631a41f8a    377901 bytes  archive_CODEX_1557.md
+  test_harness_guards.py   @27085  466177daa366c87a    389925 bytes  archive_CODEX_1557.md
+  test_harness_guards.py   @31538  fa2242d5b960fe1e    397189 bytes  archive_CODEX_1557.md
+  test_harness_guards.py   @31764  155f747fcb342cf8    399032 bytes  archive_CODEX_1557.md
+  test_harness_guards.py   @34187  2e6fe2bad9f109f0    399719 bytes  archive_CODEX_1557.md
+INVENTORY OK: 8 accepted checkpoints, each verified against its evidence and its pinned acceptance archive
+== 2026-09-04 03:43:04.378 END   rc=0
+== 2026-09-04 03:43:04.379 BEGIN 4b verify the fixed decision inputs (transcript prefix, git store, mounts, resume inputs)
+FIXED INPUTS OK: transcript prefix, git store, workflow-state copies and resume inputs all hash to their authorities, and every resume input agrees with the projection
+== 2026-09-04 03:43:04.697 END   rc=0
+== 2026-09-04 03:43:04.698 BEGIN 5 verify the signer handoff
+  acceptance             6870 bytes  620c1db77b0be785
+  agent_meta               67 bytes  b0c0b840227c4003
+  agent_transcript      18230 bytes  d394d83dcdd1ef8e
+  producer_report        5539 bytes  7cf1fe778aeef34b
+  signer_evidence         927 bytes  1752fbab5e64dc25
+  signer_raw              520 bytes  722d35e6a42e7e9c
+  signer_reply            525 bytes  118332ba3ffb3498
+  workflow_state        14213 bytes  0743cdb4bfda1c4d
+SIGNER HANDOFF OK: completed workflow, three-row transcript, zero tool calls, terminal text == raw.bin. No retry is lawful.
+== 2026-09-04 03:43:04.719 END   rc=0
+== 2026-09-04 03:43:04.720 BEGIN 6 A3 primary receipt reconstructed from surviving evidence, no call
+run_id             kf-a3-one-item-196x2-serial-20260821T055948Z
+ledger_rows        36
+states_recorded    36
+unique_states      36
+allowed_calls      392
+unique_allowed     392
+invocations        36
+manifest_sha256    d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28
+max_output_tokens  128000
+quoted_not_derived []
+setting_read_from_rebuilt_builder 128000
+bytes              138988
+sha256             19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536
+pin                19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536
+pin_met            True
+== 2026-09-04 03:43:05.006 END   rc=0
+== 2026-09-04 03:43:05.007 BEGIN 6b A3 retry receipt reconstructed from surviving evidence, no call
+run_id           retry
+attempt          2
+states_recorded  1
+allowed_calls    1
+invocations      1
+parent           {"finalization_sha256": "92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7", "receipt_sha256": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536", "run_id": "kf-a3-one-item-196x2-serial-20260821T055948Z"}
+bytes            1873
+sha256           4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465
+pin              4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465
+pin_met          True
+== 2026-09-04 03:43:05.061 END   rc=0
+== 2026-09-04 03:43:05.063 BEGIN 7 package-backed projection table from the freeze's own walk
+projection: 147 input + 827 identity + 75 state + 431 record files, historical root /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments, states root /home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows, records root /home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows
+== 2026-09-04 03:43:06.263 END   rc=0
+== 2026-09-04 03:43:06.264 BEGIN 8 isolated: a1_finalize primary and retry, pinned a3_evidence boundary, real __main__ - traced, the closure derived
+PROJECTED 147 input files; defects before the run: 0
+ARMED ok=True problems=[] launchers=36
+PRIMARY PROBLEMS 1 ["('0000092380-26-000044#042', '0000092380-26-000044#042/L1')"]
+PRIMARY FINALIZATION 92e1872ce4e171e7 == package
+RETRY ARMED ok=True problems=[] launchers=1
+RETRY PROBLEMS 0 []
+RETRY FINALIZATION 15cb7a2dc8c53f0d == package
+GENERATED 823 files; not package-backed: 0 []
+BOUNDARY owner a289601b0bf52f22 unchanged=True answers 392 problems 0
+history: 168 shipped proposals, 36 events, problems ["0000006201-26-000031: shipped input bytes are not the manifest's", '0000006201-26-000031: ships 7 proposal rows, the manifest says 9', "0000006201-26-000032: shipped input bytes are not the manifest's", '0000006201-26-000032: ships 5 proposal rows, the manifest says 6', "0000063908-26-000032: shipped input bytes are not the manifest's", '0000063908-26-000032: ships 6 proposal rows, the manifest says 7', "0000092380-26-000044: shipped input bytes are not the manifest's", '0000092380-26-000044: ships 4 proposal rows, the manifest says 5', "0000764478-25-000057: shipped input bytes are not the manifest's", '0000764478-25-000057: ships 4 proposal rows, the manifest says 5', "0000898173-26-000006: shipped input bytes are not the manifest's", '0000898173-26-000006: ships 7 proposal rows, the manifest says 8', "0000940944-25-000038: shipped input bytes are not the manifest's", '0000940944-25-000038: ships 8 proposal rows, the manifest says 6', "0000940944-26-000005: shipped input bytes are not the manifest's", "0000940944-26-000009: shipped input bytes are not the manifest's", '0000940944-26-000009: ships 4 proposal rows, the manifest says 5', "0001041061-26-000003: shipped input bytes are not the manifest's", '0001041061-26-000003: ships 4 proposal rows, the manifest says 5', "0001041061-26-000084: shipped input bytes are not the manifest's", '0001041061-26-000084: ships 7 proposal rows, the manifest says 9', "0001104659-25-102611: shipped input bytes are not the manifest's", "0001104659-26-017090: shipped input bytes are not the manifest's", '0001104659-26-017090: ships 4 proposal rows, the manifest says 5', "0001104659-26-027061: shipped input bytes are not the manifest's", '0001104659-26-027061: ships 7 proposal rows, the manifest says 11', "0001104659-26-032757: shipped input bytes are not the manifest's", "0001171843-26-001288: shipped input bytes are not the manifest's", '0001171843-26-001288: ships 4 proposal rows, the manifest says 5', "BBY_2026-03-03T08.00: shipped input bytes are not the manifest's", 'BBY_2026-03-03T08.00: ships 4 proposal rows, the manifest says 6', "CMG_2026-02-03T16.30: shipped input bytes are not the manifest's", 'CMG_2026-02-03T16.30: ships 5 proposal rows, the manifest says 7', "DAL_2026-04-08T10.00: shipped input bytes are not the manifest's", "DRI_2026-03-19T08.30: shipped input bytes are not the manifest's", 'DRI_2026-03-19T08.30: ships 6 proposal rows, the manifest says 7', "MCD_2026-02-11T16.30: shipped input bytes are not the manifest's", 'MCD_2026-02-11T16.30: ships 8 proposal rows, the manifest says 11', "ULTA_2026-03-12T16.30: shipped input bytes are not the manifest's", 'ULTA_2026-03-12T16.30: ships 4 proposal rows, the manifest says 8', "YUM_2026-02-04T08.15: shipped input bytes are not the manifest's", 'YUM_2026-02-04T08.15: ships 4 proposal rows, the manifest says 6', "bzNews_50877032: shipped input bytes are not the manifest's", 'bzNews_50877032: ships 4 proposal rows, the manifest says 3', 'the package ships 168 proposal rows, its manifest records 196']
+history source gap: named 57a1cdd01125 found=True bound=frozen_package_inputs
+materialized: 196 records, problems none
+  reproduces the signed inventory: True
+lock: problems none
+A4 phase 1: 196 calls, ledger 3990 -> 4186
+A3: digest b266fc6866c7 problems none
+entry point : build_kfields_key.py::__main__
+result      : completed
+files opened: 2472 (child 69)
+into dirty main : 0 []
+unmanifested    : 0 []
+run artifacts   : 0 (the run under audit)
+declared search : 0 in ['/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments', '/home/faisal/.core827-orchestrator']
+temporary reads: 0 []
+subprocesses    : 2 audited, 0 unaudited
+CLEAN
+projection verify: 0 defects
+closure: 1557 files, 84525170 bytes (projection+projected-read 825, projection+read 655, traced-exec 1, traced-read 76); traced opens under the package 1557; outside the package and the interpreter: {'/home/faisal/.core827_backups': 2, '/tmp/claude-1000/-home-faisal-EventMarketDB': 8}
+== 2026-09-04 03:43:15.820 END   rc=0
+== 2026-09-04 03:43:15.822 BEGIN 9 every case mutation
+a pre-loaded bench module answers a replayed import control=True  mutant_caught=True  KILLED
+an unmapped /tmp read is covered             control=True  mutant_caught=True  KILLED
+a schema-invalid attempt is counted as valid control=True  mutant_caught=True  KILLED
+the raw prefilter misses a JSON-escaped script path control=True  mutant_caught=True  KILLED
+a cut-short program always loses its write   control=True  mutant_caught=True  KILLED
+a stdin program keeps the synthetic argv     control=True  mutant_caught=True  KILLED
+the pre-filter never reads an executed script control=True  mutant_caught=True  KILLED
+a sed after a cd names its file from the record start control=True  mutant_caught=True  KILLED
+an in-place sed is not a route               control=True  mutant_caught=True  KILLED
+the sed file token keeps its quotes          control=True  mutant_caught=True  KILLED
+a join-form write is not a write             control=True  mutant_caught=True  KILLED
+a program's argument is not bound            control=True  mutant_caught=True  KILLED
+a replayed program sleeps real time          control=True  mutant_caught=True  KILLED
+a stat miss on a mount is not recorded       control=True  mutant_caught=True  KILLED
+the seed-tree climb never stops at the root  control=True  mutant_caught=True  KILLED
+a lookup is answered by a suffix match       control=True  mutant_caught=True  KILLED
+a bare exception class never matches         control=True  mutant_caught=True  KILLED
+a -c program runs to the line's last quote   control=True  mutant_caught=True  KILLED
+the active owner text ignores the cutoff     control=True  mutant_caught=True  KILLED
+a seeded tree starts from the bare commit    control=True  mutant_caught=True  KILLED
+an append is not a write                     control=True  mutant_caught=True  KILLED
+a command without cd stood nowhere           control=True  mutant_caught=True  KILLED
+a re-entrant read ignores its cutoff         control=True  mutant_caught=True  KILLED
+a rejected tool call is replayed             control=True  mutant_caught=True  KILLED
+a -c line inside a heredoc body is a program control=True  mutant_caught=True  KILLED
+assignments on one line are not shell variables control=True  mutant_caught=True  KILLED
+a nested program evicts an outer import      control=True  mutant_caught=True  KILLED
+a record's own sibling write stays stale     control=True  mutant_caught=True  KILLED
+a background record is judged by its launch notice control=True  mutant_caught=True  KILLED
+a dot-dot path is a different directory      control=True  mutant_caught=True  KILLED
+an import root is where the command ended    control=True  mutant_caught=True  KILLED
+import roots stay relative                   control=True  mutant_caught=True  KILLED
+a program stands in the census directory     control=True  mutant_caught=True  KILLED
+a tree named through a variable has no origin control=True  mutant_caught=True  KILLED
+glob walks the live box                      control=True  mutant_caught=True  KILLED
+a namespace package is not served            control=True  mutant_caught=True  KILLED
+a filesystem question about the side table answers from the live box control=True  mutant_caught=True  KILLED
+a bare relative name matches any owner of that basename control=True  mutant_caught=True  KILLED
+an import only the live filesystem provides is served control=True  mutant_caught=True  KILLED
+a path outside the package counts as inside  control=True  mutant_caught=True  KILLED
+an executed script gets no arguments         control=True  mutant_caught=True  KILLED
+a bare filename matches the repository root copy control=True  mutant_caught=True  KILLED
+an empty module source is absence            control=True  mutant_caught=True  KILLED
+checkpoint tuple binds cutoff                control=True  mutant_caught=True  KILLED
+signer prompt bound in full                  control=True  mutant_caught=True  KILLED
+signer chain bound                           control=True  mutant_caught=True  KILLED
+after-state measured after open, not after read control=True  mutant_caught=True  KILLED
+a null in a required field is accepted       control=True  mutant_caught=True  KILLED
+a generic failure keyword stands in for the exact exception control=True  mutant_caught=True  KILLED
+the prefix digest is not compared            control=True  mutant_caught=True  KILLED
+the cache key ignores the input identity     control=True  mutant_caught=True  KILLED
+a failed resume is clean                     control=True  mutant_caught=True  KILLED
+the cache guard clears before refilling      control=True  mutant_caught=True  KILLED
+sibling write mode still truncates           control=True  mutant_caught=True  KILLED
+write mode still truncates                   control=True  mutant_caught=True  KILLED
+a missing product still fails closed         control=True  mutant_caught=True  KILLED
+owner append keeps its text                  control=True  mutant_caught=True  KILLED
+sibling append keeps its text                control=True  mutant_caught=True  KILLED
+the shim steps aside for its own reads       control=True  mutant_caught=True  KILLED
+a recovered body must match its digest       control=True  mutant_caught=True  KILLED
+resume agrees with the past route            control=True  mutant_caught=True  KILLED
+wrong tree                                   control=True  mutant_caught=True  KILLED
+wrong cwd for a relative name                control=True  mutant_caught=True  KILLED
+sed line insertion                           control=True  mutant_caught=True  KILLED
+grep-guarded sed is idempotent               control=True  mutant_caught=True  KILLED
+no final newline                             control=True  mutant_caught=True  KILLED
+backup and restore is net zero               control=True  mutant_caught=True  KILLED
+multi-file saved program                     control=True  mutant_caught=True  KILLED
+canonical-path alias cycle                   control=True  mutant_caught=True  KILLED
+a file's text is not a path                  control=True  mutant_caught=True  KILLED
+out-of-range line insert                     control=True  mutant_caught=True  KILLED
+empty-file line insert                       control=True  mutant_caught=True  KILLED
+per-line substitution                        control=True  mutant_caught=True  KILLED
+guard reads the named file                   control=True  mutant_caught=True  KILLED
+sed command order                            control=True  mutant_caught=True  KILLED
+.bak preserved for restore                   control=True  mutant_caught=True  KILLED
+shell termination                            control=True  mutant_caught=True  KILLED
+executed-script closure                      control=True  mutant_caught=True  KILLED
+path built inside the open call              control=True  mutant_caught=True  KILLED
+git show produces its redirect target        control=True  mutant_caught=True  KILLED
+absolute destination names its tree          control=True  mutant_caught=True  KILLED
+binary read yields bytes                     control=True  mutant_caught=True  KILLED
+result found by its tool_use_id              control=True  mutant_caught=True  KILLED
+a cd names the tree                          control=True  mutant_caught=True  KILLED
+text inside a program is not a write         control=True  mutant_caught=True  KILLED
+only owning processes run                    control=True  mutant_caught=True  KILLED
+termination decided first                    control=True  mutant_caught=True  KILLED
+script cached per cutoff                     control=True  mutant_caught=True  KILLED
+an empty result is present                   control=True  mutant_caught=True  KILLED
+ledger accounts for every row                control=True  mutant_caught=True  KILLED
+child audit crosses the boundary             control=True  mutant_caught=True  KILLED
+1 entries (1 files, 0 links)
+manifest sha256 ebcfad60428e38b9
+CHANGED a.py
+PACKAGE FAILS: 1 entries, 0 missing, 0 unmanifested, 1 changed
+1 entries (1 files, 0 links)
+manifest sha256 7ae9862e1418e7c8
+PACKAGE VERIFIES: 1 entries, 0 missing, 0 unmanifested, 0 changed
+package manifest compares content            control=True  mutant_caught=True  KILLED
+heredoc opening line continues               control=True  mutant_caught=True  KILLED
+a module import is served                    control=True  mutant_caught=True  KILLED
+an unknown module is not invented            control=True  mutant_caught=True  KILLED
+a recovered artefact has an era              control=True  mutant_caught=True  KILLED
+an era-less fallback may not fill a pre-series window control=True  mutant_caught=True  KILLED
+a tree sibling is not a producer             control=True  mutant_caught=True  KILLED
+the product check is real                    control=True  mutant_caught=True  KILLED
+a wrong product is rejected                  control=True  mutant_caught=True  KILLED
+termination precedes execution               control=True  mutant_caught=True  KILLED
+an absent result is not completed            control=True  mutant_caught=True  KILLED
+the two facts do not collapse                control=True  mutant_caught=True  KILLED
+the report lists every call state            control=True  mutant_caught=True  KILLED
+a history failure is not completed           control=True  mutant_caught=True  KILLED
+finalization requires a completed call       control=True  mutant_caught=True  KILLED
+a populated call-state line is not omitted   control=True  mutant_caught=True  KILLED
+owner lists exclude producer rows            control=True  mutant_caught=True  KILLED
+a missing pin is not correct                 control=True  mutant_caught=True  KILLED
+the internal manifest is never verified      control=True  mutant_caught=True  KILLED
+the closure reader drops the traced files    control=True  mutant_caught=True  KILLED
+the checkout is never executed               control=True  mutant_caught=True  KILLED
+a served namespace package lingers           control=True  mutant_caught=True  KILLED
+an arming failure leaves the host patched    control=True  mutant_caught=True  KILLED
+the strict owner is never called             control=True  mutant_caught=True  KILLED
+strict mode runs outside the projection      control=True  mutant_caught=True  KILLED
+rows of two sessions get a parent session    control=True  mutant_caught=True  KILLED
+an absent official directory is not refused  control=True  mutant_caught=True  KILLED
+a projected file need not hash to its mount authority control=True  mutant_caught=True  KILLED
+a pinned path need not be the row's official path control=True  mutant_caught=True  KILLED
+schema validity counts any attempt, not the latest control=True  mutant_caught=True  KILLED
+a resume input outside the projection passes control=True  mutant_caught=True  KILLED
+fixed-input verification ignores projection conflicts control=True  mutant_caught=True  KILLED
+the copy drops the executable bit            control=True  mutant_caught=True  KILLED
+an export with a lost executable bit passes  control=True  mutant_caught=True  KILLED
+a non-executable script passes the export    control=True  mutant_caught=True  KILLED
+an unresolvable ./invocation passes the export control=True  mutant_caught=True  KILLED
+an unmanifested staged file passes the export control=True  mutant_caught=True  KILLED
+a shipped ordered log need not hash to its pin control=True  mutant_caught=True  KILLED
+the publication manifest hashes the working file control=True  mutant_caught=True  KILLED
+the index keeps the mode git recorded        control=True  mutant_caught=True  KILLED
+the projection omits the saved attempts' states control=True  mutant_caught=True  KILLED
+0 harness errors
+132 of 132 mutations killed; 0 survived
+== 2026-09-04 03:45:40.441 END   rc=0
+== 2026-09-04 03:45:40.443 BEGIN 9b regenerated inventory
+raw_transport.py           {'applied': 41, 'producer-correct/completed': 1, 'faithfully-failed': 1}
+audit_worker_access.py     {'applied': 26, 'producer-correct/completed': 2}
+test_harness_guards.py     {'applied': 124, 'terminated': 1, 'faithfully-failed': 4, 'no-change': 2, 'producer-correct/completed': 4}
+branches: 159, untested none, without a mutation 0, control-only 13
+== 2026-09-04 03:58:44.425 END   rc=0
+== 2026-09-04 03:58:44.427 BEGIN 9c exhaustive exact-credit audit
+STRONG  tree qualification                       <- absolute destination names its
+STRONG  another tree's copy is not this owner    <- wrong tree
+STRONG  cd ordering                              <- wrong cwd for a relative name
+STRONG  checkpoint tuple                         <- checkpoint tuple binds cutoff
+STRONG  signer full prompt                       <- signer prompt bound in full
+STRONG  signer uuid chain                        <- signer chain bound
+STRONG  post-read measurement                    <- after-state measured after ope
+STRONG  required non-null                        <- a null in a required field is 
+STRONG  exact historical exception               <- a generic failure keyword stan
+STRONG  fixed prefix digest                      <- the prefix digest is not compa
+STRONG  cache key identity                       <- the cache key ignores the inpu
+STRONG  resume verdict                           <- a failed resume is clean
+STRONG  live-only import refused                 <- an import only the live filesy
+STRONG  outside the package                      <- a path outside the package cou
+STRONG  executed-script argv                     <- an executed script gets no arg
+STRONG  suffix needs a directory                 <- a bare filename matches the re
+STRONG  empty module is present                  <- an empty module source is abse
+STRONG  bare name needs a bare owner             <- a bare relative name matches a
+STRONG  filesystem questions from the world      <- a filesystem question about th
+STRONG  namespace packages served                <- a namespace package is not ser
+STRONG  directory iteration from the world       <- glob walks the live box
+STRONG  tree origin through a shell variable     <- a tree named through a variabl
+STRONG  import roots absolute in the world       <- import roots stay relative
+STRONG  a program's cwd is its record's          <- a program stands in the census
+STRONG  shell assignments separated by semicolon <- assignments on one line are no
+STRONG  a replayed import is served from its wor <- a pre-loaded bench module answ
+STRONG  an unmapped /tmp read is temporary, neve <- an unmapped /tmp read is cover
+STRONG  a schema-invalid attempt is paid evidenc <- a schema-invalid attempt is co
+STRONG  the raw prefilter sees a JSON-escaped sc <- the raw prefilter misses a JSO
+STRONG  a cut-short program keeps a write its re <- a cut-short program always los
+STRONG  a stdin program gets the arguments the s <- a stdin program keeps the synt
+STRONG  the pre-filter reads the scripts a comma <- the pre-filter never reads an 
+STRONG  a sed after a cd names its file from whe <- a sed after a cd names its fil
+STRONG  an in-place sed is a route of its file   <- an in-place sed is not a route
+STRONG  the sed file token is unquoted           <- the sed file token keeps its q
+STRONG  a join-form write names its file         <- a join-form write is not a wri
+STRONG  a program's argument binds its directory <- a program's argument is not bo
+STRONG  a replayed program does not sleep real t <- a replayed program sleeps real
+STRONG  a stat miss on a mount is recorded       <- a stat miss on a mount is not 
+STRONG  the seed-tree climb stops at the root    <- the seed-tree climb never stop
+STRONG  a lookup is answered by its exact path   <- a lookup is answered by a suff
+STRONG  a bare exception class is the same failu <- a bare exception class never m
+STRONG  a -c program ends at its matching quote  <- a -c program runs to the line'
+STRONG  the active owner's text honours the cuto <- the active owner text ignores 
+STRONG  a tree seeded from another tree's modifi <- a seeded tree starts from the 
+STRONG  an append selects its process            <- an append is not a write
+STRONG  a command starts in its record's directo <- a command without cd stood now
+STRONG  re-entrant reads honour their cutoff     <- a re-entrant read ignores its 
+STRONG  a rejected tool call did nothing         <- a rejected tool call is replay
+STRONG  a -c line inside a heredoc body is conte <- a -c line inside a heredoc bod
+STRONG  a nested program restores an outer impor <- a nested program evicts an out
+STRONG  a record's own sibling write is read bac <- a record's own sibling write s
+STRONG  background record judged by what history <- a background record is judged 
+STRONG  dot-dot paths resolve in the world       <- a dot-dot path is a different 
+STRONG  import root is where the program stood   <- an import root is where the co
+STRONG  sed line insert                          <- sed line insertion
+STRONG  grep-guarded sed                         <- grep-guarded sed is idempotent
+STRONG  no final newline                         <- no final newline
+STRONG  backup/restore                           <- backup and restore is net zero
+STRONG  multi-file program                       <- multi-file saved program
+STRONG  alias cycle                              <- canonical-path alias cycle
+STRONG  recovered digest                         <- a recovered body must match it
+CONTROL boundary owner                           a byte pin: these bytes are those bytes
+CONTROL era cutoff kind                          a byte comparison against surviving era blob
+CONTROL owner pins                               byte pins for the four A3 artefacts
+STRONG  shell termination                        <- shell termination
+STRONG  script closure                           <- executed-script closure
+STRONG  per-line substitution                    <- per-line substitution
+STRONG  command order                            <- sed command order
+STRONG  .bak preservation                        <- .bak preserved for restore
+STRONG  package manifest                         <- package manifest compares cont
+STRONG  a file's text is not a path              <- a file's text is not a path
+STRONG  out-of-range line insert                 <- out-of-range line insert
+STRONG  empty-file line insert                   <- empty-file line insert
+STRONG  grep guard reads the named file          <- guard reads the named file
+STRONG  only owning processes EXECUTE            <- only owning processes run
+STRONG  path built inside the open call          <- path built inside the open cal
+STRONG  git show producer                        <- git show produces its redirect
+STRONG  absolute destination names its tree      <- absolute destination names its
+STRONG  binary read yields bytes                 <- binary read yields bytes
+STRONG  result found by tool_use_id              <- result found by its tool_use_i
+STRONG  a cd names the tree                      <- a cd names the tree
+STRONG  text inside a program                    <- text inside a program is not a
+STRONG  process ownership                        <- text inside a program is not a
+STRONG  process selection                        <- text inside a program is not a
+STRONG  termination order                        <- termination decided first
+STRONG  script cached per cutoff                 <- script cached per cutoff
+STRONG  resume equals fresh                      <- resume agrees with the past ro
+STRONG  owner append                             <- owner append keeps its text
+STRONG  owner append cursor                      <- owner append keeps its text
+STRONG  sibling append                           <- sibling append keeps its text
+STRONG  cache fence restores exactly             <- the cache guard clears before 
+STRONG  owner write truncates                    <- write mode still truncates
+STRONG  sibling write truncates                  <- sibling write mode still trunc
+STRONG  shim self-interception                   <- the shim steps aside for its o
+STRONG  empty result is present                  <- an empty result is present
+STRONG  ledger accounts for every row            <- ledger accounts for every row
+STRONG  child audit                              <- child audit crosses the bounda
+STRONG  heredoc opening line continues           <- heredoc opening line continues
+STRONG  a module import is served                <- a module import is served
+STRONG  an unknown module still refuses          <- an unknown module is not inven
+STRONG  a recovered artefact has an era          <- a recovered artefact has an er
+STRONG  a tree sibling is not a producer         <- a tree sibling is not a produc
+STRONG  the producer's product is inspected      <- the product check is real
+STRONG  a missing product fails closed           <- a missing product still fails 
+STRONG  a wrong product fails closed             <- a wrong product is rejected
+STRONG  producer termination precedes execution  <- termination precedes execution
+STRONG  a producer with no result is not credite <- an absent result is not comple
+STRONG  a truly outstanding call is not credited <- an absent result is not comple
+STRONG  the report lists every producer call sta <- the report lists every call st
+STRONG  product status and call outcome do not c <- the two facts do not collapse
+STRONG  a faithfully failed call keeps both fact <- the two facts do not collapse
+STRONG  a refused call keeps both facts          <- the two facts do not collapse
+STRONG  a history failure is not completed       <- a history failure is not compl
+STRONG  finalization requires a completed call   <- finalization requires a comple
+STRONG  a correct product refused never finalize <- finalization requires a comple
+STRONG  a correct product outstanding never fina <- finalization requires a comple
+STRONG  a correct product with no result never f <- finalization requires a comple
+STRONG  a missing pin reports unpinned           <- a missing pin is not correct
+STRONG  each non-completed state is listed exact <- a populated call-state line is
+STRONG  owner lists exclude producer rows        <- owner lists exclude producer r
+STRONG  the report carries every required state  <- the report lists every call st
+STRONG  a product before a failure keeps both fa <- the product check is real
+STRONG  three disputed records write this owner  <- text inside a program is not a
+STRONG  pre-series window is empty               <- an era-less fallback may not f
+STRONG  producer boundary is exact               <- a recovered artefact has an er
+STRONG  strict identity by the one existing owne <- the strict owner is never call
+STRONG  strict identity only inside the projecti <- strict mode runs outside the p
+STRONG  one official parent session              <- rows of two sessions get a par
+STRONG  an absent official directory refuses, no <- an absent official directory i
+STRONG  projected bytes hash to the mount author <- a projected file need not hash
+STRONG  a pin's path is the row's official path  <- a pinned path need not be the 
+STRONG  schema validity is the latest attempt's  <- schema validity counts any att
+STRONG  every resume input is a projection row   <- a resume input outside the pro
+STRONG  fixed inputs carry projection conflicts  <- fixed-input verification ignor
+STRONG  the projection carries the strict proof' <- the projection omits the saved
+STRONG  the copy keeps the executable bit        <- the copy drops the executable 
+STRONG  checkout mode equals the manifest mode   <- an export with a lost executab
+STRONG  every shipped script is executable       <- a non-executable script passes
+STRONG  every ./invocation resolves in the check <- an unresolvable ./invocation p
+STRONG  every checked-out file is in the publica <- an unmanifested staged file pa
+STRONG  the shipped ordered log hashes to its pi <- a shipped ordered log need not
+STRONG  the publication manifest describes the i <- the publication manifest hashe
+STRONG  the index takes the working file's mode  <- the index keeps the mode git r
+CONTROL fault flag restored exactly under nestin a harness-isolation control on the fault app
+CONTROL fault setup failure leaves no trace      a harness-isolation control on the fault app
+CONTROL restore keeps the snapshot's flag        a harness-isolation control on the snapshot/
+CONTROL the pre-import control leaves no trace   a control's own cleanup, proven by a second 
+STRONG  arming failure restores the host         <- an arming failure leaves the h
+CONTROL a host leak is charged to its case       a harness-isolation control on the fence its
+STRONG  a served namespace package does not ling <- a served namespace package lin
+CONTROL repeated snapshot/restore does not grow  a harness-isolation control on the snapshot/
+CONTROL in-place host mutations are charged and  a harness-isolation control on the fence its
+CONTROL a replaced registry entry is charged and a harness-isolation control on the fence its
+STRONG  the staged closure carries the traced co <- the closure reader drops the t
+STRONG  the checkout executes the real path      <- the checkout is never executed
+CONTROL added host state is charged and removed  a harness-isolation control on the fence its
+CONTROL one fenced runner for harness and audit  a harness-isolation control on the fenced ru
+STRONG  the checkout verifies its own internal m <- the internal manifest is never
+
+rows 159 | STRONG 146 | CONTROL 13 | FALSE 0 | ERROR 0
+STATE DRIFT across the whole audit: 0 []
+ACCEPTABLE
+== 2026-09-04 04:04:02.961 END   rc=0
+== 2026-09-04 04:04:02.961 BEGIN 10 purge generated bytecode
+== 2026-09-04 04:04:02.970 END   rc=0
+== 2026-09-04 04:04:02.971 BEGIN 11 freeze once, all package-content reports final
+7340 entries (7340 files, 0 links)
+manifest sha256 b1efdda1b53b0053
+== 2026-09-04 04:04:03.410 END   rc=0
+== 2026-09-04 04:04:03.412 BEGIN 12 full affected suite
+........................................................................ [ 18%]
+........................................................................ [ 37%]
+........................................................................ [ 56%]
+........................................................................ [ 75%]
+........................................................................ [ 94%]
+.....................                                                    [100%]
+381 passed in 113.39s (0:01:53)
+== 2026-09-04 04:05:57.450 END   rc=0
+== 2026-09-04 04:05:57.451 BEGIN 13 package verification, no rewrite
+PACKAGE VERIFIES: 7340 entries, 0 missing, 0 unmanifested, 0 changed
+== 2026-09-04 04:05:57.889 END   rc=0
+== 2026-09-04 04:05:58.806 DECISION INPUTS UNCHANGED THROUGHOUT: 2647 files
+ORDERED RUN COMPLETE
