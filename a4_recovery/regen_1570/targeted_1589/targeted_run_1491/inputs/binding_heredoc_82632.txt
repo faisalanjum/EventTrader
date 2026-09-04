@@ -1,0 +1,182 @@
+S=/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad
+H=$S/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+/home/faisal/EventMarketDB/venv/bin/python3 - <<'PYEOF'
+import io
+H = "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3"
+S = "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad"
+def patch(name, pairs):
+    p = "%s/%s" % (H, name); t = io.open(p, encoding="utf-8").read()
+    for old, new in pairs:
+        assert t.count(old) == 1, (name, t.count(old), old[:60]); t = t.replace(old, new)
+    io.open(p, "w", encoding="utf-8").write(t); print("patched", name)
+# ------------------------------------------------------------ T: the binding + proved_spend over it
+patch("build_kfields_key_targeted.py", [
+('''#: the correction receipt that derived the corrected inventory from the
+#: reviewed source receipt; it carries that receipt's file hash and digest''',
+'''#: THE IMMUTABLE TARGETED EVIDENCE BINDING (Codex SEQ 1493), beside the
+#: targeted pointer: the accepted receipt / finalization / raw-tree identities
+#: of the finalized run's primary and its one child, written once. It decides
+#: which attempts exist and what their bytes are; nothing stored inside the
+#: run decides that.
+BINDING = os.path.join(K.EVIDENCE, "targeted_binding.json")
+BINDING_SCHEMA = "a4-targeted-evidence-binding/1"
+#: the correction receipt that derived the corrected inventory from the
+#: reviewed source receipt; it carries that receipt's file hash and digest'''),
+('''def proved_spend(run_dir):
+    """READ-ONLY (Codex SEQ 1492 item A). The calls a FINALIZED targeted run
+    actually spent, re-proved through this lifecycle's own context and
+    checks: the receipt is the owner's, the finalization binds that receipt
+    and closed clean, every official state proves through the shared audit,
+    and every raw and proved file holds exactly the official text. The
+    primary and its one lawful child are each a row; nothing is trusted from
+    a stored total. Any missing, foreign or tampered byte refuses the WHOLE
+    spend. -> [{run_dir, attempt, receipt_sha256, finalization_sha256, calls}]"""
+    ctx = _ctx()
+    rows, parent = [], None
+    for base, attempt in ((run_dir, 1),
+                          (os.path.join(run_dir, "retry"), K.MAX_ATTEMPTS)):
+        if attempt != 1 and not (parent or {}).get("retry"):
+            break                                  # no child was owed
+        rec_path = os.path.join(base, K.RECEIPT_NAME)
+        fin_path = os.path.join(base, K.FINALIZATION_NAME)
+        for p in (rec_path, fin_path):
+            if not os.path.isfile(p):
+                raise ValueError("%s: missing %s" % (base, os.path.basename(p)))
+        rec, fin = _load(rec_path), _load(fin_path)
+        bad = list(K._receipt_problems(base, rec, ctx))''',
+'''def _measured_attempt(base, attempt):
+    """The exact identity of one finalized attempt directory, measured."""
+    raw = os.path.join(base, "raw")
+    return collections.OrderedDict([
+        ("attempt", attempt), ("dir", base),
+        ("receipt_sha256", INV.sha_file(os.path.join(base, K.RECEIPT_NAME))),
+        ("finalization_sha256", INV.sha_file(
+            os.path.join(base, K.FINALIZATION_NAME))),
+        ("raw_files", collections.OrderedDict(
+            (f, INV.sha_file(os.path.join(raw, f)))
+            for f in sorted(os.listdir(raw))))])
+
+
+def write_binding(run_dir):
+    """Freeze the accepted run ONCE: its primary and, when present, its one
+    child, each by receipt, finalization and every raw-tree file. Write-once
+    through the transport's owner; never rewritten."""
+    run_dir = os.path.abspath(run_dir)
+    attempts = [_measured_attempt(run_dir, 1)]
+    child = os.path.join(run_dir, "retry")
+    if os.path.isdir(child):
+        attempts.append(_measured_attempt(child, K.MAX_ATTEMPTS))
+    doc = collections.OrderedDict([("schema", BINDING_SCHEMA),
+                                   ("run_dir", run_dir),
+                                   ("attempts", attempts)])
+    RT.write_new(BINDING, json.dumps(doc, indent=1))
+    return doc
+
+
+def proved_spend(run_dir):
+    """READ-ONLY (Codex SEQ 1492 item A, bound at SEQ 1493). The calls the
+    FINALIZED targeted run actually spent, re-proved through this lifecycle's
+    own context and checks. The immutable binding decides WHICH attempts
+    exist and what their receipt, finalization and raw-tree bytes ARE; then
+    the receipt is re-proved through the shared owner, the finalization must
+    bind that receipt and have closed clean, every official state proves
+    through the shared audit, and every raw and proved file holds exactly the
+    official text. Nothing stored inside the run decides anything. Any
+    missing, foreign, unexpected or tampered byte refuses the WHOLE spend.
+    -> [{run_dir, attempt, receipt_sha256, finalization_sha256, calls}]"""
+    ctx = _ctx()
+    binding = _load(BINDING)
+    if binding.get("schema") != BINDING_SCHEMA or \\
+            binding.get("run_dir") != os.path.abspath(run_dir):
+        raise ValueError("%s is not the bound targeted run %s"
+                         % (run_dir, binding.get("run_dir")))
+    bound = {a["attempt"]: a for a in binding["attempts"]}
+    present = [1] + ([K.MAX_ATTEMPTS] if os.path.isdir(
+        os.path.join(run_dir, "retry")) else [])
+    if sorted(bound) != present:
+        raise ValueError("%s carries attempts %s; the binding owns %s"
+                         % (run_dir, present, sorted(bound)))
+    rows = []
+    for attempt in sorted(bound):
+        base = bound[attempt]["dir"]
+        rec_path = os.path.join(base, K.RECEIPT_NAME)
+        fin_path = os.path.join(base, K.FINALIZATION_NAME)
+        for p in (rec_path, fin_path):
+            if not os.path.isfile(p):
+                raise ValueError("%s: missing %s" % (base, os.path.basename(p)))
+        if _measured_attempt(base, attempt) != bound[attempt]:
+            raise ValueError("%s: the receipt, finalization or raw tree is not "
+                             "the bound identity" % base)
+        rec, fin = _load(rec_path), _load(fin_path)
+        bad = list(K._receipt_problems(base, rec, ctx))'''),
+('''        rows.append(collections.OrderedDict([
+            ("run_dir", base), ("attempt", attempt),
+            ("receipt_sha256", INV.sha_file(rec_path)),
+            ("finalization_sha256", INV.sha_file(fin_path)),
+            ("calls", len(states))]))
+        parent = fin
+    return rows''',
+'''        rows.append(collections.OrderedDict([
+            ("run_dir", base), ("attempt", attempt),
+            ("receipt_sha256", INV.sha_file(rec_path)),
+            ("finalization_sha256", INV.sha_file(fin_path)),
+            ("calls", len(states))]))
+    return rows'''),
+])
+# ------------------------------------------------------------ HRT: provenance from the ONE binding
+patch("build_kfields_hard_review_targeted.py", [
+('''PKG_DIR = os.path.join(K._X, "kfields_key_a4", "hard_review_targeted_1492")
+#: the current derived budget receipt this stage's numbers are bound to
+BUDGET_RECEIPT = "/tmp/a7_budget_receipt_1492.json"
+#: the targeted key-review run whose settlements this review is independent of;
+#: pinned as provenance through the evidence pointer, never shown to a call
+TARGETED_POINTER = os.path.join(K.EVIDENCE, "targeted_dir.txt")''',
+'''PKG_DIR = os.path.join(K._X, "kfields_key_a4", "hard_review_targeted_1493")
+#: the current derived budget receipt this stage's numbers are bound to
+BUDGET_RECEIPT = "/tmp/a7_budget_receipt_1493.json"'''),
+('''def _targeted_run():
+    run = io.open(TARGETED_POINTER, encoding="utf-8").read().strip()
+    row = collections.OrderedDict([
+        ("run_dir", run),
+        ("receipt_sha256", INV.sha_file(os.path.join(run, K.RECEIPT_NAME))),
+        ("finalization_sha256", INV.sha_file(
+            os.path.join(run, K.FINALIZATION_NAME)))])
+    child = os.path.join(run, "retry", K.FINALIZATION_NAME)
+    if os.path.isfile(child):
+        row["retry_finalization_sha256"] = INV.sha_file(child)
+    return row
+''',
+'''def _targeted_run():
+    """The targeted key-review run this review is independent of, as
+    provenance: THE one immutable binding, by path and hash (Codex SEQ 1493);
+    its identities are never copied here, and never shown to a call."""
+    return collections.OrderedDict([
+        ("binding_path", T.BINDING),
+        ("binding_sha256", INV.sha_file(T.BINDING)),
+        ("run_dir", _load(T.BINDING)["run_dir"])])
+'''),
+('''        ("targeted_run", _targeted_run())])''', '''        ("targeted_binding", _targeted_run())])'''),
+])
+# ------------------------------------------------------------ budget receipt 1493 from the binding
+t = io.open(S + "/budget_receipt_1492.py").read()
+t = t.replace('OUT = "/tmp/a7_budget_receipt_1492.json"', 'OUT = "/tmp/a7_budget_receipt_1493.json"')
+t = t.replace('("actual", sum(r["calls"] for r in rows if r["stage"].startswith("targeted_key_review"))), ("run_dir", [r["run_dir"] for r in rows if r["stage"] == "targeted_key_review_primary"][0]),',
+              '("actual", sum(r["calls"] for r in rows if r["stage"].startswith("targeted_key_review"))), ("run_dir", [r["run_dir"] for r in rows if r["stage"] == "targeted_key_review_primary"][0]),\n        ("binding_path", T.BINDING), ("binding_sha256", sha(T.BINDING)),')
+t = t.replace('("schema", "a7_call_budget_receipt/1492"),', '("schema", "a7_call_budget_receipt/1493"),')
+assert t.count("binding_sha256") == 1 and "1493" in t
+io.open(S + "/budget_receipt_1493.py", "w").write(t); print("budget_receipt_1493.py written")
+PYEOF
+cd $H && /home/faisal/EventMarketDB/venv/bin/python3 -B - <<'PYEOF' 2>&1 | grep -v WARNING | tail -6
+import sys, os, json, hashlib
+sys.path.insert(0, os.getcwd()); sys.path.insert(0, "/home/faisal/EventMarketDB")
+import build_kfields_key_targeted as T
+print("binding exists before:", os.path.exists(T.BINDING))
+doc = T.write_binding("/tmp/a4_targeted_run_1491")
+print("binding written:", T.BINDING, hashlib.sha256(open(T.BINDING, "rb").read()).hexdigest())
+print("bound:", [(a["attempt"], a["dir"], a["receipt_sha256"][:12], a["finalization_sha256"][:12], len(a["raw_files"])) for a in doc["attempts"]])
+print("proved_spend:", [(r["attempt"], r["calls"]) for r in T.proved_spend("/tmp/a4_targeted_run_1491")])
+PYEOF
+/home/faisal/EventMarketDB/venv/bin/python3 -B $S/budget_receipt_1493.py 2>&1 | grep -v "^WARNING" | tail -2; sha256sum /tmp/a7_budget_receipt_1493.json | cut -c1-16
+cd $H && /home/faisal/EventMarketDB/venv/bin/python3 -B -c "
+import sys, os; sys.path.insert(0, os.getcwd()); sys.path.insert(0, '/home/faisal/EventMarketDB')
+import build_kfields_hard_review_targeted as HRT; d = HRT.build(HRT.PKG_DIR); print('package', HRT.PKG_DIR.split('/')[-1], d['manifest_sha256']); print('budget', d['budget']['before'], d['budget']['after_primaries'], d['budget']['worst_case_after'], d['budget']['global_ceiling'], '| counts', d['counts']['tasks'], d['counts']['primary_calls']); print('derived_from.targeted_binding', d['derived_from']['targeted_binding']); print('package_problems', HRT.package_problems(HRT.PKG_DIR))" 2>&1 | grep -v WARNING | tail -4

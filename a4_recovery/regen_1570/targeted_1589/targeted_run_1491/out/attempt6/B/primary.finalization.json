@@ -1,0 +1,96 @@
+{
+ "door": "a4_phase1_one_item_key",
+ "attempt": 1,
+ "run_id": "a4_targeted_run_1491",
+ "receipt_sha256": "a1f287a7f3bc9dc3f71a1c11fbc2a75254027a9cbd5af5a03d492b0f5dcf49a9",
+ "rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "a3_binding": {
+  "retry_receipt": "4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465",
+  "retry_finalization": "15cb7a2dc8c53f0d9ec093e34b816ff88f5ca678196c1896b32494a13a1f72b2",
+  "primary_receipt": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+  "primary_finalization": "92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7"
+ },
+ "harvested_raw": [
+  "wf_1b219d0e-f6f.000.raw.json",
+  "wf_4d457126-2c2.000.raw.json",
+  "wf_18711197-8f3.000.raw.json",
+  "wf_6190a18b-6dc.000.raw.json",
+  "wf_151dc0d0-21b.000.raw.json",
+  "wf_b2e9766c-4b3.000.raw.json",
+  "wf_816056b1-7d0.000.raw.json",
+  "wf_9b565634-84f.000.raw.json",
+  "wf_d5a9c34a-271.000.raw.json",
+  "wf_f9443ff9-759.000.raw.json",
+  "wf_ff9f0be4-1c4.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "0000006201-26-000031#001",
+   "valid",
+   ""
+  ],
+  [
+   "0000006201-26-000031#006",
+   "valid",
+   ""
+  ],
+  [
+   "0000006201-26-000031#008",
+   "valid",
+   ""
+  ],
+  [
+   "0000027904-26-000022#029",
+   "valid",
+   ""
+  ],
+  [
+   "0000092380-26-000044#042",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-26-000005#065",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-26-000009#068",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-26-000009#072",
+   "invalid_response",
+   "0000940944-26-000009#072/L1: exact_match says False; this draft states the settled reply"
+  ],
+  [
+   "0001041061-25-000109#075",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-26-027061#115",
+   "valid",
+   ""
+  ],
+  [
+   "0001171843-26-001288#133",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 11,
+  "valid": 10,
+  "invalid_response": 1,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "retry": [
+  "0000940944-26-000009#072"
+ ]
+}

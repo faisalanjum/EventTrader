@@ -1,0 +1,37 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#072",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "This is a real, non-boilerplate reported figure (Rule 1.1), but it cannot be lawfully resolved into one fact: the label 'Impairments and (gain) loss on disposal of assets, net' bundles two independent causes — an asset-impairment write-down and a gain/loss on disposal of assets — that this same filing elsewhere attributes to different, oppositely-signed events (the impairment tied to closing ~14 Bahama Breeze restaurants vs. the gain on the Olive Garden Canada sale). Rule 3.1 requires naming only the cause and Rule 3.2 requires splitting independent causes into separate facts, but the located quote states only the combined net dollar amount per period (25.1/0.1/NM for the three months, (19.8)/1.1/NM for the nine months) with no per-cause breakdown, so there is no lawful basis to allocate the netted value between the two causes or to name it as one cause without merging two distinct drivers. Per Rule 1.4, a real fact that cannot be lawfully resolved is abstained rather than emitted as a merged or guessed driver."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#072/L1",
+      "exact_match": false,
+      "why": "L1 also lands on zero facts plus one abstention, but its stated reason is factually wrong: it claims the '(in millions)' scale marker sits in a table header outside the quote, when the supplied quote literally reads '...Nine Months Ended (in millions) February 22, 2026...' — the scale marker is inside the quote. The correct blocking reason is not a missing scale marker but that the row nets two independent causes (impairment vs. disposal gain/loss) into one figure with no lawful way to split them per Rule 3.1/3.2."
+    },
+    {
+      "lane_id": "0000940944-26-000009#072/L2",
+      "exact_match": false,
+      "why": "L2 gives the same no-fact outcome as L1 with the same false premise — that '(in millions)' lives in a header/column label outside this quote — but the quote text itself contains '(in millions)' right after 'Nine Months Ended'. The settled abstention instead rests on Rule 3.2's cause-independence problem (impairment vs. disposal gain/loss netted with no per-cause values), which L2 never raises."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'Impairments and (gain) loss on disposal of assets, net' should be kept as one combined driver name (like a standard compound expense line such as 'food and beverage') or must be split per Rule 3.2 into an impairment-cause fact and a disposal-gain/loss-cause fact.",
+      "why": "The label textually joins two economically distinct events — a non-cash asset write-down and a completed disposal/sale transaction — that the surrounding narrative in this same filing ties to different causes with opposite signs (Bahama Breeze closures vs. the Olive Garden Canada sale gain), yet this located quote gives only one netted number per period with no per-cause split, so a single merged name and Rule 3.2's split requirement are in direct, unresolvable tension for this item."
+    },
+    {
+      "what": "Even setting the split question aside, whether this bare-root concept lands in the metric lane (it is a standing income-statement line re-read every quarter) or the action_event lane (the bare-root default table maps asset_impairment to action_event, and both impairment and disposal are one-off, non-recurring items).",
+      "why": "Rule 2's persistence test would point to metric (the line is reported and re-readable every period), but the explicit bare-root default list overrides asset_impairment to action_event; the combined label here also includes a disposal-gain/loss component that isn't itself on that default list, so which lane governs the merged concept is not settled by the rules as written."
+    }
+  ]
+}
+```

@@ -1,0 +1,49 @@
+```json
+{
+  "packet_id": "0001171843-26-001288#133",
+  "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "net_inventory",
+          "driver_state": "increased",
+          "level_low": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+          "level_high": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+          "comparison_high": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "instant",
+          "period_end_date": "2026-02-14",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001171843-26-001288#133/L1",
+      "exact_match": false,
+      "why": "L1 abstains claiming the '$ in thousands' scale marker sits only in a header outside the quote, but the supplied quote itself literally contains the substring '($ in thousands)' immediately before the Inventory/Net-inventory figures, so the scale is lawfully sourced inside the quote and a fact can be emitted instead of an abstention."
+    },
+    {
+      "lane_id": "0001171843-26-001288#133/L2",
+      "exact_match": false,
+      "why": "L2 makes the same factual error as L1 -- it treats '($ in thousands)' as a header external to the quote, when it is embedded directly in the given quote text, so the metric fact (net_inventory, increased, -813,494k vs -1,196,131k prior year) is lawfully emittable rather than an abstention."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether to attach fiscal_quarter=2 / fiscal_year=2026 to this instant balance fact.",
+      "why": "The immediate quote only states exact dates ('as of February 14, 2026' / 'February 15, 2025'), not a fiscal-quarter label; the Q2 FY2026 framing comes from elsewhere in the same press release (event context), and Rule 6 allows but does not force exact dates to coexist with fiscal framing."
+    }
+  ]
+}
+```

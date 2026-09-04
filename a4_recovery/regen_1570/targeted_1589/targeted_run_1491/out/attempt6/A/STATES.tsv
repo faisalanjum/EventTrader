@@ -1,0 +1,13 @@
+order	attempt	packet_id	wf	world_state_path	status
+01	1	0000006201-26-000031#001	wf_1b219d0e-f6f	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_1b219d0e-f6f.json	pinned+projected
+02	1	0000006201-26-000031#006	wf_4d457126-2c2	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_4d457126-2c2.json	pinned+projected
+03	1	0000006201-26-000031#008	wf_18711197-8f3	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_18711197-8f3.json	pinned+projected
+04	1	0000027904-26-000022#029	wf_6190a18b-6dc	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_6190a18b-6dc.json	pinned+projected
+05	1	0000092380-26-000044#042	wf_151dc0d0-21b	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_151dc0d0-21b.json	pinned+projected
+06	1	0000940944-26-000005#065	wf_b2e9766c-4b3	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b2e9766c-4b3.json	pinned+projected
+07	1	0000940944-26-000009#068	wf_816056b1-7d0	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_816056b1-7d0.json	pinned+projected
+08	1	0000940944-26-000009#072	wf_9b565634-84f	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_9b565634-84f.json	pinned+projected
+09	1	0001041061-25-000109#075	wf_d5a9c34a-271	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_d5a9c34a-271.json	pinned+projected
+10	1	0001104659-26-027061#115	wf_f9443ff9-759	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_f9443ff9-759.json	pinned+projected
+11	1	0001171843-26-001288#133	wf_ff9f0be4-1c4	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ff9f0be4-1c4.json	pinned+projected
+12	2	0000940944-26-000009#072	wf_cbc7405a-c2d	/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_cbc7405a-c2d.json	pinned+projected

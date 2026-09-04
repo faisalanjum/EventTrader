@@ -1,0 +1,23 @@
+export: 8168 files, candidate inputs 58
+== UNIT REPLAY 18:22:19
+RESULT MATCH
+======================== 34 passed in 87.43s (0:01:27) =========================
+== DONE A 18:24:05 adapter=0 tests=0
+RESULT MATCH
+== DONE B 18:24:24 adapter=0 tests=0
+diff rc=0
+GATE PASS
+== PHASE1 REGRESSION 18:24:24
+RESULT MATCH
+============================== 7 passed in 27.10s ==============================
+== DONE A 18:25:09 adapter=0 tests=0
+RESULT MATCH
+== DONE B 18:25:28 adapter=0 tests=0
+diff rc=0
+GATE PASS
+== COMPARE 18:25:28
+unit A in-place vs export: diff rc=1 (2 lines)
+unit B in-place vs export: diff rc=1
+phase1 regenerated vs HEAD: 36 files, 2 differ: A_tests.txt reaudit.strace 
+== REPLAY DONE 18:25:28 unit=0 phase1=0 cmpA=1 cmpB=1 phase1_diff=2
+rc=0

@@ -1,0 +1,34 @@
+{
+ "door": "a4_phase1_one_item_key",
+ "attempt": 2,
+ "run_id": "retry",
+ "receipt_sha256": "04e1d48c79396d9720da5c68184493b24fe58fbb7708416438fb8917f47de93d",
+ "rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "a3_binding": {
+  "retry_receipt": "4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465",
+  "retry_finalization": "15cb7a2dc8c53f0d9ec093e34b816ff88f5ca678196c1896b32494a13a1f72b2",
+  "primary_receipt": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+  "primary_finalization": "92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7"
+ },
+ "harvested_raw": [
+  "wf_cbc7405a-c2d.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "0000940944-26-000009#072",
+   "invalid_response",
+   "0000940944-26-000009#072/L1: exact_match says False; this draft states the settled reply"
+  ]
+ ],
+ "ledger": {
+  "scheduled": 1,
+  "valid": 0,
+  "invalid_response": 1,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "retry": []
+}

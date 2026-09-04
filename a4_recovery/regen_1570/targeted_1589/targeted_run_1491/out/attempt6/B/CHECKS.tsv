@@ -1,0 +1,19 @@
+check	got	want	status
+primary receipt	"a1f287a7f3bc9dc3f71a1c11fbc2a75254027a9cbd5af5a03d492b0f5dcf49a9"	"a1f287a7f3bc9dc3f71a1c11fbc2a75254027a9cbd5af5a03d492b0f5dcf49a9"	ok
+primary finalization	"bdbac1e126d35b65da8b9677e851ccbcc3de94963779a670be7e46c0a853ca43"	"bdbac1e126d35b65da8b9677e851ccbcc3de94963779a670be7e46c0a853ca43"	ok
+primary raw tree (22)	"a27ba06982d826118ebd2ba727713e14de13d0ff2cff995ff2536c670ecdd335"	"a27ba06982d826118ebd2ba727713e14de13d0ff2cff995ff2536c670ecdd335"	ok
+primary raw files	22	22	ok
+child receipt	"04e1d48c79396d9720da5c68184493b24fe58fbb7708416438fb8917f47de93d"	"04e1d48c79396d9720da5c68184493b24fe58fbb7708416438fb8917f47de93d"	ok
+child finalization	"3e65d39066d56a9315b91538e47738cbf1ee79326f80abf94208e4da540c1102"	"3e65d39066d56a9315b91538e47738cbf1ee79326f80abf94208e4da540c1102"	ok
+child raw tree (2)	"800534c11b781f7218e678a96db0c36ef0b2c3fd7e177fbcf388c5cd30f86ba2"	"800534c11b781f7218e678a96db0c36ef0b2c3fd7e177fbcf388c5cd30f86ba2"	ok
+child raw files	2	2	ok
+primary ledger scheduled/valid/invalid/missing/unproved	[11, 10, 1, 0, 0]	[11, 10, 1, 0, 0]	ok
+primary retry keys	["0000940944-26-000009#072"]	["0000940944-26-000009#072"]	ok
+child ledger scheduled/valid/invalid	[1, 0, 1]	[1, 0, 1]	ok
+child retry (no third attempt)	[]	[]	ok
+binding	"55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8"	"55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8"	ok
+binding schema	"a4-targeted-evidence-binding/1"	"a4-targeted-evidence-binding/1"	ok
+binding run_dir	"/tmp/a4_targeted_run_1491"	"/tmp/a4_targeted_run_1491"	ok
+proved_spend attempts/calls	[[1, 11], [2, 1]]	[[1, 11], [2, 1]]	ok
+completed calls	12	12	ok
+targeted owner imported	"0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588"	"0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588"	ok

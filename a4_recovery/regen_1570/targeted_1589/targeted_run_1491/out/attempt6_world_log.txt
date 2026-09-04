@@ -1,0 +1,77 @@
+projected 3063 files at their historical paths
+== WORLD A 18:37:52 masks: 79 tmpfs
+lifecycle ["record_state", "wf_6190a18b-6dc", []]
+lifecycle ["record_state", "wf_151dc0d0-21b", []]
+lifecycle ["record_state", "wf_b2e9766c-4b3", []]
+lifecycle ["record_state", "wf_816056b1-7d0", []]
+lifecycle ["record_state", "wf_9b565634-84f", []]
+lifecycle ["record_state", "wf_d5a9c34a-271", []]
+lifecycle ["record_state", "wf_f9443ff9-759", []]
+lifecycle ["record_state", "wf_ff9f0be4-1c4", []]
+lifecycle ["finalize primary", {"scheduled": 11, "valid": 10, "invalid_response": 1, "transport_no_answer": 0, "unproved": 0, "missing": 0}, ["0000940944-26-000009#072"]]
+lifecycle ["record_state child", "wf_cbc7405a-c2d", []]
+lifecycle ["finalize child", {"scheduled": 1, "valid": 0, "invalid_response": 1, "transport_no_answer": 0, "unproved": 0, "missing": 0}, []]
+check primary receipt: a1f287a7f3bc9dc3f71a1c11fbc2a75254027a9cbd5af5a03d492b0f5dcf49a9 vs a1f287a7f3bc9dc3f71a1c11fbc2a75254027a9cbd5af5a03d492b0f5dcf49a9 ok
+check primary finalization: bdbac1e126d35b65da8b9677e851ccbcc3de94963779a670be7e46c0a853ca43 vs bdbac1e126d35b65da8b9677e851ccbcc3de94963779a670be7e46c0a853ca43 ok
+check primary raw tree (22): a27ba06982d826118ebd2ba727713e14de13d0ff2cff995ff2536c670ecdd335 vs a27ba06982d826118ebd2ba727713e14de13d0ff2cff995ff2536c670ecdd335 ok
+check primary raw files: 22 vs 22 ok
+check child receipt: 04e1d48c79396d9720da5c68184493b24fe58fbb7708416438fb8917f47de93d vs 04e1d48c79396d9720da5c68184493b24fe58fbb7708416438fb8917f47de93d ok
+check child finalization: 3e65d39066d56a9315b91538e47738cbf1ee79326f80abf94208e4da540c1102 vs 3e65d39066d56a9315b91538e47738cbf1ee79326f80abf94208e4da540c1102 ok
+check child raw tree (2): 800534c11b781f7218e678a96db0c36ef0b2c3fd7e177fbcf388c5cd30f86ba2 vs 800534c11b781f7218e678a96db0c36ef0b2c3fd7e177fbcf388c5cd30f86ba2 ok
+check child raw files: 2 vs 2 ok
+check primary ledger scheduled/valid/invalid/missing/unproved: (11, 10, 1, 0, 0) vs (11, 10, 1, 0, 0) ok
+check primary retry keys: ['0000940944-26-000009#072'] vs ['0000940944-26-000009#072'] ok
+check child ledger scheduled/valid/invalid: (1, 0, 1) vs (1, 0, 1) ok
+check child retry (no third attempt): [] vs [] ok
+check binding: 55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8 vs 55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8 ok
+check binding schema: a4-targeted-evidence-binding/1 vs a4-targeted-evidence-binding/1 ok
+check binding run_dir: /tmp/a4_targeted_run_1491 vs /tmp/a4_targeted_run_1491 ok
+check proved_spend attempts/calls: [(1, 11), (2, 1)] vs [(1, 11), (2, 1)] ok
+check completed calls: 12 vs 12 ok
+check targeted owner imported: 0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588 vs 0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588 ok
+RESULT MATCH
+adapter rc=0
+.................................                                        [100%]
+
+======================== 34 passed in 83.30s (0:01:23) =========================
+tests rc=0
+== DONE A 18:39:33 adapter=0 tests=0
+projected 3063 files at their historical paths
+== WORLD B 18:39:34 masks: 79 tmpfs
+lifecycle ["record_state", "wf_6190a18b-6dc", []]
+lifecycle ["record_state", "wf_151dc0d0-21b", []]
+lifecycle ["record_state", "wf_b2e9766c-4b3", []]
+lifecycle ["record_state", "wf_816056b1-7d0", []]
+lifecycle ["record_state", "wf_9b565634-84f", []]
+lifecycle ["record_state", "wf_d5a9c34a-271", []]
+lifecycle ["record_state", "wf_f9443ff9-759", []]
+lifecycle ["record_state", "wf_ff9f0be4-1c4", []]
+lifecycle ["finalize primary", {"scheduled": 11, "valid": 10, "invalid_response": 1, "transport_no_answer": 0, "unproved": 0, "missing": 0}, ["0000940944-26-000009#072"]]
+lifecycle ["record_state child", "wf_cbc7405a-c2d", []]
+lifecycle ["finalize child", {"scheduled": 1, "valid": 0, "invalid_response": 1, "transport_no_answer": 0, "unproved": 0, "missing": 0}, []]
+check primary receipt: a1f287a7f3bc9dc3f71a1c11fbc2a75254027a9cbd5af5a03d492b0f5dcf49a9 vs a1f287a7f3bc9dc3f71a1c11fbc2a75254027a9cbd5af5a03d492b0f5dcf49a9 ok
+check primary finalization: bdbac1e126d35b65da8b9677e851ccbcc3de94963779a670be7e46c0a853ca43 vs bdbac1e126d35b65da8b9677e851ccbcc3de94963779a670be7e46c0a853ca43 ok
+check primary raw tree (22): a27ba06982d826118ebd2ba727713e14de13d0ff2cff995ff2536c670ecdd335 vs a27ba06982d826118ebd2ba727713e14de13d0ff2cff995ff2536c670ecdd335 ok
+check primary raw files: 22 vs 22 ok
+check child receipt: 04e1d48c79396d9720da5c68184493b24fe58fbb7708416438fb8917f47de93d vs 04e1d48c79396d9720da5c68184493b24fe58fbb7708416438fb8917f47de93d ok
+check child finalization: 3e65d39066d56a9315b91538e47738cbf1ee79326f80abf94208e4da540c1102 vs 3e65d39066d56a9315b91538e47738cbf1ee79326f80abf94208e4da540c1102 ok
+check child raw tree (2): 800534c11b781f7218e678a96db0c36ef0b2c3fd7e177fbcf388c5cd30f86ba2 vs 800534c11b781f7218e678a96db0c36ef0b2c3fd7e177fbcf388c5cd30f86ba2 ok
+check child raw files: 2 vs 2 ok
+check primary ledger scheduled/valid/invalid/missing/unproved: (11, 10, 1, 0, 0) vs (11, 10, 1, 0, 0) ok
+check primary retry keys: ['0000940944-26-000009#072'] vs ['0000940944-26-000009#072'] ok
+check child ledger scheduled/valid/invalid: (1, 0, 1) vs (1, 0, 1) ok
+check child retry (no third attempt): [] vs [] ok
+check binding: 55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8 vs 55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8 ok
+check binding schema: a4-targeted-evidence-binding/1 vs a4-targeted-evidence-binding/1 ok
+check binding run_dir: /tmp/a4_targeted_run_1491 vs /tmp/a4_targeted_run_1491 ok
+check proved_spend attempts/calls: [(1, 11), (2, 1)] vs [(1, 11), (2, 1)] ok
+check completed calls: 12 vs 12 ok
+check targeted owner imported: 0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588 vs 0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588 ok
+RESULT MATCH
+adapter rc=0
+== DONE B 18:39:51 adapter=0 tests=0
+== COMPARE
+diff rc=0
+== ALL DONE A=0 B=0 diff=0
+GATE PASS
+rc=0

@@ -1,0 +1,39 @@
+{
+ "run_id": "retry",
+ "door": "a4_phase1_one_item_key",
+ "attempt": 2,
+ "allowed": [
+  "0000940944-26-000009#072"
+ ],
+ "parent": {
+  "run_id": "a4_targeted_run_1491",
+  "finalization_sha256": "bdbac1e126d35b65da8b9677e851ccbcc3de94963779a670be7e46c0a853ca43"
+ },
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "manifest_sha256": "ec065a3ae5b557693b4d390324ffd9dc687a3d0eac13a94aa5eec4f6cce49b1e",
+ "a3_binding": {
+  "retry_receipt": "4a2ecf870f390fc67f69d9937a48766a0e990bfff0046c6c486b660453b42465",
+  "retry_finalization": "15cb7a2dc8c53f0d9ec093e34b816ff88f5ca678196c1896b32494a13a1f72b2",
+  "primary_receipt": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+  "primary_finalization": "92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7"
+ },
+ "prompts": {
+  "0000940944-26-000009#072": "7144ff651f759604adca518cfb7ac11cdd132832f400bee853a0365c7a7efedd"
+ },
+ "states": [
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_cbc7405a-c2d.json"
+ ]
+}

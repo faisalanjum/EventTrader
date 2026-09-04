@@ -1,0 +1,1 @@
+RED: finalize with no recorded state -> ledger {"scheduled": 11, "valid": 0, "invalid_response": 0, "transport_no_answer": 0, "unproved": 0, "missing": 11}, complete=False (prepare ok=True)
