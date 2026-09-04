@@ -154,6 +154,29 @@ IDENTITY: <exact reviewed commit, tree, manifest, or file hashes>
 <plain ruling, independent checks, and next gate>
 ```
 
+## Interrupt: the one exception to one-message/one-reply (owner-approved, Codex SEQ 1567)
+
+Codex may atomically publish a newer `CODEX_TO_CORE.md` before Core has replied ONLY with
+`ACTION: CHANGES_REQUIRED` and `TYPE: INTERRUPT_CURRENT_TASK`. Before publishing it, Codex
+proves that the mailbox being superseded already has a byte-identical `archive_CODEX_<SEQ>.md`,
+that Core's session id is unchanged, and that the targeted task is live. The interrupt carries
+`INTERRUPTS_CODEX_SEQ`, `INTERRUPTS_SHA256`, `TARGET_CORE_SESSION` and a concrete `REASON`; it
+takes Codex's next derived SEQ and keeps `IN_REPLY_TO` at the current Core SEQ.
+
+Core validates every one of those fields and the archive before acting. A valid interrupt stops
+only cancel-safe process groups Core itself launched for that exact task; it never stops Core, an
+unrelated or ambiguous process, or a non-cancel-safe external call. Such a call may finish once,
+its result is preserved, and work stops immediately afterward. Core preserves all files and logs,
+makes no further task changes, and sends one combined factual reply to the interrupt naming
+`INTERRUPTED_CODEX_SEQ`, the exact stopped PIDs/PGIDs and the remaining state; that reply answers
+both the superseded instruction and the interrupt, and Core then waits. An invalid or stale
+interrupt signals nothing, pauses new work, is reported as an exact refusal in one combined reply,
+and Core waits.
+
+Commands expected to exceed 30 seconds run in a named background process group; Core records
+its ownership and stays mailbox-responsive, and no foreground sleep or wait exceeds 15 seconds
+while work is in flight. Only the existing mailbox and monitor are used.
+
 ## Core side, verified
 
 Core's existing rules are correct with one correction: Core polls its incoming
