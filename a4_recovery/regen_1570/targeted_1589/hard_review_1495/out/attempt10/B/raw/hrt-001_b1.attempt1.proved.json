@@ -1,0 +1,31 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "operating_revenue",
+        "driver_state": "increased",
+        "level_low": {"value": 13912, "scale_multiplier": 1000000, "unit_scale_evidence": "In millions"},
+        "level_high": {"value": 13912, "scale_multiplier": 1000000, "unit_scale_evidence": "In millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": 12551, "scale_multiplier": 1000000, "unit_scale_evidence": "In millions"},
+        "comparison_high": {"value": 12551, "scale_multiplier": 1000000, "unit_scale_evidence": "In millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "change_value": {"value": 10.8, "scale_multiplier": 1, "unit_scale_evidence": "Percent"},
+        "change_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

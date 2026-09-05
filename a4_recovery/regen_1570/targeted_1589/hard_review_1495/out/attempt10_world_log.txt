@@ -1,0 +1,80 @@
+projected 3063 files at their historical paths
+== WORLD A 20:10:55 masks: 79 tmpfs
+check launchers: 22 vs 22 ok
+check launcher paths distinct: 22 vs 22 ok
+check hr_dir.txt pointer: 927e38ba01b9582667b20fe4547ff5756e761b1f98aa3b60fdecda51958fec23 vs 927e38ba01b9582667b20fe4547ff5756e761b1f98aa3b60fdecda51958fec23 ok
+check hr_dir.txt resolves (receipt.json present): True vs True ok
+check hr run receipt (bench): 13f0285fab13588bd6c7132d36bfd2a1d7636b11b9a867219fff19326dd121ba vs 13f0285fab13588bd6c7132d36bfd2a1d7636b11b9a867219fff19326dd121ba ok
+check run receipt: a5077a0d79b0941e97cc1f322ce1d86ae203480f6aeea6ef484a66e3735bc9c2 vs a5077a0d79b0941e97cc1f322ce1d86ae203480f6aeea6ef484a66e3735bc9c2 ok
+check run finalization: 9490b80e038e76eda260102ab5273f3989066220f485e93cb2d9f53c9a34bd0a vs 9490b80e038e76eda260102ab5273f3989066220f485e93cb2d9f53c9a34bd0a ok
+check raw tree canonical (owner): 1175573001cc8816b8c17c47f989ee8591ab165a78d102dbf7ce2cb58140a0f6 vs 1175573001cc8816b8c17c47f989ee8591ab165a78d102dbf7ce2cb58140a0f6 ok
+check raw files: 44 vs 44 ok
+check raw tree shell checksum (separately named): 156dc88d8d0c1e03ca698a895f2eeeb4438c9471482d238983d90c8bcf58ac04 vs 156dc88d8d0c1e03ca698a895f2eeeb4438c9471482d238983d90c8bcf58ac04 ok
+check official-state tree: 8b7d1711cb2878c6f031dcf67106e12f6df9fee4d2201bdccf9de8a1c3d5297e vs 8b7d1711cb2878c6f031dcf67106e12f6df9fee4d2201bdccf9de8a1c3d5297e ok
+check transcript tree: 3f976b1d9aa4a6e90d02d77f2da47b3191ac9c1d8448105041346ae0c3603514 vs 3f976b1d9aa4a6e90d02d77f2da47b3191ac9c1d8448105041346ae0c3603514 ok
+check transcript files: 66 vs 66 ok
+check states recorded: 22 vs 22 ok
+check completed states: 22 vs 22 ok
+check ledger valid/invalid/unproved/missing/transport: (22, 0, 0, 0, 0) vs (22, 0, 0, 0, 0) ok
+check retry (no child): [] vs [] ok
+check primary_complete: True vs True ok
+check finalization problems: [] vs [] ok
+check distinct agent ids: 22 vs 22 ok
+check agent labels: 22 vs 22 ok
+check agent model sonnet: 22 vs 22 ok
+check result model sonnet / lean-probe / high: (22, 22, 22) vs (22, 22, 22) ok
+check meta model sonnet: 22 vs 22 ok
+check tool calls summed: 0 vs 0 ok
+check Read in transcripts: 0 vs 0 ok
+check serial gaps positive: 21 vs 21 ok
+check tokens summed: 1034662 vs 1034662 ok
+check budget ledger_before/ledger_after (finalization): (5180, 5202) vs (5180, 5202) ok
+RESULT MATCH
+adapter rc=0
+...............                                                          [100%]
+
+============================= 16 passed in 10.42s ==============================
+tests rc=0
+.                                                                        [100%]
+1 passed in 1.15s
+public-door test rc=0
+== DONE A 20:11:52 adapter=0 tests=0
+projected 3063 files at their historical paths
+== WORLD B 20:11:52 masks: 79 tmpfs
+check launchers: 22 vs 22 ok
+check launcher paths distinct: 22 vs 22 ok
+check hr_dir.txt pointer: 927e38ba01b9582667b20fe4547ff5756e761b1f98aa3b60fdecda51958fec23 vs 927e38ba01b9582667b20fe4547ff5756e761b1f98aa3b60fdecda51958fec23 ok
+check hr_dir.txt resolves (receipt.json present): True vs True ok
+check hr run receipt (bench): 13f0285fab13588bd6c7132d36bfd2a1d7636b11b9a867219fff19326dd121ba vs 13f0285fab13588bd6c7132d36bfd2a1d7636b11b9a867219fff19326dd121ba ok
+check run receipt: a5077a0d79b0941e97cc1f322ce1d86ae203480f6aeea6ef484a66e3735bc9c2 vs a5077a0d79b0941e97cc1f322ce1d86ae203480f6aeea6ef484a66e3735bc9c2 ok
+check run finalization: 9490b80e038e76eda260102ab5273f3989066220f485e93cb2d9f53c9a34bd0a vs 9490b80e038e76eda260102ab5273f3989066220f485e93cb2d9f53c9a34bd0a ok
+check raw tree canonical (owner): 1175573001cc8816b8c17c47f989ee8591ab165a78d102dbf7ce2cb58140a0f6 vs 1175573001cc8816b8c17c47f989ee8591ab165a78d102dbf7ce2cb58140a0f6 ok
+check raw files: 44 vs 44 ok
+check raw tree shell checksum (separately named): 156dc88d8d0c1e03ca698a895f2eeeb4438c9471482d238983d90c8bcf58ac04 vs 156dc88d8d0c1e03ca698a895f2eeeb4438c9471482d238983d90c8bcf58ac04 ok
+check official-state tree: 8b7d1711cb2878c6f031dcf67106e12f6df9fee4d2201bdccf9de8a1c3d5297e vs 8b7d1711cb2878c6f031dcf67106e12f6df9fee4d2201bdccf9de8a1c3d5297e ok
+check transcript tree: 3f976b1d9aa4a6e90d02d77f2da47b3191ac9c1d8448105041346ae0c3603514 vs 3f976b1d9aa4a6e90d02d77f2da47b3191ac9c1d8448105041346ae0c3603514 ok
+check transcript files: 66 vs 66 ok
+check states recorded: 22 vs 22 ok
+check completed states: 22 vs 22 ok
+check ledger valid/invalid/unproved/missing/transport: (22, 0, 0, 0, 0) vs (22, 0, 0, 0, 0) ok
+check retry (no child): [] vs [] ok
+check primary_complete: True vs True ok
+check finalization problems: [] vs [] ok
+check distinct agent ids: 22 vs 22 ok
+check agent labels: 22 vs 22 ok
+check agent model sonnet: 22 vs 22 ok
+check result model sonnet / lean-probe / high: (22, 22, 22) vs (22, 22, 22) ok
+check meta model sonnet: 22 vs 22 ok
+check tool calls summed: 0 vs 0 ok
+check Read in transcripts: 0 vs 0 ok
+check serial gaps positive: 21 vs 21 ok
+check tokens summed: 1034662 vs 1034662 ok
+check budget ledger_before/ledger_after (finalization): (5180, 5202) vs (5180, 5202) ok
+RESULT MATCH
+adapter rc=0
+== DONE B 20:12:36 adapter=0 tests=0
+== COMPARE
+diff rc=0
+== ALL DONE A=0 B=0 diff=0
+GATE PASS
+rc=0

@@ -1,0 +1,40 @@
+check	got	want	status
+targeted binding	"55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8"	"55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8"	ok
+targeted spend	[[1, 11], [2, 1]]	[[1, 11], [2, 1]]	ok
+budget receipt 1492 (recovered)	"5ffe791f3d7e4d1a29461b4d77c95e654ba3fe2114a1d1119c86fbfff2f2b68d"	"5ffe791f3d7e4d1a29461b4d77c95e654ba3fe2114a1d1119c86fbfff2f2b68d"	ok
+budget receipt 1493 (transform)	"20b74a65e6a776f038ad225f1094ab60a1d197f537d4b5a5184358a513964eac"	"20b74a65e6a776f038ad225f1094ab60a1d197f537d4b5a5184358a513964eac"	ok
+hard-review owner imported	"936ef4a270910b9cca7cafc9fc6f3296ad610406195f125187753417cf10f12a"	"936ef4a270910b9cca7cafc9fc6f3296ad610406195f125187753417cf10f12a"	ok
+base owner imported	"8eb98ec03331a2a605d7ec04570a875004ed989099de4f74c4a22b511ad90986"	"8eb98ec03331a2a605d7ec04570a875004ed989099de4f74c4a22b511ad90986"	ok
+hard-review manifest	"7570e63adead0cd5374a8cc30cac583cbd12d03b0cd6b484c331ffcd7a367a91"	"7570e63adead0cd5374a8cc30cac583cbd12d03b0cd6b484c331ffcd7a367a91"	ok
+prefix	"216caccb6edeb327e16a40b0cb97e835986846cd51a87f2520d351980f94ee99"	"216caccb6edeb327e16a40b0cb97e835986846cd51a87f2520d351980f94ee99"	ok
+v3 rules	"72baa25a816e956061ccd624634231aa3e2f96ce1cb857382e6e65f6330451e4"	"72baa25a816e956061ccd624634231aa3e2f96ce1cb857382e6e65f6330451e4"	ok
+ledger before (the receipt's completed_before)	5180	5180	ok
+launchers	22	22	ok
+launcher paths distinct	22	22	ok
+hr_dir.txt pointer	"927e38ba01b9582667b20fe4547ff5756e761b1f98aa3b60fdecda51958fec23"	"927e38ba01b9582667b20fe4547ff5756e761b1f98aa3b60fdecda51958fec23"	ok
+hr_dir.txt resolves (receipt.json present)	true	true	ok
+hr run receipt (bench)	"13f0285fab13588bd6c7132d36bfd2a1d7636b11b9a867219fff19326dd121ba"	"13f0285fab13588bd6c7132d36bfd2a1d7636b11b9a867219fff19326dd121ba"	ok
+run receipt	"a5077a0d79b0941e97cc1f322ce1d86ae203480f6aeea6ef484a66e3735bc9c2"	"a5077a0d79b0941e97cc1f322ce1d86ae203480f6aeea6ef484a66e3735bc9c2"	ok
+run finalization	"9490b80e038e76eda260102ab5273f3989066220f485e93cb2d9f53c9a34bd0a"	"9490b80e038e76eda260102ab5273f3989066220f485e93cb2d9f53c9a34bd0a"	ok
+raw tree canonical (owner)	"1175573001cc8816b8c17c47f989ee8591ab165a78d102dbf7ce2cb58140a0f6"	"1175573001cc8816b8c17c47f989ee8591ab165a78d102dbf7ce2cb58140a0f6"	ok
+raw files	44	44	ok
+raw tree shell checksum (separately named)	"156dc88d8d0c1e03ca698a895f2eeeb4438c9471482d238983d90c8bcf58ac04"	"156dc88d8d0c1e03ca698a895f2eeeb4438c9471482d238983d90c8bcf58ac04"	ok
+official-state tree	"8b7d1711cb2878c6f031dcf67106e12f6df9fee4d2201bdccf9de8a1c3d5297e"	"8b7d1711cb2878c6f031dcf67106e12f6df9fee4d2201bdccf9de8a1c3d5297e"	ok
+transcript tree	"3f976b1d9aa4a6e90d02d77f2da47b3191ac9c1d8448105041346ae0c3603514"	"3f976b1d9aa4a6e90d02d77f2da47b3191ac9c1d8448105041346ae0c3603514"	ok
+transcript files	66	66	ok
+states recorded	22	22	ok
+completed states	22	22	ok
+ledger valid/invalid/unproved/missing/transport	[22, 0, 0, 0, 0]	[22, 0, 0, 0, 0]	ok
+retry (no child)	[]	[]	ok
+primary_complete	true	true	ok
+finalization problems	[]	[]	ok
+distinct agent ids	22	22	ok
+agent labels	22	22	ok
+agent model sonnet	22	22	ok
+result model sonnet / lean-probe / high	[22, 22, 22]	[22, 22, 22]	ok
+meta model sonnet	22	22	ok
+tool calls summed	0	0	ok
+Read in transcripts	0	0	ok
+serial gaps positive	21	21	ok
+tokens summed	1034662	1034662	ok
+budget ledger_before/ledger_after (finalization)	[5180, 5202]	[5180, 5202]	ok

@@ -1,0 +1,30 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_inventory",
+        "driver_state": "increased",
+        "level_low": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+        "level_high": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+        "comparison_high": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "instant",
+        "period_end_date": "2026-02-14",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 2,
+        "measurement_raw_spans": ["(net of payables)"],
+        "slice_parts": []
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

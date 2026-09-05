@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "discontinued_operations",
+        "driver_state": "decreased",
+        "level_low": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_high": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_high": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```
