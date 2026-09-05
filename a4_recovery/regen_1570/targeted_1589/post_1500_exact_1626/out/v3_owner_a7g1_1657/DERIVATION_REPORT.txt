@@ -1,0 +1,6 @@
+EPOCH 1 ok: 34 rows, 60592=7044621e31949c75 bytes=75098
+EPOCH 2 ok: 9 rows, 64805=f308259b74a245d3 bytes=81853
+EPOCH 3 pre-75912 ok: 0a13a27d bytes=99073
+EPOCH 3 final ok: e4fa07d0 bytes=99321; ast.parse ok
+CENSUS: 335 mentions; categories {'persistent': 75, 'reset_carry': 4, 'transient_restored': 7, 'read_only': 168, 'other_file_only': 79, 'failed_refused_waiting': 2}; outcomes {'ok': 332, 'error': 3, 'waiting': 0, 'ambiguous': 0}
+CANDIDATE a7_g1_build.py == e4fa07d0 (99321 bytes)

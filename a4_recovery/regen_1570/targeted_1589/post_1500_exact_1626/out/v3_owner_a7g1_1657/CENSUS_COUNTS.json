@@ -1,0 +1,19 @@
+{
+ "total": 335,
+ "counts": {
+  "persistent": 75,
+  "reset_carry": 4,
+  "transient_restored": 7,
+  "side_producer": 0,
+  "read_only": 168,
+  "other_file_only": 79,
+  "failed_refused_waiting": 2,
+  "unexpected_writer": 0
+ },
+ "outcomes": {
+  "ok": 332,
+  "error": 3,
+  "waiting": 0,
+  "ambiguous": 0
+ }
+}
