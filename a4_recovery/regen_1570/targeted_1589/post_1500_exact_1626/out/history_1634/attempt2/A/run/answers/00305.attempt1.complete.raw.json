@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "high_efficiency_equipment_installations",
+        "driver_state": "unknown",
+        "level_low": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "fiscal_year": 2026,
+        "period_end_date": "2026-12-31",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

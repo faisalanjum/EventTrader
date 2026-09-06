@@ -1,0 +1,50 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#008",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "net_income",
+          "driver_state": "increased",
+          "level_low": {"value": -382, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_high": {"value": -382, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": -473, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_high": {"value": -473, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "period_start_date": "2026-01-01",
+          "period_end_date": "2026-03-31",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#008/L1",
+      "exact_match": false,
+      "why": "L1 abstains claiming the 'In millions' scale marker sits in a header outside the quote, but the supplied quote actually opens with '(In millions, except share and per share amounts)' before the table rows, so the scale marker is inside the quote and a lawful net_income metric fact can be built; L1's abstention is unwarranted."
+    },
+    {
+      "lane_id": "0000006201-26-000031#008/L2",
+      "exact_match": false,
+      "why": "L2 makes the same mistaken assumption as L1 that the scale header is outside the fixed quote span; the quote text provided includes that header verbatim at its start, so the multiplier is lawfully resolvable from inside the quote and this item yields a metric fact rather than an abstention."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "period_start_date for the quarter",
+      "why": "The quote states the period only as 'Three Months Ended March 31, 2026', giving an explicit end date but no explicit start date; 2026-01-01 was used as the standard calendar-quarter start implied by that phrasing, which is a safe derivation rather than a source-stated date."
+    }
+  ]
+}
+```

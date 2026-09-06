@@ -1,0 +1,39 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#177",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "inventory_shrink",
+          "driver_state": "decreased",
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#177/L1",
+      "exact_match": true,
+      "why": "Same fact_type (metric), same driver_name (inventory_shrink), same driver_state (decreased), same fiscal_year (2025), same time_type (duration), no other fields — identical to settled."
+    },
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#177/L2",
+      "exact_match": true,
+      "why": "Identical content to L1 (only key ordering differs, which is not meaningful in JSON) — matches settled exactly."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the period should include fiscal_quarter (Q4) rather than resting on fiscal_year alone.",
+      "why": "The quote sits inside Chris DeLorifus's Q4 results discussion, but its own wording ('every quarter this year' / 'across every category') explicitly claims the reduction held across all four quarters of fiscal 2025, so the fact is scoped to the full fiscal year rather than the single quarter being narrated around it — a reasonable reader could initially default to the surrounding quarter's period before catching this."
+    }
+  ]
+}
+```

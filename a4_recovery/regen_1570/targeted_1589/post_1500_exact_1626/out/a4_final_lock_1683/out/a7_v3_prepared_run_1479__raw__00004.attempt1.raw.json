@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "total_revenue_per_available_seat_mile",
+        "driver_state": "increased",
+        "change_value": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      },
+      "per_x": "available_seat_mile"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

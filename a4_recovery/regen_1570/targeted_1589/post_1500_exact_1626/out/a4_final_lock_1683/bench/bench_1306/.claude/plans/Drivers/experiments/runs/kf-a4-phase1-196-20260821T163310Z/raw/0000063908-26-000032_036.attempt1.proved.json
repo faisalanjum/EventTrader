@@ -1,0 +1,55 @@
+```json
+{
+  "packet_id": "0000063908-26-000032#036",
+  "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "ninety_day_active_users",
+          "driver_state": "increased",
+          "level_high": {"value": 210, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "ceiling",
+          "level_unit": "count",
+          "change_value": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "instant",
+          "period_end_date": "2025-12-31",
+          "fiscal_year": 2025,
+          "slice_parts": ["customer:loyalty_members"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000063908-26-000032#036/L1",
+      "exact_match": false,
+      "why": "L1 folds 'loyalty' into driver_name (loyalty_90_day_active_users) with no slice, whereas Rule 3.4 requires the company's own measured customer group (loyalty members, explicitly defined elsewhere in the release as 'customers who self-identify as a loyalty member') to live in slice_parts, never the name; L1's name, digit-leading token shape, and empty slice_parts differ from the settled reply, though its ceiling shape/level_high/percent_yoy change treatment match."
+    },
+    {
+      "lane_id": "0000063908-26-000032#036/L2",
+      "exact_match": false,
+      "why": "L2 also keeps 'loyalty' in the compound name instead of slicing it, and additionally treats 'nearly 210 million' as a closed point (level_low=level_high) rather than a ceiling, which breaks the 'nearly'-as-open-upper-bound reading used consistently for the settled reply; comparison_baseline=prior_year matches, but name and level shape do not."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'loyalty' belongs in slice_parts (customer:loyalty_members) or stays fused into driver_name as a compound qualifier.",
+      "why": "Rule 3.4 mandates the company's own measured customer group go to slice, and the release's own definitions section frames loyalty members explicitly as a customer subset; but Rule 3.8's population-qualifier carve-out (current, funded, fee_earning stay in name) could be read to also cover 'loyalty' as a name-defining qualifier rather than a sliceable customer group, since both drafts treated it that way."
+    },
+    {
+      "what": "Whether 'nearly 210 million' is a point value or an open ceiling (high-only) bound.",
+      "why": "No rule explicitly maps the word 'nearly' to a shape; treating it as symmetric to 'over X' (used elsewhere in this same release as a floor) supports ceiling, but 'nearly' could equally be read as loose rounding language for a reported point figure, as L2 assumed."
+    },
+    {
+      "what": "Whether comparison_baseline=prior_year is lawfully supported for this specific clause.",
+      "why": "The quote itself only says 'up 19%' without naming a prior-year comparator; the prior_year inference relies on the surrounding 'full year' / 'as of year-end' framing of the whole release rather than an explicit statement inside this item's own clause, so it is a contextual inference rather than a literal textual comparison statement."
+    }
+  ]
+}
+```

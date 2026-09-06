@@ -1,0 +1,56 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The quoted caption 'Impairments and (gain) loss on disposal of assets, net' is a GAAP line that, by its own wording, nets two conceptually distinct components (impairment charges and gain/loss on disposal of assets) into one three-month dollar figure ($25.1M vs $0.1M prior year). Elsewhere in this same event the company explains this line's Q3 movement 'primarily' by the decision to close approximately 14 Bahama Breeze restaurants, but the caption's own 'and (gain) loss on disposal' wording shows a second, disposal-related component is also embedded in every period's total, and 'primarily' concedes it is not the sole driver. No per-component dollar split for the Q3 figure is stated anywhere in this event. Rule 3.2 requires splitting independent causes into separate facts, which cannot be done without inventing numbers; a single combined name is also unlawful because 'gain'/'loss' are banned polarity words under Rule 3.10, and the standard-financial-phrase carve-out (Rule 3.9) is limited to net_income/operating_margin/earnings_per_share, not this line. This is real, non-boilerplate content that cannot be lawfully resolved (Rule 1.4)."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item, and the reported figure is genuinely real and non-boilerplate, but it settles to zero facts because the net caption bundles an impairment component with a disposal gain/loss component with no per-cause dollar split and no lawful polarity-free combined name, so it lands as an exclusion rather than a fact or a plain boilerplate control."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "This quote extends the same caption to also include the nine-month figures ($(19.8)M vs $1.1M). The event's own narrative for the nine-month period states explicitly that this net line's change is driven by TWO independent, named causes: 'the gain on sale of the Olive Garden Canada Restaurants, partially offset by the decision to close approximately 14 Bahama Breeze restaurants' - a disposal gain and an impairment decision, bundled with no per-cause dollar amount given anywhere in the event. Rule 3.2 requires splitting independent causes into separate facts, which is impossible without invented values; a single combined name is also unlawful because 'gain'/'loss' are banned polarity words (Rule 3.10), and Rule 3.9's whole-phrase carve-out does not extend to this line. Real, non-boilerplate content that cannot be lawfully resolved (Rule 1.4)."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item; the fuller quote here confirms via the event's own explicit nine-month narrative that the net caption combines two independently-caused, individually named components (the Olive Garden Canada disposal gain and the Bahama Breeze impairment decision) with no dollar split, so like row 1 it settles to zero facts and is excluded rather than becoming a fact or a plain boilerplate control."
+    }
+  ],
+  "review": [],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "primary/0000940944-26-000009",
+      "agrees": true,
+      "why": "Reasoning independently from the event text (not from the lead's own writeup), I reach the same final settlement for both rows: the located caption nets an impairment component against a disposal gain/loss component, the event itself narrates these as two independent causes (Bahama Breeze closures; Olive Garden Canada sale) with no per-cause dollar figures anywhere in the source, Rule 3.2 bars a single fact for unsplit independent causes, and Rule 3.10 bars 'gain'/'loss' from any combined driver name, so both rows correctly abstain/exclude rather than yielding a fact."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Rows 1 and 2 locate the identical 'Impairments and (gain) loss on disposal of assets, net' table caption in the same MD&A results table; row 2's quote is simply a superset of row 1's, extending it to also cover the nine-month columns. They were not shown to me as a locator group.",
+      "why": "If a later step ever promoted facts from both rows independently, the shared three-month figures ($25.1M vs $0.1M) could be double counted as two separate facts for the same underlying table cell. Since both rows abstain here the risk is currently inert, but any upstream row-grouping step should still treat these two locations as one underlying row."
+    },
+    {
+      "what": "The event itself references 'Note 7' for additional information on both the Bahama Breeze impairment and the Olive Garden Canada disposal, but the note's actual text (with any separate dollar amounts per cause) is not included in the material shown to me.",
+      "why": "A per-cause dollar breakdown, if it exists in that referenced note, could let a future settlement lawfully split this net caption into two named facts instead of abstaining; since that note text is not part of the evidence provided for these two rows, I cannot use it to resolve the split here, and I have not treated it as available evidence."
+    }
+  ]
+}
+```

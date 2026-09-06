@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is footnote (5), a generic definitional/methodology note explaining what the 'Legal proceedings' non-GAAP adjustment line captures (settlements for legal matters that exceed typical costs). It states no specific value, direction, or period for any actual litigation event in this quote — it is boilerplate accounting methodology describing an adjustment category (like the sibling footnotes for impairment, forfeitures, retention grants, etc.), not a reportable statement about a driver's state, change, surprise, guidance, or action."
+    }
+  ],
+  "continuity_hints": []
+}
+```

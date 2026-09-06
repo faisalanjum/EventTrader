@@ -1,0 +1,6 @@
+(a) prefix-vs-equality gate:
+    a wrong 64-char hash sharing the 8-char prefix e4fa07d0 -> old startswith accepts=True (RED); new equality accepts=False (GREEN: rejected).
+(b) duplicate same-id binding:
+    two results for one id -> old first-only returns (100, False) with no error flag (RED); new returns class=nonunique (GREEN: rejected).
+(c) result-outcome accounting:
+    old CENSUS_COUNTS carried category counts only (RED); new adds outcomes over all mentions: {"ambiguous": 0, "error": 3, "ok": 332, "total": 335, "waiting": 0} (GREEN).

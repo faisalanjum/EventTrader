@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000027904-26-000022#029",
+  "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote 'Gain/(loss) on investments, net (550) (40) (510)' is one line of the Non-Operating Results table; the values are unscaled digits with no in-quote unit or scale marker (no '$', no 'million'). The table's only scale marker, '(in millions)', sits in the table header line, which is outside this quote. Rule 5.6 requires the scale evidence to come from inside the quote and explicitly directs abstention when a TEXT fact's scale marker sits in a header or footnote outside the quote — it cannot be borrowed from the header nor can scale_multiplier be guessed as 1 (that is not the true multiplier here). Since the quote's source location is fixed and may not be extended, this numeric fact cannot be lawfully populated, so the item abstains."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000022#029/L1",
+      "exact_match": true,
+      "why": "L1 reaches the same lawful branch (facts=[], one abstention) and gives the same governing reason: the '(in millions)' scale marker sits in the table header outside the supplied quote, so Rule 5.6 forces abstention rather than guessing or extending the quote."
+    },
+    {
+      "lane_id": "0000027904-26-000022#029/L2",
+      "exact_match": true,
+      "why": "L2 also lands on facts=[], one abstention, reasoning that no unit or scale marker exists inside the quote and the true multiplier cannot lawfully be treated as 1; this is the same substantive conclusion as the settled reply (scale information needed to populate the numeric slots is unavailable inside the quote), so it matches even though it does not explicitly name the header-location clause of Rule 5.6."
+    }
+  ],
+  "ambiguities": []
+}
+```

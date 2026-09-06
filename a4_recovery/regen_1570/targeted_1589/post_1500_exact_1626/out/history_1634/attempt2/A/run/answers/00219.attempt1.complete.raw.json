@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This reconciliation-table line nets two independent causes into one figure: gift card breakage revenue from a change in redemption-pattern recognition (a favorable item, stated elsewhere in this event as $17.3 million) and a non-recurring gift card inventory write-down (an unfavorable item of $7.9 million per footnote 3). Rule 3.2 requires independent causes to be split into separate facts, but the individual amounts underlying this net (9,396) figure are stated outside this item's located quote, so the blended net cannot be lawfully assigned a single driver name without extending beyond the fixed quote."
+    }
+  ],
+  "continuity_hints": []
+}
+```

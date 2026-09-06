@@ -1,0 +1,43 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "high_efficiency_equipment_installations",
+          "driver_state": "reported",
+          "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_start_date": "2026-02-03",
+          "period_end_date": "2026-02-03"
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "high_efficiency_equipment_installations",
+          "driver_state": "unknown",
+          "level_low": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "fiscal_year": 2026,
+          "period_end_date": "2026-12-31",
+          "company_confirmed": true
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Member 1 states the current, already-realized count of 350 restaurants with the equipment package as of the call ('today'), a bare reported metric level, while Member 2 uses the outlook verb 'anticipate' to give a forward target of about 2,000 by year end, which is a company guidance figure with a different value and a different (future, fiscal-year-end) period, so the two are distinct facts rather than one."
+}
+```

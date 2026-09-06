@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "AAL_2026-04-23T08.30#139",
+  "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "available_seat_mile",
+        "item": {
+          "driver_name": "revenue_per_available_seat_mile",
+          "driver_state": "mixed",
+          "slice_parts": ["geography:latinamericadestination"],
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "AAL_2026-04-23T08.30#139/L1",
+      "exact_match": true,
+      "why": "Same driver_name (revenue_per_available_seat_mile), driver_state mixed, single geography:latinamericadestination slice, fiscal Q1/2026, time_type duration, and per_x available_seat_mile placed correctly at the fact level alongside item."
+    },
+    {
+      "lane_id": "AAL_2026-04-23T08.30#139/L2",
+      "exact_match": true,
+      "why": "Identical content to L1, only key ordering differs (per_x listed after item instead of before); all field values match the settled reply exactly."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the quote's driver_state should be 'mixed' (from 'mixed bag', differing performance across Latin American sub-markets like Mexico vs Brazil/Argentina) or 'unchanged' (from 'break-even RASM' read as an explicit flat/zero-growth statement).",
+      "why": "Rule 4's metric checking order explicitly tests 'same driver differs across parts → mixed' BEFORE 'explicit flat → unchanged', and the source's own word 'mixed bag' plus later country-level detail (Mexico weak/turning positive, Brazil/Argentina stronger) directly supports 'mixed' winning that check, but a reader focused only on 'break-even' as a flat descriptor could plausibly argue 'unchanged' instead."
+    },
+    {
+      "what": "Expanding the acronym 'RASM' to the name 'revenue_per_available_seat_mile'.",
+      "why": "RASM is a standard, unambiguous airline industry term (revenue per available seat mile) and is used explicitly in the quote, so spelling it out per Rule 3.5 is well-grounded; still flagged since Rule 3.5 warns against guessing acronym expansions when not verifiable, and no glossary entry for 'RASM' appears in this event's own text."
+    }
+  ]
+}
+```

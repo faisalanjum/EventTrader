@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This is a generic immateriality belief statement ('we believe the impact of weather on our sales mix is not significant') with no stated direction, level, or discrete action for any driver — it is qualitative risk-type commentary about causal insensitivity, not a resolvable metric state, guidance, surprise, or action_event, so it fails the Rule 1 fact gate (generic/boilerplate-style assessment)."
+    }
+  ],
+  "continuity_hints": []
+}
+```

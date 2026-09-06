@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted row states precise values (25.1, 0.1, (19.8), 1.1) for 'Impairments and (gain) loss on disposal of assets, net' that require the table's '(in millions)' scale multiplier to be meaningful, but that scale marker sits in the surrounding table header outside this item's fixed quote — no unit/scale marker exists inside the quote itself to cite as unit_scale_evidence, and the multiplier is not 1, so per Rule 5.6 (scale marker in a header outside the quote) this cannot be lawfully resolved; abstaining rather than inventing or borrowing the header's evidence."
+    }
+  ],
+  "continuity_hints": []
+}
+```

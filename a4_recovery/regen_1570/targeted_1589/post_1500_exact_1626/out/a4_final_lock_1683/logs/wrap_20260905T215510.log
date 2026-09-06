@@ -1,0 +1,48 @@
+rc=2
+log: /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/logs/a4_20260905T215510.log
+BAD  record_round1_states         rc=1  0.3s
+kept a4_final_targeted_corr_run_1504__receipt.json.tmp    2bfc8789c5ac3340      4657 B
+kept a4_final_targeted_run_1500__finalization.json        88489e750de6f66c      3876 B
+kept a4_final_targeted_run_1500__raw__0000006201-26-000031.attempt1.proved.json aa3717ead3d4c03c      9011 B
+kept a4_final_targeted_run_1500__raw__0000027904-26-000022.attempt1.proved.json 66fcbe94169462bc      3041 B
+kept a4_final_targeted_run_1500__raw__0000092380-26-000044.attempt1.proved.json 1b6d49948d1202d2      3008 B
+kept a4_final_targeted_run_1500__raw__0000940944-26-000005.attempt1.proved.json 57eb032c6e72bf8d      5937 B
+kept a4_final_targeted_run_1500__raw__0000940944-26-000009.attempt1.proved.json 245b76ed580e88e9      7215 B
+kept a4_final_targeted_run_1500__raw__0001041061-25-000109.attempt1.proved.json 8e97ed4089fbd749      5899 B
+kept a4_final_targeted_run_1500__raw__0001104659-26-027061.attempt1.proved.json fdc0091e4f1703fc      2951 B
+kept a4_final_targeted_run_1500__raw__0001171843-26-001288.attempt1.proved.json be0a31ac09bb5442      3433 B
+kept a4_final_targeted_run_1500__raw__wf_24ff384d-b7a.000.raw.json fdc0091e4f1703fc      2951 B
+kept a4_final_targeted_run_1500__raw__wf_34958e49-61b.000.raw.json 1b6d49948d1202d2      3008 B
+kept a4_final_targeted_run_1500__raw__wf_35c2a22f-8a3.000.raw.json aa3717ead3d4c03c      9011 B
+kept a4_final_targeted_run_1500__raw__wf_382023ae-795.000.raw.json be0a31ac09bb5442      3433 B
+kept a4_final_targeted_run_1500__raw__wf_829e84c9-e3a.000.raw.json 245b76ed580e88e9      7215 B
+kept a4_final_targeted_run_1500__raw__wf_9f9f3383-169.000.raw.json 8e97ed4089fbd749      5899 B
+kept a4_final_targeted_run_1500__raw__wf_f2089dc7-25a.000.raw.json 57eb032c6e72bf8d      5937 B
+kept a4_final_targeted_run_1500__raw__wf_f6167dce-72e.000.raw.json 66fcbe94169462bc      3041 B
+kept a4_final_targeted_run_1500__receipt.json             937a766698be672f      5087 B
+kept a4_final_targeted_run_1500__scripts__0000006201-26-000031.attempt1.js 118119efca1db761    124979 B
+kept a4_final_targeted_run_1500__scripts__0000027904-26-000022.attempt1.js ad706e865650e8a4    109428 B
+kept a4_final_targeted_run_1500__scripts__0000092380-26-000044.attempt1.js 5ce44ff83cc53e8f    113584 B
+kept a4_final_targeted_run_1500__scripts__0000940944-26-000005.attempt1.js ccbe0d8cac6ebfd8     94774 B
+kept a4_final_targeted_run_1500__scripts__0000940944-26-000009.attempt1.js e40547e6d6eb6dfc    122059 B
+kept a4_final_targeted_run_1500__scripts__0001041061-25-000109.attempt1.js 4da4752b71e206a7    177880 B
+kept a4_final_targeted_run_1500__scripts__0001104659-26-027061.attempt1.js b4bdbb270107447d     98951 B
+kept a4_final_targeted_run_1500__scripts__0001171843-26-001288.attempt1.js ccfca6de82c25208     89178 B
+kept a4_hard_review_run_1495__finalization.json           9490b80e038e76ed      3788 B
+kept a4_hard_review_run_1495__raw__hrt-000_b1.attempt1.proved.json 9d3b7b94d3779f6c       988 B
+kept a7_v3_prepared_run_1479__raw__00007.attempt1.raw.json a31020278c410f8a      1182 B
+kept a7_v3_prepared_run_1479__raw__00008.attempt1.raw.json bcdbd9efe08803d7       624 B
+kept a7_v3_prepared_run_1479__raw__00009.attempt1.raw.json fd3d46ee2dade1c8       838 B
+kept a7_v3_prepared_run_1479__raw__00010.attempt1.raw.json 217f76afb3e79235       473 B
+kept a7_v3_prepared_run_1479__raw__00011.attempt1.raw.json 217f76afb3e79235       473 B
+kept a7_v3_prepared_run_1479__raw__00012.attempt1.raw.json 5e35a3420e6ff326       668 B
+kept a7_v3_prepared_run_1479__raw__00013.attempt1.raw.json 86911588cdd2b46e       512 B
+kept a7_v3_prepared_run_1479__raw__00014.attempt1.raw.json 0d9b08566e11fe47       687 B
+kept a7_v3_prepared_run_1479__raw__00015.attempt1.raw.json 4060826facdc2e26       687 B
+kept a7_v3_prepared_run_1479__raw__00016.attempt1.raw.json 542da7ae0dba2229       954 B
+kept a7_v3_prepared_run_1479__raw__00017.attempt1.raw.json 542da7ae0dba2229       954 B
+kept a7_v3_prepared_run_1479__receipt.json                99c4621be26a6d8e    122825 B
+kept scratch__a4_dir.txt                                  63c90444936472cc       176 B
+kept scratch__a4_dir.txt                                  63c90444936472cc       176 B
+PRESERVED 283 artifacts
+REFUSED: step record_round1_states failed

@@ -1,0 +1,18 @@
+{
+ "validator": "../.core827_backups/recovery_1531/regen_1539/builds/stage1/tree/.claude/plans/Drivers/experiments/harness_g1v3/validate_benchmark_inventory.py",
+ "problems": [],
+ "records_checked": 196,
+ "hard_class_counts": {
+  "point_range_floor_ceiling": 148,
+  "losses_and_sign": 21,
+  "sequential_comparison": 5,
+  "measurement_wording": 23,
+  "favourable_unfavourable_direction": 7,
+  "expectation_routing": 7,
+  "slices_and_unknown_axes": 29,
+  "portion_versus_whole": 9,
+  "ambiguous_menus": 6,
+  "corrections_and_amendments": 5
+ },
+ "tag_floor": 5
+}

@@ -1,0 +1,8 @@
+per-kind candidate writer + seam registration
+G2 -> a7_g1_candidate.json  sha 21ae14e50050780e
+   load_frozen OK | task_kind=G2 | batch_rows=17 | rules=477dbd0dba6b
+   parser=read_meaning_reply | binding ids=10
+G3 -> a7_g1_candidate.json  sha 53a60ec15228c685
+   load_frozen OK | task_kind=G3 | batch_rows=46 | rules=29fd76ead35d
+   parser=read_extras_reply | binding ids=10
+Shell cwd was reset to /home/faisal/EventMarketDB

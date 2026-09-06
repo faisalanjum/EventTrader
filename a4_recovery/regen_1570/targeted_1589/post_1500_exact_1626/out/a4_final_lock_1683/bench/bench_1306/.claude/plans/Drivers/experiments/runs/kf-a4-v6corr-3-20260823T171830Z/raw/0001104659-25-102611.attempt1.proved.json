@@ -1,0 +1,269 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revolving_credit_agreement",
+              "driver_state": "reported",
+              "time_type": "instant",
+              "period_end_date": "2028-11-15"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the source states the Revolving Credit Agreement's amended, standing termination date (a re-readable contract term), settled as a metric carrying corrections_and_amendments because the governing text explicitly says the agreement 'as amended' extends that date."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The stated week-counts per fiscal quarter (12 weeks for Q1-Q3, 16/17 weeks for Q4 across 2023-2025) describe only the fiscal reporting calendar's own structure, not any driver's state, change, surprise, guidance, or action, and fails the Rule 1 gate as reporting-convention mechanics rather than a real driver fact."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed as a control: the sentence states only fiscal-calendar week-count mechanics with no driver content."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales_seasonal_concentration",
+              "driver_state": "reported",
+              "level_low": {"value": 33.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 33.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income_seasonal_concentration",
+              "driver_state": "reported",
+              "level_low": {"value": 33.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 33.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the source explicitly attributes a disproportionate share of annual net sales (33.0%) and net income (33.5%) to the seasonally-heavy fourth quarter, a genuine share/proportion meaning under Rule 3.3, split into two bases per Rule 4."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "share_repurchase_authorization",
+              "driver_state": "increased",
+              "change_value": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "level_low": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "instant",
+              "period_end_date": "2024-06-19"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the Board's stated $1.5 billion increase to a $39.2 billion cumulative repurchase authorization is a clean, directly quoted metric change."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "nlrb_organizing_decisions",
+              "driver_state": "occurred"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a negative_control but reclassified as a fact: the clause names a specific external regulator (the NLRB) and states its own completed action of issuing decisions that ease organizing, a real discrete action rather than generic litigation/risk boilerplate."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "commercial_sales_program",
+              "driver_state": "reported",
+              "level_low": {"value": 6098, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6098, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:us"],
+              "time_type": "instant",
+              "period_end_date": "2025-08-30",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "commercial_sales_program",
+              "driver_state": "reported",
+              "slice_parts": ["geography:br", "geography:mx"],
+              "time_type": "instant",
+              "period_end_date": "2025-08-30",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact, split into a quantified 6,098-domestic-store population and a qualitative 'vast majority' Mexico/Brazil population, both carrying portion_versus_whole because the commercial-sales-program population is a stated subset of the company's total store count."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["corrections_and_amendments"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Genuine lane tension between metric (a re-readable standing contract term) and action_event (the discrete November 2024 amendment that produced it); resolved to metric via the persistence test since the termination date itself remains a re-readable standing attribute."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Naming this share-of-annual-total concept without a banned period word required grounding the driver in the source's own stated seasonal-volume cause rather than the literal 'fourth quarter' label."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Split from the sales-basis fact per Rule 4's distinct-numeric-bases rule, sharing the same seasonal-concentration cause but on a net-income base."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Fuzzy-middle call with no locked DU boundary outside DU-11: the sentence sits inside generic unionization risk narrative but itself names a specific regulator and a specific completed action, settled as a real fact rather than boilerplate."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["portion_versus_whole", "point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The governing date (August 30, 2025) sits in the same sentence immediately before the row's quoted span rather than literally inside it; used under Rule 6 because it directly governs this fact."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 1,
+      "hard_classes": ["portion_versus_whole", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source states Mexico and Brazil jointly as an unquantified 'vast majority' with no per-country breakdown, so it is recorded as one qualitative fact carrying both geography slices rather than two separately measured facts."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001104659-25-102611#095",
+      "agrees": false,
+      "why": "This lead used fact_type action_event with driver_state occurred, whereas the final settlement uses metric with driver_state reported for the same termination-date fact under the persistence test."
+    },
+    {
+      "lead_id": "hr-015/b1/row1",
+      "agrees": true,
+      "why": "Identical fact_type (metric), driver_name (revolving_credit_agreement), driver_state (reported), time_type (instant) and period_end_date (2028-11-15) to the final settlement."
+    },
+    {
+      "lead_id": "hr-015/b2/row1",
+      "agrees": false,
+      "why": "Uses fact_type action_event and the generic name 'revolving_credit_facility' instead of the quote's own defined term, and omits the period_end_date/time_type the final settlement carries."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#096",
+      "agrees": true,
+      "why": "Same lawful branch (facts:[], one abstention) with matching reasoning that fiscal-quarter week-count wording is calendar mechanics, not a driver fact."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#097",
+      "agrees": false,
+      "why": "This lead abstained on the Q4-share-of-annual disclosure, concluding no lawful driver name exists; the final settlement instead finds a lawful cause-only name under Rule 3.3's share/proportion preservation and returns two split facts."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#098",
+      "agrees": true,
+      "why": "Identical driver_name, driver_state, change/level values and units, shape hint, time_type, and period_end_date, matching the final settled fact field-for-field."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#099",
+      "agrees": true,
+      "why": "Same fact_type action_event, driver_name nlrb_organizing_decisions, driver_state occurred, and the same reclassification of the row from proposed control to fact."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#100",
+      "agrees": false,
+      "why": "Matches the final settlement's first (US, 6,098-store) fact but omits the Mexico/Brazil qualitative fact the final settlement adds for this row, and neither lead-derived fact carried portion_versus_whole, so its reply is incomplete relative to the final answer."
+    }
+  ],
+  "open_issues": []
+}
+```

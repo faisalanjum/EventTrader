@@ -1,0 +1,5 @@
+path	sha256	why	replaced_by
+superseded/a7_budget_receipt_1508.4efbb2e8.json	4efbb2e8b236481140b57ec678c5c8bd3f8993dfeed719bcb4e3f451d5898289	pre-1509, superseded by the saved patch at original 87232 (Codex SEQ 1739)	proved/budget_receipt_1508.43cb6232.py
+superseded/budget_receipt_1508.2a436d27.py	2a436d27e958515bd2882ff9dcaa385547369a659dc0b7c6344826ac232daea7	pre-1509, superseded by the saved patch at original 87232 (Codex SEQ 1739)	proved/budget_receipt_1508.43cb6232.py
+superseded/final_targeted_corr3_1508/final_targeted_correction.manifest.json	3de8ac5f87c1c2da326787f928ee158ca14c442086b7625b33b8358a4a6ab2a0	built on the pre-1509 receipt; kept as the negative control	-
+superseded/final_targeted_corr3_1508/prompt_prefix_final_targeted_correction.txt	29672e0d91e3d68606fc9dbb53b19f1b2da2f841b8377b475bd6eca2bf780b90	built on the pre-1509 receipt; kept as the negative control	-

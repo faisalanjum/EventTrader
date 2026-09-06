@@ -1,0 +1,2 @@
+path	sha256	bytes	in_commit	why	needed_by
+a3_recovery/regen_1541/evidence/transcript/accepted_prefix.jsonl	d191941462674e63f16370104478a1e0774b88cbb953b8133a6face8353c1d93	210560179	no	exceeds the remote's 104857600-byte per-file limit; the exact records the reuse proof needs are published in reused_records/	reconstruction only (recover_a4_owner.py, tests/derive_v3_prompts.py); the signed checkpoint path does not read it

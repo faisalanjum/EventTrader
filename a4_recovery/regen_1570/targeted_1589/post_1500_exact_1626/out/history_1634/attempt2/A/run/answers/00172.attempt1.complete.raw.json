@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "fiftythird_week",
+        "driver_state": "occurred",
+        "level_low": {"value": 0.09, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 0.09, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "fiscal_year": 2024
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

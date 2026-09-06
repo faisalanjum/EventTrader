@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Net loss value (-382 vs -473) is stated only as bare digits in my fixed quote 'Net loss $ (382) $ (473) (19.2)'; the scale marker that supports the millions multiplier ('In millions, except share and per share amounts') sits in the table caption outside this quote, and unit_scale_evidence must be copied verbatim from inside the quote (Rule 5.3/5.6). With multiplier not equal to 1 and no in-quote scale marker, I cannot lawfully populate the numeric slot, so I abstain per Rule 1.4/5.6."
+    }
+  ],
+  "continuity_hints": []
+}
+```

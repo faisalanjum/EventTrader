@@ -1,0 +1,183 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "unknown",
+              "level_unit": "percent_yoy",
+              "value_text": "low-teens",
+              "conditions": "on flat capacity growth",
+              "company_confirmed": true,
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed a fact: this is the company's own bare forward guide for June-quarter revenue growth, a genuine numberless guidance fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "non_fuel_unit_cost",
+              "driver_state": "increased",
+              "change_value": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed a fact: an explicit stated year-over-year non-fuel unit cost increase is a genuine metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["product:main cabin"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed a fact: the qualitative claim of the first full quarter of positive main-cabin unit-revenue growth is a real numberless metric fact under the qualitative-fact rule."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "per_x": "gallon",
+            "item": {
+              "driver_name": "fuel_price_per_gallon",
+              "driver_state": "unknown",
+              "level_low": {"value": 4.30, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 4.30, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["all-in", "approximately"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed a fact: the company's own stated projected all-in fuel price for the June quarter is a genuine point-shaped guidance fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Rule 5a.4's permissive 'may' wording leaves it discretionary whether a numberless growth guide should carry a level_unit basis (percent_yoy) at all; I keep it as the safer, more complete reading."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The filing's own CASM-Ex table implies this cost is per available seat mile, but that per-X denominator is not stated inside this quote, so per_x and any per-ASM naming stay withheld under Rule 3.5's no-invention rule."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["portion_versus_whole", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'main cabin' is a company-owned product slice (Rule 7) versus an OD-17 in-name population qualifier is not fully settled here, and if kept as a slice, whether the coined off-menu token should preserve source spacing ('product:main cabin', per Rule 7's own 'unknown:legacy brands' precedent) or the menu's no-separator convention is a genuine open formatting question."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the plain hedge word 'approximately' (versus a technical flavor like 'all-in') falls under Rule 8's number-modifier safety-sink is not explicit in the rule's named examples, though its 'when unsure, keep' instruction favors capturing it, which I have done."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000027904-26-000020#024",
+      "agrees": true,
+      "why": "Matches the settled row-1 guidance fact field-for-field: driver_name revenue, state unknown, level_unit percent_yoy, value_text low-teens, conditions on flat capacity growth, company_confirmed true, FY2026 Q2, duration."
+    },
+    {
+      "lead_id": "phase1/0000027904-26-000020#025",
+      "agrees": true,
+      "why": "Matches the settled row-2 metric fact exactly: non_fuel_unit_cost increased, change_value 6/1/percent, change_unit percent_yoy, comparison_baseline prior_year, FY2026 Q1, duration."
+    },
+    {
+      "lead_id": "phase1/0000027904-26-000020#026",
+      "agrees": true,
+      "why": "Matches the settled row-3 metric fact exactly, including the coined slice token 'product:main cabin' with the source's natural spacing preserved."
+    },
+    {
+      "lead_id": "phase1/0000027904-26-000020#027",
+      "agrees": true,
+      "why": "Matches the settled row-4 guidance fact exactly, including both measurement_raw_spans entries 'all-in' and 'approximately'."
+    },
+    {
+      "lead_id": "hr-007/b1/row4",
+      "agrees": false,
+      "why": "Matches driver_name, value, unit, shape, and period, but its measurement_raw_spans list captures only 'all-in' and drops 'approximately', which the Rule 8 safety-sink ('when unsure, keep') also requires here."
+    },
+    {
+      "lead_id": "hr-007/b2/row4",
+      "agrees": true,
+      "why": "Same content as the settled row-4 fact, capturing both 'approximately' and 'all-in' as separate measurement spans; only list order differs, which is immaterial since measurement tokens are code-normalized and sorted."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No fixed convention for formatting a coined off-menu slice value's internal word spacing (e.g. 'product:main cabin' vs 'product:main_cabin' vs 'product:maincabin').",
+      "why": "Rule 7's own worked example ('unknown:legacy brands') keeps a natural space, but the existing menu's multiword tokens are concatenated with no separator at all; since slice-label normalization only converts existing punctuation and never inserts word boundaries (FS-18), the choice here directly affects the persisted identity string and future dedup, and this event alone cannot settle which convention the catalog wants."
+    }
+  ]
+}
+```

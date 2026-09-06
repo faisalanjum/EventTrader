@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "antitrust_immunity",
+        "driver_state": "suspended",
+        "period_start_date": "2025-09-15",
+        "period_end_date": "2025-09-15",
+        "time_type": "instant",
+        "slice_parts": ["entity_ownership:grupoaeromexico"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

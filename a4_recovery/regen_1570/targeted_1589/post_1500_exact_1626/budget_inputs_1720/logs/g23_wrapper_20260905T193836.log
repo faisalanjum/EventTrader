@@ -1,0 +1,19 @@
+rc=2
+log: /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/budget_inputs_1720/logs/g23_20260905T193836.log
+ok   69679_reference_inventory_artifact rc=0  recorded lines 5, suffix match True
+BAD  69853_g23_candidates   rc=0  recorded lines 7, suffix match False
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result
+      recorded:    load_frozen OK | task_kind=G3 | batch_rows=46 | rules=29fd76ead35d
+      replayed:     raise ValueError("task kind %r is already bound to another pair" % kind)
+      recorded:    parser=read_extras_reply | binding ids=10
+      replayed: ValueError: task kind 'G2' is already bound to another pair
+   --- replay output tail ---
+per-kind candidate writer + seam registration
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_run.py", line 321, in <module>
+    G.register_task_kind("G2", kind_binding, B.read_meaning_reply)
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 1694, in register_task_kind
+    raise ValueError("task kind %r is already bound to another pair" % kind)
+ValueError: task kind 'G2' is already bound to another pair
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result

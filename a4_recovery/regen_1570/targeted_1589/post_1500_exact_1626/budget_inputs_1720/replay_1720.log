@@ -1,0 +1,6 @@
+BAD  64992_run4_root      rc=1  recorded lines 23, suffix match False
+      recorded: candidate pin        : efcf41c5041f774bf9bd2950b26d6667665dd3c9cd52415d88e2c34673a8a45e
+      replayed: /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/budget_inputs_1720/generators/64992_run
+   --- replay output tail ---
+/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/budget_inputs_1720/generators/64992_run4_root.sh: line 2: cd: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v2: No such file or directory
+REFUSED: step 64992_run4_root did not reproduce its recorded result

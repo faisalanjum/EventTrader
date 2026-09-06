@@ -1,0 +1,147 @@
+rewired
+path + fail-closed owner check installed
+rules + opaque id installed
+uniqueness guard + controls added
+controls now derive the scored set
+loader/call-packet/result binder added
+bindings, controls, prompt paths and max budget wired
+validate_merged added
+raw filename defect fixed
+launch section rewritten
+cleaned
+builder fixes applied
+order check simplified
+accounting echo + re-derivation added
+half-publication slot now refuses
+lifecycle + state-audit fixes applied
+per-lane lifecycle installed
+external approval carried through
+duplicate init removed
+delegation wired
+cleaned
+expect carries the digest
+builder: batch_ids bound, full returned row kept
+publisher and audit rewired
+inlined
+implementation inserted
+validate_merged is now the relation-to-credit owner
+deleted render..reconcile            4338 bytes
+deleted batches                      1198 bytes
+deleted RULES block                  1628 bytes
+rewired
+freeze rewired to event groups
+audit detail + terminal categories added
+build owner patched
+a7_g1_build rewired: live_key + shared card
+index translation named
+all prior spend accounted
+task-kind seam added
+reconciliation scoped to the segment
+materialize now emits the one trace
+caller passes the real arm names
+segment-scoped reconciler deleted
+effective_slots carries every saved attempt
+one attempt-complete row per scheduled slot
+raw_path stays the run path it always was
+a7_g1_build threaded, parses OK
+internal calls pass the identity
+a zero-call run is uncalled, not broken
+inventory fails closed by name
+A5 in scope
+g1 freeze fails closed
+every retry state named
+docstring no longer names a typed total
+run_of rederives and exact-compares
+run_of rederives without re-gating the era
+questions passes the run to its card lookup
+G1 consumes the one ledger owner
+one materialization per validated run
+a7_g23_build.py             65754 recorded-file-write  ok       e1afeb92d21c89d8
+a7_g23_build.py             65767 recorded-file-write  ok       3feea1442687e15d
+a7_g23_build.py             65797 recorded-file-write  ok       97e0e2f1ce73209f
+a7_g23_build.py             65836 read-only(raised)    ok       97e0e2f1ce73209f
+g23 owner: five-field text corrected, route instant now the frozen one
+a7_g23_build.py             66620 applied              ok       4f44aaf85267cdc6
+aspect definitions added, output example is a real JSON object
+a7_g23_build.py             66918 applied              ok       bad63b8018b606b0
+a7_g23_build.py             66924 recorded-file-write  ok       b6b213ac220b2f84
+total unintended changes: 0
+a7_g23_build.py             67355 recorded-file-write  ok       ebcae614f169152e
+detector now ignores the source's own wording
+a7_g23_build.py             67360 applied              ok       245928d5db29a4df
+G2: raw evidence on the authority side; parser strict by identity
+a7_g23_build.py             67370 applied              ok       5cd0bbb37c9b4f18
+a7_g23_build.py             67375 recorded-file-write  ok       2cc02925de3f8776
+a7_g23_build.py             67385 recorded-file-write  ok       94a9cd693f1697cf
+packing distinctness is now the SOURCE EVENT
+a7_g23_build.py             67395 applied              ok       ed05fa1eda85a119
+a7_g23_build.py             67457 recorded-file-write  ok       38792456296929b9
+reference card replaces quote-only, with a structural whitelist
+a7_g23_build.py             67574 applied              ok       e8a0bf574f772e87
+a7_g23_build.py             67661 recorded-file-write  ok       4a0c29ff69c464a1
+the card now reads the frozen inventory by exact row identity
+a7_g23_build.py             67833 applied              ok       b62891d2f6bedad6
+non_unique_cards updated
+a7_g23_build.py             67843 applied              ok       c393b1bf217d139d
+a7_g23_build.py             67919 read-only(raised)    ok       c393b1bf217d139d
+a7_g23_build.py             67937 read-only(raised)    ok       c393b1bf217d139d
+citations stripped
+a7_g23_build.py             68009 applied              ok       1849a177991c9744
+door tightened
+a7_g23_build.py             68034 applied              ok       cab21b160db48a85
+batch_packet added
+a7_g23_build.py             68301 applied              ok       a3366b38c6524bb1
+  OK a7_g23_build.py
+G3 keeps each question with its own event's cards
+a7_g23_build.py             69568 applied              ok       4ac81aaebdafac17
+a7_g23_build.py             69638 read-only(raised)    ok       4ac81aaebdafac17
+serving path now validates
+a7_g23_build.py             69651 applied              ok       8d2d2c00819e26a0
+rewired a7_g23_build.py
+a7_g23_build.py             70321 applied              ok       20bad968975cf040
+a7_g23_build.py             70467 applied              ok       bcbfa88c6c2c7fe6
+a7_g23_build.py             70638 applied              ok       2955d25965b57a39
+g23_build threaded (signatures)
+a7_g23_build.py             73642 applied              ok       8d8f01b8de7afd4e
+run threaded to every reference_card site
+a7_g23_build.py             73645 applied              ok       0cfaaf86e4acdafe
+precall_unresolved threaded
+a7_g23_build.py             73656 applied              ok       9fda2aed8f16975a
+preflight_problems threaded
+a7_g23_build.py             73663 applied              ok       691062ff7052270d
+official scoring entry added
+a7_g23_build.py             73955 applied              ok       fd0160a1850897ca
+population comes from the frozen candidate
+a7_g23_build.py             74229 applied              ok       23be6c793fa4db1b
+inventory revalidates before the cache lookup
+a7_g23_build.py             74294 applied              ok       9c5c428544facacf
+inventory passes the identity
+a7_g23_build.py             74304 applied              ok       dbb1870bd89c7763
+sources are locations and hashes only
+a7_g23_build.py             74414 applied              ok       ee54892ae207dcc4
+official scorer derives its own inputs
+a7_g23_build.py             74424 applied              ok       fcb4e458da77719d
+official entry routes once into its own audit
+a7_g23_build.py             74525 applied              ok       bf8029e16bed40af
+official maps derive from the root
+a7_g23_build.py             75160 applied              ok       bbd8f5653c35afe4
+G1 resolution derives from its approved lifecycle
+a7_g23_build.py             75180 applied              ok       4a2dca181fb5fb1d
+relations derived through their owner
+a7_g23_build.py             75213 applied              ok       7a1b2428cb860625
+ok: score_leg_official reuses the derived route
+a7_g23_build.py             75315 applied              ok       212f5b2fa8b39870
+ok: G1 becomes required
+ok: the required kinds gate
+ok: the absent-G1 refusal, before any grader work
+a7_g23_build.py             75912 applied              ok       e7336381b24770d2
+ok: the saved completion supplies the external expectations
+ok: the whole completion is exact-compared
+ok: official_resolution binds the producer before resolving
+a7_g23_build.py             75917 applied              ok       065d12eb482ce263
+official_resolution corrected
+new sha: 21e74d2d205c09cc4cbf0c7ea7301bd8281ec4cc5e4cfe4e3694cc24d93175e8
+a7_g23_build.py             76381 applied              ok       21e74d2d205c09cc
+a7_g23_build.py             76425 read-only(raised)    ok       21e74d2d205c09cc
+a7_g23_build.py             76430 read-only(raised)    ok       21e74d2d205c09cc
+recovered 1 source files; applied=34, read-only=62, read-only(raised)=6, recorded-file-write=9; 49 unique tool ids

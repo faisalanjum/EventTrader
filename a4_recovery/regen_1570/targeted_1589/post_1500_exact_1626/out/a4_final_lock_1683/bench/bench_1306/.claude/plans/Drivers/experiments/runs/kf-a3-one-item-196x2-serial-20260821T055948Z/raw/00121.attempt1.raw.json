@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "person",
+      "item": {
+        "driver_name": "average_check_per_person",
+        "driver_state": "reported",
+        "level_low": {"value": 24.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 24.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:olivegarden"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

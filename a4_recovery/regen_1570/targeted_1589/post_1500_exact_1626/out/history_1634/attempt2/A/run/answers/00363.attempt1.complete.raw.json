@@ -1,0 +1,48 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "change_value": {"value": 1.2, "scale_multiplier": 1, "unit_scale_evidence": "1.2%"},
+        "change_unit": "percent_yoy",
+        "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "time_type": "duration",
+        "fiscal_year": 2025
+      },
+      "per_x": "share"
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "beat",
+        "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "favorable",
+          "basis": "metric_meaning",
+          "evidence": "Diluted EPS coming in above the company's own previously provided guidance means actual per-share earnings exceeded the level management had guided to, which is a favorable outcome for an earnings metric with no mainstream counter-story.",
+          "sentence": "diluted EPS increased 1.2% to $25.64 per share above our previously provided guidance"
+        }
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

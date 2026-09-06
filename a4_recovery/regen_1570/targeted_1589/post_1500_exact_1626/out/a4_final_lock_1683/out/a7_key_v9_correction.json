@@ -1,0 +1,1497 @@
+{
+ "acted_rows": 75,
+ "actionable_population": 52,
+ "by_action": {
+  "add_fact": 1,
+  "append_terminal_suffix": 46,
+  "park": 4,
+  "patch_item": 22,
+  "set_driver_name": 2
+ },
+ "clean_od1_run": "/tmp/a7_od1_run_v2/official_result.json",
+ "clean_od1_run_sha256": "ce102969176c946e09bb0c926c981afe160a7099ec21f3259b6502e9c26c0708",
+ "family_audit_population": 68,
+ "rows": [
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "revenue",
+   "old_fact_sha256": "166dbe2023b3b3e7855cf05259ca1360feae9e1f25542aa0609deaf19a72233f",
+   "old_fact_type": "guidance",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "net_income",
+   "old_fact_sha256": "2b7b7c8a87ffc9636c8044ff7f2c867c889b46d94b0e17a1889bf61fb5960c0c",
+   "old_fact_type": "guidance",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 5,
+   "old_driver_name": "fuel_consumption",
+   "old_fact_sha256": "1648a6c34d94c35ff701bebf042c7eb998c1d9e9c86b4260683d961894dd02d2",
+   "old_fact_type": "guidance",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "revenue",
+   "old_fact_sha256": "1973925394fbf655e8b0dc84343220316b9392f2c1f30c31e59a379491191ba3",
+   "old_fact_type": "guidance",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 3,
+   "old_driver_name": "fuel_price_per_gallon",
+   "old_fact_sha256": "17caa8ae9b02ec9501fc0df65ff88fd95d7a30dc902a48af8b045faec68005ee",
+   "old_fact_type": "guidance",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "47002fbb4532a787590ce413bceef34e74db6cfa66388180cd0e89e8f7158e07",
+   "old_fact_type": "guidance",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 1,
+   "old_driver_name": "aircraft_deliveries",
+   "old_fact_sha256": "6ba03ee3e26420b65f7fe8cabc3938d256b0f47d466ce0c8c3c2fec748e43390",
+   "old_fact_type": "guidance",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 3,
+   "old_driver_name": "aircraft_retirements",
+   "old_fact_sha256": "0736565e0c7bdff3581d369db07e8a2d70e04804cc819f448be38c76c90668d6",
+   "old_fact_type": "guidance",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 1,
+   "old_driver_name": "comparable_store_sales",
+   "old_fact_sha256": "b0a2530672b9d7cf8e161a2eaef4d9d87d820b5e23a532a4d6e3775abd9b5468",
+   "old_fact_type": "surprise",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 6,
+   "old_driver_name": "comparable_store_sales",
+   "old_fact_sha256": "16fe1cca16a190b3bbd38cf03d5b37d0ff49088f6f92f0e4389c23e5c99b4855",
+   "old_fact_type": "guidance",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-12-31",
+     "to": null
+    }
+   },
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "continuing_operations_earnings_per_share",
+   "old_fact_sha256": "3a371b69e9d77e355b5a0d4cc668c2bac1e71ae713904a629320a0ce0d33136b",
+   "old_fact_type": "guidance",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 1,
+   "old_driver_name": "total_sales",
+   "old_fact_sha256": "4e59cdc73bc9f9e120900443ca21399fccb5e15c9ea9fd6ce5a622f3b09580f8",
+   "old_fact_type": "guidance",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "net_leverage_ratio",
+   "old_fact_sha256": "a6016a2326d76075daf63c4ba56ae1617a5ab328967f3fe3e5e36c648d50cfcc",
+   "old_fact_type": "guidance",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "comparable_restaurant_sales",
+   "old_fact_sha256": "9ed92647f9a1f19cf291b0989401340327eea6f47298f37579a296102b691da2",
+   "old_fact_type": "guidance",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 2,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "934b511ba5a2cc98de94e571d74ba5045b181027e5e3b18c68667384f0c7d726",
+   "old_fact_type": "surprise",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "action": "park",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "NO"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "NO"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "margin",
+   "old_fact_sha256": "a660417267a4d9ba073aef67777fb7a49b2336491d6d70c8bb77080852a73a17",
+   "old_fact_type": "metric",
+   "park_reason": "the same unsupported broad base as its family row",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "action": "park",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "NO"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "NO"
+    }
+   ],
+   "gold_idx": 5,
+   "old_driver_name": "margin",
+   "old_fact_sha256": "909a5d5082c2383ac73ce38f63ef00e857ddddb916edf56dbff239259cd82a3c",
+   "old_fact_type": "surprise",
+   "park_reason": "the source does not identify a specific standing margin",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 5,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "bdbb15291a1b68e15922e4c1a7cd6cd3aa79fd95665fc2467dca04a2072e4897",
+   "old_fact_type": "guidance",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 6,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "959aa0213751e5cdc66d951db94e81f8208b8acb2de96b9cfcf1de869a6ddd12",
+   "old_fact_type": "guidance",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 8,
+   "old_driver_name": "net_sales",
+   "old_fact_sha256": "7ba9332012b7cac986d7e2f8e1f035f2d6728c62f44e1e3bf2373497b52df14a",
+   "old_fact_type": "guidance",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "blind_lane_OD1a",
+     "candidate_id": "OD1-000",
+     "evidence_phrase": "our international sales, in constant currency, were slightly below our expectations",
+     "run": "/tmp/a7_od1_run_v2/official_result.json",
+     "run_sha256": "ce102969176c946e09bb0c926c981afe160a7099ec21f3259b6502e9c26c0708",
+     "verdict": "YES"
+    },
+    {
+     "by": "blind_lane_OD1b",
+     "candidate_id": "OD1-000",
+     "evidence_phrase": "our international sales, in constant currency, were slightly below our expectations",
+     "run": "/tmp/a7_od1_run_v2/official_result.json",
+     "run_sha256": "ce102969176c946e09bb0c926c981afe160a7099ec21f3259b6502e9c26c0708",
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 2,
+   "old_driver_name": "sales",
+   "old_fact_sha256": "948415e1d1e43f682e4d0239b5097447d86793beeb89b67cfa958e06283e3f21",
+   "old_fact_type": "surprise",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "action": "park",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "UNCLEAR"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "UNCLEAR"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "casmx",
+   "old_fact_sha256": "2171d6b4888f39e7ca1634ceafb1bb80a43eea349241418e17497d9e0bb3a300",
+   "old_fact_type": "guidance",
+   "park_reason": "the event never expands the per-X acronym and the key carries per_x null; NAME-13 requires abstention",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 1,
+   "old_driver_name": "unit_revenue",
+   "old_fact_sha256": "0cee8f0381707e929c85ce5b486106ae54eb9c88ddffe17b8193c4b908400a77",
+   "old_fact_type": "guidance",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "1c2a08cbb8d76d739de6a9dbb4408690db049ade98c0dcb6a43daf988c5db0b5",
+   "old_fact_type": "guidance",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 2,
+   "old_driver_name": "advertising_collections",
+   "old_fact_sha256": "572e1c1a3c6e17bb2ed9beced33f164fb714b9e026ace81328396d54b81cdea6",
+   "old_fact_type": "guidance",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "gross_profit_rate",
+   "old_fact_sha256": "ef2959f01d11210759f1a4e682898518d37ed8d0998437d62c99be53c99bab7b",
+   "old_fact_type": "guidance",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 2,
+   "old_driver_name": "comparable_restaurant_sales",
+   "old_fact_sha256": "410ce6b28d91e6a0ba4736ef92a4bd2385f9bc3b0a14d5e19a8873df77e4028a",
+   "old_fact_type": "guidance",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "action": "set_driver_name",
+   "checks": [
+    {
+     "by": "blind_lane_OD1a",
+     "candidate_id": "OD1-001",
+     "evidence_phrase": "we anticipate about 2,000 by year end",
+     "run": "/tmp/a7_od1_run_v2/official_result.json",
+     "run_sha256": "ce102969176c946e09bb0c926c981afe160a7099ec21f3259b6502e9c26c0708",
+     "verdict": "YES"
+    },
+    {
+     "by": "blind_lane_OD1b",
+     "candidate_id": "OD1-001",
+     "evidence_phrase": "we anticipate about 2,000 by year end",
+     "run": "/tmp/a7_od1_run_v2/official_result.json",
+     "run_sha256": "ce102969176c946e09bb0c926c981afe160a7099ec21f3259b6502e9c26c0708",
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 3,
+   "old_driver_name": "high_efficiency_equipment_package",
+   "old_fact_sha256": "9667744dd85043e0401f8ccc10417965dab94269b02952a32487508d3fd01f35",
+   "old_fact_type": "metric",
+   "patch": {
+    "driver_name": "high_efficiency_equipment_package_restaurant_count"
+   },
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "action": "set_driver_name",
+   "checks": [
+    {
+     "by": "blind_lane_OD1a",
+     "candidate_id": "OD1-001",
+     "evidence_phrase": "we anticipate about 2,000 by year end",
+     "run": "/tmp/a7_od1_run_v2/official_result.json",
+     "run_sha256": "ce102969176c946e09bb0c926c981afe160a7099ec21f3259b6502e9c26c0708",
+     "verdict": "YES"
+    },
+    {
+     "by": "blind_lane_OD1b",
+     "candidate_id": "OD1-001",
+     "evidence_phrase": "we anticipate about 2,000 by year end",
+     "run": "/tmp/a7_od1_run_v2/official_result.json",
+     "run_sha256": "ce102969176c946e09bb0c926c981afe160a7099ec21f3259b6502e9c26c0708",
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 6,
+   "old_driver_name": "high_efficiency_equipment_package",
+   "old_fact_sha256": "c3c6343df3a92770e223691bf25b5b858a8a4b6b18a70c83d2613198dae767ff",
+   "old_fact_type": "guidance",
+   "patch": {
+    "driver_name": "high_efficiency_equipment_package_restaurant_count_guidance"
+   },
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "operating_margin",
+   "old_fact_sha256": "db54231974c4c642d7c9b51e9ba798356155d8c337d947e448bc352944dabb92",
+   "old_fact_type": "guidance",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 1,
+   "old_driver_name": "pretax_income",
+   "old_fact_sha256": "58b0a7749cfdc436c12d010197458e7165738e484fcca87be3f307acf519b0cd",
+   "old_fact_type": "guidance",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 2,
+   "old_driver_name": "capacity",
+   "old_fact_sha256": "c39b4ba563fae981c9f545410a52c90b6fedd4fe6e17be8789da8354a00abef4",
+   "old_fact_type": "guidance",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 3,
+   "old_driver_name": "unit_revenue",
+   "old_fact_sha256": "072eaea81956584e9f332c71b6bbcd3895a62c7d8d0e9545822459e48921573c",
+   "old_fact_type": "guidance",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 7,
+   "old_driver_name": "revenue",
+   "old_fact_sha256": "eb1dfa0c1c6c3039bf56df4300147aed13c98d1e732d62d8b61dbfaa9dd40deb",
+   "old_fact_type": "guidance",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "park",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "NO"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "NO"
+    }
+   ],
+   "gold_idx": 8,
+   "old_driver_name": "fuel_recapture",
+   "old_fact_sha256": "878b57ce01118b3b07f1dce640231efdc5fe12111d94bedfcc4ad85296560dee",
+   "old_fact_type": "guidance",
+   "park_reason": "a one-event recovery share, not a safely reusable standing base",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 9,
+   "old_driver_name": "fuel_expense",
+   "old_fact_sha256": "122663c604d44e34b53986212f5fa8396c766985d61f882bea92b8c9647728db",
+   "old_fact_type": "guidance",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "total_sales",
+   "old_fact_sha256": "44a01304ae2ae55ee5ba3440067bbc17d7990d5ad9ab49e8db88425a3a331319",
+   "old_fact_type": "guidance",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 3,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "45a76ccdbc4aa3c675e2aba383c6611981d8fb662a4b391a1196681ab6276179",
+   "old_fact_type": "surprise",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "total_sales",
+   "old_fact_sha256": "bb2b8cfb926aa0bb850e4d23e5a7133fc1df1b42c94951bafff1b51f480e29c6",
+   "old_fact_type": "guidance",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "effective_tax_rate",
+   "old_fact_sha256": "9e5ccde653de086aa0f5adaebc46bb52588d16d76663abaec762a30048f87754",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 1,
+   "old_driver_name": "gross_restaurant_openings",
+   "old_fact_sha256": "263a68cd4d6147abdc28ab72a8cc0589e684a195387aa5b5ee6bd4f486329660",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 2,
+   "old_driver_name": "restaurant_count",
+   "old_fact_sha256": "38718b901d58b936f17f1664c2aaea10af0ae34bf2e98a1af36c2dd2deac17d4",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "comparable_sales",
+   "old_fact_sha256": "8429663c034597e29aa0721b4ee1644566378ccaf7d25ac9e1b715200ebac337",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 6,
+   "old_driver_name": "capital_expenditure",
+   "old_fact_sha256": "a4b966088d632f77d5052610b511a37df8713020a43199cb4d325f5514688611",
+   "old_fact_type": "surprise",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 7,
+   "old_driver_name": "comparable_sales",
+   "old_fact_sha256": "e9e81ea7e98dd01f0f94ca811dd23fc996a6731eaacbe574ae5a248be9ba3b40",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 8,
+   "old_driver_name": "comparable_sales",
+   "old_fact_sha256": "603546b94e049e78ccb2f7462e3475d35993825fb2727cb6137b060ba8c08b1d",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 9,
+   "old_driver_name": "restaurant_count",
+   "old_fact_sha256": "6d4fbf00ca17676bb9e6d95a2868b5c1f37697ebe074749bc2c63f2257683c93",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 10,
+   "old_driver_name": "net_restaurant_additions",
+   "old_fact_sha256": "a2078a78288535d2a1f046e6fe81e2c4580d112c0b26e4b2c245dde2688cdb5f",
+   "old_fact_type": "guidance",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "sga_expense",
+   "old_fact_sha256": "3d3106262186d5efe0dc9c9fc57ebc86a522b888ad1091ac1b21de3d7d059c55",
+   "old_fact_type": "guidance",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 6,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "89f0d52e442f00cdaf0280393a6d88b467de16589badd7d8a83573bede0db86d",
+   "old_fact_type": "surprise",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 0,
+   "old_driver_name": "tax_rate",
+   "old_fact_sha256": "d230b35463e7c611a808deca71e6cd25f8b38f86103194b90b0387eba69614db",
+   "old_fact_type": "guidance",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "action": "append_terminal_suffix",
+   "checks": [
+    {
+     "by": "Core",
+     "seq": 1273,
+     "verdict": "YES"
+    },
+    {
+     "by": "Codex",
+     "seq": 1455,
+     "verdict": "YES"
+    }
+   ],
+   "gold_idx": 4,
+   "old_driver_name": "interest_expense",
+   "old_fact_sha256": "0c78ed86c656d1499f10c7f2129f049dcd1bff9955d94ba979d8d13ed68faae4",
+   "old_fact_type": "guidance",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 0,
+   "old_driver_name": "comparable_sales",
+   "old_fact_sha256": "eadd72ba26d9b71ffe7b8854e9afc2e6d23cfcb81638df3a31b6a53c0ca8d382",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-11-01",
+     "to": null
+    }
+   },
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 2,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "536e099363b305f58bb3b10b9384ada26d8479fc4b66e99d46457205944bc14b",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-11-01",
+     "to": null
+    }
+   },
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 4,
+   "old_driver_name": "restructuring_charges",
+   "old_fact_sha256": "eefe48ca4a58fbe172a27c951a7629069afe055f69be083f38f814e10381fb4a",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-11-01",
+     "to": null
+    }
+   },
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 2,
+   "old_driver_name": "comparable_store_sales",
+   "old_fact_sha256": "72b0a53a69d50a4df8732b1d6b28d10f399cc1f3b17893785c0bcbccce336177",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-12-31",
+     "to": null
+    }
+   },
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 3,
+   "old_driver_name": "gross_profit",
+   "old_fact_sha256": "d4851fae5a88679d0ede08c125ea7f32ee262272b493cc843e10793b4de1ddd6",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-12-31",
+     "to": null
+    }
+   },
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 4,
+   "old_driver_name": "gross_margin",
+   "old_fact_sha256": "e0cb458f44fb152df2ab9d3f077d16868cfb7325d579844bb56b91749d39a728",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-12-31",
+     "to": null
+    }
+   },
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 5,
+   "old_driver_name": "share_repurchase_excise_tax",
+   "old_fact_sha256": "0c7cb68cda450d74a34d21d150b4c246a73a7880827e438302d99bb9d0c22f48",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-12-31",
+     "to": null
+    }
+   },
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 10,
+   "old_driver_name": "net_income",
+   "old_fact_sha256": "cdbdcc9e41f2f8ca2e28c3944a8b6cb0014df0c1ff8227cd295773129333b92a",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-12-31",
+     "to": null
+    }
+   },
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 11,
+   "old_driver_name": "net_margin",
+   "old_fact_sha256": "f30d8839df9472fe60ef55df102fd56be0a07a3679f3a84d5af35cb8f8e024f6",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-12-31",
+     "to": null
+    }
+   },
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 0,
+   "old_driver_name": "interest_expense_net",
+   "old_fact_sha256": "eccd32dcecf48b5c8ab8711555628ba733bb188fcb75dd65021bc69ff6704214",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2025-11-01",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 0,
+   "old_driver_name": "comparable_sales",
+   "old_fact_sha256": "7ca591937db15190ae1cc09dba8a32519e158432cbc8a295fdb8e630b87536b0",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-01-31",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 1,
+   "old_driver_name": "average_ticket",
+   "old_fact_sha256": "d57e72ddae6699e293fef9e83c6c0c03a87c3aeb682f9be8c16b2ccbeafbe5c0",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-01-31",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 2,
+   "old_driver_name": "transactions",
+   "old_fact_sha256": "da5675dfbf05fae03d6c03c39a3724d269c9668b8468fa8a99467b59619bfc16",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-01-31",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 3,
+   "old_driver_name": "earnings_per_share",
+   "old_fact_sha256": "820f7bb2083d62050e6f30afd26a3cf62202fbd6c05dba07d46cf55bddb20c87",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-01-31",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 4,
+   "old_driver_name": "net_sales",
+   "old_fact_sha256": "7d84e83296d20c0b8887cf9dfff759ac447377b7b6fcb37387362ae3ba7c672b",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-01-31",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 7,
+   "old_driver_name": "sga_expenses",
+   "old_fact_sha256": "73ae731599fc7f81b9c8c0410d00f1e83ae1874c278fa5dadd6247af300503ec",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-01-31",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 4,
+   "old_driver_name": "net_sales",
+   "old_fact_sha256": "3f3b72681b49a6e48b43a604f1f88c09b12c6e18483107dc61362013816882db",
+   "old_fact_type": "metric",
+   "patch": {
+    "period_end_date": {
+     "from": "2026-02-14",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 3,
+   "old_driver_name": "restaurant_sales",
+   "old_fact_sha256": "264cb5ce3441c668aced6c0715c9d0d830f2a075e9089ccb614c1a6e2afafb1c",
+   "old_fact_type": "metric",
+   "patch": {
+    "fiscal_quarter": {
+     "from": null,
+     "to": 3
+    },
+    "period_end_date": {
+     "from": "2025-09-30",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 0,
+   "old_driver_name": "sales_channel_mix",
+   "old_fact_sha256": "dd9d2d14910fcd38baac7d29a76dfe6517d0035c758cf9640d81c147f3c2a51a",
+   "old_fact_type": "metric",
+   "patch": {
+    "fiscal_quarter": {
+     "from": null,
+     "to": 3
+    },
+    "period_end_date": {
+     "from": "2025-09-30",
+     "to": null
+    }
+   },
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 5,
+   "old_driver_name": "revenue_per_available_seat_mile",
+   "old_fact_sha256": "c530b1b95110e2443a28ce9242bae6acd56b1e015fbb37d55dd53ca4cc719a9f",
+   "old_fact_type": "metric",
+   "patch": {
+    "change_unit": {
+     "from": "percent_yoy",
+     "to": null
+    },
+    "level_unit": {
+     "from": null,
+     "to": "percent_yoy"
+    }
+   },
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 6,
+   "old_driver_name": "revenue_per_available_seat_mile",
+   "old_fact_sha256": "89ebfcfd1f7cbbf46492a60601ef9a2992c62e0db15500ffe79a67eebf24f68d",
+   "old_fact_type": "metric",
+   "patch": {
+    "change_unit": {
+     "from": "percent_yoy",
+     "to": null
+    },
+    "level_unit": {
+     "from": null,
+     "to": "percent_yoy"
+    }
+   },
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "action": "patch_item",
+   "evidence": "SEQ 1457 items 3 and 5",
+   "gold_idx": 4,
+   "old_driver_name": "unit_revenue",
+   "old_fact_sha256": "6743f750ab318cbfd3944795fcf9991b326c37045472d5ea885774e5acbed321",
+   "old_fact_type": "metric",
+   "patch": {
+    "change_unit": {
+     "from": "percent_yoy",
+     "to": null
+    },
+    "level_unit": {
+     "from": null,
+     "to": "percent_yoy"
+    }
+   },
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "action": "add_fact",
+   "evidence": "FINAL_DESIGN.md:153 numberless surprise needs a numberless home",
+   "fact": {
+    "ambiguity_note": "restored: FINAL_DESIGN.md:153 requires a NUMBERLESS home for a numberless surprise; this sentence's own 'mid-single-digit earnings per share growth' metric was retired onto a richer value-bearing row",
+    "du_worthy": true,
+    "fact_type": "metric",
+    "gold_extra": {
+     "expectation_comparison_present": false
+    },
+    "item": {
+     "change_unit": null,
+     "change_value": null,
+     "company_confirmed": null,
+     "comparison_baseline": null,
+     "comparison_high": null,
+     "comparison_low": null,
+     "comparison_shape_hint": null,
+     "conditions": null,
+     "driver_name": "earnings_per_share",
+     "driver_state": "increased",
+     "fiscal_quarter": 3,
+     "fiscal_year": 2026,
+     "half": null,
+     "has_favorability_wording": false,
+     "level_high": null,
+     "level_low": null,
+     "level_shape_hint": null,
+     "level_unit": "percent_yoy",
+     "long_range_end_year": null,
+     "long_range_start_year": null,
+     "measurement_raw_spans": [],
+     "month": null,
+     "period_end_date": null,
+     "period_scope": null,
+     "period_start_date": null,
+     "polarity_proof": null,
+     "quote": "Third quarter earnings were in line with our expectations, delivering mid-single-digit earnings per share growth.",
+     "sentinel_class": null,
+     "slice_parts": [],
+     "surprise_basis_hint": null,
+     "time_type": "duration",
+     "value_text": null
+    },
+    "occurrence_in_part": null,
+    "part_ref": "prepared_remarks",
+    "per_x": "share"
+   },
+   "gold_idx": 7,
+   "old_driver_name": null,
+   "old_fact_sha256": null,
+   "old_fact_type": null,
+   "source_id": "DRI_2026-03-19T08.30"
+  }
+ ],
+ "rows_carrying_a_patch": 25,
+ "schema": "a7_key_correction/4",
+ "unchanged_controls": 16
+}

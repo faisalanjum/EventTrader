@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states net loss excluding net special items as $(267) vs $(386) with no in-quote scale marker; the scale wording ('in millions') sits only in the table header/footnote outside this quote, so the multiplier cannot be lawfully resolved from the quote itself — abstain per Rule 5.6."
+    }
+  ],
+  "continuity_hints": []
+}
+```

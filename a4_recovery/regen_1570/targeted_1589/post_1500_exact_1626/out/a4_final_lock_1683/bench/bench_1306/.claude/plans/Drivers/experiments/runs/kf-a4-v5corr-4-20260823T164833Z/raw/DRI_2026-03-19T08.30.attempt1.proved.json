@@ -1,0 +1,305 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "total_sales",
+              "driver_state": "unknown",
+              "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 14.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true,
+              "measurement_raw_spans": ["which includes the extra fiscal week"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact: the CFO's stated Q4-implied total-sales-growth range of 13%-14.5% is a genuine company-confirmed forward guidance statement."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3.3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 5.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact: the $3.3 billion total-sales level with its explicit 5.9% year-over-year increase is a fully quantified metric."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_sales",
+              "driver_state": "increased",
+              "change_value": {"value": 11.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhorn"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact: Longhorn's stated 11.2% total-sales increase is a real segment metric, though its slice required an off-menu coin (segment:longhorn) because the menu carries two indistinguishable Longhorn segment tokens."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item; it still settles as a fact but only as the surprise half of the TWINS pair \u2014 its numberless 'mid-single-digit EPS growth' metric is an exact semantic repeat of row 7's richer $2.95/5.4% restatement (Rule 8) and is retired in favor of that canonical fact, while the grounded 'in line with our expectations' surprise survives on its own, homed on row 7."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "total_sales",
+              "driver_state": "unknown",
+              "level_low": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact: the updated ~9.5% full-year total-sales-growth guide is company-confirmed, though absent an explicit company movement word for this specific figure, driver_state settles as unknown rather than raised."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_labor",
+              "driver_state": "decreased",
+              "change_value": {"value": -20, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["adjusted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact: the stated -20 basis-point year-over-year change in restaurant labor, governed by the paragraph's 'compared to last year' framing, is a real metric."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 5.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["Adjusted diluted", "continuing operations"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact: the $2.95 adjusted diluted continuing-operations EPS level with its explicit 5.4% year-over-year increase is a fully quantified metric that also serves as the canonical restatement absorbing row 4's numberless duplicate and as the home for row 4's surprise."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["slices_and_unknown_axes", "ambiguous_menus"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu carries two distinct Longhorn segment tokens (segment:longhornsteakhouse vs segment:longhornsteakhousesegment) that the bare 'At Longhorn' phrasing cannot select between, so an off-menu segment:longhorn value is coined and tagged ambiguous_menus, and comparison_baseline is left null because this sentence never itself states a 'than last year' comparison the way the company-wide total-sales sentence does."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["favourable_unfavourable_direction", "expectation_routing"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Whether 'in line with our expectations' routes to previous_guidance (company's own possessive framing) or consensus is a genuine judgment call, and the sentence's own numberless 'mid-single-digit EPS growth' metric is retired as an exact semantic repeat of row 7's richer $2.95/5.4% restatement, leaving only this surprise fact homed on row 7."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "An analyst later asserts unrebutted that total revenue growth guidance was raised and management confirms comps assumptions were taken up, but this specific total-sales-growth sentence itself states only a bare updated percentage with no explicit movement word, so driver_state settles as unknown rather than inferring raised from that adjacent, differently-scoped exchange."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the paragraph-opening qualifier 'our adjusted margin analysis compared to last year' directly governs this restaurant-labor line or is merely introductory scene-setting is a judgment call, since 'adjusted' is not repeated inline for this item the way it is for 'Adjusted G&A expenses' later in the same paragraph."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "expectation_routing"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Whether the measurement span for the continuing-operations qualifier should include the connective preposition ('from continuing operations') or just the bare qualifier ('continuing operations') is a judgment call not resolvable from the text alone."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/DRI_2026-03-19T08.30#157",
+      "agrees": true,
+      "why": "Matches the settled row1 guidance fact exactly on driver_name, unknown state, the 13-14.5 percent_yoy range, FQ4 FY2026, company_confirmed true, and the extra-fiscal-week measurement span."
+    },
+    {
+      "lead_id": "phase1/DRI_2026-03-19T08.30#158",
+      "agrees": true,
+      "why": "Matches the settled row2 metric fact exactly on level ($3.3B point), change (5.9% percent_yoy), prior_year baseline, and period."
+    },
+    {
+      "lead_id": "phase1/DRI_2026-03-19T08.30#159",
+      "agrees": false,
+      "why": "It picks the on-menu token segment:longhornsteakhousesegment instead of recognizing a genuine two-token menu ambiguity requiring the off-menu segment:longhorn value tagged ambiguous_menus, and it sets comparison_baseline=prior_year even though this Longhorn sentence never itself states 'than last year'."
+    },
+    {
+      "lead_id": "phase1/DRI_2026-03-19T08.30#160",
+      "agrees": false,
+      "why": "Its surprise fact (in_line, actual, previous_guidance) matches the settled surprise, but it also keeps a separate numberless EPS-growth metric fact that is an exact semantic repeat of row 7's richer $2.95/5.4% restatement and must be retired under the same-event dedup rule, not kept as a second fact."
+    },
+    {
+      "lead_id": "phase1/DRI_2026-03-19T08.30#161",
+      "agrees": true,
+      "why": "Matches the settled row5 guidance fact exactly: unknown driver_state, 9.5 point level, percent_yoy, FY2026, company_confirmed true."
+    },
+    {
+      "lead_id": "hr-024/b1/row5",
+      "agrees": true,
+      "why": "Matches the settled row5 fact exactly on driver_state, level values, unit, shape, time_type, fiscal_year, and company_confirmed."
+    },
+    {
+      "lead_id": "hr-024/b2/row5",
+      "agrees": false,
+      "why": "Sets driver_state to raised with comparison_baseline previous_guidance, but no explicit company movement wording exists for this specific total-sales-growth figure, so unknown is the lawful answer."
+    },
+    {
+      "lead_id": "phase1/DRI_2026-03-19T08.30#162",
+      "agrees": false,
+      "why": "Matches on driver_name, decreased state, -20 basis points change, and prior_year baseline, but omits the 'adjusted' measurement qualifier that the paragraph's own governing clause ('our adjusted margin analysis compared to last year') applies to this restaurant-labor line."
+    },
+    {
+      "lead_id": "phase1/DRI_2026-03-19T08.30#163",
+      "agrees": true,
+      "why": "Matches the settled row7 metric fact exactly, including the split measurement_raw_spans ['Adjusted diluted','continuing operations'], level, change, comparison_baseline, and per_x."
+    }
+  ],
+  "open_issues": []
+}
+```

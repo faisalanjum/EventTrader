@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "0000092380-26-000044#042",
+  "settled": {
+    "source_id": "0000092380-26-000044",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "income_tax_expense",
+          "driver_state": "increased",
+          "level_low": {"value": 58, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_high": {"value": 58, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": -43, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_high": {"value": -43, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000092380-26-000044#042/L1",
+      "exact_match": false,
+      "why": "L1 abstains claiming the 'in millions' scale marker sits only in a header outside the quote, but the supplied quote text itself opens with '(in millions, except per share amounts)', so the marker is inside the quote and a metric fact for the tax provision/benefit line (58 vs -43, prior-year comparison) is lawful, not an abstention."
+    },
+    {
+      "lane_id": "0000092380-26-000044#042/L2",
+      "exact_match": false,
+      "why": "L2 makes the same claim as L1 that the scale wording is outside the quote in a table header; the quote plainly includes '(in millions, except per share amounts)' as its first clause, so the abstention is unwarranted and a metric income_tax_expense fact with level 58 and prior-year comparison -43 (both in millions) is settled instead."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Choice of driver_name for this line item — 'income_tax_expense' versus a synonym like 'income_taxes' or 'provision_for_income_taxes'.",
+      "why": "Rule 3.9's treatment of loss/negative-margin as the negative region of a single base metric implies 'provision'/'benefit' are polarity framings of one underlying tax metric rather than a separate driver, but the rules do not name that base metric explicitly, so a reviewer could reasonably prefer a different (lawful-synonym) spelling per Rule 3.12."
+    }
+  ]
+}
+```

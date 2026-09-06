@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "consolidated_leverage_ratio",
+        "driver_state": "persists",
+        "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "ceiling",
+        "level_unit": "x",
+        "time_type": "instant"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

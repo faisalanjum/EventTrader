@@ -1,0 +1,245 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "revolving_credit_agreement",
+              "driver_state": "occurred",
+              "period_end_date": "2028-11-15",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact (an action_event describing the amended Revolving Credit Agreement's stated termination), though which lane (metric vs action_event) and which stated date anchors it (the amendment's own 2024-11-15 date is outside this row's quote) remains a recorded ambiguity."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The fiscal-quarter week-count composition (12 weeks for each of the first three quarters, 16/17 weeks for the fourth quarter across 2023-2025) is reporting-calendar mechanics, not a statement about any driver's state, change, surprise, guidance, or action; it fails the Rule 1 fact gate."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed as a control: the sentence states only the fiscal calendar's week structure, with no driver content."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The Q4-share-of-annual-sales/net-income percentages describe how the fiscal calendar's uneven quarter lengths and seasonally high Q4 volume distribute the already-reported net_sales/net_income totals across the year; no lawful driver name can carry this quarter-vs-annual-total relationship since period words are barred from names (Rule 3.10) and period cannot be encoded as a slice (Rule 7), so despite being real content it cannot be lawfully resolved and must be abstained rather than guessed into an invented name."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but settles as an exclusion: the naming and slice rules leave no lawful place to put a quarter's-share-of-annual-total statistic, so it cannot be materialized as a fact even though the underlying disclosure is real."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "share_repurchase_authorization",
+              "driver_state": "increased",
+              "change_value": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "level_low": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "instant",
+              "period_end_date": "2024-06-19"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the Board's $1.5 billion authorization increase to a $39.2 billion total is a clean metric fact with a stated prior/new pair and a dated Board action."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "nlrb_organizing_decisions",
+              "driver_state": "occurred"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a negative_control, but the quote states a real, already-occurred, specific external regulatory action (NLRB decisions making organizing easier), not conditional or generic boilerplate, so it is reclassified from control to fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "commercial_sales_program",
+              "driver_state": "reported",
+              "level_low": {"value": 6098, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6098, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:us"],
+              "time_type": "instant",
+              "period_end_date": "2025-08-30",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "commercial_sales_program",
+              "driver_state": "reported",
+              "slice_parts": ["geography:br", "geography:mx"],
+              "time_type": "instant",
+              "period_end_date": "2025-08-30",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact for the quantified 6,098-domestic-store commercial sales program count; the same quote's unquantified 'vast majority' of Mexico/Brazil stores is recorded as a second, more ambiguous qualitative fact rather than being silently dropped."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Genuine ambiguity whether this belongs in the metric lane (a standing, re-readable maturity/termination date) or the action_event lane (the discrete 2024 amendment), and whether period_end_date should carry the stated future termination date (2028-11-15) versus the amendment's own action date (2024-11-15), which is not inside this row's own quote."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an instant fact anchored to a single stated Board-action date should carry a redundant period_start_date equal to period_end_date, or leave period_start_date at its null default; settled to null since the source states only one date."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Genuine boundary ambiguity between a scene-setting mention embedded in a broader generic unionization risk paragraph versus a standalone factual external action; settled as a fact because the clause states a completed, specific regulatory development rather than conditional boilerplate."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 6,
+      "fact_index": 1,
+      "hard_classes": ["slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the vague 'vast majority of our stores in Mexico and Brazil' clause, jointly covering two geography slice values with no numeric quantity and no split between the two countries, deserves its own separate fact distinct from the quantified domestic figure, or should instead be treated as non-distinct color and abstained."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001104659-25-102611#095",
+      "agrees": true,
+      "why": "Matches our settled fact exactly: action_event, driver_name revolving_credit_agreement, driver_state occurred, period_end_date 2028-11-15, time_type instant."
+    },
+    {
+      "lead_id": "hr-015/b1/row1",
+      "agrees": false,
+      "why": "Chooses fact_type metric with driver_state reported rather than our settled action_event/occurred, a substantively different lane classification for the same underlying quote."
+    },
+    {
+      "lead_id": "hr-015/b2/row1",
+      "agrees": false,
+      "why": "Matches fact_type action_event and state occurred, but uses driver_name revolving_credit_facility instead of the quote's own defined term revolving_credit_agreement, and omits period_end_date entirely, dropping the stated 2028-11-15 date we retained."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#096",
+      "agrees": true,
+      "why": "Same lawful branch (facts:[], one abstention) with the same core reasoning: fiscal-quarter week-count wording is calendar mechanics, not a driver fact."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#097",
+      "agrees": true,
+      "why": "Same lawful branch (facts:[], one abstention): the Q4-share-of-annual percentages have no lawful driver name given the period-word and period-as-slice bans, matching our exclusion outcome."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#098",
+      "agrees": true,
+      "why": "Same driver_name, driver_state increased, identical change_value/level objects and units, level_shape_hint point, time_type instant, and period_end_date 2024-06-19 with no period_start_date, matching our settled fact field-for-field."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#099",
+      "agrees": true,
+      "why": "Same fact_type action_event, same driver_name nlrb_organizing_decisions, same driver_state occurred, and the same reclassification of the row from a proposed control to a fact."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-102611#100",
+      "agrees": true,
+      "why": "Matches our primary domestic fact exactly (driver_name, level 6098, count unit, geography:us slice, period_end_date, fiscal_year); it does not include the second Mexico/Brazil qualitative fact we additionally recorded and flagged as an open ambiguity, but does not contradict it either."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 1's fact_type (metric vs action_event) and which stated date (2024-11-15 amendment date vs 2028-11-15 termination date) should populate the period field.",
+      "why": "The row's own quote states only the resulting termination date, not the amendment's own action date, and the schema has no native slot for a date-valued standing attribute distinct from a period field, so a safe final encoding cannot be picked without guessing."
+    },
+    {
+      "what": "Row 3's Q4-share-of-annual-sales/income disclosure has real informational content but no lawful driver name under the current naming rules.",
+      "why": "Rule 3.10 bars period words from names and Rule 7 bars period as a slice, leaving no compliant way to record this real, source-stated, cross-year-comparable ratio without either inventing a name or abstaining."
+    },
+    {
+      "what": "Row 5's NLRB sentence sits on the boundary between generic risk-factor scene-setting and a standalone factual external action.",
+      "why": "The rules give a locked boundary only for the at_risk lane (DU-11); this fuzzy-middle case for action_event has no locked boundary, so the fact-vs-boilerplate call is a judgment, not a mechanical rule application."
+    },
+    {
+      "what": "Row 6's Mexico/Brazil 'vast majority' clause may or may not deserve its own qualitative fact separate from the quantified domestic figure.",
+      "why": "The clause is real but unquantified and undifferentiated between two countries, so recording it as one combined-geography fact is an interpretive choice rather than a rule-forced outcome."
+    }
+  ]
+}
+```

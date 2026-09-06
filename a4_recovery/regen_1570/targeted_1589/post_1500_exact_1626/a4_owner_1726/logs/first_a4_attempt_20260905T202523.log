@@ -1,0 +1,101 @@
+rewired
+path + fail-closed owner check installed
+rules + opaque id installed
+uniqueness guard + controls added
+controls now derive the scored set
+loader/call-packet/result binder added
+bindings, controls, prompt paths and max budget wired
+validate_merged added
+raw filename defect fixed
+launch section rewritten
+cleaned
+builder fixes applied
+order check simplified
+accounting echo + re-derivation added
+half-publication slot now refuses
+lifecycle + state-audit fixes applied
+per-lane lifecycle installed
+external approval carried through
+duplicate init removed
+delegation wired
+cleaned
+expect carries the digest
+builder: batch_ids bound, full returned row kept
+publisher and audit rewired
+inlined
+implementation inserted
+validate_merged is now the relation-to-credit owner
+deleted render..reconcile            4338 bytes
+deleted batches                      1198 bytes
+deleted RULES block                  1628 bytes
+rewired
+freeze rewired to event groups
+audit detail + terminal categories added
+build owner patched
+a7_g1_build rewired: live_key + shared card
+index translation named
+all prior spend accounted
+task-kind seam added
+reconciliation scoped to the segment
+materialize now emits the one trace
+caller passes the real arm names
+segment-scoped reconciler deleted
+effective_slots carries every saved attempt
+one attempt-complete row per scheduled slot
+raw_path stays the run path it always was
+a7_g1_build threaded, parses OK
+internal calls pass the identity
+a zero-call run is uncalled, not broken
+inventory fails closed by name
+A5 in scope
+g1 freeze fails closed
+every retry state named
+docstring no longer names a typed total
+run_of rederives and exact-compares
+run_of rederives without re-gating the era
+questions passes the run to its card lookup
+G1 consumes the one ledger owner
+one materialization per validated run
+a7_g23_build.py             65754 recorded-file-write  ok       e1afeb92d21c89d8
+a7_g23_build.py             65767 recorded-file-write  ok       3feea1442687e15d
+a7_g23_build.py             65797 recorded-file-write  ok       97e0e2f1ce73209f
+a7_g23_build.py             65836 read-only(raised)    ok       97e0e2f1ce73209f
+a7_g23_build.py             66620 recorded-file-write  ok       fb6931a7ba52c19c
+aspect definitions added, output example is a real JSON object
+a7_g23_build.py             66918 applied              ok       e4bfb6da365b06e0
+a7_g23_build.py             66924 recorded-file-write  ok       f8a911a404246331
+total unintended changes: 0
+a7_g23_build.py             67355 recorded-file-write  ok       2870cc8370126a86
+detector now ignores the source's own wording
+a7_g23_build.py             67360 applied              ok       37755c94b7451b4e
+G2: raw evidence on the authority side; parser strict by identity
+a7_g23_build.py             67370 applied              ok       3462be394a9477d7
+a7_g23_build.py             67375 recorded-file-write  ok       a8d64c33668970f8
+a7_g23_build.py             67385 recorded-file-write  ok       49dde8c257ee864e
+packing distinctness is now the SOURCE EVENT
+a7_g23_build.py             67395 applied              ok       f30aef5a608a75e0
+a7_g23_build.py             67457 recorded-file-write  ok       32975b28320a865b
+reference card replaces quote-only, with a structural whitelist
+a7_g23_build.py             67574 applied              ok       736b30bdf844ac84
+a7_g23_build.py             67661 recorded-file-write  ok       10f7dbd4d1b2d4b4
+the card now reads the frozen inventory by exact row identity
+a7_g23_build.py             67833 applied              ok       e296f95346717f4c
+non_unique_cards updated
+a7_g23_build.py             67843 applied              ok       620b42acbbdea2d8
+a7_g23_build.py             67919 read-only(raised)    ok       620b42acbbdea2d8
+a7_g23_build.py             67937 read-only(raised)    ok       620b42acbbdea2d8
+citations stripped
+a7_g23_build.py             68009 applied              ok       ae3e574203d2288d
+door tightened
+a7_g23_build.py             68034 applied              ok       471283aa0cbb0abd
+batch_packet added
+a7_g23_build.py             68301 applied              ok       becc9969507192a5
+a7_g23_build.py             69217 read-only(raised)    ok       becc9969507192a5
+G3 keeps each question with its own event's cards
+a7_g23_build.py             69568 applied              ok       79f2c13de4c69764
+a7_g23_build.py             69638 read-only(raised)    ok       79f2c13de4c69764
+serving path now validates
+a7_g23_build.py             69651 applied              ok       045de82cc98f2865
+a7_g23_build.py             70467 applied              ok       930e149e333963d8
+a7_g23_build.py             70638 applied              ok       172844bebd0aaa8d
+REFUSE: record 73642 (toolu_01V6edf4KmV4pw7ThYADi1Nd, result 73643, recorded ok) writes a7_g23_build.py and could not be applied: SyntaxError: invalid syntax (<transcript:73642:0>, line 35)

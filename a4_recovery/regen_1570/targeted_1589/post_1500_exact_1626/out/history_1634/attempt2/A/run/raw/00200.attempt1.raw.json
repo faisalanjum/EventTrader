@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "commercial_sales_program_stores",
+        "driver_state": "reported",
+        "level_low": {"value": 6098, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 6098, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "slice_parts": ["geography:us"],
+        "time_type": "instant",
+        "period_end_date": "2025-08-30"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

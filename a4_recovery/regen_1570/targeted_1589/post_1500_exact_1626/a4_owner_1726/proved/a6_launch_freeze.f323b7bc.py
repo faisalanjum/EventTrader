@@ -1,0 +1,683 @@
+"""A6: freeze the exact EXP-5 producer launch. Codex SEQ 1408 + 1409.
+
+ONE owner, ONE artifact. Everything is DERIVED from a prepared A5 run and the
+existing owners; nothing here is typed, and nothing here calls a model, arms a
+grader, or executes a launcher.
+
+The freeze is self-verifying: `problems(doc)` rederives every recorded value
+from the same live files and returns why the document is not the launch it
+claims to describe.
+"""
+import collections
+import hashlib
+import io
+import json
+import os
+import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def _g7():
+    """`a7_g1_build` - and it MUST be this directory's copy, the mirror of
+    a7_g1_build._a6 (Codex SEQ 1489 item E). This owner imports it lazily,
+    so whichever copy an earlier sys.path entry preloaded would otherwise be
+    used silently: a stale copy has a different history and different
+    counts. Refuse rather than repair."""
+    import a7_g1_build as mod
+    got = os.path.dirname(os.path.abspath(mod.__file__))
+    if got != _HERE:
+        raise RuntimeError(
+            "a7_g1_build resolved to %s, not the harness copy in %s; run from "
+            "one clean harness path" % (mod.__file__, _HERE))
+    return mod
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+
+import build_a5_exp5_kit as A5                                   # noqa: E402
+import build_kfields_final as F                                  # noqa: E402
+import build_launch_manifest as BLM                              # noqa: E402
+import raw_transport as RT                                       # noqa: E402
+import a1_reader                                                 # noqa: E402
+
+K = F.K
+
+#: The scratch pointers that already name every A4 phase run directory. The
+#: ledger owners read these same files; the freeze binds them so the total can
+#: be recomputed from the exact evidence rather than trusted as a number.
+# THE ONE EVIDENCE-ROOT OWNER, not a second copy of it. This restated an
+# absolute path carrying one Claude session id, so the freeze could only be
+# rebuilt inside that session; `build_kfields_key.EVIDENCE` already names the
+# root once and honours KFIELDS_EVIDENCE.
+_PTR = K.EVIDENCE
+LEDGER_POINTERS = ("a4_dir.txt", "hr_dir.txt", "hrfix_dir.txt", "final_dir.txt",
+                   "corr_dir.txt", "decision_dir.txt", "v4_dir.txt",
+                   "v5_dir.txt", "v6_dir.txt", "signer_dir.txt",
+                   "targeted_dir.txt", "hard_review_targeted_dir.txt",
+                   "final_targeted_dir.txt", "final_targeted_corr_dir.txt",
+                   "final_targeted_corr2_dir.txt")
+
+#: Arms that must be provably ABSENT from an A6 launch. Named once so the
+#: freeze records an explicit absence instead of an unstated assumption.
+FORBIDDEN_ARMS = ("opus", "haiku", "qwen", "gpt", "deepseek", "fallback",
+                  "escalation")
+
+FREEZE_NAME = "a6_exp5_launch_freeze.json"
+SCHEMA = "a6-exp5-launch-freeze-v1"
+
+#: A7's grader batch owner. It does not exist yet and A6 does not create it:
+#: the freeze names it so A7 cannot silently invent a different one.
+GRADER_BATCH_OWNER = "grade_batch.js"
+
+#: the retry child's directory name, from the transport owner
+RETRY_DIRNAME = "retry"
+
+
+def _read_ptr(name):
+    with io.open(os.path.join(_PTR, name), encoding="utf-8") as fh:
+        return fh.read().strip()
+
+
+def _sha_file(path):
+    with io.open(path, "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()
+
+
+def bound():
+    """The A4 phase runs, from the pointer files the ledger owners already use."""
+    pkg = os.path.join(os.path.dirname(_HERE), "kfields_final")
+    return F.Bound(pkg, _read_ptr("a4_dir.txt"), _read_ptr("hr_dir.txt"),
+                   _read_ptr("hrfix_dir.txt"), _read_ptr("final_dir.txt"),
+                   _read_ptr("corr_dir.txt"), _read_ptr("decision_dir.txt"),
+                   _read_ptr("v4_dir.txt"), _read_ptr("v5_dir.txt"),
+                   _read_ptr("v6_dir.txt"))
+
+
+def _validated_attempts(run_dir):
+    """Every FINALIZED attempt of one run, through the SAME validators the
+    prepared-run identity uses (Codex SEQ 1473 item 3).
+
+    Reading any present `finalization.json` and trusting its ledger let a
+    corrupted or substituted record move the call ceiling. These are the exact
+    receipt and finalization owners `a7_prepared_run.load` calls - not a second
+    set of rules.
+
+    They are called HERE rather than through `a7_prepared_run.load` because
+    that owner builds the A6 freeze, and the freeze budgets its own run: going
+    through it would be `ledger -> load -> freeze -> budget -> ledger`.
+    """
+    import raw_transport as RT
+    out = []
+    # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+    # finalization accepted ANY directory - an empty or malformed plan was
+    # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+    # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+    # that is what a completed-call ledger is - and owning a second current-era
+    # rule beside `PR.current` made loading any historical identity refuse,
+    # because an identity load budgets its own run (Codex SEQ 1475).
+    plan = RT.a1_plan_for_run(run_dir)
+    rpath = os.path.join(run_dir, "receipt.json")
+    if not os.path.isfile(rpath):
+        # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+        # not a prepared run, and must not read as a lawful zero-call one.
+        raise ValueError("%s has no receipt, so it is not a prepared run and "
+                         "cannot be counted" % run_dir)
+    receipt = K._load(rpath)
+    bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+    if bad:
+        raise ValueError("%s: the receipt does not hold: %s"
+                         % (run_dir, bad[:2]))
+    ppath = os.path.join(run_dir, K.FINALIZATION_NAME)
+    if not os.path.isfile(ppath):
+        return out                      # a LAWFUL zero-call run, now proved so
+    pf = K._load(ppath)
+    bad = RT.a1_finalization_problems(pf, plan, run_dir, 1)
+    if bad and pf.get("audit_problems"):
+        # A REFUSED CLOSEOUT IS STILL A CLOSEOUT. Its completed calls were paid
+        # whether or not the run is selectable for scoring, so the audit
+        # refusal alone may not hide them from the ledger - but every OTHER
+        # binding must still hold, proved by the same validator over the same
+        # document with only that one field cleared (Codex SEQ 1482 item 4).
+        bad = RT.a1_finalization_problems(dict(pf, audit_problems=[]), plan,
+                                          run_dir, 1)
+    if bad:
+        raise ValueError("%s: the primary finalization does not hold: %s"
+                         % (run_dir, bad[:2]))
+    out.append((run_dir, "primary", pf, _sha_file(ppath)))
+
+    owed = [tuple(c) for c in pf.get("retry") or []]
+    rdir = os.path.join(run_dir, RETRY_DIRNAME)
+    rpath = os.path.join(rdir, K.FINALIZATION_NAME)
+    if os.path.isfile(rpath):
+        bad = RT.a1_run_contract_problems(
+            K._load(os.path.join(rdir, "receipt.json")), rdir, plan)
+        if bad:
+            raise ValueError("%s: the retry receipt does not hold: %s"
+                             % (rdir, bad[:2]))
+        rf = K._load(rpath)
+        bad = RT.a1_finalization_problems(rf, plan, rdir, 2, owed)
+        if bad:
+            raise ValueError("%s: the retry finalization does not hold: %s"
+                             % (rdir, bad[:2]))
+        out.append((rdir, "retry", rf, _sha_file(rpath)))
+    return out
+
+
+#: the five V1-V5 phases the lock pins, to the five existing `Bound` fields.
+#: Measured against the lock's own receipt hashes, not assumed.
+_HISTORY_FIELDS = (("v1", "events"), ("v2", "corrections"),
+                   ("v3", "decision"), ("v4", "decision_correction"),
+                   ("v5", "decision_correction_v5"))
+
+
+def _locked_rows():
+    """The V6-correction and signer rows, counted from the SIGNED LOCK.
+
+    THE SMALLEST COUNT VALIDATOR, at the sole ledger owner (Codex SEQ 1476).
+    These rows used to be read straight out of `finalization["ledger"]
+    ["scheduled"]`, so a corrupted or substituted record could move the call
+    ceiling. Re-deriving them through the K-fields semantic reader is not
+    possible either: that rule RECHECKS against live owners, which have
+    legitimately advanced, so a closed phase would reopen merely because
+    shared code moved on.
+
+    So the authority is the immutable one A5 already owns - the exact signed
+    A4 V6 lock - and the accounting here is STRUCTURAL: every artifact the
+    lock pins must still be exactly those bytes, and each count is derived
+    from the locked receipt's own ordered `allowed`, never from a stored
+    total.
+    """
+    import build_a5_exp5_kit as A5
+    import build_kfields_final as F
+    lock = A5.a4_lock()
+    b = bound()
+    bad = []
+
+    # --- the immutable artifacts the lock already pins --------------------
+    pkg = os.path.join(b.package, "final.manifest.json")
+    if not os.path.isfile(pkg) or _sha_file(pkg) != \
+            lock["package_manifest_sha256"]:
+        bad.append("the package manifest is not the locked one")
+    loader = os.path.join(_HERE, "build_kfields_final.py")
+    if not os.path.isfile(loader) or _sha_file(loader) != \
+            lock["loader"]["sha256"]:
+        bad.append("the final loader is not the locked one")
+    for name, field in _HISTORY_FIELDS:
+        run = getattr(b, field, None)
+        if not run or not os.path.isdir(run):
+            bad.append("the %s history run is absent" % name)
+            continue
+        bad += F._pins_unchanged(run, lock["history_evidence"][name], name)
+    if bad:
+        raise ValueError("the locked history does not hold: %s" % bad[:2])
+
+    # --- the two rows this owner counts -----------------------------------
+    rows = []
+    for stage, run, pins in (
+            ("v6_correction", b.decision_correction_v6,
+             {"receipt.json": lock["v6_receipt_sha256"],
+              K.FINALIZATION_NAME: lock["v6_finalization_sha256"],
+              "raw_tree": lock["v6_raw_tree"]}),
+            ("signer", _read_ptr("signer_dir.txt"),
+             {K.FINALIZATION_NAME: lock["signer_finalization_sha256"],
+              "raw_tree": lock["signer_raw_tree"]})):
+        problems = F._pins_unchanged(run, pins, stage)
+        if problems:
+            raise ValueError("%s: %s" % (stage, problems[:2]))
+        # A RETRY THE LOCK DOES NOT REPRESENT IS NOT PART OF THIS HISTORY.
+        # These phases are locked as single completed attempts, so an added
+        # retry directory is unaccounted spend (Codex SEQ 1476).
+        child = os.path.join(run, RETRY_DIRNAME)
+        if os.path.isdir(child) and os.listdir(child):
+            raise ValueError("%s carries a retry the lock does not represent"
+                             % stage)
+        fin = K._load(os.path.join(run, K.FINALIZATION_NAME))
+        rpath = os.path.join(run, "receipt.json")
+        if not os.path.isfile(rpath):
+            raise ValueError("%s has no receipt" % stage)
+        # the SIGNER's receipt is pinned by the hash inside its own locked
+        # finalization; the V6 receipt is pinned by the lock directly.
+        if _sha_file(rpath) != fin.get("receipt_sha256"):
+            raise ValueError("%s: the receipt is not the one its locked "
+                             "finalization binds" % stage)
+        receipt = K._load(rpath)
+
+        # --- the count, DERIVED from the locked receipt's own identities ---
+        allowed = list(receipt.get("allowed") or [])
+        if not allowed:
+            raise ValueError("%s: the locked receipt allows no call" % stage)
+        led = fin.get("ledger") or {}
+        labels = [o[0] for o in (fin.get("outcomes") or [])]
+        checks = (
+            ("run", fin.get("run_id"), receipt.get("run_id")),
+            ("phase", fin.get("phase"), receipt.get("phase")),
+            ("attempt", fin.get("attempt"), receipt.get("attempt")),
+            ("outcome labels", labels, allowed),
+            ("scheduled", led.get("scheduled"), len(allowed)),
+            ("category sum", sum(v for k, v in led.items()
+                                 if k != "scheduled"), len(allowed)),
+            ("complete", fin.get("phase_complete"), True),
+            ("problems", list(fin.get("problems") or []), []),
+            ("retry", list(fin.get("retry") or []), []),
+        )
+        for field, was, want in checks:
+            if was != want:
+                raise ValueError("%s: the locked finalization's %s is %r, not "
+                                 "the derived %r" % (stage, field, was, want))
+        rows.append((stage, run, len(allowed), _sha_file(rpath),
+                     _sha_file(os.path.join(run, K.FINALIZATION_NAME))))
+    return rows
+
+
+def ledger(run_dir=None):
+    """THE completed call total, MEASURED from the bound evidence.
+
+    THE SOLE OWNER (Codex SEQ 1471 item 7). This used to stop at the A4 phases,
+    and G1 separately added the producer run, its retry and the prior
+    grading/probe runs - so the complete number existed only inside G1's
+    freeze, assembled from four places that could each drift. Every completed
+    call is reconciled here, once, with its provenance row.
+
+    Codex SEQ 1409 ruling 2: bind the exact runs AND record the derived value,
+    so verification recomputes it from the same files. A literal total with no
+    provenance is forbidden; an unstated one is incomplete.
+    """
+    b = bound()
+    total = F.v6_ledger_before(b)          # A3 baseline + phases v1..v5
+    rows = [collections.OrderedDict([
+        ("stage", "a3_and_v1_v5"), ("owner", "build_kfields_final."
+         "v6_ledger_before"), ("calls", total)])]
+    # THE LOCKED ROWS, counted from the signed A4 V6 lock's own pins and each
+    # run's ordered `allowed` - never from a stored `ledger.scheduled`
+    # (Codex SEQ 1476).
+    for stage, run, calls, receipt_sha, fin_sha in _locked_rows():
+        total += calls
+        rows.append(collections.OrderedDict([
+            ("stage", stage), ("run_dir", run),
+            ("receipt_sha256", receipt_sha),
+            ("finalization_sha256", fin_sha), ("calls", calls)]))
+
+    # THE TARGETED A4 KEY-REVIEW RUN (Codex SEQ 1492 item A): its own owner
+    # re-proves the receipt, finalization, official states and every raw and
+    # proved byte through the targeted lifecycle's context and counts the
+    # official states it returned; this owner only records the rows.
+    import build_kfields_key_targeted as _T
+    for spent in _T.proved_spend(_read_ptr("targeted_dir.txt")):
+        total += spent["calls"]
+        rows.append(collections.OrderedDict([
+            ("stage", "targeted_key_review_%s"
+             % ("primary" if spent["attempt"] == 1 else "retry")),
+            ("run_dir", spent["run_dir"]),
+            ("receipt_sha256", spent["receipt_sha256"]),
+            ("finalization_sha256", spent["finalization_sha256"]),
+            ("raw_tree", F.raw_tree(spent["run_dir"])["sha256"]),
+            ("calls", spent["calls"])]))
+
+    # THE TARGETED A4 DOUBLE-BLIND HARD REVIEW (Codex SEQ 1496 item 1): its own
+    # owner re-proves the bound receipt, finalization, official states, every
+    # raw and proved byte, the canonical raw tree, the allowed identities and
+    # the re-derived outcomes, and returns one proved row per attempt; this
+    # owner only records that row. No rule is copied here and no stored total
+    # is read.
+    import build_kfields_hard_review_targeted as _HRT
+    for spent in _HRT.proved_spend(_read_ptr("hard_review_targeted_dir.txt")):
+        total += spent["calls"]
+        rows.append(collections.OrderedDict([
+            ("stage", "hard_review_targeted_%s"
+             % ("primary" if spent["attempt"] == 1 else "retry")),
+            ("run_dir", spent["run_dir"]),
+            ("receipt_sha256", spent["receipt_sha256"]),
+            ("finalization_sha256", spent["finalization_sha256"]),
+            ("raw_tree", spent["raw_tree"]),
+            ("calls", spent["calls"])]))
+
+    # THE SUCCESSOR FINAL ADJUDICATION PRIMARY (Codex SEQ 1501 item 1): its
+    # own owner re-proves the bound run against the PINNED package it ran
+    # under and returns one proved row per attempt; this owner only records it.
+    import build_kfields_final_targeted as _FT
+    for spent in _FT.proved_spend(_read_ptr("final_targeted_dir.txt")):
+        total += spent["calls"]
+        rows.append(collections.OrderedDict([
+            ("stage", "final_targeted_%s"
+             % ("primary" if spent["attempt"] == 1 else "retry")),
+            ("run_dir", spent["run_dir"]),
+            ("receipt_sha256", spent["receipt_sha256"]),
+            ("finalization_sha256", spent["finalization_sha256"]),
+            ("raw_tree", spent["raw_tree"]),
+            ("calls", spent["calls"])]))
+
+    # THE SUCCESSOR FINAL CORRECTION ROUNDS (Codex SEQ 1505 item 1, SEQ 1507
+    # item 1): the same owner re-proves each bound correction run against the
+    # PINNED package it ran under and returns one proved row per attempt;
+    # this owner only records it, under the round's own origin name.
+    # Counting a run accepts none of its outputs.
+    for door, pointer in ((_FT.CORR_DOOR, "final_targeted_corr_dir.txt"),
+                          (_FT.CORR2_DOOR, "final_targeted_corr2_dir.txt")):
+        for spent in _FT.proved_spend(_read_ptr(pointer), door):
+            total += spent["calls"]
+            rows.append(collections.OrderedDict([
+                ("stage", "%s_%s" % (_FT._round(door)["origin"],
+                                     "primary" if spent["attempt"] == 1 else "retry")),
+                ("run_dir", spent["run_dir"]),
+                ("receipt_sha256", spent["receipt_sha256"]),
+                ("finalization_sha256", spent["finalization_sha256"]),
+                ("raw_tree", spent["raw_tree"]),
+                ("calls", spent["calls"])]))
+
+    # THE COMPLETED PRODUCER HISTORY, BOUND ONCE - plus a DISTINCT current run
+    # only when it has actually finalized. Counting only the run handed in made
+    # the total depend on the argument: `ledger()` and a fresh zero-call run
+    # both dropped the 392+1 already spent, and a fresh completed run REPLACED
+    # that history instead of adding to it (Codex SEQ 1472 item 7). Runs are
+    # deduplicated by their exact directory, so passing the historical run
+    # counts it once, not twice.
+    _G7 = _g7()
+    import build_launch_manifest as _BLM
+    import raw_transport as _RT
+    seen, counted = set(), set()
+    for base_run, tag in ([(r, "producer") for r in _G7.PRODUCER_HISTORY]
+                          + [(run_dir, "current_producer")]):
+        if not base_run:
+            continue
+        key = os.path.abspath(base_run)
+        if key in seen:
+            continue
+        seen.add(key)
+        for base, kind, fin, fin_sha in _validated_attempts(base_run):
+            # THE VALIDATED RUN/ATTEMPT IDENTITY, not the finalization bytes:
+            # two DISTINCT valid attempts may be byte-identical and both are
+            # real calls, so deduplicating on the hash would silently drop one
+            # (Codex SEQ 1474 item 3). Supplying the same run twice still
+            # counts once, because the attempt directory is the same.
+            ident = (os.path.abspath(base), kind)
+            if ident in counted:
+                continue
+            counted.add(ident)
+            # THE ROWS THE OFFICIAL STATE RETURNED, each bound to the raw file
+            # the closeout preserved from it - never the schedule: a refused
+            # partial run scheduled its whole plan and spent only what came
+            # back (Codex SEQ 1482 item 4). Equal COUNTS proved nothing: an
+            # edited file or two swapped files still counted (Codex SEQ 1483),
+            # so the transport's one binding owner verifies every filename and
+            # every byte before a single call is added.
+            returned = _RT.a1_readable_rows(
+                K._load(os.path.join(base, "receipt.json")).get("states"))
+            bad = _RT.a1_raw_binding_problems(base, returned, fin["attempt"])
+            if bad:
+                raise ValueError("%s: the preserved raw tree is not the "
+                                 "official returned rows, so this run's spend "
+                                 "cannot be counted: %s" % (base, bad[:2]))
+            raw = F.raw_tree(base)
+            calls = len(returned)
+            total += calls
+            rows.append(collections.OrderedDict([
+                ("stage", "%s_%s" % (tag, kind)), ("run_dir", base),
+                ("finalization_sha256", fin_sha),
+                ("raw_tree", raw["sha256"]), ("calls", calls)]))
+
+    # AND THE PRIOR GRADING AND PROBE RUNS, through the one owner that already
+    # enumerates them with their per-file hashes.
+    _G7 = _g7()
+    prior, provenance = _G7.all_prior_calls()
+    if prior:
+        total += prior
+        rows.append(collections.OrderedDict([
+            ("stage", "prior_grading_and_probes"),
+            ("owner", "a7_g1_build.all_prior_calls"),
+            ("grading_calls", provenance["grading_calls"]),
+            ("probe_calls", provenance["probe_calls"]),
+            ("calls", prior)]))
+    return total, rows
+
+
+def budget(planned, run_dir=None):
+    """Derived budget. `planned` is the producer call count, itself derived."""
+    completed, rows = ledger(run_dir)
+    return collections.OrderedDict([
+        ("completed_actual", completed),
+        ("provenance", rows),
+        ("a3_measured_baseline", K.LEDGER_BEFORE),
+        ("planned_producer_primary", planned),
+        ("producer_primary_after", completed + planned),
+        ("global_abort_ceiling", F.GLOBAL_CEILING),
+        ("under_ceiling", completed + planned <= F.GLOBAL_CEILING),
+        ("rule", "every future actual call, including each retry and each "
+                 "grader sublaunch, is checked against the global ceiling "
+                 "before it is armed"),
+        ("retry_rule", "only a model-invalid/invalid-JSON reply earns the one "
+                       "canonical attempt-2 subset; a valid sibling, a refusal "
+                       "and an integrity failure never do, and attempt 2 can "
+                       "never create attempt 3")])
+
+
+def grader_staging():
+    """The grader ANSWER inventory, in the dependency order Codex SEQ 1409
+    ruling 1 fixed. A6 arms ZERO grader calls: none of these counts exists
+    before the producer replies do.
+    """
+    src = os.path.join(_HERE, "scorers", "score_exp5.py")
+    return collections.OrderedDict([
+        ("armed_grader_calls", 0),
+        ("count_is_derivable_now", False),
+        ("why", "every class below is a function of producer output, and no "
+                "producer call has been made"),
+        ("stages", [
+            collections.OrderedDict([
+                ("stage", "G1_identity"),
+                ("owner", "score_exp5.grade_unmatched"),
+                ("question", "every unmatched gold row produced by the "
+                             "deterministic matcher, ruled against that "
+                             "event/arm's unmatched produced rows"),
+                ("key", "(source_id, gold_idx)"),
+                ("none_means", "a decided miss, which still counts against "
+                               "recall")]),
+            collections.OrderedDict([
+                ("stage", "reconcile"),
+                ("owner", "score_exp5.reconcile_rulings"),
+                ("question", "two blind independent grader answers; ONLY "
+                             "agreement becomes a ruling")]),
+            collections.OrderedDict([
+                ("stage", "G2_meaning"),
+                ("owner", "score_exp5.score_arm"),
+                ("question", "every FINAL matched pair - direct deterministic "
+                             "links plus agreed G1 links - receives every "
+                             "required MEANING_FIELDS verdict"),
+                ("key", "(source_id, gold_idx)"),
+                ("meaning_fields", list(_meaning_fields()))]),
+            collections.OrderedDict([
+                ("stage", "G3_extras"),
+                ("owner", "score_exp5.classify_extras"),
+                ("question", "every route-accepted produced row still "
+                             "unmatched after G1"),
+                ("key", "(source_id, produced_idx)"),
+                ("buckets", list(_extras_buckets()))])]),
+        ("inventory", "the exact union of G1 + G2 + G3, derived by those "
+                      "existing scorer owners; it is NOT reducible to the "
+                      "unresolved rows"),
+        ("batching", "the live scorer owns QUESTIONS, not batching; "
+                     "'2*N answers' does not imply '2*N calls'"),
+        ("scorer_owner_sha256", _sha_file(src)),
+        ("a7_boundary", collections.OrderedDict([
+            ("batch_owner", GRADER_BATCH_OWNER),
+            ("batch_owner_present_now", os.path.isfile(
+                os.path.join(_HERE, GRADER_BATCH_OWNER))),
+            ("order", "G1 must COMPLETE before the final G2/G3 inventory is "
+                      "frozen"),
+            ("then", "A7 builds the smallest exact grader batch packet from "
+                     "that owner, hash-freezes its batch count, and only then "
+                     "runs exactly two blind independent Sonnet-5/high calls "
+                     "per nonempty batch"),
+            ("ceiling", F.GLOBAL_CEILING)]))])
+
+
+def _matcher_path():
+    """The matcher lives in the driver package, not the harness."""
+    from driver.core import fact_match
+    return os.path.abspath(fact_match.__file__)
+
+
+def _meaning_fields():
+    from scorers import score_exp5
+    return tuple(score_exp5.MEANING_FIELDS)
+
+
+def _extras_buckets():
+    from scorers import score_exp5
+    return tuple(score_exp5.EXTRAS_BUCKETS)
+
+
+def _launchers(run_dir, plan):
+    """Every ORDERED launcher identity, armed and unarmed, from this run."""
+    rows = []
+    for inv in json.load(io.open(os.path.join(run_dir, "receipt.json"),
+                                 encoding="utf-8"))["invocations"]:
+        armed = inv["scriptPath"]
+        name = os.path.basename(armed)
+        unarmed = os.path.join(run_dir, RT.PLAN_DIRNAME, A5.LAUNCHER_DIRNAME,
+                               name)
+        rows.append(collections.OrderedDict([
+            ("source_id", inv["source_id"]), ("launcher", name),
+            ("armed_sha256", _sha_file(armed)),
+            ("unarmed_sha256", _sha_file(unarmed)
+             if os.path.isfile(unarmed) else None)]))
+    return rows
+
+
+def freeze(run_dir):
+    """THE A6 freeze document, derived entirely from a prepared A5 run."""
+    run_dir = os.path.abspath(run_dir)
+    plan = RT.a1_plan_for_run(run_dir)
+    manifest_path, prefix = RT.a1_plan_identity(plan)
+    receipt = json.load(io.open(os.path.join(run_dir, "receipt.json"),
+                                encoding="utf-8"))
+    calls = [tuple(c) for c in receipt["allowed"]]
+    a2 = plan["a2_runtime_freeze"]
+    lock = A5.a4_lock()
+    arms = [a["arm"] for a in plan["arms"]]
+    backmap = os.path.join(run_dir, "a5_menu_backmap.json")
+
+    return collections.OrderedDict([
+        ("schema", SCHEMA),
+        ("phase", "A6 - freeze the exact EXP-5 producer launch"),
+        ("prepared_run", run_dir),
+        ("a4_lock", collections.OrderedDict([
+            ("path", A5.A4_V6_LOCK_PATH), ("sha256", A5.A4_V6_LOCK_SHA),
+            ("state", lock["state"]),
+            ("key_shards", len(lock["key_shards"]))])),
+        ("bound_artifacts", collections.OrderedDict([
+            ("manifest_path", manifest_path),
+            ("manifest_sha256", _sha_file(manifest_path)),
+            ("bundle_path", plan["bundle_path"]),
+            ("bundle_sha256", plan["bundle_sha256"]),
+            ("receipt_sha256", _sha_file(os.path.join(run_dir,
+                                                      "receipt.json"))),
+            ("menu_backmap_sha256", _sha_file(backmap)),
+            ("prompt_sha256", plan["prompt_sha256"]),
+            ("input_sha256", plan["bound_inputs"]["event_source_sha256"]),
+            ("inventory_sha256", plan["bound_inputs"]["inventory_sha256"]),
+            ("owners", plan["owners"]),
+            ("scorer_sha256", _sha_file(os.path.join(_HERE, "scorers",
+                                                     "score_exp5.py"))),
+            ("matcher_sha256", _sha_file(_matcher_path())),
+            ("reader_sha256", a1_reader.owner_sha256()),
+            ("launcher_prefix", prefix),
+            ("launchers", _launchers(run_dir, plan))])),
+        ("counts", collections.OrderedDict([
+            ("events", len(plan["events"])),
+            ("packets", len(plan["packets"])),
+            ("arms", arms),
+            ("lanes_per_packet", sorted({len(p["lanes"])
+                                         for p in plan["packets"]})),
+            ("ordered_producer_calls", len(calls)),
+            ("unique_ordered_calls", len(set(calls))),
+            ("invocations", len(receipt["invocations"])),
+            ("capacity", plan["capacity"])])),
+        ("transport", collections.OrderedDict([
+            ("runtime_model_id", a2["runtime_model_id"]),
+            ("effort", a2["effort"]), ("agentType", a2["agentType"]),
+            ("disallowedTools", a2["disallowedTools"]),
+            (BLM.OUTPUT_TOKENS_VAR, a2[BLM.OUTPUT_TOKENS_VAR]),
+            ("transport", a2["transport"]), ("door", plan["door"]),
+            ("a2_freeze_sha256", A5.A2_FREEZE_SHA)])),
+        ("absent_arms", collections.OrderedDict(
+            (name, False) for name in FORBIDDEN_ARMS)),
+        ("zeros", collections.OrderedDict([
+            ("states", len(receipt.get("states") or [])),
+            ("raw_replies", len(os.listdir(os.path.join(run_dir, "raw")))
+             if os.path.isdir(os.path.join(run_dir, "raw")) else 0),
+            ("made_calls", plan["made_calls"]),
+            ("database_writes", 0), ("activated", False)])),
+        # THE RUN THIS FREEZE IS ABOUT, through the same budget owner
+        ("budget", budget(len(calls), run_dir)),
+        ("grader", grader_staging()),
+    ])
+
+
+def render(doc):
+    """The ONE serialization, so two builds cannot differ by formatting."""
+    return json.dumps(doc, indent=1, sort_keys=True)
+
+
+def problems(doc):
+    """Why this document is not the launch it says it is. Empty = it rederives.
+
+    Every check REDERIVES from the live files; nothing is compared against
+    another field of the same document, because a document that only agrees
+    with itself proves nothing.
+    """
+    bad = []
+    if not isinstance(doc, dict):
+        return ["the freeze is %s, not an object" % type(doc).__name__]
+    run = doc.get("prepared_run")
+    if not (isinstance(run, str) and os.path.isdir(run)):
+        return ["the freeze names no prepared run directory on disk"]
+    try:
+        live = freeze(run)
+    except Exception as exc:                          # noqa: BLE001 - by design
+        return ["the freeze cannot be rederived from %s: %s" % (run, exc)]
+
+    # the budget provenance is time-invariant only if the SAME files are read,
+    # so it is compared whole, exactly like every other block
+    for key in sorted(set(live) | set(doc)):
+        if key not in doc:
+            bad.append("the freeze is missing the %r block" % key)
+        elif key not in live:
+            bad.append("the freeze carries %r, which nothing rederives" % key)
+        elif doc[key] != live[key]:
+            bad.append("%s does not rederive from the live launch" % key)
+
+    if not bad:
+        b = doc["budget"]
+        if b["completed_actual"] + b["planned_producer_primary"] \
+                != b["producer_primary_after"]:
+            bad.append("the budget arithmetic does not close")
+        if b["producer_primary_after"] > b["global_abort_ceiling"]:
+            bad.append("the planned launch exceeds the global ceiling")
+        c = doc["counts"]
+        if c["ordered_producer_calls"] != c["unique_ordered_calls"]:
+            bad.append("the ordered call list contains a duplicate")
+        if c["ordered_producer_calls"] != c["packets"] * len(c["arms"]):
+            bad.append("the call count is not packets x arms")
+        if any(doc["absent_arms"].values()):
+            bad.append("an arm recorded as absent is present")
+        if any(doc["zeros"][k] for k in ("states", "raw_replies", "made_calls",
+                                         "database_writes")):
+            bad.append("this launch has already spent something")
+        if doc["zeros"]["activated"]:
+            bad.append("the launch is recorded as activated")
+        if doc["grader"]["armed_grader_calls"] != 0:
+            bad.append("A6 armed a grader call")
+    return bad
+
+
+def write(run_dir, dest_dir):
+    """Persist the freeze. Returns (path, sha256)."""
+    doc = freeze(run_dir)
+    text = render(doc)
+    path = os.path.join(dest_dir, FREEZE_NAME)
+    if not os.path.isdir(dest_dir):
+        os.makedirs(dest_dir)
+    with io.open(path + ".tmp", "w", encoding="utf-8") as fh:
+        fh.write(text)
+    os.replace(path + ".tmp", path)
+    return path, hashlib.sha256(text.encode("utf-8")).hexdigest()

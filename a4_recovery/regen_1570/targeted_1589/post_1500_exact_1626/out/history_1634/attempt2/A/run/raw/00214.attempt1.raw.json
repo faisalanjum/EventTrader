@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This states a covenant threshold written into the Loan Agreement (a minimum fixed charge coverage ratio the Company must maintain if availability falls below a threshold) — a contractual requirement/term of the agreement, not a reported actual level, guidance, surprise, or action; no current ratio value or compliance state is disclosed here, so it is boilerplate covenant language rather than a real driver fact."}
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,18 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "strategic_options_review",
+        "driver_state": "continued",
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:pizzahutglobaldivision"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

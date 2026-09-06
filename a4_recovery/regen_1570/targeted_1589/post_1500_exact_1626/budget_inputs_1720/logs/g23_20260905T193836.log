@@ -1,0 +1,26 @@
+ok   69679_reference_inventory_artifact rc=0  recorded lines 5, suffix match True
+BAD  69853_g23_candidates   rc=0  recorded lines 7, suffix match False
+      recorded: per-kind candidate writer + seam registration
+      replayed: Traceback (most recent call last):
+      recorded: G2 -> a7_g1_candidate.json  sha 21ae14e50050780e
+      replayed:   File "<string>", line 2, in <module>
+      recorded:    load_frozen OK | task_kind=G2 | batch_rows=17 | rules=477dbd0dba6b
+      replayed:   File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harne
+      recorded:    parser=read_meaning_reply | binding ids=10
+      replayed:     G.register_task_kind("G2", kind_binding, B.read_meaning_reply)
+      recorded: G3 -> a7_g1_candidate.json  sha 53a60ec15228c685
+      replayed:   File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harne
+      recorded:    load_frozen OK | task_kind=G3 | batch_rows=46 | rules=29fd76ead35d
+      replayed:     raise ValueError("task kind %r is already bound to another pair" % kind)
+      recorded:    parser=read_extras_reply | binding ids=10
+      replayed: ValueError: task kind 'G2' is already bound to another pair
+   --- replay output tail ---
+per-kind candidate writer + seam registration
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_run.py", line 321, in <module>
+    G.register_task_kind("G2", kind_binding, B.read_meaning_reply)
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 1694, in register_task_kind
+    raise ValueError("task kind %r is already bound to another pair" % kind)
+ValueError: task kind 'G2' is already bound to another pair
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result

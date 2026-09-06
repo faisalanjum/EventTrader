@@ -1,0 +1,11 @@
+ok   66620 is the record the reviewer named, with its successful result
+ok   the command's program runs BEFORE its write to this file
+ok   the record carries exactly one edit program
+ok   the program states five replacements
+ok   the command appends to this file exactly once
+ok   the base is the proven earlier state
+ok   each old anchor occurs exactly once in that base
+ok   program then append reproduces the recorded identity
+ok   the recovery table records 66620
+ok   the chain's own state after 66620 is that identity
+checks: 10  failed: 0  []

@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This is a description of an accounting/reporting methodology change (redefining how segment profit is calculated to exclude pre-opening costs) so prior and current figures are comparable — an accounting construct, not a driver's state, change, surprise, guidance, or action; the real metric affected (segment profit) is captured separately from the segment performance tables, not from this methodology note."}
+  ],
+  "continuity_hints": []
+}
+```

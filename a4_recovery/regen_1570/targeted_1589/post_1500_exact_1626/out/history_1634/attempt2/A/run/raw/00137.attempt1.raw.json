@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Quote 'Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM' gives bare digit values with no unit or scale marker (no '$', 'million', etc.) inside the quote itself; the '(in millions)' scale marker that would justify a scale_multiplier sits only in the table's column header, outside this quote. Per Rule 5.6, a scale marker sitting in a header/footnote outside the quote requires abstention rather than assuming the multiplier."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,37 @@
+```json
+{
+  "packet_id": "CMG_2026-02-03T16.30#150",
+  "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "chief_marketing_officer_search",
+          "driver_state": "announced"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "CMG_2026-02-03T16.30#150/L1",
+      "exact_match": true,
+      "why": "L1 emits the identical single action_event fact with driver_name 'chief_marketing_officer_search' and driver_state 'announced', no other fields, matching the settled reply exactly."
+    },
+    {
+      "lane_id": "CMG_2026-02-03T16.30#150/L2",
+      "exact_match": true,
+      "why": "L2 is byte-identical in content to L1 and to the settled reply: same fact_type, driver_name, driver_state, and empty abstentions/continuity_hints."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state should be 'announced' or 'continued' for 'We are conducting a national search'.",
+      "why": "The verb 'conducting' is present-continuous, suggesting an already-ongoing process, but nothing earlier in the record establishes a prior public disclosure of this search, so this call itself is the first stated instance — which the rule's 'own stated action' test maps to 'announced' rather than 'continued'."
+    }
+  ]
+}
+```

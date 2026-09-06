@@ -1,0 +1,69 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#174",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "capital_expenditures",
+          "driver_state": "reported",
+          "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "item": {
+          "driver_name": "capital_expenditures",
+          "driver_state": "beat",
+          "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": false,
+          "polarity_proof": {
+            "polarity": "favorable",
+            "basis": "source_framing",
+            "evidence": "The item quote states capex came in above the high end of the company's own guided range with no favorability word attached; the very next clause in the same passage explains the overage as deliberate extra investment toward the future opening pipeline that sets the company up for success, which is source-side favorable framing, not an admission of overrun (capex requires source_framing, not metric_meaning, since more spend has no mainstream default polarity).",
+            "sentence": "our capital expenditure spend was 3.4 billion, slightly above the high end of the range that we provided for the year. as we invested more toward our future year development pipeline, setting us up for success as we continue to increase our pace of openings in our wholly owned markets."
+          }
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#174/L1",
+      "exact_match": true,
+      "why": "L1 matches the settled reply field-for-field: same metric+surprise twin, same driver_name/state, same 3.4bn level values with matching level_shape_hint/level_unit populated on BOTH facts (satisfying the Rule 9.6 value-bearing grounding match), same surprise_basis_hint/comparison_baseline/has_favorability_wording, and a polarity_proof using source_framing over the full explanatory sentence."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#174/L2",
+      "exact_match": false,
+      "why": "L2 agrees on fact_type, driver_name/state, surprise_basis_hint, comparison_baseline, has_favorability_wording and polarity, but it omits level_low/level_high/level_shape_hint/level_unit on the surprise item entirely, so the surprise is not shown carrying the same normalized value/unit as its metric home (Rule 9.6 grounding match); its polarity_proof 'sentence' also quotes only the trailing explanatory clause rather than the full sentence that includes the 'above the high end' framing being explained."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the surprise fact is required to re-carry the actual level_low/level_high/level_unit values (duplicating the metric home), or whether a surprise fact may legitimately omit level values and rely solely on the home fact for the normalized value.",
+      "why": "Rule 9.6 says a grounded surprise must match its home's normalized value and unit 'when value-bearing,' which implies the surprise should carry that value, but no rule explicitly states level slots must be populated on a surprise item, and the sparse-emission rule could be read either way depending on whether 'value-bearing' is judged from the surprise's own fields or from its home's."
+    },
+    {
+      "what": "Whether polarity_proof's 'sentence' field may draw on the clause immediately following the item's fixed quote (the 'as we invested more...' explanation), given that clause sits outside the exact quote span supplied for this item.",
+      "why": "The ROLE section forbids extending or repairing the item's fixed source location/quote, but also instructs using the full event as context to interpret the target; polarity_proof's 'sentence' is a content field we author, not the location field itself, so it is unclear whether citing adjacent-sentence text for favorability evidence is lawful or effectively an unlawful extension of the quote boundary."
+    }
+  ]
+}
+```

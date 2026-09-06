@@ -1,0 +1,26 @@
+```json
+{
+  "packet_id": "0001041061-26-000003#081",
+  "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [],
+    "abstentions": [
+      {"reason": "The quote describes a prospective change in the company's financial-statement rounding/presentation convention (rounding to the nearest whole million), which is a reporting-methodology note, not a real statement about a driver's state, change, surprise, guidance, or action under Rule 1; it fails the fact gate and yields no fact."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000003#081/L1",
+      "exact_match": true,
+      "why": "L1 abstains with facts=[] and continuity_hints=[], giving the same reason class (a presentation/rounding-methodology note, not a driver fact under Rule 1), matching the settled reply."
+    },
+    {
+      "lane_id": "0001041061-26-000003#081/L2",
+      "exact_match": true,
+      "why": "L2 also abstains with facts=[] and continuity_hints=[], citing the same reasoning (accounting presentation/rounding convention change, not a business driver fact), matching the settled reply."
+    }
+  ],
+  "ambiguities": []
+}
+```

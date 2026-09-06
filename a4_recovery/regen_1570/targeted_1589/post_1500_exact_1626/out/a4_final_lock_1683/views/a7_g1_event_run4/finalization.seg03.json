@@ -1,0 +1,173 @@
+{
+ "accounting_sha256": "50fa5b90f3e1cc26c96166c1d7dddd1fc48fd2c8d9dedb6401141a47b2b73d5a",
+ "attempt": 1,
+ "candidate_sha256": "efcf41c5041f774bf9bd2950b26d6667665dd3c9cd52415d88e2c34673a8a45e",
+ "ledger": {
+  "invalid": 0,
+  "retry": 0,
+  "scheduled": 38,
+  "uncalled": 0,
+  "valid": 38
+ },
+ "problems": {},
+ "receipt_sha256": "d782d2199fc04b934b9c2b59d354fe0368b4fbb402ce3a9cf1250cf806d255cd",
+ "retry": [],
+ "root_sha256": "b491596136682a696876844bedd656c5cc71ff73b323f1be87d307514df3cf81",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 3,
+ "uncalled": [],
+ "validity": [
+  [
+   "G1-030/G1b",
+   true
+  ],
+  [
+   "G1-031/G1a",
+   true
+  ],
+  [
+   "G1-031/G1b",
+   true
+  ],
+  [
+   "G1-032/G1a",
+   true
+  ],
+  [
+   "G1-032/G1b",
+   true
+  ],
+  [
+   "G1-033/G1a",
+   true
+  ],
+  [
+   "G1-033/G1b",
+   true
+  ],
+  [
+   "G1-034/G1a",
+   true
+  ],
+  [
+   "G1-034/G1b",
+   true
+  ],
+  [
+   "G1-035/G1a",
+   true
+  ],
+  [
+   "G1-035/G1b",
+   true
+  ],
+  [
+   "G1-036/G1a",
+   true
+  ],
+  [
+   "G1-036/G1b",
+   true
+  ],
+  [
+   "G1-037/G1a",
+   true
+  ],
+  [
+   "G1-037/G1b",
+   true
+  ],
+  [
+   "G1-038/G1a",
+   true
+  ],
+  [
+   "G1-038/G1b",
+   true
+  ],
+  [
+   "G1-039/G1a",
+   true
+  ],
+  [
+   "G1-039/G1b",
+   true
+  ],
+  [
+   "G1-040/G1a",
+   true
+  ],
+  [
+   "G1-040/G1b",
+   true
+  ],
+  [
+   "G1-041/G1a",
+   true
+  ],
+  [
+   "G1-041/G1b",
+   true
+  ],
+  [
+   "G1-042/G1a",
+   true
+  ],
+  [
+   "G1-042/G1b",
+   true
+  ],
+  [
+   "G1-043/G1a",
+   true
+  ],
+  [
+   "G1-043/G1b",
+   true
+  ],
+  [
+   "G1-044/G1a",
+   true
+  ],
+  [
+   "G1-044/G1b",
+   true
+  ],
+  [
+   "G1-045/G1a",
+   true
+  ],
+  [
+   "G1-045/G1b",
+   true
+  ],
+  [
+   "G1-046/G1a",
+   true
+  ],
+  [
+   "G1-046/G1b",
+   true
+  ],
+  [
+   "G1-047/G1a",
+   true
+  ],
+  [
+   "G1-047/G1b",
+   true
+  ],
+  [
+   "G1-048/G1a",
+   true
+  ],
+  [
+   "G1-048/G1b",
+   true
+  ],
+  [
+   "G1-049/G1a",
+   true
+  ]
+ ]
+}

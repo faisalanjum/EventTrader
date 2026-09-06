@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This is a generic, standing description of the company's inherent seasonal sales pattern (higher Feb-Sep, lower Dec-Jan) — boilerplate about the nature of the business, not a stated state, change, surprise, guidance, or action tied to this period. Fails Rule 1 gate 2 (generic boilerplate mention)."}
+  ],
+  "continuity_hints": []
+}
+```

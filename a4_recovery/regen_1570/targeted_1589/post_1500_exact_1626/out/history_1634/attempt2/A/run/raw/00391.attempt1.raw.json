@@ -1,0 +1,17 @@
+```json
+{
+  "source_id": "bzNews_51962983",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "ceo_appointment",
+        "driver_state": "announced",
+        "fiscal_quarter": 3
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

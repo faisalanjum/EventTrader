@@ -1,0 +1,12 @@
+floor/ceiling split
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_build.py", line 322, in score_leg
+    return SCO.score_arm(gold_by_ev, arm_by_event, meta,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/score_exp5.py", line 864, in score_arm
+    outcomes = _rows_for_event(route, sid, len(produced),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/score_exp5.py", line 720, in _rows_for_event
+    raise ValueError(f"route[{sid!r}] must carry exactly result and index_map, "
+ValueError: route['0000006201-26-000031'] must carry exactly result and index_map, got ['index_map', 'rejected_conflicting_names', 'rejected_fact_idxs', 'result']
+Shell cwd was reset to /home/faisal/EventMarketDB

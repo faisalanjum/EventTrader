@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "restaurant_expenses",
+        "driver_state": "unchanged",
+        "time_type": "duration",
+        "period_scope": "ytd",
+        "period_start_date": "2025-05-26",
+        "period_end_date": "2026-02-22",
+        "fiscal_year": 2026,
+        "comparison_baseline": "prior_year"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

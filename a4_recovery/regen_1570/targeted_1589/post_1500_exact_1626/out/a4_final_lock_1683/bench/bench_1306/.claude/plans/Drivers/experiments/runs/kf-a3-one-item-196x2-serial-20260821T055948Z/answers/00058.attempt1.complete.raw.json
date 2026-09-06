@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The quote 'Gain/(loss) on investments, net (550) (40) (510)' is a bare table row with unscaled numbers; the only scale marker for this table ('(in millions)') sits in the table's header line, which is outside the supplied quote. Rule 5.6 requires unit_scale_evidence to come from inside the quote and directs abstention when the scale marker sits in a header/footnote outside it — so the value cannot be lawfully populated and the item is abstained rather than guessing or extending the quote."}
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "boeing_737_8_aircraft_deliveries",
+        "driver_state": "unknown",
+        "level_low": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "decreased",
+        "measurement_raw_spans": ["Diluted"],
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

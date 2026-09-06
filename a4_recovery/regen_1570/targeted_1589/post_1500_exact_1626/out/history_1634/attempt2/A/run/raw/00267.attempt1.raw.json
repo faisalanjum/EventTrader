@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote 'Net inventory (net of payables) (813,494 ) (1,196,131 )' states two precise negative dollar values but carries no scale marker (no '$', no 'thousand') inside the quote itself — the applicable scale label ('$ in thousands') sits only in the surrounding table header outside the fixed quote. Rule 5.6 requires unit_scale_evidence to be a verbatim span from inside the quote whenever the multiplier is not 1, and abstention when that scale marker sits in a header/footnote outside the quote. Since the multiplier cannot be lawfully sourced from within the quote, this numeric fact cannot be resolved."
+    }
+  ],
+  "continuity_hints": []
+}
+```

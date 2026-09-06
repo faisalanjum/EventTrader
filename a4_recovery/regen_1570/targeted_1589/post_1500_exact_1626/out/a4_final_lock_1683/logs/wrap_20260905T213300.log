@@ -1,0 +1,22 @@
+rc=2
+log: /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/logs/a4_20260905T213300.log
+ok   review_receipt_1501          rc=0  38.5s
+ok   budget_receipt_1501          rc=0  65.7s
+BAD  review_receipt_1502          rc=1  37.8s
+REFUSED: step review_receipt_1502 failed
+receipt: ef416c5a2469a4d0c7b17e142c2ab5f231bcd43e63ac556476649d96648b1b00 /tmp/a7_budget_receipt_1501.json
+BAD  review_receipt_1502          rc=1  37.8s
+Traceback (most recent call last):
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/raw_transport.py", line 1436, in write_new
+    os.link(tmp, path)
+FileExistsError: [Errno 17] File exists: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1502.json.partial.2211352' -> '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1502.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/reconstruct/review_receipt_1502.py", line 56, in <module>
+    RT.write_new(OUT, json.dumps(doc, indent=1, ensure_ascii=False))
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/raw_transport.py", line 1439, in write_new
+    raise ValueError("%s already exists; a published plan is never "
+ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1502.json already exists; a published plan is never overwritten
+REFUSED: step review_receipt_1502 failed

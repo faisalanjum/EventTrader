@@ -1,0 +1,269 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_low": {"value": -1.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": -1.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "period_end_date": "2025-11-01",
+              "slice_parts": ["segment:domesticsegment", "channel:online"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_low": {"value": -2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": -2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "period_scope": "ytd",
+              "period_start_date": "2025-02-02",
+              "period_end_date": "2025-11-01",
+              "slice_parts": ["segment:domesticsegment", "channel:online"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as two real metric facts (Q3 and nine-month comparable online sales change for the Domestic segment), confirming the proposed_record_kind."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "decreased",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "period_end_date": "2025-11-01",
+              "measurement_raw_spans": ["Diluted"]
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as one real, numberless metric fact (diluted EPS decreased with a stated cause), confirming the proposed_record_kind."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "five_year_facility_agreement",
+              "driver_state": "reported",
+              "level_high": {"value": 1.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "m_usd",
+              "time_type": "instant",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "period_end_date": "2025-11-01"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as one real metric fact describing the Five-Year Facility Agreement's borrowing ceiling, confirming the proposed_record_kind."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restructuring_charges",
+              "driver_state": "reported",
+              "change_value": {"value": -1.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_points",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "period_end_date": "2025-11-01"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restructuring_charges",
+              "driver_state": "reported",
+              "change_value": {"value": 3.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_points",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "period_scope": "ytd",
+              "period_start_date": "2025-02-02",
+              "period_end_date": "2025-11-01"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as two real metric facts capturing restructuring's percentage-point impact on the effective tax rate for Q3 and nine months, confirming the proposed_record_kind, though the numeric slot placement (change_value, not level) required an independent determination diverging from the earlier lead."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The statement merely describes the company's reportable-segment structure ('two reportable segments: Domestic and International') — a generic organizational disclosure, not a statement about any driver's state, change, surprise, guidance, or action; it fails the Rule 1 gate as a bare topic/organizational mention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and settles as a true control: the segment-count sentence carries no driver state/change/surprise/guidance/action, confirming the proposed_record_kind."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Menu slice-token choice (segment:domestic vs segment:domesticsegment) and whether the November 1, 2025 period_end_date — stated only in the table header context, not inside this row's own quote — may lawfully be attached under Rule 6's fiscal-framing coexistence allowance."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether period_start_date (2025-02-02) is a lawful safe derivation from the stated fiscal-2025 year-end date or an unstated guess, plus the same segment-token/period_end_date-attachment ambiguity as the Q3 fact."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether period_end_date (2025-11-01) may be attached given it is stated only in a separate table's header, not inside this narrative sentence itself."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'Five-Year' in the driver name is a lawful specific-instrument proper name (Rule 3.3) or a banned period word (Rule 3.10), and whether a quarter-end period may be attached to a standing contractual term not tied to an explicit 'as of' date inside this exact quote."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether this percent-points ETR-bridge value belongs in change_value (since restructuring_charges' own level is an absolute dollar amount) or in level slots as an intrinsic percent-points metric; the prior lead used level slots."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same change_value-vs-level placement ambiguity as the Q3 fact, plus the same period_start_date safe-derivation question for the YTD window."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000764478-25-000057#044",
+      "agrees": true,
+      "why": "Matches the settled reply's driver name, values, units, states, prior-year baselines, slice parts (segment:domesticsegment; channel:online), and period fields including the derived YTD period_start_date."
+    },
+    {
+      "lead_id": "hr-013/b1/row1",
+      "agrees": false,
+      "why": "Uses menu token segment:domestic instead of segment:domesticsegment, drops the '%' unit_scale_evidence present inside the quote, and omits period_start_date on the nine-month fact, so it diverges from the settled encoding on three points."
+    },
+    {
+      "lead_id": "hr-013/b2/row1",
+      "agrees": false,
+      "why": "Matches the settled slice tokens, values and units closely but omits period_start_date on the nine-month fact, which the settled reply includes as a safely derived YTD window start (2025-02-02)."
+    },
+    {
+      "lead_id": "phase1/0000764478-25-000057#045",
+      "agrees": true,
+      "why": "Matches the settled fact's driver_name, driver_state, per_x, fiscal period, period_end_date and measurement_raw_spans field-for-field."
+    },
+    {
+      "lead_id": "phase1/0000764478-25-000057#046",
+      "agrees": true,
+      "why": "Matches the settled driver_name (five_year_facility_agreement), ceiling shape, m_usd value, time_type instant, and derived Q3 FY2026 / 2025-11-01 period fields."
+    },
+    {
+      "lead_id": "phase1/0000764478-25-000057#047",
+      "agrees": false,
+      "why": "Placed the restructuring percentage-point values in the level slots (level_low/level_high, level_unit percent_points) rather than in change_value, whereas the settled reply follows the absolute-driver rule that routes a directional percent-points value on a dollar-level driver to change_value/change_unit instead."
+    },
+    {
+      "lead_id": "phase1/0000764478-25-000057#048",
+      "agrees": true,
+      "why": "Matches the settled empty-facts, single-abstention branch and the same boilerplate/organizational-disclosure reasoning."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 4 numeric-slot placement (change_value vs level) for the restructuring-charges ETR-bridge percentages.",
+      "why": "The absolute-driver rule (a directional percent-points value on a driver whose own level is a dollar amount belongs in change_value) points one way, but the only prior lead for this row stored the values in the level slots; this is a real encoding fork that should be confirmed before this row is locked."
+    },
+    {
+      "what": "Whether period_start_date may be attached to YTD facts by deriving it from the stated prior fiscal-year-end date.",
+      "why": "No sentence states the fiscal-2026 start date directly; it is inferred as the day after the stated fiscal-2025 end date (February 1, 2025), a safe derivation under a contiguous fiscal calendar but not a literal in-quote statement, and the leads disagree on whether to include it."
+    },
+    {
+      "what": "Menu slice-token choice for the Domestic segment (segment:domestic vs segment:domesticsegment).",
+      "why": "Both tokens exist in the company's slice menu for the same real-world segment and the located rows give no textual signal to prefer one XBRL member label over the other, risking a silent identity fork if the wrong one is picked."
+    },
+    {
+      "what": "Whether 'five_year_facility_agreement' is a lawful driver name or violates the ban on period words in Rule 3.10.",
+      "why": "The name is the company's own proper title for a specific credit facility, favoring the specific-instrument carve-out, but the rule text does not explicitly exempt duration words used inside a proper name, so this naming choice is not fully settled by the letter of the rule."
+    }
+  ]
+}
+```

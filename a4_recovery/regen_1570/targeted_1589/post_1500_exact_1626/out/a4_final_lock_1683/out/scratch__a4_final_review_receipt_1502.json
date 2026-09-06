@@ -1,0 +1,96 @@
+{
+ "schema": "a4-final-review-receipt/1",
+ "authority": "Codex SEQ 1501",
+ "primary_binding": {
+  "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_binding.json",
+  "binding_sha256": "d9a5fe296a2633d70e0fdf906bdcadc855eee01bdc84a5ff12a038a51be3787f",
+  "run_dir": "/tmp/a4_final_targeted_run_1500"
+ },
+ "findings": {
+  "0000006201-26-000031": [
+   {
+    "kind": "open_issue",
+    "what": "Rows 2 and 3 quotes contain additional genuine, non-boilerplate facts beyond each row's named raw_label (product-line revenue splits in row 2; loss-per-share and expense-line items such as operating loss and income tax benefit in row 3), and row 3's reported net loss duplicates the same underlying figure row 1 surfaces in adjusted form.",
+    "why": "The task does not state whether row-scoping is meant to bind extraction strictly to each row's raw_label_or_claim (as all shown leads did) or to every distinct fact visible in the shared quoted span; extracting the extra items risks either under-coverage or duplicate DriverUpdates for the same GAAP net-loss value across rows 1 and 3, so this scoping choice is left explicit rather than guessed."
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1501/1502",
+    "text": "judge the frozen located items only; source-discovery completeness is separate; reconcile the duplicated underlying loss figure once.",
+    "rules": [
+     "Rule 1.5"
+    ]
+   }
+  ],
+  "0000940944-26-000005": [
+   {
+    "kind": "open_issue",
+    "what": "Whether the quarter and nine-month (YTD) figures for one 'Losses from discontinued operations' line should be emitted as two separate facts (as settled here) or as a single headline-quarter fact (as all three leads did).",
+    "why": "No rule quoted above explicitly locks period-count-per-row behavior for a single located item stating two genuinely different windows for the same driver; this is a real design gap, not something safely resolvable by guessing."
+   },
+   {
+    "kind": "open_issue",
+    "what": "The verbatim tax-benefit qualifier ('net of tax benefit of $1.3, $0.2, $1.6, and $0.7, respectively') names four column-specific dollar amounts under one contiguous clause, but only one of those four amounts actually corresponds to each settled fact's own period.",
+    "why": "Rule 8 requires copying a contiguous qualifier span verbatim as ONE entry and forbids splitting it absent intervening non-qualifier prose, so both facts must carry the same full span even though it over-includes figures belonging to the other fact's column."
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1501/1502",
+    "text": "distinct quarter and YTD facts are allowed; the contiguous tax qualifier remains one whole measurement entry.",
+    "rules": [
+     "Rule 6",
+     "Rule 8"
+    ]
+   }
+  ],
+  "0000940944-26-000009": [
+   {
+    "kind": "open_issue",
+    "what": "Rows 1 and 2 both locate the identical table caption 'Impairments and (gain) loss on disposal of assets, net' in the same MD&A results table, with row 2's quote simply extending further to include the nine-month columns; they were not shown to me as a locator group.",
+    "why": "If a later step promoted facts from both rows independently, the shared three-month figures ($25.1M vs $0.1M) could be double counted as two separate facts for the same underlying table cell; since both rows abstain here the risk is currently inert, but the row-grouping step upstream should still treat these two locations as one row."
+   },
+   {
+    "kind": "open_issue",
+    "what": "Whether Note 7 (referenced in the MD&A but not quoted in either row) states separate dollar amounts for the Bahama Breeze impairment and the Olive Garden Canada disposal gain/loss.",
+    "why": "A per-cause dollar breakdown in Note 7 would let a future settlement lawfully split this net caption into two named facts instead of abstaining; the rows shown to me only carry the combined net figures, so I cannot resolve the split from this evidence even though it may be resolvable elsewhere in the same filing."
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1501/1502",
+    "text": "judge only the frozen quote; reconcile the overlapping rows; a combined cause with no separable source numbers may be excluded; never borrow Note 7 or other outside evidence.",
+    "rules": [
+     "Rule 1.4",
+     "Rule 3.2"
+    ]
+   }
+  ],
+  "0001041061-25-000109": [
+   {
+    "kind": "open_issue",
+    "what": "Two menu segment tokens ('segment:habitdivision' and 'segment:thehabitburgergrillglobaldivision') both plausibly denote the Habit Burger & Grill Division, and the two blind leads split 50/50 on which to use.",
+    "why": "Rule 7 requires reusing a menu value when the meaning is the same, but does not resolve which of two same-kind menu values to pick when both are plausible for one real-world segment and the row's own text does not state a rename between them; this affects downstream Driver identity for every Habit-division fact in the company's history and should be settled once at the catalog/menu-governance level rather than per-fact."
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1501/1502",
+    "text": "0001041061-25-000109 accepts a slice after expressly finding that two menu tokens are indistinguishable, converts a source dash into numeric zero without a stated number, and adds a 2025-01-01 YTD start date not stated by the source. Rule 1.4 and Rule 7 require fail-closed handling when the slice cannot be resolved; Rule 5 requires a numeric slot’s number to be source-stated; Rule 6 forbids the invented duration endpoint. The current two accepted facts are not safe key truth.",
+    "rules": [
+     "Rule 1.4",
+     "Rule 7",
+     "Rule 5",
+     "Rule 6"
+    ]
+   }
+  ],
+  "0000027904-26-000022": [
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1501/1502",
+    "text": "0000027904-26-000022 adds 2026-01-01 and 2026-03-31 as exact duration dates. The quote states “Three Months Ended March 31” and Q1/FY framing, but not both exact endpoints. Current Rule 6 says unstated fields stay null and a one-endpoint duration uses the matching fiscal framing, not an invented start date. Preserve the fact, values and fiscal framing; the current exact-date fields are not accepted.",
+    "rules": [
+     "Rule 6"
+    ]
+   }
+  ]
+ }
+}

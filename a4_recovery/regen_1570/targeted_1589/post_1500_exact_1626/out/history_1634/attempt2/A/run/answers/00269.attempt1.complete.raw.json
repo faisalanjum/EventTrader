@@ -1,0 +1,42 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "same_store_sales",
+        "driver_state": "unknown",
+        "measurement_raw_spans": ["constant currency"],
+        "slice_parts": ["geography:nonus"],
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "same_store_sales",
+        "driver_state": "missed",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "consensus",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "unfavorable",
+          "basis": "metric_meaning",
+          "evidence": "Lower same store sales than expected is an unfavorable outcome for a sales-growth metric, with no plausible counter-story making a shortfall favorable.",
+          "sentence": "our international sales, in constant currency, were slightly below our expectations"
+        },
+        "measurement_raw_spans": ["constant currency"],
+        "slice_parts": ["geography:nonus"],
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

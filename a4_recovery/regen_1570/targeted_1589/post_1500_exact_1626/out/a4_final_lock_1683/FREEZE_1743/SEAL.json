@@ -1,0 +1,20 @@
+{
+ "schema": "a4-recovery-freeze-seal/1743",
+ "manifest": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/FREEZE_1743/MANIFEST.sha256",
+ "manifest_sha256": "dae08f21ecd12d55e32dd6e0102dae19a05c1240556d8fe16598595af1b00810",
+ "manifest_rows": 7794,
+ "manifest_bytes": 443567625,
+ "excluded_from_manifest": [
+  "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/FREEZE_1743/MANIFEST.sha256",
+  "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/FREEZE_1743/SEAL.json"
+ ],
+ "whitelist_roots": 196,
+ "required_inputs": 7797,
+ "preserved_losslessly": 1,
+ "reused_records": 9,
+ "evidence_rows": 27,
+ "inventory_rows": 17,
+ "required_tests_passed": 11,
+ "lock": "63018354e6b26a8061a114934df15fe035b44fe031dcf00768b440983d43b8a0",
+ "lock_receipt": "7f1f7bef4d02b9c5501d9ec6d8d5b9eab5e8aab225092878b7280964bd5d44e3"
+}

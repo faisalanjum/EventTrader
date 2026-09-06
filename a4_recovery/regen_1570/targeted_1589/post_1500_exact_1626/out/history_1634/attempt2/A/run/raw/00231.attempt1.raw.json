@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted row 'Interest expense (income), net ... 2,624 ... (1,994) ...' gives only bare digits with no dollar sign or scale word inside the quote; the applicable scale marker ('In thousands, except per share data') sits only in the Exhibit 1 table header, outside this quote. Per Rule 5.6, a numeric fact whose scale marker sits in a header/footnote outside the quote must abstain rather than borrow or guess the multiplier."
+    }
+  ],
+  "continuity_hints": []
+}
+```

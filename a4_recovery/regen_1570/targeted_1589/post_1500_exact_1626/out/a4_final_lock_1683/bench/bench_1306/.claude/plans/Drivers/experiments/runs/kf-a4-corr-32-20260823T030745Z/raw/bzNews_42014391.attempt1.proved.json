@@ -1,0 +1,131 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "advertising_spending",
+              "driver_state": "announced",
+              "level_low": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd"
+            }
+          },
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "franchisee_support",
+              "driver_state": "announced"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 1 was proposed as a real item and settles as two action_event facts (advertising_spending carrying the stated $100M, and a qualitative franchisee_support companion fact), consistent with the real-item proposal but split further than the earlier single-fact settlement."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "e_coli_illness_count",
+              "driver_state": "reported",
+              "level_low": {"value": 100, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "states_affected_count",
+              "driver_state": "reported",
+              "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 2 was proposed as a real item and settles as two metric facts (illness case count and states-affected count) drawn from the same quote, consistent with the real-item proposal though split further than the earlier single-fact settlement."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The word 'advertising' is drawn from the article's title framing rather than literally present in row 1's own body quote, and the $100M funds a bundled effort with 'support franchisees' (fact 1) with no source-stated split between the two, so the shared total is emitted once here per the shared-level convention."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "This fact carries no dollar value because the single $100M figure is already recorded on the advertising_spending fact; the source never states how much of the $100M specifically funds franchisee support."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an evolving outbreak illness tally is a re-readable severity metric or a fixed attribute of a one-off action_event incident is a genuine lane-boundary call; the persistence test (the tally can be updated as the investigation continues) was used to choose metric."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether '14 states' is an independently nameable metric fact or merely descriptive detail of the illness-count fact is a genuine judgment call; it is extracted separately here as its own source-stated count under Rule 1's extract-every-distinct-fact instruction."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/bzNews_42014391#189",
+      "agrees": false,
+      "why": "The lead's single action_event fact (advertising_spending, announced, point $100M m_usd) matches this settlement's first fact exactly, but the lead omits the separate franchisee_support fact that this row's own quote also independently states ('support franchisees'), so it is only a partial match."
+    },
+    {
+      "lead_id": "phase1/bzNews_42014391#190",
+      "agrees": false,
+      "why": "The lead classifies the sickened count as a single action_event named e_coli_outbreak (state occurred), matching only the numeric floor value of 100 in count; this settlement instead uses fact_type metric per the persistence test and also extracts a second, separate states_affected_count fact (14) that the lead does not capture at all."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'advertising_spending' is safely grounded when 'advertising' appears only in the article's title and not in row 1's own cited body quote, and whether the full $100M belongs there versus on the franchisee_support fact instead.",
+      "why": "Both readings (title-informed naming with the shared level on advertising_spending, or attaching the value to the fully quote-grounded franchisee_support fact) are defensible and the source gives no way to choose between them with certainty."
+    },
+    {
+      "what": "Whether the '14 states were sickened' detail in row 2 should be its own separate metric fact (states_affected_count) or should stay folded into the illness-count fact as descriptive scope.",
+      "why": "Owner ruling 1 supports extracting every distinct stated fact, but both numbers describe one single outbreak event, and a reasonable reader could treat '14 states' as scope detail rather than an independently trackable driver."
+    },
+    {
+      "what": "Whether row 2's illness count should be fact_type metric (a re-readable severity number) or action_event describing the outbreak incident itself.",
+      "why": "Outbreak case counts are commonly revised/updated over time (favoring metric), but the underlying event is also a discrete one-off incident (favoring action_event), and the source text alone does not settle which framing is intended."
+    }
+  ]
+}
+```

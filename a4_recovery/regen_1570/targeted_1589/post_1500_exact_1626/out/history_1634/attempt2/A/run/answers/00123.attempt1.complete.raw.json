@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote merely states, as scene-setting for a hypothetical business-continuity/disaster risk, that corporate systems/support are centralized at one Florida location; it is generic risk-factor boilerplate framing a potential future risk, not a stated driver state, change, surprise, guidance, or discrete action, so it fails Rule 1.2 and yields no fact."
+    }
+  ],
+  "continuity_hints": []
+}
+```

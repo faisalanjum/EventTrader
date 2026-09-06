@@ -1,0 +1,31 @@
+```json
+{
+  "packet_id": "0000940944-25-000038#062",
+  "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [],
+    "abstentions": [
+      {"reason": "This is generic cybersecurity risk-factor boilerplate — a standard defensive disclaimer ('to date, unauthorized infiltration attempts have not had a material impact on our operations') embedded in a forward-looking risk paragraph about hypothetical future cyber incidents, not a real, non-boilerplate statement about a specific driver's state, change, surprise, guidance, or action (Rule 1.2)."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-25-000038#062/L1",
+      "exact_match": true,
+      "why": "Same lawful branch: empty facts list, exactly one abstention citing Rule 1.2 generic risk-factor boilerplate, empty continuity_hints — matches the settled reply in structure and reasoning, differing only in reason wording."
+    },
+    {
+      "lane_id": "0000940944-25-000038#062/L2",
+      "exact_match": true,
+      "why": "Same lawful branch: empty facts list, exactly one abstention citing Rule 1.2 generic risk-factor boilerplate about historical non-materiality of cyber infiltration attempts, empty continuity_hints — matches the settled reply."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the historical no-material-impact statement is pure Rule-1.2 boilerplate (abstain) or a genuine qualitative metric fact (e.g., a cybersecurity-incident-impact state of 'unchanged'/'persists') under Rule 1.3.",
+      "why": "The sentence does assert a concrete historical state ('have not had a material impact'), which formally resembles a qualitative condition; but it sits inside a stock, industry-wide cyber-risk disclaimer pattern with no company-specific incident, size, or time detail, so it reads as defensive filing boilerplate rather than a trackable driver — a judgment call rather than a certainty."
+    }
+  ]
+}
+```

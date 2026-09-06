@@ -1,0 +1,16 @@
+ok   the record is the one the reviewer named
+ok   the record carries exactly one program
+ok   the ORIGINAL program parses
+ok   the EXTRACTED fragment parses
+ok   the fragment does not run two statements together
+ok   the UNFIXED extractor still fails on this record
+ok   same-line statements: the fragment parses
+ok   same-line statements: mine is emitted exactly once
+ok   same-line statements: the other owner is excluded
+ok   same-line statements: the write is still recognised
+ok   a program with no final newline: the fragment parses
+ok   a program with no final newline: the write is recognised
+ok   another owner alone: nothing of it is kept
+ok   another owner alone: no write is claimed for mine
+ok   every recorded extraction in the walk parses when the program did
+checks: 15  failed: 0  []

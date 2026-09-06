@@ -1,0 +1,3 @@
+validator written, card_of removed
+parses OK
+Shell cwd was reset to /home/faisal/EventMarketDB

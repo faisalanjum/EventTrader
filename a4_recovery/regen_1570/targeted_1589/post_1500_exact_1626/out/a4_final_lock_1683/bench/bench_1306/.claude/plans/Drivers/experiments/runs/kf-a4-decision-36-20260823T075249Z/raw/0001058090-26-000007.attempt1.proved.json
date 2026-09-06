@@ -1,0 +1,154 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "unknown",
+              "value_text": "about flat",
+              "company_confirmed": true,
+              "time_type": "duration",
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the Outlook section states management is anticipating full-year 2026 comparable restaurant sales to be about flat, a genuine company-confirmed, numberless forward guide."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 16.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 16.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 16.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 16.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_start_date": "2025-01-01",
+              "period_end_date": "2025-12-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the stated full-year 2025 operating margin (16.2%) with its explicit prior-year comparison (16.9%) is a real metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "digital_sales",
+              "driver_state": "reported",
+              "level_low": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "period_start_date": "2025-10-01",
+              "period_end_date": "2025-12-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the Q4 2025 digital-sales share of food and beverage revenue (37.2%, bare value) is a real metric fact, with the exact window taken from the directly governing 'three months ended December 31, 2025' section header."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The quote is the generic definitional footnote for the 'Legal proceedings' non-GAAP adjustment line, describing in the abstract what that adjustment category captures; it states no specific value, direction, or period-bound occurrence of its own (the actual dollar figures sit in the adjacent reconciliation-table cells, outside this quote), so it is boilerplate methodology/definition text, not a reportable driver fact."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: the definitional footnote states no period-specific value, direction, or occurrence of its own, so it correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The release's own Definitions section frames 'digital sales' as revenue generated through a specific selling channel (website, app, third-party aggregators), which Rule 3.4's role test would ordinarily slice as channel:digital on a broader revenue driver rather than keep as its own driver name; I keep it as the named driver because it is reported as its own standalone company KPI and the channel-vs-name role is not decisively forced either way, applying Rule 3.4's 'unclear role -> keep it in the name' tie-break."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001058090-26-000007#091",
+      "agrees": true,
+      "why": "The lead's settled guidance fact (comparable_restaurant_sales, unknown, value_text 'about flat', company_confirmed true, duration, FY2026) matches my settled fact field-for-field."
+    },
+    {
+      "lead_id": "phase1/0001058090-26-000007#092",
+      "agrees": true,
+      "why": "The lead's settled metric fact (operating_margin decreased, point 16.2 vs point 16.9 percent, prior_year baseline, FY2025 full-year dates) matches my settled fact field-for-field."
+    },
+    {
+      "lead_id": "phase1/0001058090-26-000007#093",
+      "agrees": true,
+      "why": "The lead's settled metric fact (digital_sales reported, point 37.2 percent, Q4 FY2025 with the same exact governing dates) matches my settled fact; the lead's own flagged ambiguity about date-derivation and channel-vs-name framing is the same open judgment call I recorded, not a disagreement in settled content."
+    },
+    {
+      "lead_id": "phase1/0001058090-26-000007#094",
+      "agrees": true,
+      "why": "The lead also emits no facts and a single abstention reasoning that the quote is a generic definitional/methodology footnote with no period-specific value, matching my settled judgment."
+    }
+  ],
+  "open_issues": []
+}
+```

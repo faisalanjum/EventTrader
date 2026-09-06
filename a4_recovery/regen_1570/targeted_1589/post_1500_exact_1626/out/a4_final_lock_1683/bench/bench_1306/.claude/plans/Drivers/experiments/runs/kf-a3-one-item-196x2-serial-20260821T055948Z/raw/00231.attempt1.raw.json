@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states raw digits (2,624 and (1,994)) for 'Interest expense (income), net' with no dollar sign, 'thousand', or other scale/unit marker anywhere inside the quote itself; the applicable scale note ('In thousands, except per share data') sits in the Exhibit 1 table header, outside this quote, and per Rule 5.6 a scale marker sitting in a header outside the quote requires abstention rather than guessing or borrowing the multiplier."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,385 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 3.03, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 3.03, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Diluted", "5% in constant currencies"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: diluted EPS with a stated period-over-period increase is a genuine metric fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 5.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: consolidated Q4 comparable-sales growth is a genuine, non-boilerplate metric."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "accelerating_the_organization_restructuring_costs",
+              "driver_state": "reported",
+              "level_low": {"value": 74, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 74, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["Pre-tax"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2024
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "accelerating_the_organization_restructuring_costs",
+              "driver_state": "reported",
+              "level_low": {"value": 221, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 221, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["Pre-tax"],
+              "time_type": "duration",
+              "fiscal_year": 2024
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is: two point-in-time prior-year restructuring-charge figures (quarter and year), reported bare with no adjacent same-driver comparator."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "systemwide_sales",
+              "driver_state": "increased",
+              "change_value": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["5% in constant currencies"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "systemwide_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 139, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "change_value": {"value": 9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["$7 billion in constant currencies"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is: full-year systemwide sales growth, stated on two non-mergeable bases (percent and absolute dollars) that cannot share one change_value slot."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "ninety_day_active_users",
+              "driver_state": "increased",
+              "level_high": {"value": 210, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "count",
+              "change_value": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "instant",
+              "period_end_date": "2025-12-31",
+              "fiscal_year": 2025,
+              "slice_parts": ["customer:loyalty_members"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is: loyalty-program 90-day active user count with a stated year-end level and YoY growth."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "accelerating_the_organization_restructuring_costs",
+              "driver_state": "reported",
+              "level_low": {"value": 229, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 229, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["net pre-tax"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is: FY2025 restructuring-charge figure, reported bare because the only prior-year number stated beside it in this quote ($291M) is a different, broader composite, not the same driver."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:internationaloperatedmarkets"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is: full-year comparable-sales growth for the International Operated Markets segment, a real per-segment metric."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "comparison_baseline=prior_year rests on the release's side-by-side 2025-vs-2024 quarter tables rather than a phrase inside this exact sentence."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "comparison_baseline=prior_year is licensed only by the release's document-wide comparable-sales definition, not by wording adjacent to this specific bullet; a prior reviewing pass left it null for this same reason."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The co-stated $0.10-per-share figure is treated as detail inside the quote rather than a second fact; 'costs' vs 'charges' in the name is a lawful spelling synonym."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same per-share-figure and naming-synonym ambiguity as fact 0, applied to the full-year figure."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the percent-basis and dollar-basis growth statements should split into two facts (as settled) or collapse into one is genuinely unresolved by the rules as written."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same split ambiguity as fact 0; also whether the $139B level belongs on both split facts or only this one is unsettled by any rule."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'loyalty' is an own-measured customer population (sliced, as settled) or a name-fused population qualifier like 'funded'/'fee_earning' is genuinely arguable; 'nearly 210 million' as a ceiling vs a rounded point is likewise not fixed by any rule."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The nearby $291M 'prior year' figure is a different, broader composite (includes South Korea/Israel items), so it cannot serve as this driver's comparator; state is 'reported', not 'increased'."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same document-wide-definition-vs-local-statement question for comparison_baseline as row 2."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000063908-26-000032#032",
+      "agrees": true,
+      "why": "Matches the settled EPS fact on name, state, level, change value/unit, prior_year baseline, per_x, and both measurement spans (Diluted, constant currency)."
+    },
+    {
+      "lead_id": "phase1/0000063908-26-000032#033",
+      "agrees": false,
+      "why": "Matches on name, state, level and unit, but leaves comparison_baseline null where the settled reply, for consistency with the release's document-wide prior-year comparable-sales definition, includes prior_year."
+    },
+    {
+      "lead_id": "phase1/0000063908-26-000032#034",
+      "agrees": true,
+      "why": "Matches the settled two-fact structure exactly: same driver_name (accelerating_the_organization_restructuring_costs), values, m_usd unit, 'Pre-tax' measurement span, and no invented dates."
+    },
+    {
+      "lead_id": "hr-008/b1/row3",
+      "agrees": false,
+      "why": "Values and periods match, but this reading omits the 'Pre-tax' measurement span entirely, which Rule 8 requires to be captured verbatim; the '_charges' name spelling is a harmless synonym."
+    },
+    {
+      "lead_id": "hr-008/b2/row3",
+      "agrees": false,
+      "why": "Uses the same driver_name as settled but, like its sibling reading, drops the 'Pre-tax' measurement span that the settled reply retains."
+    },
+    {
+      "lead_id": "phase1/0000063908-26-000032#035",
+      "agrees": false,
+      "why": "Reaches a similar two-fact percent/dollar split and the same headline numbers, but duplicates the $139B level onto both facts and adds invented exact period dates (2025-01-01/12-31) that the settled reply omits in favor of fiscal_year alone."
+    },
+    {
+      "lead_id": "hr-009/b1/row4",
+      "agrees": false,
+      "why": "Collapses everything into one fact and folds the $9 billion absolute-dollar growth into a measurement-span string instead of its own change_value fact, so the settled second fact (m_usd change) has no counterpart here."
+    },
+    {
+      "lead_id": "hr-009/b2/row4",
+      "agrees": false,
+      "why": "Splits into two dollar-basis facts ($9B as-reported vs $7B constant-currency) but drops the source-stated 7%/5% percentage growth entirely, which the settled reply keeps as its own fact."
+    },
+    {
+      "lead_id": "phase1/0000063908-26-000032#036",
+      "agrees": true,
+      "why": "Matches the settled reply exactly: driver_name ninety_day_active_users, customer:loyalty_members slice, ceiling shape on 210 million, 19% percent_yoy change, prior_year baseline, instant time_type, year-end date."
+    },
+    {
+      "lead_id": "hr-010/b1/row5",
+      "agrees": false,
+      "why": "Fuses 'loyalty' and '90-day' both into the name with no slice, treats 210 million as a closed point rather than a ceiling, and omits comparison_baseline."
+    },
+    {
+      "lead_id": "hr-010/b2/row5",
+      "agrees": false,
+      "why": "Matches the ceiling shape, change value, and prior_year baseline, but fuses 'loyalty' into the driver_name instead of slicing it out, and places '90-day active' in measurement rather than the name."
+    },
+    {
+      "lead_id": "phase1/0000063908-26-000032#037",
+      "agrees": true,
+      "why": "Matches the settled reply on state, value, unit, shape, fiscal_year, time_type, and the 'net pre-tax' measurement span; the '_charges' vs '_costs' name is an accepted spelling synonym."
+    },
+    {
+      "lead_id": "phase1/0000063908-26-000032#038",
+      "agrees": true,
+      "why": "Matches the settled reply exactly, including the segment:internationaloperatedmarkets slice and the prior_year comparison_baseline."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a document-wide definitional statement (e.g., 'comparable sales are compared to the same period in the prior year') satisfies Rule 9.2's 'source states that comparison' for every individual comparable-sales bullet in the release, even when the comparison is not repeated next to that specific number.",
+      "why": "Earlier reviewing passes answered this inconsistently for structurally identical figures (comparable_sales in row 2 vs row 7), and the rule text does not say whether 'the source' means the whole document or the local sentence; this task resolved it uniformly toward prior_year, but the underlying rule gap remains open."
+    },
+    {
+      "what": "How to encode a single growth statement given on two incompatible bases at once (percent and absolute dollars, as in row 4's systemwide sales), including whether the shared level number should be repeated on both split facts.",
+      "why": "Rule 5a.4's split-by-basis language is written for YoY-vs-sequential percent framings, not percent-vs-dollar duality, and the several prior reviewing attempts produced three different, mutually exclusive structures (percent+dollar split, dollar+dollar-constant-currency split, single collapsed fact), none clearly mandated by the rules as written."
+    },
+    {
+      "what": "Whether an own-measured customer population that is also a defined subset name (row 5's '90-day active loyalty users') should be sliced (Rule 3.4, customer group) or kept in the name as a population qualifier (Rule 3.8, like 'funded'/'fee_earning').",
+      "why": "Both rules plausibly apply to 'loyalty' here and point to different encodings; this task sliced it out as customer:loyalty_members, but the rule text does not clearly rank one test over the other for this exact case."
+    }
+  ]
+}
+```

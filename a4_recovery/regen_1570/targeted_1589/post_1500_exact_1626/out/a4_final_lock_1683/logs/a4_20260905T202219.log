@@ -1,0 +1,16 @@
+BAD  budget_receipt_1501          rc=1
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/reconstruct/budget_receipt_1501.py", line 43, in <module>
+    ("events", len(FT.correction_events())), ("targets", sum(len(t["rows"]) for t in FT.correction_tasks())), ("max_attempts", F.MAX_ATTEMPTS),
+                   ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final_targeted.py", line 1603, in correction_events
+    rec = _review_receipt(door)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final_targeted.py", line 1587, in _review_receipt
+    doc = _load(r["review_receipt"])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final_targeted.py", line 139, in _load
+    with io.open(path, encoding="utf-8") as fh:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1502.json'
+REFUSED: step budget_receipt_1501 failed

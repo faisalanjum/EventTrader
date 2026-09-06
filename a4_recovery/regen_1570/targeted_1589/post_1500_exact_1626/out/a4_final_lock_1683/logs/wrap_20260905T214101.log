@@ -1,0 +1,18 @@
+rc=2
+log: /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/logs/a4_20260905T214101.log
+ok   review_receipt_1502          rc=0  37.9s
+BAD  prepare_round1               rc=1  0.2s
+REFUSED: step prepare_round1 failed
+ok   review_receipt_1502          rc=0  37.9s
+receipt /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1502.json 21bff8c3b107c36af1c02cf828297a921d2c40bb2975304c73e5af9eada0c6bc
+events with findings: [('000031', 2), ('000005', 3), ('000009', 3), ('000109', 2), ('000022', 1)]
+BAD  prepare_round1               rc=1  0.2s
+owner   : eef9afa4d0259661
+door    : a4_final_targeted_correction
+review  : a4_final_review_receipt_1502.json 21bff8c3b107c36a
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/reconstruct/prepare_round1.py", line 26, in <module>
+    doc = FT.build_correction(FT.CORR_PKG_DIR, FT.CORR_DOOR)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: build_correction() takes 1 positional argument but 2 were given
+REFUSED: step prepare_round1 failed

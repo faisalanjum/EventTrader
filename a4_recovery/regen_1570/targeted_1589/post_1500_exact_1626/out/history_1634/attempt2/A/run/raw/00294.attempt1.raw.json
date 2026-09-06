@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "marketing_costs",
+        "driver_state": "increased",
+        "level_low": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "change_value": {"value": 50, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+        "change_unit": "basis_points",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

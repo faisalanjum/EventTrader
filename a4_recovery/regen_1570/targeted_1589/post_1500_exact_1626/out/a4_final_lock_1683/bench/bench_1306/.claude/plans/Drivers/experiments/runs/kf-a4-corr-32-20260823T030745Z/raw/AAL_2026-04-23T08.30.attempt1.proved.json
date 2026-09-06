@@ -1,0 +1,200 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "casmx",
+              "driver_state": "unknown",
+              "level_low": {"value": 2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a genuine guidance fact (Q2 CASMX anticipated up 2%-4% YoY), so the proposal holds."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "unknown",
+              "level_low": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "floor",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:domesticdestination"],
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a genuine guidance fact (domestic unit revenue floor of >10% YoY for Q2), so the proposal holds."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_debt",
+              "driver_state": "reported",
+              "level_high": {"value": 35, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "m_usd",
+              "time_type": "instant",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a genuine metric fact (total debt below a $35 billion ceiling), so the proposal holds; but the state is 'reported' not 'decreased' because this narrow quote states only a bare threshold and a historical date reference, with no direction word or prior numeric value of its own -- the 'decreased'/'$1.8B reduction' language sits in a neighbouring sentence that must not donate a value or judgment onto this quote's own fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "capacity",
+              "driver_state": "reported",
+              "level_low": {"value": 15, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 15, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:latinamericadestination"],
+              "measurement_raw_spans": ["roughly"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "rasm",
+              "driver_state": "mixed",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:latinamericadestination"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a single real_item but the quote actually carries TWO distinct facts -- a Latin America capacity-share level (~15%, following the same speaker's own repeated per-entity 'region, X% of capacity, RASM performance' pattern) and a mixed/break-even RASM performance state -- so raw_label 'Latin America' must not suppress the capacity fact, per Rule 1."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'CASMX' should be expanded to a per-X name (cost_per_available_seat_mile / per_x available_seat_mile) or kept as the bare acronym; the denominator is never spelled out anywhere in this event, so Rule 3.5 bars guessing the expansion and the name stays 'casmx' with no per_x."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether driver_state should read 'reported' (this quote alone states only a bare $35B threshold and a date reference, no direction word or adjacent numeric prior value) or 'decreased' (only supportable by importing the immediately preceding, separately-quotable sentence's '$34.7B, a reduction of $1.8B'); the owner rule against a neighbouring fact donating a value/second fact favors 'reported'."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'roughly 15%' denotes Latin America's share of total company capacity; this exact quote never says 'of our capacity' -- that meaning is drawn from the same speaker's own repeated parallel framing used moments earlier in the same continuous answer for the Atlantic and Pacific entities."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'RASM' should be expanded to revenue_per_available_seat_mile with per_x available_seat_mile; never spelled out in this event, so Rule 3.5 keeps the bare acronym 'rasm' with no per_x; 'mixed' beats 'unchanged' because Rule 4's ladder tests differs-across-parts before explicit-flat, and the source's own 'mixed bag' plus the Mexico-vs-rest split evidences that."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/AAL_2026-04-23T08.30#136",
+      "agrees": true,
+      "why": "The lead's settled fact matches mine on every field: driver_name 'casmx' with no per_x, driver_state 'unknown', identical 2/4 percent range with '%' evidence, percent_yoy unit, Q2 FY2026, duration, company_confirmed true."
+    },
+    {
+      "lead_id": "phase1/AAL_2026-04-23T08.30#137",
+      "agrees": true,
+      "why": "Matches on driver_name 'unit_revenue', floor shape with level_low 10 and '%' evidence, percent_yoy unit (the correct dated-period default per Rule 5a.4, not merely an outside-context borrow as the lead worried), domestic geography slice, Q2 FY2026 guidance with company_confirmed true."
+    },
+    {
+      "lead_id": "phase1/AAL_2026-04-23T08.30#138",
+      "agrees": false,
+      "why": "The lead settles driver_state as 'decreased', but this row's own quote states only a bare $35B threshold and a date reference with no direction word or adjacent numeric prior value; the 'reduction'/'$34.7B' language the lead leans on sits in a separate neighbouring sentence, which the owner rulings forbid from donating a value or a second fact onto this quote, so 'reported' is the correct state."
+    },
+    {
+      "lead_id": "phase1/AAL_2026-04-23T08.30#139",
+      "agrees": false,
+      "why": "The lead expands 'RASM' into 'revenue_per_available_seat_mile' with per_x 'available_seat_mile' -- unverifiable in this event, so the name should stay the bare acronym 'rasm' -- and, more importantly, the lead captures only the RASM fact and misses the separate ~15% Latin America capacity-share fact that this same quote also carries per Owner Ruling #1."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether CASMX (row 1) and RASM (row 4) should be named as their bare acronyms or expanded into per-X names (cost_per_available_seat_mile / revenue_per_available_seat_mile) with per_x available_seat_mile.",
+      "why": "Both acronyms are standard airline shorthand for a per-available-seat-mile measure, but neither 'available seat mile' nor a full expansion is ever spelled out anywhere in this event's own text, so Rule 3.5's ban on guessing an unverifiable per-X expansion is in tension with Rule 3.3's preference for the most specific stated term."
+    },
+    {
+      "what": "Whether the row-4 'roughly 15%' figure may lawfully be read as Latin America's capacity share when the words 'of our capacity' are never stated inside this specific quote, only in the same speaker's parallel framing used earlier in the same continuous answer for other entities.",
+      "why": "Owner Ruling #2 permits directly-governing source framing to identify meaning but forbids a neighbouring independent fact from donating a value or second fact; whether the same-speaker parallel pattern in the same continuous answer counts as 'directly governing framing' versus an impermissible cross-sentence borrow is not settled by the rules as written."
+    }
+  ]
+}
+```

@@ -1,0 +1,154 @@
+rewired
+path + fail-closed owner check installed
+rules + opaque id installed
+uniqueness guard + controls added
+controls now derive the scored set
+loader/call-packet/result binder added
+bindings, controls, prompt paths and max budget wired
+validate_merged added
+raw filename defect fixed
+launch section rewritten
+cleaned
+builder fixes applied
+order check simplified
+accounting echo + re-derivation added
+half-publication slot now refuses
+lifecycle + state-audit fixes applied
+per-lane lifecycle installed
+external approval carried through
+duplicate init removed
+delegation wired
+cleaned
+expect carries the digest
+builder: batch_ids bound, full returned row kept
+publisher and audit rewired
+inlined
+implementation inserted
+validate_merged is now the relation-to-credit owner
+deleted render..reconcile            4338 bytes
+deleted batches                      1198 bytes
+deleted RULES block                  1628 bytes
+rewired
+freeze rewired to event groups
+audit detail + terminal categories added
+build owner patched
+a7_g1_build rewired: live_key + shared card
+index translation named
+all prior spend accounted
+task-kind seam added
+reconciliation scoped to the segment
+materialize now emits the one trace
+caller passes the real arm names
+segment-scoped reconciler deleted
+effective_slots carries every saved attempt
+one attempt-complete row per scheduled slot
+raw_path stays the run path it always was
+a7_g1_build threaded, parses OK
+internal calls pass the identity
+a zero-call run is uncalled, not broken
+inventory fails closed by name
+A5 in scope
+g1 freeze fails closed
+every retry state named
+docstring no longer names a typed total
+run_of rederives and exact-compares
+run_of rederives without re-gating the era
+questions passes the run to its card lookup
+G1 consumes the one ledger owner
+one materialization per validated run
+a7_source_meta.py           65985 recorded-file-write  ok       a04b48d4000f6070
+source_meta narrowed
+a7_source_meta.py           66163 applied              ok       080e660ad8af8e05
+source_meta versioned to v2 with complete ticker accounting
+a7_source_meta.py           66438 applied              ok       4addd2f2e4b79bb2
+total unintended changes: 0
+a7_reference_inventory.py   67823 recorded-file-write  ok       50ef77561c889040
+a7_reference_inventory.py   68052 applied              ok       e171733d57ddf91f
+a7_reference_inventory.py   68484 read-only(raised)    error    e171733d57ddf91f
+a7_reference_inventory.py   68488 read-only(raised)    ok       e171733d57ddf91f
+a7_reference_inventory.py   68887 read-only(raised)    ok       e171733d57ddf91f
+card_of documented as the collision key
+a7_reference_inventory.py   68897 applied              ok       fa465c64d7813669
+validator written, card_of removed
+a7_reference_inventory.py   69641 applied              ok       dc8b4c774030b71c
+DRI two-truths implemented
+a7_reference_inventory.py   69671 applied              ok       a8ca06468db7457e
+source-provenance guard added
+a7_reference_inventory.py   69699 applied              ok       33e2ce58dce1ef1f
+scorers/score_exp5.py       65019 read-only(raised)    ok       2901f1a615e988af
+scorers/score_exp5.py       66014 read-only(raised)    ok       2901f1a615e988af
+edits applied
+scorers/score_exp5.py       66137 applied              ok       a2c5fd2380df5210
+scorers/score_exp5.py       66141 read-only(raised)    ok       a2c5fd2380df5210
+scorer finished: diagnostic out of the error table, attribution added
+scorers/score_exp5.py       66468 applied              ok       11eee049c1b17cb7
+total unintended changes: 0
+scorers/score_exp5.py       68009 read-only(raised)    ok       11eee049c1b17cb7
+scorers/score_exp5.py       69217 read-only(raised)    ok       11eee049c1b17cb7
+fact-scoped rejection implemented
+scorers/score_exp5.py       69530 applied              ok       e982fc553183e500
+guard widened to a known key set
+scorers/score_exp5.py       69591 applied              ok       a4ff9826402f414a
+rejected facts now terminate explicitly
+scorers/score_exp5.py       69613 applied              ok       4db24f2e9d930058
+a7_g23_build.py             65754 recorded-file-write  ok       e1afeb92d21c89d8
+a7_g23_build.py             65767 recorded-file-write  ok       3feea1442687e15d
+a7_g23_build.py             65797 recorded-file-write  ok       97e0e2f1ce73209f
+a7_g23_build.py             65836 read-only(raised)    ok       97e0e2f1ce73209f
+a7_g23_build.py             66620 recorded-file-write  ok       fb6931a7ba52c19c
+aspect definitions added, output example is a real JSON object
+a7_g23_build.py             66918 applied              ok       e4bfb6da365b06e0
+a7_g23_build.py             66924 recorded-file-write  ok       f8a911a404246331
+total unintended changes: 0
+a7_g23_build.py             67355 recorded-file-write  ok       2870cc8370126a86
+detector now ignores the source's own wording
+a7_g23_build.py             67360 applied              ok       37755c94b7451b4e
+G2: raw evidence on the authority side; parser strict by identity
+a7_g23_build.py             67370 applied              ok       3462be394a9477d7
+a7_g23_build.py             67375 recorded-file-write  ok       a8d64c33668970f8
+a7_g23_build.py             67385 recorded-file-write  ok       49dde8c257ee864e
+packing distinctness is now the SOURCE EVENT
+a7_g23_build.py             67395 applied              ok       f30aef5a608a75e0
+a7_g23_build.py             67457 recorded-file-write  ok       32975b28320a865b
+reference card replaces quote-only, with a structural whitelist
+a7_g23_build.py             67574 applied              ok       736b30bdf844ac84
+a7_g23_build.py             67661 recorded-file-write  ok       10f7dbd4d1b2d4b4
+the card now reads the frozen inventory by exact row identity
+a7_g23_build.py             67833 applied              ok       e296f95346717f4c
+non_unique_cards updated
+a7_g23_build.py             67843 applied              ok       620b42acbbdea2d8
+a7_g23_build.py             67919 read-only(raised)    ok       620b42acbbdea2d8
+a7_g23_build.py             67937 read-only(raised)    ok       620b42acbbdea2d8
+citations stripped
+a7_g23_build.py             68009 applied              ok       ae3e574203d2288d
+door tightened
+a7_g23_build.py             68034 applied              ok       471283aa0cbb0abd
+batch_packet added
+a7_g23_build.py             68301 applied              ok       becc9969507192a5
+a7_g23_build.py             69217 read-only(raised)    ok       becc9969507192a5
+G3 keeps each question with its own event's cards
+a7_g23_build.py             69568 applied              ok       79f2c13de4c69764
+a7_g23_build.py             69638 read-only(raised)    ok       79f2c13de4c69764
+serving path now validates
+a7_g23_build.py             69651 applied              ok       045de82cc98f2865
+a7_key_correction.py        66244 recorded-file-write  ok       8724a5b059a05938
+a7_key_correction.py        66582 recorded-file-write  ok       7bd35db2fbaf8639
+applier extended with patch_item and add_fact, both identity-checked
+a7_key_correction.py        66838 applied              ok       6b7e7e93ce8d720c
+applier: a patch now rides ALONG with a naming action
+a7_key_correction.py        66940 applied              ok       633219dabffc0dcd
+total unintended changes: 0
+one executable key identity added
+a7_key_correction.py        67452 applied              ok       76cccc9afe9fbb09
+a7_g23_run.py               68281 recorded-file-write  ok       6ffb6a344189d687
+run module rewired
+a7_g23_run.py               68301 applied              ok       b3d79bb7864df47d
+route is per leg, with its own audit dir
+a7_g23_run.py               68315 applied              ok       cfe1d899010f518b
+populations reports unroutable events instead of dying
+a7_g23_run.py               68375 applied              ok       1fd8badca080b5b8
+floor/ceiling split
+a7_g23_run.py               69583 applied              ok       a266e9b64f6ef0c3
+call_plan added
+a7_g23_run.py               69737 applied              ok       817e8546c2e1ebc2
+recovered 6 source files; applied=32, read-only=114, read-only(raised)=13, recorded-file-write=15; 57 unique tool ids

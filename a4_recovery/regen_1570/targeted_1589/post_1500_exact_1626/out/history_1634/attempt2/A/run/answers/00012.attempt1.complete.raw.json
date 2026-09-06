@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Quote 'Total operating revenues 13,912 12,551 10.8' states numeric values (13,912 vs 12,551) but carries no unit or scale marker (no '$', no 'million') inside the quote itself — the '(In millions...)' header that would supply the scale multiplier sits outside this quote, in the table's separate header line. Per Rule 5.6, unit_scale_evidence must be copied verbatim from inside the quote, and null is lawful only when the multiplier is 1; since these values are not literal units (multiplier is not 1) and the scale marker sits outside the quote, this is exactly the abstain case, not a guessable one."
+    }
+  ],
+  "continuity_hints": []
+}
+```

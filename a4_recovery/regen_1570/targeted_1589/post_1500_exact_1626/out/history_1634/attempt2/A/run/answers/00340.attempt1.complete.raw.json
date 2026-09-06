@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comp_sales",
+        "driver_state": "introduced",
+        "level_unit": "percent_sequential",
+        "value_text": "sequential deceleration from Q4",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "slice_parts": ["segment:internationaldevelopmentallicensedmarketsandcorporate"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

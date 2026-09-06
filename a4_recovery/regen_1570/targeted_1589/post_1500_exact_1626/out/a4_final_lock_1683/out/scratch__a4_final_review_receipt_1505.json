@@ -1,0 +1,54 @@
+{
+ "schema": "a4-final-review-receipt/1",
+ "authority": "Codex SEQ 1505",
+ "lead_binding": {
+  "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr_binding.json",
+  "binding_sha256": "b1f516f6217ca05fae8bcb6af3b2f5ac3b259ab3ed571f09f79ef2a516ec48fd",
+  "run_dir": "/tmp/a4_final_targeted_corr_run_1504"
+ },
+ "findings": {
+  "0000940944-26-000009": [
+   {
+    "kind": "open_issue",
+    "what": "Rows 1 and 2 locate the identical 'Impairments and (gain) loss on disposal of assets, net' table caption in the same MD&A results table; row 2's quote is simply a superset of row 1's, extending it to also cover the nine-month columns. They were not shown to me as a locator group.",
+    "why": "If a later step ever promoted facts from both rows independently, the shared three-month figures ($25.1M vs $0.1M) could be double counted as two separate facts for the same underlying table cell. Since both rows abstain here the risk is currently inert, but any upstream row-grouping step should still treat these two locations as one underlying row."
+   },
+   {
+    "kind": "open_issue",
+    "what": "The event itself references 'Note 7' for additional information on both the Bahama Breeze impairment and the Olive Garden Canada disposal, but the note's actual text (with any separate dollar amounts per cause) is not included in the material shown to me.",
+    "why": "A per-cause dollar breakdown, if it exists in that referenced note, could let a future settlement lawfully split this net caption into two named facts instead of abstaining; since that note text is not part of the evidence provided for these two rows, I cannot use it to resolve the split here, and I have not treated it as available evidence."
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1505",
+    "text": "Reject 0000940944-26-000009 as closure-grade, although its two exclusions are safe. Both rows already produce zero facts, so their overlap cannot duplicate an accepted fact. Note 7 is outside the frozen evidence and cannot be borrowed. Neither point changes the frozen answer: both rows remain exclusions with zero facts and open_issues must be empty.",
+    "rules": [
+     "Rule 1.4",
+     "Rule 3.2"
+    ]
+   }
+  ],
+  "0001041061-25-000109": [
+   {
+    "kind": "open_issue",
+    "what": "Two menu segment tokens ('segment:habitdivision' and 'segment:thehabitburgergrillglobaldivision') both plausibly denote the Habit Burger & Grill Division.",
+    "why": "I resolved this by naming symmetry with the sibling divisions' current 'X globaldivision' menu tokens, but the row's text never states which catalog entry is current versus legacy, so a catalog-governance ruling could still overturn my pick and would need to be applied uniformly to every other Habit-division fact in this company's history."
+   },
+   {
+    "kind": "open_issue",
+    "what": "The YTD 2025 Operating Profit (Loss) cell for the Habit Burger & Grill Division is shown only as a dash ('$ —'), which I treated as a source-stated value of zero (rounded to the nearest whole million) rather than a missing/non-numeric cell.",
+    "why": "The document explains it rounds all tabular figures to the nearest whole million and elsewhere in this same table uses 'N/A' - not a dash - wherever a figure is genuinely not applicable, supporting a rounds-to-zero reading; but Rule 5.4 literally requires 'every stated digit', and a dash is not a digit, so a stricter reading would instead drop the level object and store the fact as numberless - this is the same point Codex's SEQ 1501/1502 finding raised, and it remains a live, rule-textual disagreement warranting a governance ruling rather than a per-fact guess."
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1505",
+    "text": "Reject both accepted facts in 0001041061-25-000109. The reply itself says the exact segment identity remains unresolved and the dash is not a stated digit, yet it guessed a menu token by naming symmetry and converted the dash to zero. Existing Rules 1.4, 5, and 7 resolve this fail-closed: do not choose either token, do not turn the dash into a number, do not invent dates, and abstain/exclude the row with zero facts and no remaining open issue.",
+    "rules": [
+     "Rule 1.4",
+     "Rule 5",
+     "Rule 7"
+    ]
+   }
+  ]
+ }
+}

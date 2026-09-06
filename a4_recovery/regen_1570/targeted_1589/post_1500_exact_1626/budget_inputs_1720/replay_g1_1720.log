@@ -1,0 +1,14 @@
+ok   64861_v16_build        rc=0  recorded lines 15, suffix match True
+ok   64992_run4_root        rc=0  recorded lines 23, suffix match True
+ok   65985_source_meta_owner rc=0  recorded lines 5, suffix match True
+ok   67823_reference_inventory rc=0  recorded lines 3, suffix match True
+BAD  68052_reference_inventory_edit rc=0  recorded lines 2, suffix match False
+      recorded: fixed
+      replayed:   File "<stdin>", line 45, in <module>
+      recorded: 23 passed in 42.40s
+      replayed: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/b
+   --- replay output tail ---
+Traceback (most recent call last):
+  File "<stdin>", line 45, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_candidate_1463.py'
+REFUSED: step 68052_reference_inventory_edit did not reproduce its recorded result

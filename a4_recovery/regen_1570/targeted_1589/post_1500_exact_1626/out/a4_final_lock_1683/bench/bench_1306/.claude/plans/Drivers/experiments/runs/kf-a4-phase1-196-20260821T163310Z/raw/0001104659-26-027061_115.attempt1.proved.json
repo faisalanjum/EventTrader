@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#115",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote for 'Interest expense (income), net' contains only bare digits and percentages (2,624 / 0.1% and (1,994) / (0.1%)) with no dollar sign, 'thousand', or any other scale/unit marker anywhere inside the quoted span; the governing scale caption '(In thousands, except per share data)' sits in the Exhibit 1 table header, above and outside this row's quote. Per Rule 5.6, when a fact's scale marker sits in a header or footnote outside the quote, the item must abstain rather than guess or import the multiplier from elsewhere in the document."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#115/L1",
+      "exact_match": true,
+      "why": "L1 also emits facts: [] with a single abstention citing Rule 5.6 for the same reason: the dollar figures need a scale multiplier whose marker ('In thousands...') is in the Exhibit 1 header, outside the quote span."
+    },
+    {
+      "lane_id": "0001104659-26-027061#115/L2",
+      "exact_match": true,
+      "why": "L2 reaches the identical no-fact / single-abstention outcome, noting the quote has no dollar sign or scale word and the 'In thousands' caption sits in the header outside the quote, invoking the same Rule 5.6 abstention."
+    }
+  ],
+  "ambiguities": []
+}
+```

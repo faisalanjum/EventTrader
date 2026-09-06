@@ -1,0 +1,29 @@
+ok   69679_reference_inventory_artifact rc=0  recorded lines 5, suffix match True
+BAD  69853_g23_candidates   rc=0  recorded lines 7, suffix match False
+      recorded: per-kind candidate writer + seam registration
+      replayed:   File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harne
+      recorded: G2 -> a7_g1_candidate.json  sha 21ae14e50050780e
+      replayed:     ("owner_sha256", _sha_file(os.path.join(_HERE, BATCH_OWNER))),
+      recorded:    load_frozen OK | task_kind=G2 | batch_rows=17 | rules=477dbd0dba6b
+      replayed:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      recorded:    parser=read_meaning_reply | binding ids=10
+      replayed:   File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harne
+      recorded: G3 -> a7_g1_candidate.json  sha 53a60ec15228c685
+      replayed:     return hashlib.sha256(io.open(path, "rb").read()).hexdigest()
+      recorded:    load_frozen OK | task_kind=G3 | batch_rows=46 | rules=29fd76ead35d
+      replayed:                           ^^^^^^^^^^^^^^^^^^^
+      recorded:    parser=read_extras_reply | binding ids=10
+      replayed: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/b
+   --- replay output tail ---
+per-kind candidate writer + seam registration
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_run.py", line 223, in call_plan
+    g1 = len(G.GRADER_LANES) * G.freeze()[0]["batching"]["batches"]
+                               ^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 1936, in freeze
+    ("owner_sha256", _sha_file(os.path.join(_HERE, BATCH_OWNER))),
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 89, in _sha_file
+    return hashlib.sha256(io.open(path, "rb").read()).hexdigest()
+                          ^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/grade_batch.js'
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result

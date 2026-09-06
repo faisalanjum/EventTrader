@@ -1,0 +1,47 @@
+{
+ "accounting_sha256": "6a4f5112fbcc90db3fef103921aec1455f9c3da32b81c8a6ca6c3aec2a059dc6",
+ "attempt": 1,
+ "candidate_sha256": "5d5798c7a1c711b5b94c1d325c46b986ec5b93e8997d8f69f92b41e8efd946c2",
+ "ledger": {
+  "invalid": 2,
+  "retry": 2,
+  "scheduled": 4,
+  "uncalled": 0,
+  "valid": 2
+ },
+ "problems": {
+  "G1-019/G1a": [
+   "Qdb8c5b4538ea4df8 was asked and not answered"
+  ],
+  "G1-019/G1b": [
+   "Qdb8c5b4538ea4df8 was asked and not answered"
+  ]
+ },
+ "receipt_sha256": "ae512e5f678ba9b58034f072e77a8824aa2d4c24db9f86b06c3c96c476f43c06",
+ "retry": [
+  "G1-019/G1a",
+  "G1-019/G1b"
+ ],
+ "root_sha256": "664bb96a11654fc0319ecbb30b399c84bcba99882f72a2fe847fe2dcf4ccbc56",
+ "schema": "a7_g1_candidate/2",
+ "segment": 12,
+ "uncalled": [],
+ "validity": [
+  [
+   "G1-019/G1a",
+   false
+  ],
+  [
+   "G1-019/G1b",
+   false
+  ],
+  [
+   "G1-020/G1a",
+   true
+  ],
+  [
+   "G1-020/G1b",
+   true
+  ]
+ ]
+}

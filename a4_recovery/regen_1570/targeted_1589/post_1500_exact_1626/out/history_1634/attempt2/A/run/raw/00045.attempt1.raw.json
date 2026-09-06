@@ -1,0 +1,19 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "aeromexico_antitrust_immunity",
+        "driver_state": "persists",
+        "time_type": "instant",
+        "period_start_date": "2025-11-12",
+        "period_end_date": "2025-11-12"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

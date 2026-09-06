@@ -1,0 +1,104 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "discontinued_operations",
+              "driver_state": "decreased",
+              "level_low": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["net of tax benefit of $1.3, $0.2, $1.6, and $0.7, respectively"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "discontinued_operations",
+              "driver_state": "decreased",
+              "level_low": {"value": -4.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -4.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1.2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -1.2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "period_scope": "ytd",
+              "measurement_raw_spans": ["net of tax benefit of $1.3, $0.2, $1.6, and $0.7, respectively"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The row was proposed as a real_item and settles as a real fact: the Losses from discontinued operations line states concrete signed quarterly and nine-month values against explicit prior-year comparisons, so the proposed_record_kind is confirmed rather than overturned."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The same quote states both a three-month and a nine-month figure for this driver; this fact captures only the three-month figure, with the nine-month figure settled as its own separate fact rather than folded in or dropped."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "This is the nine-month (fiscal YTD) counterpart to the three-month figure in the same quote; the two windows are genuinely different periods, so they are recorded as two distinct facts rather than one restated fact."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "targeted/0000940944-26-000005#065/row1",
+      "agrees": false,
+      "why": "It captured only the three-month figure and omitted the nine-month figure the same quote equally states as a distinct period; it also attached a bare period_end_date without a matching period_start_date, which breaks the all-or-nothing exact-duration-window rule (Rule 6) that the settled quarter fact avoids by using fiscal_quarter/fiscal_year alone."
+    },
+    {
+      "lead_id": "hrt-005/b1/row1",
+      "agrees": false,
+      "why": "Its single quarter fact (name, signed values, prior-year comparison, fiscal_quarter/year) matches the settled quarter fact, but it silently drops the nine-month figure the same quote states just as plainly, so it is an incomplete settlement of this row."
+    },
+    {
+      "lead_id": "hrt-005/b2/row1",
+      "agrees": false,
+      "why": "Identical in substance to the other hard-review lane's quarter-only fact and matches the settled quarter fact's values and framing, but likewise omits the nine-month figure present in the same quote, so it under-covers this row."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the quarter and nine-month (YTD) figures for one 'Losses from discontinued operations' line should be emitted as two separate facts (as settled here) or as a single headline-quarter fact (as all three leads did).",
+      "why": "No rule quoted above explicitly locks period-count-per-row behavior for a single located item stating two genuinely different windows for the same driver; this is a real design gap, not something safely resolvable by guessing."
+    },
+    {
+      "what": "The verbatim tax-benefit qualifier ('net of tax benefit of $1.3, $0.2, $1.6, and $0.7, respectively') names four column-specific dollar amounts under one contiguous clause, but only one of those four amounts actually corresponds to each settled fact's own period.",
+      "why": "Rule 8 requires copying a contiguous qualifier span verbatim as ONE entry and forbids splitting it absent intervening non-qualifier prose, so both facts must carry the same full span even though it over-includes figures belonging to the other fact's column."
+    }
+  ]
+}
+```

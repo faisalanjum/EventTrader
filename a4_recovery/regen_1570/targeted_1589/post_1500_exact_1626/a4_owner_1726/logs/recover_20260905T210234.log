@@ -1,0 +1,69 @@
+rewired
+path + fail-closed owner check installed
+rules + opaque id installed
+uniqueness guard + controls added
+controls now derive the scored set
+loader/call-packet/result binder added
+bindings, controls, prompt paths and max budget wired
+validate_merged added
+raw filename defect fixed
+launch section rewritten
+cleaned
+builder fixes applied
+order check simplified
+accounting echo + re-derivation added
+half-publication slot now refuses
+lifecycle + state-audit fixes applied
+per-lane lifecycle installed
+external approval carried through
+duplicate init removed
+delegation wired
+cleaned
+expect carries the digest
+builder: batch_ids bound, full returned row kept
+publisher and audit rewired
+inlined
+implementation inserted
+validate_merged is now the relation-to-credit owner
+deleted render..reconcile            4338 bytes
+deleted batches                      1198 bytes
+deleted RULES block                  1628 bytes
+rewired
+freeze rewired to event groups
+audit detail + terminal categories added
+build owner patched
+a7_g1_build rewired: live_key + shared card
+index translation named
+all prior spend accounted
+task-kind seam added
+reconciliation scoped to the segment
+materialize now emits the one trace
+caller passes the real arm names
+segment-scoped reconciler deleted
+effective_slots carries every saved attempt
+one attempt-complete row per scheduled slot
+raw_path stays the run path it always was
+a7_g1_build threaded, parses OK
+internal calls pass the identity
+a zero-call run is uncalled, not broken
+inventory fails closed by name
+A5 in scope
+g1 freeze fails closed
+every retry state named
+docstring no longer names a typed total
+run_of rederives and exact-compares
+run_of rederives without re-gating the era
+questions passes the run to its card lookup
+G1 consumes the one ledger owner
+one materialization per validated run
+a7_g23_build.py             65754 recorded-file-write  ok       e1afeb92d21c89d8
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/a4_owner_1726/recover_a4_owner.py", line 476, in <module>
+    main()
+  File "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/a4_owner_1726/recover_a4_owner.py", line 400, in main
+    mixed = bool(own) and started and any(
+                                      ^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/a4_owner_1726/recover_a4_owner.py", line 402, in <genexpr>
+    for _t, b in HD_Q.findall(cmd)
+        ^^^^^
+ValueError: too many values to unpack (expected 2)

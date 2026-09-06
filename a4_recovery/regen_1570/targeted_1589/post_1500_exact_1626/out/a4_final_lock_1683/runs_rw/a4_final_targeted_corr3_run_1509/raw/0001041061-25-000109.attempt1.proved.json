@@ -1,0 +1,85 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "decreased",
+              "level_low": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_unit": "m_usd",
+              "level_shape_hint": "point",
+              "comparison_low": {"value": 1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": 1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "change_value": {"value": -572, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:habit burger & grill division"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "change_value": {"value": 82, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_scope": "ytd",
+              "slice_parts": ["segment:habit burger & grill division"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item, and it settles as a fact: the source states a genuine quarter and YTD Operating Profit (Loss) change for the Habit Burger & Grill Division, corroborated identically in the separate Core Operating Profit reconciliation table, and the menu-ambiguity that blocked the prior settlement is resolved by coining a source-grounded off-menu slice value rather than abstaining."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes", "ambiguous_menus"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'The Habit Burger & Grill Division' normalizes exactly to neither existing menu segment token ('habitdivision' nor 'thehabitburgergrillglobaldivision') and the text does not select or rename either, so a source-grounded off-menu segment value was coined rather than guessing between them; the stated -572% B/(W) is kept as a non-derivable change value because the document's rounding disclosure means it cannot be recomputed from the rounded -2/1 point values."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes", "ambiguous_menus"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The YTD 2025 current-period cell is shown as a dash, which is not a stated digit, so no current-period level value is emitted; only the stated prior-year comparison (-2) and the source's own stated 82% B/(W) change are recorded, and the same off-menu segment ambiguity as fact 0 applies."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "correction_2/0001041061-25-000109",
+      "agrees": false,
+      "why": "The lead abstained entirely on both the quarter and YTD Habit Burger & Grill Division operating-profit facts, treating the two-similar-but-non-matching menu segment tokens as an unresolvable blocker; the lawful path is to coin a source-grounded off-menu slice value and tag ambiguous_menus rather than drop real, source-stated facts, so both are settled as facts here instead of abstentions. It also treated the YTD dash as a stated rounded zero (an invented value); the dash is not a stated digit, so the YTD level is left unpopulated and the movement is captured instead via the source's own explicit 82% B/(W) figure."
+    }
+  ],
+  "open_issues": []
+}
+```

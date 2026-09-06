@@ -1,0 +1,13 @@
+ok   no basename-unanimity resolver
+ok   no first-same-suffix directory route
+ok   every expected hash comes from the canonical pins
+ok   a preserved destination is refused before any work
+ok   the preserved destination is untouched
+ok   a path that normalizes back inside the bench is accepted
+ok   an absolute path is refused
+ok   a path escaping the bench with ../ is refused
+ok   the v3 view resolves the epoch contract manifest
+ok   the exact v3 A5 plan is still the pinned one
+ok   the live bench, runs, manifest and session store are byte-identical
+
+11 checks, 0 failed []

@@ -1,0 +1,15 @@
+records whose own successful result names a7_g23_build.py but which changed nothing: 14
+    65822 -> result 65823  not listed             E {'states': 36} != {'states': 0} E Use -v to get more diff test_a6_launch_freeze_1409.py:84: AssertionError =========================== short test su
+    66324 -> result 66325  not listed             packet: /tmp/a7_corrected_packet.json 59e5ff9f1ebbdc113e0e0ca8f0a253b81ba04d8b6139303c0aef106bc4e39292 2682 bytes scorers/score_exp5.py a2c5fd2380df52
+    68310 -> result 68311  not listed             def route_for(arm_by_event, audit_dir): """The REAL public write-disabled route, one call per event.""" from scorers.score_exp5 import route_reply out
+    69217 -> result 69218  not listed             === the two sed -i edits, verified in place === 39: "UNION": {"auto": 57, "unmatched_gold": 149, "unmatched_produced": 240}, 383: ("favorability", 384
+    70311 -> result 70312  not listed             a7_g1_build.py:270: mr = match_facts(gold_v2, prod_v2) scorers/score_exp5.py:888: mr = match_facts(gold_v2, prod_v2) scorers/score_exp5.py:1290: mr = 
+    72183 -> result 72184  not listed              This used to open the raw JSON, skip the schema check, and build the map by assignment - so a duplicate identity silently overwrote its twin and a st
+    73629 -> result 73635  not listed             === containing function for line 467 === 456: def meaning_packet(leg, source_id, pairs, gold_facts, produced_facts): === containing function for line 
+    76262 -> result 76263  not listed             inbound : 2e79810442978d7171254cad2ac887d4db9910df477629d0e5f1b1d09853c146 a1477 : 2e79810442978d7171254cad2ac887d4db9910df477629d0e5f1b1d09853c146 ca
+    76425 -> result 76426  read-only(raised)      === mtimes: my round's files vs the flagged scorer === a7_g23_build.py 2026-08-26_15:36 scorers/score_exp5.py 2026-08-25_14:12 test_a7_g23_lifecycle_1
+    76430 -> result 76431  read-only(raised)      a7_g23_build.py {'PIN_KEYS': ['candidate_sha256', 'git_head', 'git_tree', 'prompt_tree_sha256', 'root_sha256', 'rules_block_sha256', 'run_file_count',
+    77060 -> result 77061  not listed             == a7_g23_build arm assembly (200-290) == mine = "confirmed_duplicate_groups" if name.startswith("dup") else name got = sum(len(v[mine]) for v in by_l
+    78937 -> result 78938  not listed             == G2/G3 batching + lanes == a7_g23_build.py:1096:#: Work Order section 1.5 permits up to ten UNRELATED judgment items per call. a7_g23_run.py:308: ("
+    79039 -> result 79046  not listed             == per-call cap constant + G2/G3 launcher derivation in a7_g23_run == # ------------------------------- 7. deterministic batching (SEQ 1459 item 7) --
+    80465 -> result 80467  not listed             === save_raw body: # over (Codex SEQ 1313 item 1). So: write the whole thing to a temporary in # the SAME directory, flush it, fsync it, and only then

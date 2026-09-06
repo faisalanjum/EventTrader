@@ -1,0 +1,103 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "advertising_and_franchisee_support_spending",
+              "driver_state": "announced",
+              "level_low": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 1 was proposed as a real item and settles as one bundled action_event fact for the $100 million spend, confirming the real-item proposal, but names it to cover both source-stated purposes (advertising, from the title, and franchisee support, from the body) rather than allocating the whole unsplit amount to advertising alone."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "e_coli_illness_count",
+              "driver_state": "reported",
+              "level_low": {"value": 100, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "states_affected_count",
+              "driver_state": "reported",
+              "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 2 was proposed as a real item and settles as two distinct metric facts (illness count and states-affected count), confirming the real-item proposal with the two separately stated numeric bases split into their own facts."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The $100 million figure covers two source-stated purposes -- boosting advertising (stated only in the title, which directly governs this same spending fact) and supporting franchisees (stated in the body) -- with no source-stated dollar split between them, so both purposes are kept in one bundled fact rather than allocating the whole amount to advertising alone or inventing a two-way split."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an evolving outbreak case count is a re-readable severity metric or merely an attribute of the one-off outbreak action_event is a genuine boundary case, resolved here as a metric since foodborne-illness case counts are typically restated across follow-up reports."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the '14 states' figure merits its own independent driver fact (a distinct numeric base under Rule 5.4) or is merely incidental geographic scope of the illness-count fact is a genuine, source-unresolved judgment call."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/bzNews_42014391#189",
+      "agrees": false,
+      "why": "The lead names the whole $100M as advertising_spending, but the source states this single unsplit figure covers both boosting advertising (title) and supporting franchisees (body); allocating the entire amount to advertising alone overclaims scope, so the final fact instead uses a combined name covering both stated purposes."
+    },
+    {
+      "lead_id": "phase1/bzNews_42014391#190",
+      "agrees": false,
+      "why": "The lead records one action_event (e_coli_outbreak, occurred) carrying the sickened-count as its level, but that count is better read as a re-readable severity metric (fact_type metric, state reported) than as the state of a discrete action, and the lead also omits the separately stated '14 states' figure that the final settlement records as its own fact."
+    }
+  ],
+  "open_issues": []
+}
+```

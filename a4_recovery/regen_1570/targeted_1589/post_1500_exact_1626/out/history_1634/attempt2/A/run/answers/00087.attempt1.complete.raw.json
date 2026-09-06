@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "aircraft_retirement",
+        "driver_state": "announced",
+        "level_low": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "measurement_raw_spans": ["approximately"],
+        "time_type": "duration",
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

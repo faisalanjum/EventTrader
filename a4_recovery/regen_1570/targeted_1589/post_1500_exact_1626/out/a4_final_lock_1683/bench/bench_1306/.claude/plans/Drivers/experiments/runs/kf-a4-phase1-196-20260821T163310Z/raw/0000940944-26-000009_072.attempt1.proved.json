@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#072",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The located quote ('Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM') states four bare digit values (25.1, 0.1, (19.8), 1.1) with no dollar sign, 'million', or any other unit/scale marker anywhere inside the quote itself. The scale wording that governs this table row, '(in millions)', sits in the financial-highlights table's column header, which is text outside this located quote. Rule 5.4 requires that every stated digit be captured as a signed value, but Rule 5.6 forbids inventing a scale_multiplier/unit_scale_evidence and explicitly instructs abstention when a TEXT fact's scale marker sits in a header or footnote outside the quote. There is no lawful way to populate the required numeric value objects, so this item yields no lawful fact."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#072/L1",
+      "exact_match": true,
+      "why": "L1 abstains with the same structure (no facts, one abstention, no continuity hints) and the same core reasoning: the row's digits have no unit/scale marker inside the quote, the '(in millions)' marker lives only in the table header outside the quote, and Rule 5.6 requires abstention in that exact situation."
+    },
+    {
+      "lane_id": "0000940944-26-000009#072/L2",
+      "exact_match": true,
+      "why": "L2 is functionally identical to the settled reply and to L1: same empty facts list, single abstention, empty continuity hints, and the same Rule 5.6 header-outside-quote scale reasoning as the basis for abstaining."
+    }
+  ],
+  "ambiguities": []
+}
+```

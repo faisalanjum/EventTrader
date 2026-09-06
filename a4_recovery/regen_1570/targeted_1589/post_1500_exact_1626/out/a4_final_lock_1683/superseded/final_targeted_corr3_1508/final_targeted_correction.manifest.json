@@ -1,0 +1,232 @@
+{
+ "door": "a4_final_targeted_correction_3",
+ "version": "kfields-a4-final-targeted/1496",
+ "authority": "Codex SEQ 1508",
+ "step": "live Step 1 A4 - the correction of the successor final adjudication under the reviewer findings",
+ "contract_suffix": ".v3",
+ "derived_from": {
+  "key_owner_sha256": "2d90aed33aab8b99857c43cb12458344fe5cd7c76ed70936cbbcba53e5999bde",
+  "targeted_owner_sha256": "0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588",
+  "hard_review_owner_sha256": "8eb98ec03331a2a605d7ec04570a875004ed989099de4f74c4a22b511ad90986",
+  "hard_review_targeted_owner_sha256": "b7a72cab000ff3d2d70d76daae2abb89c6973101d4283079f7b721f3cc6176f3",
+  "final_owner_sha256": "bad84b2f9fab14443a167660dc631b8d556c143cf09233f54bf1c3b6b2649fee",
+  "final_targeted_owner_sha256": "cdd008c128f875c5e5154fbf4d350a91e1b9102f6b1032ce0bc6e4e3312f0015",
+  "inventory_review_owner_sha256": "fcd18139f6c1393c55b81042820c3004ec8eae362fbe4bc7e219639c5754dcf7",
+  "raw_parser_sha256": "05b02f5bb67944d39fcf726da043f768d5d640bddbe18754ce3c3ef6c4bc10de",
+  "gold_door_sha256": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "frozen_inventory_sha256": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff",
+  "corrected_inventory_sha256": "1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066",
+  "correction_receipt_sha256": "bc5ac688abe66763a5cc99f9fb3a3708ba15b83c9a47fd327ffaac2dcb653eab",
+  "targets": [
+   "0000006201-26-000031#001",
+   "0000006201-26-000031#006",
+   "0000006201-26-000031#008",
+   "0000027904-26-000022#029",
+   "0000092380-26-000044#042",
+   "0000940944-26-000005#065",
+   "0000940944-26-000009#068",
+   "0000940944-26-000009#072",
+   "0001041061-25-000109#075",
+   "0001104659-26-027061#115",
+   "0001171843-26-001288#133"
+  ],
+  "contract_package_sha256": "62a5c49ae71f323eff275e98ca60efaae18ca16ca6c15f447c10c9d5d8976154",
+  "locator_groups_sha256": "29293450b302e7e158daef7591ccd3bf57967101b907f176ad298ae548f60728",
+  "targeted_binding": {
+   "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/targeted_binding.json",
+   "binding_sha256": "55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8",
+   "run_dir": "/tmp/a4_targeted_run_1491"
+  },
+  "hard_review_binding": {
+   "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/hard_review_targeted_binding.json",
+   "binding_sha256": "3ae97054b2ef3e7af9786cf12382de96987bc031f61bb1038dec19310a66428e",
+   "run_dir": "/tmp/a4_hard_review_run_1495"
+  },
+  "lead_binding": {
+   "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr2_binding.json",
+   "binding_sha256": "fe3e6e03f9444aa238f1d110415e832b209546c1457e5dadb86d086b7c93e499",
+   "run_dir": "/tmp/a4_final_targeted_corr2_run_1506",
+   "package_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_targeted_corr2_1505",
+   "manifest_sha256": "85e2acf28b82c2cb1232a1791569083409daf6804b270dc565c792bf226c4fd4"
+  },
+  "review_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1508.json",
+   "sha256": "07bb7e4ef7828352e0a90e4979a401c4e72b7c7baff2ba06d8149f8d6db99f0c"
+  },
+  "decision_rules": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/decision_rules_1387.txt",
+   "sha256": "d5830182899461c7a34f3eed3f3cc374a40412618f9c80e2047f029c6a933fb2"
+  }
+ },
+ "role_sha256": "7376df61ae03adcf1e45e247d124649b787e2e5100f61bf23729ecc9ac864c4b",
+ "semantic_rules_sha256": "72baa25a816e956061ccd624634231aa3e2f96ce1cb857382e6e65f6330451e4",
+ "output_card_sha256": "94c3e6e5d6470f558a0faaf4f471f9891de52bf075c805f7954b226dcbcb3723",
+ "gate_text_sha256": "153d97f8416b3e5e0b9a85caad98022561e10ebef3187bbab34ad2642a7d5d2a",
+ "crosswalk_text_sha256": "e1f9d816f7faa15b39bcd4c7ababf2966f7fa4a2ea05e210ff70dbf0e8fe58aa",
+ "task_section_sha256": "04cfe92907bb671086480f956e517057f769f8881b4e144eef60bdef9bb89d4b",
+ "output_section_sha256": "ae4a13570c24f356dab984abbe257b014646ec7e5a00b15339f01143675ac17e",
+ "correction_task_sha256": "3eb5b94f82c73ab4e2be7085cca32655c0143d01b924abfc410a43e0bb13c716",
+ "decision_rules_sha256": "d5830182899461c7a34f3eed3f3cc374a40412618f9c80e2047f029c6a933fb2",
+ "boundary_sha256": "1f5c876a21c08ef92a08ba62201408494b6bda9f88779fd1e374b7b2869fd178",
+ "injection_control_sha256": "2f33799c705ce844ff6d2b667ce72dbed1b06977c4ccb44a1b363c81bc2f7ce7",
+ "prefix_sha256": "29672e0d91e3d68606fc9dbb53b19f1b2da2f841b8377b475bd6eca2bf780b90",
+ "prefix_bytes": 57894,
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "budget": {
+  "budget_receipt_path": "/tmp/a7_budget_receipt_1508.json",
+  "budget_receipt_sha256": "4efbb2e8b236481140b57ec678c5c8bd3f8993dfeed719bcb4e3f451d5898289",
+  "before": 5217,
+  "primaries": 2,
+  "max_attempts_per_call": 2,
+  "after_primaries": 5219,
+  "worst_case_after": 5221,
+  "signer_reserve": {
+   "primaries": 1,
+   "retry_cap": 1
+  },
+  "a4_closeout_clean": 5220,
+  "a4_closeout_worst": 5223,
+  "global_ceiling": 6000
+ },
+ "counts": {
+  "tasks": 2,
+  "targets": 2,
+  "groups": 0,
+  "leads": 2,
+  "findings": 7,
+  "preserved_events": 6,
+  "primary_calls": 2
+ },
+ "capacity": {
+  "unit": "UTF-8 bytes of the serialized launcher script the runtime actually runs; never summed",
+  "transport_limit_bytes": 524288,
+  "largest_script_bytes": 177035,
+  "smallest_script_bytes": 91782,
+  "largest_prompt_bytes": 171761,
+  "at_or_over_transport_limit": []
+ },
+ "preserved": [
+  {
+   "source_id": "0000006201-26-000031",
+   "origin": "final_targeted_correction",
+   "raw_sha256": "5830799f73dfa2ddd181750299e87540bb825216bbdab0cd96027a363fa30bd5"
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "origin": "final_targeted_correction",
+   "raw_sha256": "6d5dbc14c687d9a654c4dbffcc94652b67aa9c394ff1833e62fa206820292b01"
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "origin": "final_targeted_primary",
+   "raw_sha256": "1b6d49948d1202d2e732ec09ccad09f9ad7d5fb84c1d21f5f92b9842b6c5cde8"
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "origin": "final_targeted_correction",
+   "raw_sha256": "f71fe0806e1c6ee4516fceb98311441f2fff6c374ba3b4eea6f41c9e8d2fe8ae"
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "origin": "final_targeted_correction_2",
+   "raw_sha256": "f6cccb2ceb6013c46f8dc81a48c7576f62ea48376aceb4a08e44ae6c7b4225fd"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "origin": "final_targeted_primary",
+   "raw_sha256": "fdc0091e4f1703fc810ad0cfb01b6ee8fe223b1f24d73d7e9ae06c4ae485309a"
+  }
+ ],
+ "tasks": [
+  {
+   "task_id": "ftc-000",
+   "event_index": 6,
+   "source_id": "0001041061-25-000109",
+   "rows": [
+    "0001041061-25-000109#075"
+   ],
+   "groups": [],
+   "leads": [
+    {
+     "lead_id": "correction_2/0001041061-25-000109",
+     "origin": "final_targeted_correction_2",
+     "sha256": "e505c3f8862b19b6ddfcd506b49f3c2077dc3c2a889f45dfaf2c2fa6066f400b"
+    }
+   ],
+   "findings": [
+    {
+     "kind": "open_issue",
+     "sha256": "3d4b473b904a42d11223f0bdaf96e01a9897b9ca9a1a21958bbc28f1c824c9dc"
+    },
+    {
+     "kind": "reviewer_finding",
+     "sha256": "9bb0d04e0c0e224effa822b9ea819d4aad3af9c3a57f67a81f501fbe3702ad64"
+    },
+    {
+     "kind": "reviewer_finding",
+     "sha256": "1a77bc386f265085b982a44c7497d310667ee8d5b10e3cf0b7f1d1209b3d37e3"
+    },
+    {
+     "kind": "reviewer_finding",
+     "sha256": "b9a54542d0da0f24bce914e9c96e38d85a860bb04698a221420bbf0fbde922e5"
+    },
+    {
+     "kind": "reviewer_finding",
+     "sha256": "7394c7b3ee0f2c52cbc6e3d2c3246ef908f72839b18b298122da9c38c0b7d82d"
+    }
+   ],
+   "payload_sha256": "e32c204c36043b422d4ae63a99d5c0d5047b61140e7402c572a524e4d2bcfb26",
+   "prompt_sha256": "dfc39e56285d325a31f6cf0b49ddb9278a173507d12a337837853480c2c7ebb6",
+   "prompt_bytes": 171761,
+   "script_sha256": "d10dcee044b09a8f84e0a33a17d99dd335b62b1f7603a996adeb7d16f172615c",
+   "script_bytes": 177035
+  },
+  {
+   "task_id": "ftc-001",
+   "event_index": 8,
+   "source_id": "0001171843-26-001288",
+   "rows": [
+    "0001171843-26-001288#133"
+   ],
+   "groups": [],
+   "leads": [
+    {
+     "lead_id": "primary/0001171843-26-001288",
+     "origin": "final_targeted_primary",
+     "sha256": "be0a31ac09bb544286bc63cb8abce5b631c8b2a2b0fcb432cf6f6947ee56fdc7"
+    }
+   ],
+   "findings": [
+    {
+     "kind": "reviewer_finding",
+     "sha256": "cd76c3511467f32ee965cd25c935659b757b0f030d3fe04d77e0fecd27612f61"
+    },
+    {
+     "kind": "reviewer_finding",
+     "sha256": "291e6e70fb1f108c8e751ace505cc297199a41001529fb0d58392826fda8498c"
+    }
+   ],
+   "payload_sha256": "9d4184bc19ec0c8a4bb21cef4ae9c4097a3902bf0b0bde3a34542123f48bc33a",
+   "prompt_sha256": "ff86229c5ae1059cec7c955455248af4409af17ceba399d96e47cc7fc8ac9d00",
+   "prompt_bytes": 87851,
+   "script_sha256": "c8f5d5411e3d349b5e3762d75a0210d03c6acbdca74d8c6c86a47fd06071d937",
+   "script_bytes": 91782
+  }
+ ],
+ "call_order": [
+  "0001041061-25-000109",
+  "0001171843-26-001288"
+ ]
+}

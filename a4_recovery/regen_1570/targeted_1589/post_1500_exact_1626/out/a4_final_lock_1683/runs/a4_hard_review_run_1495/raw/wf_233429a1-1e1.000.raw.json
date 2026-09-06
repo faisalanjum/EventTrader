@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The located line 'Impairments and (gain) loss on disposal of assets, net' nets together two independent causes (asset write-down/impairment and gain or loss on disposal of assets) into a single dollar figure per period, with no breakdown of the two components in this quote. Rule 3.2 requires splitting independent causes into separate facts, but the source gives no way to decompose the net value here; separately, 'gain'/'loss' are banned polarity words for a driver name (Rule 3.10/3.9), so neither a single combined name nor a lawful split into per-cause facts can be formed from this located item without guessing."
+    }
+  ],
+  "continuity_hints": []
+}
+```

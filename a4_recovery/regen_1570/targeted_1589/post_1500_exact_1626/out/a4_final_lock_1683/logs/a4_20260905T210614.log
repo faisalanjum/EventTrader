@@ -1,0 +1,14 @@
+ok   review_receipt_1502          rc=0
+receipt /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1502.json 21bff8c3b107c36af1c02cf828297a921d2c40bb2975304c73e5af9eada0c6bc
+events with findings: [('000031', 2), ('000005', 3), ('000009', 3), ('000109', 2), ('000022', 1)]
+ok   budget_receipt_1501          rc=0
+{"completed_before": 5210, "ceiling": 6000, "minimum_total": 5608, "expected_shape_total": 5944, "headroom_at_shape": 56, "known_maximum_subtotal": 6690, "known_maximum_fits_ceiling": false}
+closeout: {"before": 5210, "correction_after_clean": 5215, "correction_worst": 5220, "signer_primaries": 1, "signer_retry_cap": 1, "a4_closeout_clean": 5216, "a4_closeout_worst": 5222, "ceiling": 6000, "worst_fits_ceiling": true}
+receipt: e49af3cfe1433ed0b92b7a9e735504f8be76ca42a955f5d2fee505fda3be72b8 /tmp/a7_budget_receipt_1501.json
+BAD  bind_1504                    rc=1
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/reconstruct/bind_1504.py", line 10, in <module>
+    real = FT._ROUNDS[FT.CORR_DOOR]["binding"]
+           ^^^^^^^^^^
+AttributeError: module 'build_kfields_final_targeted' has no attribute '_ROUNDS'
+REFUSED: step bind_1504 failed

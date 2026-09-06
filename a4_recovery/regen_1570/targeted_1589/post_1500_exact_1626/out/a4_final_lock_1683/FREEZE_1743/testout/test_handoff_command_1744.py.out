@@ -1,0 +1,10 @@
+ok   the check command is in the handoff                      
+ok   it is not doubly escaped                                 '3 A4_STEPS=verify_checkpoint \\'
+ok   a copy of it passes the stage to the runner              ['STEPS=verify_checkpoint ROUND=3 A6=f0d7b8281ae13bc8184be34253bf0236132c1900f60db574d005ae018880d4de']
+ok   a copy of it passes the round                            ['STEPS=verify_checkpoint ROUND=3 A6=f0d7b8281ae13bc8184be34253bf0236132c1900f60db574d005ae018880d4de']
+ok   a copy of it passes the ledger owner                     ['STEPS=verify_checkpoint ROUND=3 A6=f0d7b8281ae13bc8184be34253bf0236132c1900f60db574d005ae018880d4de']
+ok   no setting reaches the runner unset                      ['STEPS=verify_checkpoint ROUND=3 A6=f0d7b8281ae13bc8184be34253bf0236132c1900f60db574d005ae018880d4de']
+ok   the write-nothing manifest check is in the handoff       
+ok   valid control: a manifest that verifies                  ['manifest rows checked, mismatched 0', 'rc=0']
+ok   a mutated row makes it exit nonzero                      ['manifest rows checked, mismatched 1', 'rc=1']
+9 passed / 0 failed

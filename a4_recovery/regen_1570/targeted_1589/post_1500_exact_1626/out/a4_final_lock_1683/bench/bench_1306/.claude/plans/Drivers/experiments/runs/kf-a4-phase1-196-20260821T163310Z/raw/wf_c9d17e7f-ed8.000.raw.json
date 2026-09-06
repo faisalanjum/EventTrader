@@ -1,0 +1,57 @@
+```json
+{
+  "packet_id": "0001041061-26-000003#078",
+  "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restaurant_margin",
+          "driver_state": "decreased",
+          "change_value": {"value": -40, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+          "change_unit": "basis_points",
+          "measurement_raw_spans": ["lapping the 53rd week"],
+          "slice_parts": ["segment:tacobellglobaldivision", "entity_ownership:companyownedstores"],
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restaurant_margin",
+          "driver_state": "decreased",
+          "change_value": {"value": -10, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+          "change_unit": "basis_points",
+          "measurement_raw_spans": ["lapping the 53rd week"],
+          "slice_parts": ["segment:tacobellglobaldivision", "entity_ownership:companyownedstores"],
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000003#078/L1",
+      "exact_match": true,
+      "why": "Same two metric facts (restaurant_margin, decreased, -40bps Q4 2025 and -10bps FY2025), same slices (Taco Bell segment + company-owned entity_ownership), same measurement span 'lapping the 53rd week', same time_type duration; only key ordering inside the item object differs, which is not a content difference."
+    },
+    {
+      "lane_id": "0001041061-26-000003#078/L2",
+      "exact_match": true,
+      "why": "Identical content to L1 (and to the settled reply): same driver_name, state, signed change values, units, slices, measurement span, and period fields; differs from L1 only in key order, so it matches the settled reply."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline should be set to 'prior_year' on these two metric facts.",
+      "why": "The quote itself never says 'year-over-year' - that wording sits only in the immediately preceding sentence of the same bullet (which is context, not this item's quote). Since Rule 9.2 requires the baseline only 'when the source states that comparison,' and the located quote alone does not state it, the settled reply leaves comparison_baseline null; a reading that pulls the YoY framing from the surrounding sentence would instead set it to 'prior_year.' This is a genuine judgment call, not resolved by guessing."
+    }
+  ]
+}
+```

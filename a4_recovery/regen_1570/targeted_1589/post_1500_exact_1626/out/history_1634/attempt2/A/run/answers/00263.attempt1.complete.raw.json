@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is a footnote explaining a one-time calendar artifact (an extra fiscal week embedded in the prior-year trailing-four-quarter figure) used only to make per-store/per-square-foot comparisons meaningful. The $359.1M/$95.7M amounts belong to that single extra week, but only the trailing-4-quarter end date (Feb 15, 2025) is stated — the specific week's own start/end dates are not given, and no stated horizon (short/medium/long-term) applies, so the period required for a sales metric fact cannot be lawfully resolved (Rule 6)."
+    }
+  ],
+  "continuity_hints": []
+}
+```

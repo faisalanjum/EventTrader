@@ -1,0 +1,66 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "income_tax_expense",
+              "driver_state": "increased",
+              "level_low": {"value": 58, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 58, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -43, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -43, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed: the income-statement line 'PROVISION (BENEFIT) FOR INCOME TAXES' with $58M for Q1 2026 against a $(43)M prior-year benefit is a real, non-boilerplate financial-state fact, so final_outcome=fact matches the proposal."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The lawful driver name for this line is genuinely underdetermined between synonyms such as income_tax_expense, income_tax_provision, or provision_for_income_taxes (Rule 3.12 treats these as equivalent), a naming choice left for the later admission/catalog step rather than a blocking defect."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "targeted/0000092380-26-000044#042/row1",
+      "agrees": true,
+      "why": "Same driver_name (income_tax_expense), same point values 58/-43 in millions, same prior_year comparison_baseline, same Q1 FY2026 period and duration time_type as settled here."
+    },
+    {
+      "lead_id": "hrt-004/b1/row1",
+      "agrees": true,
+      "why": "Matches settled fact exactly in name, values, shapes, baseline and period; the only cosmetic difference is unit_scale_evidence text ('in millions' vs the smaller verbatim span 'millions'), which does not change the fact's meaning."
+    },
+    {
+      "lead_id": "hrt-004/b2/row1",
+      "agrees": true,
+      "why": "Uses the lawful synonym income_tax_provision instead of income_tax_expense but otherwise reports identical values, shapes, comparison_baseline=prior_year and period, so it agrees in meaning per Rule 3.12."
+    }
+  ],
+  "open_issues": []
+}
+```

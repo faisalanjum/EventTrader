@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#171",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "unknown",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "value_text": "expected to decelerate sequentially from Q4",
+          "change_unit": "percent_sequential",
+          "company_confirmed": true,
+          "slice_parts": ["segment:usmarket"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#171/L1",
+      "exact_match": false,
+      "why": "L1 agrees on driver_name, driver_state, fiscal_quarter/year, time_type, company_confirmed, change_unit=percent_sequential and slice segment:usmarket, but its value_text embeds the numeric anchor '6.8%', which Rule 11.1 explicitly bars from value_text (numbers belong in value slots, not the qualitative text)."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#171/L2",
+      "exact_match": false,
+      "why": "L2 agrees on driver_name, driver_state, fiscal_quarter/year, time_type, company_confirmed and a number-free value_text, but it omits change_unit entirely even though Rule 5a.4 licenses recording the stated sequential basis on this numberless growth guide, and it cites the menu token segment:u_s_market instead of segment:usmarket."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Which literal U.S.-segment menu token to cite for slice_parts: segment:usmarket vs segment:u_s_market (both exist in the menu, and the same u_s_market/usmarket duplication also appears under entity_ownership).",
+      "why": "Rule 7 requires reusing the menu's reference token exactly as shown when the meaning is the same, but the menu itself offers two differently-spelled tokens for what appears to be the identical U.S.-market meaning, with no textual signal in this item to pick one over the other; this is a menu-design ambiguity, not something resolvable from the quote."
+    }
+  ]
+}
+```

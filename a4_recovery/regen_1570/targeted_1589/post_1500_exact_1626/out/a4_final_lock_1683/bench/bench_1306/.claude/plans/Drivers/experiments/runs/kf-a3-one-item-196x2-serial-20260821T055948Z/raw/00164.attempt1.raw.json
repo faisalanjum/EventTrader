@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This is boilerplate disclosure of a new accounting standard (ASU 2025-06) issued by FASB that the company is merely evaluating; it is not a real statement about a YUM driver's state, change, surprise, guidance, or action — no fact to extract."}
+  ],
+  "continuity_hints": []
+}
+```

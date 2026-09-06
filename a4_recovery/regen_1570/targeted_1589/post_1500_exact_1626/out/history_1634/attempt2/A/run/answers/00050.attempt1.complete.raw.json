@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "non_fuel_cost_per_available_seat_mile",
+        "driver_state": "increased",
+        "change_value": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      },
+      "per_x": "available_seat_mile"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote's discontinued-operations loss figures ((3.8), (0.3), (4.1), (1.2)) carry no in-quote scale marker (e.g., 'million'); the table's 'In millions, except per share data' caption sits in a header outside this quote, so the required scale_multiplier cannot be verified from inside the quote itself (Rule 5.6) — abstaining rather than guessing the multiplier."
+    }
+  ],
+  "continuity_hints": []
+}
+```

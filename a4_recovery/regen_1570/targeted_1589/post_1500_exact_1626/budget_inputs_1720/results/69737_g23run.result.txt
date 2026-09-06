@@ -1,0 +1,22 @@
+call_plan added
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 1858, in accepted_shards
+    else tuple(decision_labels(bound))
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 2762, in decision_labels
+    return [t["source_id"] for t in event_tasks(bound.evidence)]
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 220, in event_tasks
+    for task in HR.tasks(evidence_dir):
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 303, in tasks
+    items = _items()
+            ^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 74, in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_key.py", line 637, in phase1_items
+    raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'primary finalization: the finalization was written against different plan bytes than the ones live now', 'the primary proves 0 of the canonical 392 A3 answers']
+Shell cwd was reset to /home/faisal/EventMarketDB

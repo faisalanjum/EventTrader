@@ -1,0 +1,10 @@
+S="/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad"
+p=S+"/evidence_1495.py"; s=open(p).read()
+s=s.replace('    elif cmd == "completed":', '    elif cmd == "agents": print(len({os.path.basename(t) for wf in wfs() for t in glob.glob("%s/subagents/workflows/%s/agent-*.jsonl" % (W, wf))}))\n    elif cmd == "completed":')
+open(p,"w").write(s)
+p=S+"/draft_1314.template.md"; s=open(p).read()
+s=s.replace("agent meta model sonnet x22, result model sonnet x22,", "%(agents)s distinct agent identities (one agent transcript per workflow directory, no id repeated); agent meta model sonnet x22, result model sonnet x22,")
+open(p,"w").write(s)
+p=S+"/gen_draft_1314.py"; s=open(p).read()
+s=s.replace('("hints", "hints"), ("completed", "completed")):', '("hints", "hints"), ("completed", "completed"), ("agents", "agents")):')
+open(p,"w").write(s)

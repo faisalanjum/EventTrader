@@ -1,0 +1,7 @@
+ok   64861_v16_build        rc=0  recorded lines 15, suffix match True
+ok   64992_run4_root        rc=0  recorded lines 23, suffix match True
+kept tmp__a7_g1_event_run4__root.json                     b491596136682a69     36454 B
+kept tmp__a7_g1_v16_event__a7_g1_candidate.json           efcf41c5041f774b    256077 B
+not produced by this leg of the chain: /tmp/a7_g2_candidate/a7_g1_candidate.json
+not produced by this leg of the chain: /tmp/a7_g3_candidate/a7_g1_candidate.json
+PRESERVED 2 artifacts

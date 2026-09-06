@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "DRI_2026-03-19T08.30#157",
+  "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "total_sales",
+          "driver_state": "unknown",
+          "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 14.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent_yoy",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true,
+          "measurement_raw_spans": ["which includes the extra fiscal week"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DRI_2026-03-19T08.30#157/L1",
+      "exact_match": true,
+      "why": "Same driver_name, driver_state, level_low/high (13/14.5, %, range), level_unit percent_yoy, fiscal_quarter 4, fiscal_year 2026, time_type duration, company_confirmed true, and identical measurement_raw_spans entry; field order differs but content matches exactly."
+    },
+    {
+      "lane_id": "DRI_2026-03-19T08.30#157/L2",
+      "exact_match": true,
+      "why": "Identical values to the settled fact for every field (driver_name, driver_state, level_low/high, level_shape_hint, level_unit, fiscal period, time_type, company_confirmed, measurement_raw_spans); only key ordering differs, which is immaterial."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Growth basis for level_unit (percent_yoy vs plain percent) on the Q4-implied total sales growth figure.",
+      "why": "The quote gives a bare growth range with no explicit 'year-over-year' wording, but Rule 5a.4 defaults bare growth on a dated period to percent_yoy since it is a quarter-over-same-quarter-prior-year comparison; a reader could mistakenly treat it as a plain percent level instead of a growth basis."
+    }
+  ]
+}
+```

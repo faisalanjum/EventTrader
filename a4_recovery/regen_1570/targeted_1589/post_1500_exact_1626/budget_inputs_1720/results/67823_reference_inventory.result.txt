@@ -1,0 +1,4 @@
+inventory rows: 206 | problems: 0
+rows from an override span: 22 | ledger-added: 1 | final role-free values: 224
+collisions AFTER the inventory: 0
+Shell cwd was reset to /home/faisal/EventMarketDB

@@ -1,0 +1,37 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#072",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "This row reports ONE netted dollar figure under the single caption 'Impairments and (gain) loss on disposal of assets, net,' which combines two independent causes with opposite economic character: asset-impairment write-downs (a cost) and gain/(loss) on disposal of assets (a transaction outcome that can be positive or negative, e.g. the Olive Garden Canada sale gain vs. the Bahama Breeze closure impairment discussed elsewhere in this filing). Rule 3.2 requires independent causes to be split into separate facts, and THE ONE LAW says keep meanings separate when unsure, but this quoted table row supplies only the combined net dollar amounts for each period (25.1 / 0.1 for the quarter, (19.8) / 1.1 for nine months) with no source-stated breakdown between the impairment component and the disposal-gain/loss component. Naming it as one driver would merge two distinct meanings; splitting it would require inventing numbers the source does not state. This is a real fact that cannot be lawfully resolved from this row alone (Rule 1.4), so it is abstained rather than merged or guess-split."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#072/L1",
+      "exact_match": false,
+      "why": "L1 also lands on 'no facts,' but its stated reason is factually wrong: it claims the '(in millions)' scale marker sits outside the quote in a table header, yet the supplied quote literally contains the text '(in millions)' right after 'Nine Months Ended.' The settled abstention instead rests on Rule 3.2/THE ONE LAW - the row nets two independent, unsplittable causes (impairment vs. disposal gain/loss) with no per-cause values - so the two abstention objects are not the same reply even though both choose the empty-facts branch."
+    },
+    {
+      "lane_id": "0000940944-26-000009#072/L2",
+      "exact_match": false,
+      "why": "L2 makes the identical factual error as L1, asserting the '(in millions)' scale marker is absent from the quote and lives in a surrounding header, when it is in fact present inside the quoted text. The settled reply abstains for a different, correct reason - the caption merges two independent causes (asset impairment and disposal gain/loss) into one net figure with no source-given split - so L2's reasoning and resulting object do not match the settled one."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'Impairments and (gain) loss on disposal of assets, net' should ever be treated as one atomic, lawfully-nameable driver (a company-defined combined GAAP caption) rather than being blocked as a merge of two independent causes.",
+      "why": "The rules require splitting independent causes (Rule 3.2) and never merging distinct meanings (THE ONE LAW), which points to abstention here since no per-cause values exist in this row; but the caption is itself a standing, recurring financial-statement line the company reports every period, which could argue for treating it as a single compound driver the way 'operating_margin' or similar composite captions are treated elsewhere. The source gives no breakdown to resolve this, so it is recorded as a genuine ambiguity rather than decided by guessing."
+    },
+    {
+      "what": "Whether the causal attributions found elsewhere in this document (Bahama Breeze closures, the Olive Garden Canada sale gain) belong to this same table-row item or only to separate narrative items with their own located quotes.",
+      "why": "This item's quote is strictly the numeric table row with no cause language inside it; the narrative sentences that name the Bahama Breeze impairment and the Olive Garden Canada gain sit outside this quote. Treating this row in isolation (as instructed) forecloses borrowing those causes here, but it is worth flagging that the split into 'row-only' vs. 'narrative' items is what makes this particular row unresolvable on its own."
+    }
+  ]
+}
+```

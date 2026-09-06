@@ -1,0 +1,68 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "equity_investment_valuation",
+              "driver_state": "decreased",
+              "level_low": {"value": -550, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": -550, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -40, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": -40, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "period_start_date": "2026-01-01",
+              "period_end_date": "2026-03-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The row was proposed as a real_item and it does carry a genuine, quantified metric fact (net loss on equity investments widening from $40M to $550M year over year), so the proposed kind is confirmed."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["losses_and_sign", "point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "targeted/0000027904-26-000022#029/row1",
+      "agrees": false,
+      "why": "Numeric values, shapes, prior_year baseline and Q1 FY2026 period match the settled fact, but the driver_name 'gain_loss_on_investments' bakes both polarity words 'gain' and 'loss' into the name in violation of Rule 3.10 (never state/direction/polarity words in the name); the settled name is the cause-focused 'equity_investment_valuation'."
+    },
+    {
+      "lead_id": "hrt-003/b1/row1",
+      "agrees": true,
+      "why": "Matches the settled fact on driver_name (equity_investment_valuation), values (-550 vs -40, m_usd, point/point), comparison_baseline (prior_year) and period (Q1 FY2026); the settled fact additionally states the exact quarter dates, which the source itself supports and does not change the meaning."
+    },
+    {
+      "lead_id": "hrt-003/b2/row1",
+      "agrees": false,
+      "why": "Same polarity-in-name defect as the targeted lead: 'gain_loss_on_investments' names both directions of outcome directly, which Rule 3.10 forbids; all other fields (values, shapes, baseline, period) agree with the settled fact."
+    }
+  ],
+  "open_issues": []
+}
+```

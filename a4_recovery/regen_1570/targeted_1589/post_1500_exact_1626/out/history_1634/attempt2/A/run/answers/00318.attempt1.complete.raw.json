@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "total_sales",
+        "driver_state": "increased",
+        "change_value": {
+          "value": 11.2,
+          "scale_multiplier": 1,
+          "unit_scale_evidence": "%"
+        },
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "slice_parts": ["segment:longhornsteakhousesegment"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This item is a disclosure of an accounting/reporting-methodology change (redefining segment profit to exclude pre-opening costs, applied retroactively for comparability) — it is a presentation/reporting convention, not a statement of a driver's own state, change, surprise, guidance, or action. It is an accounting construct, not a business driver (akin to the elimination/consolidation artifacts barred from naming under Rule 3.8); the affected real metric (segment profit) is captured separately from the reported segment figures, not from this methodology note."}
+  ],
+  "continuity_hints": []
+}
+```

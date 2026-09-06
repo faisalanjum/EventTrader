@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This item's quote ('Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM') gives only bare numbers with no unit or scale marker inside the quote itself — the '(in millions)' scale wording that governs these figures sits in the table header, outside the quoted span. Per Rule 5.6, a scale marker located in a header/footnote outside the quote means the fact cannot lawfully be resolved (unit_scale_evidence cannot be sourced), so it must be abstained rather than assigned a guessed scale."
+    }
+  ],
+  "continuity_hints": []
+}
+```

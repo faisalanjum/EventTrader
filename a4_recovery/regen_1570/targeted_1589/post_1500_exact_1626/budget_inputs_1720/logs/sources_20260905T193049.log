@@ -1,0 +1,253 @@
+rewired
+path + fail-closed owner check installed
+rules + opaque id installed
+uniqueness guard + controls added
+controls now derive the scored set
+loader/call-packet/result binder added
+bindings, controls, prompt paths and max budget wired
+validate_merged added
+raw filename defect fixed
+launch section rewritten
+cleaned
+builder fixes applied
+order check simplified
+accounting echo + re-derivation added
+half-publication slot now refuses
+lifecycle + state-audit fixes applied
+per-lane lifecycle installed
+external approval carried through
+duplicate init removed
+delegation wired
+cleaned
+expect carries the digest
+builder: batch_ids bound, full returned row kept
+publisher and audit rewired
+inlined
+implementation inserted
+validate_merged is now the relation-to-credit owner
+deleted render..reconcile            4338 bytes
+deleted batches                      1198 bytes
+deleted RULES block                  1628 bytes
+rewired
+freeze rewired to event groups
+audit detail + terminal categories added
+build owner patched
+a7_g1_build rewired: live_key + shared card
+index translation named
+all prior spend accounted
+task-kind seam added
+reconciliation scoped to the segment
+materialize now emits the one trace
+caller passes the real arm names
+segment-scoped reconciler deleted
+effective_slots carries every saved attempt
+one attempt-complete row per scheduled slot
+raw_path stays the run path it always was
+a7_g1_build threaded, parses OK
+internal calls pass the identity
+a zero-call run is uncalled, not broken
+inventory fails closed by name
+A5 in scope
+g1 freeze fails closed
+every retry state named
+docstring no longer names a typed total
+run_of rederives and exact-compares
+run_of rederives without re-gating the era
+questions passes the run to its card lookup
+G1 consumes the one ledger owner
+one materialization per validated run
+a7_source_meta.py           65985 recorded-file-write    -> ok         a04b48d4000f6070
+a7_source_meta.py           66071 not-applicable(TranscriptError) ->            a04b48d4000f6070
+a7_source_meta.py           66120 not-applicable(TranscriptError) ->            a04b48d4000f6070
+source_meta narrowed
+a7_source_meta.py           66163 saved-edit             -> ok         080e660ad8af8e05
+a7_source_meta.py           66325 not-applicable(TranscriptError) ->            080e660ad8af8e05
+a7_source_meta.py           66342 not-applicable(TranscriptError) ->            080e660ad8af8e05
+source_meta versioned to v2 with complete ticker accounting
+a7_source_meta.py           66438 saved-edit             -> ok         4addd2f2e4b79bb2
+total unintended changes: 0
+a7_source_meta.py           67284 not-applicable(TranscriptError) ->            4addd2f2e4b79bb2
+a7_source_meta.py           67857 not-applicable(TranscriptError) ->            4addd2f2e4b79bb2
+a7_source_meta.py           68471 not-applicable(TranscriptError) ->            4addd2f2e4b79bb2
+a7_source_meta.py           69126 not-applicable(TranscriptError) ->            4addd2f2e4b79bb2
+a7_source_meta.py           69155 not-applicable(TranscriptError) ->            4addd2f2e4b79bb2
+a7_reference_inventory.py   67823 recorded-file-write    -> ok         50ef77561c889040
+a7_reference_inventory.py   67857 not-applicable(TranscriptError) ->            50ef77561c889040
+a7_reference_inventory.py   68052 saved-edit             -> ok         e171733d57ddf91f
+a7_reference_inventory.py   68471 not-applicable(TranscriptError) ->            e171733d57ddf91f
+a7_reference_inventory.py   68484 not-applicable(IndexError) -> error      e171733d57ddf91f
+a7_reference_inventory.py   68488 not-applicable(FileNotFoundError) -> ok         e171733d57ddf91f
+a7_reference_inventory.py   68887 not-applicable(ModuleNotFoundError) -> ok         e171733d57ddf91f
+card_of documented as the collision key
+a7_reference_inventory.py   68897 saved-edit             -> ok         fa465c64d7813669
+a7_reference_inventory.py   69126 not-applicable(TranscriptError) ->            fa465c64d7813669
+a7_reference_inventory.py   69155 not-applicable(TranscriptError) ->            fa465c64d7813669
+a7_reference_inventory.py   69639 not-applicable(TranscriptError) ->            fa465c64d7813669
+validator written, card_of removed
+a7_reference_inventory.py   69641 saved-edit             -> ok         dc8b4c774030b71c
+DRI two-truths implemented
+a7_reference_inventory.py   69671 saved-edit             -> ok         a8ca06468db7457e
+source-provenance guard added
+a7_reference_inventory.py   69699 saved-edit             -> ok         33e2ce58dce1ef1f
+scorers/score_exp5.py       64998 recorded-base-pin      -> pinned     2901f1a615e988af
+scorers/score_exp5.py       65019 not-applicable(FileNotFoundError) -> ok         2901f1a615e988af
+scorers/score_exp5.py       65559 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65563 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65601 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65638 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65670 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65679 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65683 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65768 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65781 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65789 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65862 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       65928 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       66014 not-applicable(ModuleNotFoundError) -> ok         2901f1a615e988af
+scorers/score_exp5.py       66120 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       66137 not-applicable(FileNotFoundError) -> ok         2901f1a615e988af
+scorers/score_exp5.py       66141 not-applicable(ModuleNotFoundError) -> ok         2901f1a615e988af
+scorers/score_exp5.py       66271 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       66325 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       66342 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       66373 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorers/score_exp5.py       66399 not-applicable(TranscriptError) ->            2901f1a615e988af
+scorer finished: diagnostic out of the error table, attribution added
+scorers/score_exp5.py       66468 saved-edit             -> ok         8b1cb48571c422bd
+scorers/score_exp5.py       66665 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+total unintended changes: 0
+scorers/score_exp5.py       67246 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       67284 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       67857 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       67894 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       67902 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68001 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68009 not-applicable(ModuleNotFoundError) -> ok         8b1cb48571c422bd
+scorers/score_exp5.py       68061 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68209 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68316 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68374 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68471 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68552 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68690 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68709 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68727 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68729 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       68790 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       69126 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       69155 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       69217 not-applicable(FileNotFoundError) -> ok         8b1cb48571c422bd
+scorers/score_exp5.py       69218 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       69375 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+scorers/score_exp5.py       69528 not-applicable(TranscriptError) ->            8b1cb48571c422bd
+fact-scoped rejection implemented
+scorers/score_exp5.py       69530 saved-edit             -> ok         8b9b81db7c530b56
+scorers/score_exp5.py       69551 not-applicable(TranscriptError) ->            8b9b81db7c530b56
+scorers/score_exp5.py       69584 not-applicable(TranscriptError) ->            8b9b81db7c530b56
+guard widened to a known key set
+scorers/score_exp5.py       69591 saved-edit             -> ok         8c06279f669cfc47
+scorers/score_exp5.py       69592 not-applicable(TranscriptError) ->            8c06279f669cfc47
+rejected facts now terminate explicitly
+scorers/score_exp5.py       69613 saved-edit             -> ok         baced40c26c03f73
+scorers/score_exp5.py       69839 not-applicable(TranscriptError) ->            baced40c26c03f73
+a7_g23_build.py             65754 recorded-file-write    -> ok         e1afeb92d21c89d8
+a7_g23_build.py             65767 recorded-file-write    -> ok         3feea1442687e15d
+a7_g23_build.py             65768 not-applicable(TranscriptError) ->            3feea1442687e15d
+a7_g23_build.py             65789 not-applicable(TranscriptError) ->            3feea1442687e15d
+a7_g23_build.py             65797 recorded-file-write    -> ok         97e0e2f1ce73209f
+a7_g23_build.py             65823 not-applicable(TranscriptError) ->            97e0e2f1ce73209f
+a7_g23_build.py             65836 not-applicable(FileNotFoundError) -> ok         97e0e2f1ce73209f
+a7_g23_build.py             66325 not-applicable(TranscriptError) ->            97e0e2f1ce73209f
+a7_g23_build.py             66399 not-applicable(TranscriptError) ->            97e0e2f1ce73209f
+a7_g23_build.py             66620 recorded-file-write    -> ok         fb6931a7ba52c19c
+a7_g23_build.py             66766 not-applicable(TranscriptError) ->            fb6931a7ba52c19c
+aspect definitions added, output example is a real JSON object
+a7_g23_build.py             66918 saved-edit             -> ok         e4bfb6da365b06e0
+a7_g23_build.py             66924 recorded-file-write    -> ok         f8a911a404246331
+total unintended changes: 0
+a7_g23_build.py             67284 not-applicable(TranscriptError) ->            f8a911a404246331
+a7_g23_build.py             67355 recorded-file-write    -> ok         2870cc8370126a86
+detector now ignores the source's own wording
+a7_g23_build.py             67360 saved-edit             -> ok         37755c94b7451b4e
+G2: raw evidence on the authority side; parser strict by identity
+a7_g23_build.py             67370 saved-edit             -> ok         3462be394a9477d7
+a7_g23_build.py             67375 recorded-file-write    -> ok         a8d64c33668970f8
+a7_g23_build.py             67385 recorded-file-write    -> ok         49dde8c257ee864e
+packing distinctness is now the SOURCE EVENT
+a7_g23_build.py             67395 saved-edit             -> ok         f30aef5a608a75e0
+a7_g23_build.py             67457 recorded-file-write    -> ok         32975b28320a865b
+reference card replaces quote-only, with a structural whitelist
+a7_g23_build.py             67574 saved-edit             -> ok         736b30bdf844ac84
+a7_g23_build.py             67661 recorded-file-write    -> ok         10f7dbd4d1b2d4b4
+the card now reads the frozen inventory by exact row identity
+a7_g23_build.py             67833 saved-edit             -> ok         e296f95346717f4c
+non_unique_cards updated
+a7_g23_build.py             67843 saved-edit             -> ok         620b42acbbdea2d8
+a7_g23_build.py             67857 not-applicable(TranscriptError) ->            620b42acbbdea2d8
+a7_g23_build.py             67916 not-applicable(TranscriptError) ->            620b42acbbdea2d8
+a7_g23_build.py             67919 not-applicable(FileNotFoundError) -> ok         620b42acbbdea2d8
+a7_g23_build.py             67937 not-applicable(TypeError) -> ok         620b42acbbdea2d8
+a7_g23_build.py             68001 not-applicable(TranscriptError) ->            620b42acbbdea2d8
+citations stripped
+a7_g23_build.py             68009 saved-edit             -> ok         a796eeb6b203048c
+door tightened
+a7_g23_build.py             68034 saved-edit             -> ok         ee42d43435f95833
+batch_packet added
+a7_g23_build.py             68301 saved-edit             -> ok         3e828be99dcd28ed
+a7_g23_build.py             68311 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+a7_g23_build.py             68316 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+a7_g23_build.py             68334 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+a7_g23_build.py             68471 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+a7_g23_build.py             68935 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+a7_g23_build.py             69126 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+a7_g23_build.py             69155 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+a7_g23_build.py             69217 not-applicable(FileNotFoundError) -> ok         3e828be99dcd28ed
+a7_g23_build.py             69218 not-applicable(TranscriptError) ->            3e828be99dcd28ed
+G3 keeps each question with its own event's cards
+a7_g23_build.py             69568 saved-edit             -> ok         68a260b52fcac9a7
+a7_g23_build.py             69584 not-applicable(TranscriptError) ->            68a260b52fcac9a7
+a7_g23_build.py             69592 not-applicable(TranscriptError) ->            68a260b52fcac9a7
+a7_g23_build.py             69638 not-applicable(FileNotFoundError) -> ok         68a260b52fcac9a7
+serving path now validates
+a7_g23_build.py             69651 saved-edit             -> ok         044be024a18a0fcc
+a7_key_correction.py        66244 recorded-file-write    -> ok         8724a5b059a05938
+a7_key_correction.py        66325 not-applicable(TranscriptError) ->            8724a5b059a05938
+a7_key_correction.py        66399 not-applicable(TranscriptError) ->            8724a5b059a05938
+a7_key_correction.py        66582 recorded-file-write    -> ok         7bd35db2fbaf8639
+a7_key_correction.py        66701 not-applicable(TranscriptError) ->            7bd35db2fbaf8639
+applier extended with patch_item and add_fact, both identity-checked
+a7_key_correction.py        66838 saved-edit             -> ok         6b7e7e93ce8d720c
+applier: a patch now rides ALONG with a naming action
+a7_key_correction.py        66940 saved-edit             -> ok         633219dabffc0dcd
+total unintended changes: 0
+a7_key_correction.py        67284 not-applicable(TranscriptError) ->            633219dabffc0dcd
+a7_key_correction.py        67341 not-applicable(TranscriptError) ->            633219dabffc0dcd
+one executable key identity added
+a7_key_correction.py        67452 saved-edit             -> ok         76cccc9afe9fbb09
+a7_key_correction.py        67857 not-applicable(TranscriptError) ->            76cccc9afe9fbb09
+a7_key_correction.py        67894 not-applicable(TranscriptError) ->            76cccc9afe9fbb09
+a7_key_correction.py        68471 not-applicable(TranscriptError) ->            76cccc9afe9fbb09
+a7_key_correction.py        69126 not-applicable(TranscriptError) ->            76cccc9afe9fbb09
+a7_key_correction.py        69155 not-applicable(TranscriptError) ->            76cccc9afe9fbb09
+a7_g23_run.py               68281 recorded-file-write    -> ok         6ffb6a344189d687
+a7_g23_run.py               68287 not-applicable(TranscriptError) ->            6ffb6a344189d687
+a7_g23_run.py               68294 not-applicable(TranscriptError) ->            6ffb6a344189d687
+run module rewired
+a7_g23_run.py               68301 saved-edit             -> ok         b3d79bb7864df47d
+a7_g23_run.py               68311 not-applicable(TranscriptError) ->            b3d79bb7864df47d
+route is per leg, with its own audit dir
+a7_g23_run.py               68315 saved-edit             -> ok         419e1695b2dcdd10
+a7_g23_run.py               68316 not-applicable(TranscriptError) ->            419e1695b2dcdd10
+a7_g23_run.py               68334 not-applicable(TranscriptError) ->            419e1695b2dcdd10
+populations reports unroutable events instead of dying
+a7_g23_run.py               68375 saved-edit             -> ok         36aa67803087ed40
+a7_g23_run.py               68471 not-applicable(TranscriptError) ->            36aa67803087ed40
+a7_g23_run.py               69037 not-applicable(TranscriptError) ->            36aa67803087ed40
+a7_g23_run.py               69126 not-applicable(TranscriptError) ->            36aa67803087ed40
+a7_g23_run.py               69155 not-applicable(TranscriptError) ->            36aa67803087ed40
+a7_g23_run.py               69386 not-applicable(TranscriptError) ->            36aa67803087ed40
+floor/ceiling split
+a7_g23_run.py               69583 saved-edit             -> ok         c5e92cb364268072
+call_plan added
+a7_g23_run.py               69737 saved-edit             -> ok         36dce2dea3794b81
+recovered 6 source files, 160 bound operations

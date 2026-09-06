@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote ('Less Special Items EPS' with $(0.16)/$(0.02) quarter and $(0.67)/$(0.14) YTD) is a non-GAAP reconciling line that bundles the combined per-share effect of several unrelated one-off items disclosed elsewhere in this event as separate causes (resource optimization charges, Brand HQ Consolidation, German acquisition/Turkey termination costs, Pizza Hut Strategic Options Review, refranchising gains/losses, tax items). Rule 3.2 requires splitting independent causes into separate facts, and 'special items' is itself a vague, company-defined filing/non-GAAP taxonomy bucket label barred from a driver name by Rule 10 (bare category / filing-taxonomy labels) and not one of the enumerated bare-root metric defaults (Rule 2). This item's quote states only the aggregate per-share total with no single resolvable cause, so no lawful driver_name can be assigned to it."
+    }
+  ],
+  "continuity_hints": []
+}
+```

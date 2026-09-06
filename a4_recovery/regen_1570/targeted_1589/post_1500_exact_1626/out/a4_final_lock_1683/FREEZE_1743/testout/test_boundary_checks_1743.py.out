@@ -1,0 +1,17 @@
+ok   valid control: a row whose marker and run are in its log   logs/a4_20260906T013007.log
+ok   the evidence gate refuses an invented marker               ["marker 'NEVER_PRINTED_MARKER' is not in the log bound to 'control'"]
+ok   the evidence gate refuses a run that is not in the log     ["identity 'a4_never_run_9999' is not in the log bound to 'control'"]
+ok   the evidence gate refuses a wrong log hash                 ["bound log hash wrong for 'control'"]
+ok   the evidence gate refuses no log at all                    ["no log bound for 'control'"]
+ok   valid control: the unchanged check passed                  
+ok   the unchanged gate refuses a nonzero return code even with the right text ["unchanged-input check 'prior' returned 13"]
+ok   the unchanged gate refuses different text                  
+ok   valid control: a required file that exists under a root    covered by its directory root
+ok   the coverage gate refuses a file that does not exist       ['required input is absent: ../../../tmp/cov_mxw3wvvm/a/b/gone.py']
+ok   valid control: the isolated copy verifies                  ['rows 109 mismatched 0 extra 0 missing 0']
+ok   the verifier refuses when a listed file was deleted        ['rows 109 mismatched 0 extra 0 missing 1']
+ok   the harvest wrapper on harvester rc=0                      status None
+ok   the harvest wrapper on harvester rc=2                      status 'REFUSE: the harvester returned 2 (0 = signed, no lock without it)'
+ok   the harvest wrapper on harvester rc=3                      status 'REFUSE: the harvester returned 3 (0 = signed, no lock without it)'
+ok   the harvest wrapper on harvester rc=4                      status 'REFUSE: the harvester returned 4 (0 = signed, no lock without it)'
+16 passed / 0 failed

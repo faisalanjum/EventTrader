@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "consolidated_leverage_ratio",
+        "driver_state": "reported",
+        "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "to 1.00"},
+        "level_shape_hint": "ceiling",
+        "level_unit": "x",
+        "time_type": "instant",
+        "measurement_raw_spans": ["which may be temporarily increased to 4.00 to 1.00 upon the election as a result of a covered acquisition, subject to customary limitations set forth in the Revolving Credit Agreement"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,28 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "dividend_per_share",
+        "driver_state": "increased",
+        "level_low": {"value": 0.1875, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 0.1875, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": 0.15, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_high": {"value": 0.15, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "sequential_period",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "half": 2
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

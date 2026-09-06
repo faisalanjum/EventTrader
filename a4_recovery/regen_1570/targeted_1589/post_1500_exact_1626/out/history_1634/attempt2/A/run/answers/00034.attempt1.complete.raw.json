@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "aircraft_fuel_consumption",
+        "driver_state": "introduced",
+        "value_text": "increase",
+        "conditions": "generally aligned with capacity",
+        "company_confirmed": true,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

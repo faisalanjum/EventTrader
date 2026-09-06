@@ -1,0 +1,10 @@
+rc=0
+log: /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/budget_inputs_1720/logs/g23_20260905T200741.log
+ok   69679_reference_inventory_artifact rc=0  recorded lines 5, suffix match True
+ok   69853_g23_candidates   rc=0  recorded lines 7, suffix match True
+kept tmp__a7_g2_candidate__a7_g1_candidate.json           21ae14e50050780e     25106 B
+kept tmp__a7_g3_candidate__a7_g1_candidate.json           53a60ec15228c685     65280 B
+kept tmp__a7_reference_inventory.json                     ae81caf4936c4343    122841 B
+not produced by this leg of the chain: /tmp/a7_g1_event_run4/root.json
+not produced by this leg of the chain: /tmp/a7_g1_v16_event/a7_g1_candidate.json
+PRESERVED 3 artifacts

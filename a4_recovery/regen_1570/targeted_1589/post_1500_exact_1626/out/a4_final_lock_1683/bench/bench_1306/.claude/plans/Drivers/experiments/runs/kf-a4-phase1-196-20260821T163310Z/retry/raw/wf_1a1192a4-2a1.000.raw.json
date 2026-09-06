@@ -1,0 +1,75 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#181",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "increased",
+          "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "change_value": {"value": 1.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "measurement_raw_spans": ["diluted"],
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "beat",
+          "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "measurement_raw_spans": ["diluted"],
+          "fiscal_year": 2025,
+          "time_type": "duration",
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": false,
+          "polarity_proof": {
+            "polarity": "favorable",
+            "basis": "metric_meaning",
+            "evidence": "The word 'above' only states a direction, not a favorability judgment (Rule 4 forbids mapping 'above' to beat mechanically); a higher diluted EPS than the company's own prior guide is unambiguously favorable to shareholders with no mainstream counter-story, so metric_meaning applies.",
+            "sentence": "diluted EPS increased 1.2% to $25.64 per share above our previously provided guidance"
+          }
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#181/L1",
+      "exact_match": true,
+      "why": "L1's metric fact (increased, point 25.64 usd, change_value 1.2 with '%' evidence, percent_yoy, measurement_raw_spans ['diluted'], fiscal_year 2025, duration) and its surprise fact (beat, same level, surprise_basis_hint actual, comparison_baseline previous_guidance, has_favorability_wording false, metric_meaning polarity_proof favorable) match the settled reply field-for-field."
+    },
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#181/L2",
+      "exact_match": false,
+      "why": "L2 drops the required 'diluted' measurement_raw_spans on both facts, wrongly nulls the change_value's '%' unit_scale_evidence (a stated unit marker must be copied, only omitted when no marker exists at multiplier 1), and marks has_favorability_wording true with no polarity_proof even though 'above' is a bare direction word that Rule 4 forbids mapping mechanically to beat, so the wordless/metric_meaning path (favorability=false + polarity_proof) was required instead."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'above our previously provided guidance' counts as explicit favorability wording (has_favorability_wording=true) or is merely directional (false, requiring polarity_proof).",
+      "why": "Rule 4 explicitly bars mechanically mapping 'above' to beat, which pushes toward treating it as wordless/directional only; but 'above' is still an evaluative-sounding word relative to a target, so a reader could plausibly read it as favorability wording — the rules resolve this in favor of the wordless/polarity_proof path, but the surface wording invites the other reading."
+    },
+    {
+      "what": "Whether the metric fact's 'increased 1.2%' should carry comparison_baseline 'prior_year' since it is implicitly a year-over-year change.",
+      "why": "The immediate quote never states 'versus last year' for this specific figure (that framing appears earlier in the transcript, not inside this item's quote), so under Rule 9.2 (baseline only when the source states that comparison) the safer reading is to leave comparison_baseline null on the metric home, but a reader relying on the surrounding full-year narrative could argue for prior_year."
+    }
+  ]
+}
+```

@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "winter_storms",
+        "driver_state": "occurred",
+        "change_value": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "change_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "measurement_raw_spans": ["estimated"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

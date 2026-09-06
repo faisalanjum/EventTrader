@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote 'PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m.' contains no unit or scale marker; the applicable scale wording ('in millions, except per share amounts') sits only in the table's header, outside this item's fixed quote. Rule 5.6 requires unit_scale_evidence to be a verbatim span from inside the quote supporting the multiplier, and explicitly directs abstention when the scale marker sits in a header/footnote outside the quote rather than defaulting the multiplier to 1 (which would misstate the value) or inventing evidence."
+    }
+  ],
+  "continuity_hints": []
+}
+```

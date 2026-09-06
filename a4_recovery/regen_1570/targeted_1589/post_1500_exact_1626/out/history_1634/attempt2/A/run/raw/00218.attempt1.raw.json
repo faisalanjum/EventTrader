@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted 'Gift card adjustment, net(3)' reconciliation row bundles two independent causes into one net figure — gift card breakage revenue recognized from a change in historical redemption patterns (a benefit) and a separate non-recurring gift card inventory write-down (a charge). Rule 3.2 requires splitting independent causes into separate facts, but this quote states only the combined net value ($9,396 thousand) for each period, not the individual amounts needed to lawfully attribute or split either underlying cause. Abstaining rather than guessing the split or inventing a blended driver name."
+    }
+  ],
+  "continuity_hints": []
+}
+```

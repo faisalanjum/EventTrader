@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "total_sales",
+        "driver_state": "unknown",
+        "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 14.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "company_confirmed": true,
+        "measurement_raw_spans": ["includes the extra fiscal week"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

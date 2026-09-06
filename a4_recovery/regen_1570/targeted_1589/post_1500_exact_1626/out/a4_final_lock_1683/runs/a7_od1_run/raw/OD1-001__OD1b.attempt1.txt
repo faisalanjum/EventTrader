@@ -1,0 +1,1 @@
+{"verdict": "YES", "evidence_phrase": "350 restaurants have the full equipment package today, and we anticipate about 2,000 by year end"}

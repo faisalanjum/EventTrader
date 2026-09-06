@@ -1,0 +1,11 @@
+harness_g1v3/a7_g23_build.py               045de82cc98f2865
+harness_g1v3/a7_g23_run.py                 36dce2dea3794b81
+harness_g1v3/a7_key_correction.py          76cccc9afe9fbb09
+harness_g1v3/a7_reference_inventory.py     33e2ce58dce1ef1f
+harness_g1v3/a7_source_meta.py             4addd2f2e4b79bb2
+harness_g1v3/scorers/score_exp5.py         c9cee4b09016547a
+harness_g1v3/a6_launch_freeze.py           bf82339907b97bb7
+harness_g1v3/build_a5_exp5_kit.py          53386d2cb85642f6
+harness_g1v3/scorers/grade_batch.js        806a7560002a14ed
+harness_g1v3/a7_g1_build.py                48d8b32812e9e799
+fresh bench: 2405 files

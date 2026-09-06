@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "introduced",
+        "level_unit": "percent_sequential",
+        "value_text": "Q1 comp sales growth expected to decelerate sequentially from Q4's 6.8%",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "company_confirmed": true,
+        "slice_parts": ["segment:usmarket"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

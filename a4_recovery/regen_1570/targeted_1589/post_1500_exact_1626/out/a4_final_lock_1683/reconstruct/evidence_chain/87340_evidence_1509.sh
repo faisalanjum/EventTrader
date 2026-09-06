@@ -1,0 +1,1 @@
+sed -e 's#/tmp/a4_final_targeted_corr2_run_1506#/tmp/a4_final_targeted_corr3_run_1509#' -e 's#final_targeted_corr2_1505/#final_targeted_corr3_1508/#' $S/evidence_1506.py > $S/evidence_1509.py; grep -c "corr3_run_1509\|corr3_1508" $S/evidence_1509.py

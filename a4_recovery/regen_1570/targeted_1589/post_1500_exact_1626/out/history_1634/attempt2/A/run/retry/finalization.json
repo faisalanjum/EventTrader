@@ -1,0 +1,31 @@
+{
+ "attempt": 2,
+ "audit_problems": [],
+ "classification": [
+  [
+   [
+    "ULTA_2026-03-12T16.30#178",
+    "ULTA_2026-03-12T16.30#178/L2"
+   ],
+   "served"
+  ]
+ ],
+ "ledger": {
+  "missing": 0,
+  "retry_valid": 1,
+  "scheduled": 1
+ },
+ "manifest_sha256": "df53a4e27bc0e408981ab242aeb841968438920cd16d6fb027208d2561f1a84a",
+ "receipt_sha256": "9e17cd1a6a2707cee442ab1b9443f268097419e6f4051dea87ed3bc77e995e3f",
+ "retry": [],
+ "run_id": "retry",
+ "validity": [
+  [
+   [
+    "ULTA_2026-03-12T16.30#178",
+    "ULTA_2026-03-12T16.30#178/L2"
+   ],
+   true
+  ]
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "run_id": "wf_8dedf1de-a52",
+ "agent_id": "ab90ffd27c6c1606b",
+ "attempt": 1,
+ "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8dedf1de-a52.json",
+ "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_8dedf1de-a52/agent-ab90ffd27c6c1606b.jsonl",
+ "state_sha256": "375c18a89ce68218bcb0980cc718e7194294225e475cccea83ecf8d5d6fafbb3",
+ "transcript_sha256": "d7e6a540556baa5f92a8405ce38c97a0944f8930fd7d2077e0ac16c92a8541bc",
+ "raw_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/lock/final_key_candidate_1511/signer/final_sign.attempt1.raw.json",
+ "raw_sha256": "fd57049fdc9df15247094ec869feba546c2410bd1eea57a7a740543738c86aeb",
+ "raw_chars": 611,
+ "prompt_sha256": "04154f1b1bc282e58512d7bf75e1185e9c9644b1f3ee2515476703b3cc68688f",
+ "script_sha256": "7b190f48b8d7d6bfbe97d4b20f953926c682d6caf33a319a692137bb67579969",
+ "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "model": "sonnet",
+ "effort": "high",
+ "agent_type": "lean-probe",
+ "runtime_model_ids": [
+  "claude-sonnet-5"
+ ],
+ "tool_calls": 0,
+ "total_tokens": 193541,
+ "duration_ms": 135723,
+ "parser": "build_kfields_final.read_signature",
+ "parser_problems": [],
+ "outcome": "signed",
+ "retry_law": {
+  "owner": "build_kfields_final.RETRYABLE",
+  "retryable": [
+   "invalid_response"
+  ]
+ }
+}

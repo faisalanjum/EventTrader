@@ -1,0 +1,1 @@
+sed -e 's#RUN = "/tmp/a4_final_targeted_run_1500"#RUN = "/tmp/a4_final_targeted_corr_run_1504"#' -e 's#final_targeted_1499/final_targeted.manifest.json#final_targeted_corr_1503/final_targeted_correction.manifest.json#' $S/evidence_1500.py > $S/evidence_1504.py

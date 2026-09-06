@@ -1,0 +1,5 @@
+{
+ "signed": true,
+ "blocked": [],
+ "why": "Independently re-tallying every shard (accounting for all 8 composed events' base/targeted swaps) reproduces rows_accounted=196, accepted_facts=220 (=du_worthy_facts), controls=21, exclusions=8, abstentions=29, replaced=11, preserved=185, affected_events=8, affected_unchanged_rows=36, and untouched_rows=149 exactly as stated, every fact has its required hard_classes/du_worthy/gold_extra review triple, all tag floors of 5 are met with none below floor, and every shard carries an empty open_issues list with no unresolved record-kind, group, or tag-mapping conflict."
+}

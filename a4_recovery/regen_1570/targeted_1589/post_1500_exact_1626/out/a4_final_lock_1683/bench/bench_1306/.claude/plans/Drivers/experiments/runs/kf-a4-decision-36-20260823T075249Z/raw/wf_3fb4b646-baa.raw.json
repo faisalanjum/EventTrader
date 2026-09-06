@@ -1,0 +1,140 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "continuing_operations_earnings_per_share",
+              "driver_state": "unknown",
+              "level_low": {"value": 10.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 10.50, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["Reported diluted"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed a fact: the FY2026 reported diluted continuing-operations EPS outlook range ($10.40-$10.50) is a genuine, company-confirmed forward guidance statement, with continuing_operations kept as a name-level population qualifier because the release separately reports a materially different net-EPS figure that includes discontinued operations."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quoted discontinued-operations loss figures ((3.8), (0.3), (4.1), (1.2)) and the associated tax-benefit dollar amounts carry no scale marker inside the quote itself; the consolidated statement's '(In millions, except per share data)' header that fixes the scale sits outside this quoted span, so per Rule 5.6 the multiplier cannot be lawfully resolved from the quote alone and this item must abstain rather than borrow an outside-quote scale marker."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real_item but settles as a control: the discontinued-operations loss values are real but their governing scale marker lives outside the quoted span, so Rule 5.6 forces a lawful abstention rather than a guessed multiplier."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This sentence only states a change to the company's own internal definition of how segment profit is calculated (now excluding pre-opening costs); it is a definitional/accounting-construct recast under Rule 3.8/OD-17, not itself a statement of a driver's state, change, surprise, guidance, or action, so no lawful driver fact arises here while the actual segment-profit levels are carried by their own reported figures elsewhere in the release."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but settles as a named exclusion: a recast of the company's own segment-profit reporting definition is an accounting-construct/methodology note under Rule 3.8/OD-17, not a driver fact, so it is dropped and logged while the affected real segment-profit metric is carried elsewhere."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "total_sales",
+              "driver_state": "unknown",
+              "level_low": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "measurement_raw_spans": ["including approximately 2% growth related to the 53rd week"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed a fact: the FY2026 total-sales-growth outlook of approximately 9.5% (with its stated ~2-point 53rd-week component kept as a measurement note rather than a separate fact) is a genuine, company-confirmed forward guidance statement on an annual, year-over-year basis."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000940944-26-000005#064",
+      "agrees": true,
+      "why": "This lead's settled fact matches mine field-for-field: driver_name continuing_operations_earnings_per_share, unknown state, level range 10.40-10.50 in usd, per_x share, measurement_raw_spans ['Reported diluted'], fiscal_year 2026, time_type duration, company_confirmed true."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000005#065",
+      "agrees": true,
+      "why": "This lead also emits facts=[] with a single abstention citing the same Rule 5.6 basis (the '$ in millions' scale marker sits outside the quoted span), matching my settled conclusion and reasoning."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000005#066",
+      "agrees": true,
+      "why": "This lead also emits facts=[] with a single abstention treating the segment-profit reporting-definition change as an accounting-construct recast rather than a driver fact, matching my settled conclusion."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000005#067",
+      "agrees": true,
+      "why": "Values (9.5/9.5 point), level_unit percent_yoy, shape, fiscal_year, time_type, company_confirmed, and the 53rd-week measurement span all match my settled fact; the driver_name 'total_sales' is identical to mine."
+    },
+    {
+      "lead_id": "hr-014/b1/row4",
+      "agrees": true,
+      "why": "Driver_name 'sales' is a lawful synonym of my 'total_sales', and state, values, level_unit, shape, fiscal_year, time_type, and company_confirmed all match; it omits the 53rd-week measurement span I included, a minor completeness gap rather than a conflicting identity."
+    },
+    {
+      "lead_id": "hr-014/b2/row4",
+      "agrees": true,
+      "why": "Identical in substance to hr-014/b1/row4: driver_name 'sales' (lawful synonym), matching values/unit/shape/fiscal_year/time_type/company_confirmed, and the same omission of the 53rd-week measurement span I included."
+    }
+  ],
+  "open_issues": []
+}
+```

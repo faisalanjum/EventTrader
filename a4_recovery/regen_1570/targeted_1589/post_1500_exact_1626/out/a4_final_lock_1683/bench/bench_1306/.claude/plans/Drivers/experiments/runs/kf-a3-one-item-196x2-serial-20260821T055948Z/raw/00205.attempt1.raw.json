@@ -1,0 +1,29 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales_per_restaurant_operating_week",
+        "driver_state": "increased",
+        "level_low": {"value": 231971, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 231971, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": 231011, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_high": {"value": 231011, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "slice_parts": ["segment:thecheesecakefactory"]
+      },
+      "per_x": "restaurant_operating_week"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

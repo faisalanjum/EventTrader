@@ -1,0 +1,6 @@
+inventory rewritten: /tmp/a7_reference_inventory.json
+sha256   : ae81caf4936c43432fe27d5ac686dfa090539c615620ce029eaeb00b2f900106
+rows     : 206 | overrides 22 | ledger-added 1 | values 224
+origins  : {'a4_final_v3_decision': 69, 'a4_final_v4_correction': 104, 'a4_final_v6_correction': 25, 'a4_final_v5_correction': 8}
+validate : 206 rows proved
+Shell cwd was reset to /home/faisal/EventMarketDB

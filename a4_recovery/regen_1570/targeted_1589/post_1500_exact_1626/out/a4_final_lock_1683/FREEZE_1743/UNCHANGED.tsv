@@ -1,0 +1,7 @@
+check	expected	measured	returncode
+budget_inputs_1720 (accepted unit)	rows 109 mismatched 0 extra 0 missing 0	rows 109 mismatched 0 extra 0 missing 0	0
+evidence/lock carried unchanged inside lock/	0 differ	0 differ	0
+main HEAD	(recorded)	5f81248e3c1070b8343aa26473865e749ba0d5a0	0
+main staged files	(recorded)	0	0
+recovery HEAD	(recorded)	3619bbac1b16ef6fb6b2365b790a529cfe6a954f	0
+recovery staged files	(recorded)	0	0

@@ -1,0 +1,81 @@
+rewired
+path + fail-closed owner check installed
+rules + opaque id installed
+uniqueness guard + controls added
+controls now derive the scored set
+loader/call-packet/result binder added
+bindings, controls, prompt paths and max budget wired
+validate_merged added
+raw filename defect fixed
+launch section rewritten
+cleaned
+builder fixes applied
+order check simplified
+accounting echo + re-derivation added
+half-publication slot now refuses
+lifecycle + state-audit fixes applied
+per-lane lifecycle installed
+external approval carried through
+duplicate init removed
+delegation wired
+cleaned
+expect carries the digest
+builder: batch_ids bound, full returned row kept
+publisher and audit rewired
+inlined
+implementation inserted
+validate_merged is now the relation-to-credit owner
+deleted render..reconcile            4338 bytes
+deleted batches                      1198 bytes
+deleted RULES block                  1628 bytes
+rewired
+freeze rewired to event groups
+audit detail + terminal categories added
+build owner patched
+a7_g1_build rewired: live_key + shared card
+index translation named
+all prior spend accounted
+task-kind seam added
+reconciliation scoped to the segment
+materialize now emits the one trace
+caller passes the real arm names
+segment-scoped reconciler deleted
+effective_slots carries every saved attempt
+one attempt-complete row per scheduled slot
+raw_path stays the run path it always was
+a7_g1_build threaded, parses OK
+internal calls pass the identity
+a zero-call run is uncalled, not broken
+inventory fails closed by name
+A5 in scope
+g1 freeze fails closed
+every retry state named
+docstring no longer names a typed total
+run_of rederives and exact-compares
+run_of rederives without re-gating the era
+questions passes the run to its card lookup
+G1 consumes the one ledger owner
+one materialization per validated run
+build_kfields_final_targeted.py  84472 read-only(raised)    ok       70ffcbf066fd2cbb
+build_kfields_final_targeted.py  84723 read-only(raised)    ok       70ffcbf066fd2cbb
+phase-aware lifecycle patched; lines 1215
+build_kfields_final_targeted.py  84776 applied              ok       40b68dc8d03eea1e
+appended; lines 1774
+build_kfields_final_targeted.py  84788 applied              ok       b73163963ef30ff1
+cross-phase freshness added
+build_kfields_final_targeted.py  84914 applied              error    62fdbe959c5548aa
+build_kfields_final_targeted.py  85225 read-only(raised)    ok       62fdbe959c5548aa
+wrapper patched; lines 45
+build_kfields_final_targeted.py  85256 applied              ok       e2e909ac09871e2f
+CORR_PKG_DIR -> final_targeted_corr_1502
+build_kfields_final_targeted.py  85263 applied              ok       5dff31a076c6487d
+build_kfields_final_targeted.py  85278 read-only(raised)    ok       5dff31a076c6487d
+task line fixed; package dir -> corr_1503
+build_kfields_final_targeted.py  85650 applied              ok       eef9afa4d0259661
+build_kfields_final_targeted.py  85726 read-only(raised)    ok       eef9afa4d0259661
+build_kfields_final_targeted.py  85846 read-only(raised)    error    eef9afa4d0259661
+gen_draft_1323.py written
+build_kfields_final_targeted.py  86108 applied              ok       1c34db7e1f117f25
+fixed
+build_kfields_final_targeted.py  86127 applied              ok       25fb1f0c688f61e1
+recovered 1 source files; applied=8, read-only=25, read-only(raised)=6; 14 unique tool ids

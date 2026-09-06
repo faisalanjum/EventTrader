@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_store_sales",
+        "driver_state": "introduced",
+        "level_low": {"value": 3.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 5.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

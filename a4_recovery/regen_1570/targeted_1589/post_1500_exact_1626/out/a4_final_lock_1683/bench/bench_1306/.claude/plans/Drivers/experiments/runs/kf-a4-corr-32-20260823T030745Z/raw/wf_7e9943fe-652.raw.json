@@ -1,0 +1,178 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "cost_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 22.20, "scale_multiplier": 0.01, "unit_scale_evidence": "¢"},
+              "level_high": {"value": 22.20, "scale_multiplier": 0.01, "unit_scale_evidence": "¢"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 19.69, "scale_multiplier": 0.01, "unit_scale_evidence": "¢"},
+              "comparison_high": {"value": 19.69, "scale_multiplier": 0.01, "unit_scale_evidence": "¢"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and correctly settles as a fact: the CASM row states a quantified per-available-seat-mile cost with an explicit prior-year comparison drawn from its own governing table header, so it stays a fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote 'Gain/(loss) on investments, net (550) (40) (510)' states signed numeric values but carries no in-quote unit or scale marker; the '(in millions)' scale wording sits in the table header outside this located quote span, so per Rule 5.6 a TEXT fact whose scale marker sits outside the quote must abstain rather than borrow the header or guess the multiplier."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real item, but it settles to no lawful fact: the row's numeric values have no in-quote scale marker (the '(in millions)' header sits outside the quote), so Rule 5.6 forces an abstention and the row becomes a control."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:domesticdestination", "product:passenger"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "available_seat_miles",
+              "driver_state": "increased",
+              "change_value": {"value": 1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:domesticdestination"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a single real item, but per Owner Ruling 1 the quote carries two distinct facts, not one: the domestic passenger revenue increase and the co-stated domestic capacity (ASM) increase, so the row settles as two facts rather than the single revenue fact its label implies."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": 501, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 501, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": -68, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and correctly settles as a fact: the stated $501 million operating income level and the source-stated $68 million year-over-year decrease is a real quantified metric, so it stays a fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["sequential_comparison", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote itself says only 'capacity', not 'available seat miles'; the more specific name was drawn from the same document's own adjacent table column header ('ASMs (Capacity)'), a governing-context judgment rather than a term literally inside this exact sentence."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000027904-26-000022#028",
+      "agrees": false,
+      "why": "Matches on driver_name/state, per_x, and identical point-shaped level/comparison objects and prior_year baseline, but the lead also attaches period_start_date/period_end_date computed from fiscal_quarter+fye_month; per the owner ruling, when the source gives only fiscal shorthand ('March 2026 quarter'/'March 2025 quarter'), exact-date resolution is left to the shared fiscal resolver, so this settlement omits those two fields."
+    },
+    {
+      "lead_id": "phase1/0000027904-26-000022#029",
+      "agrees": true,
+      "why": "Same outcome and same substantive reason: zero facts plus one abstention citing that the '(in millions)' scale wording sits only in the header, outside the located numeric quote, per Rule 5.6."
+    },
+    {
+      "lead_id": "phase1/0000027904-26-000022#030",
+      "agrees": false,
+      "why": "The lead captures only the domestic passenger revenue fact (driver_name revenue, same slices, same 8% percent_yoy change); it omits the co-stated 'on a 1% increase in capacity' clause in the same quote, which Owner Ruling 1 requires extracting as its own distinct fact, so this settlement adds a second available_seat_miles fact the lead does not have."
+    },
+    {
+      "lead_id": "phase1/0000027904-26-000022#031",
+      "agrees": false,
+      "why": "Matches on driver_name/state, the 501M point level, the source-stated -68M change, m_usd units, prior_year baseline, duration type, and FY2026 Q1, but the lead also attaches period_start_date/period_end_date; per the owner ruling on fiscal shorthand, this settlement leaves exact-date resolution to the shared fiscal resolver and omits those two fields."
+    }
+  ],
+  "open_issues": []
+}
+```

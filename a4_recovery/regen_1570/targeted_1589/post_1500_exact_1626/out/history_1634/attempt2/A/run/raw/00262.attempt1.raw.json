@@ -1,0 +1,40 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_sales",
+        "driver_state": "reported",
+        "level_low": {"value": 359.1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 359.1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "period_end_date": "2025-02-15",
+        "period_scope": "ttm",
+        "time_type": "duration",
+        "measurement_raw_spans": ["additional week of sales"]
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_sales",
+        "driver_state": "reported",
+        "level_low": {"value": 95.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 95.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "period_end_date": "2025-02-15",
+        "period_scope": "ttm",
+        "time_type": "duration",
+        "slice_parts": ["geography:us", "unknown:commercial"],
+        "measurement_raw_spans": ["additional week of sales"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "digital_sales",
+        "driver_state": "reported",
+        "level_low": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "period_start_date": "2025-10-01",
+        "period_end_date": "2025-12-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,21 @@
+ok   the first freeze's test loop is found                    1 loop(s)
+ok   the first freeze never checked a test's return code      no returncode guard inside the loop
+ok   and nothing refused before it declared success           the success line follows the loop unguarded
+ok   valid control: all tests passed                          no problems
+ok   a required test with rc=1 refuses                        ['required test failed: b rc=1']
+ok   a required test with rc=2 refuses                        ['required test failed: b rc=2']
+ok   a required test with rc=127 refuses                      ['required test failed: b rc=127']
+ok   a required test with rc=-9 refuses                       ['required test failed: b rc=-9']
+ok   valid control: the unchanged-input checks hold           no problems
+ok   an unchanged-input check reading 'rows 109 mismatched 1 extra ' refuses 
+ok   an unchanged-input check reading 'empty' refuses         
+ok   an unchanged-input check reading 'rows 108 mismatched 0 extra ' refuses 
+ok   valid control: an evidence row that binds                logs/a4_20260906T013007.log
+ok   an evidence row with no log refuses                      ["no log bound for 'x'"]
+ok   an evidence row with a log that is not there refuses     ["bound log missing for 'x'"]
+ok   an evidence row with a wrong hash refuses                ["bound log hash wrong for 'x'"]
+ok   a reused row is not required to carry a log              
+ok   valid control: every required input is covered           one root, one tracked file
+ok   an uncovered required input refuses                      ['uncovered required input: d/e.py']
+ok   a root that only looks like a prefix does not cover      
+20 passed / 0 failed

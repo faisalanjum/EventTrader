@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0001041061-25-000109#075",
+  "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote is the Habit Burger & Grill Division's Operating Profit (Loss) row: '$ (2) $ 1 (572) (572) $ — $ (2) 82 82'. Every dollar figure carries only a bare '$' marker inside the quote; the document's controlling scale convention ('Tabular amounts are displayed in millions of U.S. dollars...') appears only in the MD&A's introductory paragraph, well outside this quote's span, and no 'million' wording sits anywhere in or near this specific table row. Rule 5.6 requires unit_scale_evidence to be the smallest span INSIDE the quote supporting the multiplier; a bare '$' suffices only when scale_multiplier is 1, but the true scale here is millions (multiplier 1000000), not 1 — treating it as 1 would misstate the value by six orders of magnitude, and code never rescales values itself (Rule 5.7). Rule 5.6 explicitly directs abstention when the scale marker sits in a header/footnote outside the quote. The numeric level/comparison slots therefore cannot be lawfully populated, and inventing or borrowing the outside scale marker is forbidden, so this item yields no fact."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-25-000109#075/L1",
+      "exact_match": true,
+      "why": "L1 reaches the identical settled outcome (no facts, one abstention, empty continuity_hints) for the identical reason: the quote's bare '$' markers cannot lawfully support a non-1 scale_multiplier because the document's 'millions' scale wording sits in the intro, outside the quote, per Rule 5.6."
+    },
+    {
+      "lane_id": "0001041061-25-000109#075/L2",
+      "exact_match": true,
+      "why": "L2 also lands on no facts / one abstention / empty continuity_hints, citing the same Rule 5.6 basis — the scale marker for 'millions' is outside the quote's span, so the numeric slots cannot be populated and the item must abstain rather than borrow or guess the scale."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Rule 5.6's final sentence names 'TEXT facts whose scale marker sits in a header or footnote outside your quote' as the abstain trigger, and this item's quote is a table row (not narrative prose).",
+      "why": "It is not fully explicit whether 'TEXT facts' is meant to cover any fact built from extracted document text (as opposed to a structurally-tagged XBRL numeric fact with its own inherent scale metadata) or is narrower than that; either reading still forces abstention here since no in-quote scale wording exists in this table row, but the scope of the term itself is not pinned down by the rule text."
+    }
+  ]
+}
+```

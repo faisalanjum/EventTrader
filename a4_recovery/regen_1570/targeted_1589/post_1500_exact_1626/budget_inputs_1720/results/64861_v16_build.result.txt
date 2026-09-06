@@ -1,0 +1,16 @@
+problems: []
+candidate sha256  : efcf41c5041f774bf9bd2950b26d6667665dd3c9cd52415d88e2c34673a8a45e
+schema            : a7_g1_event_candidate/3
+BUDGET spent_before=4932 initial=210 after_initial=5142 after_max=5352 ceiling=6000 under=True
+prior G1 provenance: run_dir=/tmp/a7_g1_run3 total=93 files=26
+  first file       : finalization.seg01.json scheduled=1
+owners pinned      : a7_g1_build, a7_g1_complete_v2, audit_worker_access, grade_batch_owner, lean_probe_agent, raw_transport, score_exp5
+events/calls       : 105 / 210
+armed_calls        : 0
+questions/produced : 448 / 484
+bytes min/med/max/total: 4216 13537 38485 1558071
+prompt tree        : b4a220fc6dbbc04ae9f3aaf7b2181a5b9464ae50493aaf39e04cc8e1140610c0
+rules sha          : 2ae6e800797be6ba7eeeb1eebd487396e5b9e6cd465c3afb3aeab18b3ca6efa6
+rebuild determinism:
+ second build: efcf41c5041f774bf9bd2950b26d6667665dd3c9cd52415d88e2c34673a8a45e
+Shell cwd was reset to /home/faisal/EventMarketDB

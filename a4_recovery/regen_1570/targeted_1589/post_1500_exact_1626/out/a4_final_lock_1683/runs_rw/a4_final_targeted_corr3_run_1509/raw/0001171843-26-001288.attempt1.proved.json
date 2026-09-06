@@ -1,0 +1,57 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_inventory",
+              "driver_state": "increased",
+              "level_low": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "level_high": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "comparison_high": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "instant",
+              "period_end_date": "2026-02-14",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The row was proposed as a real_item and it settles as exactly that: the table states a real, non-boilerplate instant balance (net inventory = merchandise inventories less accounts payable) at two points in time, so the proposed real-item classification is confirmed."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "primary/0001171843-26-001288",
+      "agrees": true,
+      "why": "The lead settles the identical net_inventory metric fact with the same signed point values (-813,494k vs -1,196,131k), 'increased' state, instant time_type, prior_year baseline and Q2 FY2026 period, matching my own settlement on substance; but I drop its portion_versus_whole tag (net inventory is an arithmetic netting of two balance-sheet lines, not an OD-17 population-qualifier/subset) and its ambiguity_note about the fiscal period, since the release's own repeated 'second quarter (12 weeks) ended February 14, 2026' / 'FY2026' framing directly governs this balance-sheet date under decision rule 6, leaving no genuine ambiguity."
+    }
+  ],
+  "open_issues": []
+}
+```

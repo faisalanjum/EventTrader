@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is a generic footnote definition explaining what qualifies for the 'Legal proceedings' non-GAAP adjustment line (any settlement charge/reduction exceeding typical costs) — it states no specific value, direction, case, or period for this event; it is boilerplate methodology text, not a fact about a driver's state, change, or action (Rule 1.2)."
+    }
+  ],
+  "continuity_hints": []
+}
+```

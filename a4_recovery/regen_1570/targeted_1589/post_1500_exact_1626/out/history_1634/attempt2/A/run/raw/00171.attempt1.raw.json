@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "same_store_sales",
+        "driver_state": "decreased",
+        "change_value": {"value": -1, "scale_multiplier": 1, "unit_scale_evidence": "point"},
+        "change_unit": "percent_points",
+        "fiscal_year": 2024,
+        "time_type": "duration",
+        "measurement_raw_spans": ["approximate"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

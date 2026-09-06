@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The quote states raw digits ($ (267) / $ (386) / (30.8%)) for net loss excluding net special items with no in-quote scale marker; the applicable scale wording (\"in millions, except share and per share amounts\") sits in the table's header, outside this fixed quote. Per Rule 5.6, a scale marker located in a header/footnote outside the quote requires abstention rather than assuming or importing the multiplier."}
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,19 @@
+```json
+{
+ "source_id": "bzNews_42014391",
+ "facts": [
+  {
+   "fact_type": "metric",
+   "item": {
+    "driver_name": "e_coli_outbreak_illnesses",
+    "driver_state": "reported",
+    "level_low": {"value": 100, "scale_multiplier": 1, "unit_scale_evidence": null},
+    "level_shape_hint": "floor",
+    "level_unit": "count"
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}
+```

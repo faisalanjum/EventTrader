@@ -1,0 +1,39 @@
+{
+ "schema": "a4-final-targeted-evidence-binding/1",
+ "run_dir": "/tmp/a4_final_targeted_run_1500",
+ "package": {
+  "dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_targeted_1499",
+  "manifest_sha256": "7a20746c89bc895ede7e661586fe31c98e29132b3732f0d68006f888097805da",
+  "prefix_sha256": "ea52fd19c657037c1fdcf1f8f753d4d7435a26ab5c7cf255700c12c66ab7f9aa"
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "dir": "/tmp/a4_final_targeted_run_1500",
+   "receipt_sha256": "937a766698be672f0359fb8464814aa259030bdbad4164412ddb3cc5da3f7eb2",
+   "finalization_sha256": "88489e750de6f66c3ee93752384fde776b87d0e639ca6b55826a8e4be7671d33",
+   "raw_files": {
+    "0000006201-26-000031.attempt1.proved.json": "aa3717ead3d4c03c560c76bea97c8ca546f3db04191eb525793525648ab23ed2",
+    "0000027904-26-000022.attempt1.proved.json": "66fcbe94169462bce616b336097a943ac791283479743e0b3f6448dddf56eb9f",
+    "0000092380-26-000044.attempt1.proved.json": "1b6d49948d1202d2e732ec09ccad09f9ad7d5fb84c1d21f5f92b9842b6c5cde8",
+    "0000940944-26-000005.attempt1.proved.json": "57eb032c6e72bf8da824cf5d8f4afb6b433f2d182346eec64da4a68004101d6a",
+    "0000940944-26-000009.attempt1.proved.json": "245b76ed580e88e99a9c9ee72b7b05150d6758794591a718a9a6e3b0438402fb",
+    "0001041061-25-000109.attempt1.proved.json": "8e97ed4089fbd74994b15f519f768afe9b57f82ca454f1f862fa649aafb6d6a4",
+    "0001104659-26-027061.attempt1.proved.json": "fdc0091e4f1703fc810ad0cfb01b6ee8fe223b1f24d73d7e9ae06c4ae485309a",
+    "0001171843-26-001288.attempt1.proved.json": "be0a31ac09bb544286bc63cb8abce5b631c8b2a2b0fcb432cf6f6947ee56fdc7",
+    "wf_24ff384d-b7a.000.raw.json": "fdc0091e4f1703fc810ad0cfb01b6ee8fe223b1f24d73d7e9ae06c4ae485309a",
+    "wf_34958e49-61b.000.raw.json": "1b6d49948d1202d2e732ec09ccad09f9ad7d5fb84c1d21f5f92b9842b6c5cde8",
+    "wf_35c2a22f-8a3.000.raw.json": "aa3717ead3d4c03c560c76bea97c8ca546f3db04191eb525793525648ab23ed2",
+    "wf_382023ae-795.000.raw.json": "be0a31ac09bb544286bc63cb8abce5b631c8b2a2b0fcb432cf6f6947ee56fdc7",
+    "wf_829e84c9-e3a.000.raw.json": "245b76ed580e88e99a9c9ee72b7b05150d6758794591a718a9a6e3b0438402fb",
+    "wf_9f9f3383-169.000.raw.json": "8e97ed4089fbd74994b15f519f768afe9b57f82ca454f1f862fa649aafb6d6a4",
+    "wf_f2089dc7-25a.000.raw.json": "57eb032c6e72bf8da824cf5d8f4afb6b433f2d182346eec64da4a68004101d6a",
+    "wf_f6167dce-72e.000.raw.json": "66fcbe94169462bce616b336097a943ac791283479743e0b3f6448dddf56eb9f"
+   },
+   "raw_tree": {
+    "files": 16,
+    "sha256": "f74ad6e1e233c94755d2ce1fe5a3f2c41d3b7e0c48ecc8ca4f8e284a01061ccd"
+   }
+  }
+ ]
+}

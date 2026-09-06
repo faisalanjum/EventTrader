@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote 'Net loss excluding net special items $ (267) $ (386) (30.8%)' states digits but no scale wording; the scale marker '(in millions, except share and per share amounts)' that establishes these are millions sits in the table's column header, outside this item's supplied quote. Per Rule 5.6, a scale marker located in a header outside the quote requires abstaining rather than guessing or defaulting scale_multiplier to 1 (which would misstate the value by six orders of magnitude)."
+    }
+  ],
+  "continuity_hints": []
+}
+```

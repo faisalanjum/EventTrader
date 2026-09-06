@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This 'Restructuring charges' row (-1.5%, —%, 3.2%, —%) is a line inside the effective-tax-rate reconciliation bridging GAAP ETR to Adjusted ETR — it is a derived, percentage-point restatement of the already-disclosed restructuring charge dollar amount (shown elsewhere as $(5)/$(4)/$218/$4), purely an accounting reconciliation artifact, not an independent driver state, change, surprise, guidance, or action."}
+  ],
+  "continuity_hints": []
+}
+```

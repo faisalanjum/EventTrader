@@ -1,0 +1,3 @@
+file	line	tool_use_id	result_line	recorded_outcome	category	before_sha256	after_sha256	bytes
+a6_launch_freeze.py	85865			pinned	recorded-base-pin		57604202dff9c015973b42bf292dec2786d6763c48947cc075c9876ec4379db8	32018
+a6_launch_freeze.py	86108	toolu_01Ks6u5qA2HkAcs77dxKp2cg	86115	ok	read-only(raised)	57604202dff9c015973b42bf292dec2786d6763c48947cc075c9876ec4379db8	57604202dff9c015973b42bf292dec2786d6763c48947cc075c9876ec4379db8	32018

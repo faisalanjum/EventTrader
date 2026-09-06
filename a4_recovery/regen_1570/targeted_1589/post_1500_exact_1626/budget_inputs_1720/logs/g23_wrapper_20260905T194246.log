@@ -1,0 +1,19 @@
+rc=2
+log: /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/budget_inputs_1720/logs/g23_20260905T194246.log
+ok   69679_reference_inventory_artifact rc=0  recorded lines 5, suffix match True
+BAD  69853_g23_candidates   rc=0  recorded lines 7, suffix match False
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result
+      replayed: ValueError: the A4 final lock is missing at /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.cl
+   --- replay output tail ---
+per-kind candidate writer + seam registration
+                                                   ^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a6_launch_freeze.py", line 192, in _locked_rows
+    lock = A5.a4_lock()
+           ^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_a5_exp5_kit.py", line 239, in a4_lock
+    doc = _pinned_file(A4_LOCK_PATH, A4_LOCK_SHA, "A4 final lock")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_a5_exp5_kit.py", line 228, in _pinned_file
+    raise ValueError("the %s is missing at %s" % (what, path))
+ValueError: the A4 final lock is missing at /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-final-20260829T1226Z/a4_final_key_lock.json
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result

@@ -1,0 +1,31 @@
+{
+ "source": "archive_CODEX_1636.md sha256 a03d6032180d6d58a0a2785dc1f9657e12d25ae678989d6530950f0df3432e35 + durable transcript records 76624/76822/77103/77230",
+ "pins": {
+  "zero_state_receipt": "5834de07f599225969f9dfa0ae9fe0875df38d86f1df2b9744133f5da892ce2c",
+  "state_bound_receipt": "99c4621be26a6d8e5a8fc6a095e7c6f34de09f47537cfb72599700f37f573bb6",
+  "finalization": "fc572d546cf81b4dba49432f5446c32ccc35c13167e31db09bff9cadb01ac081",
+  "raw_tree": "9ec7352460641707cc4932f61e4f1aeb38faaf7a9e3d46ed07c2d20bd9ee88e1",
+  "shell_raw": "7a10196d10c534df224be2e513070084bf4fbeae41ecde8ee49e7714bc7cae9f",
+  "state": "8f9dfeb6fc6989fbd27d6ee26c3b9d74d6ba5ce5977d73517ea6e70058fa7b93",
+  "transcript_digest": "360905aeae000f2b307f476dd1df7ba690688040bf998b9d46246c90bcd2b8d4",
+  "freeze": "5d3503ff92a64c3bee457f3728eaedc2920b211096bbebd761320b0a8961ddea",
+  "manifest": "804a3b190042244fddcc9349b0442a55cafed8bf2225270d02f2411078c4ed51",
+  "bundle": "df7e07d869cd17d92a5dd599daf1e15cc6ad29f4b5e4d417057205258468812c",
+  "scorer": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "facts": {
+  "answers_absent": true,
+  "raw_files": 18,
+  "scheduled": 392,
+  "integrity_refusal": 18,
+  "spawned_without_answer": 374,
+  "missing": 0,
+  "validity_rows": 0,
+  "allowed_pairs_returned": 18,
+  "workflow": "wf_3a3a1b8a-0d4",
+  "source_id": "0000006201-26-000031",
+  "launcher": "/tmp/a7_v3_prepared_run_1479/launch/exp5_a5_0000006201-26-000031.attempt1.js",
+  "max_output_tokens": "128000",
+  "primary_calls": 392
+ }
+}

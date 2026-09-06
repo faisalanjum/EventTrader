@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#085",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "same_store_sales",
+          "driver_state": "decreased",
+          "change_value": {"value": -1, "scale_multiplier": 1, "unit_scale_evidence": "point"},
+          "change_unit": "percent_points",
+          "time_type": "duration",
+          "fiscal_year": 2024
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000084#085/L1",
+      "exact_match": false,
+      "why": "L1 names the driver 'same_store_sales_growth', which embeds the change-noun 'growth' inside the name; Rule 3 (naming) bars motion/change nouns like growth/decline from the name field (state, direction, size belong elsewhere), so the settled name drops it to 'same_store_sales'. All other fields (state decreased, change_value -1/point, change_unit percent_points, time_type duration, fiscal_year 2024) match."
+    },
+    {
+      "lane_id": "0001041061-26-000084#085/L2",
+      "exact_match": true,
+      "why": "L2's driver_name 'same_store_sales' (growth stripped from the name) matches the settled name, and every other field (state, change_value, change_unit, time_type, fiscal_year) is identical to the settled reply."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the hedge word 'approximate' in 'an approximate one-point headwind' belongs in measurement_raw_spans.",
+      "why": "Rule 8's catch-all says any number modifier not captured by name/period/unit/slice/basis stays in measurement_raw_spans, which could textually include 'approximate'; but Rule 8's heading and examples (constant currency, organic, adjusted, GAAP, TTM) are about measurement methodology, not precision hedging, so I settled on omitting it (matching both drafts) rather than treating every 'approximately' in the filing as a raw span."
+    },
+    {
+      "what": "Whether the driver being named should be the affected metric (same-store sales) or the causal external event (the Middle East/Malaysia/Indonesia military-conflict impact).",
+      "why": "Rule 3.1 says 'name the CAUSE only,' which could point toward naming the conflict itself; I read the quote's target ('a headwind TO YUM's overall same-store sales growth') as isolating the affected standing metric, with the conflict serving as contextual explanation captured by the attached quote rather than a separate driver name in this item."
+    }
+  ]
+}
+```

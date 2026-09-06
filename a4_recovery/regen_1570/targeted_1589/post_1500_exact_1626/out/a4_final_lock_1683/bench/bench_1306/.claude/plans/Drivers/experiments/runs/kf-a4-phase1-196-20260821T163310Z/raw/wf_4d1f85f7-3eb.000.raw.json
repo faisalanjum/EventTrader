@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0001104659-25-102611#098",
+  "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "share_repurchase_authorization",
+          "driver_state": "increased",
+          "change_value": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "change_unit": "m_usd",
+          "level_low": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "instant",
+          "period_end_date": "2024-06-19"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-102611#098/L1",
+      "exact_match": true,
+      "why": "L1 uses the same driver_name, state 'increased', identical change_value/level objects and units, level_shape_hint 'point', time_type 'instant', and populates only period_end_date (2024-06-19) with no period_start_date, matching the settled reply exactly."
+    },
+    {
+      "lane_id": "0001104659-25-102611#098/L2",
+      "exact_match": false,
+      "why": "L2 matches on name, state, values, units and shape, but it additionally emits period_start_date='2024-06-19' equal to period_end_date; the settled reply treats this as an instant (point-in-time) fact where only period_end_date is stated by the source, so period_start_date should stay omitted (its null default), making L2 not an exact match."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether an 'instant' time_type fact whose only source-stated date is the Board's action date should carry period_start_date equal to period_end_date, or leave period_start_date null.",
+      "why": "Rule 6 says equal start/end dates are lawful ONLY for instant facts, but does not say they are required; since the source states a single date (June 19, 2024) rather than an explicit start-and-end pair, it is genuinely ambiguous whether code expects the redundant start date to be populated or omitted under the sparse rule."
+    }
+  ]
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is only the bare table row ('Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM') giving four dollar figures across two periods; the scale marker that supports the multiplier for those figures, '(in millions)', sits in the table's column header, which lies outside this quote. Per Rule 5.6, when a text fact's unit_scale_evidence sits in a header outside the quote, the fact must abstain rather than guess or borrow the scale from surrounding context."
+    }
+  ],
+  "continuity_hints": []
+}
+```

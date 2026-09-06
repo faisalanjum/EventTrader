@@ -1,0 +1,9 @@
+rejected facts now terminate explicitly
+candidate  : /tmp/a7_g23_candidate2/a7_g23_candidate.json
+sha256     : d09088cf1d0d79bca735a5e79c5d5885995499ea7a4d3df4f36dc695b620a745
+key digest : 2368fff9388a0e1fd88b72dd15cc361816112b49306dbe9bc0dd11a09eb4f2e7
+G2         : {'batches': 17, 'largest_batch': 10, 'questions': 140}
+G3         : {'batches': 46, 'largest_batch': 10, 'legs_scored': ['P1', 'P2', 'UNION'], 'questions': 357, 'unroutable': [], 'unroutable_event_legs': 0}
+launchers  : 126
+made_calls : 0
+Shell cwd was reset to /home/faisal/EventMarketDB

@@ -1,0 +1,19 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "five_year_facility_agreement_borrowing_capacity",
+        "driver_state": "reported",
+        "level_high": {"value": 1.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "ceiling",
+        "level_unit": "m_usd"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

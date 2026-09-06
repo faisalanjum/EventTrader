@@ -1,0 +1,28 @@
+BAD  69853_g23_candidates   rc=0  recorded lines 7, suffix match False
+      recorded: per-kind candidate writer + seam registration
+      replayed:   File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harne
+      recorded: G2 -> a7_g1_candidate.json  sha 21ae14e50050780e
+      replayed:     doc = R.read()
+      recorded:    load_frozen OK | task_kind=G2 | batch_rows=17 | rules=477dbd0dba6b
+      replayed:           ^^^^^^^^
+      recorded:    parser=read_meaning_reply | binding ids=10
+      replayed:   File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harne
+      recorded: G3 -> a7_g1_candidate.json  sha 53a60ec15228c685
+      replayed:     with io.open(path, encoding="utf-8") as fh:
+      recorded:    load_frozen OK | task_kind=G3 | batch_rows=46 | rules=29fd76ead35d
+      replayed:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      recorded:    parser=read_extras_reply | binding ids=10
+      replayed: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/a7_reference_inventory.json'
+   --- replay output tail ---
+per-kind candidate writer + seam registration
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_build.py", line 633, in reference_card
+    row = _inventory().get((source_id, gold_idx))
+          ^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_build.py", line 612, in _inventory
+    doc = R.read()
+          ^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py", line 216, in read
+    with io.open(path, encoding="utf-8") as fh:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/a7_reference_inventory.json'
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result

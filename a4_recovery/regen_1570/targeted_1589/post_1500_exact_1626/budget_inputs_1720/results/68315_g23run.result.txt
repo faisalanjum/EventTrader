@@ -1,0 +1,16 @@
+route is per leg, with its own audit dir
+    g2, g3, arms, gold, meta, problems = populations(primary)
+                                         ^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_run.py", line 69, in populations
+    route = B.route_for(arms[leg], audit)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_build.py", line 257, in route_for
+    out[sid] = route_reply(reply, _event_doc(sid), audit_dir)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/score_exp5.py", line 438, in route_reply
+    store = _ReplayStore(_replay_drivers(reply), source, [event["ticker"]])
+                         ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/score_exp5.py", line 403, in _replay_drivers
+    raise ValueError(
+ValueError: reply gives driver 'comparable_store_sales' conflicting fact_types 'metric' and 'surprise'; the replay store cannot invent which one the graph holds
+Shell cwd was reset to /home/faisal/EventMarketDB

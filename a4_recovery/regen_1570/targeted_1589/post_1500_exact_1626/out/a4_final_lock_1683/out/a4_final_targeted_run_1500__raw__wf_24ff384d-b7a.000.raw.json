@@ -1,0 +1,66 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "interest_expense_net",
+              "driver_state": "increased",
+              "level_low": {"value": 2624, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+              "level_high": {"value": 2624, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1994, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+              "comparison_high": {"value": -1994, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 1 was proposed as a real_item and settles as exactly that: a genuine metric fact (the 'Interest expense (income), net' line swung from a $1,994K net benefit in Q4 FY2024 to a $2,624K net expense in Q4 FY2025), so the proposed_record_kind is confirmed unchanged."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "targeted/0001104659-26-027061#115/row1",
+      "agrees": false,
+      "why": "This lead adds a lone period_end_date ('2026-01-31') with no period_start_date, which Rule 6's all-or-nothing exact-date requirement forbids since the source states only the end date of the 13-week window; our settled fact correctly omits both dates and carries only fiscal_quarter=4/fiscal_year=2025 framing, otherwise its values, signs, shapes, state and baseline match ours."
+    },
+    {
+      "lead_id": "hrt-009/b1/row1",
+      "agrees": true,
+      "why": "Values (2624 vs -1994, scale 1000, 'thousands' evidence), shapes (point/point), state (increased), comparison_baseline (prior_year), time_type and fiscal period all match our settled fact; its driver_name 'interest_expense' drops the word 'net' but names the same cause, a lawful synonym under Rule 3.12."
+    },
+    {
+      "lead_id": "hrt-009/b2/row1",
+      "agrees": true,
+      "why": "Driver name, signed values, scale, shapes, state, comparison_baseline, time_type and fiscal period all match our settled fact exactly."
+    }
+  ],
+  "open_issues": []
+}
+```

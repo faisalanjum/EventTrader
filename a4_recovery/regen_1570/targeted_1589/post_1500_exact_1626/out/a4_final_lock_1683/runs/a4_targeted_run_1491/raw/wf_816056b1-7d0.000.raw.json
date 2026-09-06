@@ -1,0 +1,53 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#068",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "asset_impairment",
+          "driver_state": "occurred",
+          "level_low": {"value": 25.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_high": {"value": 25.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": 0.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_high": {"value": 0.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "period_end_date": "2026-02-22",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#068/L1",
+      "exact_match": false,
+      "why": "L1 abstains on the premise that the scale marker '(in millions)' sits only in a table header outside the supplied quote, but the item's own quote literally contains the substring '(in millions)' near its start, so the premise is false and a lawful fact with scale_multiplier=1000000/unit_scale_evidence='millions' can be built; not a match."
+    },
+    {
+      "lane_id": "0000940944-26-000009#068/L2",
+      "exact_match": false,
+      "why": "L2 abstains claiming both the scale marker and the period label sit outside the quote, but the supplied quote also literally contains 'February 22, 2026' and 'February 23, 2025' as the three-month column headers immediately preceding the row's own values (25.1 0.1 NM), so both blocking premises are false; not a match."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the driver_name should be the bare 'asset_impairment' (the rule's explicit bare-root default) or a compound name that also names the disposal gain/loss component, since the caption nets two narratively distinct causes (the Bahama Breeze closure impairment and the Olive Garden Canada sale gain/loss).",
+      "why": "The row supplies only one net dollar figure per period, so the two underlying causes cannot be separately valued from this quote alone, yet Rule 3.2 prefers splitting independent causes into separate facts — the rule's own asset_impairment default and its specificity instruction pull in different directions here."
+    },
+    {
+      "what": "Whether fact_type should be action_event (per the explicit asset_impairment bare-root default) or metric (since this net line is a standing income-statement caption re-reported every quarter, satisfying the Rule 2 persistence test, like the adjacent depreciation-and-amortization line which is a metric).",
+      "why": "This caption recurs quarter over quarter with a re-readable level, which favors metric under the persistence test, while the rule's named bare-root default explicitly assigns asset_impairment to action_event; the text does not say which signal wins when both apply to the same caption."
+    }
+  ]
+}
+```

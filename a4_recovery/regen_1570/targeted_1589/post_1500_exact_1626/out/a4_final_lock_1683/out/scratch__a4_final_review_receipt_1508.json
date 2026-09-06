@@ -1,0 +1,78 @@
+{
+ "schema": "a4-final-review-receipt/1",
+ "authority": "Codex SEQ 1507 + 1508",
+ "supersedes": {
+  "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1507.json",
+  "sha256": "e3247585f368fc405d07863342527d3f698b1cb25ebf155c3ad89f2f30e9b02b"
+ },
+ "lead_binding": {
+  "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr2_binding.json",
+  "binding_sha256": "fe3e6e03f9444aa238f1d110415e832b209546c1457e5dadb86d086b7c93e499",
+  "run_dir": "/tmp/a4_final_targeted_corr2_run_1506"
+ },
+ "findings": {
+  "0001041061-25-000109": [
+   {
+    "kind": "open_issue",
+    "what": "The company menu carries two same-kind ('segment') tokens for the same real-world division -- 'segment:habitdivision' and 'segment:thehabitburgergrillglobaldivision' -- and this event's own text ('The Habit Burger & Grill Division') does not exactly normalize to either, nor state which is current versus superseded.",
+    "why": "This is a genuine gap in the Rule 7 ladder (which only offers unknown:<value> for KIND ambiguity, not same-kind VALUE ambiguity), so every Habit Burger & Grill Division fact for this company will keep hitting this same block until a governed catalog decision (offline, code-owned per the frozen axis/menu rules) picks or merges the two tokens; that decision is outside what a single event-level settlement can lawfully resolve without guessing."
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1507",
+    "text": "The active exact decision rule at decision_rules_1387.txt rule 5 says that when multiple same-kind menu tokens remain indistinguishable, the model uses one source-grounded off-menu value and tags ambiguous_menus; FINAL_DESIGN.md section 5.2/FS-18 also says an unsure producer coins new. The answer instead claims this case has no lawful fallback and drops both real facts.",
+    "rules": [
+     "decision rule 5",
+     "Rule 7"
+    ]
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1507",
+    "text": "The answer twice interprets the source dash as a rounded zero, contrary to Rule 5.4 and the prior reviewed ruling. A dash is not a stated digit. Do not preserve that claim in the key or sidecar.",
+    "rules": [
+     "Rule 5.4"
+    ]
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1507",
+    "text": "The source safely states the quarterly -2 versus +1 comparison and separately states the YTD prior -2 and 82 B/(W) while showing a dash for the current level. The model, not code, must settle the exact lawful fields under Rules 4-7, but it must not discard a supported fact merely because one numeric slot is unavailable, invent zero, invent dates, or choose either ambiguous existing menu identity.",
+    "rules": [
+     "Rule 4",
+     "Rule 5",
+     "Rule 6",
+     "Rule 7"
+    ]
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1507",
+    "text": "Its one open_issue is therefore not an authority conflict: the already-active rule supplies a lawful off-menu answer. Residual ambiguity belongs in each accepted fact's ambiguity_note; open_issues must be empty.",
+    "rules": [
+     "Rule 1.4",
+     "decision rule 5"
+    ]
+   }
+  ],
+  "0001171843-26-001288": [
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1508",
+    "text": "`portion_versus_whole` is wrong. The source defines net inventory as merchandise inventory less accounts payable. That is arithmetic netting of two balances, not OD-17's business-population qualifier or subset. The tag must not survive.",
+    "rules": [
+     "decision rule 10",
+     "OD-17"
+    ]
+   },
+   {
+    "kind": "reviewer_finding",
+    "source": "Codex SEQ 1508",
+    "text": "The ambiguity_note is also wrong. This same release explicitly says \"second quarter (12 weeks) ended February 14, 2026\" and labels the table \"2nd Quarter, FY2026\"; that full-event text directly governs the February 14 inventory instant under decision rule 6. Q2/FY2026 is supported, not genuinely uncertain.",
+    "rules": [
+     "decision rule 6"
+    ]
+   }
+  ]
+ }
+}

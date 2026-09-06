@@ -1,0 +1,3 @@
+fixed
+23 passed in 42.40s
+Shell cwd was reset to /home/faisal/EventMarketDB

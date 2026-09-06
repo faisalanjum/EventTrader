@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The located quote bundles the restructuring-charges effective-tax-rate impact across two non-collapsible periods (three months ended Nov 1, 2025 at (1.5)% and nine months ended Nov 1, 2025 at 3.2%, each paired with a nil/dash prior-year column). Rule 6 allows at most one period shape per fact and this is not a case the rules authorize splitting for (not a sibling or basis split — it is two different reporting windows, not two growth bases). With no single period resolvable and no stated dateless horizon, the period requirement for this metric fact cannot be lawfully satisfied, so it abstains."
+    }
+  ],
+  "continuity_hints": []
+}
+```

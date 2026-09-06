@@ -1,0 +1,49 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#070",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "current_liabilities",
+          "driver_state": "increased",
+          "level_low": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "comparison_high": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "sequential_period",
+          "time_type": "instant",
+          "period_end_date": "2026-02-22",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#070/L1",
+      "exact_match": false,
+      "why": "L1 matches driver_name, driver_state, both numeric objects, shapes, level_unit, comparison_baseline, time_type and period_end_date, but omits fiscal_quarter=3 and fiscal_year=2026, which the surrounding document text ('the third quarter of fiscal 2026', header table 'Three Months Ended ... February 22, 2026') safely supports and Rule 6 explicitly allows to coexist with exact dates."
+    },
+    {
+      "lane_id": "0000940944-26-000009#070/L2",
+      "exact_match": true,
+      "why": "L2 states the identical fact object field-for-field, including fiscal_quarter=3 and fiscal_year=2026 alongside the exact period_end_date, matching the settled reply exactly."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline for a Q3 balance-sheet figure compared to the prior fiscal-year-end balance (May 25, 2025, not the same calendar date a year earlier) should be labeled sequential_period versus some unlabeled category.",
+      "why": "Rule 9.2 restricts metric baselines to only prior_year or sequential_period, but neither term is explicitly defined for the standard 10-Q convention of comparing an interim balance-sheet date to the last fiscal year-end (not to the immediately preceding fiscal quarter, nor to the same date one year prior). sequential_period was chosen as the closest fit (the most recently reported balance-sheet date in this company's filing cadence), but the rule text does not name this pattern explicitly."
+    }
+  ]
+}
+```

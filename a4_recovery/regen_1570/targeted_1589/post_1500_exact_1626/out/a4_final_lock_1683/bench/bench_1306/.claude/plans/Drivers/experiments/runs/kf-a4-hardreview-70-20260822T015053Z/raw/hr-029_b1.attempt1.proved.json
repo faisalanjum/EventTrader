@@ -1,0 +1,43 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "boeing_737_8_deliveries",
+          "driver_state": "unknown",
+          "level_low": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "aircraft_retirements",
+          "driver_state": "unknown",
+          "level_low": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true,
+          "measurement_raw_spans": ["approximately"]
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Item 1 is the company's outlook for new Boeing 737-8 aircraft it expects to receive (66 units) while item 2 is a separate outlook for aircraft the company plans to retire (approximately 60 units); these are two independent fleet-count drivers with different values and different causal meanings that merely happen to be stated in the same sentence, so they are distinct facts rather than one fact restated twice."
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This line ('PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m.') is a stated numeric value from the income-statement table, but the scale marker that supports the multiplier (the header '(in millions, except per share amounts)') sits outside this quote, in the table header. Rule 5.6 requires abstention when a fact's scale marker sits in a header/footnote outside the supplied quote rather than inventing or borrowing unit_scale_evidence."
+    }
+  ],
+  "continuity_hints": []
+}
+```

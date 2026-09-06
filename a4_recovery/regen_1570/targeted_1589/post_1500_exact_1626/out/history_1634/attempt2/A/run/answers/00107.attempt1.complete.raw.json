@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "share_repurchase_excise_tax",
+        "driver_state": "reported",
+        "level_low": {"value": 21.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 21.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "period_start_date": "2025-01-01",
+        "period_end_date": "2025-12-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "net_restaurant_additions",
+        "driver_state": "unknown",
+        "level_low": {"value": 2100, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 2100, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "company_confirmed": true,
+        "measurement_raw_spans": ["approximately"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

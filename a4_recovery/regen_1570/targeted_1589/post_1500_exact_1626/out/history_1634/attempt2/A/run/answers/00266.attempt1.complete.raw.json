@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote 'Net inventory (net of payables) (813,494 ) (1,196,131 )' states real numeric values but carries no unit or scale marker inside it; the applicable marker ('$ in thousands') sits in the table's header row, outside this quote. Per Rule 5.6, a scale marker sitting in a header outside the quote requires abstention rather than importing or repairing it from outside evidence."
+    }
+  ],
+  "continuity_hints": []
+}
+```

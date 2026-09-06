@@ -1,0 +1,101 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "decreased",
+              "level_low": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": 1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:thehabitburgergrillglobaldivision"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "level_low": {"value": 0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_scope": "ytd",
+              "period_start_date": "2025-01-01",
+              "period_end_date": "2025-09-30",
+              "slice_parts": ["segment:thehabitburgergrillglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The proposed real_item designation is upheld: the located row states the Habit Burger & Grill Division's quarter and year-to-date Operating Profit (Loss) versus the prior-year period, a genuine segment metric, not a control or boilerplate."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu carries two plausible segment tokens for this division, 'segment:habitdivision' and 'segment:thehabitburgergrillglobaldivision'; I chose the latter as the closer match to the source's full name ('Habit Burger & Grill Division') and to the naming pattern shared by the other three current divisions ('...globaldivision'), but this is a genuine value-level menu ambiguity, not resolvable from this row's text alone."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same segment-token ambiguity as fact_index 0 applies here; additionally the year-to-date 2025 value is shown only as a dash, which I read as a literal $0 because the identical dash appears for the identical Habit Burger & Grill Division YTD 2025 Operating Profit (Loss) figure in the separate GAAP-to-Core reconciliation table elsewhere in this same document."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "targeted/0001041061-25-000109#075/row1",
+      "agrees": false,
+      "why": "Values, states, periods and shapes all match my settlement, but this lead picked the segment slice token 'segment:habitdivision' where I settled on 'segment:thehabitburgergrillglobaldivision' as the closer match to the source's full division name; a different slice token is a different Driver identity, so this is a genuine disagreement, not a wording variant."
+    },
+    {
+      "lead_id": "hrt-008/b1/row1",
+      "agrees": true,
+      "why": "This lead's two facts (quarter and YTD Operating Profit for the Habit Burger & Grill Division vs prior year) match my settlement exactly, including the segment slice token 'segment:thehabitburgergrillglobaldivision', values, states, shapes, and periods."
+    },
+    {
+      "lead_id": "hrt-008/b2/row1",
+      "agrees": false,
+      "why": "Values, states, and shapes match my settlement, but this lead used the segment slice token 'segment:habitdivision' instead of 'segment:thehabitburgergrillglobaldivision', and it also omitted period_start_date on the YTD fact; the slice-token choice is the material disagreement."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Two menu segment tokens ('segment:habitdivision' and 'segment:thehabitburgergrillglobaldivision') both plausibly denote the Habit Burger & Grill Division, and the two blind leads split 50/50 on which to use.",
+      "why": "Rule 7 requires reusing a menu value when the meaning is the same, but does not resolve which of two same-kind menu values to pick when both are plausible for one real-world segment and the row's own text does not state a rename between them; this affects downstream Driver identity for every Habit-division fact in the company's history and should be settled once at the catalog/menu-governance level rather than per-fact."
+    }
+  ]
+}
+```

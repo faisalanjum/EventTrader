@@ -1,0 +1,7 @@
+ok   the lawful empty list            status None, success printed True
+ok   one problem                      status "REFUSE: the verifier reported problems: ['a file is not the derivation']", success printed False
+ok   several problems                 status "REFUSE: the verifier reported problems: ['one', 'two', 'three']", success printed False
+ok   a non-string problem             status "REFUSE: the verifier reported problems: [{'path': 'key_identity.json', 'why': 'sha'}]", success printed False
+ok   an empty string inside a list    status "REFUSE: the verifier reported problems: ['']", success printed False
+ok   a nonempty tuple                 status "REFUSE: the verifier reported problems: ('only one',)", success printed False
+6 passed / 0 failed

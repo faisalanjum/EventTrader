@@ -1,0 +1,1 @@
+{"verdict": "YES", "evidence_phrase": "our international sales, in constant currency, were slightly below our expectations"}

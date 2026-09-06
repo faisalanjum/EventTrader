@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted row ('Operating Profit (Loss) $ (2) $ 1 (572) (572) $ — $ (2) 82 82') states level/comparison dollar figures with no scale marker (e.g. 'million') inside the quote itself — only a bare '$' — while the document's 'in millions of U.S. dollars' convention appears solely in the MD&A intro paragraph, outside this quote. Per Rule 5.6 that scale cannot be lawfully resolved from inside the quote, and level_shape_hint/level values are mandatory once level numbers are present, so this item cannot be lawfully resolved; abstaining rather than borrowing the scale from outside the quote."
+    }
+  ],
+  "continuity_hints": []
+}
+```

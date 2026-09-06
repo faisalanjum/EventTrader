@@ -1,0 +1,25 @@
+candidate pin        : efcf41c5041f774bf9bd2950b26d6667665dd3c9cd52415d88e2c34673a8a45e
+freeze_root problems : []
+root sha256          : b491596136682a696876844bedd656c5cc71ff73b323f1be87d307514df3cf81
+root rows            : 210
+root candidate       : efcf41c5041f774bf9bd2950b26d6667665dd3c9cd52415d88e2c34673a8a45e
+root prompt tree     : b4a220fc6dbbc04ae9f3aaf7b2181a5b9464ae50493aaf39e04cc8e1140610c0
+root rules block     : 2ae6e800797be6ba7eeeb1eebd487396e5b9e6cd465c3afb3aeab18b3ca6efa6
+root max_attempts    : 2
+root max_output      : 128000
+root lane pins       : {"agentType": "lean-probe", "disallowedTools": ["Read"], "effort": "high", "max_output_tokens": "128000", "model": "sonnet", "runtime_model_id": "claude-sonnet-5"}
+ROOT OWNER MAP:
+   a7_g1_build            f308259b74a245d3402f4e8dc9d45e930ee2754736ef6367cc9bb8635594de8d
+   a7_g1_complete_v2      33daa5d75f1ceb9ae0b75d1d39d8b2d898756a46b42004766c60699a16070a23
+   audit_worker_access    40639f42a7150d397c25d2984278376afa1a4eb6a5921f063fa4140e0334ef3e
+   grade_batch_owner      806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6
+   lean_probe_agent       28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515
+   raw_transport          64429e5fb59d19b63bbabe4af8809177755c3822a400e976532c579e15d77df5
+   score_exp5             2901f1a615e988af30eba07d18e70bb5ad0473b52de6c537847f1bf3912b3a90
+
+next_admissible problems: []
+derived lanes           : 32 ['G1-000/G1a', 'G1-000/G1b', 'G1-001/G1a', 'G1-001/G1b', 'G1-002/G1a', 'G1-002/G1b', 'G1-003/G1a', 'G1-003/G1b', 'G1-004/G1a', 'G1-004/G1b', 'G1-005/G1a', 'G1-005/G1b', 'G1-006/G1a', 'G1-006/G1b', 'G1-007/G1a', 'G1-007/G1b', 'G1-008/G1a', 'G1-008/G1b', 'G1-009/G1a', 'G1-009/G1b', 'G1-010/G1a', 'G1-010/G1b', 'G1-011/G1a', 'G1-011/G1b', 'G1-012/G1a', 'G1-012/G1b', 'G1-013/G1a', 'G1-013/G1b', 'G1-014/G1a', 'G1-014/G1b', 'G1-015/G1a', 'G1-015/G1b']
+predicted script bytes  : 519518
+gate owner sha256       : e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703
+gate byte limit         : 524288
+Shell cwd was reset to /home/faisal/EventMarketDB

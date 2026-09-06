@@ -1,0 +1,67 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_inventory",
+              "driver_state": "increased",
+              "level_low": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+              "level_high": {"value": -813494, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+              "comparison_high": {"value": -1196131, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "instant",
+              "period_end_date": "2026-02-14",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The row was proposed as a real_item and settles as exactly that: a real, non-boilerplate instant-balance metric (net inventory of $-813,494k vs $-1,196,131k a year earlier), so the proposed classification is confirmed."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether to attach fiscal_quarter=2/fiscal_year=2026 is genuinely ambiguous because the isolated quote states only exact 'as of' dates while the Q2 FY2026 fiscal framing comes from the surrounding press-release document rather than from inside this specific quote."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "targeted/0001171843-26-001288#133/row1",
+      "agrees": true,
+      "why": "This lead settles the same net_inventory metric fact — same signed values (-813,494k vs -1,196,131k), same 'increased' direction, same instant/point/prior_year framing and same Feb 14 2026 period end — matching my own settlement; its internal notes about hypothetical L1/L2 leads are not among the leads shown here and don't change the agreement."
+    },
+    {
+      "lead_id": "hrt-010/b1/row1",
+      "agrees": true,
+      "why": "It settles the identical net_inventory fact (same signed values, unit, comparison baseline, instant time_type, Q2 FY2026 period) as I did; its added measurement_raw_spans entry '(net of payables)' is extra I omitted since that phrase merely defines the driver name rather than adding a measurement flavor, but the core fact and classification still agree."
+    },
+    {
+      "lead_id": "hrt-010/b2/row1",
+      "agrees": true,
+      "why": "It settles the same net_inventory metric fact with identical values, direction, baseline and period as mine; it cites a slightly larger scale-evidence span ('$ in thousands' vs my 'in thousands') but both are lawfully inside the quote and support the same 1000x multiplier, so the underlying fact agrees."
+    }
+  ],
+  "open_issues": []
+}
+```

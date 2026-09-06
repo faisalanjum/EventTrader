@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revolving_credit_facility",
+        "driver_state": "reported",
+        "level_high": {"value": 1.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "ceiling",
+        "level_unit": "m_usd",
+        "time_type": "instant",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "period_end_date": "2025-11-01",
+        "slice_parts": ["unknown:us-gaap:DebtInstrumentAxis__fiveyearfacilityagreement"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

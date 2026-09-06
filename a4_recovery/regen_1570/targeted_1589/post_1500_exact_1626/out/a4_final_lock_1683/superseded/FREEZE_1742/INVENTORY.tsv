@@ -1,0 +1,17 @@
+callable	what_changed	coverage_kind	covering_evidence	sha256
+tests/a4_pipeline.py	stage filter and preservation	test	test_recovery_wrappers_1741 (4 filter cases); test_stage_propagation (53)	d2d189c6bdf7279f8eb3f9c96bd3ac33602c511d2b0b96af76c4ce2e83903f46
+tests/build_1501_map.py	bind map: era owner by hash, lock superset, runs_rw, out/ replay	execution	every boundary run in logs/; placement rules re-run today	3020b49997e2576262301f999d143ff9cd5bfef716ecc71a2a490bb51bde0442
+tests/seed_runs_rw.py	materialise a round's writable run directory	test	test_recovery_wrappers_1741 (differing byte refused, identical accepted)	ec5c5d44cfeeed64276acb27a4038d370031f813cbc7fa5083f9bfaef2746c8e
+tests/place_era_owner.py	put one era owner in the bench, by hash	test	test_recovery_wrappers_1741 (unknown hash, unknown name); manifest/BENCH_OWNER_SWAPS.tsv	30fc34b99e18cfe08e8f47afeec12bd631d1a0d1125a50194297f2987fd88a3e
+tests/extract_budget_chain.py	take a recorded program out of its own record	execution	both chains in reconstruct/budget_chain and reconstruct/evidence_chain; refused records 83500 and 87448 in this session's output	113b324395c0627fd72891303451c82c2e45cbd1a5e01bddacf5069663c8a822
+tests/run_a4.sh	one boundary run with its inputs	execution	every run in logs/	9c8d1ecc3fe2f0dd23abfac3bf2d3b49ee1a8191d07d8e9d119b58b11f3d874a
+tests/freeze_1742.py	this freeze and its gates	test	test_freeze_gates_1742 (20 checks, with the first freeze as the failing control)	1c2b4d93ae526ff8c0a715e5549ce40bdc34287e9b3a3a28aba08495832a7353
+reconstruct/budget_receipt_1508.py	run the corrected generator, gate ae27f66f	test	test_recovery_wrappers_1741 (wrong generator); executed BUDGET_1508_OK	87db5ec57aa69318caccb28c228c0843cb54dc0cb3b9923fbf59f8cd7fcdaa10
+reconstruct/evidence_1509.py	derive the round-3 evidence helper from its records	execution	executed EVIDENCE_1509_OK after a refused incomplete helper	b719aa9bd550e2fd017c0623c65d02320854a8f1606efca09c3ba28872013f4a
+reconstruct/build_final_candidate.py	run the builder, gate the verifier	test	test_build_wrapper_refusal (6, red then green); executed BUILD_CANDIDATE_OK	b0865e347872722091f903151fbe09d3a694b960d47d2167e21503d8c01b86fe
+reconstruct/harvest_final_sign_run.py	harvest the saved signer state	execution	executed HARVEST_OK; the nonzero-child branch is tested in test_recovery_wrappers_1741	7e2fa21e7eec076d183b0eb9765fde6986efbe53716aad7d161a2010d6e257d8
+reconstruct/check_final_key_candidate.py	real pytest over the frozen selection	test	test_recovery_wrappers_1741 (5 skip/short/failure cases); executed 4 passed	7767597663224b85dfdc37023cd83d9de3bf19b58dd037bb9361393041df3cc1
+reconstruct/build_final_key_lock_run.py	run the saved lock builder once	execution	executed LOCK_OK: lock, receipt, 28/28 mutations, accounting	6a60c5a5c9ebdbf5e3ad6facafa253daf10c2df146b1506896634fca4fe44691
+reconstruct/ledger_check.py	fresh-process ledger gate	test	test_recovery_wrappers_1741 (missing expected total); executed at 5217 and 5219	a7dbb63d686c13cfbb03fe60c50290897dfe370e8d8a277e51aca4acebbc2eb3
+reconstruct/verify_checkpoint.py	read-only checkpoint check	execution	executed CHECKPOINT_OK	d308ece03f352c6e6e85860abf8322ba0e8e36fb6591f1d770f965bb9187a225
+a4_owner_1726/patch_replay.py	replay one saved patch on proved preimages	execution	produced 960ebdeb, cdd008c1 and f323b7bc; refuses without a proved preimage	ec4183f298b16b13c5e3b007abaa74bab71c626744348b97fa1ba8adefc05f27

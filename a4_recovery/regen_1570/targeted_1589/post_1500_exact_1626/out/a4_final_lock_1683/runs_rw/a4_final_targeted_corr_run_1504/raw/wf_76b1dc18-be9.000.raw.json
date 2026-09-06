@@ -1,0 +1,85 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "discontinued_operations",
+              "driver_state": "decreased",
+              "level_low": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["net of tax benefit of $1.3, $0.2, $1.6, and $0.7, respectively"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "discontinued_operations",
+              "driver_state": "decreased",
+              "level_low": {"value": -4.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -4.1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1.2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -1.2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "period_scope": "ytd",
+              "measurement_raw_spans": ["net of tax benefit of $1.3, $0.2, $1.6, and $0.7, respectively"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The row was proposed as a real_item and settles as a real fact: the Losses from discontinued operations line states concrete signed quarterly and nine-month values against explicit prior-year comparisons, confirming the proposed_record_kind."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "primary/0000940944-26-000005",
+      "agrees": true,
+      "why": "Independent re-audit produces the same two metric facts (Q3 and nine-month YTD) for the discontinued_operations line, with matching signed level/comparison values, prior_year baselines, fiscal_quarter/fiscal_year framing, period_scope on the YTD fact only, and the same single contiguous measurement qualifier span."
+    }
+  ],
+  "open_issues": []
+}
+```

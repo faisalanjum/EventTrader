@@ -1,0 +1,241 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "unknown",
+              "level_low": {"value": 4.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 4.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["adjusted"],
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settles as one: the un-updated full-year adjusted EPS guide of $4.00 is a genuine guidance-status statement, but since the company only says updating it 'would not be productive' rather than using reaffirming language, the state is unknown rather than reaffirmed."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "boeing_737_8_deliveries",
+              "driver_state": "unknown",
+              "level_low": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 66, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settles as one: a discrete FY2026 delivery-count guide specifically naming the Boeing 737-8 fleet, independent of the retirement figure sharing the same sentence."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_expenses",
+              "driver_state": "increased",
+              "level_low": {"value": 6.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 6.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "period_start_date": "2026-01-01",
+              "period_end_date": "2026-03-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settles as one: a stated year-over-year operating-expense increase with a dollar level and percent change, a plain metric fact under the gate."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quoted row 'PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m.' states signed values with no in-quote scale marker; the '(in millions, except per share amounts)' marker that would fix the multiplier sits only in the statement's outer table header, outside this quote, so Rule 5.6 requires abstention rather than borrowing that outside marker or defaulting the multiplier to 1."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real item, but settles to a control: the bare income-statement figure cannot be lawfully scaled from within its own quote, so Rule 5.6 forces an abstention rather than a stored fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "aircraft_retirements",
+              "driver_state": "unknown",
+              "level_low": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "measurement_raw_spans": ["approximately"],
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settles as one: a separate FY2026 fleet-retirement guide of approximately 60 aircraft, distinct from the Boeing 737-8 delivery guide in row 2."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source declines to update the existing $4.00 guide without using explicit reaffirming language, so per Rule 7 the movement defaults to unknown rather than reaffirmed."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Exact Q1 2026 period dates are derived from the same event's income-statement caption ('Three months ended March 31, 2026') rather than stated directly within this bullet, a clearly-implied period under Rule 6."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Aircraft retirements is treated as a plural-meaning recurring fleet count rather than defaulting to the Rule 3.11 singular form."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [2, 5],
+      "members_are_one_fact": false,
+      "reason": "The shared sentence 'Expect 66 Boeing 737-8 aircraft deliveries and plan to retire approximately 60 aircraft in 2026' names two independent forward fleet actions - an acquisition (66 Boeing 737-8 deliveries) and a disposal (approximately 60 retirements) - which Rule 3.2 requires as separate causes recorded as two distinct guidance facts, not one fact."
+    }
+  ],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000092380-26-000044#039",
+      "agrees": true,
+      "why": "Matches my settled row-1 fact exactly: driver_name earnings_per_share, driver_state unknown, point 4.00 usd level, per_x share, fiscal_year 2026, measurement 'adjusted', company_confirmed true."
+    },
+    {
+      "lead_id": "hr-011/b1/row1",
+      "agrees": false,
+      "why": "Sets driver_state to 'reaffirmed', but the source only states a decision not to update the guide, never explicit reaffirming language, so Rule 7 requires 'unknown'."
+    },
+    {
+      "lead_id": "hr-011/b2/row1",
+      "agrees": false,
+      "why": "Same divergence as hr-011/b1: uses 'reaffirmed' where the absence of explicit reaffirming language requires 'unknown'."
+    },
+    {
+      "lead_id": "phase1/0000092380-26-000044#040",
+      "agrees": true,
+      "why": "Uses 'boeing_737_8_aircraft_deliveries', a lawful synonym of my 'boeing_737_8_deliveries'; level, unit, fiscal_year, time_type, and company_confirmed all match."
+    },
+    {
+      "lead_id": "hr-029/b1/row2",
+      "agrees": false,
+      "why": "Member 1 uses the generic name 'aircraft_deliveries', dropping the source-stated Boeing 737-8 type that Rule 3.3 requires when the evidence supports that specificity."
+    },
+    {
+      "lead_id": "hr-029/b2/row2",
+      "agrees": true,
+      "why": "Member 1 ('boeing_737_8_deliveries') and member 2 ('aircraft_retirements' with 'approximately' captured) match my settled row-2 and row-5 facts field-for-field, and the false one-fact verdict matches mine."
+    },
+    {
+      "lead_id": "phase1/0000092380-26-000044#041",
+      "agrees": true,
+      "why": "Matches my settled row-3 fact on name, state, level, change value/unit, comparison_baseline, fiscal period, and the same period dates derived from the same event's income-statement framing."
+    },
+    {
+      "lead_id": "hr-012/b1/row3",
+      "agrees": false,
+      "why": "Matches all core fields but omits period_start_date/period_end_date, which I include as a clearly-implied real period under Rule 6."
+    },
+    {
+      "lead_id": "hr-012/b2/row3",
+      "agrees": false,
+      "why": "Identical content to hr-012/b1 and shares the same single divergence: no exact period dates alongside the fiscal-quarter framing."
+    },
+    {
+      "lead_id": "phase1/0000092380-26-000044#042",
+      "agrees": true,
+      "why": "Matches my settled row-4 abstention exactly: no facts, one abstention citing the header-outside-quote scale-marker gap under Rule 5.6."
+    },
+    {
+      "lead_id": "phase1/0000092380-26-000044#043",
+      "agrees": true,
+      "why": "Matches my settled row-5 fact exactly: driver_name aircraft_retirements, point 60 count, measurement_raw_spans ['approximately'], fiscal_year 2026, company_confirmed true."
+    },
+    {
+      "lead_id": "hr-029/b1/row5",
+      "agrees": false,
+      "why": "Member 2 matches name, state, level, unit, fiscal_year, and company_confirmed but omits the measurement_raw_spans entry for 'approximately' that Rule 8 requires as a captured number modifier."
+    },
+    {
+      "lead_id": "hr-029/b2/row5",
+      "agrees": true,
+      "why": "Member 2 matches my settled row-5 fact exactly, including the measurement_raw_spans ['approximately'] entry, and the false one-fact verdict matches mine."
+    }
+  ],
+  "open_issues": []
+}
+```

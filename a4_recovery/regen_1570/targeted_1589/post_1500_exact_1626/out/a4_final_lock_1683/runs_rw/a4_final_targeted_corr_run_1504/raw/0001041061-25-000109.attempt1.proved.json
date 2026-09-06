@@ -1,0 +1,94 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "decreased",
+              "level_low": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": 1, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:thehabitburgergrillglobaldivision"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "level_low": {"value": 0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -2, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 3,
+              "period_scope": "ytd",
+              "slice_parts": ["segment:thehabitburgergrillglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The proposed real_item classification is confirmed: the Habit Burger & Grill Division's Operating Profit (Loss) line, for both the quarter and year-to-date columns versus the prior year, states two genuine standing-metric facts, not a control or generic boilerplate."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes", "ambiguous_menus"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu lists two plausible segment tokens for this division, 'segment:habitdivision' and 'segment:thehabitburgergrillglobaldivision'; since the row's own text does not state a rename between them, I resolved it by the naming symmetry with the three sibling divisions' current menu tokens (kfcglobaldivision, tacobellglobaldivision, pizzahutglobaldivision all use the 'X globaldivision' pattern), picking 'segment:thehabitburgergrillglobaldivision' as the current, parallel token rather than treating it as an unresolved menu-ambiguous unknown."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes", "ambiguous_menus"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same segment-token choice as fact_index 0 applies; additionally the YTD 2025 cell is shown only as a dash ('$ \u2014'), which I read as a source-stated rounded value of zero because the document states it rounds tabular figures to the nearest whole million and elsewhere in this very table uses 'N/A' (never a dash) wherever a figure is genuinely not applicable - a stricter literal reading of Rule 5.4's 'stated digit' requirement could instead treat this cell as numberless and I record that as unresolved."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "primary/0001041061-25-000109",
+      "agrees": false,
+      "why": "The lead's two facts match my settlement on driver name, driver states, level and comparison values, shapes, baseline, and the segment slice token; however it invented an unstated period_start_date of '2025-01-01' for the YTD fact where the source only ever states the period's end date (September 30, 2025) and never a January 1 start - Rule 6 requires an exact duration window to state both endpoints or neither - so I instead carry the YTD window only via fiscal_year/fiscal_quarter/period_scope=ytd with no exact dates, making this a genuine, rule-relevant disagreement even though the fact content otherwise aligns."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Two menu segment tokens ('segment:habitdivision' and 'segment:thehabitburgergrillglobaldivision') both plausibly denote the Habit Burger & Grill Division.",
+      "why": "I resolved this by naming symmetry with the sibling divisions' current 'X globaldivision' menu tokens, but the row's text never states which catalog entry is current versus legacy, so a catalog-governance ruling could still overturn my pick and would need to be applied uniformly to every other Habit-division fact in this company's history."
+    },
+    {
+      "what": "The YTD 2025 Operating Profit (Loss) cell for the Habit Burger & Grill Division is shown only as a dash ('$ \u2014'), which I treated as a source-stated value of zero (rounded to the nearest whole million) rather than a missing/non-numeric cell.",
+      "why": "The document explains it rounds all tabular figures to the nearest whole million and elsewhere in this same table uses 'N/A' - not a dash - wherever a figure is genuinely not applicable, supporting a rounds-to-zero reading; but Rule 5.4 literally requires 'every stated digit', and a dash is not a digit, so a stricter reading would instead drop the level object and store the fact as numberless - this is the same point Codex's SEQ 1501/1502 finding raised, and it remains a live, rule-textual disagreement warranting a governance ruling rather than a per-fact guess."
+    }
+  ]
+}
+```

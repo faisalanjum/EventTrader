@@ -1,0 +1,3 @@
+original	sha256	bytes	preserved_as	gz_sha256	gz_bytes	decompresses_to_the_original	why
+a3_recovery/regen_1541/evidence/transcript/accepted_prefix.jsonl	d191941462674e63f16370104478a1e0774b88cbb953b8133a6face8353c1d93	210560179	a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/transcript/accepted_prefix.jsonl.gz	3336cc0af71fed9e365ed1f9fce200f7d338e91d0b17a8446d644a5c2038fc27	47115223	yes (proved by streaming decompression in this freeze)	the raw file exceeds the remote's 104857600-byte per-file limit; the lossless copy is published in its place and the original is left untouched
+/home/faisal/EventMarketDB/venv/bin/python3			(not published)				environment prerequisite: the interpreter

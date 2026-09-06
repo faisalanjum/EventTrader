@@ -1,0 +1,95 @@
+{
+ "schema": "a4-final-key-lock/1511",
+ "state": "LOCKED",
+ "authority": {
+  "instruction": "Codex SEQ 1512",
+  "instruction_sha256": "677079b9f4af3834df91c10b93324cd4c04a18cabd83d1a84c6d6606d44299ae"
+ },
+ "artifacts": {
+  "key_identity": "df5f8bbca0c052242a174f0805d6129d8dfd869f7db1af1d3d33a545fab094ca",
+  "sidecar": "e07ab7d05ce7a53f82bc0dd9eaad5615231c6f6cd743ebf6f7c402c0f11f7a84",
+  "validator_receipt": "a0e7c9d795fb52e0c5a9c9d59abfdb45d0203d999c27f652bc2a1e45932424dd",
+  "provenance": "c17a37a4076cfba2b59881b87fee04021eaafcac59c58b52efd7f21ab94d453a",
+  "signer_prompt": "04154f1b1bc282e58512d7bf75e1185e9c9644b1f3ee2515476703b3cc68688f",
+  "signer_launcher": "7b190f48b8d7d6bfbe97d4b20f953926c682d6caf33a319a692137bb67579969",
+  "signer_manifest": "45875261763f310ce43e68729b22e63fe764e9acfe34c6f731fff5058ef5e87d",
+  "signer_raw": "fd57049fdc9df15247094ec869feba546c2410bd1eea57a7a740543738c86aeb",
+  "signer_evidence": "0f87db538214dcd9106b4918c448129353e686527cb7408de388cc18230173a0",
+  "signer_reply": "342afdcf00ae76ae3798b45c73283612910412a6bfb4e6a7ccbeb81edc1802a7"
+ },
+ "key": {
+  "identity": "key_identity.json: the ordered exact raw component shards, the four bindings and the pinned loader",
+  "loader": {
+   "module": "build_kfields_final_targeted",
+   "entry": "full_materialize",
+   "sha256": "fb7c820d765565cc19722938caeb8f8f5e4bdefa9c19a0443c48398fda20113d"
+  },
+  "materializer": {
+   "module": "build_kfields_final",
+   "entry": "materialize",
+   "sha256": "bad84b2f9fab14443a167660dc631b8d556c143cf09233f54bf1c3b6b2649fee"
+  },
+  "bindings": {
+   "a4_final_targeted_adjudication": "d9a5fe296a2633d70e0fdf906bdcadc855eee01bdc84a5ff12a038a51be3787f",
+   "a4_final_targeted_correction": "b1f516f6217ca05fae8bcb6af3b2f5ac3b259ab3ed571f09f79ef2a516ec48fd",
+   "a4_final_targeted_correction_2": "fe3e6e03f9444aa238f1d110415e832b209546c1457e5dadb86d086b7c93e499",
+   "a4_final_targeted_correction_3": "5f2b167deb5a5159a058a2027564f70d69dcdada1b9be11388fb8853c9754257"
+  },
+  "events": 36,
+  "composed_events": 8
+ },
+ "counts": {
+  "events": 36,
+  "rows": 196,
+  "unique_rows": 196,
+  "replaced": 11,
+  "preserved": 185,
+  "untouched_events": 28,
+  "untouched_rows": 149,
+  "affected_events": 8,
+  "affected_unchanged_rows": 36
+ },
+ "validator": {
+  "problems": [],
+  "open_issues": 0,
+  "tags_below_floor": [],
+  "rows_accounted": 196,
+  "class_floor": 5
+ },
+ "signer": {
+  "signed": true,
+  "blocked": [],
+  "run_id": "wf_8dedf1de-a52",
+  "agent_id": "ab90ffd27c6c1606b",
+  "attempt": 1,
+  "state_sha256": "375c18a89ce68218bcb0980cc718e7194294225e475cccea83ecf8d5d6fafbb3",
+  "transcript_sha256": "d7e6a540556baa5f92a8405ce38c97a0944f8930fd7d2077e0ac16c92a8541bc",
+  "raw_sha256": "fd57049fdc9df15247094ec869feba546c2410bd1eea57a7a740543738c86aeb",
+  "prompt_sha256": "04154f1b1bc282e58512d7bf75e1185e9c9644b1f3ee2515476703b3cc68688f",
+  "script_sha256": "7b190f48b8d7d6bfbe97d4b20f953926c682d6caf33a319a692137bb67579969",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "model": "sonnet",
+  "effort": "high",
+  "agent_type": "lean-probe",
+  "runtime_model_ids": [
+   "claude-sonnet-5"
+  ],
+  "transport": "subscription",
+  "max_output_tokens": "128000",
+  "tool_calls": 0,
+  "parser": "build_kfields_final.read_signature"
+ },
+ "call_accounting": {
+  "ledger_before": 5219,
+  "signer_calls": 1,
+  "retries": 0,
+  "ledger_after": 5220,
+  "ceiling": 6000,
+  "retry_law": {
+   "owner": "build_kfields_final.RETRYABLE",
+   "retryable": [
+    "invalid_response"
+   ]
+  }
+ }
+}

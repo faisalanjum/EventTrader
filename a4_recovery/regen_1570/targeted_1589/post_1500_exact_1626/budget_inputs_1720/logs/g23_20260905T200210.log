@@ -1,0 +1,23 @@
+ok   69679_reference_inventory_artifact rc=0  recorded lines 5, suffix match True
+BAD  69853_g23_candidates   rc=0  recorded lines 7, suffix match False
+      recorded: G2 -> a7_g1_candidate.json  sha 21ae14e50050780e
+      replayed: Traceback (most recent call last):
+      recorded:    load_frozen OK | task_kind=G2 | batch_rows=17 | rules=477dbd0dba6b
+      replayed:   File "<string>", line 3, in <module>
+      recorded:    parser=read_meaning_reply | binding ids=10
+      replayed:   File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harne
+      recorded: G3 -> a7_g1_candidate.json  sha 53a60ec15228c685
+      replayed:     g2, g3, arms, gold, meta, problems, unroutable = populations(primary)
+      recorded:    load_frozen OK | task_kind=G3 | batch_rows=46 | rules=29fd76ead35d
+      replayed:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      recorded:    parser=read_extras_reply | binding ids=10
+      replayed: ValueError: not enough values to unpack (expected 7, got 6)
+   --- replay output tail ---
+per-kind candidate writer + seam registration
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_run.py", line 123, in freeze
+    g2, g3, arms, gold, meta, problems, unroutable = populations(primary)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 7, got 6)
+REFUSED: step 69853_g23_candidates did not reproduce its recorded result

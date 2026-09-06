@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted text merely describes the company's fiscal calendar convention (the number of weeks composing the fourth quarter in each of 2025, 2024, 2023) — a period-structure/accounting-calendar disclosure, not a real statement about a driver's state, change, surprise, guidance, or action; it is boilerplate calendar mechanics used only to explain quarterly revenue-share comparability, so it fails Rule 1's fact gate."
+    }
+  ],
+  "continuity_hints": []
+}
+```

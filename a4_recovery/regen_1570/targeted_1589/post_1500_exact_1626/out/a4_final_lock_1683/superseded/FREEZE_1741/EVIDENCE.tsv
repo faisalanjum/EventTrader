@@ -1,0 +1,21 @@
+kind	what	marker_or_source	log	log_sha256
+executed	round 2 states recorded in the receipt's scheduled order	RECORD_ROUND1_OK	logs/a4_20260906T000549.log	954a7ce0f2292ac41387c494b28b75b1f2d3f9d1ca4becacd955c55c4f66ba88
+executed	round 2 finalized once	FINALIZE_ROUND1_OK	logs/a4_20260906T000549.log	954a7ce0f2292ac41387c494b28b75b1f2d3f9d1ca4becacd955c55c4f66ba88
+executed	round 2 bound; ledger 5217	LEDGER_OK 5217	logs/a4_20260905T232316.log	d766a633d40696e646ff5622609ae8e66241ab5974990189153f65231b5a87c1
+executed	round 3 corrected budget receipt ae27f66f	BUDGET_1508_OK	logs/a4_20260905T235533.log	cd49d56eb556790ab066bd9ec4bb3808e4c6530533d18a03ef3b3c782c0a83f2
+executed	round 3 package eb3cce17	BUILD_PACKAGE_OK	logs/a4_20260905T235925.log	8a1afe22b9772753ca48e54842d4034d72b8db071ed47c7191e3314a9122a4dc
+executed	round 3 prepared receipt 071b41f7	PREPARE_DONE	logs/a4_20260906T000056.log	9a6880ad541a0d9a9988752f169641ddd6cd7b97f16d83f62c6a3dcd3e4dee83
+executed	round 3 evidence helper derived	EVIDENCE_1509_OK	logs/a4_20260906T001302.log	320c836dc48957089e30001cee7d6429dae135541cb5c827fbcfae1485780972
+executed	round 3 bound; ledger 5219	LEDGER_OK 5219	logs/a4_20260906T001648.log	89b8523c0f44ee3fde7d0afb5c623a5702450b2baedd8762dbdf9aac1eb19b66
+executed	final candidate built and verified	BUILD_CANDIDATE_OK	logs/a4_20260906T003331.log	a636bb229d3df7e5be0eba4fd13faa6e97cabbb60c23287441806929700c2b1e
+executed	saved signer harvested (no new call)	HARVEST_OK	logs/a4_20260906T005300.log	a6d9ab2fd3117b4bc0af30d9b6c655b68e734bfcdfb1becac68b923ab0b28c78
+executed	four owed checker cases under real pytest	CHECK_CANDIDATE_OK	logs/a4_20260906T010803.log	1c771a5c1278f48bfb7a1ef5b9d5fb5e12cc995fa2015d2e2be6df6c4af25703
+executed	lock and receipt written once; 28/28 mutations refuse	LOCK_OK	logs/a4_20260906T011110.log	f679fb0a4bcfc41bd32932c61f9145e0ccef7b1830af70f50c381a6cac8a1645
+executed	tests/test_build_wrapper_refusal.py	6 passed / 0 failed	rc=0	7453c2e1da4d189176ce946eebdfb97bc47eddcab6213702800fb2601122bb86
+executed	tests/test_stage_propagation.py	53 passed / 0 failed	rc=0	0926e40783a49b6c6cba0fbc3a4c6e8bf812f3a579676f2131e4d5794a50911c
+executed	tests/test_recovery_wrappers_1741.py	22 passed / 0 failed	rc=0	a572ad812e0ac3d54abce5d82ba3d35f5d315e4cb30bdaf7ec9d73cfe64e2b34
+executed	tests/test_placement_rules.py	11 checks, 0 failed []	rc=0	ca55cef2b67b3217f90d11579d386b088377c368491e6d4b8e88ece0baab9949
+reused	the rest of check_final_key_candidate.py (dd4e321d)	actual historical execution at original 87726/87817, single-test patch 87823, passing rerun 87835		
+reused	correction-round regression	original 87773 and its corrected test rerun		
+reused	boundary and projection placement results	unchanged source/input identity; tests/test_placement_rules.py re-run today		
+reused	two identical candidate builds	the build plus fresh C.verify (Codex SEQ 1741 standing proof); the three-rebuild test not re-run		

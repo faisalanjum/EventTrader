@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The quote states net loss excluding net special items as $(267) vs $(386) with no scale marker inside it — the 'in millions' wording that fixes the multiplier sits only in the table header outside this quote, so unit_scale_evidence cannot be sourced from within the quote and the value cannot be lawfully scaled; abstain per Rule 5.6 rather than borrow the header."}
+  ],
+  "continuity_hints": []
+}
+```

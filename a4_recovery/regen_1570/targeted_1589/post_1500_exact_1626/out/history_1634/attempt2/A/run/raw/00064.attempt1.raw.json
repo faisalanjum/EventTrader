@@ -1,0 +1,47 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "level_low": {"value": 3.03, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 3.03, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "change_value": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["Diluted"],
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025
+      },
+      "per_x": "share"
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "level_low": {"value": 3.03, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 3.03, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "change_value": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["Diluted", "constant currencies"],
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

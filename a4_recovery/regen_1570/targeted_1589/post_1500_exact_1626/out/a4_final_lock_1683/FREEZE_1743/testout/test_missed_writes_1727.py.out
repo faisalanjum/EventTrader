@@ -1,0 +1,13 @@
+ok   70321 is the record the reviewer named
+ok   its own result reports the rewrite of this owner
+ok   70321 keeps a fragment for this owner
+ok   70321 excludes the other owner's name
+ok   the substitution's anchor is present exactly once in the accepted state
+ok   applying it gives the reviewer's independent identity
+ok   70321 is recognised as a write to this owner
+ok   75912 is the record the reviewer named
+ok   75912 is recognised as a write to this owner
+ok   75912 keeps the helper this owner's calls need
+ok   75912 keeps exactly the three calls for this owner
+ok   75912 excludes the other owner's preceding call
+checks: 12  failed: 0  []

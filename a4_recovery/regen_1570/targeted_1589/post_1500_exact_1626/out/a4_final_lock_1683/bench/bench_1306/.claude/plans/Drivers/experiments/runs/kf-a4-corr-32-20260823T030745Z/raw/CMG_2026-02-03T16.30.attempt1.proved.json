@@ -1,0 +1,280 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_unit": "m_usd",
+              "level_shape_hint": "point",
+              "change_value": {"value": 4.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: total Q4 sales of $3 billion with a stated 4.9% growth is a genuine metric statement."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "marketing_costs",
+              "driver_state": "increased",
+              "level_low": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_unit": "percent",
+              "level_shape_hint": "point",
+              "change_value": {"value": 50, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: marketing costs at 3.5% of sales with an explicit 50-bps year-over-year increase ('from last year') is a real, cleanly-stated metric."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "unknown",
+              "value_text": "about flat",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the company's own numberless full-year comp-sales outlook is company-confirmed guidance."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "high_efficiency_equipment_package",
+              "driver_state": "reported",
+              "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_unit": "count",
+              "level_shape_hint": "point",
+              "time_type": "instant",
+              "period_end_date": "2026-02-03"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the as-of-today count of 350 restaurants with the equipment package is a real, source-stated metric level, distinct from row 7's forward target."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "chief_marketing_officer_search",
+              "driver_state": "announced"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the national CMO search is a discrete, company-stated action rather than boilerplate."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_unit": "percent_yoy",
+              "level_shape_hint": "point",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the -2.5% comp-sales figure is a distinct real metric from row 1's total-sales figure though co-stated in the same sentence."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "high_efficiency_equipment_package",
+              "driver_state": "unknown",
+              "level_low": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_unit": "count",
+              "level_shape_hint": "point",
+              "fiscal_year": 2026,
+              "time_type": "instant",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as a fact: the ~2,000-restaurant year-end target ('we anticipate') is the company's own forward guide, distinct from row 4's current-state count."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether comparison_baseline=prior_year should be recorded for this bare 4.9% growth figure, since this exact sentence never uses 'year over year'/'from last year' the way sibling lines in the same call do."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the driver name should carry a suffix (e.g. '_installations'/'_restaurant_count') and whether an instant fact whose only stated anchor is 'today' should also populate period_start_date equal to period_end_date."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the present-continuous 'are conducting' implies an already-ongoing search ('continued') rather than a first-disclosed 'announced', since no earlier public disclosure is evidenced in this record."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same comparison_baseline question as the co-stated total-sales figure: whether this inherently year-over-year comp metric requires prior_year to be stored, or should stay null absent explicit 'year over year' wording in this exact sentence."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Naming choice for the driver ('package' alone vs with an added '_restaurant_count'/'_installations' suffix) is not forced to a single string, though all lawful forms should retain the source's own 'package' term."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [1, 6],
+      "members_are_one_fact": false,
+      "reason": "Total quarterly sales (an absolute dollar level of $3 billion with 4.9% growth, including new-restaurant contribution) and comparable restaurant sales (a same-store rate of -2.5% that strips new-unit growth out) are two independently re-readable standing metrics stated side by side in one sentence, not one fact restated twice."
+    },
+    {
+      "member_row_indexes": [4, 7],
+      "members_are_one_fact": false,
+      "reason": "Row 4 is a reported current-state count (350 restaurants equipped 'today', a metric) while row 7 is a forward company guide (outlook verb 'anticipate' targeting about 2,000 'by year end'), differing in fact_type, period, and value, so they are two distinct facts about the same equipment rollout rather than one."
+    }
+  ],
+  "lead_reconciliation": [
+    {"lead_id": "phase1/CMG_2026-02-03T16.30#146", "agrees": true, "why": "Matches the settled row-1 fact exactly on driver_name, state, level ($3B point, m_usd), change (4.9 with '%' cited as unit_scale_evidence), percent_yoy, Q4 FY2025, duration, and no comparison_baseline emitted."},
+    {"lead_id": "hr-032/b1/row1", "agrees": false, "why": "Reaches the same group conclusion (members_are_one_fact=false) and matches the sales fact's core values, but wrongly nulls change_value.unit_scale_evidence where the quote's own '%' marker is present and must be cited per Rule 5.6."},
+    {"lead_id": "hr-032/b2/row1", "agrees": false, "why": "Same unit_scale_evidence omission as hr-032/b1, and additionally adds comparison_baseline='prior_year' without an explicit 'year over year'/'from last year' statement in this exact quote, unlike the settled reply which leaves it null pending that ambiguity."},
+    {"lead_id": "phase1/CMG_2026-02-03T16.30#147", "agrees": true, "why": "Matches the settled row-2 fact field-for-field: marketing_costs/increased, 3.5% point level, 50 bps change, comparison_baseline=prior_year (explicit 'from last year'), Q4 FY2025, duration."},
+    {"lead_id": "phase1/CMG_2026-02-03T16.30#148", "agrees": true, "why": "Matches the settled row-3 guidance fact exactly: comparable_restaurant_sales/unknown, value_text 'about flat', fiscal_year 2026, duration, company_confirmed true."},
+    {"lead_id": "phase1/CMG_2026-02-03T16.30#149", "agrees": true, "why": "Core fact matches (metric, 350 count, point shape, instant, period_end_date=2026-02-03); the '_installations' suffix on the driver name is a lawful synonym under Rule 3.12 since it still retains the source's own 'package' term."},
+    {"lead_id": "hr-033/b1/row4", "agrees": true, "why": "Matches the settled row-4 fact on driver_name ('high_efficiency_equipment_package'), state, level, unit, and instant time_type; differs only by also populating a redundant period_start_date equal to period_end_date, a lawful-but-optional surplus already flagged as an open ambiguity."},
+    {"lead_id": "hr-033/b2/row4", "agrees": false, "why": "Drops the source's own 'package' term entirely for 'high_efficiency_equipment_installations', losing the specific named program the transcript uses, unlike the settled name which retains 'package'."},
+    {"lead_id": "phase1/CMG_2026-02-03T16.30#150", "agrees": true, "why": "Matches the settled row-5 fact exactly: single action_event fact, chief_marketing_officer_search/announced, no other fields."},
+    {"lead_id": "phase1/CMG_2026-02-03T16.30#151", "agrees": true, "why": "Matches the settled row-6 fact exactly: comparable_restaurant_sales/decreased, -2.5 point-shaped level in percent_yoy with '%' cited as unit_scale_evidence, Q4 FY2025, duration."},
+    {"lead_id": "hr-032/b1/row6", "agrees": false, "why": "Agrees on the group split but wrongly nulls unit_scale_evidence for the -2.5% level where the quote's '%' marker should be cited per Rule 5.6."},
+    {"lead_id": "hr-032/b2/row6", "agrees": false, "why": "Same unit_scale_evidence omission plus an unstated comparison_baseline='prior_year' addition, not matching the settled null pending the same YoY-wording ambiguity."},
+    {"lead_id": "phase1/CMG_2026-02-03T16.30#152", "agrees": true, "why": "Core fact matches (guidance, 2000 count, point shape, fiscal_year 2026, instant, company_confirmed true); the longer driver name 'high_efficiency_equipment_package_restaurant_count' still retains the source's own 'package' term, a lawful synonym of the settled name."},
+    {"lead_id": "hr-033/b1/row7", "agrees": true, "why": "Matches the settled row-7 fact exactly, using the identical driver_name 'high_efficiency_equipment_package' plus identical level/unit/period/company_confirmed fields."},
+    {"lead_id": "hr-033/b2/row7", "agrees": false, "why": "Drops the source's own 'package' term in favor of 'high_efficiency_equipment_installations', the same naming defect as its row-4 counterpart, unlike the settled name which retains 'package'."}
+  ],
+  "open_issues": [
+    {
+      "what": "Whether comparison_baseline should be set to 'prior_year' for the row-1 total-sales growth (4.9%) and the row-6 comp-sales decline (-2.5%), or left null.",
+      "why": "Both figures are growth/comp numbers conventionally read as year-over-year, but this exact sentence never uses 'year over year' or 'from last year' the way other lines in the same call do (e.g., cost of sales, marketing costs), and Rule 9.2 requires the comparison to be source-stated before the field is populated on a metric; leads split on this exact point, confirming it is a genuine, unresolved borderline case."
+    },
+    {
+      "what": "The exact driver-name string for the equipment-package rollout (rows 4 and 7) varies across lawful candidates ('high_efficiency_equipment_package', '..._installations', '..._restaurant_count') with no rule forcing a single unique string.",
+      "why": "Rule 3.12 allows lawful synonyms and names are explicitly provisional pending the later admission/catalog step, so this variance does not block settling either row as a fact but should be reconciled there rather than guessed here."
+    }
+  ]
+}
+```

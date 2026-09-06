@@ -1,0 +1,237 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 12.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 12.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "change_value": {"value": 40, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["entity_ownership:companyownedstores", "segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the quote states KFC Division's own company-owned restaurant margin (12.7%, +40bps) with an explicit year-over-year comparison inside the quote itself."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_margin",
+              "driver_state": "decreased",
+              "change_value": {"value": -40, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["lapping the 53rd week"],
+              "slice_parts": ["entity_ownership:companyownedstores", "segment:tacobellglobaldivision"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_margin",
+              "driver_state": "decreased",
+              "change_value": {"value": -10, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["lapping the 53rd week"],
+              "slice_parts": ["entity_ownership:companyownedstores", "segment:tacobellglobaldivision"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the 40bps-quarter/10bps-year figures match Taco Bell Division's (not KFC's 20bps-quarter) 53rd-week-lap drag on its own company-owned restaurant margin."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "foreign_currency_translation",
+              "driver_state": "reported",
+              "level_low": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "foreign_currency_translation",
+              "driver_state": "reported",
+              "level_low": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the $10M-quarter/$12M-year figures match KFC Division's own FX reconciliation bullet exactly, distinct from the worldwide $11M/$12M figures stated elsewhere."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 12, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["GAAP"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: a whole-company GAAP operating profit growth fact tying to the +12% ($738M vs $657M) figure in the summary table."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote describes a prospective change in financial-statement rounding/presentation convention, not a driver's state, change, surprise, guidance, or action; it is accounting-methodology boilerplate that fails Rule 1's gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: this is purely a rounding/presentation-basis disclosure and yields no driver fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "This sentence quantifies 'the change' in Taco Bell's company-owned restaurant margin already stated as year-over-year in the two immediately preceding sentences of the same bullet, so comparison_baseline=prior_year is derived from that directly-governing antecedent rather than from words inside this exact quote."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["measurement_wording", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same reasoning as fact 0 applied to the full-year (-10bps) figure: comparison_baseline is drawn from the same bullet's preceding year-over-year framing sentence, not from this quote's own words."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "comparison_baseline=prior_year rests on the release's document-wide statement 'All comparisons are versus the same period a year ago' rather than explicit YoY wording inside this exact quote; that blanket statement directly governs every comparison in the release, including this one."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001041061-26-000003#077",
+      "agrees": true,
+      "why": "Independently settled to the same driver_name, state, level/change values, units, comparison_baseline, period, and slice content."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#078",
+      "agrees": false,
+      "why": "Same driver identity, signed change values, measurement span, slices, and period as this lead, but the lead left comparison_baseline null citing quote-boundary caution, whereas this final settlement resolves it to prior_year because the sentence's own 'the change' anaphorically refers to the year-over-year comparison stated one sentence earlier in the same bullet, which directly governs it under Rule 6."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#079",
+      "agrees": true,
+      "why": "Independently settled to the same driver_name (foreign_currency_translation), reported state, point-shaped m_usd level values, and KFC segment slice for both Q4 ($10M) and FY ($12M)."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#080",
+      "agrees": true,
+      "why": "Independently settled to the same operating_profit / increased / +12% percent_yoy / prior_year / GAAP-measurement structure, both resolving the baseline from the document-wide 'a year ago' framing statement."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#081",
+      "agrees": true,
+      "why": "Independently reached the same abstention: a rounding/presentation-basis change is not a driver state/change/surprise/guidance/action fact."
+    }
+  ],
+  "open_issues": []
+}
+```

@@ -1,0 +1,33 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "surprise",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "beat",
+        "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "measurement_raw_spans": ["diluted"],
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "favorable",
+          "basis": "metric_meaning",
+          "evidence": "Diluted EPS is a per-share earnings measure; a higher actual value than the company's own prior guidance is unambiguously favorable with no mainstream counter-story.",
+          "sentence": "diluted EPS increased 1.2% to $25.64 per share above our previously provided guidance"
+        }
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

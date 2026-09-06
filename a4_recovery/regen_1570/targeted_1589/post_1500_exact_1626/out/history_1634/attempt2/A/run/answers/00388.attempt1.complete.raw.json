@@ -1,0 +1,10 @@
+```json
+{
+ "source_id": "bzNews_50877032",
+ "facts": [],
+ "abstentions": [
+  {"reason": "The target phrase is a generic risk-boilerplate characterization ('jet fuel costs are one of the most volatile expenses') describing an inherent, ongoing characteristic of the expense category, not a specific stated state, direction, size, or change for this event — it fails Rule 1's boilerplate gate."}
+ ],
+ "continuity_hints": []
+}
+```

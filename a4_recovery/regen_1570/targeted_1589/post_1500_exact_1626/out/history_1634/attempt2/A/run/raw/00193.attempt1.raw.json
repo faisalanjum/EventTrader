@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This item states the fiscal calendar structure (number of weeks in each fourth quarter across three years) — a definitional/administrative fact about how the reporting period is constructed, not a real statement about a driver's state, change, surprise, guidance, or action. It fails Rule 1's fact gate."
+    }
+  ],
+  "continuity_hints": []
+}
+```

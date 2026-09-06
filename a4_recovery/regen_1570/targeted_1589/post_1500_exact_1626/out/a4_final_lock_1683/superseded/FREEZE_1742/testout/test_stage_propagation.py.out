@@ -1,0 +1,54 @@
+ok   the runner leaves its stage loop on a failure        1 loop(s) with a break
+ok   the break is guarded by the child's return code      guard test Attribute(value=Name(id='p', ctx=Load()), attr='returncode',
+ok   a failed run ends nonzero                            the runner exits 2 on a failed stage
+ok   a4_20260905T202219.log: the failed stage is the last one 1 stage lines, failure at 0 (budget_receipt_1501)
+ok   a4_20260905T202219.log: the refusal names it         REFUSED: step budget_receipt_1501 failed
+ok   a4_20260905T202301.log: the failed stage is the last one 2 stage lines, failure at 1 (budget_receipt_1501)
+ok   a4_20260905T202301.log: the refusal names it         REFUSED: step budget_receipt_1501 failed
+ok   a4_20260905T210614.log: the failed stage is the last one 3 stage lines, failure at 2 (bind_1504)
+ok   a4_20260905T210614.log: the refusal names it         REFUSED: step bind_1504 failed
+ok   a4_20260905T213300.log: the failed stage is the last one 3 stage lines, failure at 2 (review_receipt_1502)
+ok   a4_20260905T213300.log: the refusal names it         REFUSED: step review_receipt_1502 failed
+ok   a4_20260905T214101.log: the failed stage is the last one 2 stage lines, failure at 1 (prepare_round1)
+ok   a4_20260905T214101.log: the refusal names it         REFUSED: step prepare_round1 failed
+ok   a4_20260905T214230.log: the failed stage is the last one 1 stage lines, failure at 0 (prepare_round1)
+ok   a4_20260905T214230.log: the refusal names it         REFUSED: step prepare_round1 failed
+ok   a4_20260905T214327.log: the failed stage is the last one 2 stage lines, failure at 1 (prepare_round1)
+ok   a4_20260905T214327.log: the refusal names it         REFUSED: step prepare_round1 failed
+ok   a4_20260905T215510.log: the failed stage is the last one 1 stage lines, failure at 0 (record_round1_states)
+ok   a4_20260905T215510.log: the refusal names it         REFUSED: step record_round1_states failed
+ok   a4_20260905T215630.log: the failed stage is the last one 2 stage lines, failure at 1 (finalize_round1)
+ok   a4_20260905T215630.log: the refusal names it         REFUSED: step finalize_round1 failed
+ok   a4_20260905T220656.log: the failed stage is the last one 1 stage lines, failure at 0 (bind_1504)
+ok   a4_20260905T220656.log: the refusal names it         REFUSED: step bind_1504 failed
+ok   a4_20260905T221545.log: the failed stage is the last one 1 stage lines, failure at 0 (bind_1504)
+ok   a4_20260905T221545.log: the refusal names it         REFUSED: step bind_1504 failed
+ok   a4_20260905T222735.log: the failed stage is the last one 1 stage lines, failure at 0 (ledger_after_round1)
+ok   a4_20260905T222735.log: the refusal names it         REFUSED: step ledger_after_round1 failed
+ok   a4_20260905T225436.log: the failed stage is the last one 1 stage lines, failure at 0 (prepare_1506)
+ok   a4_20260905T225436.log: the refusal names it         REFUSED: step prepare_1506 failed
+ok   a4_20260905T225740.log: the failed stage is the last one 1 stage lines, failure at 0 (build_package)
+ok   a4_20260905T225740.log: the refusal names it         REFUSED: step build_package failed
+ok   a4_20260905T230500.log: the failed stage is the last one 1 stage lines, failure at 0 (record_round1_states)
+ok   a4_20260905T230500.log: the refusal names it         REFUSED: step record_round1_states failed
+ok   a4_20260905T230912.log: the failed stage is the last one 4 stage lines, failure at 3 (finalize_round1)
+ok   a4_20260905T230912.log: the refusal names it         REFUSED: step finalize_round1 failed
+ok   a4_20260905T233607.log: the failed stage is the last one 1 stage lines, failure at 0 (budget_receipt_1508)
+ok   a4_20260905T233607.log: the refusal names it         REFUSED: step budget_receipt_1508 failed
+ok   a4_20260905T233713.log: the failed stage is the last one 1 stage lines, failure at 0 (budget_receipt_1508)
+ok   a4_20260905T233713.log: the refusal names it         REFUSED: step budget_receipt_1508 failed
+ok   a4_20260905T233805.log: the failed stage is the last one 1 stage lines, failure at 0 (budget_receipt_1508)
+ok   a4_20260905T233805.log: the refusal names it         REFUSED: step budget_receipt_1508 failed
+ok   a4_20260906T000956.log: the failed stage is the last one 1 stage lines, failure at 0 (evidence_1509)
+ok   a4_20260906T000956.log: the refusal names it         REFUSED: step evidence_1509 failed
+ok   a4_20260906T001123.log: the failed stage is the last one 1 stage lines, failure at 0 (evidence_1509)
+ok   a4_20260906T001123.log: the refusal names it         REFUSED: step evidence_1509 failed
+ok   a4_20260906T001158.log: the failed stage is the last one 1 stage lines, failure at 0 (evidence_1509)
+ok   a4_20260906T001158.log: the refusal names it         REFUSED: step evidence_1509 failed
+ok   a4_20260906T001345.log: the failed stage is the last one 1 stage lines, failure at 0 (ledger_check)
+ok   a4_20260906T001345.log: the refusal names it         REFUSED: step ledger_check failed
+ok   a4_20260906T003228.log: the failed stage is the last one 1 stage lines, failure at 0 (build_final_candidate)
+ok   a4_20260906T003228.log: the refusal names it         REFUSED: step build_final_candidate failed
+ok   a multi-stage run stopped at its failure             a4_20260905T202301.log 2 stages, failed at budget_receipt_1501; a4_20260905T210614.log 3 stages, failed at bind_1504; a4_20260905T213300.log 3 stages, failed at review_receipt_1502; a4_20260905T214101.log 2 stages, failed at prepare_round1; a4_20260905T214327.log 2 stages, failed at prepare_round1; a4_20260905T215630.log 2 stages, failed at finalize_round1; a4_20260905T230912.log 4 stages, failed at finalize_round1
+ok   failed runs were actually observed                   24 logs carry a failed stage
+53 passed / 0 failed

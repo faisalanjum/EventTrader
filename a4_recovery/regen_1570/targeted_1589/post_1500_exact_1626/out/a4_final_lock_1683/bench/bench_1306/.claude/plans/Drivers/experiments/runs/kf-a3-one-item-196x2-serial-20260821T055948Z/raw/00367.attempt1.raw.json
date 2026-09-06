@@ -1,0 +1,23 @@
+```json
+{
+ "source_id": "YUM_2026-02-04T08.15",
+ "facts": [
+  {
+   "fact_type": "guidance",
+   "item": {
+    "driver_name": "tax_rate",
+    "driver_state": "unknown",
+    "level_low": {"value": 22, "scale_multiplier": 1, "unit_scale_evidence": null},
+    "level_high": {"value": 24, "scale_multiplier": 1, "unit_scale_evidence": null},
+    "level_unit": "percent",
+    "level_shape_hint": "range",
+    "time_type": "duration",
+    "fiscal_year": 2026,
+    "company_confirmed": true
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}
+```

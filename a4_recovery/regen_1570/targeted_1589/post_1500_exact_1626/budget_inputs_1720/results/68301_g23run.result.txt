@@ -1,0 +1,7 @@
+batch_packet added
+run module rewired
+REFUSED: 3
+   * leg P1 does not score: 'NoneType' object is not iterable
+   * leg P2 does not score: 'NoneType' object is not iterable
+   * leg UNION does not score: 'NoneType' object is not iterable
+Shell cwd was reset to /home/faisal/EventMarketDB

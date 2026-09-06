@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "unknown",
+        "value_text": "expected to decelerate sequentially versus Q4",
+        "company_confirmed": true,
+        "comparison_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "6.8%"},
+        "comparison_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "6.8%"},
+        "comparison_shape_hint": "point",
+        "level_unit": "percent_sequential",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "slice_parts": ["segment:u_s_market"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,28 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_interest_expense",
+        "driver_state": "increased",
+        "level_low": {"value": 0.1, "scale_multiplier": 1, "unit_scale_evidence": "0.1%"},
+        "level_high": {"value": 0.1, "scale_multiplier": 1, "unit_scale_evidence": "0.1%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "comparison_low": {"value": -0.1, "scale_multiplier": 1, "unit_scale_evidence": "(0.1%)"},
+        "comparison_high": {"value": -0.1, "scale_multiplier": 1, "unit_scale_evidence": "(0.1%)"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "period_end_date": "2026-01-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

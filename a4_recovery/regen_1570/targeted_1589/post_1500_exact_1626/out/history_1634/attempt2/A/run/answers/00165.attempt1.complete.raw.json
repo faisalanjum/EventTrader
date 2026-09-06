@@ -1,0 +1,10 @@
+```json
+{
+ "source_id": "0001041061-26-000084",
+ "facts": [],
+ "abstentions": [
+  {"reason": "The quoted text is boilerplate 'new accounting pronouncement' disclosure reporting that FASB issued ASU 2025-06; it states only that a standard-setter issued guidance, not any state, change, surprise, guidance, or action of the company's own driver — the company merely says it is 'currently evaluating' impact, which is not itself a fact."}
+ ],
+ "continuity_hints": []
+}
+```

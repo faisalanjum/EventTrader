@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001104659-25-102611#096",
+  "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "This describes the fiscal-calendar structure of the reporting periods themselves (the number of weeks composing the fourth quarter in 2025/2024/2023, contrasted with the standard 12-week first three quarters) — it is period-definition/reporting-convention disclosure, not a statement about any driver's state, change, surprise, guidance, or action; it fails the Rule 1 fact gate as non-boilerplate but non-driver structural mechanics."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-102611#096/L1",
+      "exact_match": true,
+      "why": "Same lawful branch (no facts, single abstention) with the same core reasoning: the quote states fiscal-quarter week-count mechanics, not a driver fact, so it fails the Rule 1 gate."
+    },
+    {
+      "lane_id": "0001104659-25-102611#096/L2",
+      "exact_match": true,
+      "why": "Same lawful branch (no facts, single abstention) with the same core reasoning: the quote is a fiscal-calendar reporting-period convention (weeks per quarter), not a driver state/change/surprise/guidance/action, so it fails Rule 1."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,27 @@
+{
+ "schema": "a4-final-targeted-evidence-binding/1",
+ "run_dir": "/tmp/a4_final_targeted_corr3_run_1509",
+ "package": {
+  "dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_targeted_corr3_1508",
+  "manifest_sha256": "eb3cce1754ef354e449e650daa163e73818f101bdfc464d6ec0659390d48c634",
+  "prefix_sha256": "29672e0d91e3d68606fc9dbb53b19f1b2da2f841b8377b475bd6eca2bf780b90"
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "dir": "/tmp/a4_final_targeted_corr3_run_1509",
+   "receipt_sha256": "268f55910d888ced32895f4ed3337146090dc66137f408f11d80e8b136cde1dd",
+   "finalization_sha256": "603be212f3320a21c74ebedd44a16bb8495b8c2a2e17c128d3cb3c050ffa2fc9",
+   "raw_files": {
+    "0001041061-25-000109.attempt1.proved.json": "82aeee0afe5c1bcbdc882b4e65a44e97854a95755918444e844a9ae5b9466601",
+    "0001171843-26-001288.attempt1.proved.json": "3a05f89560ad34286bcfd652752b2ac70c61935ff4a7d3ac8870b669eaa8ab5f",
+    "wf_353e5904-0ad.000.raw.json": "3a05f89560ad34286bcfd652752b2ac70c61935ff4a7d3ac8870b669eaa8ab5f",
+    "wf_a082a079-d01.000.raw.json": "82aeee0afe5c1bcbdc882b4e65a44e97854a95755918444e844a9ae5b9466601"
+   },
+   "raw_tree": {
+    "files": 4,
+    "sha256": "6438b015564c8f504511e0619caebb8a1d8f85a7e12dd8b0c8ee22d04b442ef1"
+   }
+  }
+ ]
+}

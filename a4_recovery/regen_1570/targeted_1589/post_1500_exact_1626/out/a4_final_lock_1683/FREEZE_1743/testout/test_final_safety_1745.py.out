@@ -1,0 +1,17 @@
+ok   the old cache saw no dependency of test_boundary_checks_1743.py named files: []
+ok   so its key was the test file alone (test_boundary_checks_1743.py) 
+ok   the old cache saw no dependency of test_handoff_command_1744.py named files: []
+ok   so its key was the test file alone (test_handoff_command_1744.py) 
+ok   the live freeze has no such cache                          
+ok   and it runs the short checks once, unconditionally         
+ok   the restoration command is in the handoff                  
+ok   it compares the decompressed bytes, not just prints them   3 sha256sum uses
+ok   it does not use a fixed temporary name                     
+ok   valid control: an absent original is restored, parent made ['restored /tmp/restore_8l1b4tl1/sub/dir/original.jsonl']
+ok   an existing correct original is verified and left alone    ['present and correct - left unchanged']
+ok   a differing existing original is REFUSED and left unchanged ['REFUSED: /tmp/restore_3dond_bk/sub/dir/original.jsonl exists and differs - left unchanged']
+ok   a bad compressed input never creates the target            ['REFUSED: the compressed copy does not give 9829e1d12d8a963e2c2c5f480fe14e875cdcee2bd9ac1778a888cc71786ed669']
+ok   and it leaves no temporary behind                          
+ok   a wrong decompressed hash never creates the target         ['REFUSED: the compressed copy does not give 9829e1d12d8a963e2c2c5f480fe14e875cdcee2bd9ac1778a888cc71786ed669']
+ok   a publication that does not take place is REFUSED, not reported as success ['REFUSED: /tmp/restore_yvij5tjy/sub/dir/original.jsonl appeared while restoring - left unchanged']
+16 passed / 0 failed

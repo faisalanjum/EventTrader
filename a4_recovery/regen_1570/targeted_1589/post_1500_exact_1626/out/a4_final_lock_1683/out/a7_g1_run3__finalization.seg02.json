@@ -1,0 +1,108 @@
+{
+ "accounting_sha256": "96e661ed7ea6b97724111d3911102289cec102b9164ee13f5d5540925c2bb949",
+ "attempt": 1,
+ "candidate_sha256": "5d5798c7a1c711b5b94c1d325c46b986ec5b93e8997d8f69f92b41e8efd946c2",
+ "closure": "prelaunch_refusal",
+ "credited": 0,
+ "ledger": {
+  "invalid": 0,
+  "retry": 0,
+  "scheduled": 0,
+  "uncalled": 10,
+  "valid": 0
+ },
+ "problems": {
+  "G1-000/G1b": [
+   "prelaunch_refusal"
+  ],
+  "G1-001/G1a": [
+   "prelaunch_refusal"
+  ],
+  "G1-001/G1b": [
+   "prelaunch_refusal"
+  ],
+  "G1-002/G1a": [
+   "prelaunch_refusal"
+  ],
+  "G1-002/G1b": [
+   "prelaunch_refusal"
+  ],
+  "G1-003/G1a": [
+   "prelaunch_refusal"
+  ],
+  "G1-003/G1b": [
+   "prelaunch_refusal"
+  ],
+  "G1-004/G1a": [
+   "prelaunch_refusal"
+  ],
+  "G1-004/G1b": [
+   "prelaunch_refusal"
+  ],
+  "G1-005/G1a": [
+   "prelaunch_refusal"
+  ]
+ },
+ "receipt_sha256": "ab3af4b262cbdad59eba702f0ca751bea58028d76143ddfc07e201aaf7c7d791",
+ "refusal_sha256": "6065a4586ac60e46780a73c3abda8dd268204b94961933e267896982c406d64c",
+ "retry": [],
+ "root_sha256": "664bb96a11654fc0319ecbb30b399c84bcba99882f72a2fe847fe2dcf4ccbc56",
+ "schema": "a7_g1_candidate/2",
+ "segment": 2,
+ "state_audited": false,
+ "uncalled": [
+  "G1-000/G1b",
+  "G1-001/G1a",
+  "G1-001/G1b",
+  "G1-002/G1a",
+  "G1-002/G1b",
+  "G1-003/G1a",
+  "G1-003/G1b",
+  "G1-004/G1a",
+  "G1-004/G1b",
+  "G1-005/G1a"
+ ],
+ "validity": [
+  [
+   "G1-000/G1b",
+   false
+  ],
+  [
+   "G1-001/G1a",
+   false
+  ],
+  [
+   "G1-001/G1b",
+   false
+  ],
+  [
+   "G1-002/G1a",
+   false
+  ],
+  [
+   "G1-002/G1b",
+   false
+  ],
+  [
+   "G1-003/G1a",
+   false
+  ],
+  [
+   "G1-003/G1b",
+   false
+  ],
+  [
+   "G1-004/G1a",
+   false
+  ],
+  [
+   "G1-004/G1b",
+   false
+  ],
+  [
+   "G1-005/G1a",
+   false
+  ]
+ ],
+ "workflow_gate_sha256": "e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703"
+}

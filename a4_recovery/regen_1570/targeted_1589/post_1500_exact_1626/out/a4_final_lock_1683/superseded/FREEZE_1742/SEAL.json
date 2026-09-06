@@ -1,0 +1,13 @@
+{
+ "schema": "a4-recovery-freeze-seal/1742",
+ "manifest": "FREEZE_1742/MANIFEST.sha256",
+ "manifest_sha256": "a7a0ae99bde8314431bde526cc72470bb790340ad2ec71f597868ba2c1855937",
+ "manifest_rows": 7599,
+ "manifest_bytes": 599639355,
+ "whitelist_roots": 69,
+ "evidence_rows": 25,
+ "inventory_rows": 16,
+ "required_tests_passed": 8,
+ "lock": "63018354e6b26a8061a114934df15fe035b44fe031dcf00768b440983d43b8a0",
+ "lock_receipt": "7f1f7bef4d02b9c5501d9ec6d8d5b9eab5e8aab225092878b7280964bd5d44e3"
+}

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted phrase 'better-than-planned financial performance' is a generic, undifferentiated characterization of overall results with no specific metric or driver named (only the vague umbrella term 'financial performance'), so no lawful driver_name can be assigned per Rule 3.10 (no vague/generic category words); it also does not itself state which metric, value, or baseline was exceeded, so it cannot be grounded as a surprise fact (Rule 9 home-sibling/baseline requirement) separate from the specific quantified facts (net sales, comparable sales, EPS) reported elsewhere in the release."
+    }
+  ],
+  "continuity_hints": []
+}
+```

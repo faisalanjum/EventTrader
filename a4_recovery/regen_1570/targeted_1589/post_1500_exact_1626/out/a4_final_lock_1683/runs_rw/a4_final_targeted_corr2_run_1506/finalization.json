@@ -1,0 +1,97 @@
+{
+ "door": "a4_final_targeted_correction_2",
+ "version": "kfields-a4-final-targeted/1496",
+ "attempt": 1,
+ "run_id": "a4_final_targeted_corr2_run_1506",
+ "receipt_sha256": "281811031aeb9a50346ccd13b9261979f68b882802d4754347f1e906d43d421c",
+ "manifest_sha256": "85e2acf28b82c2cb1232a1791569083409daf6804b270dc565c792bf226c4fd4",
+ "derived_from": {
+  "key_owner_sha256": "2d90aed33aab8b99857c43cb12458344fe5cd7c76ed70936cbbcba53e5999bde",
+  "targeted_owner_sha256": "0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588",
+  "hard_review_owner_sha256": "8eb98ec03331a2a605d7ec04570a875004ed989099de4f74c4a22b511ad90986",
+  "hard_review_targeted_owner_sha256": "b7a72cab000ff3d2d70d76daae2abb89c6973101d4283079f7b721f3cc6176f3",
+  "final_owner_sha256": "bad84b2f9fab14443a167660dc631b8d556c143cf09233f54bf1c3b6b2649fee",
+  "final_targeted_owner_sha256": "8f1cba41a27727a211d088a499c9f4c3394dd67e551208d4cb9c670ef90316d9",
+  "inventory_review_owner_sha256": "fcd18139f6c1393c55b81042820c3004ec8eae362fbe4bc7e219639c5754dcf7",
+  "raw_parser_sha256": "05b02f5bb67944d39fcf726da043f768d5d640bddbe18754ce3c3ef6c4bc10de",
+  "gold_door_sha256": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "frozen_inventory_sha256": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff",
+  "corrected_inventory_sha256": "1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066",
+  "correction_receipt_sha256": "bc5ac688abe66763a5cc99f9fb3a3708ba15b83c9a47fd327ffaac2dcb653eab",
+  "targets": [
+   "0000006201-26-000031#001",
+   "0000006201-26-000031#006",
+   "0000006201-26-000031#008",
+   "0000027904-26-000022#029",
+   "0000092380-26-000044#042",
+   "0000940944-26-000005#065",
+   "0000940944-26-000009#068",
+   "0000940944-26-000009#072",
+   "0001041061-25-000109#075",
+   "0001104659-26-027061#115",
+   "0001171843-26-001288#133"
+  ],
+  "contract_package_sha256": "62a5c49ae71f323eff275e98ca60efaae18ca16ca6c15f447c10c9d5d8976154",
+  "locator_groups_sha256": "29293450b302e7e158daef7591ccd3bf57967101b907f176ad298ae548f60728",
+  "targeted_binding": {
+   "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/targeted_binding.json",
+   "binding_sha256": "55f39a34a16f710a24b069105b9c439c1ba761b8f486cc0e582c78435488d9f8",
+   "run_dir": "/tmp/a4_targeted_run_1491"
+  },
+  "hard_review_binding": {
+   "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/hard_review_targeted_binding.json",
+   "binding_sha256": "3ae97054b2ef3e7af9786cf12382de96987bc031f61bb1038dec19310a66428e",
+   "run_dir": "/tmp/a4_hard_review_run_1495"
+  },
+  "lead_binding": {
+   "binding_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr_binding.json",
+   "binding_sha256": "b1f516f6217ca05fae8bcb6af3b2f5ac3b259ab3ed571f09f79ef2a516ec48fd",
+   "run_dir": "/tmp/a4_final_targeted_corr_run_1504",
+   "package_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_targeted_corr_1503",
+   "manifest_sha256": "46759d90da1ac464b9bb3b8aaaa063392be1ccb81d1e0689a140532e75c09feb"
+  },
+  "review_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1505.json",
+   "sha256": "0bd44f2b7c4438bbbe4b1fd51da76e90acbbcb10dc37999ea98f7ceb91c0788d"
+  }
+ },
+ "harvested_raw": [
+  "wf_278b18c7-f5e.000.raw.json",
+  "wf_d85a10dc-da0.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "0000940944-26-000009",
+   "valid",
+   ""
+  ],
+  [
+   "0001041061-25-000109",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 2,
+  "valid": 2,
+  "invalid_response": 0,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "budget": {
+  "ledger_before": 5215,
+  "this_attempt": 2,
+  "spent_so_far": 2,
+  "ledger_after": 5217,
+  "frozen_primaries": 2,
+  "worst_case_after": 5219,
+  "a4_closeout_clean": 5218,
+  "a4_closeout_worst": 5221,
+  "global_ceiling": 6000,
+  "within_ceiling": true
+ },
+ "retry": []
+}

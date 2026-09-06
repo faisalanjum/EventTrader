@@ -1,0 +1,6 @@
+problems: 0 []
+path    : /tmp/a7_source_instants.json
+events  : 36
+by label: {"News": 4, "Report": 24, "Transcript": 8}
+by type : {"10k": 4, "10q": 8, "8k": 12, "news": 4, "transcript": 8}
+Shell cwd was reset to /home/faisal/EventMarketDB

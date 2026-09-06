@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#006",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "operating_revenue",
+          "driver_state": "increased",
+          "level_low": {"value": 13912, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_high": {"value": 13912, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": 12551, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_high": {"value": 12551, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "period_start_date": "2026-01-01",
+          "period_end_date": "2026-03-31"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#006/L1",
+      "exact_match": false,
+      "why": "L1 abstained on the premise that the millions scale marker sits outside the quote (in a header/footnote), but the supplied quote text itself begins with '(In millions, except share and per share amounts)' — the scale marker is inside the quote, so a lawful metric fact with scale_multiplier 1,000,000 is producible and abstention is wrong."
+    },
+    {
+      "lane_id": "0000006201-26-000031#006/L2",
+      "exact_match": false,
+      "why": "L2 built the correct fact shape (operating_revenue metric, point level 13912 vs comparison 12551, prior_year baseline, Q1 FY2026 duration) but used scale_multiplier 1 with unit_scale_evidence null instead of scale_multiplier 1,000,000 with unit_scale_evidence 'millions' taken from the in-quote header '(In millions, except share and per share amounts)', so the numeric slots are mis-scaled relative to Rule 5.5/5.6."
+    }
+  ],
+  "ambiguities": []
+}
+```

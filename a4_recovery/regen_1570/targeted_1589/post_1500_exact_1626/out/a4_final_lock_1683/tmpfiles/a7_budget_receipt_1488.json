@@ -1,0 +1,152 @@
+{
+ "schema": "a7_call_budget_receipt/1488",
+ "completed_before": 5168,
+ "completed_before_owner": "a6_launch_freeze.ledger()",
+ "completed_rows": [
+  {
+   "stage": "a3_and_v1_v5",
+   "owner": "build_kfields_final.v6_ledger_before",
+   "calls": 4442
+  },
+  {
+   "stage": "v6_correction",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z",
+   "receipt_sha256": "79e02d7548a9821cf0c429353f784653ba4b6d5f13c28e3ffba9cbd95ab53ab1",
+   "finalization_sha256": "3d7b16ad5cd881d82b74b5479ca91e0448114e4d4b67f510eb0e3b5a4af8229c",
+   "calls": 3
+  },
+  {
+   "stage": "signer",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-signer-20260823T180519Z",
+   "receipt_sha256": "dfab7c269e09bd98e051d1a4567d4e454b217a26154b0931f7a8a0f35c36543d",
+   "finalization_sha256": "1a625209d36ddbe1edf7fa066b5c3e636e25470f975ce3abb0bee623d6559ee0",
+   "calls": 1
+  },
+  {
+   "stage": "producer_primary",
+   "run_dir": "/tmp/a6_prepared_run",
+   "finalization_sha256": "fba7f866d44c596f4d46c9eee4c4862f7b1b7c01c2a5a719962997d496fcca80",
+   "raw_tree": "975bf2f9fdffe009f4a37448f619b6ee52cc5fbaa82cb71a9f06800f713cf2c6",
+   "calls": 392
+  },
+  {
+   "stage": "producer_retry",
+   "run_dir": "/tmp/a6_prepared_run/retry",
+   "finalization_sha256": "7e08df8b93ac1f44eb250d543178c9dc7b4ef4c317975d6700ca3ba8b0b3335a",
+   "raw_tree": "1fbb5b425b96867d77d9a2b64c09580269de58775b59d68c1843836c315d99bb",
+   "calls": 1
+  },
+  {
+   "stage": "producer_primary",
+   "run_dir": "/tmp/a7_v3_prepared_run_1479",
+   "finalization_sha256": "fc572d546cf81b4dba49432f5446c32ccc35c13167e31db09bff9cadb01ac081",
+   "raw_tree": "9ec7352460641707cc4932f61e4f1aeb38faaf7a9e3d46ed07c2d20bd9ee88e1",
+   "calls": 18
+  },
+  {
+   "stage": "prior_grading_and_probes",
+   "owner": "a7_g1_build.all_prior_calls",
+   "grading_calls": 303,
+   "probe_calls": 8,
+   "calls": 311
+  }
+ ],
+ "ceiling": 6000,
+ "ceiling_owner": "a7_g1_build.CEILING",
+ "stages": [
+  {
+   "stage": "key_review",
+   "owner": "build_kfields_key_targeted.targets x build_kfields_key.MAX_ATTEMPTS",
+   "primaries": 11,
+   "max_attempts": 2,
+   "shape": 11,
+   "min": 11,
+   "max": 22
+  },
+  {
+   "stage": "hard_review",
+   "owner": "build_kfields_hard_review: tasks are structural (unresolved / neither draft / exact-locator group); BLINDS x MAX_ATTEMPTS",
+   "tasks_max": 11,
+   "exact_locator_groups_among_targets": 0,
+   "blinds": 2,
+   "max_attempts": 2,
+   "shape": 0,
+   "min": 0,
+   "max": 44
+  },
+  {
+   "stage": "key_signing",
+   "owner": "build_kfields_final signer x MAX_ATTEMPTS",
+   "primaries": 1,
+   "max_attempts": 2,
+   "shape": 1,
+   "min": 1,
+   "max": 2
+  },
+  {
+   "stage": "producer",
+   "owner": "raw_transport.a1_limits(plan of the stopped run)",
+   "primaries": 392,
+   "retry_cap": 392,
+   "shape": 392,
+   "min": 392,
+   "max": 784
+  },
+  {
+   "stage": "g1",
+   "owner": "a7_g1_build: one call per (leg, event) with unmatched gold, GRADER_LANES x MAX_ATTEMPTS",
+   "legs": 3,
+   "events": 36,
+   "lanes": 2,
+   "max_attempts": 2,
+   "shape": 210,
+   "shape_artifact": "/tmp/a7_g1_event_run4/root.json",
+   "shape_artifact_sha256": "b491596136682a696876844bedd656c5cc71ff73b323f1be87d307514df3cf81",
+   "min": 0,
+   "max": 432
+  },
+  {
+   "stage": "g2",
+   "owner": "a7_g23_build.pack_batches: <= MAX_ITEMS_PER_CALL matched pairs per call, per leg, x lanes x MAX_ATTEMPTS",
+   "accepted_key_rows": 206,
+   "max_items_per_call": 10,
+   "legs": 3,
+   "lanes": 2,
+   "shape": 34,
+   "shape_artifact": "/tmp/a7_g2_candidate/a7_g1_candidate.json",
+   "shape_artifact_sha256": "21ae14e50050780e6dcac5451c72a4ed5d96b283d38f6f8cd78de2dccc180d19",
+   "min": 0,
+   "max": 252
+  },
+  {
+   "stage": "g3",
+   "owner": "a7_g23_build.pack_batches over unmatched PRODUCED records: not derivable before the producer run",
+   "shape": 92,
+   "questions": 357,
+   "batches": 46,
+   "shape_artifact": "/tmp/a7_g3_candidate/a7_g1_candidate.json",
+   "shape_artifact_sha256": "53a60ec15228c685b27da89b0bf4ff6c86ece4c78dbe3b9fff127f1040ae0c3a",
+   "min": 0,
+   "max": null,
+   "max_note": "bounded only by the produced count, which exists after the producer run; the lawful cap is the remaining headroom (a7_g23_run: the retry cap is headroom, not a per-row reservation)"
+  }
+ ],
+ "minimum_total": 5572,
+ "minimum_fits_ceiling": true,
+ "expected_shape_total": 5908,
+ "expected_shape_note": "the provisional no-retry shape: primaries at the latest accepted zero-call artifacts, no retries, no hard-review task; every stage population is re-derived by its owner after key settlement, the producer run and G1",
+ "headroom_at_shape": 92,
+ "known_maximum_subtotal": 6704,
+ "known_maximum_note": "the sum of every DERIVABLE structural maximum; it is not an absolute maximum",
+ "absolute_maximum": null,
+ "absolute_maximum_note": "unknown before the producer run: G3's maximum depends on the produced count",
+ "known_maximum_fits_ceiling": false,
+ "smallest_lawful_predeclared_bound": {
+  "bound": 6000,
+  "primaries_declared": 5572,
+  "headroom_for_retries_hard_review_and_g3": 428,
+  "rule": "every future call is checked against the ceiling before it is armed; retries, hard-review tasks and G3 batches are headroom, never per-row reservations, and the run stops at the ceiling"
+ },
+ "calls_armed": 0,
+ "receipt_sha256": "3d4fa8bdb9b130bcdb45d7a8e27d8a4dc8a3fb5eb69f8c97de05c95e22b72fa6"
+}

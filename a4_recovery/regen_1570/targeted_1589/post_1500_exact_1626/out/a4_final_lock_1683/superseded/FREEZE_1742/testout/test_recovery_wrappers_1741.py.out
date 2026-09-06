@@ -1,0 +1,23 @@
+ok   valid control: the filter keeps exactly the stages named ['bind_1509', 'ledger_check']
+ok   wrong stage order is impossible: the naming order is kept named ledger_check first and ORDER agrees only by accident: ['ledger_check', 'bind_1509']
+ok   an unfiltered run is the whole order                     29 stages
+ok   a stage this pipeline does not have is refused           
+ok   missing required input: the ledger gate refuses with no expected total rc=1 ['REFUSE: A4_LEDGER (the expected total) was not given']
+ok   wrong required input: budget runner on the corrected generator status None
+ok   wrong required input: budget runner on a superseded generator status 'REFUSE: the bound generator is not the corrected one'
+ok   wrong required input: budget runner on an empty file     status 'REFUSE: the bound generator is not the corrected one'
+ok   nonzero child: candidate wrapper on builder rc=0         status None
+ok   nonzero child: candidate wrapper on builder rc=1         status 'REFUSE: the candidate builder did not run'
+ok   nonzero child: candidate wrapper on builder rc=2         status 'REFUSE: the candidate builder did not run'
+ok   nonzero child: candidate wrapper on builder rc=-9        status 'REFUSE: the candidate builder did not run'
+ok   no executed pass / skip: test runner on four executed passes status None
+ok   no executed pass / skip: test runner on a skip           status 'REFUSE: 3 passed, not the 4 selected cases'
+ok   no executed pass / skip: test runner on all four passing but one skipped too status "REFUSE: a skipped or failing test is not a pass ({'passed': 4, 'skipped': 1})"
+ok   no executed pass / skip: test runner on too few passes   status 'REFUSE: 2 passed, not the 4 selected cases'
+ok   no executed pass / skip: test runner on a failure        status 'REFUSE: the test gate failed'
+ok   no executed pass / skip: test runner on nothing collected status 'REFUSE: None passed, not the 4 selected cases'
+ok   differing durable byte: the seeder refuses rather than overwrite rc=1 ['   REFUSE differing byte: receipt.json']
+ok   valid control: the seeder accepts the identical byte     ['a_run: placed 0  already present 1  refused 0']
+ok   unknown owner: the placer refuses a hash no proved owner has ['REFUSE: no proved owner at 0000000000000000']
+ok   unknown file: the placer refuses a name the bench does not carry ['REFUSE: the bench carries no not_a_bench_file.py']
+22 passed / 0 failed

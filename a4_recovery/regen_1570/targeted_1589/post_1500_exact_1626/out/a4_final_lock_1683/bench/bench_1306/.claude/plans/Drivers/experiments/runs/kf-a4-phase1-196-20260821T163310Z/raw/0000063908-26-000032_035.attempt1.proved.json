@@ -1,0 +1,70 @@
+```json
+{
+  "packet_id": "0000063908-26-000032#035",
+  "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "systemwide_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 139, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "floor",
+          "level_unit": "m_usd",
+          "change_value": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "measurement_raw_spans": ["5% in constant currencies"],
+          "fiscal_year": 2025,
+          "period_start_date": "2025-01-01",
+          "period_end_date": "2025-12-31",
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "systemwide_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 139, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "floor",
+          "level_unit": "m_usd",
+          "change_value": {"value": 9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "change_unit": "m_usd",
+          "comparison_baseline": "prior_year",
+          "measurement_raw_spans": ["$7 billion in constant currencies"],
+          "fiscal_year": 2025,
+          "period_start_date": "2025-01-01",
+          "period_end_date": "2025-12-31",
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000063908-26-000032#035/L1",
+      "exact_match": false,
+      "why": "L1 emits only the percent-basis fact (7%, 5% constant-currency), and misattaches the dollar constant-currency span '$7 billion in constant currencies' to that percent fact instead of a separate dollar-basis fact; it entirely drops the source-stated $9 billion (m_usd) change that Rule 5a.4's multi-basis split requires as its own fact."
+    },
+    {
+      "lane_id": "0000063908-26-000032#035/L2",
+      "exact_match": false,
+      "why": "L2 emits only the dollar-basis fact (9 billion, m_usd) with an incomplete measurement span ('in constant currencies' instead of the full contiguous '$7 billion in constant currencies'), omits comparison_baseline, and entirely drops the percent-basis fact (7%, 5% constant-currency) required by the split."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether growth stated both as a percentage (7%, 5% constant currency) and as an absolute dollar amount ($9 billion, $7 billion constant currency) for the same full-year change counts as 'a value stated on two or more bases' under Rule 5a.4, requiring a split into two metric facts, versus capturing only one representation.",
+      "why": "The split rule's text sits inside a paragraph specifically about percent-family growth bases (YoY/sequential/points), so it is unclear whether it also governs a percent-vs-absolute-dollar duplication of the same change; a narrower reading would mean one of the two source-stated numbers (7% or $9 billion) is never captured in any fact, which conflicts with Rule 5.4's 'every stated digit' principle."
+    },
+    {
+      "what": "Whether comparison_baseline='prior_year' is licensed on this bullet, since 'increased 7%... to over $139 billion, or growth of $9 billion' does not itself say 'vs 2024' the way the release's comparable-sales definition explicitly states its prior-year basis elsewhere.",
+      "why": "Rule 9.2 allows comparison_baseline on a metric 'only when the source states that comparison'; here the prior-year comparison is only implied by the release's standard full-year-over-full-year framing rather than stated in this specific sentence, so leaving it null instead of prior_year is also defensible."
+    }
+  ]
+}
+```

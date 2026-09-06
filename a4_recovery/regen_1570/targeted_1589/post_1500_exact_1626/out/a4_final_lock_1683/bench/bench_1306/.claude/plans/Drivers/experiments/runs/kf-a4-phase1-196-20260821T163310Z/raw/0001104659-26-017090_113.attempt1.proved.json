@@ -1,0 +1,57 @@
+```json
+{
+  "packet_id": "0001104659-26-017090#113",
+  "settled": {
+    "source_id": "0001104659-26-017090",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "margin",
+          "driver_state": "unknown",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "item": {
+          "driver_name": "margin",
+          "driver_state": "in_line",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": false
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-017090#113/L1",
+      "exact_match": false,
+      "why": "L1 names the driver 'operating_margin' (an unstated specificity — the quote only says 'Margins' with no qualifier), marks the surprise 'beat' with has_favorability_wording true, and adds a period_end_date; settled uses the undifferentiated name 'margin', rules 'in_line' because 'toward the higher end' places the value inside the closed expectation range (Rule 9.3), treats that phrase as positional rather than explicit favorability wording, and omits the unstated exact date."
+    },
+    {
+      "lane_id": "0001104659-26-017090#113/L2",
+      "exact_match": false,
+      "why": "L2 matches settled on driver_state ('unknown'/'in_line') and has_favorability_wording (false), and correctly omits period_end_date, but it names the driver 'operating_margin', adding a margin type the bare quote 'Margins' never specifies; settled keeps the undifferentiated name 'margin' instead."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the driver should be named the generic 'margin' or a specific type like 'operating_margin'.",
+      "why": "The located quote says only 'Margins' with no qualifier (gross, operating, restaurant-level, adjusted); Rule 3.3 says a familiar broad name is for undifferentiated mentions and forbids inventing specificity the source doesn't state, but 'operating_margin' is a plausible reader inference from the surrounding income-statement context — genuine naming ambiguity, not resolved by guessing."
+    },
+    {
+      "what": "Whether 'finished toward the higher end of our expectations' counts as explicit favorability wording.",
+      "why": "The phrase signals a favorable position but is framed as a location within a range rather than an explicit beat/exceed statement; Rule 9.3's within-range correction to in_line applies either way here, but the true/false call on has_favorability_wording itself is a judgment call the rules don't pin down with a bright line."
+    }
+  ]
+}
+```

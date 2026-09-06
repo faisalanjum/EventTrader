@@ -1,0 +1,48 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "special_items_per_share",
+        "driver_state": "decreased",
+        "level_low": {"value": -0.16, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": -0.16, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": -0.02, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_high": {"value": -0.02, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2025
+      }
+    },
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "special_items_per_share",
+        "driver_state": "decreased",
+        "level_low": {"value": -0.67, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": -0.67, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": -0.14, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_high": {"value": -0.14, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "period_scope": "ytd",
+        "period_end_date": "2025-09-30"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

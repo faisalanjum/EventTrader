@@ -1,0 +1,97 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_50877032",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "miami_international_airport_concourse_d_construction",
+              "driver_state": "announced",
+              "level_low": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_year": 2027,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 1 was proposed as a real item and settles as one: American Airlines' own announced $1B action to build Concourse D at Miami International Airport starting 2027 is a genuine action_event, though on re-audit Miami International Airport is kept inside driver_name (not coined as a geography slice) because it is an external, third-party-owned facility rather than one of AA's own measured geography populations."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "bzNews_50877032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Benzinga Edge Rankings' Momentum/Growth/Long-term price-trend scores are a third-party editorial/algorithmic scoring widget's generic characterization of the stock, not a company-stated driver state, change, guidance, surprise, or action; it fails the gate as non-disclosure boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Row 2 was proposed as a negative control and settles the same way: a third-party ranking widget's generic score carries no company-disclosed driver fact, so it correctly yields no DriverUpdate."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "bzNews_50877032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "\"Jet fuel costs are one of the most volatile expenses for the airline\" is a generic, evergreen truism about the expense category's inherent nature (true of any airline at any time) rather than a specific reported level, change, guidance, or action for this event/period, so it fails the gate as generic risk boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Row 3 was proposed as a negative control and settles the same way: the sentence is a generic, evergreen characterization of jet-fuel-cost volatility, not a period-specific disclosed fact, so it correctly yields no DriverUpdate."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/bzNews_50877032#192",
+      "agrees": false,
+      "why": "This lead coins 'geography:miami international airport' as a slice and drops the airport from driver_name, but the airport is an external, third-party-owned facility that is not AA's own measured geography, so it belongs in driver_name (not a slice) and the settled name keeps it there."
+    },
+    {
+      "lead_id": "hr-026/b1/row1",
+      "agrees": true,
+      "why": "This lead's driver_name 'miami_airport_concourse_d_construction' keeps the airport in the name with no slice_parts and preserves the specific Concourse D instrument, matching the settled treatment (the dropped word 'international' is a lawful synonym, meaning not spelling controls)."
+    },
+    {
+      "lead_id": "hr-026/b2/row1",
+      "agrees": false,
+      "why": "This lead's driver_name 'miami_airport_expansion' correctly keeps the airport in the name and omits a slice, but it drops the stated specific instrument 'Concourse D', which Rule 3.3 requires be preserved over a broader generic label."
+    },
+    {
+      "lead_id": "phase1/bzNews_50877032#193",
+      "agrees": true,
+      "why": "Same lawful branch (no facts, one abstention) with the same core reasoning that the Benzinga Edge Rankings scores are generic third-party scoring, not a company-disclosed driver fact."
+    },
+    {
+      "lead_id": "phase1/bzNews_50877032#194",
+      "agrees": true,
+      "why": "Same lawful branch (no facts, one abstention) with the same core reasoning that the jet-fuel-volatility sentence is generic, evergreen boilerplate rather than a period-specific driver fact."
+    }
+  ],
+  "open_issues": []
+}
+```

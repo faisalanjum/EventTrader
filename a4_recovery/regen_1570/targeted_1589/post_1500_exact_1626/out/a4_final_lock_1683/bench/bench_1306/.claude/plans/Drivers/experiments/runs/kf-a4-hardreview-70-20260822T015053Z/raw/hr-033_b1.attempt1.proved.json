@@ -1,0 +1,42 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "high_efficiency_equipment_package_restaurant_count",
+          "driver_state": "reported",
+          "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_end_date": "2026-02-03"
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "high_efficiency_equipment_package_restaurant_count",
+          "driver_state": "unknown",
+          "level_low": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_end_date": "2026-12-31",
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Item 1 reports an already-realized, present-tense count (\"350 restaurants have the full equipment package today\"), a metric with state reported and period anchored to the call date, while item 2 uses the outlook verb \"anticipate\" for a different future count (\"about 2,000 by year end\"), which Rule 2 forces into the guidance lane with its own target period at fiscal year end 2026 -- different fact_type, different value, and different period make these two distinct facts about the same underlying rollout, not one fact."
+}
+```
