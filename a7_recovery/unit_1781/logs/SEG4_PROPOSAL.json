@@ -1,0 +1,62 @@
+{
+ "typed_args_array": {
+  "rows": 34,
+  "type": "list",
+  "sha256": "11025f699fbf6ea4c98332bbec05187ab70b2c47887b35301cc54cbdb07a3556",
+  "lanes": [
+   "G1-041/G1a",
+   "G1-041/G1b",
+   "G1-042/G1a",
+   "G1-042/G1b",
+   "G1-043/G1a",
+   "G1-043/G1b",
+   "G1-044/G1a",
+   "G1-044/G1b",
+   "G1-045/G1a",
+   "G1-045/G1b",
+   "G1-046/G1a",
+   "G1-046/G1b",
+   "G1-047/G1a",
+   "G1-047/G1b",
+   "G1-048/G1a",
+   "G1-048/G1b",
+   "G1-049/G1a",
+   "G1-049/G1b",
+   "G1-050/G1a",
+   "G1-050/G1b",
+   "G1-051/G1a",
+   "G1-051/G1b",
+   "G1-052/G1a",
+   "G1-052/G1b",
+   "G1-053/G1a",
+   "G1-053/G1b",
+   "G1-054/G1a",
+   "G1-054/G1b",
+   "G1-055/G1a",
+   "G1-055/G1b",
+   "G1-056/G1a",
+   "G1-056/G1b",
+   "G1-057/G1a",
+   "G1-057/G1b"
+  ]
+ },
+ "script": {
+  "logical_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg04.js",
+  "durable_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/proposed_run/grade_batch.seg04.js",
+  "same_file_proved": true,
+  "sha256": "36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757",
+  "bytes": 520690
+ },
+ "root_sha256": "cb161efeab864d109d47e9134012132ba0cda1a21673dcca0758dcceb3c9b9fb",
+ "receipt_seg04_sha256": "208b1dd490058224d2566a95c3f9b5f7ce6751c8afc1cbc41ca64dbeb7e5e5a3",
+ "cache_expectation": {
+  "cache_hits": 4,
+  "new_calls": 30,
+  "note": "Codex SEQ 1781 recomputed all 34 v2 keys: four completed journal keys hit, the fifth is started-without-result, 29 never started. This is a statement of expectation only; NO call is authorized or made here."
+ },
+ "stopped_before": [
+  "launch",
+  "ingest",
+  "finalization"
+ ]
+}

@@ -1,0 +1,14 @@
+{
+ "published_root": "9af8e5ca553e0a4cf0dff2107fef4b8e6ffe0f4e50c72b429554c5cbe72a1691",
+ "proposed_root": "cb161efeab864d109d47e9134012132ba0cda1a21673dcca0758dcceb3c9b9fb",
+ "differences": [
+  {
+   "path": "/owners/audit_worker_access",
+   "published": "d23ef33d396206569f6044702d23deac6f070b45c96451b70d2f8d2363a7d7a1",
+   "proposed": "816bbc722a8aff2a2385513c542afa292d6ad34f559e1897497fa02823f63780"
+  }
+ ],
+ "only_audit_owner_differs": true,
+ "rows": 206,
+ "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a"
+}

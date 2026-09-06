@@ -1,0 +1,221 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/invocation.seg04.json",
+ "invocation_sha256": "6fdfd68c28c54fec79b354b671e9ae312ee9efeaa7a8dccb9f998e5e851f52c4",
+ "parent": null,
+ "reservation_sha256": "f390b5099ac9143f4813c6320b6c06bd797609fbf91d85470e2a16ff4f65ddbb",
+ "root_sha256": "cb161efeab864d109d47e9134012132ba0cda1a21673dcca0758dcceb3c9b9fb",
+ "rows": [
+  {
+   "batch_id": "G1-041",
+   "lane_id": "G1-041/G1a",
+   "ordinal": 82,
+   "prompt_sha256": "d5cae4e25f2ec072630c1ec0b36fd0a03c16352ae86f395f6292294c779769ca"
+  },
+  {
+   "batch_id": "G1-041",
+   "lane_id": "G1-041/G1b",
+   "ordinal": 83,
+   "prompt_sha256": "d5cae4e25f2ec072630c1ec0b36fd0a03c16352ae86f395f6292294c779769ca"
+  },
+  {
+   "batch_id": "G1-042",
+   "lane_id": "G1-042/G1a",
+   "ordinal": 84,
+   "prompt_sha256": "e78258c62068373ffb3dedcbb17b688209ca756ea1b2a9056094ebf970f22138"
+  },
+  {
+   "batch_id": "G1-042",
+   "lane_id": "G1-042/G1b",
+   "ordinal": 85,
+   "prompt_sha256": "e78258c62068373ffb3dedcbb17b688209ca756ea1b2a9056094ebf970f22138"
+  },
+  {
+   "batch_id": "G1-043",
+   "lane_id": "G1-043/G1a",
+   "ordinal": 86,
+   "prompt_sha256": "e8a0ac8292e98745d024f9e6ebfcf11d5fd69a4667c3960903b55d5c75cea22f"
+  },
+  {
+   "batch_id": "G1-043",
+   "lane_id": "G1-043/G1b",
+   "ordinal": 87,
+   "prompt_sha256": "e8a0ac8292e98745d024f9e6ebfcf11d5fd69a4667c3960903b55d5c75cea22f"
+  },
+  {
+   "batch_id": "G1-044",
+   "lane_id": "G1-044/G1a",
+   "ordinal": 88,
+   "prompt_sha256": "21db5b9857dd9c0b100e2ca3bef47e6f9abaf4b477b6c6d7dc2394afc51ba807"
+  },
+  {
+   "batch_id": "G1-044",
+   "lane_id": "G1-044/G1b",
+   "ordinal": 89,
+   "prompt_sha256": "21db5b9857dd9c0b100e2ca3bef47e6f9abaf4b477b6c6d7dc2394afc51ba807"
+  },
+  {
+   "batch_id": "G1-045",
+   "lane_id": "G1-045/G1a",
+   "ordinal": 90,
+   "prompt_sha256": "154aedd13ba4a7b4171c201ebec9ee58a5ac4cb4ac4ba0a310891c64aeb0ca6a"
+  },
+  {
+   "batch_id": "G1-045",
+   "lane_id": "G1-045/G1b",
+   "ordinal": 91,
+   "prompt_sha256": "154aedd13ba4a7b4171c201ebec9ee58a5ac4cb4ac4ba0a310891c64aeb0ca6a"
+  },
+  {
+   "batch_id": "G1-046",
+   "lane_id": "G1-046/G1a",
+   "ordinal": 92,
+   "prompt_sha256": "bfc2be0ffe5194fbc37054c3d72ab46f96809b9e08ef8c48667e8f242a66be8c"
+  },
+  {
+   "batch_id": "G1-046",
+   "lane_id": "G1-046/G1b",
+   "ordinal": 93,
+   "prompt_sha256": "bfc2be0ffe5194fbc37054c3d72ab46f96809b9e08ef8c48667e8f242a66be8c"
+  },
+  {
+   "batch_id": "G1-047",
+   "lane_id": "G1-047/G1a",
+   "ordinal": 94,
+   "prompt_sha256": "7d191303df36a45b7894c6131b5719674aca52716ba89fff61077a440845e571"
+  },
+  {
+   "batch_id": "G1-047",
+   "lane_id": "G1-047/G1b",
+   "ordinal": 95,
+   "prompt_sha256": "7d191303df36a45b7894c6131b5719674aca52716ba89fff61077a440845e571"
+  },
+  {
+   "batch_id": "G1-048",
+   "lane_id": "G1-048/G1a",
+   "ordinal": 96,
+   "prompt_sha256": "703655b14c2a1172599da7b98a552575ce527dad3b4d5657f53fde708879e688"
+  },
+  {
+   "batch_id": "G1-048",
+   "lane_id": "G1-048/G1b",
+   "ordinal": 97,
+   "prompt_sha256": "703655b14c2a1172599da7b98a552575ce527dad3b4d5657f53fde708879e688"
+  },
+  {
+   "batch_id": "G1-049",
+   "lane_id": "G1-049/G1a",
+   "ordinal": 98,
+   "prompt_sha256": "aae50f4ab84638e0b1a9f98c6205e1ad6db24c63cab8d39630dffac977b57a14"
+  },
+  {
+   "batch_id": "G1-049",
+   "lane_id": "G1-049/G1b",
+   "ordinal": 99,
+   "prompt_sha256": "aae50f4ab84638e0b1a9f98c6205e1ad6db24c63cab8d39630dffac977b57a14"
+  },
+  {
+   "batch_id": "G1-050",
+   "lane_id": "G1-050/G1a",
+   "ordinal": 100,
+   "prompt_sha256": "d08e62e8c6548feda892d5dcfd0bf144008500f102ba0a7701b17f3fd8693787"
+  },
+  {
+   "batch_id": "G1-050",
+   "lane_id": "G1-050/G1b",
+   "ordinal": 101,
+   "prompt_sha256": "d08e62e8c6548feda892d5dcfd0bf144008500f102ba0a7701b17f3fd8693787"
+  },
+  {
+   "batch_id": "G1-051",
+   "lane_id": "G1-051/G1a",
+   "ordinal": 102,
+   "prompt_sha256": "2be310e8fed910cc2f32dadaf6b9469ed2e3d5ec29036ae727db22b66c6942a1"
+  },
+  {
+   "batch_id": "G1-051",
+   "lane_id": "G1-051/G1b",
+   "ordinal": 103,
+   "prompt_sha256": "2be310e8fed910cc2f32dadaf6b9469ed2e3d5ec29036ae727db22b66c6942a1"
+  },
+  {
+   "batch_id": "G1-052",
+   "lane_id": "G1-052/G1a",
+   "ordinal": 104,
+   "prompt_sha256": "eb475e33ce857a969445d643a754dc06dc81b739f821985a1308259547f837f7"
+  },
+  {
+   "batch_id": "G1-052",
+   "lane_id": "G1-052/G1b",
+   "ordinal": 105,
+   "prompt_sha256": "eb475e33ce857a969445d643a754dc06dc81b739f821985a1308259547f837f7"
+  },
+  {
+   "batch_id": "G1-053",
+   "lane_id": "G1-053/G1a",
+   "ordinal": 106,
+   "prompt_sha256": "3078c49e5dfe0eeb51ad282816ce0e2b6e315cd80d566d466ee78b8f8411868d"
+  },
+  {
+   "batch_id": "G1-053",
+   "lane_id": "G1-053/G1b",
+   "ordinal": 107,
+   "prompt_sha256": "3078c49e5dfe0eeb51ad282816ce0e2b6e315cd80d566d466ee78b8f8411868d"
+  },
+  {
+   "batch_id": "G1-054",
+   "lane_id": "G1-054/G1a",
+   "ordinal": 108,
+   "prompt_sha256": "910103ee3d79b06463c191e2d9fa59b3d242bc872858091e258a11761f047dff"
+  },
+  {
+   "batch_id": "G1-054",
+   "lane_id": "G1-054/G1b",
+   "ordinal": 109,
+   "prompt_sha256": "910103ee3d79b06463c191e2d9fa59b3d242bc872858091e258a11761f047dff"
+  },
+  {
+   "batch_id": "G1-055",
+   "lane_id": "G1-055/G1a",
+   "ordinal": 110,
+   "prompt_sha256": "5176e03d14fb3ad8951f499fea70381c18a9139179112f1bcecd3e27299d8992"
+  },
+  {
+   "batch_id": "G1-055",
+   "lane_id": "G1-055/G1b",
+   "ordinal": 111,
+   "prompt_sha256": "5176e03d14fb3ad8951f499fea70381c18a9139179112f1bcecd3e27299d8992"
+  },
+  {
+   "batch_id": "G1-056",
+   "lane_id": "G1-056/G1a",
+   "ordinal": 112,
+   "prompt_sha256": "d634410ba0ed201a8fd6f8f9c7afe9ba6b04c87bd0408d9fe27cfcde93c87535"
+  },
+  {
+   "batch_id": "G1-056",
+   "lane_id": "G1-056/G1b",
+   "ordinal": 113,
+   "prompt_sha256": "d634410ba0ed201a8fd6f8f9c7afe9ba6b04c87bd0408d9fe27cfcde93c87535"
+  },
+  {
+   "batch_id": "G1-057",
+   "lane_id": "G1-057/G1a",
+   "ordinal": 114,
+   "prompt_sha256": "e874ed3354d1b69cbac39bbd0b03e4e54e2e698a4b370dbc4cc49c1a2539d36b"
+  },
+  {
+   "batch_id": "G1-057",
+   "lane_id": "G1-057/G1b",
+   "ordinal": 115,
+   "prompt_sha256": "e874ed3354d1b69cbac39bbd0b03e4e54e2e698a4b370dbc4cc49c1a2539d36b"
+  }
+ ],
+ "run_id": "g1_precall_run_1525",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg04.js",
+ "script_sha256": "36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757",
+ "segment": 4,
+ "state_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/state.seg04.json"
+}

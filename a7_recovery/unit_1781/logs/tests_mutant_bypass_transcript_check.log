@@ -1,0 +1,101 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -p no:cacheprovider -q --no-header -rf /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_g1_cached_resume_1781.py
+CWD: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+--- STDOUT ---
+.......................................FFFFFF....                        [100%]
+=================================== FAILURES ===================================
+_____________ test_a_cached_row_with_a_corrupted_prompt_is_refused _____________
+
+    @_needs
+    def test_a_cached_row_with_a_corrupted_prompt_is_refused():
+        def m(recs):
+            recs[0]["message"]["content"] = "a different prompt entirely"
+>       assert _corrupt_transcript(_first_agent_id(), m)
+E       AssertionError: assert []
+E        +  where [] = _corrupt_transcript('a3c7953724eb0553a', <function test_a_cached_row_with_a_corrupted_prompt_is_refused.<locals>.m at 0x7f3900743060>)
+E        +    where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:302: AssertionError
+_____________ test_a_cached_row_with_a_corrupted_model_is_refused ______________
+
+    @_needs
+    def test_a_cached_row_with_a_corrupted_model_is_refused():
+        def m(recs):
+            for r in recs:
+                if r.get("type") == "assistant":
+                    r["message"]["model"] = "claude-opus-4"
+>       assert _corrupt_transcript(_first_agent_id(), m)
+E       AssertionError: assert []
+E        +  where [] = _corrupt_transcript('a3c7953724eb0553a', <function test_a_cached_row_with_a_corrupted_model_is_refused.<locals>.m at 0x7f390066e7a0>)
+E        +    where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:311: AssertionError
+_____________ test_a_cached_row_with_a_corrupted_effort_is_refused _____________
+
+    @_needs
+    def test_a_cached_row_with_a_corrupted_effort_is_refused():
+        def m(recs):
+            for r in recs:
+                if "effort" in r:
+                    r["effort"] = "low"
+>       assert _corrupt_transcript(_first_agent_id(), m)
+E       AssertionError: assert []
+E        +  where [] = _corrupt_transcript('a3c7953724eb0553a', <function test_a_cached_row_with_a_corrupted_effort_is_refused.<locals>.m at 0x7f390066eac0>)
+E        +    where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:320: AssertionError
+____________ test_a_cached_row_with_a_corrupted_session_is_refused _____________
+
+    @_needs
+    def test_a_cached_row_with_a_corrupted_session_is_refused():
+        def m(recs):
+            recs[0]["sessionId"] = "00000000-0000-0000-0000-000000000000"
+>       assert _corrupt_transcript(_first_agent_id(), m)
+E       AssertionError: assert []
+E        +  where [] = _corrupt_transcript('a3c7953724eb0553a', <function test_a_cached_row_with_a_corrupted_session_is_refused.<locals>.m at 0x7f390066eb60>)
+E        +    where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:327: AssertionError
+____________ test_a_cached_row_with_a_corrupted_agent_id_is_refused ____________
+
+    @_needs
+    def test_a_cached_row_with_a_corrupted_agent_id_is_refused():
+        def m(recs):
+            for r in recs:
+                r["agentId"] = "a0000000000000000"
+>       assert _corrupt_transcript(_first_agent_id(), m)
+E       AssertionError: assert []
+E        +  where [] = _corrupt_transcript('a3c7953724eb0553a', <function test_a_cached_row_with_a_corrupted_agent_id_is_refused.<locals>.m at 0x7f390066ee80>)
+E        +    where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:335: AssertionError
+________________ test_a_cached_row_that_used_a_tool_is_refused _________________
+
+    @_needs
+    def test_a_cached_row_that_used_a_tool_is_refused():
+        def m(recs):
+            for r in recs:
+                if r.get("type") == "assistant":
+                    c = r["message"]["content"]
+                    if isinstance(c, list):
+                        c.append({"type": "tool_use", "id": "tu_1", "name": "Read",
+                                  "input": {}})
+                        return
+>       assert _corrupt_transcript(_first_agent_id(), m)
+E       AssertionError: assert []
+E        +  where [] = _corrupt_transcript('a3c7953724eb0553a', <function test_a_cached_row_that_used_a_tool_is_refused.<locals>.m at 0x7f390066ef20>)
+E        +    where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:348: AssertionError
+=========================== short test summary info ============================
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_a_corrupted_prompt_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_a_corrupted_model_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_a_corrupted_effort_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_a_corrupted_session_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_a_corrupted_agent_id_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_that_used_a_tool_is_refused
+6 failed, 43 passed in 1.05s
+
+--- STDERR ---
+
+--- EXIT ---
+1

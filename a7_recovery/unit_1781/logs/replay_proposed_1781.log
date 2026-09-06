@@ -1,0 +1,35 @@
+seg 1 prepared: lanes 30 predicted_bytes 519064 receipt 50d98ad370cf4a8f
+  receipt CHANGED by the owner snapshot (expected): 50d98ad370cf4a8fb46b9cb9c36a647e21bf091dbb1e92c311eb2de72c4cd852
+  OFFICIAL_ROWS  30
+  LEDGER         {"invalid":0,"retry":0,"scheduled":30,"uncalled":0,"valid":30}
+  RETRY          [] UNCALLED []
+  NONVALID       [] why {}
+  SEGMENT_CLEAN  True
+  finalization  0021763155a41193e377b08853e79e272fe013009507e88951428bed73a9f78b
+  finalization CHANGED by the owner snapshot, as expected (published run had 540000fbc2f5bebb)
+seg 2 prepared: lanes 52 predicted_bytes 522334 receipt 7440b41945a53bb1
+  receipt CHANGED by the owner snapshot (expected): 7440b41945a53bb1f1bfe001553ec84ad431b621011bf673339665be496fa19d
+  OFFICIAL_ROWS  52
+  LEDGER         {"invalid":1,"retry":1,"scheduled":52,"uncalled":0,"valid":51}
+  RETRY          ['G1-018/G1a'] UNCALLED []
+  NONVALID       [['G1-018/G1a', False]] why {"G1-018/G1a":["the reply is dict, not an array"]}
+  SEGMENT_CLEAN  False
+  finalization  e227a69e42ea036a66de2322b7e5ed4d701396c8ff63d0e1ec3c49e8953ada90
+  finalization CHANGED by the owner snapshot, as expected (published run had 5ae820e804ec1881)
+seg 3 (attempt-2 retry) prepared: lanes 1 receipt 465d32df3fc17d50
+  receipt CHANGED by the owner snapshot (expected): 465d32df3fc17d50c3386252a12ad4673f70819b6311523e6606350f3e8c0ed6
+  OFFICIAL_ROWS  1
+  LEDGER         {"invalid":0,"retry":0,"scheduled":1,"uncalled":0,"valid":1}
+  RETRY          [] UNCALLED []
+  NONVALID       [] why {}
+  SEGMENT_CLEAN  True
+  finalization  50897a27e77e04b07a299a497720186165811c475ad1a69d7cb34ad024d3bb99
+  no historical finalization hash exists for this retry; recorded from the owner, not invented
+
+--- status after three segments (exit 0) ---
+ROOT_SHA    : cb161efeab864d109d47e9134012132ba0cda1a21673dcca0758dcceb3c9b9fb
+SEGMENTS    : [1, 2, 3]
+  seg 1 finalized
+  seg 2 finalized
+  seg 3 finalized
+LANE_STATES : called 82 of 206

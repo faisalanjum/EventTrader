@@ -1,0 +1,14 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py ingest 2 7440b41945a53bb1f1bfe001553ec84ad431b621011bf673339665be496fa19d f309e723-949
+--- STDOUT ---
+SEGMENT     : 2 state_file wf_f309e723-949.json
+OFFICIAL_ROWS: 52
+LEDGER      : {"invalid":1,"retry":1,"scheduled":52,"uncalled":0,"valid":51}
+RETRY       : ['G1-018/G1a'] UNCALLED []
+NONVALID    : [['G1-018/G1a', False]] why {"G1-018/G1a":["the reply is dict, not an array"]}
+SEGMENT_CLEAN: False
+STOP: segment 2 is not clean; do NOT start the next segment
+
+--- STDERR ---
+
+--- EXIT ---
+0

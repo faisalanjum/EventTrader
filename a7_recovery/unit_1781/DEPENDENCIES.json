@@ -1,0 +1,568 @@
+{
+ "boundary": {
+  "path": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+  "sha256": "814311de6d059ce1a1f77f9551099529823cf7b798140ed97fb8751b008df843",
+  "note": "the published A4 launcher, used unmodified"
+ },
+ "composed_views": {
+  "view/workflows": {
+   "digest": "59446164297011f3e54f726a91654c968a67fc965ec8775bb589dc5d1c1b357a",
+   "files": 624,
+   "compose_command": "compose_views_1781.sh"
+  }
+ },
+ "map_rows": 90,
+ "writable_rows": 4,
+ "manifest_self_reference_exclusion": {
+  "path": "MANIFEST.sha256",
+  "reason": "a manifest cannot contain its own final hash",
+  "everything_else_included": true
+ },
+ "preserved_but_not_published": {
+  "reason": "deliberately corrupted private copies of the accepted run, reproducible by re-running each recorded case command; their invocation, output and exit ARE published",
+  "entries": {}
+ },
+ "unsatisfied_sources": [],
+ "closure": [
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_serial_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/a3_serial_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/a4",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/a4_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/corr_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/corr_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/decision_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/decision_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/final_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_binding.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/final_targeted_binding.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/final_targeted_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/hard_review_targeted_binding.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/hard_review_targeted_binding.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/hard_review_targeted_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/hard_review_targeted_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/hr_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/hr_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/hrfix_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/hrfix_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/lock",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/lock",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/signer_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/signer_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/targeted_binding.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/targeted_binding.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/targeted_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/targeted_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/v4_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/v4_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/v5_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/v5_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/v6_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/evidence/v6_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/bench/bench_1306",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/home/faisal/.claude/projects",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/session_store/projects",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a4_final_targeted_run_1500",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs/a4_final_targeted_run_1500",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a4_hard_review_run_1495",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs/a4_hard_review_run_1495",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a4_targeted_run_1491",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs/a4_targeted_run_1491",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a6_prepared_run",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/history_1634/attempt2/A/run",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_g1_event_run4",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/views/a7_g1_event_run4",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_g1_run3",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs/a7_g1_run3",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_od1_run",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs/a7_od1_run",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_od1_run_v2",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs/a7_od1_run_v2",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_v3_prepared_run_1479",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs/a7_v3_prepared_run_1479",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a4_targeted_run_1491_launch",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launch/a4_targeted_run_1491_launch",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_budget_receipt_1488.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/tmpfiles/a7_budget_receipt_1488.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_budget_receipt_1492.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/tmpfiles/a7_budget_receipt_1492.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_budget_receipt_1493.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/tmpfiles/a7_budget_receipt_1493.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_budget_receipt_1496.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/tmpfiles/a7_budget_receipt_1496.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_key_v9_correction.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/tmpfiles/a7_key_v9_correction.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_key_v9_gold.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/tmpfiles/a7_key_v9_gold.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_source_locator_audit_1486.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/tmpfiles/a7_source_locator_audit_1486.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_budget_receipt_1505.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/inputs/receipts/a7_budget_receipt_1505.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_g2_candidate",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/views/a7_g2_candidate",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_g3_candidate",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/views/a7_g3_candidate",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/budget_receipt_1508.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/a4_owner_1726/proved/budget_receipt_1508.43cb6232.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/pkg/kfields_key_a4",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a4_final_targeted_corr2_run_1506",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs_rw/a4_final_targeted_corr2_run_1506",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a4_final_targeted_corr3_run_1509",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs_rw/a4_final_targeted_corr3_run_1509",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a4_final_targeted_corr_run_1504",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/runs_rw/a4_final_targeted_corr_run_1504",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_budget_receipt_1501.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/a7_budget_receipt_1501.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_budget_receipt_1508.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/a7_budget_receipt_1508.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1502.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__a4_final_review_receipt_1502.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1505.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__a4_final_review_receipt_1505.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1507.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__a4_final_review_receipt_1507.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a4_final_review_receipt_1508.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__a4_final_review_receipt_1508.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/budget_receipt_1501.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__budget_receipt_1501.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/budget_receipt_1505.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__budget_receipt_1505.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/budget_receipt_1507.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__budget_receipt_1507.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/evidence_1495.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__evidence_1495.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/evidence_1500.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__evidence_1500.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/evidence_1504.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__evidence_1504.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/evidence_1506.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__evidence_1506.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/evidence_1509.py",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__evidence_1509.py",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr2_binding.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__final_targeted_corr2_binding.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr2_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__final_targeted_corr2_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr3_binding.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__final_targeted_corr3_binding.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr3_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__final_targeted_corr3_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr_binding.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__final_targeted_corr_binding.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/final_targeted_corr_dir.txt",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/out/scratch__final_targeted_corr_dir.txt",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments",
+   "source": "a5_recovery/unit_1758/view/experiments",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs",
+   "source": "a5_recovery/unit_1758/view/runs_composed",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core",
+   "source": "a5_recovery/unit_1758/view/driver_core",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/keys",
+   "source": "a5_recovery/unit_1758/view/experiments/keys",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a5_logs_1758",
+   "source": "a5_recovery/unit_1758/logs",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a5_build_a_1758",
+   "source": "a5_recovery/unit_1758/out/a5_build_a_1758",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a5_build_b_1758",
+   "source": "a5_recovery/unit_1758/out/a5_build_b_1758",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a5_candidate_1758",
+   "source": "a5_recovery/unit_1758/out/a5_candidate_1758",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_reference_inventory.json",
+   "source": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/budget_inputs_1720/out_g23/tmp__a7_reference_inventory.json",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_prelaunch_1773/a6_a5run_1515",
+   "source": "a5_recovery/unit_1758/out/a6_a5run_1515",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_producer_reports_1773",
+   "source": "a7_recovery/unit_1773/evidence/reports",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_candidate_a_1773",
+   "source": "a7_recovery/unit_1773/out/candidate_a",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_candidate_b_1773",
+   "source": "a7_recovery/unit_1773/out/candidate_b",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_logs_1773",
+   "source": "a7_recovery/unit_1773/logs",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows",
+   "source": "a7_recovery/unit_1778/view/subagent_runs",
+   "mode": "ro",
+   "supplied_by": "composed by a7_recovery/unit_1778/compose_views_1778.sh with unit_1778 as its target, from published bytes"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515",
+   "source": "a7_recovery/unit_1773/out/producer_run",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_cand_1525",
+   "source": "a7_recovery/unit_1773/out/candidate_a",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/a7_logs_1778",
+   "source": "a7_recovery/unit_1778/logs",
+   "mode": "ro",
+   "supplied_by": "already published (git-tracked)"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3",
+   "source": "a7_recovery/unit_1781/view/harness_g1v3",
+   "mode": "ro",
+   "supplied_by": "newly whitelisted in this package"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "source": "a7_recovery/unit_1781/view/scratchpad/g1_run_1525.py",
+   "mode": "ro",
+   "supplied_by": "newly whitelisted in this package"
+  },
+  {
+   "logical": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8",
+   "source": "a7_recovery/unit_1781/out/private_agents/wf_85692dcf-0e8",
+   "mode": "rw",
+   "supplied_by": "newly whitelisted in this package"
+  },
+  {
+   "logical": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows",
+   "source": "a7_recovery/unit_1781/view/workflows",
+   "mode": "rw",
+   "supplied_by": "composed by compose_views_1781.sh from three published layers, in order: A4 session workflows, unit_1773 producer states, unit_1778 G1 states; demonstrated to the exact 624-file digest"
+  },
+  {
+   "logical": "/tmp/a7_logs_1781",
+   "source": "a7_recovery/unit_1781/logs",
+   "mode": "rw",
+   "supplied_by": "newly whitelisted in this package"
+  },
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525",
+   "source": "a7_recovery/unit_1781/out/g1_precall_run_1525",
+   "mode": "rw",
+   "supplied_by": "newly whitelisted in this package"
+  }
+ ]
+}

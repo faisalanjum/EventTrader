@@ -1,0 +1,54 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -p no:cacheprovider -q --no-header -rf /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_g1_cached_resume_1781.py
+CWD: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+--- STDOUT ---
+.F......F...                                                             [100%]
+=================================== FAILURES ===================================
+____________________ test_a_lawful_cached_state_is_accepted ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_lawful_cached_state_is_0')
+
+    @_needs
+    def test_a_lawful_cached_state_is_accepted(tmp_path):
+        """The behaviour under correction: cached rows backed by real metadata."""
+>       assert _audit_fixture(_cached_state()) == []
+E       assert ["G1-000/G1a ...actly 0', ...] == []
+E         
+E         Left contains 90 more items, first extra item: "G1-000/G1a ran model 'sonnet', not 'claude-sonnet-5'"
+E         Use -v to get more diff
+
+test_g1_cached_resume_1781.py:107: AssertionError
+____________ test_the_same_file_under_its_durable_path_is_accepted _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_same_file_under_its_d0')
+
+    @_needs
+    def test_the_same_file_under_its_durable_path_is_accepted(tmp_path):
+        """The REAL alias: the logical bind and the durable file are one file."""
+        published = G._read(G.receipt_path(RUN, 1))["script_path"]
+        # THE REAL ALIAS: a native Workflow runs OUTSIDE this namespace and names
+        # the durable file on disk, while the publication names the logical bound
+        # path. They are one file, reached by two names.
+        durable = DURABLE_SCRIPT
+        assert durable != published, "the two names must differ for this to test anything"
+        st = _state()
+        st["scriptPath"] = durable
+        got = _audit_fixture(st)
+        same = os.path.samefile(durable, published)
+        assert same, "the boundary did not present one file under two paths"
+>       assert got == [], got
+E       AssertionError: ["the state ran '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/g1_precall_run_1525/grade_batch..../-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg01.js'"]
+E       assert ["the state r...ch.seg01.js'"] == []
+E         
+E         Left contains one more item: "the state ran '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/g1_precall_run_1525/grade_batch.s...0/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg01.js'"
+E         Use -v to get more diff
+
+test_g1_cached_resume_1781.py:165: AssertionError
+=========================== short test summary info ============================
+FAILED test_g1_cached_resume_1781.py::test_a_lawful_cached_state_is_accepted
+FAILED test_g1_cached_resume_1781.py::test_the_same_file_under_its_durable_path_is_accepted
+2 failed, 10 passed in 0.29s
+
+--- STDERR ---
+
+--- EXIT ---
+1

@@ -1,0 +1,60 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -p no:cacheprovider -q --no-header -rf /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_g1_cached_resume_1781.py
+CWD: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+--- STDOUT ---
+.........FFF.....................................                        [100%]
+=================================== FAILURES ===================================
+____________ test_a_different_file_with_identical_bytes_is_refused _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_different_file_with_ide0')
+
+    @_needs
+    def test_a_different_file_with_identical_bytes_is_refused(tmp_path):
+        published = G._read(G.receipt_path(RUN, 1))["script_path"]
+        twin = str(tmp_path / "twin.js")
+        io.open(twin, "wb").write(io.open(published, "rb").read())
+        st = _state()
+        st["scriptPath"] = twin
+        got = _audit_fixture(st)
+>       assert got, "identical bytes in a different file must not be accepted"
+E       AssertionError: identical bytes in a different file must not be accepted
+E       assert []
+
+test_g1_cached_resume_1781.py:176: AssertionError
+____________________ test_a_missing_script_path_is_refused _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_missing_script_path_is_0')
+
+    @_needs
+    def test_a_missing_script_path_is_refused(tmp_path):
+        st = _state()
+        st["scriptPath"] = str(tmp_path / "absent.js")
+>       assert _audit_fixture(st), "a missing script must be refused"
+E       AssertionError: a missing script must be refused
+E       assert []
+E        +  where [] = _audit_fixture({'agentCount': 30, 'args': [{'agentType': 'lean-probe', 'attempt': 1, 'batch_id': 'G1-000', 'candidate_sha256': '2be60...079b155d3f4558bec4141e1d3574cdb8b3129c7746a', ...}, ...], 'defaultModel': 'claude-opus-4-8', 'durationMs': 418049, ...})
+
+test_g1_cached_resume_1781.py:183: AssertionError
+___________________ test_a_malformed_script_path_is_refused ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_malformed_script_path_i0')
+
+    @_needs
+    def test_a_malformed_script_path_is_refused(tmp_path):
+        st = _state()
+        st["scriptPath"] = None
+>       assert _audit_fixture(st), "a null script path must be refused"
+E       AssertionError: a null script path must be refused
+E       assert []
+E        +  where [] = _audit_fixture({'agentCount': 30, 'args': [{'agentType': 'lean-probe', 'attempt': 1, 'batch_id': 'G1-000', 'candidate_sha256': '2be60...079b155d3f4558bec4141e1d3574cdb8b3129c7746a', ...}, ...], 'defaultModel': 'claude-opus-4-8', 'durationMs': 418049, ...})
+
+test_g1_cached_resume_1781.py:190: AssertionError
+=========================== short test summary info ============================
+FAILED test_g1_cached_resume_1781.py::test_a_different_file_with_identical_bytes_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_missing_script_path_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_malformed_script_path_is_refused
+3 failed, 46 passed in 1.03s
+
+--- STDERR ---
+
+--- EXIT ---
+1

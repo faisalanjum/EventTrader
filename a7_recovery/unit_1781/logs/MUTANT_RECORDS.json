@@ -1,0 +1,50 @@
+[
+ {
+  "mutant": "bypass_cached_metadata",
+  "disabled": "def _resumed_cached_row(pr, rid_dir, lane):",
+  "failures": 26,
+  "failed_tests": [
+   "test_a_cached_claim_with_the_wrong_alias_is_refused",
+   "test_a_cached_claim_with_an_extra_field_is_refused",
+   "test_a_cached_flag_that_is_false_is_refused",
+   "test_a_fresh_row_missing_its_agent_type_is_still_refused",
+   "test_a_cached_row_missing_any_required_key_is_refused",
+   "test_a_cached_row_missing_any_required_key_is_refused"
+  ],
+  "lawful_control": "test_a_lawful_cached_state_is_accepted",
+  "control_still_passes": true,
+  "nested_pytest_exit": 1,
+  "sufficient": true
+ },
+ {
+  "mutant": "bypass_script_identity",
+  "disabled": "def _same_published_script(claim, published):",
+  "failures": 3,
+  "failed_tests": [
+   "test_a_different_file_with_identical_bytes_is_refused",
+   "test_a_missing_script_path_is_refused",
+   "test_a_malformed_script_path_is_refused"
+  ],
+  "lawful_control": "test_control_the_exact_published_script_path_is_accepted",
+  "control_still_passes": true,
+  "nested_pytest_exit": 1,
+  "sufficient": true
+ },
+ {
+  "mutant": "bypass_transcript_check",
+  "disabled": "problems += [\"%s: %s\" % (label, w) for w in why]",
+  "failures": 6,
+  "failed_tests": [
+   "test_a_cached_row_with_a_corrupted_prompt_is_refused",
+   "test_a_cached_row_with_a_corrupted_model_is_refused",
+   "test_a_cached_row_with_a_corrupted_effort_is_refused",
+   "test_a_cached_row_with_a_corrupted_session_is_refused",
+   "test_a_cached_row_with_a_corrupted_agent_id_is_refused",
+   "test_a_cached_row_that_used_a_tool_is_refused"
+  ],
+  "lawful_control": "test_control_the_unchanged_fresh_state_is_accepted",
+  "control_still_passes": true,
+  "nested_pytest_exit": 1,
+  "sufficient": true
+ }
+]

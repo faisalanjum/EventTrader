@@ -1,0 +1,456 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -p no:cacheprovider -q --no-header -rf /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_g1_cached_resume_1781.py
+CWD: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+--- STDOUT ---
+..FFF.F......FF.FFFF.FF..FFFFFFFFFFFFFF..........                        [100%]
+=================================== FAILURES ===================================
+_____________ test_a_cached_claim_with_the_wrong_alias_is_refused ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_cached_claim_with_the_w0')
+
+    @_needs
+    def test_a_cached_claim_with_the_wrong_alias_is_refused(tmp_path):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(model="opus")))
+>       assert got, got  # refused either way; the correction names it "cached"
+        ^^^^^^^^^^^^^^^
+E       AssertionError: []
+E       assert []
+
+test_g1_cached_resume_1781.py:113: AssertionError
+______________ test_a_cached_claim_with_an_extra_field_is_refused ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_cached_claim_with_an_ex0')
+
+    @_needs
+    def test_a_cached_claim_with_an_extra_field_is_refused(tmp_path):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(toolCalls=0)))
+>       assert got, got  # refused either way; the correction names it "cached"
+        ^^^^^^^^^^^^^^^
+E       AssertionError: []
+E       assert []
+
+test_g1_cached_resume_1781.py:119: AssertionError
+_________________ test_a_cached_flag_that_is_false_is_refused __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_cached_flag_that_is_fal0')
+
+    @_needs
+    def test_a_cached_flag_that_is_false_is_refused(tmp_path):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(cached=False)))
+>       assert got, "a cached:false row must not pass as cached"
+E       AssertionError: a cached:false row must not pass as cached
+E       assert []
+
+test_g1_cached_resume_1781.py:125: AssertionError
+___________ test_a_fresh_row_missing_its_agent_type_is_still_refused ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_fresh_row_missing_its_a0')
+
+    @_needs
+    def test_a_fresh_row_missing_its_agent_type_is_still_refused(tmp_path):
+        """Ordinary fresh rows stay strict: dropping a field must not pass."""
+        st = _state()
+        for pr in st["workflowProgress"]:
+            if pr.get("type") == "workflow_agent":
+                pr.pop("agentType", None)
+        got = _audit_fixture(st)
+>       assert got, "a fresh row missing agentType must still be refused"
+E       AssertionError: a fresh row missing agentType must still be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:142: AssertionError
+________ test_a_cached_row_missing_any_required_key_is_refused[cached] _________
+
+key = 'cached'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'cached' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+_________ test_a_cached_row_missing_any_required_key_is_refused[index] _________
+
+key = 'index'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'index' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+____ test_a_cached_row_missing_any_required_key_is_refused[lastProgressAt] _____
+
+key = 'lastProgressAt'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'lastProgressAt' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+_________ test_a_cached_row_missing_any_required_key_is_refused[model] _________
+
+key = 'model'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'model' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+______ test_a_cached_row_missing_any_required_key_is_refused[phaseIndex] _______
+
+key = 'phaseIndex'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'phaseIndex' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+______ test_a_cached_row_missing_any_required_key_is_refused[phaseTitle] _______
+
+key = 'phaseTitle'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'phaseTitle' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+_____ test_a_cached_row_missing_any_required_key_is_refused[resultPreview] _____
+
+key = 'resultPreview'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'resultPreview' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+_______ test_a_cached_row_missing_any_required_key_is_refused[startedAt] _______
+
+key = 'startedAt'
+
+    @_needs
+    @pytest.mark.parametrize("key", sorted(AUD.CACHED_ROW_KEYS))
+    def test_a_cached_row_missing_any_required_key_is_refused(key):
+        def drop(pr):
+            pr.pop(key, None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a cached row without %r must be refused" % key
+E       AssertionError: a cached row without 'startedAt' must be refused
+E       assert []
+
+test_g1_cached_resume_1781.py:246: AssertionError
+_______________ test_a_non_boolean_cached_claim_is_refused[None] _______________
+
+value = None
+
+    @_needs
+    @pytest.mark.parametrize("value", [None, 1, "true", 0, [], {}])
+    def test_a_non_boolean_cached_claim_is_refused(value):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(cached=value)))
+>       assert got, "cached=%r must not be accepted" % (value,)
+E       AssertionError: cached=None must not be accepted
+E       assert []
+
+test_g1_cached_resume_1781.py:253: AssertionError
+________________ test_a_non_boolean_cached_claim_is_refused[1] _________________
+
+value = 1
+
+    @_needs
+    @pytest.mark.parametrize("value", [None, 1, "true", 0, [], {}])
+    def test_a_non_boolean_cached_claim_is_refused(value):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(cached=value)))
+>       assert got, "cached=%r must not be accepted" % (value,)
+E       AssertionError: cached=1 must not be accepted
+E       assert []
+
+test_g1_cached_resume_1781.py:253: AssertionError
+_______________ test_a_non_boolean_cached_claim_is_refused[true] _______________
+
+value = 'true'
+
+    @_needs
+    @pytest.mark.parametrize("value", [None, 1, "true", 0, [], {}])
+    def test_a_non_boolean_cached_claim_is_refused(value):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(cached=value)))
+>       assert got, "cached=%r must not be accepted" % (value,)
+E       AssertionError: cached='true' must not be accepted
+E       assert []
+
+test_g1_cached_resume_1781.py:253: AssertionError
+________________ test_a_non_boolean_cached_claim_is_refused[0] _________________
+
+value = 0
+
+    @_needs
+    @pytest.mark.parametrize("value", [None, 1, "true", 0, [], {}])
+    def test_a_non_boolean_cached_claim_is_refused(value):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(cached=value)))
+>       assert got, "cached=%r must not be accepted" % (value,)
+E       AssertionError: cached=0 must not be accepted
+E       assert []
+
+test_g1_cached_resume_1781.py:253: AssertionError
+______________ test_a_non_boolean_cached_claim_is_refused[value4] ______________
+
+value = []
+
+    @_needs
+    @pytest.mark.parametrize("value", [None, 1, "true", 0, [], {}])
+    def test_a_non_boolean_cached_claim_is_refused(value):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(cached=value)))
+>       assert got, "cached=%r must not be accepted" % (value,)
+E       AssertionError: cached=[] must not be accepted
+E       assert []
+
+test_g1_cached_resume_1781.py:253: AssertionError
+______________ test_a_non_boolean_cached_claim_is_refused[value5] ______________
+
+value = {}
+
+    @_needs
+    @pytest.mark.parametrize("value", [None, 1, "true", 0, [], {}])
+    def test_a_non_boolean_cached_claim_is_refused(value):
+        got = _audit_fixture(_cached_state(lambda pr: pr.update(cached=value)))
+>       assert got, "cached=%r must not be accepted" % (value,)
+E       AssertionError: cached={} must not be accepted
+E       assert []
+
+test_g1_cached_resume_1781.py:253: AssertionError
+___________ test_a_row_with_no_cached_key_at_all_is_judged_as_fresh ____________
+
+    @_needs
+    def test_a_row_with_no_cached_key_at_all_is_judged_as_fresh():
+        """Absent claim: it must be held to the strict fresh rules, not skipped."""
+        def drop(pr):
+            pr.pop("cached", None)
+        got = _audit_fixture(_cached_state(drop))
+>       assert got, "a row with no cached key must face the fresh checks"
+E       AssertionError: a row with no cached key must face the fresh checks
+E       assert []
+
+test_g1_cached_resume_1781.py:262: AssertionError
+______________ test_a_cached_row_with_missing_metadata_is_refused ______________
+
+    @_needs
+    def test_a_cached_row_with_missing_metadata_is_refused():
+>       assert _with_file(_meta(_first_agent_id()), None)
+E       AssertionError: assert []
+E        +  where [] = _with_file('/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json', None)
+E        +    where '/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json' = _meta('a3c7953724eb0553a')
+E        +      where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:268: AssertionError
+_____________ test_a_cached_row_with_malformed_metadata_is_refused _____________
+
+    @_needs
+    def test_a_cached_row_with_malformed_metadata_is_refused():
+>       assert _with_file(_meta(_first_agent_id()), b"{not json")
+E       AssertionError: assert []
+E        +  where [] = _with_file('/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json', b'{not json')
+E        +    where '/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json' = _meta('a3c7953724eb0553a')
+E        +      where 'a3c7953724eb0553a' = _first_agent_id()
+
+test_g1_cached_resume_1781.py:273: AssertionError
+____________ test_a_cached_row_with_wrong_metadata_is_refused[bad0] ____________
+
+bad = {'agentType': 'other', 'model': 'sonnet', 'spawnDepth': 1}
+
+    @_needs
+    @pytest.mark.parametrize("bad", [
+        {"agentType": "other", "spawnDepth": 1, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"},
+        {"agentType": "lean-probe", "spawnDepth": 1},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1},
+    ])
+    def test_a_cached_row_with_wrong_metadata_is_refused(bad):
+>       assert _with_file(_meta(_first_agent_id()),
+                          json.dumps(bad).encode("utf-8")), bad
+E       AssertionError: {'agentType': 'other', 'model': 'sonnet', 'spawnDepth': 1}
+E       assert []
+E        +  where [] = _with_file('/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json', b'{"agentType": "other", "spawnDepth": 1, "model": "sonnet"}')
+E        +    where '/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json' = _meta('a3c7953724eb0553a')
+E        +      where 'a3c7953724eb0553a' = _first_agent_id()
+E        +    and   b'{"agentType": "other", "spawnDepth": 1, "model": "sonnet"}' = <built-in method encode of str object at 0x7f6160c26cd0>('utf-8')
+E        +      where <built-in method encode of str object at 0x7f6160c26cd0> = '{"agentType": "other", "spawnDepth": 1, "model": "sonnet"}'.encode
+E        +        where '{"agentType": "other", "spawnDepth": 1, "model": "sonnet"}' = <function dumps at 0x7f6163323100>({'agentType': 'other', 'model': 'sonnet', 'spawnDepth': 1})
+E        +          where <function dumps at 0x7f6163323100> = json.dumps
+
+test_g1_cached_resume_1781.py:285: AssertionError
+____________ test_a_cached_row_with_wrong_metadata_is_refused[bad1] ____________
+
+bad = {'agentType': 'lean-probe', 'model': 'sonnet', 'spawnDepth': 2}
+
+    @_needs
+    @pytest.mark.parametrize("bad", [
+        {"agentType": "other", "spawnDepth": 1, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"},
+        {"agentType": "lean-probe", "spawnDepth": 1},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1},
+    ])
+    def test_a_cached_row_with_wrong_metadata_is_refused(bad):
+>       assert _with_file(_meta(_first_agent_id()),
+                          json.dumps(bad).encode("utf-8")), bad
+E       AssertionError: {'agentType': 'lean-probe', 'model': 'sonnet', 'spawnDepth': 2}
+E       assert []
+E        +  where [] = _with_file('/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json', b'{"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"}')
+E        +    where '/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json' = _meta('a3c7953724eb0553a')
+E        +      where 'a3c7953724eb0553a' = _first_agent_id()
+E        +    and   b'{"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"}' = <built-in method encode of str object at 0x7f6160c26f70>('utf-8')
+E        +      where <built-in method encode of str object at 0x7f6160c26f70> = '{"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"}'.encode
+E        +        where '{"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"}' = <function dumps at 0x7f6163323100>({'agentType': 'lean-probe', 'model': 'sonnet', 'spawnDepth': 2})
+E        +          where <function dumps at 0x7f6163323100> = json.dumps
+
+test_g1_cached_resume_1781.py:285: AssertionError
+____________ test_a_cached_row_with_wrong_metadata_is_refused[bad2] ____________
+
+bad = {'agentType': 'lean-probe', 'model': 'opus', 'spawnDepth': 1}
+
+    @_needs
+    @pytest.mark.parametrize("bad", [
+        {"agentType": "other", "spawnDepth": 1, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"},
+        {"agentType": "lean-probe", "spawnDepth": 1},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1},
+    ])
+    def test_a_cached_row_with_wrong_metadata_is_refused(bad):
+>       assert _with_file(_meta(_first_agent_id()),
+                          json.dumps(bad).encode("utf-8")), bad
+E       AssertionError: {'agentType': 'lean-probe', 'model': 'opus', 'spawnDepth': 1}
+E       assert []
+E        +  where [] = _with_file('/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json', b'{"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"}')
+E        +    where '/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json' = _meta('a3c7953724eb0553a')
+E        +      where 'a3c7953724eb0553a' = _first_agent_id()
+E        +    and   b'{"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"}' = <built-in method encode of str object at 0x7f6160c27440>('utf-8')
+E        +      where <built-in method encode of str object at 0x7f6160c27440> = '{"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"}'.encode
+E        +        where '{"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"}' = <function dumps at 0x7f6163323100>({'agentType': 'lean-probe', 'model': 'opus', 'spawnDepth': 1})
+E        +          where <function dumps at 0x7f6163323100> = json.dumps
+
+test_g1_cached_resume_1781.py:285: AssertionError
+____________ test_a_cached_row_with_wrong_metadata_is_refused[bad3] ____________
+
+bad = {'agentType': 'lean-probe', 'spawnDepth': 1}
+
+    @_needs
+    @pytest.mark.parametrize("bad", [
+        {"agentType": "other", "spawnDepth": 1, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"},
+        {"agentType": "lean-probe", "spawnDepth": 1},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1},
+    ])
+    def test_a_cached_row_with_wrong_metadata_is_refused(bad):
+>       assert _with_file(_meta(_first_agent_id()),
+                          json.dumps(bad).encode("utf-8")), bad
+E       AssertionError: {'agentType': 'lean-probe', 'spawnDepth': 1}
+E       assert []
+E        +  where [] = _with_file('/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json', b'{"agentType": "lean-probe", "spawnDepth": 1}')
+E        +    where '/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json' = _meta('a3c7953724eb0553a')
+E        +      where 'a3c7953724eb0553a' = _first_agent_id()
+E        +    and   b'{"agentType": "lean-probe", "spawnDepth": 1}' = <built-in method encode of str object at 0x7f6160c4da70>('utf-8')
+E        +      where <built-in method encode of str object at 0x7f6160c4da70> = '{"agentType": "lean-probe", "spawnDepth": 1}'.encode
+E        +        where '{"agentType": "lean-probe", "spawnDepth": 1}' = <function dumps at 0x7f6163323100>({'agentType': 'lean-probe', 'spawnDepth': 1})
+E        +          where <function dumps at 0x7f6163323100> = json.dumps
+
+test_g1_cached_resume_1781.py:285: AssertionError
+____________ test_a_cached_row_with_wrong_metadata_is_refused[bad4] ____________
+
+bad = {'agentType': 'lean-probe', 'model': 'sonnet', 'spawnDepth': 1, 'x': 1}
+
+    @_needs
+    @pytest.mark.parametrize("bad", [
+        {"agentType": "other", "spawnDepth": 1, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 2, "model": "sonnet"},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "opus"},
+        {"agentType": "lean-probe", "spawnDepth": 1},
+        {"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1},
+    ])
+    def test_a_cached_row_with_wrong_metadata_is_refused(bad):
+>       assert _with_file(_meta(_first_agent_id()),
+                          json.dumps(bad).encode("utf-8")), bad
+E       AssertionError: {'agentType': 'lean-probe', 'model': 'sonnet', 'spawnDepth': 1, 'x': 1}
+E       assert []
+E        +  where [] = _with_file('/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json', b'{"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1}')
+E        +    where '/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8/agent-a3c7953724eb0553a.meta.json' = _meta('a3c7953724eb0553a')
+E        +      where 'a3c7953724eb0553a' = _first_agent_id()
+E        +    and   b'{"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1}' = <built-in method encode of str object at 0x7f6160d2a730>('utf-8')
+E        +      where <built-in method encode of str object at 0x7f6160d2a730> = '{"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1}'.encode
+E        +        where '{"agentType": "lean-probe", "spawnDepth": 1, "model": "sonnet", "x": 1}' = <function dumps at 0x7f6163323100>({'agentType': 'lean-probe', 'model': 'sonnet', 'spawnDepth': 1, 'x': 1})
+E        +          where <function dumps at 0x7f6163323100> = json.dumps
+
+test_g1_cached_resume_1781.py:285: AssertionError
+=========================== short test summary info ============================
+FAILED test_g1_cached_resume_1781.py::test_a_cached_claim_with_the_wrong_alias_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_claim_with_an_extra_field_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_flag_that_is_false_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_fresh_row_missing_its_agent_type_is_still_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[cached]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[index]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[lastProgressAt]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[model]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[phaseIndex]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[phaseTitle]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[resultPreview]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_missing_any_required_key_is_refused[startedAt]
+FAILED test_g1_cached_resume_1781.py::test_a_non_boolean_cached_claim_is_refused[None]
+FAILED test_g1_cached_resume_1781.py::test_a_non_boolean_cached_claim_is_refused[1]
+FAILED test_g1_cached_resume_1781.py::test_a_non_boolean_cached_claim_is_refused[true]
+FAILED test_g1_cached_resume_1781.py::test_a_non_boolean_cached_claim_is_refused[0]
+FAILED test_g1_cached_resume_1781.py::test_a_non_boolean_cached_claim_is_refused[value4]
+FAILED test_g1_cached_resume_1781.py::test_a_non_boolean_cached_claim_is_refused[value5]
+FAILED test_g1_cached_resume_1781.py::test_a_row_with_no_cached_key_at_all_is_judged_as_fresh
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_missing_metadata_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_malformed_metadata_is_refused
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_wrong_metadata_is_refused[bad0]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_wrong_metadata_is_refused[bad1]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_wrong_metadata_is_refused[bad2]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_wrong_metadata_is_refused[bad3]
+FAILED test_g1_cached_resume_1781.py::test_a_cached_row_with_wrong_metadata_is_refused[bad4]
+26 failed, 23 passed in 1.11s
+
+--- STDERR ---
+
+--- EXIT ---
+1
