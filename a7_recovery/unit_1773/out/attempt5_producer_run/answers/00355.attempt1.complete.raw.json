@@ -1,0 +1,18 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "inventory_shrink",
+        "driver_state": "decreased",
+        "time_type": "duration",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

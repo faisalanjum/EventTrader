@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "level_low": {"value": 6.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 6.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["X Special"],
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

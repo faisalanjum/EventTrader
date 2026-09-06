@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This quoted row is a non-GAAP effective-tax-rate reconciliation bridge line — the percentage-point tax-rate effect of restructuring charges used solely to walk GAAP effective tax rate to adjusted effective tax rate. It is an accounting reconciliation/elimination-style construct (Rule 3.8), not an independent driver fact: the underlying restructuring charges are reported as real dollar values elsewhere, and the effective tax rate itself is reported with its own actual/adjusted values elsewhere; this line adds no new causal state beyond re-expressing that same charge as a tax-math bridge component."
+    }
+  ],
+  "continuity_hints": []
+}
+```

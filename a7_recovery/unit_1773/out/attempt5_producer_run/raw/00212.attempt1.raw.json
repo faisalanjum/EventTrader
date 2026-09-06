@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This item is a real metric fact (gross profit as % of net sales moved from 39.1% to 39.6%) with a clearly stated comparison period, but the source only gives the period END date ('39 weeks ended November 1, 2025' vs 'November 2, 2024') and never states the START date anywhere in this quote or nearby text. A 39-week span is three fiscal quarters — it does not map to any single lawful period shape field (not a fiscal_quarter, not a half, not a month, not a full fiscal_year), and no dateless horizon is stated either. Per the period-resolution rule, an exact duration window requires BOTH start and end dates or neither, and when only one endpoint is given the fact must fall back to a fiscal framing that describes the SAME window — no such framing exists here (13-week quarter framing would misstate this 39-week YTD figure). The period is therefore unresolvable with no stated horizon, so this metric fact abstains rather than guessing or mis-stating the window."
+    }
+  ],
+  "continuity_hints": []
+}
+```

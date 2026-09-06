@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is the 'Less Special Items EPS' reconciling line, an aggregate accounting adjustment combining multiple distinct, unrelated special items (resource optimization charges, Brand HQ consolidation, German acquisition/Turkey termination costs, Pizza Hut strategic options review costs, tax items, etc.) into one basket per-share figure used solely to bridge GAAP EPS to EPS-excluding-Special-Items. It is not itself a single business cause (Rule 3.1/3.2) but a company-defined non-GAAP reconciling construct (akin to an elimination/consolidation artifact, Rule 3.8) with no single nameable driver, and this quote gives no per-item breakdown to split into separate causes. Cannot lawfully resolve a name; abstain."
+    }
+  ],
+  "continuity_hints": []
+}
+```

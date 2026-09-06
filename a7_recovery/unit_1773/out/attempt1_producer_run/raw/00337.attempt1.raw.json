@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales_guidance",
+        "driver_state": "unknown",
+        "level_unit": "percent_sequential",
+        "value_text": "Q1 IOM comparable sales expected to accelerate sequentially from Q4's 5.2%",
+        "company_confirmed": true,
+        "slice_parts": ["segment:internationaloperatedmarkets"],
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

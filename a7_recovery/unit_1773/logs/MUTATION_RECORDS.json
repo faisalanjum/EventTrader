@@ -1,0 +1,197 @@
+[
+ {
+  "case": "control",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/control/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "control"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "the unmutated private copy carries the accepted identity"
+ },
+ {
+  "case": "missing_receipt",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/missing_receipt/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "missing_receipt"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "a7_prepared_run/1: no receipt at /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515/receipt.json"
+ },
+ {
+  "case": "foreign_receipt",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/foreign_receipt/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "foreign_receipt"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the receipt does not hold: ['receipt.run_id is not what a lawful run of this shape carries', 'receipt.manifest_sha256 is not what a lawful run of this shape carries']"
+ },
+ {
+  "case": "changed_receipt",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/changed_receipt/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "changed_receipt"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the receipt does not hold: ['the receipt keys are not exactly [\\'run_id\\', \\'states\\', \\'attempt\\', \\'manifest_sha256\\', \\'max_output_tokens\\', \\'allowed\\', \\'receipts\\', \\'invocations\\'] (extra [\"\\'injected_field\\'\"], missing [])']"
+ },
+ {
+  "case": "changed_finalization",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/changed_finalization/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "changed_finalization"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the primary finalization does not hold: [\"finalization.ledger is not the accounting owner's recomputation of its own classifications\"]"
+ },
+ {
+  "case": "changed_raw",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/changed_raw/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "changed_raw"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the preserved raw tree is not the official returned rows, so this run's spend cannot be counted: [\"00000.attempt1.raw.json does not hold the official row's text bytes\"]"
+ },
+ {
+  "case": "missing_finalization",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/missing_finalization/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "missing_finalization"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "a7_prepared_run/1: /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 holds 860 saved files but no finalization; its answers cannot be selected, so it is refused rather than read"
+ },
+ {
+  "case": "wrong_freeze",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/wrong_freeze/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "wrong_freeze"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "a7_prepared_run/1: /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d, not the required 0000000000000000000000000000000000000000000000000000000000000000"
+ },
+ {
+  "case": "wrong_era",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/wrong_era/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "wrong_era"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the receipt does not hold: ['receipt.manifest_sha256 is not what a lawful run of this shape carries']"
+ },
+ {
+  "case": "candidate_control",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/candidate_control/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "candidate_control"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "candidate 2be60129ee18c999, prompt tree 02e9d2259d0cc256, 206/103/444"
+ },
+ {
+  "case": "changed_prompt",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/changed_prompt/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "changed_prompt"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "prompt tree moved 02e9d2259d0cc256 -> f9051224a26aa6af"
+ },
+ {
+  "case": "changed_question",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/changed_question/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "changed_question"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "candidate moved 2be60129ee18c999 -> 30da9b6fb32fbb3c"
+ },
+ {
+  "case": "short_population",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py",
+   "--host",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/short_population/map.tsv",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py",
+   "short_population"
+  ],
+  "exit": 0,
+  "detected": true,
+  "result": "102 of 103 batches no longer the accepted candidate (aba829b9cd65de13)"
+ }
+]

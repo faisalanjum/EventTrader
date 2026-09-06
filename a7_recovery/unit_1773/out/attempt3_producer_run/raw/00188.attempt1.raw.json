@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The quote is a generic footnote defining what the 'legal proceedings' non-GAAP adjustment line covers ('distinct legal matters that exceeded or are expected to exceed typical costs') — it names no specific legal matter, party, direction, or magnitude and applies uniformly across all periods shown; this is boilerplate methodology text, not a reportable driver state/change/action."}
+  ],
+  "continuity_hints": []
+}
+```

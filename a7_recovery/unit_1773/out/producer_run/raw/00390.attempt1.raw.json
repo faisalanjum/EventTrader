@@ -1,0 +1,16 @@
+```json
+{
+  "source_id": "bzNews_51962983",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "ceo_transition",
+        "driver_state": "announced"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

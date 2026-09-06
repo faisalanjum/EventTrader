@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The target term 'EUVs' is an acronym whose expansion is never stated anywhere in this source; it is not defined and does not match the transcript's own spelled-out term 'average unit volumes (AUVs)' used elsewhere by a different speaker, so it cannot be safely equated to that metric or any other. Per the rule against guessing acronym expansions, the driver cannot be lawfully named from this evidence, so the item must abstain rather than coin a name on an unverified acronym."
+    }
+  ],
+  "continuity_hints": []
+}
+```

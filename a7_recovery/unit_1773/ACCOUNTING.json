@@ -1,0 +1,43 @@
+{
+ "note": "Codex SEQ 1774 item 3. These are the verified distinctions carried from 1773's review; no model call was repeated and no successful answer was re-audited. The earlier finalized_lanes_bound:82 was NOT a meaning review and is replaced by the explicit split below.",
+ "producer": {
+  "workflow_records_bound_by_the_receipt": 36,
+  "workflow_invocations_including_resumptions": 39,
+  "resumptions_resume_the_same_state_ids_not_new_files": 3,
+  "answers": 392,
+  "packets": 196,
+  "events": 36,
+  "extra_session_limit_starts_counted_separately": 3
+ },
+ "candidate_population": {
+  "required_lanes": 206,
+  "batches": 103,
+  "questions": 444,
+  "prompt_pins": 103
+ },
+ "g1_progress": {
+  "returned_replies": 117,
+  "strict_schema_valid_replies": 116,
+  "selected_replies": 86,
+  "selected_pairs": 43,
+  "journal_only_successes_among_the_selected": 4,
+  "answered_questions": 199,
+  "remaining_questions": 245,
+  "unresolved_question_disagreements": 5,
+  "meaning_finalized_answers": 0,
+  "never_started_lanes": 119,
+  "started_no_result_lanes_owing_retry": 1,
+  "lanes_with_a_finalized_grading_state": 82
+ },
+ "classification_owner": {
+  "note": "No second schema exists in this unit. Any executable schema classification delegates to the existing owner below, over the exact rebuilt packet; JSON shape alone is never promoted to valid.",
+  "module": "a7_g1_build.read_event_reply",
+  "module_sha256": "747d1f9d439d9402cf02c6702b904b0e3cd8daf4ec39df15d90b535725c8e2a7"
+ },
+ "budget": {
+  "frozen_historical_spent_before": 5612,
+  "frozen_composition": "closed A4 lock baseline 5220 + this producer's 392, counted once",
+  "live_conservative": 5739,
+  "note": "kept apart; no retrospective change to closed A4 or A6 accounting"
+ }
+}

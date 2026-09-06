@@ -1,0 +1,7 @@
+rows ok        : 17804
+view digests   : 2
+MISMATCHED     : 0
+not in manifest: 2 ['MANIFEST.sha256', 'logs/manifest_green_1775.log']
+declared exclusion:
+    # EXCLUDED MANIFEST.sha256 - a manifest cannot contain its own final hash; every other file above is included
+[rc=1]

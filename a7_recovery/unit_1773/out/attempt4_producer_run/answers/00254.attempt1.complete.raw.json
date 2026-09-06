@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted effective tax rate is stated only for a 'trailing four quarters ended' window, giving just the end dates (February 14, 2026 and February 15, 2025) with no start date. Rule 6 requires an exact duration window to state BOTH start and end dates or neither; with only one endpoint given, the fiscal framing must be checked, but no stated fiscal_quarter/half/month/fiscal_year framing in this event describes this trailing-four-quarter span (it straddles two fiscal years and is distinct from the quarter/half figures elsewhere in the filing). No dateless horizon is stated either. Since this metric's period is real, stated, and load-bearing (it distinguishes this TTM rate from the other effective-tax-rate figures reported for the 12-week/24-week periods) but cannot be resolved to the lawful period fields, the fact must abstain under the unresolved-period rule."
+    }
+  ],
+  "continuity_hints": []
+}
+```

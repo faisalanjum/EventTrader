@@ -1,0 +1,16 @@
+seeded run: states=0 allowed=392 run_id=a6_a5run_1515
+index names 36 states for this run, all present
+matched 36 invocations to exactly one recorded state each
+recorded states: 36
+  ok    receipt                c43457c99231edb36f3d479848f1ea9ac63fcc84d095755c5a1b8d7a2109b8c4
+a1_finalize -> {'records': [{'index': 0, 'row': {'packet_id': '0000006201-26-000031#000', 'source_id': '0000006201-26-000031', 'lane_id': '0000006201-26-000031#000/L1', 'model
+  ok    finalization           04b53cddf63528933cd99afe1b215061d2a07d8f4bc2fb0738014dd50aa30880
+  ok    a5_manifest            5e33c3e4acbff1c710321008335d6a66622992a8317027c9d231d85912f37c53
+  ok    a5_bundle              d2e850d86f643f177868b8b755b0a0d92c0a57f1aec8fabd4455acea2367edff
+  BAD   a6_freeze              fb0d64f48204f92422d98c11fc838b476f6f6ef86f52235b4bbbabe33cfad334
+  ok    run_digest             9aa2d1b2efcdbec5ee5d58958e68dc6ec91b076f64f832d625f941488970215a
+  ok    run_files              861
+  ok    scheduled_calls        392
+  ok    contract_suffix        .v3
+
+9 checks, 1 bad ['a6_freeze']

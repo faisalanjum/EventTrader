@@ -1,0 +1,903 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -p no:cacheprovider -q /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_recovery_boundary_1774.py
+CWD: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+--- STDOUT ---
+FFFFFFFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+_____________ test_the_private_copy_carries_the_accepted_identity ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_the_private_copy_carries_0')
+
+    @_needs_run
+    def test_the_private_copy_carries_the_accepted_identity(tmp_path):
+        """Without this, no refusal below can be attributed to its mutation."""
+>       _control(_copy(tmp_path, "control"))
+
+test_a7_recovery_boundary_1774.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_the_private_copy_carries_0/control/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_the_private_copy_carries_0/control/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+________________________ test_a_missing_receipt_refuses ________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_missing_receipt_refuses0')
+
+    @_needs_run
+    def test_a_missing_receipt_refuses(tmp_path):
+        run = _copy(tmp_path, "norcpt")
+>       _control(run)
+
+test_a7_recovery_boundary_1774.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_missing_receipt_refuses0/norcpt/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_missing_receipt_refuses0/norcpt/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+________________________ test_a_foreign_receipt_refuses ________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_foreign_receipt_refuses0')
+
+    @_needs_run
+    def test_a_foreign_receipt_refuses(tmp_path):
+        """A real receipt from a DIFFERENT completed run, not a corrupted one."""
+        if not os.path.isfile(os.path.join(FOREIGN_RUN, "receipt.json")):
+            pytest.skip("the other completed run is not bound")
+        run = _copy(tmp_path, "foreign")
+>       _control(run)
+
+test_a7_recovery_boundary_1774.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_foreign_receipt_refuses0/foreign/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_foreign_receipt_refuses0/foreign/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+________________________ test_a_changed_receipt_refuses ________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_changed_receipt_refuses0')
+
+    @_needs_run
+    def test_a_changed_receipt_refuses(tmp_path):
+        run = _copy(tmp_path, "rcpt")
+>       _control(run)
+
+test_a7_recovery_boundary_1774.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_changed_receipt_refuses0/rcpt/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_changed_receipt_refuses0/rcpt/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+_____________________ test_a_changed_finalization_refuses ______________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_changed_finalization_re0')
+
+    @_needs_run
+    def test_a_changed_finalization_refuses(tmp_path):
+        run = _copy(tmp_path, "fin")
+>       _control(run)
+
+test_a7_recovery_boundary_1774.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_changed_finalization_re0/fin/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_changed_finalization_re0/fin/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+_______________________ test_a_changed_raw_reply_refuses _______________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_changed_raw_reply_refus0')
+
+    @_needs_run
+    def test_a_changed_raw_reply_refuses(tmp_path):
+        run = _copy(tmp_path, "raw")
+>       _control(run)
+
+test_a7_recovery_boundary_1774.py:136: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_changed_raw_reply_refus0/raw/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_changed_raw_reply_refus0/raw/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+_____________________ test_a_missing_finalization_refuses ______________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_missing_finalization_re0')
+
+    @_needs_run
+    def test_a_missing_finalization_refuses(tmp_path):
+        """Answers but no finalization: the refused middle state, reached from the
+        completed run rather than by preparing a new one."""
+        run = _copy(tmp_path, "middle")
+>       _control(run)
+
+test_a7_recovery_boundary_1774.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_missing_finalization_re0/middle/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_missing_finalization_re0/middle/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+_____________________ test_a_wrong_accepted_freeze_refuses _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_wrong_accepted_freeze_r0')
+
+    @_needs_run
+    def test_a_wrong_accepted_freeze_refuses(tmp_path):
+        run = _copy(tmp_path, "freeze")
+>       _control(run)
+
+test_a7_recovery_boundary_1774.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_wrong_accepted_freeze_r0/freeze/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_wrong_accepted_freeze_r0/freeze/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+__________________ test_another_era_refuses_on_the_live_route __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_another_era_refuses_on_th0')
+
+    @_needs_run
+    def test_another_era_refuses_on_the_live_route(tmp_path):
+        run = _copy(tmp_path, "era")
+>       ident = _control(run)
+                ^^^^^^^^^^^^^
+
+test_a7_recovery_boundary_1774.py:167: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_another_era_refuses_on_th0/era/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_another_era_refuses_on_th0/era/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+______ test_the_candidate_rebuilds_identically_from_the_accepted_identity ______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_the_candidate_rebuilds_id0')
+
+    @_needs_run
+    def test_the_candidate_rebuilds_identically_from_the_accepted_identity(tmp_path):
+        """The positive control for the three population negatives below."""
+>       ident = _control(_copy(tmp_path, "cand"))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_recovery_boundary_1774.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_the_candidate_rebuilds_id0/cand/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_the_candidate_rebuilds_id0/cand/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+______________ test_a_changed_prompt_byte_breaks_the_prompt_tree _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_changed_prompt_byte_bre0')
+
+    @_needs_run
+    def test_a_changed_prompt_byte_breaks_the_prompt_tree(tmp_path):
+>       ident = _control(_copy(tmp_path, "prompt"))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_recovery_boundary_1774.py:193: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_changed_prompt_byte_bre0/prompt/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_changed_prompt_byte_bre0/prompt/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+_____________ test_a_changed_question_binding_breaks_the_candidate _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_changed_question_bindin0')
+
+    @_needs_run
+    def test_a_changed_question_binding_breaks_the_candidate(tmp_path):
+>       ident = _control(_copy(tmp_path, "question"))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_recovery_boundary_1774.py:209: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_a_changed_question_bindin0/question/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_a_changed_question_bindin0/question/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+_________ test_an_incomplete_population_is_not_the_accepted_candidate __________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_an_incomplete_population_0')
+
+    @_needs_run
+    def test_an_incomplete_population_is_not_the_accepted_candidate(tmp_path):
+>       ident = _control(_copy(tmp_path, "population"))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_recovery_boundary_1774.py:223: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_recovery_boundary_1774.py:64: in _control
+    ident = PR.current(run, ACCEPTED)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_prepared_run.py:104: in load
+    frozen = A6.freeze(run_dir)
+             ^^^^^^^^^^^^^^^^^^
+a6_launch_freeze.py:428: in freeze
+    measured = ledger(run_dir)
+               ^^^^^^^^^^^^^^^
+a6_launch_freeze.py:244: in ledger
+    for base, kind, fin, fin_sha in _validated_attempts(run_dir):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-1/test_an_incomplete_population_0/population/a6_a5run_1515'
+
+    def _validated_attempts(run_dir):
+        """Every FINALIZED attempt of one run, through the SAME validators the
+        prepared-run identity uses (Codex SEQ 1473 item 3).
+    
+        Reading any present `finalization.json` and trusting its ledger let a
+        corrupted or substituted record move the call ceiling. These are the exact
+        receipt and finalization owners `a7_prepared_run.load` calls - not a second
+        set of rules.
+    
+        They are called HERE rather than through `a7_prepared_run.load` because
+        that owner builds the A6 freeze, and the freeze budgets its own run: going
+        through it would be `ledger -> load -> freeze -> budget -> ledger`.
+        """
+        import raw_transport as RT
+        out = []
+        # THE PLAN, ERA AND RECEIPT FIRST. Returning early on a missing
+        # finalization accepted ANY directory - an empty or malformed plan was
+        # counted as a lawful zero-call run (Codex SEQ 1474 item 3).
+        # NO ERA RULE HERE. The ledger counts VALIDATED calls from every era -
+        # that is what a completed-call ledger is - and owning a second current-era
+        # rule beside `PR.current` made loading any historical identity refuse,
+        # because an identity load budgets its own run (Codex SEQ 1475).
+        plan = RT.a1_plan_for_run(run_dir)
+        rpath = os.path.join(run_dir, "receipt.json")
+        if not os.path.isfile(rpath):
+            # NAMED, not a bare FileNotFoundError: a directory with no receipt is
+            # not a prepared run, and must not read as a lawful zero-call one.
+            raise ValueError("%s has no receipt, so it is not a prepared run and "
+                             "cannot be counted" % run_dir)
+        receipt = K._load(rpath)
+        bad = RT.a1_run_contract_problems(receipt, run_dir, plan)
+        if bad:
+>           raise ValueError("%s: the receipt does not hold: %s"
+                             % (run_dir, bad[:2]))
+E           ValueError: /tmp/pytest-of-faisal/pytest-1/test_an_incomplete_population_0/population/a6_a5run_1515: the receipt does not hold: ['receipt.receipts is not what a lawful run of this shape carries', 'receipt.invocations is not what a lawful run of this shape carries']
+
+a6_launch_freeze.py:128: ValueError
+=========================== short test summary info ============================
+FAILED test_a7_recovery_boundary_1774.py::test_the_private_copy_carries_the_accepted_identity
+FAILED test_a7_recovery_boundary_1774.py::test_a_missing_receipt_refuses - Va...
+FAILED test_a7_recovery_boundary_1774.py::test_a_foreign_receipt_refuses - Va...
+FAILED test_a7_recovery_boundary_1774.py::test_a_changed_receipt_refuses - Va...
+FAILED test_a7_recovery_boundary_1774.py::test_a_changed_finalization_refuses
+FAILED test_a7_recovery_boundary_1774.py::test_a_changed_raw_reply_refuses - ...
+FAILED test_a7_recovery_boundary_1774.py::test_a_missing_finalization_refuses
+FAILED test_a7_recovery_boundary_1774.py::test_a_wrong_accepted_freeze_refuses
+FAILED test_a7_recovery_boundary_1774.py::test_another_era_refuses_on_the_live_route
+FAILED test_a7_recovery_boundary_1774.py::test_the_candidate_rebuilds_identically_from_the_accepted_identity
+FAILED test_a7_recovery_boundary_1774.py::test_a_changed_prompt_byte_breaks_the_prompt_tree
+FAILED test_a7_recovery_boundary_1774.py::test_a_changed_question_binding_breaks_the_candidate
+FAILED test_a7_recovery_boundary_1774.py::test_an_incomplete_population_is_not_the_accepted_candidate
+13 failed in 1.06s
+
+--- STDERR ---
+
+--- EXIT ---
+1

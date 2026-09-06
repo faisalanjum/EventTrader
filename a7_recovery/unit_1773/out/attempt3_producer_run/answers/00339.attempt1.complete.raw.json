@@ -1,0 +1,38 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "capital_expenditure",
+        "driver_state": "reported",
+        "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point",
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "capital_expenditure_surprise",
+        "driver_state": "unknown",
+        "level_low": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 3.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point",
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "unit_openings",
+        "driver_state": "increased",
+        "level_low": {"value": 155, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 155, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "comparison_baseline": "prior_year",
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "slice_parts": ["segment:tacobellglobaldivision", "geography:international"],
+        "measurement_raw_spans": ["gross"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

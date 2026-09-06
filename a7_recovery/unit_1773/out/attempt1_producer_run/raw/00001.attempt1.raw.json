@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "total_revenue_guidance",
+        "driver_state": "unknown",
+        "level_low": {"value": 13.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 16.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent_yoy",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

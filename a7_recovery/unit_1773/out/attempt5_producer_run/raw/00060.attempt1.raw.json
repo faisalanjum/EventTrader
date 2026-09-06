@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "passenger_revenue",
+        "driver_state": "increased",
+        "change_value": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "slice_parts": ["geography:domesticdestination"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

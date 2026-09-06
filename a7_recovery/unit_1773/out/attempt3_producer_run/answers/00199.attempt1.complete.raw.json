@@ -1,0 +1,16 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "nlrb_organizing_rules",
+        "driver_state": "increased"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

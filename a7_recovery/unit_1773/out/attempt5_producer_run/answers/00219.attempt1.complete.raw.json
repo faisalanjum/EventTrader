@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This quoted reconciliation-table row ('Gift card adjustment, net(3) (9,396) - (9,396) -') nets two independent causes — gift card breakage revenue and a gift card inventory write-down — into a single non-GAAP bridge figure; its scale marker ('in thousands') sits in the table header outside the quote, so scale_multiplier cannot be lawfully sourced from inside the quote per Rule 5.6, and per Rule 3.2 the two causes cannot be split into separate facts without extending the fixed quote, so abstain."
+    }
+  ],
+  "continuity_hints": []
+}
+```

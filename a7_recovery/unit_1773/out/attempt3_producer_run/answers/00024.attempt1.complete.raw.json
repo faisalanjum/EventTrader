@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is a generic forward-looking statement of financing intent ('we intend to finance future aircraft deliveries and option exercises using long-term debt') with no stated value, condition, or period — 'future aircraft deliveries' names no real period and no explicit dateless horizon is stated. Guidance requires a target period (real or explicit horizon) per Rule 6; none is resolvable here, so the item cannot be lawfully turned into a fact."
+    }
+  ],
+  "continuity_hints": []
+}
+```

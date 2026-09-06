@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This item describes a reporting/methodology change — how segment profit is calculated (now excluding pre-opening costs) — not a substantive change in a business driver's state, action, guidance, or surprise. It is an accounting-presentation construct (a recast/definitional change for comparability), which Rule 3.8 excludes as a driver in its own right; the affected real metric (segment profit) is reported separately, not via this methodology note."}
+  ],
+  "continuity_hints": []
+}
+```

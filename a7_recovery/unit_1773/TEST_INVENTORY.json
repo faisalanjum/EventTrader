@@ -1,0 +1,216 @@
+{
+ "note": "Codex SEQ 1774 item 1. Derived from the restored functions and entry points, not a version matrix. Closed A3-A6 proofs are reused by exact identity, not re-run.",
+ "suites": [
+  {
+   "suite": "postrun_identity",
+   "covers": "PR.load/current, immutable launch bindings, executed-run budget",
+   "module": "test_a7_postrun_identity_1521_recovery_1774.py",
+   "command": [
+    "/home/faisal/EventMarketDB/venv/bin/python3",
+    "-B",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "-q",
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_postrun_identity_1521_recovery_1774.py"
+   ],
+   "cwd": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3",
+   "exit": 0,
+   "summary": "9 passed in 0.58s",
+   "tests": [
+    "test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+    "test_completed_run_freeze_budget_counts_once_not_as_future_plan",
+    "test_inmemory_zero_completed_primary_owes_the_whole_schedule",
+    "test_inmemory_completed_primary_without_retry_owes_nothing",
+    "test_inmemory_completed_primary_plus_retry_preserves_retry_and_owes_zero",
+    "test_inmemory_impossible_over_schedule_primary_refuses",
+    "test_omitted_or_wrong_freeze_hash_refuses",
+    "test_a_genuinely_derived_over_ceiling_future_budget_is_under_ceiling_false",
+    "test_re_adding_the_completed_392_yields_6004_and_breaches_the_ceiling"
+   ],
+   "module_sha256": "fdac03d1da992cab73ba8520e02c0600e98656c14af3f8305d7e2caadab4dc5c"
+  },
+  {
+   "suite": "g1_precall_freeze",
+   "covers": "G1 candidate/prompt/population identity and offline admission",
+   "module": "test_a7_g1_precall_freeze_1525.py",
+   "command": [
+    "/home/faisal/EventMarketDB/venv/bin/python3",
+    "-B",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "-q",
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_g1_precall_freeze_1525.py"
+   ],
+   "cwd": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3",
+   "exit": 0,
+   "summary": "7 passed in 44.25s",
+   "tests": [
+    "test_candidate_and_prompt_tree_and_root_rebuild_byte_identically",
+    "test_every_batch_binds_the_current_producer_and_one_same_event",
+    "test_every_lane_occurs_exactly_once",
+    "test_two_blind_lanes_are_blind_and_carry_no_answer",
+    "test_workflow_groups_are_maximal_under_the_exact_byte_boundary",
+    "test_the_run_is_empty_and_resumable",
+    "test_preflight_zero_problems_and_attempt1_budget_under_ceiling"
+   ],
+   "module_sha256": "5870caaff6ce149621faa381431c62fd3913f17eef45c787547e0c3772d0faa9"
+  }
+ ],
+ "adaptation": {
+  "original": "test_a7_postrun_identity_1521.py",
+  "original_sha256": "7f73b68155367a4275dba04690ced8d12146271e049040b8cf73e729477514ee",
+  "adapted": "test_a7_postrun_identity_1521_recovery_1774.py",
+  "adapted_sha256": "fdac03d1da992cab73ba8520e02c0600e98656c14af3f8305d7e2caadab4dc5c",
+  "script": "ledger/adapt_retained_test_1774.py",
+  "removed": {
+   "reopens A5.prepare; 1774 says reuse the closed prelaunch proof": [
+    "test_a_fresh_zero_call_run_loads_against_its_own_freeze",
+    "test_a_substituted_run_refuses_against_the_accepted_hash",
+    "test_a_middle_state_run_refuses"
+   ],
+   "G2/G3 later-step work, and the only consumer of the two ambiguous imports": [
+    "test_grading_inventories_derive_twice_identically_with_zero_problems"
+   ],
+   "uncontrolled: the renamed copy refuses on its path-bound receipt, so the mutation was never shown to be detected; replaced by controlled cases": [
+    "test_a_changed_receipt_refuses",
+    "test_a_changed_finalization_refuses",
+    "test_a_changed_raw_tree_refuses"
+   ]
+  },
+  "not_used": {
+   "test_a7_precall_identity_1517.py": "its zero-call fixture expectations do not apply to a completed run"
+  }
+ },
+ "mutation_cases": {
+  "design": "each case binds ONE isolated private copy of the accepted run at the run's OWN logical path, proves the control loads to the accepted identity, then mutates one thing and requires the intended owner's refusal, matched on what it says",
+  "payload": "ledger/mutation_case_1774.py",
+  "payload_sha256": "046460b43160fd17717c215a29466e05eb9e539b5b60c94f4aa834d0d6f46e27",
+  "driver": "ledger/run_mutations_1774.py",
+  "driver_sha256": "27b873dcfa78e2dadb92a6800d66b438ab61a4a3f9450528990ab12df0593c30",
+  "classification_note": "Codex SEQ 1775 item 2. My earlier record labelled all 13 cases as detected mutations. That was wrong. Only the eight owner_refusal cases drive a rejecting guard. The three hash_sensitivity cases show that a changed input yields a different hash; they do NOT invoke a guard, and changed_question and short_population never write their modified candidate at all - I verified that all three on-disk candidates are still the accepted 2be60129.",
+  "by_kind": {
+   "positive_control": [
+    {
+     "case": "control",
+     "exit": 0,
+     "result": "the unmutated private copy carries the accepted identity"
+    },
+    {
+     "case": "candidate_control",
+     "exit": 0,
+     "result": "candidate 2be60129ee18c999, prompt tree 02e9d2259d0cc256, 206/103/444"
+    }
+   ],
+   "owner_refusal": [
+    {
+     "case": "missing_receipt",
+     "exit": 0,
+     "result": "a7_prepared_run/1: no receipt at /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515/receipt.jso"
+    },
+    {
+     "case": "foreign_receipt",
+     "exit": 0,
+     "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the receipt does not hold: ['receipt.run_id"
+    },
+    {
+     "case": "changed_receipt",
+     "exit": 0,
+     "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the receipt does not hold: ['the receipt ke"
+    },
+    {
+     "case": "changed_finalization",
+     "exit": 0,
+     "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the primary finalization does not hold: [\"f"
+    },
+    {
+     "case": "changed_raw",
+     "exit": 0,
+     "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the preserved raw tree is not the official "
+    },
+    {
+     "case": "missing_finalization",
+     "exit": 0,
+     "result": "a7_prepared_run/1: /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 holds 860 saved files but"
+    },
+    {
+     "case": "wrong_freeze",
+     "exit": 0,
+     "result": "a7_prepared_run/1: /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 4123bb693f6b04"
+    },
+    {
+     "case": "wrong_era",
+     "exit": 0,
+     "result": "/tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515: the receipt does not hold: ['receipt.manife"
+    }
+   ],
+   "hash_sensitivity": [
+    {
+     "case": "changed_prompt",
+     "exit": 0,
+     "result": "prompt tree moved 02e9d2259d0cc256 -> f9051224a26aa6af"
+    },
+    {
+     "case": "changed_question",
+     "exit": 0,
+     "result": "candidate moved 2be60129ee18c999 -> 30da9b6fb32fbb3c"
+    },
+    {
+     "case": "short_population",
+     "exit": 0,
+     "result": "102 of 103 batches no longer the accepted candidate (aba829b9cd65de13)"
+    }
+   ]
+  },
+  "counts": {
+   "positive_control": 2,
+   "owner_refusal": 8,
+   "hash_sensitivity": 3
+  },
+  "on_disk_candidates_after_the_three_hash_cases": {
+   "candidate_control": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+   "changed_prompt": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+   "changed_question": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+   "short_population": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a"
+  }
+ },
+ "reused_not_rerun": {
+  "A3_A6": "closed and published; reused by exact identity (recovery HEAD cc7df9f4)",
+  "a6_prelaunch_freeze": "4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+ },
+ "codex_supplied_guard_proof": {
+  "source": "Codex SEQ 1775 item 2 - Codex's own read-only probe, not a Core run",
+  "status": "supplied by the reviewer to close the guard gap my three hash-sensitivity cases left; nothing was rerun or rebuilt here to satisfy it",
+  "owner_sha256": "747d1f9d439d9402cf02c6702b904b0e3cd8daf4ec39df15d90b535725c8e2a7",
+  "method": "read-only probe compiling the unmodified AST bodies of load_frozen, _rows_for, _sha, _sha_file, _read and _pretty with their real module constants and import dependencies",
+  "positive_control": "on the actual out/mutations/candidate_control/cand_out files: load_frozen accepted the external pin 2be60129..., and _rows_for accepted all 206 root lanes with zero problems",
+  "changed_prompt": {
+   "on": "Core's actual out/mutations/changed_prompt/cand_out files",
+   "result": "the same owner accepted 204 unchanged lanes and refused exactly G1-000/G1a and G1-000/G1b; neither affected lane was returned as valid",
+   "measured_prompt_sha256": "6876d4505c49cdfd3ec97f8c3e9af197443782467d937acd5eb8894a41481e03",
+   "root_pin_sha256": "0f821b8313c805a169335676ec61adec6cf0d7ea5b4282c5fcc7b7e8cb3aa8c1",
+   "core_confirmation": "Core independently re-measured both prompt files on disk and got the same two hashes"
+  },
+  "changed_question": {
+   "level": "unit-level, via an in-memory io.open overlay for only that candidate path",
+   "mutated_candidate_sha256": "30da9b6fb32fbb3c38be21e6f5bce1e0322f93733359ceeb10b6d062a9cee2b4",
+   "result": "the real load_frozen raised ValueError: not the approved 2be60129..."
+  },
+  "short_population": {
+   "level": "unit-level, via the same in-memory overlay",
+   "mutated_candidate_sha256": "aba829b9cd65de13d0acaff5deb1e2b6ae04d117a3c3ad22f57a6760662a6b53",
+   "result": "the real load_frozen raised ValueError: not the approved 2be60129..."
+  },
+  "era_and_cli": "the exact PR 43dcbd35 current_era/require_current_era with the suffix read from pinned BLM 3f04dae5: .v3 accepted, .v3.other refused AT THE ERA OWNER, not as a receipt mismatch; the exact cli_run body dispatched all four split/equals flag-order forms, and omitted arguments, --run-only and --expect-freeze-only each refused before dispatch",
+  "probe_exit": 0,
+  "discarded": "an initial isolated probe omitted the module's SCHEMA constant and raised NameError; Codex records that as a probe setup error, not a production defect, and it is not counted as passing proof",
+  "unchanged_disk_control": "still passed afterward"
+ },
+ "provenance": {
+  "records": "evidence/COMMAND_RECORDS_1775.json",
+  "superseded": "evidence/COMMAND_RECORDS_1774.json (kept; its bindings matched a script definition rather than the launch of the log that stands)"
+ }
+}

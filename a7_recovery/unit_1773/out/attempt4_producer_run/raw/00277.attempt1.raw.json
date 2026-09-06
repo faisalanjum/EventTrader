@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "total_debt",
+        "driver_state": "reported",
+        "level_high": {"value": 35, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "ceiling",
+        "level_unit": "m_usd",
+        "time_type": "instant",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

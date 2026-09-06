@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The targeted text ('Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations') is generic risk-monitoring boilerplate with no stated driver state, direction, magnitude, or discrete action — it only says the company is watching an uncertain, evolving situation, which fails the Rule 1 fact gate."
+    }
+  ],
+  "continuity_hints": []
+}
+```

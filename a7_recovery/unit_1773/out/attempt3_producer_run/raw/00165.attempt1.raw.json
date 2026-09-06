@@ -1,0 +1,10 @@
+```json
+{
+ "source_id": "0001041061-26-000084",
+ "facts": [],
+ "abstentions": [
+  {"reason": "This is a routine 'new accounting pronouncement not yet adopted' disclosure naming ASU 2025-06 and stating the company is 'currently evaluating the impact' with no quantified or qualitative business effect stated; it is a required accounting-standard notice, not a real statement about a driver's state, change, surprise, guidance, or action."}
+ ],
+ "continuity_hints": []
+}
+```

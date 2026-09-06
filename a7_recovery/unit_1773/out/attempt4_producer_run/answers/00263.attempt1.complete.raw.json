@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote reports extra-week sales ($359.1M total AutoZone Stores, $95.7M Domestic Commercial) that occurred inside the trailing-4-quarters window ending February 15, 2025 because that window contained a 53rd week, but no exact start/end dates or fiscal quarter/half/month for that single extra week are stated, and no dateless horizon (sentinel_class) is stated either. This metric fact requires a real period under Rule 6, and the period cannot be lawfully resolved from the text, so the item abstains."
+    }
+  ],
+  "continuity_hints": []
+}
+```

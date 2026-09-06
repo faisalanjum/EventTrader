@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted 'Less Special Items EPS' row is a non-GAAP reconciling line (the per-share delta between GAAP EPS and EPS Excluding Special Items), not a single named driver: it bundles multiple independent one-off items already reported as their own facts elsewhere in this filing (Resource Optimization charges, Brand HQ Consolidation charges, German acquisition/Turkey termination costs, Pizza Hut Strategic Options Review costs, market-wide refranchising gains/losses). Rule 3.2 requires splitting independent causes into separate facts, and Rule 3.8 excludes accounting/reconciliation constructs as drivers. This quote gives only the combined per-share total with no per-cause breakdown, so it cannot be lawfully attributed to a single driver name."
+    }
+  ],
+  "continuity_hints": []
+}
+```

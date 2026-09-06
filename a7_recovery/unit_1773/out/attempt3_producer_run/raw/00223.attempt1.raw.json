@@ -1,0 +1,36 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "unknown",
+        "measurement_raw_spans": ["adjusted diluted"],
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share_surprise",
+        "driver_state": "beat",
+        "measurement_raw_spans": ["adjusted diluted"],
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

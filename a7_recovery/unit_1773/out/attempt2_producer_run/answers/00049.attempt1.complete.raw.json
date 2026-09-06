@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "revenue_guidance",
+        "driver_state": "unknown",
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "level_unit": "percent_yoy",
+        "value_text": "low-teens revenue growth",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

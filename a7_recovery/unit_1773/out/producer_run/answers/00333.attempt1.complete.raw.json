@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "unit_count_guidance",
+        "driver_state": "unknown",
+        "level_low": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+        "level_high": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+        "level_shape_hint": "point",
+        "level_unit": "percent_yoy",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

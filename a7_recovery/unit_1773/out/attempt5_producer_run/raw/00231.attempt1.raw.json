@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "interest_expense_net",
+        "driver_state": "increased",
+        "level_low": {"value": 2624, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "level_high": {"value": 2624, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -1994, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "comparison_high": {"value": -1994, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

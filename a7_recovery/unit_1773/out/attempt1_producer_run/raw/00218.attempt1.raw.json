@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This item is the 'Gift card adjustment, net' line inside the GAAP-to-non-GAAP reconciliation table — a bridging construct that nets two distinct, independent causes (gift card breakage revenue from a redemption-pattern change, and a non-recurring gift card inventory write-down) into one reconciliation figure. Rule 3.2 requires one name per cause and Rule 3.8 requires omitting elimination/reconciliation accounting constructs (keeping only the affected real metric fact), but this quote gives only the netted bridge value with no quote-internal basis to split it back into its two underlying causes or attribute the value to either one. It cannot be lawfully resolved into a single-cause driver fact from this quote alone."
+    }
+  ],
+  "continuity_hints": []
+}
+```

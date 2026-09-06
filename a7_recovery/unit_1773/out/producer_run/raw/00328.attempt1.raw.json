@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "effective_tax_rate_guidance",
+        "driver_state": "unknown",
+        "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "conditions": "with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_restaurant_sales_guidance",
+        "driver_state": "unknown",
+        "value_text": "about flat",
+        "company_confirmed": true,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "level_unit": "percent_yoy"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

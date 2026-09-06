@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_restaurant_sales_guidance",
+        "driver_state": "unknown",
+        "value_text": "about flat",
+        "level_unit": "percent_yoy",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

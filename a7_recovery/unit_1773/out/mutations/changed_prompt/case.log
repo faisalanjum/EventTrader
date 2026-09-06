@@ -1,0 +1,10 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py --host /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/changed_prompt/map.tsv /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py changed_prompt
+--- STDOUT ---
+CASE changed_prompt
+RESULT prompt tree moved 02e9d2259d0cc256 -> f9051224a26aa6af
+OK
+
+--- STDERR ---
+
+--- EXIT ---
+0

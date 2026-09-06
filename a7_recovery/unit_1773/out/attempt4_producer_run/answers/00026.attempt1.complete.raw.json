@@ -1,0 +1,17 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "debt_covenant_compliance",
+        "driver_state": "reported",
+        "time_type": "instant"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

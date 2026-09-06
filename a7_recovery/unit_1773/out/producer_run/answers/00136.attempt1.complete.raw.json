@@ -1,0 +1,28 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "asset_impairment",
+        "driver_state": "occurred",
+        "level_low": {"value": 25.1, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_high": {"value": 25.1, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": 0.1, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_high": {"value": 0.1, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "measurement_raw_spans": ["net"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

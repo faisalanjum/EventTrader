@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales_guidance",
+        "driver_state": "unknown",
+        "level_unit": "percent_sequential",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "slice_parts": ["segment:internationaldevelopmentallicensedmarketsandcorporate"],
+        "value_text": "Q1 comparable sales growth expected to decrease sequentially versus Q4.",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,17 @@
+seeded run: states=0 allowed=392 run_id=a6_a5run_1515
+index names 36 states for this run, all present
+matched 36 invocations to exactly one recorded state each
+recorded states: 36
+  ok    receipt                c43457c99231edb36f3d479848f1ea9ac63fcc84d095755c5a1b8d7a2109b8c4
+a1_finalize -> {'records': [{'index': 0, 'row': {'packet_id': '0000006201-26-000031#000', 'source_id': '0000006201-26-000031', 'lane_id': '0000006201-26-000031#000/L1', 'model
+  BAD   finalization           d0ade69d192fa50e690a9532a21d5cfd277be859aaf102f3d64771797b1dc128
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/reconstruct_producer_1773.py", line 133, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/reconstruct_producer_1773.py", line 112, in main
+    ident = PR.load(RUN)
+            ^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_prepared_run.py", line 111, in load
+    raise ValueError("%s: the A6 freeze of %s does not hold: %s"
+ValueError: a7_prepared_run/1: the A6 freeze of /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 does not hold: ['the planned launch exceeds the global ceiling', 'this launch has already spent something']

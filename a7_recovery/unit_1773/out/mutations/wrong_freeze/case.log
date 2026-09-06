@@ -1,0 +1,10 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py --host /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/wrong_freeze/map.tsv /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py wrong_freeze
+--- STDOUT ---
+CASE wrong_freeze
+RESULT a7_prepared_run/1: /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d, not the required 0000000000000000000000000000000000000000000000000000000000000000
+OK
+
+--- STDERR ---
+
+--- EXIT ---
+0

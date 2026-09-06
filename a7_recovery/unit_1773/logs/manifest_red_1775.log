@@ -1,0 +1,6 @@
+rows ok        : 17798
+view digests   : 2
+self-reference : 1 (a manifest cannot contain its own final hash)
+MISMATCHED     : 1
+   WHITELIST.tsv          want 5d1092e21600f07c got cf2b5e13a48bfaeb
+[rc=1]

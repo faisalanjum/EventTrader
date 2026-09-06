@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is a generic, boilerplate statement of general financing intent ('intend to finance future aircraft deliveries and option exercises using long-term debt') with no specific amount, instrument, timeframe, or discrete transaction — it is not a measurable driver state/change, a quantified or dated guidance target, a surprise comparison, or a discrete action event; it fails Rule 1's gate as generic non-boilerplate content is required."
+    }
+  ],
+  "continuity_hints": []
+}
+```

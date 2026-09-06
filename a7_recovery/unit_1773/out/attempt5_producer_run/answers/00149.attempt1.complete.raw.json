@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "unit_count",
+        "driver_state": "reported",
+        "level_low": {"value": 19872, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 19872, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "slice_parts": ["segment:pizzahutglobaldivision"],
+        "time_type": "instant",
+        "period_start_date": "2025-09-30",
+        "period_end_date": "2025-09-30"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

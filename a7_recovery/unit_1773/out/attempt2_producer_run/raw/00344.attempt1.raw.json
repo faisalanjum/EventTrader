@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "restaurant_count_guidance",
+        "driver_state": "unknown",
+        "level_low": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 50000, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "fiscal_year": 2027,
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

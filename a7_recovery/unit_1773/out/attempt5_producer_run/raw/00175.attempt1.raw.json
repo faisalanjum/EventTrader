@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "consolidated_net_leverage_ratio_guidance",
+        "driver_state": "reaffirmed",
+        "level_low": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": "x"},
+        "level_high": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": "x"},
+        "level_shape_hint": "point",
+        "level_unit": "x",
+        "sentinel_class": "medium_term",
+        "time_type": "instant",
+        "conditions": "Subject to market conditions",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

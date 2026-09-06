@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "share_repurchase_program",
+        "driver_state": "announced",
+        "level_low": {"value": 3.0, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 3.0, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "time_type": "instant",
+        "month": 10,
+        "fiscal_year": 2024,
+        "slice_parts": ["unknown:us-gaap:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

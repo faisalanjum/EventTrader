@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "winter_storms",
+        "driver_state": "occurred",
+        "level_low": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 1,
+        "measurement_raw_spans": ["estimated"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

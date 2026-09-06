@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states an extra-week sales contribution ($359.1M total / $95.7M domestic commercial) tied to the 'Trailing 4 Quarters ending February 15, 2025' window, but only the end date is given; the source states no start date and no fiscal-quarter/half/month/year framing that matches this TTM window, and no dateless horizon is stated either, so the required period cannot be lawfully resolved (Rule 6 all-or-nothing exact-date rule bars stating the end date alone) — abstain."
+    }
+  ],
+  "continuity_hints": []
+}
+```

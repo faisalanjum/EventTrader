@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "unit_count",
+        "driver_state": "reported",
+        "level_low": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 33897, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "slice_parts": ["segment:kfcglobaldivision"],
+        "fiscal_year": 2025,
+        "time_type": "instant"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

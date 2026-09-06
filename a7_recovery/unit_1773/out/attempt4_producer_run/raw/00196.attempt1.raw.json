@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "share_repurchase_authorization",
+        "driver_state": "increased",
+        "level_low": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 39.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "change_value": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "change_unit": "m_usd",
+        "time_type": "instant",
+        "period_end_date": "2024-06-19"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

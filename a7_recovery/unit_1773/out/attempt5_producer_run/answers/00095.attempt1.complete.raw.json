@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The quoted row (\"(1.5)% — % 3.2% — %\") is the restructuring-charges line inside the GAAP-to-non-GAAP effective-tax-rate reconciliation table — it states the percentage-point impact of excluding restructuring charges when bridging effective tax rate to adjusted effective tax rate. This is a reconciliation/elimination artifact of the tax-rate bridge, not a standalone driver value; the real restructuring-charges metric is reported separately in dollar terms elsewhere in the filing, and effective tax rate itself is a separate driver captured elsewhere. Per Rule 3.8, such accounting-construct bridge lines are omitted."}
+  ],
+  "continuity_hints": []
+}
+```

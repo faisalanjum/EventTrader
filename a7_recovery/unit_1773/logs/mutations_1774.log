@@ -1,0 +1,15 @@
+  control                rc=0   DETECTED  the unmutated private copy carries the accepted identity
+  missing_receipt        rc=0   DETECTED  a7_prepared_run/1: no receipt at /tmp/claude-1000/-home-faisal-eventmarket
+  foreign_receipt        rc=0   DETECTED  /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7c
+  changed_receipt        rc=0   DETECTED  /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7c
+  changed_finalization   rc=0   DETECTED  /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7c
+  changed_raw            rc=0   DETECTED  /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7c
+  missing_finalization   rc=0   DETECTED  a7_prepared_run/1: /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0
+  wrong_freeze           rc=0   DETECTED  a7_prepared_run/1: /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0
+  wrong_era              rc=0   DETECTED  /tmp/claude-1000/-home-faisal-eventmarketdb/5ae9b86b-f0f6-4449-beee-9cac7c
+  candidate_control      rc=0   DETECTED  candidate 2be60129ee18c999, prompt tree 02e9d2259d0cc256, 206/103/444
+  changed_prompt         rc=0   DETECTED  prompt tree moved 02e9d2259d0cc256 -> f9051224a26aa6af
+  changed_question       rc=0   DETECTED  candidate moved 2be60129ee18c999 -> 30da9b6fb32fbb3c
+  short_population       rc=0   DETECTED  102 of 103 batches no longer the accepted candidate (aba829b9cd65de13)
+
+13 cases, 0 failed 

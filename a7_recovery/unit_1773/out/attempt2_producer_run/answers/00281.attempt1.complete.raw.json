@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share_guidance",
+        "driver_state": "introduced",
+        "level_low": {"value": 6.30, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 6.60, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "range",
+        "level_unit": "usd",
+        "measurement_raw_spans": ["adjusted diluted"],
+        "fiscal_year": 2027,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

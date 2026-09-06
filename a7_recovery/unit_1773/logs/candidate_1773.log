@@ -1,0 +1,11 @@
+identity: era .v3, 392 scheduled, freeze 4123bb693f6b040a
+  ok    candidate_A              2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a
+  ok    candidate_B              2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/build_candidate_1773.py", line 90, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/build_candidate_1773.py", line 67, in main
+    check("prompt_tree", doc["prompt_tree_sha256"], WANT_PROMPTS)
+                         ~~~^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'prompt_tree_sha256'

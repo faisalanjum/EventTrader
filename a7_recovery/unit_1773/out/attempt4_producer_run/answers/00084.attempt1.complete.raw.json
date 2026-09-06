@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "income_tax_provision",
+        "driver_state": "increased",
+        "level_low": {"value": 58, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_high": {"value": 58, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -43, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_high": {"value": -43, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

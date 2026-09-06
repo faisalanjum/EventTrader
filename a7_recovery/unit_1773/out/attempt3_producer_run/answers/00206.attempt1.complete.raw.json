@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revolving_credit_facility_accordion_capacity",
+        "driver_state": "reported",
+        "level_high": {
+          "value": 200,
+          "scale_multiplier": 1000000,
+          "unit_scale_evidence": "million"
+        },
+        "level_shape_hint": "ceiling",
+        "level_unit": "m_usd"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

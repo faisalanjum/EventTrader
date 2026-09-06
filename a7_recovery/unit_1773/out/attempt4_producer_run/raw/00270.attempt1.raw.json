@@ -1,0 +1,29 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "store",
+      "item": {
+        "driver_name": "net_inventory_per_store",
+        "driver_state": "increased",
+        "level_low": {"value": -105, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+        "level_high": {"value": -105, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": -161, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+        "comparison_high": {"value": -161, "scale_multiplier": 1000, "unit_scale_evidence": "thousand"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "instant",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "period_end_date": "2026-02-14"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

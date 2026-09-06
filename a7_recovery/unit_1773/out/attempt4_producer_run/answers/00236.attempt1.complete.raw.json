@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "earnings_per_share_guidance",
+        "driver_state": "introduced",
+        "level_low": {"value": 28.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 28.55, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "range",
+        "level_unit": "usd",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "measurement_raw_spans": ["Diluted"],
+        "company_confirmed": true
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

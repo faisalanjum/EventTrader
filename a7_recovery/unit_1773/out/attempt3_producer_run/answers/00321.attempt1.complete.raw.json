@@ -1,0 +1,35 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "facts": [
+    {
+      "fact_type": "surprise",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share_surprise",
+        "driver_state": "in_line",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026
+      }
+    },
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

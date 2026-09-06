@@ -1,0 +1,28 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales",
+        "driver_state": "increased",
+        "level_low": {"value": 139.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 139.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point",
+        "comparison_low": {"value": 106.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "comparison_high": {"value": 106.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "period_scope": "ytd",
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:flowerchild"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

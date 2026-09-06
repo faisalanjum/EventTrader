@@ -1,0 +1,10 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py --host /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/out/mutations/candidate_control/map.tsv /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1773/ledger/mutation_case_1774.py candidate_control
+--- STDOUT ---
+CASE candidate_control
+RESULT candidate 2be60129ee18c999, prompt tree 02e9d2259d0cc256, 206/103/444
+OK
+
+--- STDERR ---
+
+--- EXIT ---
+0

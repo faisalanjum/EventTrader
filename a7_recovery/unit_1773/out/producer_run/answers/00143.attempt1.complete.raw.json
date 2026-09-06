@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote's period is 'Nine Months Ended February 22, 2026 Compared to Nine Months Ended February 23, 2025' — only the end date is stated, no start date is given, and this nine-month cumulative window does not match any lawful period shape field (it is not a single fiscal_quarter, half, month, or a stand-alone full fiscal_year, and YTD framing requires exact start+end dates per Rule 6, which are not both present). Since a real period is clearly implied and required for this metric fact but cannot be lawfully resolved, the fact must park/abstain per Rule 6."
+    }
+  ],
+  "continuity_hints": []
+}
+```

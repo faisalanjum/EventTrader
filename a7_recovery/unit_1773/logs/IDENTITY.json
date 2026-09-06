@@ -1,0 +1,20 @@
+{
+ "schema": "a7_prepared_run/1",
+ "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515",
+ "contract_suffix": ".v3",
+ "a5_manifest_sha256": "5e33c3e4acbff1c710321008335d6a66622992a8317027c9d231d85912f37c53",
+ "a5_bundle_sha256": "d2e850d86f643f177868b8b755b0a0d92c0a57f1aec8fabd4455acea2367edff",
+ "receipt_sha256": "c43457c99231edb36f3d479848f1ea9ac63fcc84d095755c5a1b8d7a2109b8c4",
+ "scheduled_calls": 392,
+ "a6_freeze_sha256": "4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d",
+ "a4_lock_sha256": "63018354e6b26a8061a114934df15fe035b44fe031dcf00768b440983d43b8a0",
+ "a4_lock_receipt_sha256": "7f1f7bef4d02b9c5501d9ec6d8d5b9eab5e8aab225092878b7280964bd5d44e3",
+ "corrected_inventory_sha256": "1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066",
+ "finalizations": {
+  "primary": "04b53cddf63528933cd99afe1b215061d2a07d8f4bc2fb0738014dd50aa30880"
+ },
+ "executed": {
+  "run_digest": "9aa2d1b2efcdbec5ee5d58958e68dc6ec91b076f64f832d625f941488970215a",
+  "run_files": 861
+ }
+}

@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "unit_revenue_guidance",
+        "driver_state": "unknown",
+        "level_low": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "floor",
+        "level_unit": "percent_yoy",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "slice_parts": ["geography:domesticdestination"],
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

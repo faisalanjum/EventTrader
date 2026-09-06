@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This item describes a change in internal segment-profit reporting methodology (excluding pre-opening costs from the calculation) — an accounting/reporting construct, not a business driver's state, change, surprise, guidance, or action. Rule 3.8 treats such accounting constructs as non-drivers; no real metric value, direction, or business event is stated here to attach a fact to."}
+  ],
+  "continuity_hints": []
+}
+```

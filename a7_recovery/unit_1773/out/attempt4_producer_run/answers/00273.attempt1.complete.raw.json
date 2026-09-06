@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "cost_per_available_seat_mile_ex_fuel_guidance",
+        "driver_state": "introduced",
+        "level_low": {"value": 2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "company_confirmed": true
+      },
+      "per_x": "available_seat_mile"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

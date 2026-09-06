@@ -1,0 +1,38 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "foreign_currency_translation",
+        "driver_state": "reported",
+        "level_low": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:kfcglobaldivision"]
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "foreign_currency_translation",
+        "driver_state": "reported",
+        "level_low": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:kfcglobaldivision"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

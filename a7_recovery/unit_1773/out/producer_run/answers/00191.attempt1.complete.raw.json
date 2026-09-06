@@ -1,0 +1,18 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revolving_credit_facility_maturity",
+        "driver_state": "reported",
+        "period_end_date": "2028-11-15",
+        "time_type": "instant"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,36 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "restaurant_margin",
+        "driver_state": "decreased",
+        "change_value": {"value": -40, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+        "change_unit": "basis_points",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:tacobellglobaldivision", "entity_ownership:companyownedstores"],
+        "measurement_raw_spans": ["lapping the 53rd week"]
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "restaurant_margin",
+        "driver_state": "decreased",
+        "change_value": {"value": -10, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+        "change_unit": "basis_points",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:tacobellglobaldivision", "entity_ownership:companyownedstores"],
+        "measurement_raw_spans": ["lapping the 53rd week"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

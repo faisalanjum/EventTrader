@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "reported",
+        "level_low": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 37.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "slice_parts": ["product:foodandbeverage", "channel:digital"],
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

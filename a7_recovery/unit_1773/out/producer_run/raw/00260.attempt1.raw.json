@@ -1,0 +1,18 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "weather",
+        "driver_state": "persists",
+        "sentinel_class": "long_term",
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

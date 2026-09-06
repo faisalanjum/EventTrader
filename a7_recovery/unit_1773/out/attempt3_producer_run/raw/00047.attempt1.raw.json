@@ -1,0 +1,16 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "antitrust_immunity_termination",
+        "driver_state": "suspended"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

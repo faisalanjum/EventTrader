@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Target text ('Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations') is generic risk-boilerplate/monitoring language with no stated direction, magnitude, or concrete action for a specific driver — it only says the company is watching an uncertain, evolving situation, matching Rule 1.2's 'generic risk boilerplate' exclusion rather than a real fact."
+    }
+  ],
+  "continuity_hints": []
+}
+```

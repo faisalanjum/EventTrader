@@ -1,0 +1,19 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "skymiles_credit_facility",
+        "driver_state": "occurred",
+        "time_type": "instant",
+        "fiscal_year": 2025,
+        "month": 9
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

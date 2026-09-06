@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "sga_expense_guidance",
+        "driver_state": "introduced",
+        "level_unit": "percent_yoy",
+        "value_text": "in line with to slightly below net sales growth; significantly lower than fiscal 2025's SG&A growth",
+        "company_confirmed": true,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales_guidance",
+        "driver_state": "introduced",
+        "level_unit": "percent_sequential",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "slice_parts": ["segment:internationaldevelopmentallicensedmarketsandcorporate"],
+        "value_text": "Q1 2026 IDL comp sales guided to decrease sequentially from the 4.5% Q4 2025 level",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

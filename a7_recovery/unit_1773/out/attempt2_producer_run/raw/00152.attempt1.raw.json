@@ -1,0 +1,32 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "restaurant_acquisitions",
+        "driver_state": "occurred",
+        "slice_parts": ["segment:kfcglobaldivision"]
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "same_store_sales",
+        "driver_state": "increased",
+        "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:kfcglobaldivision", "entity_ownership:companyownedstores"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

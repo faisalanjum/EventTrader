@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states the effective tax rate only for a trailing-four-quarters window ending February 14, 2026 (with a year-ago comparison ending February 15, 2025); only the end date is given, no start date is stated, and no fiscal_quarter/half/month/fiscal_year framing describes that same trailing-four-quarter window (it spans parts of two fiscal years), so the period cannot be resolved into any period field and no dateless horizon is stated. This is a real, clearly-implied-period metric with an unresolvable period, so it must abstain rather than guess, derive, or collapse the window."
+    }
+  ],
+  "continuity_hints": []
+}
+```

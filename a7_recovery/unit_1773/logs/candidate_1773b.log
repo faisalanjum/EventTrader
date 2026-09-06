@@ -1,0 +1,15 @@
+identity: era .v3, 392 scheduled, freeze 4123bb693f6b040a
+  ok    candidate_A              2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a
+  ok    candidate_B              2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a
+  ok    prompt_tree              02e9d2259d0cc2567dad56786d6457893629c16eb62128c88872288f76e00122
+  ok    lanes                    206
+  ok    batches                  103
+  ok    batch_rows               103
+  ok    questions                444
+  ok    question_bindings        444
+  ok    prompt_pins              103
+  ok    grader_owner             806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6
+  ok    prompt_files             103
+  ok    both_builds_identical    True
+
+12 checks, 0 bad 

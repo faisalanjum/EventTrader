@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "facts": [],
+  "abstentions": [
+    {"reason": "Generic risk-type boilerplate characterizing jet fuel costs as inherently volatile for the airline in general — not a stated level, change, surprise, guidance, or discrete event for a specific period; no actionable driver fact to extract."}
+  ],
+  "continuity_hints": []
+}
+```
