@@ -1,0 +1,8 @@
+root written : /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/root.json
+  sha256     : 9af8e5ca553e0a4cf0dff2107fef4b8e6ffe0f4e50c72b429554c5cbe72a1691
+  required   : 9af8e5ca553e0a4cf0dff2107fef4b8e6ffe0f4e50c72b429554c5cbe72a1691
+  bytes      : 35877 (required 35877)
+  serializer reproduces the bytes: True
+  rows       : 206
+MATCH: True
+[rc=0]

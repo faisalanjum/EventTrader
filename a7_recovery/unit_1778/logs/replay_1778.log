@@ -1,0 +1,35 @@
+seg 1 prepared: lanes 30 predicted_bytes 519064 receipt dd59d2d3d37f45c4
+  receipt matches the historical pin
+  OFFICIAL_ROWS  30
+  LEDGER         {"invalid":0,"retry":0,"scheduled":30,"uncalled":0,"valid":30}
+  RETRY          [] UNCALLED []
+  NONVALID       [] why {}
+  SEGMENT_CLEAN  True
+  finalization  540000fbc2f5bebbf84a5da685bf073a6fe619a8ce252f7e1e63adb18ce471c6
+  finalization matches the historical pin
+seg 2 prepared: lanes 52 predicted_bytes 522334 receipt 8853a3fd3fb68f97
+  receipt matches the historical pin
+  OFFICIAL_ROWS  52
+  LEDGER         {"invalid":1,"retry":1,"scheduled":52,"uncalled":0,"valid":51}
+  RETRY          ['G1-018/G1a'] UNCALLED []
+  NONVALID       [['G1-018/G1a', False]] why {"G1-018/G1a":["the reply is dict, not an array"]}
+  SEGMENT_CLEAN  False
+  finalization  5ae820e804ec18812780c5269cd0a17ea42b87df571ec39182d96e3f4e4912e1
+  finalization matches the historical pin
+seg 3 (attempt-2 retry) prepared: lanes 1 receipt 6ae2d791c542cdbe
+  receipt matches the historical pin
+  OFFICIAL_ROWS  1
+  LEDGER         {"invalid":0,"retry":0,"scheduled":1,"uncalled":0,"valid":1}
+  RETRY          [] UNCALLED []
+  NONVALID       [] why {}
+  SEGMENT_CLEAN  True
+  finalization  46f467b96f0d13d4776dfb40f667b218018db47526a1f909deab98b6a0981762
+  no historical finalization hash exists for this retry; recorded from the owner, not invented
+
+--- status after three segments (exit 0) ---
+ROOT_SHA    : 9af8e5ca553e0a4cf0dff2107fef4b8e6ffe0f4e50c72b429554c5cbe72a1691
+SEGMENTS    : [1, 2, 3]
+  seg 1 finalized
+  seg 2 finalized
+  seg 3 finalized
+LANE_STATES : called 82 of 206

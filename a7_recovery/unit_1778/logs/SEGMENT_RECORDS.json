@@ -1,0 +1,88 @@
+[
+ {
+  "label": "seg1_prepare",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "prepare"
+  ],
+  "exit": 0
+ },
+ {
+  "label": "seg1_ingest",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "ingest",
+   "1",
+   "dd59d2d3d37f45c43f80ebf34a50fe0b6e06584996259fbeadf141c79fb0e9b4",
+   "85692dcf-0e8"
+  ],
+  "exit": 0,
+  "finalization_sha256": "540000fbc2f5bebbf84a5da685bf073a6fe619a8ce252f7e1e63adb18ce471c6",
+  "expected_outcome": "30 valid, no retry or uncalled"
+ },
+ {
+  "label": "seg2_prepare",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "prepare"
+  ],
+  "exit": 0
+ },
+ {
+  "label": "seg2_ingest",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "ingest",
+   "2",
+   "8853a3fd3fb68f9795e51c0f69710ef0a1692098fe14b9c17cf09e6201480094",
+   "f309e723-949"
+  ],
+  "exit": 0,
+  "finalization_sha256": "5ae820e804ec18812780c5269cd0a17ea42b87df571ec39182d96e3f4e4912e1",
+  "expected_outcome": "51 valid and one schema-invalid G1-018/G1a"
+ },
+ {
+  "label": "seg3_prepare",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "retry",
+   "G1-018/G1a"
+  ],
+  "exit": 0
+ },
+ {
+  "label": "seg3_ingest",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "ingest",
+   "3",
+   "6ae2d791c542cdbede088c22247e1943c2098eb2b63dc4eaf2abb563bccc08f3",
+   "87012c93-dba"
+  ],
+  "exit": 0,
+  "finalization_sha256": "46f467b96f0d13d4776dfb40f667b218018db47526a1f909deab98b6a0981762",
+  "expected_outcome": "one valid, no retry or uncalled"
+ },
+ {
+  "label": "status_after_3",
+  "command": [
+   "/home/faisal/EventMarketDB/venv/bin/python3",
+   "-B",
+   "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+   "status"
+  ],
+  "exit": 0
+ }
+]

@@ -1,0 +1,54 @@
+{
+ "grade_batch.seg04.js": {
+  "bytes": 520690,
+  "sha256": "36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757"
+ },
+ "receipt.seg04.json": {
+  "bytes": 6726,
+  "sha256": "a98d86729c7196bf23e9ce0a343081fabb3a1aa5a3c01a7b611ed7845df93924"
+ },
+ "reservation.seg04.json": {
+  "bytes": 731,
+  "sha256": "8f5cf84e35ff2789d2e09a3fac675459851af486c5ed4ae930bf73b41830f75a"
+ },
+ "root_sha256": "9af8e5ca553e0a4cf0dff2107fef4b8e6ffe0f4e50c72b429554c5cbe72a1691",
+ "receipt_seg04_sha256": "a98d86729c7196bf23e9ce0a343081fabb3a1aa5a3c01a7b611ed7845df93924",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg04.js",
+ "args_rows": 34,
+ "args_lanes": [
+  "G1-041/G1a",
+  "G1-041/G1b",
+  "G1-042/G1a",
+  "G1-042/G1b",
+  "G1-043/G1a",
+  "G1-043/G1b",
+  "G1-044/G1a",
+  "G1-044/G1b",
+  "G1-045/G1a",
+  "G1-045/G1b",
+  "G1-046/G1a",
+  "G1-046/G1b",
+  "G1-047/G1a",
+  "G1-047/G1b",
+  "G1-048/G1a",
+  "G1-048/G1b",
+  "G1-049/G1a",
+  "G1-049/G1b",
+  "G1-050/G1a",
+  "G1-050/G1b",
+  "G1-051/G1a",
+  "G1-051/G1b",
+  "G1-052/G1a",
+  "G1-052/G1b",
+  "G1-053/G1a",
+  "G1-053/G1b",
+  "G1-054/G1a",
+  "G1-054/G1b",
+  "G1-055/G1a",
+  "G1-055/G1b",
+  "G1-056/G1a",
+  "G1-056/G1b",
+  "G1-057/G1a",
+  "G1-057/G1b"
+ ]
+}

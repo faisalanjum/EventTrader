@@ -1,0 +1,15 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py prepare
+--- STDOUT ---
+SEGMENT     : 2
+LANES       : 52 predicted_bytes 522334
+ROOT_SHA    : 9af8e5ca553e0a4cf0dff2107fef4b8e6ffe0f4e50c72b429554c5cbe72a1691
+RECEIPT_SHA : 8853a3fd3fb68f9795e51c0f69710ef0a1692098fe14b9c17cf09e6201480094
+SCRIPT_PATH : /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg02.js
+SCRIPT_BYTES: 522334
+ARGS_FILE   : /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_args_seg02.json rows 52
+PREPARE_OK
+
+--- STDERR ---
+
+--- EXIT ---
+0

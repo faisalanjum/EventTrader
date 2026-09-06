@@ -1,0 +1,197 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/invocation.seg01.json",
+ "invocation_sha256": "133deda51ddf62f9abe152316000f36abecec7ff5726fab0d1239ca19b2d6870",
+ "parent": null,
+ "reservation_sha256": "6064c2f92bac07b223af456ac6f5f86827bea7e2bd8b21a9973b2a102dc0f1bd",
+ "root_sha256": "9af8e5ca553e0a4cf0dff2107fef4b8e6ffe0f4e50c72b429554c5cbe72a1691",
+ "rows": [
+  {
+   "batch_id": "G1-000",
+   "lane_id": "G1-000/G1a",
+   "ordinal": 0,
+   "prompt_sha256": "0f821b8313c805a169335676ec61adec6cf0d7ea5b4282c5fcc7b7e8cb3aa8c1"
+  },
+  {
+   "batch_id": "G1-000",
+   "lane_id": "G1-000/G1b",
+   "ordinal": 1,
+   "prompt_sha256": "0f821b8313c805a169335676ec61adec6cf0d7ea5b4282c5fcc7b7e8cb3aa8c1"
+  },
+  {
+   "batch_id": "G1-001",
+   "lane_id": "G1-001/G1a",
+   "ordinal": 2,
+   "prompt_sha256": "8778dc06eab6123d06fed7d8df017fd20f21c264e120715185314b614e238a2d"
+  },
+  {
+   "batch_id": "G1-001",
+   "lane_id": "G1-001/G1b",
+   "ordinal": 3,
+   "prompt_sha256": "8778dc06eab6123d06fed7d8df017fd20f21c264e120715185314b614e238a2d"
+  },
+  {
+   "batch_id": "G1-002",
+   "lane_id": "G1-002/G1a",
+   "ordinal": 4,
+   "prompt_sha256": "243c769b7a050c2e1cc0e7fbb46b88cd8a1d86a3b19a2d46a613cc740111280d"
+  },
+  {
+   "batch_id": "G1-002",
+   "lane_id": "G1-002/G1b",
+   "ordinal": 5,
+   "prompt_sha256": "243c769b7a050c2e1cc0e7fbb46b88cd8a1d86a3b19a2d46a613cc740111280d"
+  },
+  {
+   "batch_id": "G1-003",
+   "lane_id": "G1-003/G1a",
+   "ordinal": 6,
+   "prompt_sha256": "4e72e3e2251f4762ca6a29dc7b6847c2816ac8088487a6401b2e04bb118b64c3"
+  },
+  {
+   "batch_id": "G1-003",
+   "lane_id": "G1-003/G1b",
+   "ordinal": 7,
+   "prompt_sha256": "4e72e3e2251f4762ca6a29dc7b6847c2816ac8088487a6401b2e04bb118b64c3"
+  },
+  {
+   "batch_id": "G1-004",
+   "lane_id": "G1-004/G1a",
+   "ordinal": 8,
+   "prompt_sha256": "dedf519fc3d3fd1c6226d71b989e0fe456206f811396340572983896e39af45e"
+  },
+  {
+   "batch_id": "G1-004",
+   "lane_id": "G1-004/G1b",
+   "ordinal": 9,
+   "prompt_sha256": "dedf519fc3d3fd1c6226d71b989e0fe456206f811396340572983896e39af45e"
+  },
+  {
+   "batch_id": "G1-005",
+   "lane_id": "G1-005/G1a",
+   "ordinal": 10,
+   "prompt_sha256": "cfdc7a928a683d8101cc68029aa955d6ca78de1f5e8c709384e7b4afebcf7dd5"
+  },
+  {
+   "batch_id": "G1-005",
+   "lane_id": "G1-005/G1b",
+   "ordinal": 11,
+   "prompt_sha256": "cfdc7a928a683d8101cc68029aa955d6ca78de1f5e8c709384e7b4afebcf7dd5"
+  },
+  {
+   "batch_id": "G1-006",
+   "lane_id": "G1-006/G1a",
+   "ordinal": 12,
+   "prompt_sha256": "2e69aad8497dfb743cea6dda567c6b5237f9e30b1b02212b76e6623093d60d1a"
+  },
+  {
+   "batch_id": "G1-006",
+   "lane_id": "G1-006/G1b",
+   "ordinal": 13,
+   "prompt_sha256": "2e69aad8497dfb743cea6dda567c6b5237f9e30b1b02212b76e6623093d60d1a"
+  },
+  {
+   "batch_id": "G1-007",
+   "lane_id": "G1-007/G1a",
+   "ordinal": 14,
+   "prompt_sha256": "be0ca8fc0902887affaec544128c36884146dbc5b86f1ee578f9871f9fd9e9fa"
+  },
+  {
+   "batch_id": "G1-007",
+   "lane_id": "G1-007/G1b",
+   "ordinal": 15,
+   "prompt_sha256": "be0ca8fc0902887affaec544128c36884146dbc5b86f1ee578f9871f9fd9e9fa"
+  },
+  {
+   "batch_id": "G1-008",
+   "lane_id": "G1-008/G1a",
+   "ordinal": 16,
+   "prompt_sha256": "977a6b964de3cd1beef00407df1e120e34f450c111e204af6e354137220ff9c0"
+  },
+  {
+   "batch_id": "G1-008",
+   "lane_id": "G1-008/G1b",
+   "ordinal": 17,
+   "prompt_sha256": "977a6b964de3cd1beef00407df1e120e34f450c111e204af6e354137220ff9c0"
+  },
+  {
+   "batch_id": "G1-009",
+   "lane_id": "G1-009/G1a",
+   "ordinal": 18,
+   "prompt_sha256": "d8f5884d470949438f3a9aca699d76e05b181fa3ce142d01a13691e8e6b0898a"
+  },
+  {
+   "batch_id": "G1-009",
+   "lane_id": "G1-009/G1b",
+   "ordinal": 19,
+   "prompt_sha256": "d8f5884d470949438f3a9aca699d76e05b181fa3ce142d01a13691e8e6b0898a"
+  },
+  {
+   "batch_id": "G1-010",
+   "lane_id": "G1-010/G1a",
+   "ordinal": 20,
+   "prompt_sha256": "92fc62e238cbda83300cda3886a0e7060ec73f4bd531bd5ac5c9dd54f817e566"
+  },
+  {
+   "batch_id": "G1-010",
+   "lane_id": "G1-010/G1b",
+   "ordinal": 21,
+   "prompt_sha256": "92fc62e238cbda83300cda3886a0e7060ec73f4bd531bd5ac5c9dd54f817e566"
+  },
+  {
+   "batch_id": "G1-011",
+   "lane_id": "G1-011/G1a",
+   "ordinal": 22,
+   "prompt_sha256": "3ff14e6d31fd3b6f45b8df4fddc02f8810ca8425f2605acc948562f707da1aa5"
+  },
+  {
+   "batch_id": "G1-011",
+   "lane_id": "G1-011/G1b",
+   "ordinal": 23,
+   "prompt_sha256": "3ff14e6d31fd3b6f45b8df4fddc02f8810ca8425f2605acc948562f707da1aa5"
+  },
+  {
+   "batch_id": "G1-012",
+   "lane_id": "G1-012/G1a",
+   "ordinal": 24,
+   "prompt_sha256": "d6277f01a11cb0e73d8192c67bb37778bf7619e79ca615c8127721ed70d091b6"
+  },
+  {
+   "batch_id": "G1-012",
+   "lane_id": "G1-012/G1b",
+   "ordinal": 25,
+   "prompt_sha256": "d6277f01a11cb0e73d8192c67bb37778bf7619e79ca615c8127721ed70d091b6"
+  },
+  {
+   "batch_id": "G1-013",
+   "lane_id": "G1-013/G1a",
+   "ordinal": 26,
+   "prompt_sha256": "4da1831b8410062105f99b3d20607efa39fbd5ea011f33fc2e4ec9fd88c7b49f"
+  },
+  {
+   "batch_id": "G1-013",
+   "lane_id": "G1-013/G1b",
+   "ordinal": 27,
+   "prompt_sha256": "4da1831b8410062105f99b3d20607efa39fbd5ea011f33fc2e4ec9fd88c7b49f"
+  },
+  {
+   "batch_id": "G1-014",
+   "lane_id": "G1-014/G1a",
+   "ordinal": 28,
+   "prompt_sha256": "a4d8a5bef248668f9f9fdf044a0efeae0320bd442231407175496c8f43678289"
+  },
+  {
+   "batch_id": "G1-014",
+   "lane_id": "G1-014/G1b",
+   "ordinal": 29,
+   "prompt_sha256": "a4d8a5bef248668f9f9fdf044a0efeae0320bd442231407175496c8f43678289"
+  }
+ ],
+ "run_id": "g1_precall_run_1525",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg01.js",
+ "script_sha256": "2386e6ea0c42801df534379cbaee50fc6f55548ddb97db3c53e0b97917872f39",
+ "segment": 1,
+ "state_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/state.seg01.json"
+}
