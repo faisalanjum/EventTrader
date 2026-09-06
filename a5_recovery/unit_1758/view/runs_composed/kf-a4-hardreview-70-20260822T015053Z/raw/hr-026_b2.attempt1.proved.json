@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "miami_airport_expansion",
+        "driver_state": "announced",
+        "level_low": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "fiscal_year": 2027
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

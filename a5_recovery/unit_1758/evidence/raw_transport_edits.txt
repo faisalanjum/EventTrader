@@ -1,0 +1,20 @@
+edit 1
+--- recorded old ---
+    with io.open(blm.INVENTORY, encoding="utf-8") as fh:
+        records = json.load(fh)["records"]
+    primary = len(records) * blm.LANES_PER_PACKET
+--- recorded new ---
+    with io.open(blm.plan_inventory(plan), encoding="utf-8") as fh:
+        records = json.load(fh)["records"]
+    primary = len(records) * blm.LANES_PER_PACKET
+
+edit 2
+--- recorded old ---
+    derived = blm.derive_expected(
+        plan.get("runtime_model_id"),
+        contract_suffix=plan.get("contract_suffix"))
+--- recorded new ---
+    derived = blm.derive_expected(
+        plan.get("runtime_model_id"),
+        contract_suffix=plan.get("contract_suffix"),
+        inventory=blm.plan_inventory(plan))

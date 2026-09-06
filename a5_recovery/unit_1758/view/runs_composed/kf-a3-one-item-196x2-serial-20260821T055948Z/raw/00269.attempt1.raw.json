@@ -1,0 +1,36 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales",
+        "driver_state": "unknown",
+        "slice_parts": ["geography:nonus"],
+        "measurement_raw_spans": ["constant currency"],
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "sales",
+        "driver_state": "missed",
+        "slice_parts": ["geography:nonus"],
+        "measurement_raw_spans": ["constant currency"],
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "consensus",
+        "has_favorability_wording": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

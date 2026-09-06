@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This is a loan-agreement covenant requirement (a contractual minimum fixed charge coverage ratio the company must maintain if availability falls below a threshold), not a reported/actual state of the company's own fixed charge coverage ratio and not a change, surprise, guidance, or discrete action — it is a contingent contractual term, so it fails Rule 1's gate for a real driver state/change/surprise/guidance/action."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,81 @@
+{
+ "door": "a4_hard_review_double_blind",
+ "attempt": 2,
+ "run_id": "retry",
+ "receipt_sha256": "af042823e94ff7d002b57a1936ff446737299b130fc0b509ad70b3445d8b64a8",
+ "manifest_sha256": "3666352de6f9217bfc440a1f40fb7dce1182c2c9edd71d675c2f65626e8102e0",
+ "derived_from": {
+  "owner_sha256": "a289601b0bf52f223661f63f64128717baabb9ab1d061055119474d3cc4321f9",
+  "regrade_sha256": "f587b7ab3d08933b49bd6f04f4d9ecc9eff8e043f1d41c33a60a6faeea170b7f",
+  "conflicts_sha256": "29293450b302e7e158daef7591ccd3bf57967101b907f176ad298ae548f60728",
+  "a4_receipt_sha256": "98ecc6762493a5a36a02ca785b836b2761a5dfa8602bd3789068231008573442",
+  "a4_finalization_sha256": "45e0f404506c6178a11cd455ad8e5fe3e2a466bf5cb4b29ae743df67781f277e"
+ },
+ "harvested_raw": [
+  "wf_654217f9-2a4.000.raw.json",
+  "wf_5c57d428-25c.000.raw.json",
+  "wf_8248ba6e-7d6.000.raw.json",
+  "wf_8b1d165e-d6f.000.raw.json",
+  "wf_b8de6c72-ab6.000.raw.json",
+  "wf_670e5d7a-f32.000.raw.json",
+  "wf_f823b381-9e9.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "hr-029/b1",
+   "valid",
+   ""
+  ],
+  [
+   "hr-029/b2",
+   "invalid_response",
+   "0000092380-26-000044#040: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+  ],
+  [
+   "hr-030/b1",
+   "valid",
+   ""
+  ],
+  [
+   "hr-031/b1",
+   "valid",
+   ""
+  ],
+  [
+   "hr-033/b1",
+   "invalid_response",
+   "CMG_2026-02-03T16.30#149: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+  ],
+  [
+   "hr-033/b2",
+   "invalid_response",
+   "CMG_2026-02-03T16.30#149: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+  ],
+  [
+   "hr-034/b1",
+   "invalid_response",
+   "MCD_2026-02-11T16.30#165: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+  ]
+ ],
+ "ledger": {
+  "scheduled": 7,
+  "valid": 3,
+  "invalid_response": 4,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "budget": {
+  "ledger_before": 4230,
+  "this_attempt": 7,
+  "spent_so_far": 77,
+  "ledger_after": 4307,
+  "frozen_primaries": 70,
+  "worst_case_total": 140,
+  "global_ceiling": 4382,
+  "within_ceiling": true
+ },
+ "retry": []
+}

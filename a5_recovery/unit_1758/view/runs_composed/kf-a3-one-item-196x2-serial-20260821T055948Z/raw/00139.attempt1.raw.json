@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales",
+        "driver_state": "increased",
+        "slice_parts": ["segment:longhornsteakhousesegment"],
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

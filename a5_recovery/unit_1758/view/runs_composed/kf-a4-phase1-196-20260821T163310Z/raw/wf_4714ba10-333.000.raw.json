@@ -1,0 +1,39 @@
+```json
+{
+  "packet_id": "0000027904-26-000022#030",
+  "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "revenue",
+          "driver_state": "increased",
+          "change_value": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "slice_parts": ["geography:domesticdestination", "product:passenger"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000022#030/L1",
+      "exact_match": false,
+      "why": "L1 folds the product dimension into the driver_name (\"passenger_revenue\") and omits product:passenger from slice_parts; Rule 3.4 requires the company's own measured product (passenger vs. cargo vs. other, per the revenue breakdown table) to live in the slice, not the name, and the menu itself carries product:passenger as a valid token — so the settled name is the bare metric \"revenue\" with both geography and product slices."
+    },
+    {
+      "lane_id": "0000027904-26-000022#030/L2",
+      "exact_match": true,
+      "why": "L2 uses driver_name \"revenue\" with slice_parts [\"geography:domesticdestination\", \"product:passenger\"], and matches on driver_state, change_value (8/1/\"%\"), change_unit percent_yoy, comparison_baseline prior_year, time_type duration, and fiscal_quarter/year 1/2026 — identical to the settled item."
+    }
+  ],
+  "ambiguities": []
+}
+```

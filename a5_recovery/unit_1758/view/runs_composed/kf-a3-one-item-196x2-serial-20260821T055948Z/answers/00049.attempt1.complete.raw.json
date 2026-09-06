@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "unknown",
+        "value_text": "Low-teens revenue growth",
+        "conditions": "on flat capacity growth",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "change_unit": "percent_yoy"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

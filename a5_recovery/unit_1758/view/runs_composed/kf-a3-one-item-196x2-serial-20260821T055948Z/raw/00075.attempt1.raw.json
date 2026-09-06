@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "accelerating_the_organization_restructuring_charges",
+        "driver_state": "reported",
+        "level_low": {"value": 229, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 229, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "measurement_raw_spans": ["net pre-tax"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

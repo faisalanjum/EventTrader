@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Generic risk-boilerplate materiality disclaimer ('we believe the impact of weather on our sales mix is not significant') — a stock long-term reassurance with no quantification, no stated level/direction, and no company-specific new information; matches Rule 1.2's boilerplate exclusion rather than a resolvable driver state, and 'impact' is a banned effect word (Rule 3.10) so no lawful driver_name can be built from it."
+    }
+  ],
+  "continuity_hints": []
+}
+```

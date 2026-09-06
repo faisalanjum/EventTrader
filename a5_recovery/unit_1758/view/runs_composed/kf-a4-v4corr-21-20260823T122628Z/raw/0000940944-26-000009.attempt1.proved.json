@@ -1,0 +1,230 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The quote 'Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM' states two bare digit values (25.1 and 0.1) with no dollar sign, 'million', or any other scale/unit marker inside the quote itself; the governing '(in millions)' label sits only in the table's column header, outside this located span. Rule 5.6 requires abstention for a value-bearing fact whose scale marker sits in a header outside the quote rather than assuming or borrowing the multiplier, and the digits are specific (not vague), so no numberless recast is available either."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real_item, but the quote's bare digits carry no in-quote scale marker (the '(in millions)' label lives only in the table header outside this span), so Rule 5.6 forces abstention, making this a control that correctly yields no fact rather than the proposed real item."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_sales",
+              "driver_state": "increased",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_average_check",
+              "driver_state": "increased",
+              "change_value": {"value": 3.9, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_guest_counts",
+              "driver_state": "increased",
+              "change_value": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as carrying four distinct facts: the LongHorn Steakhouse reportable segment's whole sales increase, its same-restaurant-sales increase as a distinct OD-17 qualified population, and the two stated numeric drivers of that same-restaurant increase (average check +3.9%, guest counts +3.3%)."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "current_liabilities",
+              "driver_state": "increased",
+              "level_low": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 2.61, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "comparison_high": {"value": 2.25, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "sequential_period",
+              "time_type": "instant",
+              "period_end_date": "2026-02-22",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed: a specific current-liabilities balance stated with an explicit prior-balance-sheet comparison figure is a real, non-boilerplate metric fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_expense_ratio",
+              "driver_state": "unchanged",
+              "time_type": "duration",
+              "period_scope": "ytd",
+              "period_end_date": "2026-02-22",
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed, though numberless: 'remained flat as a percent of sales' is a real qualitative fact, but because a percent-of-sales ratio is a different meaning from the underlying dollar restaurant-expense amount (Decision Rule 3), the driver is named restaurant_expense_ratio rather than bare restaurant_expenses."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "The quote 'Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM' states four bare digit values (25.1, 0.1, (19.8), 1.1) with no dollar sign, 'million', or other scale/unit marker inside the quote; the governing '(in millions)' label sits only in the table header, outside this quoted span. Rule 5.6 requires abstention rather than assuming the multiplier, so no lawful numeric fact can be emitted."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a real_item, but like row 1 this superset quote carries only bare digits with no in-quote scale marker, so Rule 5.6 forces abstention, making this a control rather than the proposed real item."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 2,
+      "hard_classes": ["portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 3,
+      "hard_classes": ["portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "comparison_baseline is set to sequential_period by elimination since the compared date (May 25, 2025 fiscal year-end) is neither a same-quarter prior-year date nor the immediately preceding fiscal quarter, and the rule text's two allowed metric baselines do not explicitly name this standard 10-Q balance-vs-last-fiscal-year-end comparison pattern."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000940944-26-000009#068",
+      "agrees": true,
+      "why": "Matches this settlement's abstention and Rule 5.6 reasoning exactly: the quote's bare digits lack an in-quote scale marker, so no lawful numeric fact can be emitted."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#069",
+      "agrees": false,
+      "why": "It captured only the single qualitative whole-segment sales-increase fact (correctly using slice segment:longhornsteakhousesegment) but omitted the same-restaurant-sales fact and its two stated numeric sub-drivers (average check +3.9%, guest counts +3.3%) that this settlement requires as separate facts, a recall miss."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#070",
+      "agrees": true,
+      "why": "Its current_liabilities fact matches this settlement field-for-field: point level/comparison values, sequential_period baseline, instant time_type, and the exact period end date."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#071",
+      "agrees": false,
+      "why": "It reused the bare driver name restaurant_expenses for a fact that is actually a percent-of-sales ratio; Decision Rule 3 requires a ratio to be named distinctly from its underlying dollar amount, so this settlement renames it restaurant_expense_ratio."
+    },
+    {
+      "lead_id": "phase1/0000940944-26-000009#072",
+      "agrees": true,
+      "why": "Matches this settlement's abstention and Rule 5.6 reasoning: the superset quote's bare digits still carry no in-quote scale marker."
+    }
+  ],
+  "open_issues": []
+}
+```

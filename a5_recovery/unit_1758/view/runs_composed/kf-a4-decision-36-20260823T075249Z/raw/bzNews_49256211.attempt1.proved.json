@@ -1,0 +1,51 @@
+```json
+{
+  "source_id": "bzNews_49256211",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_49256211",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase_authorization",
+              "driver_state": "announced",
+              "level_low": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "B"},
+              "level_high": {"value": 1.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "B"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as one: the title states a discrete, non-boilerplate board action (authorizing an additional $1.8B for share repurchases), which lawfully yields a single action_event fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {
+        "expectation_comparison_present": false
+      },
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/bzNews_49256211#191",
+      "agrees": true,
+      "why": "Independently settled the same single action_event fact -- driver_name share_repurchase_authorization, state announced, level_low/level_high both {1.8, 1e9, \"B\"}, shape point, unit m_usd -- matching the lead's L1/L2 exact-match content."
+    }
+  ],
+  "open_issues": []
+}
+```

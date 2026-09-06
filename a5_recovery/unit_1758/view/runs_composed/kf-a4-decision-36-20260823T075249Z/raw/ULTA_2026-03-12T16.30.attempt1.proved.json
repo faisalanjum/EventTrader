@@ -1,0 +1,336 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 39.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "change_value": {"value": 30, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact: the full-year recap states a real gross-margin level (39.1%) with a source-stated basis-point change."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "reported",
+              "level_low": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 12.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 12.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed, but split into two metric facts (dollar operating income and its percent-of-sales margin) because Rule 3 treats a ratio/mix as a different meaning from its underlying amount."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "inventory_shrink",
+              "driver_state": "decreased",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: a real, non-boilerplate qualitative statement that shrink was reduced across every category throughout fiscal 2025, which counts under Rule 1.3."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "sga_expense",
+              "driver_state": "unknown",
+              "value_text": "in line with to slightly below net sales growth and significantly lower than fiscal 2025",
+              "company_confirmed": true,
+              "time_type": "duration",
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact (the company's own numberless FY2026 SG&A outlook), but driver_state is corrected from earlier rounds' 'introduced' to 'unknown': Rule 7 requires explicit source language to write introduced/raised/lowered/reaffirmed, and this bare outlook sentence states none."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic forward-looking-statements safe-harbor disclaimer about risks and uncertainties causing results to differ materially \u2014 not a real, non-boilerplate statement about any driver's state, change, surprise, guidance, or action (Rule 1.2)."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: the quote is generic legal boilerplate carrying no driver-specific fact, so it correctly yields the one abstention."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 1.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["diluted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: this is the metric home for the annual diluted-EPS figure, the sibling of the row-7 surprise drawn from the richer restatement of the same underlying value."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "beat",
+              "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["diluted"],
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "favorable",
+                "basis": "metric_meaning",
+                "evidence": "Diluted EPS is a headline earnings metric where a higher actual value than the company's own prior guidance has no mainstream unfavorable counter-story.",
+                "sentence": "diluted EPS increased 1.2% to $25.64 per share above our previously provided guidance"
+              }
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the trailing 'above our previously provided guidance' clause is the actual-vs-own-prior-guidance comparison, so it settles as the surprise twin, with row 6 carrying the sole metric home."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "decreased",
+              "level_low": {"value": 35, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 35, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["product:cosmetics"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the makeup category's share of Q4 sales is a real, source-stated metric mapped to the menu's product:cosmetics slice."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "sequential_comparison is not applied because this is a full fiscal-year change, not a true immediate-prior sub-annual comparison (Rule 10); comparison_baseline is left null since the sentence itself states a 30-basis-point change but no explicit 'versus last year' comparison language."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "driver_state is set to 'unknown' rather than 'introduced': Rule 7 requires source language that establishes introduced/raised/lowered/reaffirmed, and this bare FY2026 SG&A outlook states no such movement language, so a bare guide defaults to unknown regardless of it being the first mention this call."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "sequential_comparison is not applied because percent_yoy is an ordinary year-over-year basis, not a true sub-annual sequential comparison (Rule 10); comparison_baseline is left null since the bare 'increased 1.2%' clause states no explicit prior-year comparison language of its own."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction", "expectation_routing", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The polarity_proof rests on metric_meaning rather than explicit favorability wording, since 'above' is a position word requiring the polarity test rather than counting as favorability wording itself."
+    },
+    {
+      "row_index": 8,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Mapping the spoken 'makeup' category to the menu's product:cosmetics token is a same-meaning judgment call rather than a literal string match."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/ULTA_2026-03-12T16.30#175",
+      "agrees": false,
+      "why": "Matches on driver_name/state/level/change/shape, but it assigns comparison_baseline=prior_year, whereas my settlement leaves it null because the exact sentence states only a 30-basis-point change with no explicit 'compared to last year' language."
+    },
+    {
+      "lead_id": "phase1/ULTA_2026-03-12T16.30#176",
+      "agrees": false,
+      "why": "Correctly captures operating_income at $1.5B but omits the co-stated 12.4%-of-sales operating_margin figure, which my settlement emits as a second, distinctly-meaning metric fact per Rule 3."
+    },
+    {
+      "lead_id": "phase1/ULTA_2026-03-12T16.30#177",
+      "agrees": true,
+      "why": "Matches exactly: metric inventory_shrink, decreased, FY2025, duration, no numeric slots since the source is purely qualitative."
+    },
+    {
+      "lead_id": "phase1/ULTA_2026-03-12T16.30#178",
+      "agrees": false,
+      "why": "The lead settles driver_state='introduced', but my settlement corrects it to 'unknown' because Rule 7 requires explicit source language establishing introduced/raised/lowered/reaffirmed, and this bare outlook sentence states none."
+    },
+    {
+      "lead_id": "phase1/ULTA_2026-03-12T16.30#179",
+      "agrees": true,
+      "why": "Matches exactly: no facts, single abstention for generic forward-looking-statements boilerplate under Rule 1.2."
+    },
+    {
+      "lead_id": "phase1/ULTA_2026-03-12T16.30#180",
+      "agrees": true,
+      "why": "Matches my settlement field-for-field: earnings_per_share increased, point $25.64, percent_yoy 1.2% change, diluted measurement, per_x share, no comparison_baseline."
+    },
+    {
+      "lead_id": "hr-005/b1/row7",
+      "agrees": true,
+      "why": "Matches my settlement: a single surprise fact only in row 7 (earnings_per_share beat vs previous_guidance) with metric_meaning polarity_proof, leaving row 6 as the sole metric home."
+    },
+    {
+      "lead_id": "hr-005/b2/row7",
+      "agrees": false,
+      "why": "Duplicates the metric fact already assigned to row 6 by also emitting an earnings_per_share metric record inside row 7, double-counting the same value across the twin pair instead of leaving row 6 as the sole metric home."
+    },
+    {
+      "lead_id": "phase1/ULTA_2026-03-12T16.30#182",
+      "agrees": true,
+      "why": "Matches my settlement: sales_mix metric, decreased, point 35%, Q4 FY2025, product:cosmetics slice mapped from the spoken 'makeup' category."
+    }
+  ],
+  "open_issues": []
+}
+```

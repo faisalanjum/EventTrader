@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#166",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "restaurant_count",
+          "driver_state": "unknown",
+          "level_low": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+          "level_high": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#166/L1",
+      "exact_match": true,
+      "why": "L1 uses driver_name restaurant_count and matches the settled item exactly on state, level_low/high, shape, unit, time_type, fiscal_year, and company_confirmed."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T166.30#166/L2",
+      "exact_match": false,
+      "why": "L2 is identical to the settled fact in every field except it names the driver unit_count instead of the settled restaurant_count."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Driver name choice between restaurant_count and unit_count for the guidance target underlying '4.5 percent unit growth'.",
+      "why": "The transcript uses 'restaurant' (restaurants, restaurant openings, restaurant additions) and 'unit' (unit growth, unit openings) interchangeably for the same physical-location count, so both are lawful synonyms per Rule 3.12 and the choice is a provisional naming judgment, not something the text disambiguates."
+    }
+  ]
+}
+```

@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "DRI_2026-03-19T08.30#161",
+  "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "total_sales",
+          "driver_state": "unknown",
+          "level_low": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DRI_2026-03-19T08.30#161/L1",
+      "exact_match": false,
+      "why": "L1 matches name, level values, shape, unit, time_type, fiscal_year, company_confirmed, and correctly cites '%' as unit_scale_evidence, but it wrongly sets driver_state to 'raised' — no prior total-sales-growth guidance figure is ever quoted anywhere in the source to run the two-point-guide comparison the rule requires, so movement is not safely established for this specific line item."
+    },
+    {
+      "lane_id": "DRI_2026-03-19T08.30#161/L2",
+      "exact_match": false,
+      "why": "L2 correctly settles driver_state as 'unknown' and matches name, level values, shape, unit, time_type, fiscal_year, and company_confirmed, but it wrongly nulls unit_scale_evidence on both level slots even though the quote contains the literal '%' marker, which Rule 5.6 requires to be cited since a scale/unit marker is present."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state for this total_sales guidance should be 'raised' or 'unknown'.",
+      "why": "Later in the same call an analyst states unrebutted that 'you raised the total revenue growth guidance,' and management's reply confirms 'we took up comps to reflect that' and that EPS guidance rose — but never a total-sales-specific old-vs-new figure — while a directly comparable line item (commodity inflation) DOES get an explicit stated 'from four to five down to four' movement elsewhere in this same transcript. That contrast makes it a real judgment call whether the unrebutted analyst framing counts as 'the source states it' for total sales specifically, or whether the absence of a quoted prior total-sales figure forces 'unknown'."
+    }
+  ]
+}
+```

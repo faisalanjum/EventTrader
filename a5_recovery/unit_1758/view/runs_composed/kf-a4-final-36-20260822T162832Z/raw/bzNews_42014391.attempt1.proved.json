@@ -1,0 +1,93 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "advertising_spending",
+              "driver_state": "announced",
+              "level_low": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 1 was proposed as a real item and settles as one action_event fact for the $100M spending announcement, confirming the proposal."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "e_coli_outbreak_illness_count",
+              "driver_state": "reported",
+              "level_low": {"value": 100, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 2 was proposed as a real item and settles as one metric fact for the re-readable illness-count severity, confirming the real-item proposal though the lane differs from an action_event framing."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The $100 million covers two bundled purposes (reviving sales/advertising and supporting franchisees) that the source never splits into separate amounts, so it is kept as one action_event whose 'advertising' mechanism is drawn from the article's title rather than being force-split into two unstated dollar figures."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an evolving outbreak illness count is a re-readable severity metric (chosen here, since Rule 2 explicitly lists 'count' as a metric unit) or a fixed property of a one-off action_event incident is a genuine boundary case."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/bzNews_42014391#189",
+      "agrees": true,
+      "why": "The independently settled fact (action_event, driver_name advertising_spending, state announced, point $100M in m_usd) matches this lead's settled fact on fact_type, driver_name, state, and the numeric value/unit."
+    },
+    {
+      "lead_id": "phase1/bzNews_42014391#190",
+      "agrees": false,
+      "why": "This lead classified the sickened-count as an action_event named e_coli_outbreak with state occurred, but Rule 2's persistence test plus its explicit listing of 'count' as a metric unit make this a re-readable severity metric (e_coli_outbreak_illness_count, state reported); the numeric floor value of 100 in count matches but the lane and state disagree."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the $100M spending announcement should be split into two separate action_event facts (advertising vs. franchisee financial support) instead of one bundled fact.",
+      "why": "The source states one combined dollar figure for two distinct purposes with no allocation between them; splitting would force inventing a value split the source never states, so a single bundled fact was chosen but this is a judgment call a reviewer may want to revisit."
+    },
+    {
+      "what": "Whether the driver_name 'advertising_spending' is safely grounded for row 1's fact, since the word 'advertising' appears only in the article's title, not inside row 1's own body quote.",
+      "why": "Using whole-event context to name a fact whose citation is drawn from a different text_part is a defensible but non-certain interpretive choice."
+    }
+  ]
+}
+```

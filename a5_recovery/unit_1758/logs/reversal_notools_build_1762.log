@@ -1,0 +1,33 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a1_no_tools.py::test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fe5fddaa0d0>
+
+    def test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse(
+            tmp_path, monkeypatch):
+        """MUTATION: the existing preflight re-derives launcher bytes and compares
+        them to what is on disk, so deleting the deny from ONE launcher must be
+        refused by the check that already exists - no new proof framework."""
+        mirror = str(tmp_path / "harness")
+        shutil.copytree(_HERE, mirror,
+                        ignore=shutil.ignore_patterns("__pycache__", "runs"))
+        monkeypatch.setattr(blm, "_HERE", mirror)
+        # The recovered harness carries no generated A1 pair, so the mirror is armed by
+        # the SAME builder the preflight re-derives against - never a copied lineage
+        # whose bytes this owner does not derive.
+        victim = sorted(_derived_launcher_texts())[0]
+        lp = os.path.join(mirror, "launchers_a1",
+                          "kfields_a1_%s.workflow.js" % victim)
+>       text = io.open(lp, encoding="utf-8").read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0/harness/launchers_a1/kfields_a1_0000006201-26-000031.workflow.js'
+
+test_a1_no_tools.py:119: FileNotFoundError
+=========================== short test summary info ============================
+FAILED test_a1_no_tools.py::test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse
+1 failed in 0.31s
+
+[rc=1]

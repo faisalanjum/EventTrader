@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "DAL_2026-04-08T10.00#154",
+  "settled": {
+    "source_id": "DAL_2026-04-08T10.00",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "unit_revenue",
+          "driver_state": "unknown",
+          "value_text": "Q2 unit revenue expected to grow double-digit, a meaningful acceleration from the March quarter's mid-single-digit growth",
+          "company_confirmed": true,
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "fiscal_quarter": 2,
+          "level_unit": "percent_yoy",
+          "slice_parts": ["product:passenger"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DAL_2026-04-08T10.00#154/L1",
+      "exact_match": false,
+      "why": "L1 agrees on driver_name (unit_revenue), guidance lane, slice (product:passenger), period (FY2026 Q2), time_type duration and company_confirmed true, but sets driver_state to 'introduced' where Rule 4 requires 'unknown' absent an explicit stated movement, and it omits level_unit which the settled answer derives via Rule 5a.4's numberless-growth-basis allowance (percent_yoy, since unit revenue growth here is framed year-over-year, not sequential)."
+    },
+    {
+      "lane_id": "DAL_2026-04-08T10.00#154/L2",
+      "exact_match": false,
+      "why": "L2 correctly settles driver_state as 'unknown' and matches driver_name, slice, period and company_confirmed, but its level_unit choice of 'percent_sequential' is wrong: the 'acceleration' language describes the trend of a year-over-year growth rate across quarters (as with the earlier 'sequential improvement from the fourth quarter' in YoY unit-revenue growth), not a sequential (quarter-over-quarter) growth computation, so percent_yoy is the rule-derived basis instead."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether a numberless guidance growth fact should carry a level_unit at all, and if so whether it is percent_yoy or percent_sequential.",
+      "why": "Rule 5a.4 permissively allows ('may still carry') a basis unit on a numberless growth fact from the source's own framing, but does not clearly make it mandatory the way Rule 5a.1 does for populated numeric slots; a reasonable reader could read the 'acceleration from ... March quarter' comparison as sequential-quarter framing rather than a trend in the YoY growth rate, so both the presence and the value of level_unit are debatable."
+    },
+    {
+      "what": "Whether driver_state should be 'introduced' rather than 'unknown' for this first-given Q2 guide.",
+      "why": "This is narratively the first time Q2 guidance is stated, which could suggest 'introduced', but Rule 4 requires the movement be source-stated, not inferred from novelty, and no explicit 'introducing'/'first' language appears in the quote, so 'unknown' is the literal-rule answer even though 'introduced' is a plausible reading of intent."
+    }
+  ]
+}
+```

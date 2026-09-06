@@ -1,0 +1,36 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "gross_advertising_collections",
+        "driver_state": "increased",
+        "level_low": {"value": 900, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "floor",
+        "level_unit": "m_usd",
+        "change_value": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "gross_advertising_collections",
+        "driver_state": "unknown",
+        "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "fiscal_year": 2027,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,5 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a5_corrected_inventory_1514.py test_a5_contract_1401.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+.............................                                            [100%]
+29 passed in 6.91s
+
+[rc=0]

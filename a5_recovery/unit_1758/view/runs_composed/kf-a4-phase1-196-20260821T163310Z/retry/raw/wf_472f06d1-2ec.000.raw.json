@@ -1,0 +1,18 @@
+```json
+{
+  "packet_id": "0000764478-25-000057#048",
+  "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [],
+    "abstentions": [
+      {"reason": "The quote merely states the company's reportable-segment structure ('two reportable segments: Domestic and International') — a generic organizational/structural disclosure naming segment labels, not a statement about a driver's state, change, surprise, guidance, or action; fails Rule 1 (bare topic/organizational mention, gate step 2)."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {"lane_id": "0000764478-25-000057#048/L1", "exact_match": true, "why": "L1 abstains with the same reasoning: the segment-structure sentence is organizational boilerplate, not a driver fact under Rule 1, matching the settled empty-facts/single-abstention branch."},
+    {"lane_id": "0000764478-25-000057#048/L2", "exact_match": true, "why": "L2 abstains with materially the same reasoning (boilerplate reportable-segment disclosure fails Rule 1 gate step 2), matching the settled reply."}
+  ],
+  "ambiguities": []
+}
+```

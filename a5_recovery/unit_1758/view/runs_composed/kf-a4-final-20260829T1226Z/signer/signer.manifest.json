@@ -1,0 +1,239 @@
+{
+ "schema": "a4-final-key-candidate/1511/signer",
+ "door": "a4_final_key_signature",
+ "authority": "Codex SEQ 1510 item 4",
+ "state": "frozen, unrun",
+ "signer_owner": {
+  "module": "build_kfields_final",
+  "sha256": "bad84b2f9fab14443a167660dc631b8d556c143cf09233f54bf1c3b6b2649fee",
+  "functions": [
+   "signer_prompt",
+   "render_signer",
+   "read_signature"
+  ]
+ },
+ "materializer_owner": {
+  "module": "build_kfields_final_targeted",
+  "sha256": "fb7c820d765565cc19722938caeb8f8f5e4bdefa9c19a0443c48398fda20113d"
+ },
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "label": "a4-final-signer",
+ "shards": [
+  {
+   "shard": "0000006201-26-000031 [COMPOSED: base component, origin a4_final_v3_decision, replaced 001,006,008]",
+   "sha256": "0708524f2c64b83f2be214f636fc05cd984d5759f41abab3ea4fb800dcf58e4f"
+  },
+  {
+   "shard": "0000006201-26-000031 [COMPOSED: targeted component, origin final_targeted_correction, replaced 001,006,008]",
+   "sha256": "5830799f73dfa2ddd181750299e87540bb825216bbdab0cd96027a363fa30bd5"
+  },
+  {
+   "shard": "0000006201-26-000032",
+   "sha256": "ba7bd76b670466a7217d40e9b834301c89e8a266ba91ee9ff89f2c5f3403e507"
+  },
+  {
+   "shard": "0000027904-26-000013",
+   "sha256": "5ccd1de361c9a6892be012f8d7c86f3da66795b53c54bd8498a7d493b031e98d"
+  },
+  {
+   "shard": "0000027904-26-000020",
+   "sha256": "30bd06ef9a0f16e8dbeb288bea9365fdcb2ccdb4fdcf562f13ef6b423d5de4ea"
+  },
+  {
+   "shard": "0000027904-26-000022 [COMPOSED: base component, origin a4_final_v3_decision, replaced 029]",
+   "sha256": "03aff1ec14909082b4f8b145969d62e9e19c0db47ff629e9677f485267b70323"
+  },
+  {
+   "shard": "0000027904-26-000022 [COMPOSED: targeted component, origin final_targeted_correction, replaced 029]",
+   "sha256": "6d5dbc14c687d9a654c4dbffcc94652b67aa9c394ff1833e62fa206820292b01"
+  },
+  {
+   "shard": "0000063908-26-000032",
+   "sha256": "2f712c2db83666089c42c795ad223c4aec53b7d2237a51eb2e91c09e9acff574"
+  },
+  {
+   "shard": "0000092380-26-000044 [COMPOSED: base component, origin a4_final_v4_correction, replaced 042]",
+   "sha256": "e6e35fea3f6229d005e595236afdc8657494388bd7286fb46d596ed05d743176"
+  },
+  {
+   "shard": "0000092380-26-000044 [COMPOSED: targeted component, origin final_targeted_primary, replaced 042]",
+   "sha256": "1b6d49948d1202d2e732ec09ccad09f9ad7d5fb84c1d21f5f92b9842b6c5cde8"
+  },
+  {
+   "shard": "0000764478-25-000057",
+   "sha256": "32f8a65a19a9f4e1c0aa6a535989a2a4e5103b593597e2494c7b16b1047c86f6"
+  },
+  {
+   "shard": "0000764478-26-000005",
+   "sha256": "5490e14b366993ff03fde1d3c94308683303649b2bfc33f44c8417a61bd9b34b"
+  },
+  {
+   "shard": "0000898173-26-000006",
+   "sha256": "7a67dd04280bda91a894438a86833c2b442da0d7477cb2a9f5d0f0402e322373"
+  },
+  {
+   "shard": "0000940944-25-000038",
+   "sha256": "3a463555403de8b7b08da3851ae9515baf56718f89a9e474dc514e4aa93b39fa"
+  },
+  {
+   "shard": "0000940944-26-000005 [COMPOSED: base component, origin a4_final_v3_decision, replaced 065]",
+   "sha256": "9ea2908d2e51cc1dc7b181aa1b4ea8474559dfbc577ffe1a0900376a9030b516"
+  },
+  {
+   "shard": "0000940944-26-000005 [COMPOSED: targeted component, origin final_targeted_correction, replaced 065]",
+   "sha256": "f71fe0806e1c6ee4516fceb98311441f2fff6c374ba3b4eea6f41c9e8d2fe8ae"
+  },
+  {
+   "shard": "0000940944-26-000009 [COMPOSED: base component, origin a4_final_v4_correction, replaced 068,072]",
+   "sha256": "caea464a91a97e0f01182e322fb6b9d5e828540e3ee832dfbad4942ffdea627e"
+  },
+  {
+   "shard": "0000940944-26-000009 [COMPOSED: targeted component, origin final_targeted_correction_2, replaced 068,072]",
+   "sha256": "f6cccb2ceb6013c46f8dc81a48c7576f62ea48376aceb4a08e44ae6c7b4225fd"
+  },
+  {
+   "shard": "0001041061-25-000109 [COMPOSED: base component, origin a4_final_v4_correction, replaced 075]",
+   "sha256": "51be3a193a1c1cb6fffd78b6a27cf90094c269b5e4df0db2558c7dbd99802af4"
+  },
+  {
+   "shard": "0001041061-25-000109 [COMPOSED: targeted component, origin final_targeted_correction_3, replaced 075]",
+   "sha256": "82aeee0afe5c1bcbdc882b4e65a44e97854a95755918444e844a9ae5b9466601"
+  },
+  {
+   "shard": "0001041061-26-000003",
+   "sha256": "8101471d5d2569a7ad7d49a423d243385b446e66b7b41308339554c31d544733"
+  },
+  {
+   "shard": "0001041061-26-000084",
+   "sha256": "956d917f83264823ff83848c7bb5c3ff6a332f36df2e0c19655fbd0d453ddb54"
+  },
+  {
+   "shard": "0001058090-26-000007",
+   "sha256": "beb2580cc732040741b0684a99a5019c6540265545646e92e2146a7fc754cea8"
+  },
+  {
+   "shard": "0001104659-25-102611",
+   "sha256": "07eeb4770132a38b96f706b265bcb7617150e6df70b9d1c64ff6f8a678674c95"
+  },
+  {
+   "shard": "0001104659-25-105631",
+   "sha256": "b74713468cdb1b17439e0b74d88a54e9f06c1260115ee5cfd9bff37ad066df4d"
+  },
+  {
+   "shard": "0001104659-25-118458",
+   "sha256": "1990be53f977050fb50a09af849efd35302cd6da02109c6eb4be0b2665d03241"
+  },
+  {
+   "shard": "0001104659-26-017090",
+   "sha256": "9f251be9e2da9abb7692c93eef4638114856ea2fab6393490ff6b4573104b180"
+  },
+  {
+   "shard": "0001104659-26-027061 [COMPOSED: base component, origin a4_final_v4_correction, replaced 115]",
+   "sha256": "8249b1fef32d536448b4c8dc25ee9479395f46112b076812eedfc78e76b72718"
+  },
+  {
+   "shard": "0001104659-26-027061 [COMPOSED: targeted component, origin final_targeted_primary, replaced 115]",
+   "sha256": "fdc0091e4f1703fc810ad0cfb01b6ee8fe223b1f24d73d7e9ae06c4ae485309a"
+  },
+  {
+   "shard": "0001104659-26-032757",
+   "sha256": "845919278b7d801a292e4fba41a148061efbab5ca12f482e1b05e0db8f19ec7a"
+  },
+  {
+   "shard": "0001171843-26-001288 [COMPOSED: base component, origin a4_final_v4_correction, replaced 133]",
+   "sha256": "a0ca10e4ae6fb17ae465b6201d9b9b51f9d853a74a0eeebf0b12064e6f530ddb"
+  },
+  {
+   "shard": "0001171843-26-001288 [COMPOSED: targeted component, origin final_targeted_correction_3, replaced 133]",
+   "sha256": "3a05f89560ad34286bcfd652752b2ac70c61935ff4a7d3ac8870b669eaa8ab5f"
+  },
+  {
+   "shard": "AAL_2026-04-23T08.30",
+   "sha256": "ee991c223b7cb612f7c7154c7a1bb8cb7e7b07ebf2aa07ef0f934a14eba77f0f"
+  },
+  {
+   "shard": "BBY_2026-03-03T08.00",
+   "sha256": "bcfefc0ed2aab68d51b329b5a2c23a4d86728df1fceaf4c92835ced7422db062"
+  },
+  {
+   "shard": "CMG_2026-02-03T16.30",
+   "sha256": "83251257f94d288166da0d18a25c48813330280262fde1e68c293e77b8972a75"
+  },
+  {
+   "shard": "DAL_2026-04-08T10.00",
+   "sha256": "be286d37b36390de4c1be11e3de68a123a84fbc71c435b34bd9928d740abb386"
+  },
+  {
+   "shard": "DRI_2026-03-19T08.30",
+   "sha256": "c329da12c0b13458279624fec6a7fcd2f96daf559867ea4a568eb85003fbe044"
+  },
+  {
+   "shard": "MCD_2026-02-11T16.30",
+   "sha256": "4c98ea0615638ce789bf1432126a064217d5f4ae0dd63225a87207abcf4ba3fd"
+  },
+  {
+   "shard": "ULTA_2026-03-12T16.30",
+   "sha256": "c6851664ab85cda4c6ec40fc0e696e47775606914ea00c05e1a9018dc4a315e4"
+  },
+  {
+   "shard": "YUM_2026-02-04T08.15",
+   "sha256": "ef95d6dd2ee6c8cbcd2e72849de904278cd92a2bf6d9079be10319e9ffe66623"
+  },
+  {
+   "shard": "bzNews_42014391",
+   "sha256": "95e70d25ee1c3c9be0852566a522538f6d4f6ca994773ae31fdb47a2ef629485"
+  },
+  {
+   "shard": "bzNews_49256211",
+   "sha256": "7d44369d242ab25ca713ca385394847739b47109aaa4201dc84499d1f373e69f"
+  },
+  {
+   "shard": "bzNews_50877032",
+   "sha256": "5d9fcb4561a00b3c8785cad7c0a1406e413fc4e85d5e6d660fd2f8a766ceadca"
+  },
+  {
+   "shard": "bzNews_51962983",
+   "sha256": "1e91d9bbae7d55012bbc9d1765a0cc15a2e45e10d9da9dc8083b36b63aa9963a"
+  }
+ ],
+ "prompt_sha256": "04154f1b1bc282e58512d7bf75e1185e9c9644b1f3ee2515476703b3cc68688f",
+ "prompt_bytes": 460782,
+ "script_sha256": "7b190f48b8d7d6bfbe97d4b20f953926c682d6caf33a319a692137bb67579969",
+ "script_bytes": 497823,
+ "transport_limit_bytes": 524288,
+ "head_sha256": "ce6539729d346432c0ee384389b0cdb09b13b4a72e019b61c0940a1088176685",
+ "count_block_sha256": "fc354287d204cbb65b77a22afcce22ad26bf164d78e3ae3b77136769b44494a2",
+ "composition_map_events": 8,
+ "budget": {
+  "before": 5219,
+  "primaries": 1,
+  "retry_cap": 1,
+  "after_clean": 5220,
+  "worst": 5221,
+  "ceiling": 6000
+ },
+ "retry_law": {
+  "owner": "build_kfields_final.RETRYABLE",
+  "retryable": [
+   "invalid_response"
+  ]
+ },
+ "gate": {
+  "success": "read_signature(text) returns an object with signed true and blocked [] (build_kfields_final.read_signature)",
+  "failure": "signed false with nonempty blocked - a lawful refusal, FINAL, never retried",
+  "transport_no_answer": "a genuine transport/no-answer refusal is retained and reported and is FINAL: no second call (build_kfields_final.RETRYABLE)",
+  "retry": "at most one identical-bytes retry, only for a structurally invalid reply (invalid_response: build_kfields_final.read_signature refuses the shape); never for meaning"
+ }
+}

@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#122",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote is CEO narrative praising execution and guest experience; 'better-than-planned financial performance' names no specific metric, segment, or value to interpret as a driver (Rule 3 forbids a bare category word like 'financial performance' as a name, and Rule 1.2 treats an unspecific characterization as a non-fact). Even read as a would-be surprise (actual results vs. the company's own internal plan), it states no value and has no identifiable home fact elsewhere in this quote to attach to — an ungrounded 'beat expectations/plan' claim with no home abstains per Rule 9.6."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#122/L1",
+      "exact_match": true,
+      "why": "Same lawful branch (no facts, one abstention) and same core justification: a generic, metric-less CEO claim of an ungrounded overall beat with no identifiable home fact, citing Rule 9.6."
+    },
+    {
+      "lane_id": "0001104659-26-027061#122/L2",
+      "exact_match": true,
+      "why": "Same lawful branch and same substantive reasoning: no specific metric/value is named, the implied plan-vs-actual comparison has no home fact to attach to, so it abstains under Rule 9.6."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'better-than-planned financial performance' could be treated as a wordless surprise on an aggregate metric (e.g., net_income or EPS) versus the company's own prior guidance.",
+      "why": "The phrase invokes a plan/expectation comparison (potentially previous_guidance basis), but since it names no specific metric or value inside the quote, there is no lawfully nameable driver or home fact to attach the comparison to, so it cannot be resolved into a grounded surprise — it can only be recorded as an abstention."
+    }
+  ]
+}
+```

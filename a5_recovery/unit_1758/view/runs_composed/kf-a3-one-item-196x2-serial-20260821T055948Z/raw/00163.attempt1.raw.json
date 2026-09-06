@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "facts": [],
+  "abstentions": [
+    {"reason": "This describes a change in accounting presentation/rounding methodology (rounding figures to the nearest whole million) rather than a driver's state, change, surprise, guidance, or action; it is a reporting-convention note, not a business fact."}
+  ],
+  "continuity_hints": []
+}
+```

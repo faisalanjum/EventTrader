@@ -1,0 +1,7 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a5_route_1406.py::test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes test_a5_route_1406.py::test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+..                                                                       [100%]
+2 passed in 10.73s
+
+[rc=0]
+
+WROTE focused_route_1762.log  412 bytes  rc=0

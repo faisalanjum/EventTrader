@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0000063908-26-000032#037",
+  "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "accelerating_the_organization_restructuring_charges",
+          "driver_state": "reported",
+          "level_low": {"value": 229, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": 229, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "measurement_raw_spans": ["net pre-tax"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000063908-26-000032#037/L1",
+      "exact_match": true,
+      "why": "L1's fact matches the settled reply on every field: same driver_name, driver_state 'reported', identical level_low/high ($229M point), level_unit m_usd, time_type duration, fiscal_year 2025, and measurement_raw_spans ['net pre-tax']; key order differs but content is identical."
+    },
+    {
+      "lane_id": "0000063908-26-000032#037/L2",
+      "exact_match": true,
+      "why": "L2 is content-identical to L1 and to the settled reply (same driver_name, state, values, unit, shape, time_type, fiscal_year, measurement span), differing only in field ordering (fiscal_year listed before time_type), which does not change meaning."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state should be 'increased'/'decreased' instead of 'reported', given the adjacent sentence in the same full-year bullet cites a prior-year 'net pre-tax charges of $291 million'.",
+      "why": "That $291 million figure is a broader composite (per the KEY FINANCIAL METRICS footnote, 2024's Accelerating-the-Organization-only restructuring charge was $221 million, with the remaining ~$70 million being unrelated South Korea/Israel transaction items), so it is not the same driver as this item's $229 million AtO-restructuring-only figure; treating it as a same-driver prior value would conflate two different composite scopes, so 'reported' (bare value, no lawfully comparable prior value stated beside it) is the conservative, non-guessing choice."
+    }
+  ]
+}
+```

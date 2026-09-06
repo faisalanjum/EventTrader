@@ -1,0 +1,10 @@
+```json
+{
+ "source_id": "0001104659-26-032757",
+ "facts": [],
+ "abstentions": [
+  {"reason": "Target claim 'Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations' is generic forward-looking risk-monitoring boilerplate — no stated driver state, direction, or discrete action; fails Rule 1 gate (generic risk boilerplate)."}
+ ],
+ "continuity_hints": []
+}
+```

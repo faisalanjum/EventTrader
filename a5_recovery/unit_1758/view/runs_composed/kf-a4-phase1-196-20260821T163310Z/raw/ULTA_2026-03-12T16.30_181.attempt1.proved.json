@@ -1,0 +1,71 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#181",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "increased",
+          "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "change_value": {"value": 1.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "measurement_raw_spans": ["diluted"],
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "beat",
+          "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "measurement_raw_spans": ["diluted"],
+          "fiscal_year": 2025,
+          "time_type": "duration",
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "previous_guidance",
+          "has_favorability_wording": false,
+          "polarity_proof": {
+            "polarity": "favorable",
+            "basis": "metric_meaning",
+            "evidence": "Diluted EPS coming in above the company's own previously issued guidance is unambiguously favorable for shareholders (higher earnings per share), unlike spend-type metrics with a mainstream counter-story.",
+            "sentence": "diluted EPS increased 1.2% to $25.64 per share above our previously provided guidance"
+          }
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#181/L1",
+      "exact_match": true,
+      "why": "L1 matches field-for-field: same two facts (metric home + surprise twin), correct change_value with unit_scale_evidence '%', measurement_raw_spans ['diluted'] on both facts, has_favorability_wording false with a valid metric_meaning polarity_proof, and comparison_baseline previous_guidance."
+    },
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#181/L2",
+      "exact_match": false,
+      "why": "L2 diverges in three ways: it drops measurement_raw_spans (['diluted'] is present in the quote and must be emitted, not defaulted to []), sets change_value unit_scale_evidence to null instead of the '%' marker present in the quote, and marks has_favorability_wording true with no polarity_proof even though 'above' is not favorability wording (Rule 4 explicitly forbids mapping 'above' to beat mechanically), which is the wrong path for a wordless outside-range surprise under Rule 9.4."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether unit_scale_evidence is required for a percent-family change_value when scale_multiplier for percent is already fixed at 1 by Rule 5a.2.",
+      "why": "Rule 5.6 says evidence is null only when multiplier is 1 AND no unit/scale marker exists; here the quote does contain the '%' marker, so I required it as evidence — but a reader could argue percent's multiplier is rule-fixed rather than marker-derived, making the citation unnecessary. This is exactly where the two drafts split."
+    }
+  ]
+}
+```

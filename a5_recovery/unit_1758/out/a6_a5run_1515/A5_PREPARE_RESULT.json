@@ -1,0 +1,10 @@
+{
+ "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515",
+ "run_id": "a6_a5run_1515",
+ "manifest_sha256": "5e33c3e4acbff1c710321008335d6a66622992a8317027c9d231d85912f37c53",
+ "bundle_sha256": "d2e850d86f643f177868b8b755b0a0d92c0a57f1aec8fabd4455acea2367edff",
+ "receipt_sha256": "b468a0a19f778f48f415b210afd95dc70eb381d9b50f1c4097384be84dfedf84",
+ "allowed": 392,
+ "states": 0,
+ "files": 76
+}

@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "restaurant_margin",
+        "driver_state": "increased",
+        "level_low": {"value": 12.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 12.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "change_value": {"value": 40, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+        "change_unit": "basis_points",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:kfcglobaldivision", "entity_ownership:companyownedstores"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

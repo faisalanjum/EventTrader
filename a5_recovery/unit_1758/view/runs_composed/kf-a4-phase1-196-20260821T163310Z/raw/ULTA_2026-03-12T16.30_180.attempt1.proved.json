@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#180",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "increased",
+          "level_low": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 25.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "point",
+          "level_unit": "usd",
+          "change_value": {"value": 1.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "measurement_raw_spans": ["diluted"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#180/L1",
+      "exact_match": false,
+      "why": "L1 leaves change_value.unit_scale_evidence null, but the quote contains the '%' marker directly attached to 1.2, which Rule 5.6 requires be cited (bare marker suffices when scale_multiplier is 1); otherwise identical to the settled reply."
+    },
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#180/L2",
+      "exact_match": true,
+      "why": "L2 matches the settled reply field for field, including citing '%' as unit_scale_evidence on change_value alongside scale_multiplier 1."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the '%' sign should be cited as unit_scale_evidence on a percent-family change_value, given scale_multiplier is fixed at 1 by Rule 5a.2 regardless of the sign's presence.",
+      "why": "Rule 5.6 says unit_scale_evidence is null only when multiplier is 1 AND no unit/scale marker exists; since '%' is a marker present in the quote, the settled reading cites it, but a reader could argue percent's multiplier-of-1 is fixed by the unit itself (Rule 5a.2) rather than 'supported' by the sign, making the field arguably eligible for null too."
+    }
+  ]
+}
+```

@@ -1,0 +1,42 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "high_efficiency_equipment_package_restaurant_count",
+          "driver_state": "reported",
+          "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "period_end_date": "2026-02-03"
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "high_efficiency_equipment_package_restaurant_count",
+          "driver_state": "unknown",
+          "level_low": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2000, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "instant",
+          "fiscal_year": 2026,
+          "period_end_date": "2026-12-31",
+          "company_confirmed": true
+        }
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Member 1 states an already-realized, present-tense count ('350 restaurants have the full equipment package today'), a bare-value metric with driver_state reported and an instant period of the call date; member 2 uses the outlook verb 'anticipate' for a distinct future value (2,000) tied to a different instant period (year end), which Rule 2's outlook-verb clause forces into the guidance lane with driver_state unknown — different fact_type, driver_state, and period make these two separate facts, not one restated."
+}
+```

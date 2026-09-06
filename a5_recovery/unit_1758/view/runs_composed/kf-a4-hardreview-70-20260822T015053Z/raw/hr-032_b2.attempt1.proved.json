@@ -1,0 +1,60 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 4.9, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -2.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": -2.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "Item 1 reports total quarterly sales revenue as an absolute dollar level ($3 billion) with its own year-over-year growth rate, while item 2 reports comparable (same-store) restaurant sales, a distinct company metric with no absolute dollar counterpart and its own percent value, so the two items describe two separate, independently re-readable driver facts co-stated in one sentence rather than one underlying fact."
+}
+```

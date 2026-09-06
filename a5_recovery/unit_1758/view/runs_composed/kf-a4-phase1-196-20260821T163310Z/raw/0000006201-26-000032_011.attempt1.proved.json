@@ -1,0 +1,47 @@
+```json
+{
+  "packet_id": "0000006201-26-000032#011",
+  "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "total_operating_revenues",
+          "driver_state": "increased",
+          "level_low": {"value": 13.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 13.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "change_value": {"value": 1.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "change_unit": "m_usd",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "fiscal_quarter": 1
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000032#011/L1",
+      "exact_match": true,
+      "why": "L1's single metric fact matches the settled reply on every field: driver_name total_operating_revenues, state increased, level 13.9 with billion scale, point shape, m_usd unit, change 1.4 billion m_usd, prior_year baseline, duration, FY2026 Q1; key order differences (fiscal_year before fiscal_quarter) are not semantically meaningful."
+    },
+    {
+      "lane_id": "0000006201-26-000032#011/L2",
+      "exact_match": true,
+      "why": "L2 is identical in content to the settled reply (same driver_name, state, level/change value objects, units, baseline, time_type, and period fields); only the JSON key ordering (fiscal_quarter before fiscal_year) differs, which carries no meaning."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "The quote states the period-over-period change both as an absolute dollar amount ($1.4 billion) and as a percentage (10.8%), but the schema allows only one change_value/change_unit pair per fact.",
+      "why": "The rules do not state a priority between a source-stated dollar delta and a source-stated percent delta when both appear in the same sentence for the same comparison; choosing the dollar-denominated change (matching level_unit m_usd) over percent_yoy is a defensible but not uniquely forced reading."
+    }
+  ]
+}
+```

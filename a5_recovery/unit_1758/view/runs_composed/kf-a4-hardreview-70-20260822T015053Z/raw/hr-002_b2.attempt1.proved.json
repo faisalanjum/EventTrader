@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "restaurant_count",
+        "driver_state": "unknown",
+        "change_value": {"value": 4.5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+        "change_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

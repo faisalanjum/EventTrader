@@ -1,0 +1,52 @@
+```json
+{
+  "packet_id": "0000940944-25-000038#059",
+  "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "leverage_ratio",
+          "driver_state": "reported",
+          "level_high": {
+            "value": 3.5,
+            "scale_multiplier": 1,
+            "unit_scale_evidence": null
+          },
+          "level_shape_hint": "ceiling",
+          "level_unit": "x",
+          "time_type": "instant",
+          "period_start_date": "2024-09-16",
+          "period_end_date": "2024-09-16",
+          "measurement_raw_spans": ["consolidated"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-25-000038#059/L1",
+      "exact_match": true,
+      "why": "L1's driver_name (leverage_ratio), driver_state (reported), level_high object (3.5/1/null), level_shape_hint (ceiling), level_unit (x), time_type (instant), the 2024-09-16/2024-09-16 instant period, and measurement_raw_spans ([\"consolidated\"]) all match the settled reply field-for-field."
+    },
+    {
+      "lane_id": "0000940944-25-000038#059/L2",
+      "exact_match": false,
+      "why": "L2 uses driver_name leverage_ratio_covenant (the word 'covenant' is a category/context label, not part of the cause), cites unit_scale_evidence \"to 1.00\" where none is needed (x-unit ratios need no scale marker, like the '14 stores' case), and omits both the instant period (2024-09-16) and the measurement_raw_spans entry for 'consolidated'."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'consolidated' should sit in measurement_raw_spans (as settled) or instead be folded into a more specific driver name such as consolidated_leverage_ratio.",
+      "why": "The source treats 'consolidated' as a scope qualifier similar to 'adjusted'/'GAAP' spans (Rule 8's 'and similar'), but it could also be read as part of a legally-defined covenant term name rather than a generic measurement flavor."
+    },
+    {
+      "what": "The amendment also allows a temporary increase of the same covenant ceiling to 4.00 to 1.00 upon a covered acquisition; this conditional alternate value is not captured in any numeric slot.",
+      "why": "There is no lawful conditional-value field on a metric fact (conditions is guidance-only), so the contingent 4.00-to-1.00 figure stays in the quote only rather than becoming a second level slot or a second fact, which is a judgment call rather than an explicit rule instruction."
+    }
+  ]
+}
+```

@@ -1,0 +1,23 @@
+{
+ "source_id": "0000764478-26-000005",
+ "source_type": "8k",
+ "ticker": "BBY",
+ "cik": "0000764478",
+ "date": "2026-03-03",
+ "fye_month": 1,
+ "text_parts": [
+  {
+   "part": "form",
+   "content": "FORM: 8-K"
+  },
+  {
+   "part": "items",
+   "content": "ITEMS: [\"Item 2.02: Results of Operations and Financial Condition\", \"Item 9.01: Financial Statements and Exhibits\"]"
+  },
+  {
+   "part": "description",
+   "content": "DESC: Form 8-K - Current report - Item 2.02 Item 9.01"
+  }
+ ],
+ "sha256": "a0fc69f830868adbee03b6c8bdbcf5c07c9ac7ee297fbfce4bdb812b12c5daab"
+}

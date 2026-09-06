@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "income_tax_provision",
+        "driver_state": "increased",
+        "time_type": "duration",
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "comparison_baseline": "prior_year"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```
+
+Reasoning: quote is a bare income-statement line ("PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m.") with no `$` or scale word (million/thousand) inside it — the "(in millions...)" marker sits in the table header outside the quote, so per Rule 5.6 the numeric value objects cannot be lawfully populated (would require guessing the multiplier). Direction is still safely derivable without scale: current period value is positive (58, a provision/charge) versus prior period value negative (43 in parens, a tax benefit) — a stated prior value beside the current value forces `increased` per Rule 4, independent of scale. Period (Q1 2026 vs Q1 2025, exact dates) and `comparison_baseline: prior_year` come from the surrounding "Three months ended March 31, 2026 / 2025" table framing, which Rule 6 lets you use (only Rule 5.6's scale-evidence requirement is quote-scoped). No slice (whole-company line item), no per_x, no measurement qualifiers present.

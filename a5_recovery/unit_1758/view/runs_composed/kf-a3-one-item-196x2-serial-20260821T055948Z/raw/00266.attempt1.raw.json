@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Quote 'Net inventory (net of payables) (813,494 ) (1,196,131 )' gives two signed numeric values but carries no inline unit/scale marker ($ or 'thousand'); the applicable scale wording ('$ in thousands') sits only in the table's header row, outside this quote. Per Rule 5.6 the scale/unit-scale evidence must be inside the quote and this is not a multiplier=1 case, so it cannot be lawfully sourced — abstain."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "advertising_spend",
+        "driver_state": "announced",
+        "level_low": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

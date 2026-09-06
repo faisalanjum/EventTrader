@@ -1,0 +1,50 @@
+{
+ "allowed": [
+  [
+   "0000092380-26-000044#042",
+   "0000092380-26-000044#042/L1"
+  ]
+ ],
+ "attempt": 2,
+ "invocations": [
+  {
+   "args": [
+    {
+     "attempt": 2,
+     "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000092380-26-000044.json",
+     "lane_id": "0000092380-26-000044#042/L1",
+     "packet_id": "0000092380-26-000044#042",
+     "source_id": "0000092380-26-000044"
+    }
+   ],
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a3-one-item-196x2-serial-20260821T055948Z/retry/launch/kfields_a1_0000092380-26-000044.attempt2.js",
+   "source_id": "0000092380-26-000044"
+  }
+ ],
+ "manifest_sha256": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+ "max_output_tokens": "128000",
+ "parent": {
+  "finalization_sha256": "92e1872ce4e171e7829f13274216cff9b32aa237d137d6401cfd34e9c137a8d7",
+  "receipt_sha256": "19abb07cf23178434ff230443bb1d146f390226fcba3fa20c4a8d2c35e6e1536",
+  "run_id": "kf-a3-one-item-196x2-serial-20260821T055948Z"
+ },
+ "receipts": {
+  "0000092380-26-000044": {
+   "allowed": [
+    [
+     "0000092380-26-000044#042",
+     "0000092380-26-000044#042/L1"
+    ]
+   ],
+   "attempt": 2,
+   "input_sha256": "97085fd9139810967c3bf155d921c166ccc47190a35313a558b744e68a15bff3",
+   "launcher_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a3-one-item-196x2-serial-20260821T055948Z/retry/launch/kfields_a1_0000092380-26-000044.attempt2.js",
+   "max_output_tokens": "128000",
+   "source_id": "0000092380-26-000044"
+  }
+ },
+ "run_id": "retry",
+ "states": [
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_7b06aa46-c6f.json"
+ ]
+}

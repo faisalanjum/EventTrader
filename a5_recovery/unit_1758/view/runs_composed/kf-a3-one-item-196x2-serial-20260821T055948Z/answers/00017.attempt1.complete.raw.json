@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Quote 'Net loss $ (382) $ (473) (19.2)' states digits (382, 473, 19.2) that require a value object per Rule 5.4, but the scale marker that fixes the multiplier ('In millions, except share and per share amounts') sits in the table header outside this quote, not inside it. Rule 5.6 requires unit_scale_evidence to be the smallest span from INSIDE the quote supporting the multiplier, forbids a bare '$' marker when multiplier isn't 1, and explicitly directs abstention when a TEXT fact's scale marker sits in a header/footnote outside the quote. No lawful multiplier=1 substitute exists since the true value is in millions, so the numeric fact cannot be lawfully populated; abstaining rather than extending the fixed quote or guessing the scale."
+    }
+  ],
+  "continuity_hints": []
+}
+```

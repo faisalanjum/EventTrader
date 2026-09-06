@@ -1,0 +1,38 @@
+```json
+{
+  "packet_id": "YUM_2026-02-04T08.15#188",
+  "settled": {
+    "source_id": "YUM_2026-02-04T08.15",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "average_unit_volume",
+          "driver_state": "decreased",
+          "slice_parts": ["geography:cn"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "YUM_2026-02-04T08.15#188/L1",
+      "exact_match": true,
+      "why": "Draft names average_unit_volume, states decreased, and slices geography:cn — identical to the settled fact in name, state, and slice."
+    },
+    {
+      "lane_id": "YUM_2026-02-04T08.15#188/L2",
+      "exact_match": true,
+      "why": "Identical to L1 and to the settled fact: average_unit_volume / decreased / geography:cn."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "The acronym 'EUVs' in the quote is never spelled out anywhere near this mention (unlike 'AUV', which the same call earlier spells out in full as 'average unit volume' for Taco Bell). The CFO uses 'EUV' twice in this same answer ('lower EUVs' and 'higher EUV markets'), consistently, but its expansion is not verified in the source text.",
+      "why": "Rule 3.5 forbids guessing an unverified per-X acronym expansion, and the same caution applies in spirit here: naming this 'average_unit_volume' assumes EUV is a stand-in for the call's earlier 'AUV' concept (same underlying idea of per-store unit volume) rather than an unverified distinct metric, so the exact identity of EUV vs AUV is a genuine, unresolved textual ambiguity even though the surrounding sentence makes the general concept (store-level volume) clear enough to classify as a metric fact."
+    }
+  ]
+}
+```

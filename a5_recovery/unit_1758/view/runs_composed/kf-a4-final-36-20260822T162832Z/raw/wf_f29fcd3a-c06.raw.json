@@ -1,0 +1,313 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "unknown",
+              "level_low": {"value": 6.30, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 6.60, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["adjusted diluted"],
+              "fiscal_year": 2027,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is a genuine FY27 adjusted-diluted-EPS guidance fact, but driver_state settles to 'unknown' (bare guide, no stated movement) rather than 'introduced'."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "advertising_collections",
+              "driver_state": "increased",
+              "level_low": {"value": 900, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "change_value": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["gross"],
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "advertising_collections",
+              "driver_state": "unknown",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["gross"],
+              "fiscal_year": 2027,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is, and the row correctly yields two facts (the FY26 actual and the FY27 growth guide), both about the same 'gross' advertising-collections driver."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "level_unit": "percent_yoy",
+              "slice_parts": ["product:computing"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is: an eighth-consecutive-quarter positive comparable-sales fact for computing, numberless but real."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_profit_rate",
+              "driver_state": "unknown",
+              "change_value": {"value": 30, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "company_confirmed": true,
+              "fiscal_year": 2027,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is a genuine FY27 gross-profit-rate guidance fact, but driver_state settles to 'unknown' rather than 'introduced'."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "vendor_provided_labor_hours",
+              "driver_state": "increased",
+              "change_value": {"value": 20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2026,
+              "half": 2,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is: the Q&A clarification restates but does not duplicate a genuine, only-here-located vendor-provided-labor-hours growth fact for H2 FY2026."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "decreased",
+              "level_low": {"value": 12.6, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 12.6, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": -1.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:domesticsegment"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:domesticsegment"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is, but the row actually carries two facts (domestic-segment revenue and domestic-segment comparable sales), not just the one revenue fact any prior lead captured."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "corrections_and_amendments"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether driver_state should be 'introduced' (first-ever FY27 EPS guide) or 'unknown' (bare guide); settled 'unknown' because 'introduced' is a read-time-derived state per the corrections_and_amendments law, never producer-written."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'gross' belongs in the driver name or is a Rule-8 measurement qualifier; settled as measurement, though a gross-vs-net distinct-driver reading is also defensible."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison", "corrections_and_amendments"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same gross/measurement naming ambiguity, plus whether the FY27 10% growth belongs in change_value or level_unit=percent_yoy; resolved to change_value since the driver's own level (dollars) is absolute, not itself a rate/growth metric."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["slices_and_unknown_axes", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The only computing-related menu token bundles mobile phones in with computing, but the quote gives them different streak lengths, so an off-menu coin (product:computing) is used instead."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "corrections_and_amendments"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same introduced-vs-unknown guidance-state question as row 1; settled 'unknown' for the same read-derivation reason, correcting the 'introduced' answer common to prior leads."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether to keep the qualifier 'provided' in the name (vendor_provided_labor_hours) or drop it (vendor_labor_hours); kept it as the more source-specific form."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two same-kind menu values (segment:domestic vs segment:domesticsegment) both plausibly match 'our domestic segment'; segment:domesticsegment was picked on literal wording but the tie is not rule-forced."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same domestic-segment slice-token tie as the sibling fact; comparable_sales is stored as a level (percent_yoy) rather than a change_value because the driver itself is a growth-rate metric."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/BBY_2026-03-03T08.00#140",
+      "agrees": false,
+      "why": "Matches name, per_x, level range, measurement, and period, but its driver_state 'introduced' is wrong for a bare FY27 EPS guide; the corrections_and_amendments law requires 'unknown' at write time, with 'introduced' reserved for code's read-time series derivation."
+    },
+    {
+      "lead_id": "phase1/BBY_2026-03-03T08.00#141",
+      "agrees": true,
+      "why": "Its own settled packet matches: driver_name 'advertising_collections' with 'gross' in measurement, the FY26 floor/change metric, and the FY27 guidance correctly routed to change_value/percent_yoy rather than a level percent."
+    },
+    {
+      "lead_id": "hr-022/b1/row2",
+      "agrees": false,
+      "why": "Only records the FY26 metric and omits the FY27 10% growth guidance fact entirely, so it is missing half of row 2's genuine facts, and it also leaves unit_scale_evidence null where a '%' marker is present."
+    },
+    {
+      "lead_id": "hr-022/b2/row2",
+      "agrees": true,
+      "why": "Records both the FY26 metric and FY27 guidance fact with matching names, states, and change routing; only differs by omitting the 'gross' measurement token on the guidance fact, a minor variant of the same naming ambiguity."
+    },
+    {
+      "lead_id": "phase1/BBY_2026-03-03T08.00#142",
+      "agrees": true,
+      "why": "Matches exactly: comparable_sales, increased, Q4 FY2026, percent_yoy, off-menu product:computing slice coined because the menu bundles computing with mobile phones."
+    },
+    {
+      "lead_id": "phase1/BBY_2026-03-03T08.00#143",
+      "agrees": false,
+      "why": "Matches driver_name, change_value/unit (30 basis points), and company_confirmed, but its driver_state 'introduced' is wrong for the same read-derivation reason as row 1 — a bare guide must be written 'unknown'."
+    },
+    {
+      "lead_id": "phase1/BBY_2026-03-03T08.00#144",
+      "agrees": true,
+      "why": "Matches exactly: vendor_provided_labor_hours, increased, 20% percent_yoy vs prior year, half 2 FY2026; keeping 'provided' is the better source-grounded name."
+    },
+    {
+      "lead_id": "phase1/BBY_2026-03-03T08.00#145",
+      "agrees": false,
+      "why": "The domestic-segment revenue fact matches exactly, but it entirely omits the second fact embedded in the same quote — the domestic segment's comparable-sales decline of 0.8%, which needs its own record since comparable_sales is itself a growth-rate driver."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Which menu token names Best Buy's 'domestic segment': segment:domestic or segment:domesticsegment.",
+      "why": "Both exist in the menu as separate values; the source's wording does not decisively distinguish them, so picking segment:domesticsegment on literal-string grounds is a judgment call, not a rule-forced resolution, and should be checked against actual XBRL usage before being materialized."
+    },
+    {
+      "what": "Whether 'gross' in 'gross advertising collections' belongs in the driver name or in measurement_raw_spans.",
+      "why": "Rule 8's measurement-flavor examples (adjusted, diluted, constant currency, GAAP, organic) do not explicitly cover a gross-vs-net qualifier, and 'gross' plausibly names a genuinely different reported line (pre-offset collections) rather than a mere presentation flavor, so both readings remain defensible."
+    }
+  ]
+}
+```

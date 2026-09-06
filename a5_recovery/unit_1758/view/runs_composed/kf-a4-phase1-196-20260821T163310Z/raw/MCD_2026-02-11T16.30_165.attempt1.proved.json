@@ -1,0 +1,40 @@
+```json
+{
+  "packet_id": "MCD_2026-02-11T16.30#165",
+  "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "gross_restaurant_openings",
+          "driver_state": "unknown",
+          "level_low": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 2600, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "measurement_raw_spans": ["approximately"],
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "MCD_2026-02-11T16.30#165/L1",
+      "exact_match": true,
+      "why": "L1 uses the same guidance lane, name gross_restaurant_openings, unknown state, point-shaped level 2600/2600 count with 'approximately' as the measurement span, fiscal_year 2026, duration time_type, and company_confirmed true — identical to the settled reply."
+    },
+    {
+      "lane_id": "MCD_2026-02-11T16.30#165/L2",
+      "exact_match": true,
+      "why": "L2 is byte-for-byte the same fields and values as L1 and matches the settled reply on every key."
+    }
+  ],
+  "ambiguities": []
+}
+```

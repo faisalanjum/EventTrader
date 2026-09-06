@@ -1,0 +1,161 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a5_corrected_inventory_1514.py test_a5_final_lock_1513.py test_a5_exp5_kit_1400.py test_a5_contract_1401.py test_a5_launch_gate_1403.py test_a5_route_1406.py test_a5_gate_1469.py test_a1_invalid_response.py test_a1_no_tools.py test_a1_prompt_contract.py test_a1_serial_transport.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+....................................F..............................F.... [ 41%]
+F.F..................................................................... [ 83%]
+......F.....................                                             [100%]
+=================================== FAILURES ===================================
+__________________ test_no_prompt_exposes_the_key_or_the_lock __________________
+
+kit = {'lock': {'artifacts': {'key_identity': 'df5f8bbca0c052242a174f0805d6129d8dfd869f7db1af1d3d33a545fab094ca', 'provenanc...revenue per ASM (cents) 17.35 16.30 6.5 %",\n  "raw_label_or_claim": "Passenger revenue per ASM (cents)"\n }\n}', ...}}
+
+    def test_no_prompt_exposes_the_key_or_the_lock(kit):
+        text = "\n".join(kit["prompts"].values())
+        assert A5.A4_LOCK_SHA not in text
+        assert "a4_detailed_key_lock" not in text
+        for shard in A5._bound_artifact(kit["lock"], "key_identity")["key_shards"]:
+>           assert shard["sha256"] not in text
+                   ^^^^^^^^^^^^^^^
+E           KeyError: 'sha256'
+
+test_a5_exp5_kit_1400.py:180: KeyError
+___________________ test_frozen_source_byte_drift_arms_zero ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_frozen_source_byte_drift_0')
+
+    def test_frozen_source_byte_drift_arms_zero(tmp_path):
+        ev = [e for e in BLM._events() if e["source_id"].startswith("AAL")][0]
+        src = os.path.join(BLM._REPO, ev["input_path"])
+        orig = io.open(src, "rb").read()
+        out = str(tmp_path / "srcdrift")
+        try:
+            doc = json.loads(orig.decode("utf-8"))
+            doc["ticker"] = "MUTATED"
+>           io.open(src, "w", encoding="utf-8").write(json.dumps(doc, indent=1))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           OSError: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/AAL_2026-04-23T08.30.json'
+
+test_a5_launch_gate_1403.py:125: OSError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_frozen_source_byte_drift_0')
+
+    def test_frozen_source_byte_drift_arms_zero(tmp_path):
+        ev = [e for e in BLM._events() if e["source_id"].startswith("AAL")][0]
+        src = os.path.join(BLM._REPO, ev["input_path"])
+        orig = io.open(src, "rb").read()
+        out = str(tmp_path / "srcdrift")
+        try:
+            doc = json.loads(orig.decode("utf-8"))
+            doc["ticker"] = "MUTATED"
+            io.open(src, "w", encoding="utf-8").write(json.dumps(doc, indent=1))
+            got = A5.prepare(out)
+            assert got["ok"] is False, "changed source bytes armed a run"
+            assert not _armed(out)
+            assert any("source file" in p or "manifest hash" in p
+                       for p in got["problems"]), got["problems"][:2]
+        finally:
+>           io.open(src, "wb").write(orig)
+            ^^^^^^^^^^^^^^^^^^
+E           OSError: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/AAL_2026-04-23T08.30.json'
+
+test_a5_launch_gate_1403.py:132: OSError
+_______ test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes ________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_public_route_runs_end_0')
+
+    @TG._needs_node
+    def test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes(tmp_path):
+        """THE CONTROL. prepare -> the RETURNED invocations -> record -> audit ->
+        finalize, over every planned call.
+    
+        SEQ 1405's control was abstention-only. `_a1_replies` covers all three
+        lawful branches, so a schema-lawful FACT reply now reaches the finalizer
+        through the item/default/menu/source-locator path, and the nonempty
+        `continuity_hints` branch is exercised by the SAME existing control rather
+        than a duplicate of it.
+        """
+        fix = _a5_run(tmp_path)
+        plan = fix["plan"]
+        bodies = [json.loads(fix["replies"][pk["prompt_sha256"]])
+                  for pk in plan["packets"]]
+        assert any(b["facts"] for b in bodies), "no lawful FACT reply was served"
+        assert any(b["continuity_hints"] for b in bodies), \
+            "the nonempty continuity_hints branch was never served"
+        assert any(b["abstentions"] for b in bodies)
+    
+        n_calls = _planned_calls(plan)
+        assert n_calls == len(fix["prep"]["allowed"]) == 392, n_calls
+        out = TG._finalize(fix)
+>       assert out["audit_problems"] == [], out["audit_problems"][:5]
+E       AssertionError: ["wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually rece...06201-26-000031#002', '0000006201-26-000031#002/L1'): the prompt actually received is not the manifest's pinned bytes"]
+E       assert ['wf_a5_00000...d bytes', ...] == []
+E         
+E         Left contains 784 more items, first extra item: "wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+test_a5_route_1406.py:150: AssertionError
+___ test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_one_invalid_primary_ma0')
+
+    @TG._needs_node
+    def test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably(
+            tmp_path):
+        """EXACTLY ONE call answers unparseably: every call is still accounted, the
+        retry is that one lane and not its sibling, attempt 2 closes on disk, and
+        attempt 3 is refused.
+    
+        The previous version corrupted by prompt_sha256 and so hit BOTH lanes of the
+        packet; asserting only the packet id let it pass on 2 invalid calls and 2
+        retries (Codex SEQ 1407 item 1). Every count below is now per-LANE.
+        """
+        fix = _a5_run(tmp_path)
+        plan = fix["plan"]
+        n_calls = _planned_calls(plan)
+        assert n_calls == len(fix["prep"]["allowed"]) == 392, n_calls
+        packet = plan["packets"][0]
+        pid = packet["packet_id"]
+        lanes = [l["lane_id"] for l in packet["lanes"]]
+        assert len(lanes) == len(plan["arms"]) == 2, lanes
+        target, sibling = (pid, lanes[0]), (pid, lanes[1])
+        _corrupt_one_lane(fix, *target)
+    
+        primary = TG._finalize(fix)
+        led = primary["ledger"]
+>       assert primary["audit_problems"] == [], primary["audit_problems"][:5]
+E       AssertionError: ["wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually rece...06201-26-000031#002', '0000006201-26-000031#002/L1'): the prompt actually received is not the manifest's pinned bytes"]
+E       assert ['wf_a5_00000...d bytes', ...] == []
+E         
+E         Left contains 784 more items, first extra item: "wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+test_a5_route_1406.py:203: AssertionError
+___ test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fd48405ea90>
+
+    def test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse(
+            tmp_path, monkeypatch):
+        """MUTATION: the existing preflight re-derives launcher bytes and compares
+        them to what is on disk, so deleting the deny from ONE launcher must be
+        refused by the check that already exists - no new proof framework."""
+        mirror = str(tmp_path / "harness")
+        shutil.copytree(_HERE, mirror,
+                        ignore=shutil.ignore_patterns("__pycache__", "runs"))
+        victim = sorted(_derived_launcher_texts())[0]
+        lp = os.path.join(mirror, "launchers_a1", "kfields_a1_%s.workflow.js" % victim)
+>       text = io.open(lp, encoding="utf-8").read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0/harness/launchers_a1/kfields_a1_0000006201-26-000031.workflow.js'
+
+test_a1_no_tools.py:114: FileNotFoundError
+=========================== short test summary info ============================
+FAILED test_a5_exp5_kit_1400.py::test_no_prompt_exposes_the_key_or_the_lock
+FAILED test_a5_launch_gate_1403.py::test_frozen_source_byte_drift_arms_zero
+FAILED test_a5_route_1406.py::test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes
+FAILED test_a5_route_1406.py::test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably
+FAILED test_a1_no_tools.py::test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse
+5 failed, 167 passed in 147.78s (0:02:27)
+
+[rc=1]

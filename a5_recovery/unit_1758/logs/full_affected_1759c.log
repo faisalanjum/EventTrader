@@ -1,0 +1,2690 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a5_corrected_inventory_1514.py test_a5_final_lock_1513.py test_a5_exp5_kit_1400.py test_a5_contract_1401.py test_a5_route_1406.py test_a5_gate_1469.py test_a1_invalid_response.py test_a1_no_tools.py test_a1_prompt_contract.py test_a1_serial_transport.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+...............F.....F..............F.........................F.FFFF.... [ 44%]
+..........F................FFFFFFFFFFFFFFFF........FFFFFFFFFF......FF... [ 88%]
+..............FFFF                                                       [100%]
+=================================== FAILURES ===================================
+_________________ test_the_a4_lock_binds_and_the_counts_derive _________________
+
+kit = {'lock': {'artifacts': {'key_identity': 'df5f8bbca0c052242a174f0805d6129d8dfd869f7db1af1d3d33a545fab094ca', 'provenanc...revenue per ASM (cents) 17.35 16.30 6.5 %",\n  "raw_label_or_claim": "Passenger revenue per ASM (cents)"\n }\n}', ...}}
+
+    def test_the_a4_lock_binds_and_the_counts_derive(kit):
+        assert kit["lock"]["state"] == "LOCKED"
+>       assert kit["lock"]["signature"]["signed"] is True
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'signature'
+
+test_a5_exp5_kit_1400.py:34: KeyError
+____________ test_only_two_independent_sonnet_high_arms_are_active _____________
+
+    def test_only_two_independent_sonnet_high_arms_are_active():
+        rows = A5.active_arms()          # DERIVED from the frozen kit, not typed
+        assert [a["arm"] for a in rows] == ["P1", "P2"]
+        assert [a["role"] for a in rows] == ["sonnet_run1", "sonnet_run2"]
+        for a in rows:
+            assert a["tier"] == "sonnet" and a["effort"] == "high" and a["active"]
+        names = json.dumps([dict(a) for a in rows])
+        for gone in ("haiku", "opus", "qwen", "gpt", "fallback", "escalation",
+                     "P3", "P4", "P5"):
+            assert gone.lower() not in names.lower(), gone
+        # retired, but retained as evidence
+>       assert any("P3" in r for r in A5.RETIRED_ARMS)
+                                      ^^^^^^^^^^^^^^^
+E       AttributeError: module 'build_a5_exp5_kit' has no attribute 'RETIRED_ARMS'
+
+test_a5_exp5_kit_1400.py:85: AttributeError
+__________________ test_no_prompt_exposes_the_key_or_the_lock __________________
+
+kit = {'lock': {'artifacts': {'key_identity': 'df5f8bbca0c052242a174f0805d6129d8dfd869f7db1af1d3d33a545fab094ca', 'provenanc...revenue per ASM (cents) 17.35 16.30 6.5 %",\n  "raw_label_or_claim": "Passenger revenue per ASM (cents)"\n }\n}', ...}}
+
+    def test_no_prompt_exposes_the_key_or_the_lock(kit):
+        text = "\n".join(kit["prompts"].values())
+        assert A5.A4_LOCK_SHA not in text
+        assert "a4_detailed_key_lock" not in text
+>       for shard in kit["lock"]["key_shards"]:
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'key_shards'
+
+test_a5_exp5_kit_1400.py:179: KeyError
+_______ test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes ________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_public_route_runs_end_0')
+
+    @TG._needs_node
+    def test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes(tmp_path):
+        """THE CONTROL. prepare -> the RETURNED invocations -> record -> audit ->
+        finalize, over every planned call.
+    
+        SEQ 1405's control was abstention-only. `_a1_replies` covers all three
+        lawful branches, so a schema-lawful FACT reply now reaches the finalizer
+        through the item/default/menu/source-locator path, and the nonempty
+        `continuity_hints` branch is exercised by the SAME existing control rather
+        than a duplicate of it.
+        """
+>       fix = _a5_run(tmp_path)
+              ^^^^^^^^^^^^^^^^^
+
+test_a5_route_1406.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a5_route_1406.py:81: in _a5_run
+    TG._a1_execute(work, tmp_path, prep, plan, projects, replies, tag)
+test_harness_guards.py:7575: in _a1_execute
+    res = _replay(tmp_path, prep["invocations"], replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_public_route_runs_end_0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...lic_route_runs_end_0/a5run/launch/exp5_a5_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'0034eff89f3a24cac2c4ecee02a8387ad6f1792f00fc6a4dee3260ad764aac33': '{"source_id": "0000027904-26-000020", "facts": [...: [], "abstentions": [{"reason": "a rename"}], "continuity_hints": [{"kind": "driver", "old": "A", "new": "B"}]}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+___ test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_one_invalid_primary_ma0')
+
+    @TG._needs_node
+    def test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably(
+            tmp_path):
+        """EXACTLY ONE call answers unparseably: every call is still accounted, the
+        retry is that one lane and not its sibling, attempt 2 closes on disk, and
+        attempt 3 is refused.
+    
+        The previous version corrupted by prompt_sha256 and so hit BOTH lanes of the
+        packet; asserting only the packet id let it pass on 2 invalid calls and 2
+        retries (Codex SEQ 1407 item 1). Every count below is now per-LANE.
+        """
+>       fix = _a5_run(tmp_path)
+              ^^^^^^^^^^^^^^^^^
+
+test_a5_route_1406.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a5_route_1406.py:81: in _a5_run
+    TG._a1_execute(work, tmp_path, prep, plan, projects, replies, tag)
+test_harness_guards.py:7575: in _a1_execute
+    res = _replay(tmp_path, prep["invocations"], replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_one_invalid_primary_ma0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00..._invalid_primary_ma0/a5run/launch/exp5_a5_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'0034eff89f3a24cac2c4ecee02a8387ad6f1792f00fc6a4dee3260ad764aac33': '{"source_id": "0000027904-26-000020", "facts": [...: [], "abstentions": [{"reason": "a rename"}], "continuity_hints": [{"kind": "driver", "old": "A", "new": "B"}]}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row[the pinned bundle's bytes changed-<lambda>] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_a_broken_launcher_bund0')
+label = "the pinned bundle's bytes changed"
+break_it = <function <lambda> at 0x7f3e26971ee0>
+
+    @TG._needs_node
+    @pytest.mark.parametrize("label,break_it", [
+        ("the pinned bundle's bytes changed", lambda rd: _bump(_bundle_of(rd))),
+        ("the pinned bundle is gone", lambda rd: os.remove(_bundle_of(rd))),
+        # same owner as the two above - audit()'s bundle loop - so it is frozen
+        # here rather than as a separate full-route copy
+        ("a reviewed launcher no longer matches the bundle",
+         lambda rd: _bump(_first_unarmed(rd))),
+    ])
+    def test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row(
+            tmp_path, label, break_it):
+        """Both were REAL defects found by mutation in SEQ 1405, in the mechanism
+        SEQ 1405 item A had just ordered:
+    
+          * drifted bundle bytes were ACCEPTED - the plan pinned `bundle_sha256`
+            and nothing ever compared it, so a one-byte change produced a clean
+            392-answer finalization.
+          * a missing bundle raised FileNotFoundError straight out of audit(). A
+            crash is not failing closed: the paid rows were already on disk.
+    
+        Rule E, all four halves: refuse, keep every paid raw row, credit zero
+        semantic answers, arm zero retries.
+        """
+>       fix = _a5_run(tmp_path, mutate_after=break_it)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a5_route_1406.py:284: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a5_route_1406.py:81: in _a5_run
+    TG._a1_execute(work, tmp_path, prep, plan, projects, replies, tag)
+test_harness_guards.py:7575: in _a1_execute
+    res = _replay(tmp_path, prep["invocations"], replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_a_broken_launcher_bund0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...roken_launcher_bund0/a5run/launch/exp5_a5_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'0034eff89f3a24cac2c4ecee02a8387ad6f1792f00fc6a4dee3260ad764aac33': '{"source_id": "0000027904-26-000020", "facts": [...: [], "abstentions": [{"reason": "a rename"}], "continuity_hints": [{"kind": "driver", "old": "A", "new": "B"}]}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row[the pinned bundle is gone-<lambda>] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_a_broken_launcher_bund1')
+label = 'the pinned bundle is gone'
+break_it = <function <lambda> at 0x7f3e26971f80>
+
+    @TG._needs_node
+    @pytest.mark.parametrize("label,break_it", [
+        ("the pinned bundle's bytes changed", lambda rd: _bump(_bundle_of(rd))),
+        ("the pinned bundle is gone", lambda rd: os.remove(_bundle_of(rd))),
+        # same owner as the two above - audit()'s bundle loop - so it is frozen
+        # here rather than as a separate full-route copy
+        ("a reviewed launcher no longer matches the bundle",
+         lambda rd: _bump(_first_unarmed(rd))),
+    ])
+    def test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row(
+            tmp_path, label, break_it):
+        """Both were REAL defects found by mutation in SEQ 1405, in the mechanism
+        SEQ 1405 item A had just ordered:
+    
+          * drifted bundle bytes were ACCEPTED - the plan pinned `bundle_sha256`
+            and nothing ever compared it, so a one-byte change produced a clean
+            392-answer finalization.
+          * a missing bundle raised FileNotFoundError straight out of audit(). A
+            crash is not failing closed: the paid rows were already on disk.
+    
+        Rule E, all four halves: refuse, keep every paid raw row, credit zero
+        semantic answers, arm zero retries.
+        """
+>       fix = _a5_run(tmp_path, mutate_after=break_it)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a5_route_1406.py:284: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a5_route_1406.py:81: in _a5_run
+    TG._a1_execute(work, tmp_path, prep, plan, projects, replies, tag)
+test_harness_guards.py:7575: in _a1_execute
+    res = _replay(tmp_path, prep["invocations"], replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_a_broken_launcher_bund1')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...roken_launcher_bund1/a5run/launch/exp5_a5_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'0034eff89f3a24cac2c4ecee02a8387ad6f1792f00fc6a4dee3260ad764aac33': '{"source_id": "0000027904-26-000020", "facts": [...: [], "abstentions": [{"reason": "a rename"}], "continuity_hints": [{"kind": "driver", "old": "A", "new": "B"}]}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row[a reviewed launcher no longer matches the bundle-<lambda>] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_a_broken_launcher_bund2')
+label = 'a reviewed launcher no longer matches the bundle'
+break_it = <function <lambda> at 0x7f3e26972020>
+
+    @TG._needs_node
+    @pytest.mark.parametrize("label,break_it", [
+        ("the pinned bundle's bytes changed", lambda rd: _bump(_bundle_of(rd))),
+        ("the pinned bundle is gone", lambda rd: os.remove(_bundle_of(rd))),
+        # same owner as the two above - audit()'s bundle loop - so it is frozen
+        # here rather than as a separate full-route copy
+        ("a reviewed launcher no longer matches the bundle",
+         lambda rd: _bump(_first_unarmed(rd))),
+    ])
+    def test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row(
+            tmp_path, label, break_it):
+        """Both were REAL defects found by mutation in SEQ 1405, in the mechanism
+        SEQ 1405 item A had just ordered:
+    
+          * drifted bundle bytes were ACCEPTED - the plan pinned `bundle_sha256`
+            and nothing ever compared it, so a one-byte change produced a clean
+            392-answer finalization.
+          * a missing bundle raised FileNotFoundError straight out of audit(). A
+            crash is not failing closed: the paid rows were already on disk.
+    
+        Rule E, all four halves: refuse, keep every paid raw row, credit zero
+        semantic answers, arm zero retries.
+        """
+>       fix = _a5_run(tmp_path, mutate_after=break_it)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a5_route_1406.py:284: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a5_route_1406.py:81: in _a5_run
+    TG._a1_execute(work, tmp_path, prep, plan, projects, replies, tag)
+test_harness_guards.py:7575: in _a1_execute
+    res = _replay(tmp_path, prep["invocations"], replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a5_a_broken_launcher_bund2')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...roken_launcher_bund2/a5run/launch/exp5_a5_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'0034eff89f3a24cac2c4ecee02a8387ad6f1792f00fc6a4dee3260ad764aac33': '{"source_id": "0000027904-26-000020", "facts": [...: [], "abstentions": [{"reason": "a rename"}], "continuity_hints": [{"kind": "driver", "old": "A", "new": "B"}]}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_________ test_a5_a_drifted_bound_input_refuses_at_the_inventory_owner _________
+
+    def test_a5_a_drifted_bound_input_refuses_at_the_inventory_owner():
+        """A bound source's live bytes must match what the A4 lock sealed."""
+        assert A5.inventory_problems() == []
+        lock = A5.a4_lock()
+        broken = json.loads(json.dumps(lock))
+>       broken["bound_owners"]["inventory"] = "0" * 64
+        ^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'bound_owners'
+
+test_a5_route_1406.py:369: KeyError
+_________________ test_a_plain_exact_prefix_is_still_accepted __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_plain_exact_prefix_is_s0')
+
+    def test_a_plain_exact_prefix_is_still_accepted(tmp_path):
+        """LAWFUL CONTROL: the shape the fixture always used must keep passing."""
+>       out, _ = _audit(tmp_path)
+                 ^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_plain_exact_prefix_is_s0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00..._prefix_is_s0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+____________ test_the_exact_official_ellipsized_prefix_is_accepted _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_exact_official_ellips0')
+
+    def test_the_exact_official_ellipsized_prefix_is_accepted(tmp_path):
+        def go(st):
+            pr = _row(st)
+            pr["promptPreview"] = pr["promptPreview"] + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_exact_official_ellips0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...icial_ellips0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+____________ test_every_other_preview_shape_still_refuses[missing] _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape0')
+label = 'missing'
+
+    @pytest.mark.parametrize("label", [
+        "missing", "non-string", "empty", "ellipsis only",
+        "three dots instead of the marker", "a wrong character before the marker",
+        "a wrong prefix entirely",
+    ])
+    def test_every_other_preview_shape_still_refuses(tmp_path, label):
+        def go(st):
+            pr = _row(st)
+            real = pr["promptPreview"]
+            if label == "missing":
+                pr.pop("promptPreview", None)
+            elif label == "non-string":
+                pr["promptPreview"] = 17
+            elif label == "empty":
+                pr["promptPreview"] = ""
+            elif label == "ellipsis only":
+                pr["promptPreview"] = ELLIPSIS
+            elif label == "three dots instead of the marker":
+                pr["promptPreview"] = real + "..."
+            elif label == "a wrong character before the marker":
+                pr["promptPreview"] = real[:-1] + "Z" + ELLIPSIS
+            else:
+                pr["promptPreview"] = "not the prompt at all" + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...review_shape0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+___________ test_every_other_preview_shape_still_refuses[non-string] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape1')
+label = 'non-string'
+
+    @pytest.mark.parametrize("label", [
+        "missing", "non-string", "empty", "ellipsis only",
+        "three dots instead of the marker", "a wrong character before the marker",
+        "a wrong prefix entirely",
+    ])
+    def test_every_other_preview_shape_still_refuses(tmp_path, label):
+        def go(st):
+            pr = _row(st)
+            real = pr["promptPreview"]
+            if label == "missing":
+                pr.pop("promptPreview", None)
+            elif label == "non-string":
+                pr["promptPreview"] = 17
+            elif label == "empty":
+                pr["promptPreview"] = ""
+            elif label == "ellipsis only":
+                pr["promptPreview"] = ELLIPSIS
+            elif label == "three dots instead of the marker":
+                pr["promptPreview"] = real + "..."
+            elif label == "a wrong character before the marker":
+                pr["promptPreview"] = real[:-1] + "Z" + ELLIPSIS
+            else:
+                pr["promptPreview"] = "not the prompt at all" + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape1')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...review_shape1/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_____________ test_every_other_preview_shape_still_refuses[empty] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape2')
+label = 'empty'
+
+    @pytest.mark.parametrize("label", [
+        "missing", "non-string", "empty", "ellipsis only",
+        "three dots instead of the marker", "a wrong character before the marker",
+        "a wrong prefix entirely",
+    ])
+    def test_every_other_preview_shape_still_refuses(tmp_path, label):
+        def go(st):
+            pr = _row(st)
+            real = pr["promptPreview"]
+            if label == "missing":
+                pr.pop("promptPreview", None)
+            elif label == "non-string":
+                pr["promptPreview"] = 17
+            elif label == "empty":
+                pr["promptPreview"] = ""
+            elif label == "ellipsis only":
+                pr["promptPreview"] = ELLIPSIS
+            elif label == "three dots instead of the marker":
+                pr["promptPreview"] = real + "..."
+            elif label == "a wrong character before the marker":
+                pr["promptPreview"] = real[:-1] + "Z" + ELLIPSIS
+            else:
+                pr["promptPreview"] = "not the prompt at all" + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape2')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...review_shape2/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_________ test_every_other_preview_shape_still_refuses[ellipsis only] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape3')
+label = 'ellipsis only'
+
+    @pytest.mark.parametrize("label", [
+        "missing", "non-string", "empty", "ellipsis only",
+        "three dots instead of the marker", "a wrong character before the marker",
+        "a wrong prefix entirely",
+    ])
+    def test_every_other_preview_shape_still_refuses(tmp_path, label):
+        def go(st):
+            pr = _row(st)
+            real = pr["promptPreview"]
+            if label == "missing":
+                pr.pop("promptPreview", None)
+            elif label == "non-string":
+                pr["promptPreview"] = 17
+            elif label == "empty":
+                pr["promptPreview"] = ""
+            elif label == "ellipsis only":
+                pr["promptPreview"] = ELLIPSIS
+            elif label == "three dots instead of the marker":
+                pr["promptPreview"] = real + "..."
+            elif label == "a wrong character before the marker":
+                pr["promptPreview"] = real[:-1] + "Z" + ELLIPSIS
+            else:
+                pr["promptPreview"] = "not the prompt at all" + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape3')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...review_shape3/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_every_other_preview_shape_still_refuses[three dots instead of the marker] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape4')
+label = 'three dots instead of the marker'
+
+    @pytest.mark.parametrize("label", [
+        "missing", "non-string", "empty", "ellipsis only",
+        "three dots instead of the marker", "a wrong character before the marker",
+        "a wrong prefix entirely",
+    ])
+    def test_every_other_preview_shape_still_refuses(tmp_path, label):
+        def go(st):
+            pr = _row(st)
+            real = pr["promptPreview"]
+            if label == "missing":
+                pr.pop("promptPreview", None)
+            elif label == "non-string":
+                pr["promptPreview"] = 17
+            elif label == "empty":
+                pr["promptPreview"] = ""
+            elif label == "ellipsis only":
+                pr["promptPreview"] = ELLIPSIS
+            elif label == "three dots instead of the marker":
+                pr["promptPreview"] = real + "..."
+            elif label == "a wrong character before the marker":
+                pr["promptPreview"] = real[:-1] + "Z" + ELLIPSIS
+            else:
+                pr["promptPreview"] = "not the prompt at all" + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape4')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...review_shape4/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_every_other_preview_shape_still_refuses[a wrong character before the marker] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape5')
+label = 'a wrong character before the marker'
+
+    @pytest.mark.parametrize("label", [
+        "missing", "non-string", "empty", "ellipsis only",
+        "three dots instead of the marker", "a wrong character before the marker",
+        "a wrong prefix entirely",
+    ])
+    def test_every_other_preview_shape_still_refuses(tmp_path, label):
+        def go(st):
+            pr = _row(st)
+            real = pr["promptPreview"]
+            if label == "missing":
+                pr.pop("promptPreview", None)
+            elif label == "non-string":
+                pr["promptPreview"] = 17
+            elif label == "empty":
+                pr["promptPreview"] = ""
+            elif label == "ellipsis only":
+                pr["promptPreview"] = ELLIPSIS
+            elif label == "three dots instead of the marker":
+                pr["promptPreview"] = real + "..."
+            elif label == "a wrong character before the marker":
+                pr["promptPreview"] = real[:-1] + "Z" + ELLIPSIS
+            else:
+                pr["promptPreview"] = "not the prompt at all" + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape5')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...review_shape5/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+____ test_every_other_preview_shape_still_refuses[a wrong prefix entirely] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape6')
+label = 'a wrong prefix entirely'
+
+    @pytest.mark.parametrize("label", [
+        "missing", "non-string", "empty", "ellipsis only",
+        "three dots instead of the marker", "a wrong character before the marker",
+        "a wrong prefix entirely",
+    ])
+    def test_every_other_preview_shape_still_refuses(tmp_path, label):
+        def go(st):
+            pr = _row(st)
+            real = pr["promptPreview"]
+            if label == "missing":
+                pr.pop("promptPreview", None)
+            elif label == "non-string":
+                pr["promptPreview"] = 17
+            elif label == "empty":
+                pr["promptPreview"] = ""
+            elif label == "ellipsis only":
+                pr["promptPreview"] = ELLIPSIS
+            elif label == "three dots instead of the marker":
+                pr["promptPreview"] = real + "..."
+            elif label == "a wrong character before the marker":
+                pr["promptPreview"] = real[:-1] + "Z" + ELLIPSIS
+            else:
+                pr["promptPreview"] = "not the prompt at all" + ELLIPSIS
+>       out, _ = _audit(tmp_path, go)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_other_preview_shape6')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...review_shape6/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+______ test_the_exact_live_reset_is_one_invalid_response_and_nothing_else ______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_exact_live_reset_is_o0')
+
+    def test_the_exact_live_reset_is_one_invalid_response_and_nothing_else(tmp_path):
+>       out, _ = _audit(tmp_path, None, _reset_response)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:146: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_exact_live_reset_is_o0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...e_reset_is_o0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_______ test_a_real_max_token_continuation_is_served_credited_and_clean ________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_real_max_token_continua0')
+
+    def test_a_real_max_token_continuation_is_served_credited_and_clean(tmp_path):
+        """LAWFUL CONTROL beside the mutation above."""
+>       out, _ = _audit(tmp_path, None, _maxtokens_continuation)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_real_max_token_continua0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...ken_continua0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+__________ test_every_scheduled_key_gets_exactly_one_terminal_outcome __________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_scheduled_key_gets_0')
+
+    def test_every_scheduled_key_gets_exactly_one_terminal_outcome(tmp_path):
+>       out, _ = _audit(tmp_path, None, _reset_response)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_scheduled_key_gets_0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...ed_key_gets_0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+______ test_the_same_topology_with_another_fault_is_fail_closed[tool use] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_same_topology_with_an0')
+label = 'tool use'
+
+    @pytest.mark.parametrize("label", ["tool use", "wrong first prompt",
+                                       "result text mismatch"])
+    def test_the_same_topology_with_another_fault_is_fail_closed(tmp_path, label):
+        tx_mut = state_mut = None
+        if label == "tool use":
+            tx_mut = lambda tx, n: _reset_response(tx, n, tools=True)
+        elif label == "wrong first prompt":
+            def tx_mut(tx, n):
+                _reset_response(tx, n)
+                tx[0]["message"]["content"] = "a different prompt entirely"
+        else:
+            tx_mut = lambda tx, n: _reset_response(tx, n, answer="other text")
+>       out, _ = _audit(tmp_path, state_mut, tx_mut)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_same_topology_with_an0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...logy_with_an0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_the_same_topology_with_another_fault_is_fail_closed[wrong first prompt] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_same_topology_with_an1')
+label = 'wrong first prompt'
+
+    @pytest.mark.parametrize("label", ["tool use", "wrong first prompt",
+                                       "result text mismatch"])
+    def test_the_same_topology_with_another_fault_is_fail_closed(tmp_path, label):
+        tx_mut = state_mut = None
+        if label == "tool use":
+            tx_mut = lambda tx, n: _reset_response(tx, n, tools=True)
+        elif label == "wrong first prompt":
+            def tx_mut(tx, n):
+                _reset_response(tx, n)
+                tx[0]["message"]["content"] = "a different prompt entirely"
+        else:
+            tx_mut = lambda tx, n: _reset_response(tx, n, answer="other text")
+>       out, _ = _audit(tmp_path, state_mut, tx_mut)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_same_topology_with_an1')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...logy_with_an1/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_the_same_topology_with_another_fault_is_fail_closed[result text mismatch] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_same_topology_with_an2')
+label = 'result text mismatch'
+
+    @pytest.mark.parametrize("label", ["tool use", "wrong first prompt",
+                                       "result text mismatch"])
+    def test_the_same_topology_with_another_fault_is_fail_closed(tmp_path, label):
+        tx_mut = state_mut = None
+        if label == "tool use":
+            tx_mut = lambda tx, n: _reset_response(tx, n, tools=True)
+        elif label == "wrong first prompt":
+            def tx_mut(tx, n):
+                _reset_response(tx, n)
+                tx[0]["message"]["content"] = "a different prompt entirely"
+        else:
+            tx_mut = lambda tx, n: _reset_response(tx, n, answer="other text")
+>       out, _ = _audit(tmp_path, state_mut, tx_mut)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_same_topology_with_an2')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...logy_with_an2/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_________ test_audit_to_classification_to_retry_is_the_supported_path __________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_audit_to_classification_t0')
+
+    def test_audit_to_classification_to_retry_is_the_supported_path(tmp_path):
+        """audit -> a1_classify -> finalization -> the existing retry derivation."""
+>       fix = TG._a1_official_run(tmp_path, None, _reset_response)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_audit_to_classification_t0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...sification_t0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_every_lawful_single_response_marker_shape_is_served[one record ending end_turn-markers0] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo0')
+label = 'one record ending end_turn', markers = ['end_turn']
+
+    @pytest.mark.parametrize("label,markers", [
+        ("one record ending end_turn", ["end_turn"]),
+        ("one record carrying no marker at all", [None]),
+        ("two records, only the last marked", [None, "end_turn"]),
+        ("two records, both marked end_turn", ["end_turn", "end_turn"]),
+    ])
+    def test_every_lawful_single_response_marker_shape_is_served(tmp_path, label,
+                                                                 markers):
+>       out, _ = _audit(tmp_path, None, lambda tx, n: _one_group(tx, markers))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...single_respo0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_every_lawful_single_response_marker_shape_is_served[one record carrying no marker at all-markers1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo1')
+label = 'one record carrying no marker at all', markers = [None]
+
+    @pytest.mark.parametrize("label,markers", [
+        ("one record ending end_turn", ["end_turn"]),
+        ("one record carrying no marker at all", [None]),
+        ("two records, only the last marked", [None, "end_turn"]),
+        ("two records, both marked end_turn", ["end_turn", "end_turn"]),
+    ])
+    def test_every_lawful_single_response_marker_shape_is_served(tmp_path, label,
+                                                                 markers):
+>       out, _ = _audit(tmp_path, None, lambda tx, n: _one_group(tx, markers))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo1')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...single_respo1/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_every_lawful_single_response_marker_shape_is_served[two records, only the last marked-markers2] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo2')
+label = 'two records, only the last marked', markers = [None, 'end_turn']
+
+    @pytest.mark.parametrize("label,markers", [
+        ("one record ending end_turn", ["end_turn"]),
+        ("one record carrying no marker at all", [None]),
+        ("two records, only the last marked", [None, "end_turn"]),
+        ("two records, both marked end_turn", ["end_turn", "end_turn"]),
+    ])
+    def test_every_lawful_single_response_marker_shape_is_served(tmp_path, label,
+                                                                 markers):
+>       out, _ = _audit(tmp_path, None, lambda tx, n: _one_group(tx, markers))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo2')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...single_respo2/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_every_lawful_single_response_marker_shape_is_served[two records, both marked end_turn-markers3] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo3')
+label = 'two records, both marked end_turn', markers = ['end_turn', 'end_turn']
+
+    @pytest.mark.parametrize("label,markers", [
+        ("one record ending end_turn", ["end_turn"]),
+        ("one record carrying no marker at all", [None]),
+        ("two records, only the last marked", [None, "end_turn"]),
+        ("two records, both marked end_turn", ["end_turn", "end_turn"]),
+    ])
+    def test_every_lawful_single_response_marker_shape_is_served(tmp_path, label,
+                                                                 markers):
+>       out, _ = _audit(tmp_path, None, lambda tx, n: _one_group(tx, markers))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lawful_single_respo3')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...single_respo3/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_any_non_end_turn_marker_on_one_response_still_refuses[a noncompletion marker on the single response-markers0] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_any_non_end_turn_marker_o0')
+label = 'a noncompletion marker on the single response'
+markers = ['max_tokens']
+
+    @pytest.mark.parametrize("label,markers", [
+        ("a noncompletion marker on the single response", ["max_tokens"]),
+        ("a noncompletion marker on an earlier record", ["max_tokens", "end_turn"]),
+        ("an unknown marker", ["stop_sequence"]),
+    ])
+    def test_any_non_end_turn_marker_on_one_response_still_refuses(tmp_path, label,
+                                                                  markers):
+>       out, _ = _audit(tmp_path, None, lambda tx, n: _one_group(tx, markers))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:309: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_any_non_end_turn_marker_o0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...urn_marker_o0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_any_non_end_turn_marker_on_one_response_still_refuses[a noncompletion marker on an earlier record-markers1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_any_non_end_turn_marker_o1')
+label = 'a noncompletion marker on an earlier record'
+markers = ['max_tokens', 'end_turn']
+
+    @pytest.mark.parametrize("label,markers", [
+        ("a noncompletion marker on the single response", ["max_tokens"]),
+        ("a noncompletion marker on an earlier record", ["max_tokens", "end_turn"]),
+        ("an unknown marker", ["stop_sequence"]),
+    ])
+    def test_any_non_end_turn_marker_on_one_response_still_refuses(tmp_path, label,
+                                                                  markers):
+>       out, _ = _audit(tmp_path, None, lambda tx, n: _one_group(tx, markers))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:309: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_any_non_end_turn_marker_o1')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...urn_marker_o1/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_ test_any_non_end_turn_marker_on_one_response_still_refuses[an unknown marker-markers2] _
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_any_non_end_turn_marker_o2')
+label = 'an unknown marker', markers = ['stop_sequence']
+
+    @pytest.mark.parametrize("label,markers", [
+        ("a noncompletion marker on the single response", ["max_tokens"]),
+        ("a noncompletion marker on an earlier record", ["max_tokens", "end_turn"]),
+        ("an unknown marker", ["stop_sequence"]),
+    ])
+    def test_any_non_end_turn_marker_on_one_response_still_refuses(tmp_path, label,
+                                                                  markers):
+>       out, _ = _audit(tmp_path, None, lambda tx, n: _one_group(tx, markers))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:309: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_any_non_end_turn_marker_o2')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...urn_marker_o2/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_________ test_text_on_an_earlier_record_of_one_response_still_refuses _________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_text_on_an_earlier_record0')
+
+    def test_text_on_an_earlier_record_of_one_response_still_refuses(tmp_path):
+        """LAWFUL CONTROL's opposite: exactly one terminal text record, unchanged."""
+        def go(tx, _n):
+            a = dict(tx[1]["message"])
+            _one_group(tx, ["end_turn", "end_turn"],
+                       texts=[a["content"], a["content"]])
+>       out, _ = _audit(tmp_path, None, go)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:321: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_text_on_an_earlier_record0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...rlier_record0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+_________ test_a_multi_response_missing_its_final_marker_still_refuses _________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_multi_response_missing_0')
+
+    def test_a_multi_response_missing_its_final_marker_still_refuses(tmp_path):
+        def go(tx, _n):
+            _maxtokens_continuation(tx, _n)
+            tx[-1]["message"]["stop_reason"] = None
+>       out, _ = _audit(tmp_path, None, go)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:329: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_multi_response_missing_0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...nse_missing_0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+___________ test_the_lawful_multi_response_continuation_is_unchanged ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_lawful_multi_response0')
+
+    def test_the_lawful_multi_response_continuation_is_unchanged(tmp_path):
+        """LAWFUL CONTROL: non-final max_tokens, final end_turn, still served."""
+>       out, _ = _audit(tmp_path, None, _maxtokens_continuation)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_invalid_response.py:335: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a1_invalid_response.py:41: in _audit
+    fix = TG._a1_official_run(tmp_path, mutate_state, mutate_tx)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:109: in _a1_official_run
+    fix = _a1_public_run(tmp_path, mutate_state=wrapped, mutate_tx=mutate_tx,
+test_harness_guards.py:7811: in _a1_public_run
+    res = _replay(tmp_path, invocations, replies=replies)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_lawful_multi_response0')
+invocations = [{'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-00...lti_response0/publicrun/launch/kfields_a1_0000063908-26-000032.attempt1.js', 'source_id': '0000063908-26-000032'}, ...]
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id": "0000006201-26-000031", "facts": [...idance", "item": {"driver_name": "d129", "driver_state": "guided"}}], "abstentions": [], "continuity_hints": []}', ...}
+default_reply = None, provide_process = False
+
+    def _replay(tmp_path, invocations, replies=None, default_reply=None,
+                provide_process=False):
+        """THE test-only invocation runner: it replays the RETURNED rows, in the
+        RETURNED order, passing each exact `scriptPath` and `args` unchanged.
+    
+        No dictionary, no sort, no reconstruction — converting the list to a map
+        and letting the runner order it lexically is how three rounds of "green"
+        tests proved a reordering that the public output never asked for.
+        """
+        cfg = {"launchers": [{"path": row["scriptPath"], "args": row["args"]}
+                             for row in invocations],
+               "replies": None if replies is False else replies,
+               "default_reply": default_reply,
+               "provide_process": provide_process, "env": {}}
+        cfgp = str(tmp_path / ("cfg%d.json" % len(os.listdir(str(tmp_path)))))
+        with io.open(cfgp, "w", encoding="utf-8") as fh:
+            json.dump(cfg, fh)
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-2000:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_harness_guards.py:6553: AssertionError
+________ test_the_fake_agent_control_sees_the_deny_on_every_actual_call ________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_fake_agent_control_se0')
+
+    @pytest.mark.skipif(_NODE is None, reason="node is unavailable")
+    def test_the_fake_agent_control_sees_the_deny_on_every_actual_call(tmp_path):
+        """THE LOAD-BEARING ONE: arm a real launcher the lawful way, execute it with
+        the fake agent hooks, and assert the option that actually reaches agent().
+    
+        A committed launcher refuses to call until the coordinator arms it, so this
+        goes through the public publisher rather than hand-editing the receipt.
+        """
+        import raw_transport as RT
+        run_dir = str(tmp_path / "armed")
+        prep = RT.a1_prepare_run(run_dir)
+        assert prep["ok"], prep["problems"][:3]
+        plan = json.load(io.open(os.path.join(
+            _HERE, "launch_kfields_drafts.manifest.json"), encoding="utf-8"))
+        inv = prep["invocations"][0]
+        cfg = {"launchers": [{"path": inv["scriptPath"], "args": inv["args"]}],
+               "replies": None,
+               "default_reply": '{"source_id":"X","facts":[],"abstentions":[],'
+                                '"continuity_hints":[]}',
+               "provide_process": False, "env": {}}
+        cfgp = str(tmp_path / "cfg.json")
+        io.open(cfgp, "w", encoding="utf-8").write(json.dumps(cfg))
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-1500:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_a1_no_tools.py:90: AssertionError
+___ test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3e26929610>
+
+    def test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse(
+            tmp_path, monkeypatch):
+        """MUTATION: the existing preflight re-derives launcher bytes and compares
+        them to what is on disk, so deleting the deny from ONE launcher must be
+        refused by the check that already exists - no new proof framework."""
+        mirror = str(tmp_path / "harness")
+        shutil.copytree(_HERE, mirror,
+                        ignore=shutil.ignore_patterns("__pycache__", "runs"))
+        victim = sorted(_derived_launcher_texts())[0]
+        lp = os.path.join(mirror, "launchers_a1", "kfields_a1_%s.workflow.js" % victim)
+>       text = io.open(lp, encoding="utf-8").read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0/harness/launchers_a1/kfields_a1_0000006201-26-000031.workflow.js'
+
+test_a1_no_tools.py:114: FileNotFoundError
+_____________ test_the_launcher_holds_exactly_one_agent_in_flight ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_launcher_holds_exactl0')
+
+    @pytest.mark.skipif(_NODE is None, reason="node is unavailable")
+    def test_the_launcher_holds_exactly_one_agent_in_flight(tmp_path):
+        """THE DEFECT. Every planned call still happens, one at a time."""
+        inv = _armed(tmp_path)
+>       res = _replay(tmp_path, inv)
+              ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_serial_transport.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_the_launcher_holds_exactl0')
+inv = {'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000..._launcher_holds_exactl0/armed/launch/kfields_a1_0000006201-26-000031.attempt1.js', 'source_id': '0000006201-26-000031'}
+replies = None
+default = '{"source_id":"X","facts":[],"abstentions":[],"continuity_hints":[]}'
+
+    def _replay(tmp_path, inv, replies=None, default=LAWFUL):
+        cfg = {"launchers": [{"path": inv["scriptPath"], "args": inv["args"]}],
+               "replies": replies, "default_reply": default,
+               "provide_process": False, "env": {}}
+        cfgp = str(tmp_path / "cfg.json")
+        io.open(cfgp, "w", encoding="utf-8").write(json.dumps(cfg))
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-1500:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_a1_serial_transport.py:41: AssertionError
+___________ test_order_and_full_output_survive_the_serial_transport ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_order_and_full_output_sur0')
+
+    @pytest.mark.skipif(_NODE is None, reason="node is unavailable")
+    def test_order_and_full_output_survive_the_serial_transport(tmp_path):
+        """LAWFUL CONTROL: same calls, same order, every row returned."""
+        inv = _armed(tmp_path)
+>       res = _replay(tmp_path, inv)
+              ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_serial_transport.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_order_and_full_output_sur0')
+inv = {'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000...er_and_full_output_sur0/armed/launch/kfields_a1_0000006201-26-000031.attempt1.js', 'source_id': '0000006201-26-000031'}
+replies = None
+default = '{"source_id":"X","facts":[],"abstentions":[],"continuity_hints":[]}'
+
+    def _replay(tmp_path, inv, replies=None, default=LAWFUL):
+        cfg = {"launchers": [{"path": inv["scriptPath"], "args": inv["args"]}],
+               "replies": replies, "default_reply": default,
+               "provide_process": False, "env": {}}
+        cfgp = str(tmp_path / "cfg.json")
+        io.open(cfgp, "w", encoding="utf-8").write(json.dumps(cfg))
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-1500:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_a1_serial_transport.py:41: AssertionError
+_________ test_a_no_answer_retains_its_row_and_launches_nothing_later __________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_no_answer_retains_its_r0')
+
+    @pytest.mark.skipif(_NODE is None, reason="node is unavailable")
+    def test_a_no_answer_retains_its_row_and_launches_nothing_later(tmp_path):
+        """The exact live failure: the runtime returns no answer mid-invocation."""
+        inv = _armed(tmp_path)
+        shas = _prompt_shas(inv)
+        assert len(shas) >= 3, "this source is too small to prove a mid-run stop"
+        dead = shas[1]                      # the second packet, both its lanes
+        replies = {h: LAWFUL for h in shas}
+        replies[dead] = None                # an explicit runtime no-answer
+>       res = _replay(tmp_path, inv, replies=replies)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_serial_transport.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_no_answer_retains_its_r0')
+inv = {'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000...o_answer_retains_its_r0/armed/launch/kfields_a1_0000006201-26-000031.attempt1.js', 'source_id': '0000006201-26-000031'}
+replies = {'00a876feeda18ae89ed0e2a2b78e96e0e0a8f7117ce0959424de3d89c6dc48a1': '{"source_id":"X","facts":[],"abstentions":[],"co...c18369a81dc936695325286d0bfe0db467aa5eb69': '{"source_id":"X","facts":[],"abstentions":[],"continuity_hints":[]}', ...}
+default = '{"source_id":"X","facts":[],"abstentions":[],"continuity_hints":[]}'
+
+    def _replay(tmp_path, inv, replies=None, default=LAWFUL):
+        cfg = {"launchers": [{"path": inv["scriptPath"], "args": inv["args"]}],
+               "replies": replies, "default_reply": default,
+               "provide_process": False, "env": {}}
+        cfgp = str(tmp_path / "cfg.json")
+        io.open(cfgp, "w", encoding="utf-8").write(json.dumps(cfg))
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-1500:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_a1_serial_transport.py:41: AssertionError
+__________ test_every_lane_still_carries_the_pinned_identity_and_deny __________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lane_still_carries_0')
+
+    @pytest.mark.skipif(_NODE is None, reason="node is unavailable")
+    def test_every_lane_still_carries_the_pinned_identity_and_deny(tmp_path):
+        """LAWFUL CONTROL: serialising changed nothing about what is asked for."""
+        inv = _armed(tmp_path)
+>       res = _replay(tmp_path, inv)
+              ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a1_serial_transport.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_every_lane_still_carries_0')
+inv = {'args': [{'attempt': 1, 'input_path': '.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000...ry_lane_still_carries_0/armed/launch/kfields_a1_0000006201-26-000031.attempt1.js', 'source_id': '0000006201-26-000031'}
+replies = None
+default = '{"source_id":"X","facts":[],"abstentions":[],"continuity_hints":[]}'
+
+    def _replay(tmp_path, inv, replies=None, default=LAWFUL):
+        cfg = {"launchers": [{"path": inv["scriptPath"], "args": inv["args"]}],
+               "replies": replies, "default_reply": default,
+               "provide_process": False, "env": {}}
+        cfgp = str(tmp_path / "cfg.json")
+        io.open(cfgp, "w", encoding="utf-8").write(json.dumps(cfg))
+        out = subprocess.run([_NODE, os.path.join(_HERE, "run_launcher_fake.mjs"),
+                              cfgp], capture_output=True, text=True)
+>       assert out.returncode == 0, out.stderr[-1500:]
+E       AssertionError: node:fs:482
+E               path = getValidatedPath(path);
+E                      ^
+E         
+E         TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+E             at Object.readFileSync (node:fs:482:14)
+E             at file:///tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_launcher_fake.mjs:6:30
+E             at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+E             at async node:internal/modules/esm/loader:643:26
+E             at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+E           code: 'ERR_INVALID_ARG_TYPE'
+E         }
+E         
+E         Node.js v24.19.0
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6...ointWithESMLoader (node:internal/modules/run_main:101:5) {\n  code: \'ERR_INVALID_ARG_TYPE\'\n}\n\nNode.js v24.19.0\n').returncode
+
+test_a1_serial_transport.py:41: AssertionError
+=========================== short test summary info ============================
+FAILED test_a5_exp5_kit_1400.py::test_the_a4_lock_binds_and_the_counts_derive
+FAILED test_a5_exp5_kit_1400.py::test_only_two_independent_sonnet_high_arms_are_active
+FAILED test_a5_exp5_kit_1400.py::test_no_prompt_exposes_the_key_or_the_lock
+FAILED test_a5_route_1406.py::test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes
+FAILED test_a5_route_1406.py::test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably
+FAILED test_a5_route_1406.py::test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row[the pinned bundle's bytes changed-<lambda>]
+FAILED test_a5_route_1406.py::test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row[the pinned bundle is gone-<lambda>]
+FAILED test_a5_route_1406.py::test_a5_a_broken_launcher_bundle_refuses_and_keeps_every_paid_row[a reviewed launcher no longer matches the bundle-<lambda>]
+FAILED test_a5_route_1406.py::test_a5_a_drifted_bound_input_refuses_at_the_inventory_owner
+FAILED test_a1_invalid_response.py::test_a_plain_exact_prefix_is_still_accepted
+FAILED test_a1_invalid_response.py::test_the_exact_official_ellipsized_prefix_is_accepted
+FAILED test_a1_invalid_response.py::test_every_other_preview_shape_still_refuses[missing]
+FAILED test_a1_invalid_response.py::test_every_other_preview_shape_still_refuses[non-string]
+FAILED test_a1_invalid_response.py::test_every_other_preview_shape_still_refuses[empty]
+FAILED test_a1_invalid_response.py::test_every_other_preview_shape_still_refuses[ellipsis only]
+FAILED test_a1_invalid_response.py::test_every_other_preview_shape_still_refuses[three dots instead of the marker]
+FAILED test_a1_invalid_response.py::test_every_other_preview_shape_still_refuses[a wrong character before the marker]
+FAILED test_a1_invalid_response.py::test_every_other_preview_shape_still_refuses[a wrong prefix entirely]
+FAILED test_a1_invalid_response.py::test_the_exact_live_reset_is_one_invalid_response_and_nothing_else
+FAILED test_a1_invalid_response.py::test_a_real_max_token_continuation_is_served_credited_and_clean
+FAILED test_a1_invalid_response.py::test_every_scheduled_key_gets_exactly_one_terminal_outcome
+FAILED test_a1_invalid_response.py::test_the_same_topology_with_another_fault_is_fail_closed[tool use]
+FAILED test_a1_invalid_response.py::test_the_same_topology_with_another_fault_is_fail_closed[wrong first prompt]
+FAILED test_a1_invalid_response.py::test_the_same_topology_with_another_fault_is_fail_closed[result text mismatch]
+FAILED test_a1_invalid_response.py::test_audit_to_classification_to_retry_is_the_supported_path
+FAILED test_a1_invalid_response.py::test_every_lawful_single_response_marker_shape_is_served[one record ending end_turn-markers0]
+FAILED test_a1_invalid_response.py::test_every_lawful_single_response_marker_shape_is_served[one record carrying no marker at all-markers1]
+FAILED test_a1_invalid_response.py::test_every_lawful_single_response_marker_shape_is_served[two records, only the last marked-markers2]
+FAILED test_a1_invalid_response.py::test_every_lawful_single_response_marker_shape_is_served[two records, both marked end_turn-markers3]
+FAILED test_a1_invalid_response.py::test_any_non_end_turn_marker_on_one_response_still_refuses[a noncompletion marker on the single response-markers0]
+FAILED test_a1_invalid_response.py::test_any_non_end_turn_marker_on_one_response_still_refuses[a noncompletion marker on an earlier record-markers1]
+FAILED test_a1_invalid_response.py::test_any_non_end_turn_marker_on_one_response_still_refuses[an unknown marker-markers2]
+FAILED test_a1_invalid_response.py::test_text_on_an_earlier_record_of_one_response_still_refuses
+FAILED test_a1_invalid_response.py::test_a_multi_response_missing_its_final_marker_still_refuses
+FAILED test_a1_invalid_response.py::test_the_lawful_multi_response_continuation_is_unchanged
+FAILED test_a1_no_tools.py::test_the_fake_agent_control_sees_the_deny_on_every_actual_call
+FAILED test_a1_no_tools.py::test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse
+FAILED test_a1_serial_transport.py::test_the_launcher_holds_exactly_one_agent_in_flight
+FAILED test_a1_serial_transport.py::test_order_and_full_output_survive_the_serial_transport
+FAILED test_a1_serial_transport.py::test_a_no_answer_retains_its_row_and_launches_nothing_later
+FAILED test_a1_serial_transport.py::test_every_lane_still_carries_the_pinned_identity_and_deny
+41 failed, 121 passed in 67.88s (0:01:07)
+
+[rc=1]

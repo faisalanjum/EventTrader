@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The item's dollar figures (2,624 and (1,994)) for 'Interest expense (income), net' require a scale multiplier (the table is captioned 'In thousands, except per share data') to be lawfully populated, but that scale marker sits in the Exhibit 1 table header outside the supplied quote span. Per Rule 5.6, a TEXT fact whose scale marker sits in a header outside the quote must abstain rather than extend the quote to reach it; the quote itself carries no in-span unit or scale marker for the dollar value."
+    }
+  ],
+  "continuity_hints": []
+}
+```

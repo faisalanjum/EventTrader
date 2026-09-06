@@ -1,0 +1,53 @@
+ 2 invalid calls and 2
+        retries (Codex SEQ 1407 item 1). Every count below is now per-LANE.
+        """
+        fix = _a5_run(tmp_path)
+        plan = fix["plan"]
+        n_calls = _planned_calls(plan)
+        assert n_calls == len(fix["prep"]["allowed"]) == 392, n_calls
+        packet = plan["packets"][0]
+        pid = packet["packet_id"]
+        lanes = [l["lane_id"] for l in packet["lanes"]]
+        assert len(lanes) == len(plan["arms"]) == 2, lanes
+        target, sibling = (pid, lanes[0]), (pid, lanes[1])
+        _corrupt_one_lane(fix, *target)
+    
+        primary = TG._finalize(fix)
+        led = primary["ledger"]
+>       assert primary["audit_problems"] == [], primary["audit_problems"][:5]
+E       AssertionError: ["wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually rece...06201-26-000031#002', '0000006201-26-000031#002/L1'): the prompt actually received is not the manifest's pinned bytes"]
+E       assert ['wf_a5_00000...d bytes', ...] == []
+E         
+E         Left contains 784 more items, first extra item: "wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the prompt actually received is not the manifest's pinned bytes"
+E         Use -v to get more diff
+
+test_a5_route_1406.py:203: AssertionError
+___ test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7eff86bf79d0>
+
+    def test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse(
+            tmp_path, monkeypatch):
+        """MUTATION: the existing preflight re-derives launcher bytes and compares
+        them to what is on disk, so deleting the deny from ONE launcher must be
+        refused by the check that already exists - no new proof framework."""
+        mirror = str(tmp_path / "harness")
+        shutil.copytree(_HERE, mirror,
+                        ignore=shutil.ignore_patterns("__pycache__", "runs"))
+        victim = sorted(_derived_launcher_texts())[0]
+        lp = os.path.join(mirror, "launchers_a1", "kfields_a1_%s.workflow.js" % victim)
+>       text = io.open(lp, encoding="utf-8").read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0/harness/launchers_a1/kfields_a1_0000006201-26-000031.workflow.js'
+
+test_a1_no_tools.py:114: FileNotFoundError
+=========================== short test summary info ============================
+FAILED test_a5_route_1406.py::test_a5_public_route_runs_end_to_end_on_all_lawful_reply_shapes
+FAILED test_a5_route_1406.py::test_a5_one_invalid_primary_makes_exactly_one_child_that_closes_durably
+FAILED test_a1_no_tools.py::test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse
+3 failed, 169 passed in 150.80s (0:02:30)
+
+[rc=1]
+
+WROTE full_eleven_1760d.log  6407 bytes  rc=1

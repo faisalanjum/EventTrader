@@ -1,0 +1,42 @@
+```json
+{
+  "packet_id": "BBY_2026-03-03T08.00#142",
+  "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "increased",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2026,
+          "level_unit": "percent_yoy",
+          "slice_parts": ["product:computing"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "BBY_2026-03-03T08.00#142/L1",
+      "exact_match": true,
+      "why": "L1's item (driver_name comparable_sales, state increased, time_type duration, Q4 FY2026, level_unit percent_yoy, slice product:computing) matches the settled fact in every field; only key ordering differs."
+    },
+    {
+      "lane_id": "BBY_2026-03-03T08.00#142/L2",
+      "exact_match": true,
+      "why": "L2 has the identical field set and values as L1 and the settled fact, again differing only in key order."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'computing' should reuse the broader menu token product:computingandmobilephones or be coined off-menu as product:computing.",
+      "why": "The menu only offers a combined computing+mobile-phones product token, but the quote explicitly separates computing (8 straight quarters) from mobile phones (4 straight quarters) as distinct facts with different streak lengths, so the combined token would misrepresent this item's specific meaning; a narrower source-grounded coin (product:computing) is used instead per Rule 7's 'meaning is the SAME' test failing here."
+    }
+  ]
+}
+```

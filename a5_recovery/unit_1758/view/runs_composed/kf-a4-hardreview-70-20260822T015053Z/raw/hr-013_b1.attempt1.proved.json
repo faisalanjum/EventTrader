@@ -1,0 +1,49 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "increased",
+        "level_low": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "comparison_low": {"value": -1.0, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "comparison_high": {"value": -1.0, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "period_end_date": "2025-11-01",
+        "slice_parts": ["segment:domestic", "channel:online"]
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "increased",
+        "level_low": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "comparison_low": {"value": -2.9, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "comparison_high": {"value": -2.9, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "period_scope": "ytd",
+        "period_end_date": "2025-11-01",
+        "slice_parts": ["segment:domestic", "channel:online"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

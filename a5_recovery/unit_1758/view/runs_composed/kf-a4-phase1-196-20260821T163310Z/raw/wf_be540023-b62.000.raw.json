@@ -1,0 +1,40 @@
+```json
+{
+  "packet_id": "0000027904-26-000013#023",
+  "settled": {
+    "source_id": "0000027904-26-000013",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "aeromexico_antitrust_immunity",
+          "driver_state": "suspended",
+          "time_type": "instant",
+          "period_start_date": "2025-09-15",
+          "period_end_date": "2025-09-15"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000013#023/L1",
+      "exact_match": true,
+      "why": "L1 uses the same driver_name (aeromexico_antitrust_immunity), fact_type action_event, time_type instant, identical period dates, and driver_state 'suspended', matching the settled reply exactly."
+    },
+    {
+      "lane_id": "0000027904-26-000013#023/L2",
+      "exact_match": false,
+      "why": "L2 matches on driver_name, fact_type, time_type, and dates, but chose driver_state 'occurred' instead of 'suspended', ignoring that the same document's narrative shows the DOT termination order was later stayed by the court (Nov 12, 2025) and the parties continue operating under the agreement in the meantime, so the LATEST stage of this action is paused/resumable, not simply completed."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state for the DOT termination order should be 'occurred' (the order itself was issued and completed) or 'suspended' (the order's effect is currently paused pending the Eleventh Circuit's review, per the court's Nov 12, 2025 stay stated later in the same event).",
+      "why": "Rule 4 requires classifying the LATEST stage, and the full event text (read as context) shows the order was stayed and the parties continue operating as before; a reader who anchors state purely to the located sentence (the order's issuance) rather than the full event's subsequent development could reasonably pick 'occurred' instead."
+    }
+  ]
+}
+```

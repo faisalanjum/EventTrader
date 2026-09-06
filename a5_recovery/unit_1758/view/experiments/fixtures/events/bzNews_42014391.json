@@ -1,0 +1,23 @@
+{
+ "source_id": "bzNews_42014391",
+ "source_type": "news",
+ "ticker": "MCD",
+ "cik": "0000063908",
+ "date": "2024-11-15",
+ "fye_month": 12,
+ "text_parts": [
+  {
+   "part": "title",
+   "content": "'McDonald's To Spend $100M To Move Past E. Coli Outbreak; Company Is Boosting Advertising And Supporting Franchisees; More Than 100 In 14 States Were Sickened By The Outbreak' - Bloomberg News"
+  },
+  {
+   "part": "teaser",
+   "content": "https://www.bloomberg.com/news/articles/2024-11-15/mcdonald-s-to-spend-100-million-to-move-past-e-coli-outbreakMcDonald&#39;s Corp. is spending $100 million in an effort to revive sales and support franchisees after a severe"
+  },
+  {
+   "part": "body",
+   "content": "https://www.bloomberg.com/news/articles/2024-11-15/mcdonald-s-to-spend-100-million-to-move-past-e-coli-outbreak McDonald's Corp. is spending $100 million in an effort to revive sales and support franchisees after a severe E. Coli outbreak spooked diners away."
+  }
+ ],
+ "sha256": "361957aeff39b4e7ce2bef9e5505a8dffda1f9e6a26161ab303c70026c0b0b73"
+}

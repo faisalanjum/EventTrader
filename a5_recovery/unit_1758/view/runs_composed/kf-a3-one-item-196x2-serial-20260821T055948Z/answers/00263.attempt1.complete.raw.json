@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This sentence is a comparability footnote explaining that the trailing-4-quarters period ending February 15, 2025 contained an extra (53rd) fiscal week — a calendar/measurement artifact affecting how that prior-year TTM figure compares to the current period — not a stated state, change, surprise, guidance, or action of a business driver. The dollar amounts describe sales attributable to that single extra week, but the week itself has no stated exact dates, fiscal quarter/half/month, or explicit horizon, and mapping the value onto the stated 'Trailing 4 Quarters ending February 15, 2025' period would misrepresent a one-week partial amount as that period's level. With no lawfully resolvable period and no real driver state/change/action being reported, this abstains under Rule 6 (unresolvable period, no stated horizon)."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,15 @@
+{
+ "source_id": "bzNews_49256211",
+ "source_type": "news",
+ "ticker": "CMG",
+ "cik": "0001058090",
+ "date": "2025-12-08",
+ "fye_month": 12,
+ "text_parts": [
+  {
+   "part": "title",
+   "content": "Chipotle Mexican Grill Authorizes Additional $1.8B For Share Repurchases"
+  }
+ ],
+ "sha256": "d4ffe5a36e2778f1897a6b124a43a3164e6e0e31803c49e1418b966dcdbaf4c8"
+}

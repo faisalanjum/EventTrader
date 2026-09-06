@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [],
+  "abstentions": [
+    {"reason": "Quote states compliance with debt covenants only as of 'the most recent applicable measurement dates' — a vague, unspecified reference (the surrounding text notes measurement dates vary by covenant, some annual/semiannual) with no stated or safely derivable real period; this metric fact requires a period and none can be lawfully resolved, so it abstains rather than guessing the quarter-end."}
+  ],
+  "continuity_hints": []
+}
+```

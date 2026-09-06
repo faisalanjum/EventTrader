@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "high_efficiency_equipment_installations",
+        "driver_state": "reported",
+        "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "period_end_date": "2026-02-03"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

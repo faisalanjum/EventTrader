@@ -1,0 +1,68 @@
+{
+ "purpose": "the original command and result records this unit's accepted outputs came from",
+ "resolved_by": "exact tool_use_id, never neighbouring text",
+ "note": "the build and prepare commands piped their output through tail, so the preserved result text is the as-recorded terminal tail and carries no separately recorded pre-pipe exit status; nothing here was re-executed or reconstructed",
+ "transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+ "records": [
+  {
+   "tool_use_id": "toolu_019mKRqkV1a96x6qhWU51koN",
+   "what": "successful A5 build (as-recorded terminal tail)",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 171775,
+   "invocation_line_sha256": "4c6c8d1cd94b393d5de83e128d221b4a2270a5795caf18b2d9fb732e80a25d43",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery\nUNIT=$R/a5_recovery/unit_1758\nU=$R/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683\nrm -rf $UNIT/view/driver_core\ncp -a $U/bench/bench_1306/driver/core $UNIT/view/driver_core\ncp $R/driver/core/fact_match.py $UNIT/view/driver_core/\necho \"composed driver/core: $(ls $UNIT/view/driver_core | tr '\\n' ' ')\"\ncd $UNIT\npython3 - <<'PYEOF'\nimport io\np=\"build_a5_map_1758.py\"; t=io.open(p).read()\no = '''      S + \"/bench_1306/driver/core/fact_match.py\": R + \"/driver/core/fact_match.py\"}'''\nn = '''      S + \"/bench_1306/driver/core\": VIEW + \"/driver_core\"}'''\nassert o in t\nio.open(p,\"w\").write(t.replace(o,n)); print(\"patched\")\nPYEOF\nPYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B build_a5_map_1758.py >/dev/null 2>&1\nrm -rf $UNIT/out/a5_build_a_1758 $UNIT/out/a5_build_b_1758 $UNIT/out/a5_candidate_1758\nPYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B build_a5_map_1758.py >/dev/null 2>&1\ntimeout 250 /home/faisal/EventMarketDB/venv/bin/python3 -B $U/launcher/boundary.py --host $UNIT/a5_map_1758.tsv $UNIT/a5_build_1758.py 2>&1 | tail -24",
+   "result_line": 171776,
+   "result_line_sha256": "29b26580c6d7832fc5b366ce22328f985d2be8121344334b32babbe00021ee63",
+   "result_is_error": false,
+   "result_text": "composed driver/core: driver_fusion.py driver_ids.py driver_member_fold.py driver_period_resolver.py driver_units.py driver_validators.py driver_write_cli.py driver_writer.py fact_match.py __init__.py outcome_codes.py prepared_fact_v2.py slice_axis_frozen.py slice_menu.py slot_convert.py unit_resolver.py \npatched\n  \"0001058090-26-000007\": \"e30f1e059c2e96bea1a5a517dac9aead35d1d335e1c184caab24ed4f3ee249db\",\n  \"0001104659-25-102611\": \"2e5e141b4c0a53a939cdb057676f70990071ee299784bba9e548b7de39fd6aab\",\n  \"0001104659-25-105631\": \"cc12af33fd346dcbfd56f3167bf79ca642057ac2d8c340181bce591666675482\",\n  \"0001104659-25-118458\": \"04b098a12812a829ffbcd5c5a278b5c9c222ee9cf81b1a4ffa9cb553624c110b\",\n  \"0001104659-26-017090\": \"40d2babcdafd8b3b58b767656bad9a706d34250f07138ca5203e6355fac45e79\",\n  \"0001104659-26-027061\": \"9621a03f10e98e72c47d9b24553df47cacf13d943e771afbf386c231dc9fd628\",\n  \"0001104659-26-032757\": \"8c62714b71800cabf77158d30b30f174f142e9b508b08052388a648f47d33f87\",\n  \"0001171843-26-001288\": \"6954ee19dff1bb0bbc26425539c32bccd0a8bfc61bdce530607e4c62fe69aca8\",\n  \"AAL_2026-04-23T08.30\": \"3e071a611d043c8b9588736d3bb9d16884d2b51e6db17bc54f0c1854757bb7d8\",\n  \"BBY_2026-03-03T08.00\": \"02470e26765aa9a3a68358d87af6fa4bf2f8bcc6cd9d0795029be1d202ee439d\",\n  \"CMG_2026-02-03T16.30\": \"6079fe9cfc7cabea4ef5fc36d471f55022d7b25f21a7f6878cf58f4b5e33b705\",\n  \"DAL_2026-04-08T10.00\": \"6d71edec78ef0271817646b47b93193ef2c86fc41908c4b155362ae472864fb5\",\n  \"DRI_2026-03-19T08.30\": \"d564b2f08e71196a7d90041d9cb351b3c0bfa82cac91d99fd413a0c98b874d17\",\n  \"MCD_2026-02-11T16.30\": \"db101e6221d3b43d9e1cb33a27bc5924d039632666fcacded309823b92e10fcf\",\n  \"ULTA_2026-03-12T16.30\": \"f3f13f61b444dde44de238b36110d2681941df80207eccce65116faf3e92825a\",\n  \"YUM_2026-02-04T08.15\": \"60e70e7e667c480511d8c5f3eed748af27fcd628486b3f38fc30e058dda5e7e7\",\n  \"bzNews_42014391\": \"f51c6b723d933a960deb1f2f52fe7ba6cda82c967bb06d5a392a4dc69fdd92d3\",\n  \"bzNews_49256211\": \"55540c168d53e871c6895fd4ead4de8bb213889dd9764319ed747542cfd8eafc\",\n  \"bzNews_50877032\": \"c4d99d2547d10814459fd7612773622554fea9f61868f47d55323433b5712ca9\",\n  \"bzNews_51962983\": \"3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca\"\n }\n}\nchecks 11  failed 0  []\nA5_BUILD_1758_DONE\nShell cwd was reset to /home/faisal/EventMarketDB"
+  },
+  {
+   "tool_use_id": "toolu_011E4BumNqDhtwHUCkS5E2F5",
+   "what": "successful A5 prepare (as-recorded terminal tail)",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 171825,
+   "invocation_line_sha256": "ba9d8f35eb7058213ac0392ac7a64c1aee0205fc3442b40081b869da09d59c64",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery\nUNIT=$R/a5_recovery/unit_1758\nU=$R/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683\ncd $UNIT\nsed -i 's|^RUN = \"/tmp/a6_a5run_1515\"|RUN = S + \"/a6_a5run_1515\"|' a5_prepare_1758.py\ngrep -n '^RUN' a5_prepare_1758.py\npython3 - <<'PYEOF'\nimport io\np=\"build_a5_map_1758.py\"; t=io.open(p).read()\no = '''      \"/tmp/a6_a5run_1515\": UNIT + \"/out/a6_a5run_1515\"}'''\nn = '''      S + \"/a6_a5run_1515\": UNIT + \"/out/a6_a5run_1515\"}'''\nassert o in t\nio.open(p,\"w\").write(t.replace(o,n)); print(\"patched to the recorded historical run path\")\nPYEOF\nrm -rf $UNIT/out/a6_a5run_1515\nPYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B build_a5_map_1758.py >/dev/null 2>&1\ntimeout 250 /home/faisal/EventMarketDB/venv/bin/python3 -B $U/launcher/boundary.py --host $UNIT/a5_map_1758.tsv $UNIT/a5_prepare_1758.py 2>&1 | tail -16",
+   "result_line": 171826,
+   "result_line_sha256": "c7c6350cee700d52e415a784334cd225f0de10a29b25e1750d79cf674dcc9e84",
+   "result_is_error": false,
+   "result_text": "17:RUN = S + \"/a6_a5run_1515\"\npatched to the recorded historical run path\nok   the receipt schedules the planned calls        392\nok   no state is recorded yet                       0\nok   no answers directory exists                    False\nrun_id: a6_a5run_1515\n{\n \"run\": \"/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515\",\n \"run_id\": \"a6_a5run_1515\",\n \"manifest_sha256\": \"5e33c3e4acbff1c710321008335d6a66622992a8317027c9d231d85912f37c53\",\n \"bundle_sha256\": \"d2e850d86f643f177868b8b755b0a0d92c0a57f1aec8fabd4455acea2367edff\",\n \"receipt_sha256\": \"b468a0a19f778f48f415b210afd95dc70eb381d9b50f1c4097384be84dfedf84\",\n \"allowed\": 392,\n \"states\": 0,\n \"files\": 76\n}\nchecks 8  failed 0  []\nA5_PREPARE_1758_DONE\nShell cwd was reset to /home/faisal/EventMarketDB"
+  },
+  {
+   "tool_use_id": "toolu_01KUCdbvVFWnNAJzgyPHDgdj",
+   "what": "final full eleven-suite launch",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 172704,
+   "invocation_line_sha256": "c04a2bc601cab2c474fd449d000d895bcd96c9a7e1d1e4545156000b1bbf5689",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery\nUNIT=$R/a5_recovery/unit_1758\nU=$R/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683\ncd $UNIT\nsetsid nohup /home/faisal/EventMarketDB/venv/bin/python3 -B $U/launcher/boundary.py --host $UNIT/a5_map_1758.tsv $UNIT/a5_tests_1758.py \\\n  full_eleven_1762_final test_a5_corrected_inventory_1514.py test_a5_final_lock_1513.py test_a5_exp5_kit_1400.py \\\n  test_a5_contract_1401.py test_a5_launch_gate_1403.py test_a5_route_1406.py test_a5_gate_1469.py \\\n  test_a1_invalid_response.py test_a1_no_tools.py test_a1_prompt_contract.py test_a1_serial_transport.py \\\n  > $UNIT/logs/run_1762_final.out 2>&1 < /dev/null &\necho \"launched pgid $! (single authorized full run)\"",
+   "result_line": 172705,
+   "result_line_sha256": "c8d469e36497edbb9c2fa13e9a4de92f7ee834117e9f375ea9fc4830dd91a841",
+   "result_is_error": false,
+   "result_text": "launched pgid 3363556 (single authorized full run)\nShell cwd was reset to /home/faisal/EventMarketDB"
+  },
+  {
+   "tool_use_id": "toolu_0195Y2ZN8jiU5iinfXi8wQuv",
+   "what": "INVALID first reversal attempt (no log written; not evidence)",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 172753,
+   "invocation_line_sha256": "f6188028a92297849f50db6fb924af6b16092db2bbd70b53df1a3512c9bd2fca",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery; UNIT=$R/a5_recovery/unit_1758\ncd $UNIT\ntimeout 280 /home/faisal/EventMarketDB/venv/bin/python3 -B reversal_controls_1762.py 2>&1 | tail -8",
+   "result_line": 172754,
+   "result_line_sha256": "e8a56924814150e2875f066c43f159fd308a15555a00141c38775e6b9a4618da",
+   "result_is_error": false,
+   "result_text": "ok   test_harness_guards.py             reverted -> rc=3 (red, as required)\n     restored e87c0b7fba137074 == e87c0b7fba137074 : True\nok   test_a1_no_tools.py                reverted -> rc=3 (red, as required)\n     restored 84725b336b93b820 == 84725b336b93b820 : True\nreversal controls failed: 0 []\nShell cwd was reset to /home/faisal/EventMarketDB"
+  },
+  {
+   "tool_use_id": "toolu_01V4qXVr7spTtUKcKkKdXy5q",
+   "what": "corrected real reversal controls",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 172772,
+   "invocation_line_sha256": "b93e9672465fe6ac7297b853eba03690f4e02caf887c01155fc59500a012602b",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery; UNIT=$R/a5_recovery/unit_1758\ncd $UNIT\npython3 - <<'PYEOF'\nimport io\np=\"reversal_controls_1762.py\"; t=io.open(p).read()\no = '''def run(name, tests):\n    cmd = [PY, \"-B\", U + \"/launcher/boundary.py\", \"--host\", UNIT + \"/a5_map_1758.tsv\",\n           UNIT + \"/a5_tests_1758.py\", name] + tests\n    p = subprocess.run(cmd, capture_output=True, text=True, cwd=UNIT)\n    return p.returncode'''\nn = '''def remap():\n    \"\"\"The map pins the view's digest, so a reverted file makes the boundary refuse\n    until the map is rebuilt for that exact state. Rebuilding is part of the control,\n    not a way around the check.\"\"\"\n    subprocess.run([PY, \"-B\", UNIT + \"/build_a5_map_1758.py\"],\n                   capture_output=True, text=True, cwd=UNIT, check=True)\n\n\ndef run(name, tests):\n    remap()\n    cmd = [PY, \"-B\", U + \"/launcher/boundary.py\", \"--host\", UNIT + \"/a5_map_1758.tsv\",\n           UNIT + \"/a5_tests_1758.py\", name] + tests\n    p = subprocess.run(cmd, capture_output=True, text=True, cwd=UNIT)\n    log = os.path.join(UNIT, \"logs\", name + \".log\")\n    if not os.path.isfile(log):\n        raise SystemExit(\"REFUSED: %s produced no log; rc=%d stderr=%s\"\n                         % (name, p.returncode, (p.stderr or p.stdout)[-400:]))\n    body = io.open(log, encoding=\"utf-8\").read()\n    return p.returncode, body'''\nassert o in t; t = t.replace(o, n)\no2 = '''        rc = run(log, tests)\n        ok = rc != 0\n        print(\"%s %-34s reverted -> rc=%d %s\"\n              % (\"ok  \" if ok else \"BAD \", fname, rc,\n                 \"(red, as required)\" if ok else \"(STILL GREEN - the fix is not load-bearing)\"))'''\nn2 = '''        rc, body = run(log, tests)\n        red = \"failed\" in body.splitlines()[-3] if len(body.splitlines()) > 3 else False\n        ok = rc != 0 and red\n        print(\"%s %-34s reverted -> rc=%d | %s\"\n              % (\"ok  \" if ok else \"BAD \", fname, rc,\n                 [l for l in body.splitlines() if \"passed\" in l or \"failed\" in l][-1:]))'''\nassert o2 in t; t = t.replace(o2, n2)\no3 = '''    finally:\n        io.open(path, \"w\", encoding=\"utf-8\").write(good)'''\nn3 = '''    finally:\n        io.open(path, \"w\", encoding=\"utf-8\").write(good)\n        remap()'''\nassert o3 in t; t = t.replace(o3, n3)\nio.open(p,\"w\").write(t); print(\"patched: map rebuilt per state, log presence required\")\nPYEOF\ntimeout 280 /home/faisal/EventMarketDB/venv/bin/python3 -B reversal_controls_1762.py 2>&1 | tail -8",
+   "result_line": 172773,
+   "result_line_sha256": "0e608dfc84f6e21ca9a8f50074b2a814e585d7e04e3e730aa301bfd2d6bfccce",
+   "result_is_error": false,
+   "result_text": "patched: map rebuilt per state, log presence required\nok   test_harness_guards.py             reverted -> rc=1 | ['1 failed in 5.11s']\n     restored e87c0b7fba137074 == e87c0b7fba137074 : True\nok   test_a1_no_tools.py                reverted -> rc=1 | ['1 failed in 0.31s']\n     restored 84725b336b93b820 == 84725b336b93b820 : True\nreversal controls failed: 0 []\nShell cwd was reset to /home/faisal/EventMarketDB"
+  }
+ ]
+}

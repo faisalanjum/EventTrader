@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "0000898173-26-000006#052",
+  "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "gross_profit",
+          "driver_state": "increased",
+          "level_low": {"value": 9.17, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 9.17, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "comparison_low": {"value": 8.55, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "comparison_high": {"value": 8.55, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "period_end_date": "2025-12-31"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000898173-26-000006#052/L1",
+      "exact_match": true,
+      "why": "L1's fact_type, driver_name/state, level/comparison numeric objects, shape hints, level_unit, comparison_baseline, time_type, fiscal_year, and period_end_date all match the settled reply exactly."
+    },
+    {
+      "lane_id": "0000898173-26-000006#052/L2",
+      "exact_match": false,
+      "why": "L2 matches on every field except it omits period_end_date; the quote states an exact end date ('year ended December 31, 2025'), and Rule 6's exact-dates-first resolution priority means that stated date should be populated alongside the fiscal_year framing, not dropped."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether period_end_date must accompany fiscal_year for a full-year fact when only the period's end date (not its start) is textually stated.",
+      "why": "Rule 6 says exact dates outrank fiscal framing in resolution priority and 'may coexist' with it, but does not explicitly mandate emitting a lone end date without a matching start date; a stricter reading could argue fiscal_year alone suffices for a full-year metric and adding a partial exact date is optional rather than required."
+    }
+  ]
+}
+```

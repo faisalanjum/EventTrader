@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [],
+  "abstentions": [
+    {"reason": "\"The Company has one reportable segment, which includes retail stores, salon services, and e-commerce\" is a basis-of-presentation / segment-structure disclosure, not a statement about any driver's state, change, surprise, guidance, or action — it fails Rule 1's fact gate as boilerplate organizational description."}
+  ],
+  "continuity_hints": []
+}
+```

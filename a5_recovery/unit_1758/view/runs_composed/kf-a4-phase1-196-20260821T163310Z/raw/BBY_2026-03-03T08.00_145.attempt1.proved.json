@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "BBY_2026-03-03T08.00#145",
+  "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "revenue",
+          "driver_state": "decreased",
+          "level_low": {"value": 12.6, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 12.6, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "change_value": {"value": -1.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "slice_parts": ["segment:domesticsegment"],
+          "fiscal_quarter": 4,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "BBY_2026-03-03T08.00#145/L1",
+      "exact_match": true,
+      "why": "Same fact_type, driver_name 'revenue', decreased state, identical level ($12.6B point, m_usd, billion evidence), identical change (-1.1, percent_yoy, prior_year baseline), same domestic-segment slice, and same Q4 FY2026 duration period; only JSON key order differs, which is not meaningful."
+    },
+    {
+      "lane_id": "BBY_2026-03-03T08.00#145/L2",
+      "exact_match": true,
+      "why": "Identical content to L1 and to the settled reply: same driver_name, state, level/change objects, units, comparison_baseline, slice_parts, and period fields; only key ordering differs from the settled reply."
+    }
+  ],
+  "ambiguities": []
+}
+```

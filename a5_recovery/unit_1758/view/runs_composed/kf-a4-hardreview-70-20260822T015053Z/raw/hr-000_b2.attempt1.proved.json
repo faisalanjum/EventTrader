@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This is a generic, boilerplate statement of ongoing financing intent/policy ('we intend to finance future aircraft deliveries and option exercises using long-term debt') with no discrete decision, transaction, approval, or one-off action, no numeric value, and no specific forward target/forecast for a driver — it fails the non-boilerplate fact gate (Rule 1.2) rather than qualifying as a metric, guidance, surprise, or action_event."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "systemwide_sales",
+        "driver_state": "increased",
+        "level_low": {"value": 139, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "floor",
+        "level_unit": "m_usd",
+        "change_value": {"value": 9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "change_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "measurement_raw_spans": ["in constant currencies"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

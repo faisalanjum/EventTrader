@@ -1,0 +1,313 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_store_sales",
+              "driver_state": "reported",
+              "level_low": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "comparable_store_sales",
+              "driver_state": "in_line",
+              "level_low": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_low": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 5.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "range",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": false,
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed: the quote states O'Reilly's own full-year actual comparable-store-sales result against its own revised guidance range, an actual-vs-previous-guidance comparison that lawfully writes a metric home fact plus its surprise twin."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_store_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_low": {"value": 2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_end_date": "2025-12-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed: a genuine year-over-year metric change for comparable store sales, with the exact end date stated in the quote itself."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_profit",
+              "driver_state": "increased",
+              "level_low": {"value": 9.17, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 9.17, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 8.55, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "comparison_high": {"value": 8.55, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_end_date": "2025-12-31"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 51.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 51.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 51.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 51.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_end_date": "2025-12-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed, expanded to two facts because the sentence states two distinct meanings (the gross-profit dollar level and the gross-margin percent-of-sales ratio), each with its own prior-year comparison."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "share_repurchase_excise_tax",
+              "driver_state": "reported",
+              "level_low": {"value": 21.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 21.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "period_end_date": "2025-12-31"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed: the $21.0 million excise-tax amount is a genuine reported dollar fact for the stated year, not boilerplate."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_store_sales",
+              "driver_state": "unknown",
+              "level_low": {"value": 3.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "period_end_date": "2026-12-31",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed: this is the company's own forward FY2026 comparable-store-sales guidance range; state is unknown since no raise/lower/reaffirm language is given."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_store_sales",
+              "driver_state": "increased",
+              "time_type": "duration",
+              "long_range_start_year": 1993,
+              "long_range_end_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "reported",
+              "time_type": "duration",
+              "long_range_start_year": 1993,
+              "long_range_end_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "reported",
+              "time_type": "duration",
+              "long_range_start_year": 1993,
+              "long_range_end_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed, expanded to three facts (comparable-store-sales, revenue, operating income) since the sentence makes a genuine multi-year record/streak claim about each, not generic boilerplate."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "increased",
+              "level_low": {"value": 605, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 605, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 551, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": 551, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "period_end_date": "2025-12-31",
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 13.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 13.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 13.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 13.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "period_end_date": "2025-12-31",
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed, expanded to two facts (the net-income dollar level and the co-stated net-margin percent-of-sales ratio), each with its own prior-year comparison; the stated $54 million/10% delta is left as null change_value since it is exactly derivable from the two stated points."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote is a generic forward-looking-statements risk-factor list naming broad categories (economy, inflation, weather, trade disputes, supply chain, cyberattacks, etc.) with no elaboration on any specific current threat; 'weather' is a bare topic mention inside standard risk boilerplate, not a real statement about a driver's state, change, surprise, guidance, or action, failing the gate at Rule 1 step 2."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed: 'weather' appears only inside the generic forward-looking-statements risk list with no company-specific elaboration, so it correctly yields no fact."
+    }
+  ],
+  "review": [
+    {"row_index": 1, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": true}, "ambiguity_note": "This quote itself states only 'full-year ... result of 4.7%' without exact dates, unlike row 2's parallel sentence in the same release, so period_start_date/period_end_date were left null rather than backfilled from a different sentence."},
+    {"row_index": 1, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling", "expectation_routing", "favourable_unfavourable_direction"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": true}, "ambiguity_note": "\"at the high end of\" is a positional descriptor, not explicit favorability wording, so per Rule 9.3 the 4.7% value sitting inside the closed 4.0%-5.0% guidance range is scored in_line rather than beat."},
+    {"row_index": 2, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 3, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 3, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the parenthetical margin percentage is an independently reportable metric distinct from the gross-profit dollar figure is a judgment call; it is treated here as a separate ratio-meaning fact per Rule 3's ratio/amount distinction."},
+    {"row_index": 4, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 5, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "period_end_date 2026-12-31 was taken from the guidance table's header ('For the Year Ending December 31, 2026'), which directly governs this located line item even though the header text itself sits outside this row's own narrow quote."},
+    {"row_index": 6, "fact_index": 0, "hard_classes": [], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "\"since becoming a public company in April of 1993\" grammatically sits closest to 'record revenue and operating income,' but is applied here to the comparable-store-sales streak too since 2025-1993+1=33 matches the stated 33-year streak exactly."},
+    {"row_index": 6, "fact_index": 1, "hard_classes": [], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "\"record\" asserts an all-time high without an explicit increase/decrease verb, so driver_state is set to reported rather than increased; a reader could argue the superlative implies an increase."},
+    {"row_index": 6, "fact_index": 2, "hard_classes": [], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "\"record\" asserts an all-time high without an explicit increase/decrease verb, so driver_state is set to reported rather than increased; a reader could argue the superlative implies an increase."},
+    {"row_index": 7, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 7, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the parenthetical net-margin percentage is an independently reportable metric distinct from the net-income dollar figure is a judgment call, treated here as a separate ratio-meaning fact for the same reason as row 3's gross margin."}
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {"lead_id": "phase1/0000898173-26-000006#050", "agrees": true, "why": "Lead #050's TWINS pair (metric home reported + surprise in_line vs previous_guidance, actual basis, has_favorability_wording false) matches my settlement's driver name, lane split, values, units and baseline; it differs only by adding exact 2025-01-01/2025-12-31 dates that this row's own quote does not itself state, which my settlement leaves null."},
+    {"lead_id": "phase1/0000898173-26-000006#051", "agrees": true, "why": "Matches my settlement exactly: comparable_store_sales, increased, 4.7% vs the stated prior-year 2.9% (prior_year baseline), percent_yoy, FY2025 with the literally-stated period_end_date 2025-12-31."},
+    {"lead_id": "phase1/0000898173-26-000006#052", "agrees": false, "why": "Lead #052's gross_profit fact matches my first fact exactly, but it does not split out the co-stated gross-margin percentage (51.6% vs 51.2%) as its own metric fact, which my settlement includes as a second, distinct-meaning fact."},
+    {"lead_id": "phase1/0000898173-26-000006#053", "agrees": false, "why": "Lead #053 matches on driver_name, state, and level value, but omits the period_end_date 2025-12-31 that the quote literally states ('for the year ended December 31, 2025'), which my settlement includes."},
+    {"lead_id": "phase1/0000898173-26-000006#054", "agrees": false, "why": "Lead #054 matches on lane, driver, unknown state, the 3.0-5.0% range, percent_yoy unit, FY2026, and company_confirmed true, but omits the period_end_date 2026-12-31 that the guidance table's own header states, which my settlement includes."},
+    {"lead_id": "phase1/0000898173-26-000006#055", "agrees": false, "why": "Lead #055 uses the same three drivers and the same long_range_start_year 1993 / long_range_end_year 2025 span, but marks driver_state=increased for all three; my settlement keeps increased only for comparable_store_sales (the quote explicitly says 'growth') and uses reported for revenue and operating_income, since 'record' alone is a superlative, not a stated increase."},
+    {"lead_id": "phase1/0000898173-26-000006#056", "agrees": false, "why": "Lead #056's net_income fact matches my settlement exactly, including the correct omission of the derivable change_value, but it does not split out the co-stated net-margin percentage (13.7% vs 13.5%) as its own fact, which my settlement includes."},
+    {"lead_id": "phase1/0000898173-26-000006#057", "agrees": true, "why": "Matches my settlement exactly: an abstention on the grounds that 'weather' is a bare topic mention inside generic forward-looking-statements risk boilerplate, with no facts emitted."}
+  ],
+  "open_issues": []
+}
+```

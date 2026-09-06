@@ -1,0 +1,50 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a1_no_tools.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+___ test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_removing_the_deny_from_on0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fcc6624a950>
+
+    def test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse(
+            tmp_path, monkeypatch):
+        """MUTATION: the existing preflight re-derives launcher bytes and compares
+        them to what is on disk, so deleting the deny from ONE launcher must be
+        refused by the check that already exists - no new proof framework."""
+        mirror = str(tmp_path / "harness")
+        shutil.copytree(_HERE, mirror,
+                        ignore=shutil.ignore_patterns("__pycache__", "runs"))
+        monkeypatch.setattr(blm, "_HERE", mirror)
+        # The mirror is armed from ITS OWN derivation - the same owner the preflight
+        # below compares against - so the control starts from bytes this owner really
+        # derives, never from a copied lineage it does not.
+        texts = _derived_launcher_texts()
+        ldir = os.path.join(mirror, "launchers_a1")
+        os.makedirs(ldir, exist_ok=True)
+        for sid, body in texts.items():
+            io.open(os.path.join(ldir, "kfields_a1_%s.workflow.js" % sid),
+                    "w", encoding="utf-8").write(body)
+        victim = sorted(texts)[0]
+        lp = os.path.join(ldir, "kfields_a1_%s.workflow.js" % victim)
+        text = io.open(lp, encoding="utf-8").read()
+        assert PASSES in text, (
+            "the on-disk launcher never passed %s, so there is nothing to remove"
+            % PASSES)
+        env = {blm.OUTPUT_TOKENS_VAR: blm.MAX_OUTPUT_TOKENS_SETTING}
+    
+        # LAWFUL CONTROL: untouched, no reason may name this launcher. (A mirror
+        # re-derives its own launcher paths, so unrelated reasons can exist; the
+        # victim's name is what must appear only after the deny is removed.)
+        before = blm.preflight(env=env, run_dir=str(tmp_path / "fresh_a"))
+>       assert not any(victim in r for r in before), (
+            "the control already blamed %s: %s" % (victim, before[:3]))
+E       AssertionError: the control already blamed 0000006201-26-000031: ["the bundle's slices is not the derivation: 36 rows vs 36 derived, first difference at index 0", '0000006201-26-000031: the launcher on disk is not the launcher this source derives - wrong or drifted bytes', '0000006201-26-000032: the launcher on disk is not the launcher this source derives - wrong or drifted bytes']
+E       assert not True
+E        +  where True = any(<generator object test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse.<locals>.<genexpr> at 0x7fcc664eec00>)
+
+test_a1_no_tools.py:134: AssertionError
+=========================== short test summary info ============================
+FAILED test_a1_no_tools.py::test_removing_the_deny_from_one_launcher_makes_the_derived_check_refuse
+1 failed, 3 passed in 1.22s
+
+[rc=1]

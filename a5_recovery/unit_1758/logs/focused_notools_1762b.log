@@ -1,0 +1,5 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a1_no_tools.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+....                                                                     [100%]
+4 passed in 1.65s
+
+[rc=0]

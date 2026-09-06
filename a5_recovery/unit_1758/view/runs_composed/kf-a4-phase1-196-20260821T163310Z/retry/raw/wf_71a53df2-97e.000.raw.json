@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0001104659-26-032757#126",
+  "settled": {
+    "source_id": "0001104659-26-032757",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The target text 'Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations' is generic forward-looking risk-monitoring boilerplate: it states no direction, level, or discrete action for any driver, only that the company watches an unspecified macro condition. Fails Rule 1 gate at step 2 (bare topic mention / generic risk boilerplate); the concrete surrounding events (the Supreme Court IEEPA ruling, the President's new tariffs) are separate located items, not this target."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-032757#126/L1",
+      "exact_match": false,
+      "why": "L1 emits a metric fact (driver_name tariff_policy, state persists), but the target sentence is generic monitoring boilerplate with no stated level, direction, or discrete driver state — it should abstain under Rule 1.2, not be recorded as a metric."
+    },
+    {
+      "lane_id": "0001104659-26-032757#126/L2",
+      "exact_match": true,
+      "why": "L2 abstains for the same substantive reason: the target claim is generic risk-monitoring boilerplate with no stated driver state, direction, or discrete action, failing Rule 1's gate — matches the settled reply's facts=[] / single-abstention shape."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'tariff policy continues to evolve' could instead be read as a qualitative metric fact (driver tariff_policy, state persists/unchanged) rather than boilerplate.",
+      "why": "Rule 2 allows a metric to be a qualitative standing condition (e.g., 'policy-in-force'), and this sentence does assert an ongoing real-world condition tied to actual court/executive tariff actions elsewhere in the quote; but taken alone it carries no company-specific level, direction, or exposure detail and reads as the same generic 'monitoring potential impacts' hedge used across countless filings, so Rule 1.2's boilerplate exclusion is judged to control."
+    }
+  ]
+}
+```

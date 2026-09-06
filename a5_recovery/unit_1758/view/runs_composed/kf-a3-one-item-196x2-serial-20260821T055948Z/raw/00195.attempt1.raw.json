@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote states that Q4 FY2025 represented 33.0% of annual sales and 33.5% of net income, which is disclosed only to explain a fiscal-calendar mechanic (Q4 spans 16 weeks vs 12 weeks for Q1-Q3, so it structurally captures a disproportionate share of the year) rather than a trackable driver state, guidance, surprise, or action. Naming it net_sales/net_income would wrongly conflate this same-period concentration ratio with the absolute-dollar net_sales/net_income drivers reported elsewhere, and no period-word-free, non-conflicting driver name is supported by the evidence, so it does not lawfully resolve to a fact."
+    }
+  ],
+  "continuity_hints": []
+}
+```

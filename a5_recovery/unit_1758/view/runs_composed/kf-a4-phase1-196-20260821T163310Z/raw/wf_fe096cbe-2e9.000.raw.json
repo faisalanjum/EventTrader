@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "DAL_2026-04-08T10.00#156",
+  "settled": {
+    "source_id": "DAL_2026-04-08T10.00",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "fuel_expense",
+          "driver_state": "unknown",
+          "level_low": {
+            "value": 2,
+            "scale_multiplier": 1000000000,
+            "unit_scale_evidence": "billion"
+          },
+          "level_shape_hint": "floor",
+          "level_unit": "m_usd",
+          "time_type": "duration",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DAL_2026-04-08T10.00#156/L1",
+      "exact_match": true,
+      "why": "L1 matches field-for-field: guidance lane, driver_name fuel_expense, driver_state unknown, level_low as an open floor {value:2, scale_multiplier:1e9, evidence:'billion'} with level_shape_hint floor and level_unit m_usd, time_type duration, fiscal_quarter 2/fiscal_year 2026, company_confirmed true."
+    },
+    {
+      "lane_id": "DAL_2026-04-08T10.00#156/L2",
+      "exact_match": false,
+      "why": "L2 stores the amount as change_value instead of level_low, but change_value has no floor/ceiling shape field so it cannot lawfully carry the stated open-ended 'more than $2 billion'; it also wrongly sets value to the already-scaled 2000000000 (with scale_multiplier 1e9 again), double-applying the scale instead of storing the stated digit 2 per Rule 5.4."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the $2 billion fuel-cost figure belongs in level_low (floor) or change_value.",
+      "why": "'Fuel headwind' conceptually denotes an incremental cost impact (a delta vs. a prior fuel-price assumption, per Dan Jenke's later 'relative to the start of the year' framing elsewhere in the call), which could argue for change_value. But the source states it as an open-ended 'more than $2 billion' (a floor), and only the level/comparison slot groups have a shape-hint field capable of expressing floor/ceiling per Rule 5.2 — change_value has no such field. This schema constraint is why level_low + floor is the settled choice, but the underlying meaning (delta vs. absolute level) is genuinely ambiguous from this quote alone."
+    }
+  ]
+}
+```

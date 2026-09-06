@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#121",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "net_sales",
+          "driver_state": "introduced",
+          "level_low": {"value": 6.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 7.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent_yoy",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#121/L1",
+      "exact_match": true,
+      "why": "L1's driver_name (net_sales), driver_state (introduced), level_low/high values and shape (range), level_unit (percent_yoy), fiscal_year (2026), time_type (duration), and company_confirmed (true) all match the settled reply exactly."
+    },
+    {
+      "lane_id": "0001104659-26-027061#121/L2",
+      "exact_match": true,
+      "why": "L2 is byte-for-byte the same content as L1 and matches the settled reply on every field: name, state, level range/shape/unit, fiscal_year, time_type, and company_confirmed."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state should be 'introduced' vs 'unknown' for this fiscal 2026 net sales growth guide.",
+      "why": "Rule 4 only spells out how to pick raised/lowered/reaffirmed (via two closed guides) and says a bare guide defaults to unknown, without stating exactly when 'introduced' applies; here the press release explicitly frames this as first-time fiscal 2026 guidance ('PROVIDES FISCAL 2026 GUIDANCE') with no prior FY2026 guide referenced anywhere in the source, which supports 'introduced' rather than treating it as an undetermined bare guide."
+    }
+  ]
+}
+```

@@ -1,0 +1,40 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#000",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "total_revenue",
+          "driver_state": "unknown",
+          "level_low": {"value": 13.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 16.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#000/L1",
+      "exact_match": true,
+      "why": "L1 uses the same fact_type guidance, driver_name total_revenue, driver_state unknown, identical level_low/level_high/shape/unit, time_type duration, fiscal_quarter 2, fiscal_year 2026, and company_confirmed true — matches the settled reply field for field."
+    },
+    {
+      "lane_id": "0000006201-26-000031#000/L2",
+      "exact_match": true,
+      "why": "L2 is byte-identical to L1 and to the settled reply: same driver_name, state, numeric range 13.5-16.5 percent_yoy, period fields, and company_confirmed true."
+    }
+  ],
+  "ambiguities": []
+}
+```

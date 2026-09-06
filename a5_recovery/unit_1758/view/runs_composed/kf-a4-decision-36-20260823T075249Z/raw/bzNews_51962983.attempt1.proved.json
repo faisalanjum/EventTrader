@@ -1,0 +1,49 @@
+```json
+{
+  "source_id": "bzNews_51962983",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_51962983",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "ceo_appointment",
+              "driver_state": "announced",
+              "fiscal_quarter": 3,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The row was proposed as a real_item and it settles as a fact, since the title reports a genuine, non-boilerplate CEO-succession action (a new CEO appointed, effective end of Q3), which clearly passes the gate."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {
+        "expectation_comparison_present": false
+      },
+      "ambiguity_note": "The title states only 'end of Q3' with no fiscal year, so fiscal_quarter is recorded alone and fiscal_year is left null rather than derived from the event's fye_month metadata, since the text never states which fiscal year's Q3 is meant."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/bzNews_51962983#195",
+      "agrees": true,
+      "why": "The lead's settled fact (driver_name ceo_appointment, driver_state announced, fiscal_quarter 3, time_type instant, fiscal_year omitted) matches the independently settled fact field-for-field."
+    }
+  ],
+  "open_issues": []
+}
+```

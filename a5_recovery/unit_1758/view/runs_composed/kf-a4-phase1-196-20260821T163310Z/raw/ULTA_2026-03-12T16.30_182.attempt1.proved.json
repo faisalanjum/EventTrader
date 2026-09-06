@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#182",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sales_mix",
+          "driver_state": "decreased",
+          "level_low": {"value": 35, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 35, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "slice_parts": ["product:cosmetics"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#182/L1",
+      "exact_match": true,
+      "why": "Same driver_name (sales_mix), driver_state (decreased), point-shaped 35% level with percent unit and % evidence, product:cosmetics slice, Q4 FY2025 period, and duration time_type; field order differs only."
+    },
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#182/L2",
+      "exact_match": true,
+      "why": "Identical content to L1 and to the settled fact — same name, state, level values/shape/unit, slice, period, and time_type; only key ordering differs, which is immaterial."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Exact canonical driver_name for a category's share-of-total-sales metric ('sales_mix' vs a lawful synonym like 'category_sales_mix' or 'net_sales_mix').",
+      "why": "The source never names this metric explicitly (it just says 'decreased to 35% of sales'); 'sales_mix' is a provisional, meaning-based label per Rule 3's provisional-naming clause, and the later admission step may reconcile it against the catalog."
+    }
+  ]
+}
+```
