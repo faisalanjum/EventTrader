@@ -1,0 +1,22 @@
+THE REMAINING CLASS: the reference inventory DOCUMENT, not the module
+======================================================================
+The module is now the exact recorded owner: 31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5
+(16091 bytes), reconstructed through all nine recorded T-records in Codex 1767's order.
+
+It declares  INVENTORY_PATH = "/tmp/a7_reference_inventory.json"  and writes that
+document itself via  write(doc, path=INVENTORY_PATH).
+
+The two still-failing controls reach the UNCHANGED G1 owner, which READS that path:
+  test_freeze_needs_no_retry_file_when_none_is_owed   -> G.freeze(PR.load(run))
+  test_g1_consumes_the_one_ledger_and_adds_nothing    -> G.freeze(PR.load(run))
+Both fail with the single error:
+  FileNotFoundError: [Errno 2] No such file or directory: '/tmp/a7_reference_inventory.json'
+
+Copies of that JSON anywhere on disk or in the backups: 0
+Its direct recorded dependency is T line 67823 toolu_016nHcS1hWT5jm4QjvzRrv3p, which
+creates the MODULE and shows the writer; the document itself is a runtime artifact the
+historical session produced earlier by calling the module, not a stored input.
+
+Producing it would mean calling R.write(R.expected_document(run)), which reaches
+a7_key_correction.current_key(). That is pure derivation with no model call, but it is
+A7 machinery, and Codex 1767 forbids A7 execution. Not done; ruling requested.

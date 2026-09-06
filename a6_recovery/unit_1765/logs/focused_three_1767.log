@@ -1,0 +1,95 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed test_a7_runstates_1470.py::test_the_reference_lookup_has_no_default_run test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+F.F                                                                      [100%]
+=================================== FAILURES ===================================
+______________ test_freeze_needs_no_retry_file_when_none_is_owed _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_freeze_needs_no_retry_fil0')
+
+    def test_freeze_needs_no_retry_file_when_none_is_owed(tmp_path):
+        """`freeze` read the retry ledger unconditionally too."""
+        run = _lawful_zero_retry(tmp_path, "freezeclean")
+>       doc, _prompts, problems = G.freeze(PR.load(run))
+                                  ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:245: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2137: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:657: in questions
+    ("reference_card", A7C.reference_card(
+a7_g23_build.py:819: in reference_card
+    row = _inventory(run).get((source_id, gold_idx))
+          ^^^^^^^^^^^^^^^
+a7_g23_build.py:801: in _inventory
+    _INVENTORY["rows"] = R.validate(run=run)
+                         ^^^^^^^^^^^^^^^^^^^
+a7_reference_inventory.py:320: in validate
+    doc = read(path)
+          ^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = '/tmp/a7_reference_inventory.json'
+
+    def read(path=None):
+        """The frozen inventory document, STRUCTURALLY checked. See `validate` for
+        the proof against the live authorities."""
+        # LATE BINDING. `path=INVENTORY_PATH` bound the constant at import, so the
+        # inventory location could not be redirected at all - a test that pointed
+        # the serving path at another document silently read the real one and
+        # proved nothing.
+        path = INVENTORY_PATH if path is None else path
+>       with io.open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/a7_reference_inventory.json'
+
+a7_reference_inventory.py:237: FileNotFoundError
+_______________ test_g1_consumes_the_one_ledger_and_adds_nothing _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_g1_consumes_the_one_ledge0')
+
+    def test_g1_consumes_the_one_ledger_and_adds_nothing(tmp_path):
+        A6 = _ledger()
+        run = _copy(tmp_path, "consume")
+>       doc, _p, problems = G.freeze(PR.load(run))
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:444: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2137: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:657: in questions
+    ("reference_card", A7C.reference_card(
+a7_g23_build.py:819: in reference_card
+    row = _inventory(run).get((source_id, gold_idx))
+          ^^^^^^^^^^^^^^^
+a7_g23_build.py:801: in _inventory
+    _INVENTORY["rows"] = R.validate(run=run)
+                         ^^^^^^^^^^^^^^^^^^^
+a7_reference_inventory.py:320: in validate
+    doc = read(path)
+          ^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = '/tmp/a7_reference_inventory.json'
+
+    def read(path=None):
+        """The frozen inventory document, STRUCTURALLY checked. See `validate` for
+        the proof against the live authorities."""
+        # LATE BINDING. `path=INVENTORY_PATH` bound the constant at import, so the
+        # inventory location could not be redirected at all - a test that pointed
+        # the serving path at another document silently read the real one and
+        # proved nothing.
+        path = INVENTORY_PATH if path is None else path
+>       with io.open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/a7_reference_inventory.json'
+
+a7_reference_inventory.py:237: FileNotFoundError
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+FAILED test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+2 failed, 1 passed in 20.30s
+
+[rc=1]

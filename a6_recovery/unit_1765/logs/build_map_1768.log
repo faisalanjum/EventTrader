@@ -1,0 +1,16 @@
+published A5 rows demoted to read-only: 6
+    S/bench_1306/.claude/plans/Drivers/experiments/keys
+    /tmp/a5_logs_1758
+    S/a5_build_a_1758
+    S/a5_build_b_1758
+    S/a5_candidate_1758
+    S/a6_a5run_1515
+A6 owner overlaid read-only:
+    /tmp/a7_reference_inventory.json
+    S/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+A6-only writable outputs:
+    /tmp/a6_freeze_1765_a
+    /tmp/a6_freeze_1765_b
+    /tmp/a6_logs_1765
+map rows: 80  (3 writable, all A6-only) -> /home/faisal/EventMarketDB-driver-recovery/a6_recovery/unit_1765/a6_map_1765.tsv
+[rc=0]

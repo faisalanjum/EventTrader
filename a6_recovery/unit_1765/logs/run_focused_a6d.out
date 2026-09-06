@@ -1,0 +1,48 @@
+proved only that a caller could build a dict: the run could
+        # have moved, been re-finalized or had a byte change since the identity was
+        # captured, and every consumer below would still read its answers. This is
+        # the last point before data is read, so it is where the run must still BE
+        # what it said it was (Codex SEQ 1471 item 3).
+        # THE SINGLE ERA GATE FOR EVERY LIVE USE (Codex SEQ 1473 item 1). A
+        # lawful historical v1 identity used to pass here, so the live route could
+        # grade an era it will never call. `PR.current` refuses any run not
+        # prepared for the current producer era, and the exact comparison below
+        # additionally refuses a run that has changed since its identity was
+        # captured - which is also what stops two valid runs from crossing.
+        # ONE FULL VALIDATION, THEN ONE TRACE (Codex SEQ 1489 item D). Once this
+        # exact identity has a materialized trace, the run is proved unmoved by
+        # the digest owner alone - whole-tree digest plus file count - and the
+        # raw answers are never semantically reopened, reparsed or re-walked.
+        entry = _MATERIALIZED.get(_sha(_plain(run)))
+        if entry is not None:
+            # THE ERA GATE STILL ASKS AT EVERY LIVE USE (SEQ 1473): the trace only
+            # replaces the re-validation of the bytes, never the era decision.
+            PR.current_era(run)
+            # compared against the PRIVATE expected tuple, never a returned meta
+            got = _measured(run["run_dir"])
+            if got != entry["expected"]:
+                raise ValueError(
+                    "%s no longer measures the supplied identity; its digest/file "
+                    "count %s is not the traced %s, so nothing may be read from it"
+                    % (run["run_dir"], list(got), list(entry["expected"])))
+            return run["run_dir"]
+>       fresh = PR.current(run["run_dir"])
+                ^^^^^^^^^^
+E       AttributeError: module 'a7_prepared_run' has no attribute 'current'
+
+a7_g1_build.py:168: AttributeError
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_the_real_run_is_the_control - Attribut...
+FAILED test_a7_runstates_1470.py::test_a_clean_primary_owing_no_retry_needs_no_retry_directory
+FAILED test_a7_runstates_1470.py::test_an_owed_retry_that_is_not_finalized_is_a_NAMED_wait
+FAILED test_a7_runstates_1470.py::test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second
+FAILED test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+FAILED test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer
+FAILED test_a7_runstates_1470.py::test_two_valid_runs_cannot_cross - Attribut...
+FAILED test_a7_runstates_1470.py::test_the_reference_lookup_has_no_default_run
+FAILED test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+9 failed, 89 passed in 45.71s
+
+[rc=1]
+
+WROTE focused_a6_1765d.log  34870 bytes  rc=1

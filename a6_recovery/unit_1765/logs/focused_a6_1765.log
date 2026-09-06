@@ -1,0 +1,340 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a6_final_lock_1515.py test_a6_launch_freeze_1409.py test_a6_locked_rows_1476.py test_a7_runstates_1470.py test_a7_closeout_integrity_1482.py test_a7_raw_binding_1483.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+........................................EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE. [ 73%]
+..........................                                               [100%]
+==================================== ERRORS ====================================
+______________ ERROR at setup of test_the_real_run_is_the_control ______________
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 161
+  def test_the_real_run_is_the_control(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:161
+_ ERROR at setup of test_a_clean_primary_owing_no_retry_needs_no_retry_directory _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 167
+  def test_a_clean_primary_owing_no_retry_needs_no_retry_directory(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:167
+__ ERROR at setup of test_a_contradictory_finalization_is_REFUSED_not_trusted __
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 180
+  def test_a_contradictory_finalization_is_REFUSED_not_trusted(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:180
+__ ERROR at setup of test_an_owed_retry_that_is_not_finalized_is_a_NAMED_wait __
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 192
+  def test_an_owed_retry_that_is_not_finalized_is_a_NAMED_wait(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:192
+________ ERROR at setup of test_a_stray_retry_when_none_is_owed_REFUSES ________
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 201
+  def test_a_stray_retry_when_none_is_owed_REFUSES(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:201
+_ ERROR at setup of test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 222
+  def test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:222
+__ ERROR at setup of test_saved_answers_without_a_primary_finalization_REFUSE __
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 234
+  def test_saved_answers_without_a_primary_finalization_REFUSE(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:234
+_____ ERROR at setup of test_freeze_needs_no_retry_file_when_none_is_owed ______
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 242
+  def test_freeze_needs_no_retry_file_when_none_is_owed(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:242
+_ ERROR at setup of test_one_mutation_of_the_primary_finalization_REFUSES[retry] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 281
+  @pytest.mark.parametrize("mutate", [
+      _mutate_retry, _mutate_classification, _mutate_validity, _mutate_ledger,
+      _mutate_identity, _mutate_receipt_binding, _mutate_attempt,
+  ], ids=["retry", "classification", "validity", "ledger", "identity",
+          "receipt-binding", "attempt-shape"])
+  def test_one_mutation_of_the_primary_finalization_REFUSES(mutate, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:281
+_ ERROR at setup of test_one_mutation_of_the_primary_finalization_REFUSES[classification] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 281
+  @pytest.mark.parametrize("mutate", [
+      _mutate_retry, _mutate_classification, _mutate_validity, _mutate_ledger,
+      _mutate_identity, _mutate_receipt_binding, _mutate_attempt,
+  ], ids=["retry", "classification", "validity", "ledger", "identity",
+          "receipt-binding", "attempt-shape"])
+  def test_one_mutation_of_the_primary_finalization_REFUSES(mutate, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:281
+_ ERROR at setup of test_one_mutation_of_the_primary_finalization_REFUSES[validity] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 281
+  @pytest.mark.parametrize("mutate", [
+      _mutate_retry, _mutate_classification, _mutate_validity, _mutate_ledger,
+      _mutate_identity, _mutate_receipt_binding, _mutate_attempt,
+  ], ids=["retry", "classification", "validity", "ledger", "identity",
+          "receipt-binding", "attempt-shape"])
+  def test_one_mutation_of_the_primary_finalization_REFUSES(mutate, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:281
+_ ERROR at setup of test_one_mutation_of_the_primary_finalization_REFUSES[ledger] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 281
+  @pytest.mark.parametrize("mutate", [
+      _mutate_retry, _mutate_classification, _mutate_validity, _mutate_ledger,
+      _mutate_identity, _mutate_receipt_binding, _mutate_attempt,
+  ], ids=["retry", "classification", "validity", "ledger", "identity",
+          "receipt-binding", "attempt-shape"])
+  def test_one_mutation_of_the_primary_finalization_REFUSES(mutate, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:281
+_ ERROR at setup of test_one_mutation_of_the_primary_finalization_REFUSES[identity] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 281
+  @pytest.mark.parametrize("mutate", [
+      _mutate_retry, _mutate_classification, _mutate_validity, _mutate_ledger,
+      _mutate_identity, _mutate_receipt_binding, _mutate_attempt,
+  ], ids=["retry", "classification", "validity", "ledger", "identity",
+          "receipt-binding", "attempt-shape"])
+  def test_one_mutation_of_the_primary_finalization_REFUSES(mutate, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:281
+_ ERROR at setup of test_one_mutation_of_the_primary_finalization_REFUSES[receipt-binding] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 281
+  @pytest.mark.parametrize("mutate", [
+      _mutate_retry, _mutate_classification, _mutate_validity, _mutate_ledger,
+      _mutate_identity, _mutate_receipt_binding, _mutate_attempt,
+  ], ids=["retry", "classification", "validity", "ledger", "identity",
+          "receipt-binding", "attempt-shape"])
+  def test_one_mutation_of_the_primary_finalization_REFUSES(mutate, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:281
+_ ERROR at setup of test_one_mutation_of_the_primary_finalization_REFUSES[attempt-shape] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 281
+  @pytest.mark.parametrize("mutate", [
+      _mutate_retry, _mutate_classification, _mutate_validity, _mutate_ledger,
+      _mutate_identity, _mutate_receipt_binding, _mutate_attempt,
+  ], ids=["retry", "classification", "validity", "ledger", "identity",
+          "receipt-binding", "attempt-shape"])
+  def test_one_mutation_of_the_primary_finalization_REFUSES(mutate, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:281
+_ ERROR at setup of test_a_mutation_after_identity_capture_refuses_before_any_answer _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 304
+  def test_a_mutation_after_identity_capture_refuses_before_any_answer(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:304
+______________ ERROR at setup of test_two_valid_runs_cannot_cross ______________
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 322
+  def test_two_valid_runs_cannot_cross(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:322
+________ ERROR at setup of test_the_reference_lookup_has_no_default_run ________
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 334
+  def test_the_reference_lookup_has_no_default_run(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:334
+______ ERROR at setup of test_the_ledger_is_the_sum_of_its_own_provenance ______
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 351
+  def test_the_ledger_is_the_sum_of_its_own_provenance():
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:351
+_ ERROR at setup of test_the_completed_history_is_counted_with_no_run_supplied _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 364
+  def test_the_completed_history_is_counted_with_no_run_supplied():
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:364
+____ ERROR at setup of test_a_fresh_zero_call_run_does_not_lose_the_history ____
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 375
+  def test_a_fresh_zero_call_run_does_not_lose_the_history(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:375
+______ ERROR at setup of test_the_same_run_supplied_twice_is_counted_once ______
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 404
+  def test_the_same_run_supplied_twice_is_counted_once(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:404
+________ ERROR at setup of test_a_distinct_finalized_run_ADDS_its_calls ________
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 419
+  def test_a_distinct_finalized_run_ADDS_its_calls(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:419
+______ ERROR at setup of test_only_actually_finalized_retries_increase_it ______
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 431
+  def test_only_actually_finalized_retries_increase_it(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:431
+______ ERROR at setup of test_g1_consumes_the_one_ledger_and_adds_nothing ______
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 446
+  def test_g1_consumes_the_one_ledger_and_adds_nothing(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:446
+_ ERROR at setup of test_a_correlated_primary_receipt_and_finalization_REFUSES _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 470
+  def test_a_correlated_primary_receipt_and_finalization_REFUSES(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:470
+__ ERROR at setup of test_a_correlated_RETRY_receipt_and_finalization_REFUSES __
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 481
+  def test_a_correlated_RETRY_receipt_and_finalization_REFUSES(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:481
+__________ ERROR at setup of test_the_distinct_clean_run_reaches_5542 __________
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 491
+  def test_the_distinct_clean_run_reaches_5542(tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:491
+_ ERROR at setup of test_correlated_corruption_REFUSES_before_counting[inflated ledger] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 503
+  @pytest.mark.parametrize("corrupt", [
+      lambda fin: fin["ledger"].__setitem__(
+          "scheduled", fin["ledger"]["scheduled"] + 1000),
+      lambda fin: fin.__setitem__("classification", fin["classification"][:-1]),
+      lambda fin: fin.__setitem__("run_id", "some-other-run"),
+  ], ids=["inflated ledger", "short classification", "wrong identity"])
+  def test_correlated_corruption_REFUSES_before_counting(corrupt, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:503
+_ ERROR at setup of test_correlated_corruption_REFUSES_before_counting[short classification] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 503
+  @pytest.mark.parametrize("corrupt", [
+      lambda fin: fin["ledger"].__setitem__(
+          "scheduled", fin["ledger"]["scheduled"] + 1000),
+      lambda fin: fin.__setitem__("classification", fin["classification"][:-1]),
+      lambda fin: fin.__setitem__("run_id", "some-other-run"),
+  ], ids=["inflated ledger", "short classification", "wrong identity"])
+  def test_correlated_corruption_REFUSES_before_counting(corrupt, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:503
+_ ERROR at setup of test_correlated_corruption_REFUSES_before_counting[wrong identity] _
+file /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py, line 503
+  @pytest.mark.parametrize("corrupt", [
+      lambda fin: fin["ledger"].__setitem__(
+          "scheduled", fin["ledger"]["scheduled"] + 1000),
+      lambda fin: fin.__setitem__("classification", fin["classification"][:-1]),
+      lambda fin: fin.__setitem__("run_id", "some-other-run"),
+  ], ids=["inflated ledger", "short classification", "wrong identity"])
+  def test_correlated_corruption_REFUSES_before_counting(corrupt, tmp_path):
+E       fixture 'historical_v1_evidence' not found
+>       available fixtures: _session_faker, anyio_backend, anyio_backend_name, anyio_backend_options, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, faker, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py:503
+=========================== short test summary info ============================
+ERROR test_a7_runstates_1470.py::test_the_real_run_is_the_control
+ERROR test_a7_runstates_1470.py::test_a_clean_primary_owing_no_retry_needs_no_retry_directory
+ERROR test_a7_runstates_1470.py::test_a_contradictory_finalization_is_REFUSED_not_trusted
+ERROR test_a7_runstates_1470.py::test_an_owed_retry_that_is_not_finalized_is_a_NAMED_wait
+ERROR test_a7_runstates_1470.py::test_a_stray_retry_when_none_is_owed_REFUSES
+ERROR test_a7_runstates_1470.py::test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second
+ERROR test_a7_runstates_1470.py::test_saved_answers_without_a_primary_finalization_REFUSE
+ERROR test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+ERROR test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[retry]
+ERROR test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[classification]
+ERROR test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[validity]
+ERROR test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[ledger]
+ERROR test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[identity]
+ERROR test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[receipt-binding]
+ERROR test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[attempt-shape]
+ERROR test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer
+ERROR test_a7_runstates_1470.py::test_two_valid_runs_cannot_cross
+ERROR test_a7_runstates_1470.py::test_the_reference_lookup_has_no_default_run
+ERROR test_a7_runstates_1470.py::test_the_ledger_is_the_sum_of_its_own_provenance
+ERROR test_a7_runstates_1470.py::test_the_completed_history_is_counted_with_no_run_supplied
+ERROR test_a7_runstates_1470.py::test_a_fresh_zero_call_run_does_not_lose_the_history
+ERROR test_a7_runstates_1470.py::test_the_same_run_supplied_twice_is_counted_once
+ERROR test_a7_runstates_1470.py::test_a_distinct_finalized_run_ADDS_its_calls
+ERROR test_a7_runstates_1470.py::test_only_actually_finalized_retries_increase_it
+ERROR test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+ERROR test_a7_runstates_1470.py::test_a_correlated_primary_receipt_and_finalization_REFUSES
+ERROR test_a7_runstates_1470.py::test_a_correlated_RETRY_receipt_and_finalization_REFUSES
+ERROR test_a7_runstates_1470.py::test_the_distinct_clean_run_reaches_5542
+ERROR test_a7_runstates_1470.py::test_correlated_corruption_REFUSES_before_counting[inflated ledger]
+ERROR test_a7_runstates_1470.py::test_correlated_corruption_REFUSES_before_counting[short classification]
+ERROR test_a7_runstates_1470.py::test_correlated_corruption_REFUSES_before_counting[wrong identity]
+67 passed, 31 errors in 38.88s
+
+[rc=1]

@@ -1,0 +1,9 @@
+conftest base : bbd580b3a2c3f0ad231cd5e1fdae8ea65763dddecb6eb51dc7e47fecb01bee2d 1832 bytes
+  L74940 python blocks: 2 - using the SECOND, as named
+  L74940 second block pairs for conftest.py: 1
+  L81074 pairs for conftest.py: 2
+conftest built: bc9532ceebca92c4b625376d83792ef6c1cdfc053f5f463963a94bf06fb0137d 2210 bytes
+Codex expected: bc9532ceebca92c4b625376d83792ef6c1cdfc053f5f463963a94bf06fb0137d 2210 bytes
+MATCH         : True
+  written to owners/conftest.recorded_1766.py
+[rc=0]

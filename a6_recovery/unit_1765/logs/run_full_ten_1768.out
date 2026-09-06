@@ -1,0 +1,9 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a6_final_lock_1515.py test_a6_launch_freeze_1409.py test_a6_locked_rows_1476.py test_a5_corrected_inventory_1514.py test_a5_final_lock_1513.py test_a5_route_1406.py test_a5_gate_1469.py test_a7_runstates_1470.py test_a7_closeout_integrity_1482.py test_a7_raw_binding_1483.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+........................................................................ [ 48%]
+........................................................................ [ 96%]
+......                                                                   [100%]
+150 passed in 144.28s (0:02:24)
+
+[rc=0]
+
+WROTE full_ten_1768.log  683 bytes  rc=0

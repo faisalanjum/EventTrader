@@ -1,0 +1,25 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a6_fixture_isolation_1768.py test_a6_fixture_isolation_after_1768.py --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+..F.                                                                     [100%]
+=================================== FAILURES ===================================
+__ test_3_inside_the_fixture_the_old_era_is_permitted_and_still_fully_checked __
+
+    @pytest.mark.usefixtures("historical_v1_evidence")
+    def test_3_inside_the_fixture_the_old_era_is_permitted_and_still_fully_checked():
+        ident = PR.current(OLD_RUN)
+        # the era is relaxed; every other binding the identity carries is not
+        assert ident["contract_suffix"] == _era_of(OLD_RUN)
+        for field in ("run_dir", "freeze_sha256", "receipt_sha256"):
+>           assert ident.get(field), "the fixture dropped %s from the identity" % field
+E           AssertionError: the fixture dropped freeze_sha256 from the identity
+E           assert None
+E            +  where None = <built-in method get of collections.OrderedDict object at 0x7f71c0dc46c0>('freeze_sha256')
+E            +    where <built-in method get of collections.OrderedDict object at 0x7f71c0dc46c0> = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a6_prepared_run'), ('contract_suffix', None), ('a5_man...rderedDict([('run_digest', '0fb15aaf66958617449c08cbd2ea3fa773fd4b87af89b5cf02a745b701435496'), ('run_files', 866)]))]).get
+
+test_a6_fixture_isolation_1768.py:61: AssertionError
+=========================== short test summary info ============================
+FAILED test_a6_fixture_isolation_1768.py::test_3_inside_the_fixture_the_old_era_is_permitted_and_still_fully_checked
+1 failed, 3 passed in 1.06s
+
+[rc=1]
+
+WROTE isolation_1768b.log  1769 bytes  rc=1

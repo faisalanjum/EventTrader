@@ -1,0 +1,59 @@
+$ /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing --import-mode=importlib -p no:cacheprovider -q --no-header -rfE
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+______________ test_freeze_needs_no_retry_file_when_none_is_owed _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_freeze_needs_no_retry_fil0')
+
+    def test_freeze_needs_no_retry_file_when_none_is_owed(tmp_path):
+        """`freeze` read the retry ledger unconditionally too."""
+        run = _lawful_zero_retry(tmp_path, "freezeclean")
+>       doc, _prompts, problems = G.freeze(PR.load(run))
+                                  ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:245: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2205: in freeze
+    ("owner_sha256", _sha_file(os.path.join(_HERE, BATCH_OWNER))),
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/grade_batch.js'
+
+    def _sha_file(path):
+>       return hashlib.sha256(io.open(path, "rb").read()).hexdigest()
+                              ^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/grade_batch.js'
+
+a7_g1_build.py:95: FileNotFoundError
+_______________ test_g1_consumes_the_one_ledger_and_adds_nothing _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_g1_consumes_the_one_ledge0')
+
+    def test_g1_consumes_the_one_ledger_and_adds_nothing(tmp_path):
+        A6 = _ledger()
+        run = _copy(tmp_path, "consume")
+>       doc, _p, problems = G.freeze(PR.load(run))
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:444: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2205: in freeze
+    ("owner_sha256", _sha_file(os.path.join(_HERE, BATCH_OWNER))),
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/grade_batch.js'
+
+    def _sha_file(path):
+>       return hashlib.sha256(io.open(path, "rb").read()).hexdigest()
+                              ^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/scorers/grade_batch.js'
+
+a7_g1_build.py:95: FileNotFoundError
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+FAILED test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+2 failed in 44.76s
+
+[rc=1]

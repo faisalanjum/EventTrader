@@ -1,0 +1,60 @@
+1_consumes_the_one_ledge0')
+
+    def test_g1_consumes_the_one_ledger_and_adds_nothing(tmp_path):
+        A6 = _ledger()
+        run = _copy(tmp_path, "consume")
+>       doc, _p, problems = G.freeze(PR.load(run))
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:444: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2137: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:657: in questions
+    ("reference_card", A7C.reference_card(
+a7_g23_build.py:819: in reference_card
+    row = _inventory(run).get((source_id, gold_idx))
+          ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/pytest-of-faisal/pytest-0/test_g1_consumes_the_one_led...rderedDict([('run_digest', '41528e22f42d0506bfbcf2ba44598c19c2420f86854c844cac6e5f25db685908'), ('run_files', 866)]))])
+
+    def _inventory(run):
+        """The reference inventory, PROVED against the live key, by row identity.
+    
+        This used to open the raw JSON, skip the schema check, and build the map by
+        assignment - so a duplicate identity silently overwrote its twin and a
+        stale inventory served happily against a moved key. One owner now proves
+        it, and it refuses rather than repairs.
+        """
+        import a7_reference_inventory as R
+        # REVALIDATED BEFORE THE CACHE IS EVEN KEYED. Hashing the caller's dict
+        # first meant a warm entry answered without the run being re-measured, so
+        # drift after the cache warmed was invisible (Codex SEQ 1473 item 1).
+        primary = G.run_of(run)
+        # KEYED BY THE COMPLETE, FRESHLY VALIDATED IDENTITY. One unkeyed global
+        # meant the FIRST run to ask populated it and every later run silently got
+        # that run's bound rows.
+        key = G._sha(G._plain(run))
+        if _INVENTORY.get("key") != key:
+            _INVENTORY.clear()
+            _INVENTORY["key"] = key
+            # ONE exact comparison against the canonical expected document. The
+            # key-digest spot check that used to live here is inside it now: a
+            # document built for another key differs in `key_identity` and is
+            # refused with every other difference at the same time.
+>           _INVENTORY["rows"] = R.validate(run=run)
+                                 ^^^^^^^^^^^^^^^^^^^
+E           TypeError: validate() got an unexpected keyword argument 'run'
+
+a7_g23_build.py:801: TypeError
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+FAILED test_a7_runstates_1470.py::test_the_reference_lookup_has_no_default_run
+FAILED test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+3 failed, 28 passed in 37.94s
+
+[rc=1]
+
+WROTE focused_runstates_1766.log  6942 bytes  rc=1

@@ -1,0 +1,8 @@
+pre-edit base found : 45b6e10c7d6f9a84749ec7eba31627082f1b2789f8c966863f1f323f233be8bf 20393 bytes
+the available live  : 7ebe3b34cf6636f5c8551820eeb72ea2a97d2ef72395314a90b0dbecd14f052f 21986 bytes
+  edit L89038 on the base applies 1 time(s)
+  edit L89043 on the base applies 1 time(s)
+base + both edits   : be42bb56372f3cb5273a22f16c38fc4642213d3dcbc8d416f8ebaef0224f86f9 21429 bytes
+equals the live H copy: False
+both recorded new strings already present in the live copy: True
+[rc=0]

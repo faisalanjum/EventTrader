@@ -1,0 +1,43 @@
+1517 seam 1). Hashing a
+        # SECOND json rendering here gave A6 identity two owners and a hash that
+        # differed from the exact bytes A6 itself writes and locks - an unpinned
+        # substitution could pass one while failing the other. Hash the exact
+        # A6-rendered bytes, so `a6_freeze_sha256` IS the frozen A6 document.
+        #
+        # A6 is a PRE-LAUNCH guard, so a completed run's live freeze differs from
+        # the accepted pre-call freeze (spent zeros, grown receipt, counted ledger)
+        # (Codex SEQ 1521). The identity pin is over the run's ACCEPTED pre-launch
+        # view - reconstructed by A6 from the run's own evidence, a no-op before
+        # execution - so a completed run remains bound to the exact accepted freeze
+        # while its ledger still counts its returned calls once.
+        freeze_sha = hashlib.sha256(
+>           A6.render(A6.precall_view(frozen, run_dir)).encode("utf-8")).hexdigest()
+                      ^^^^^^^^^^^^^^^
+E       AttributeError: module 'a6_launch_freeze' has no attribute 'precall_view'
+
+a7_prepared_run.py:135: AttributeError
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_the_real_run_is_the_control - Attribut...
+FAILED test_a7_runstates_1470.py::test_a_clean_primary_owing_no_retry_needs_no_retry_directory
+FAILED test_a7_runstates_1470.py::test_an_owed_retry_that_is_not_finalized_is_a_NAMED_wait
+FAILED test_a7_runstates_1470.py::test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second
+FAILED test_a7_runstates_1470.py::test_saved_answers_without_a_primary_finalization_REFUSE
+FAILED test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+FAILED test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[retry]
+FAILED test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[classification]
+FAILED test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[validity]
+FAILED test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[ledger]
+FAILED test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[identity]
+FAILED test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[receipt-binding]
+FAILED test_a7_runstates_1470.py::test_one_mutation_of_the_primary_finalization_REFUSES[attempt-shape]
+FAILED test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer
+FAILED test_a7_runstates_1470.py::test_two_valid_runs_cannot_cross - Attribut...
+FAILED test_a7_runstates_1470.py::test_the_reference_lookup_has_no_default_run
+FAILED test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+FAILED test_a7_runstates_1470.py::test_a_correlated_primary_receipt_and_finalization_REFUSES
+FAILED test_a7_runstates_1470.py::test_a_correlated_RETRY_receipt_and_finalization_REFUSES
+19 failed, 79 passed in 44.88s
+
+[rc=1]
+
+WROTE focused_a6_1765b.log  110694 bytes  rc=1

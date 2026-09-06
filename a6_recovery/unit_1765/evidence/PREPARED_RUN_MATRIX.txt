@@ -1,0 +1,9 @@
+what the A6-era runstates suite needs: current=True, precall_view=0, strict era check=0
+sha256               bytes  current  precall_view   era-check  path
+43dcbd35d95d3112     14965     True             1           1  a4_recovery/regen_1570/targeted_1589/phase1_targeted_1488/inputs
+b949218ee0e2b15a     11408     True             0           1  BK:recovery_1531/model/tmp/gsuite_mirror/harness_g1v3/a7_prepare
+30fc55db60fc473b      9788    False             0           0  a4_recovery/regen_1570/targeted_1589/hard_review_1495/derived_pr
+acb49a5001f187f7      6723    False             0           0  BK:recovery_1531/model/$(mktemp/.claude/plans/Drivers/experiment
+
+usable combination present: False
+a7_reference_inventory.py copies anywhere: 3

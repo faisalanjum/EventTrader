@@ -1,0 +1,10 @@
+ok   the named base file is the pinned one                549be88835adc0744b34f4da1d1c7569c192b489d221912f1511ced6002d7e53
+ok   the base size                                        22146
+ok   record 88987 names the A6 owner                      a6_launch_freeze.py
+ok   record 88987 old occurs exactly once                 1
+ok   record 89026 names the A6 owner                      a6_launch_freeze.py
+ok   record 89026 old occurs exactly once                 1
+ok   recovered A6 owner size                              24292
+ok   recovered A6 owner sha256                            2c666040853f611a90f368b9f2dddb1adc8879cb0abfa9fe3923c1eace07118c
+RECOVER_A6_OWNER_OK  checks 8  failed 0
+[rc=0]

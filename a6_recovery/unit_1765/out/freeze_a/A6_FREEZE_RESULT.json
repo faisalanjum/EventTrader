@@ -1,0 +1,132 @@
+{
+ "freeze_path": "/tmp/a6_freeze_1765_a/a6_exp5_launch_freeze.json",
+ "freeze_sha256": "4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d",
+ "second_build": "4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d",
+ "problems": [],
+ "ledger_bare": 5220,
+ "ledger_fresh_run": 5220,
+ "counts": {
+  "events": 36,
+  "packets": 196,
+  "arms": [
+   "P1",
+   "P2"
+  ],
+  "lanes_per_packet": [
+   2
+  ],
+  "ordered_producer_calls": 392,
+  "unique_ordered_calls": 392,
+  "invocations": 36,
+  "capacity": {
+   "packets": 196,
+   "prompt_chars_min": 30840,
+   "prompt_chars_median": 80452,
+   "prompt_chars_max": 235419,
+   "prompt_utf8_bytes_min": 31170,
+   "prompt_utf8_bytes_median": 80782,
+   "prompt_utf8_bytes_max": 235749,
+   "runtime_input_tokens": null,
+   "max_output_tokens_setting": 128000
+  }
+ },
+ "budget": {
+  "completed_actual": 5220,
+  "provenance": [
+   {
+    "stage": "a4_final_key",
+    "run_dir": "wf_8dedf1de-a52",
+    "receipt_sha256": "63018354e6b26a8061a114934df15fe035b44fe031dcf00768b440983d43b8a0",
+    "finalization_sha256": "7f1f7bef4d02b9c5501d9ec6d8d5b9eab5e8aab225092878b7280964bd5d44e3",
+    "calls": 5220
+   }
+  ],
+  "a3_measured_baseline": 3990,
+  "planned_producer_primary": 392,
+  "producer_primary_after": 5612,
+  "global_abort_ceiling": 6000,
+  "under_ceiling": true,
+  "rule": "every future actual call, including each retry and each grader sublaunch, is checked against the global ceiling before it is armed",
+  "retry_rule": "only a model-invalid/invalid-JSON reply earns the one canonical attempt-2 subset; a valid sibling, a refusal and an integrity failure never do, and attempt 2 can never create attempt 3"
+ },
+ "bound_artifacts": {
+  "manifest_sha256": "5e33c3e4acbff1c710321008335d6a66622992a8317027c9d231d85912f37c53",
+  "bundle_sha256": "d2e850d86f643f177868b8b755b0a0d92c0a57f1aec8fabd4455acea2367edff",
+  "receipt_sha256": "b468a0a19f778f48f415b210afd95dc70eb381d9b50f1c4097384be84dfedf84",
+  "inventory_sha256": "1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c1b3066",
+  "scorer_sha256": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6",
+  "matcher_sha256": "bf6f0c922ef1f443fa16b01c4d80d87b445895d48b7da5fa772964de21304497"
+ },
+ "a4_lock": {
+  "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-final-20260829T1226Z/a4_final_key_lock.json",
+  "sha256": "63018354e6b26a8061a114934df15fe035b44fe031dcf00768b440983d43b8a0",
+  "receipt_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-final-20260829T1226Z/a4_final_key_lock_receipt.json",
+  "receipt_sha256": "7f1f7bef4d02b9c5501d9ec6d8d5b9eab5e8aab225092878b7280964bd5d44e3",
+  "schema": "a4-final-key-lock/1511",
+  "state": "LOCKED",
+  "signed": true,
+  "events": 36,
+  "ledger_after": 5220
+ },
+ "zeros": {
+  "states": 0,
+  "raw_replies": 0,
+  "made_calls": 0,
+  "database_writes": 0,
+  "activated": false
+ },
+ "grader": {
+  "armed_grader_calls": 0,
+  "count_is_derivable_now": false,
+  "why": "every class below is a function of producer output, and no producer call has been made",
+  "stages": [
+   {
+    "stage": "G1_identity",
+    "owner": "score_exp5.grade_unmatched",
+    "question": "every unmatched gold row produced by the deterministic matcher, ruled against that event/arm's unmatched produced rows",
+    "key": "(source_id, gold_idx)",
+    "none_means": "a decided miss, which still counts against recall"
+   },
+   {
+    "stage": "reconcile",
+    "owner": "score_exp5.reconcile_rulings",
+    "question": "two blind independent grader answers; ONLY agreement becomes a ruling"
+   },
+   {
+    "stage": "G2_meaning",
+    "owner": "score_exp5.score_arm",
+    "question": "every FINAL matched pair - direct deterministic links plus agreed G1 links - receives every required MEANING_FIELDS verdict",
+    "key": "(source_id, gold_idx)",
+    "meaning_fields": [
+     "driver_state",
+     "lane_routing",
+     "favorability",
+     "growth_basis",
+     "slice_vs_menu",
+     "driver_name_meaning"
+    ]
+   },
+   {
+    "stage": "G3_extras",
+    "owner": "score_exp5.classify_extras",
+    "question": "every route-accepted produced row still unmatched after G1",
+    "key": "(source_id, produced_idx)",
+    "buckets": [
+     "duplicate",
+     "key_miss",
+     "unsupported"
+    ]
+   }
+  ],
+  "inventory": "the exact union of G1 + G2 + G3, derived by those existing scorer owners; it is NOT reducible to the unresolved rows",
+  "batching": "the live scorer owns QUESTIONS, not batching; '2*N answers' does not imply '2*N calls'",
+  "scorer_owner_sha256": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6",
+  "a7_boundary": {
+   "batch_owner": "grade_batch.js",
+   "batch_owner_present_now": false,
+   "order": "G1 must COMPLETE before the final G2/G3 inventory is frozen",
+   "then": "A7 builds the smallest exact grader batch packet from that owner, hash-freezes its batch count, and only then runs exactly two blind independent Sonnet-5/high calls per nonempty batch",
+   "ceiling": 6000
+  }
+ }
+}

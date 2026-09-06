@@ -1,0 +1,87 @@
+ok   the A6 owner in the view is the recovered one            2c666040853f611a90f368b9f2dddb1adc8879cb0abfa9fe3923c1eace
+ok   the prelaunch fixture is the preserved one               b468a0a19f778f48f415b210afd95dc70eb381d9b50f1c4097384be84d
+ok   its manifest is the accepted one                         5e33c3e4acbff1c710321008335d6a66622992a8317027c9d231d85912
+ok   A6.problems on the accepted freeze                       []
+ok   the freeze renders identically twice                     4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c
+ok   the accepted freeze identity                             4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c
+ok   the persisted file equals the reported identity          4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c
+ok   the bare ledger is the signed lock's closed baseline     5220
+ok   the fresh run's ledger is the same closed baseline       5220
+ok   events                                                   36
+ok   packets                                                  196
+ok   arms                                                     ['P1', 'P2']
+ok   unique ordered producer calls                            392
+ok   invocations                                              36
+ok   budget completed_actual                                  5220
+ok   budget planned primary                                   392
+ok   budget producer_primary_after                            5612
+ok   budget stays under the ceiling                           True
+ok   bound bundle                                             d2e850d86f643f177868b8b755b0a0d92c0a57f1aec8fabd4455acea23
+ok   bound receipt                                            b468a0a19f778f48f415b210afd95dc70eb381d9b50f1c4097384be84d
+ok   bound corrected inventory                                1440d75131c0c7418a66821778a88d5c1ff8fd9bdf7f4cca4d561b596c
+ok   bound A4 lock                                            63018354e6b26a8061a114934df15fe035b44fe031dcf00768b440983d
+ok   bound A4 lock receipt                                    7f1f7bef4d02b9c5501d9ec6d8d5b9eab5e8aab225092878b7280964bd
+ok   the lock is signed                                       True
+ok   scorer and matcher are bound                             True
+ok   no forbidden arm is present                              [False]
+ok   nothing has run: states, raw, made_calls, db writes      [0, 0, 0, 0]
+ok   not activated                                            False
+ok   runtime is the subscription Sonnet-5 high                ['claude-sonnet-5', 'high']
+ok   the grader inventory is honestly unarmed before A7       True
+{
+ "freeze_path": "/tmp/a6_freeze_1765_a/a6_exp5_launch_freeze.json",
+ "freeze_sha256": "4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d",
+ "second_build": "4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d",
+ "problems": [],
+ "ledger_bare": 5220,
+ "ledger_fresh_run": 5220,
+ "counts": {
+  "events": 36,
+  "packets": 196,
+  "arms": [
+   "P1",
+   "P2"
+  ],
+  "lanes_per_packet": [
+   2
+  ],
+  "ordered_producer_calls": 392,
+  "unique_ordered_calls": 392,
+  "invocations": 36,
+  "capacity": {
+   "packets": 196,
+   "prompt_chars_min": 30840,
+   "prompt_chars_median": 80452,
+   "prompt_chars_max": 235419,
+   "prompt_utf8_bytes_min": 31170,
+   "prompt_utf8_bytes_median": 80782,
+   "prompt_utf8_bytes_max": 235749,
+   "runtime_input_tokens": null,
+   "max_output_tokens_setting": 128000
+  }
+ },
+ "budget": {
+  "completed_actual": 5220,
+  "provenance": [
+   {
+    "stage": "a4_final_key",
+    "run_dir": "wf_8dedf1de-a52",
+    "receipt_sha256": "63018354e6b26a8061a114934df15fe035b44fe031dcf00768b440983d43b8a0",
+    "finalization_sha256": "7f1f7bef4d02b9c5501d9ec6d8d5b9eab5e8aab225092878b7280964bd5d44e3",
+    "calls": 5220
+   }
+  ],
+  "a3_measured_baseline": 3990,
+  "planned_producer_primary": 392,
+  "producer_primary_after": 5612,
+  "global_abort_ceiling": 6000,
+  "under_ceiling": true,
+  "rule": "every future actual call, including each retry and each grader sublaunch, is checked against the global ceiling before it is armed",
+  "retry_rule": "only a model-invalid/invalid-JSON reply earns the one canonical attempt-2 subset; a valid sibling, a refusal and an integrity failure never do, and attempt 2 can never create attempt 3"
+ },
+ "bound_artifacts": {
+  "manifest_sha256": "5e33c3e4acbff1c710321008335d6a66622992a8317027c9d231d85912f37c53",
+  "bundle_sha25
+checks 30  failed 0  []
+A6_FREEZE_1765_DONE
+[rc=0]

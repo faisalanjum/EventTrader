@@ -1,0 +1,17 @@
+base: 33e2ce58dce1ef1fd21b17d616cbd097daf51f259cf0869f525c43842f035b36 16611 bytes
+  L70457  splice (tail offset 1) -> c21fb7f1ee65175e 14813 bytes
+  L70476  pairs  6 | applied  5 self-noop 1 zero-match 0
+     checkpoint 8dd2629f474f878a 15140 bytes | MATCH True
+  L71187  pairs 10 | applied  9 self-noop 0 zero-match 1
+  L71207  pairs  1 | applied  1 self-noop 0 zero-match 0
+  L72045  pairs  1 | applied  1 self-noop 0 zero-match 0
+  L72188  pairs  1 | applied  1 self-noop 0 zero-match 0
+  L73642  pairs  2 | applied  1 self-noop 0 zero-match 1
+  L74304  pairs  8 | applied  8 self-noop 0 zero-match 0
+  L74336  pairs  1 | applied  1 self-noop 0 zero-match 0
+final: 31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5 16091 bytes
+Codex: 31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5 16091
+MATCH: True
+recorded zero-match leftovers: [(71187, 10, '    packets = _packets()'), (73642, 1, '    if primary is None:')]
+written into owners/ and the view
+[rc=0]

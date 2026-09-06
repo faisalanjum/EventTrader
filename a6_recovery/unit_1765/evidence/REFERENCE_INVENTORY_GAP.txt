@@ -1,0 +1,23 @@
+THE RECORDED EXPLICIT-RUN API FOR a7_reference_inventory.py
+records: T 71187 toolu_015Q7sk16FC2seKxdzu8AfkX, T 74304 toolu_01MnwT445o3FjcCxdYMse8Nj
+literal replacement pairs recorded for that ONE file: 18
+
+sha256                bytes applies  path
+e171733d57ddf91f       9379    8/18  a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/
+33e2ce58dce1ef1f      16611    8/18  a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/
+
+distinct copies reachable anywhere: 2
+a copy accepting every recorded pair: False
+
+the pairs that fit NO reachable copy (the missing API surface):
+  T71187      rows, problems = build(key)
+  T71187      want = expected_document()
+  T71187  def expected_document():
+  T71187  def validate(path=None):
+  T74304      if primary is None:
+  T74304      rows, problems = build(key, primary)
+  T74304      want = expected_document(primary)
+  T74304  def expected_document(primary=None):
+  T74304  def validate(path=None, primary=None):
+
+live consequence in the focused run: 2 x validate() unexpected kwarg 'run'; 1 x _packets() takes 0 positional arguments

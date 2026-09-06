@@ -1,0 +1,40 @@
+{
+ "finding": "BOTH recorded supply-model edits are ALREADY APPLIED in the available accepted copy: each new_string is present in it verbatim. Applying them to the located pre-edit base yields be42bb56..., which is NOT that copy - the accepted copy is a later descendant carrying 557 further bytes. Per Codex 1765 the historical hash is a lead only, so no later bytes were hunted and the accepted copy is used as it stands.",
+ "pre_edit_base": {
+  "path": "/home/faisal/.core827_backups/recovery_1531/model/tmp/gsuite_mirror/harness_g1v3/test_a7_runstates_1470.py",
+  "bytes": 20393,
+  "sha256": "45b6e10c7d6f9a84749ec7eba31627082f1b2789f8c966863f1f323f233be8bf"
+ },
+ "edits": [
+  {
+   "line": 89038,
+   "tool_use_id": "toolu_016JadFutFGsAP8oUJcfiqHo",
+   "line_sha256": "e81fe36721f99c611fe5ee1ac0a2e7b9001737b52761795dac9ab84cbf3bffc6",
+   "old_bytes": 670,
+   "new_bytes": 1115,
+   "after_sha256": "0f62ee8ca663f21662bf9cf7b100ea712915bfccf4d8b485dd17decf0dbfef74"
+  },
+  {
+   "line": 89043,
+   "tool_use_id": "toolu_0132iWa5PkKrxJoXLeyuCC7n",
+   "line_sha256": "7963f09363d8e07e045c9a1112ca16fc1684d38dcc5ac0a88075cd7733f7dbac",
+   "old_bytes": 127,
+   "new_bytes": 718,
+   "after_sha256": "be42bb56372f3cb5273a22f16c38fc4642213d3dcbc8d416f8ebaef0224f86f9"
+  }
+ ],
+ "reconstructed": {
+  "bytes": 21429,
+  "sha256": "be42bb56372f3cb5273a22f16c38fc4642213d3dcbc8d416f8ebaef0224f86f9"
+ },
+ "live_accepted_copy": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/phase1_targeted_1488/inputs/harness_g1v3/test_a7_runstates_1470.py",
+  "bytes": 21986,
+  "sha256": "7ebe3b34cf6636f5c8551820eeb72ea2a97d2ef72395314a90b0dbecd14f052f"
+ },
+ "identical": false,
+ "codex_lead": "fe585d9ad6a0a2608e0e37d4710d41ced6e561cb657f5a61d42bdbd516165c02",
+ "recorded_edits_present_in_live_copy": true,
+ "live_copy_is_later_descendant_by_bytes": 557,
+ "decision": "use the available accepted copy 7ebe3b34...; do not reconstruct further"
+}

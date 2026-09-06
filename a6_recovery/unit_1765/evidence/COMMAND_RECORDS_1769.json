@@ -1,0 +1,82 @@
+{
+ "purpose": "the original command and result records this unit's accepted outputs came from",
+ "resolved_by": "exact tool_use_id, never neighbouring text",
+ "note": "the build and prepare commands piped their output through tail, so the preserved result text is the as-recorded terminal tail and carries no separately recorded pre-pipe exit status; nothing here was re-executed or reconstructed",
+ "transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+ "records": [
+  {
+   "tool_use_id": "toolu_01SFg26o6q2yiwGMX11wqXUB",
+   "what": "the two repaired focused controls",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 173835,
+   "invocation_line_sha256": "863b3c7e2e76a9362850301b92f28d9fd2425acd8efb5e60771992a2839ad65b",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery; UNIT=$R/a6_recovery/unit_1765; V=$UNIT/view/harness_g1v3\nH=$R/a4_recovery/regen_1570/targeted_1589/phase1_targeted_1488/inputs/harness_g1v3\ncp $H/scorers/grade_batch.js $V/scorers/\necho \"added scorers/grade_batch.js $(sha256sum $V/scorers/grade_batch.js | cut -c1-16) (all 4 copies identical)\"\ncd $UNIT\nU=$R/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683\nPYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B build_a6_map_1765.py >/dev/null 2>&1\ntimeout 280 /home/faisal/EventMarketDB/venv/bin/python3 -B $U/launcher/boundary.py --host $UNIT/a6_map_1765.tsv $UNIT/a6_tests_1765.py \\\n  focused_two_1768b \\\n  \"test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed\" \\\n  \"test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing\" > logs/run_two_1768b.out 2>&1\necho \"[rc=$?]\"\ntail -4 logs/focused_two_1768b.log 2>/dev/null || tail -4 logs/run_two_1768b.out\ngrep -m1 -o \"No such file or directory: '[^']*'\" logs/focused_two_1768b.log 2>/dev/null | sed 's|.*/||'",
+   "result_line": 173836,
+   "result_line_sha256": "6d7ec9f9afd11cb440f7b36b89dbc13ef9061202bd1662dcbbc98d14aa9601a2",
+   "result_is_error": false,
+   "result_text": "added scorers/grade_batch.js 806a7560002a14ed (all 4 copies identical)\n[rc=0]\n..                                                                       [100%]\n2 passed in 44.93s\n\n[rc=0]\nShell cwd was reset to /home/faisal/EventMarketDB",
+   "linked_log": "logs/focused_two_1768b.log",
+   "linked_log_bytes": 383,
+   "linked_log_sha256": "6e92a0564d2af2ba3826bb334efea80a1d7d48764199506288470632ad544969",
+   "linked_log_exit": [
+    "[rc=0]"
+   ]
+  },
+  {
+   "tool_use_id": "toolu_016MDkUiSNmX4qNPp3pEWP9T",
+   "what": "the final fixture-isolation checks",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 173888,
+   "invocation_line_sha256": "907eaea3b9ba76a37d36d1f76074afb53e7f036e4073ac8f7d72c7b716da5113",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery; V=$R/a6_recovery/unit_1765/view/harness_g1v3; UNIT=$R/a6_recovery/unit_1765\npython3 - <<'PYEOF'\nimport io\nV=\"/home/faisal/EventMarketDB-driver-recovery/a6_recovery/unit_1765/view/harness_g1v3\"\np=V+\"/test_a6_fixture_isolation_1768.py\"; t=io.open(p).read()\no = '''    for field in (\"run_dir\", \"freeze_sha256\", \"receipt_sha256\"):\n        assert ident.get(field), \"the fixture dropped %s from the identity\" % field'''\nn = '''    # the shape is DERIVED from the identity the same owner builds for the current\n    # run outside the fixture, so this cannot drift on a guessed field list\n    reference = PR.load(CURRENT_RUN)\n    assert set(ident) == set(reference), (\n        \"the fixture changed the identity's shape: %s\"\n        % sorted(set(ident) ^ set(reference)))\n    for field in sorted(set(reference) - {\"contract_suffix\"}):\n        assert ident.get(field) is not None, (\n            \"the fixture dropped %s from the identity\" % field)'''\nassert o in t\nio.open(p,\"w\").write(t.replace(o,n)); print(\"patched: the expected shape is derived, not listed\")\nPYEOF\ncd $UNIT\nU=$R/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683\nPYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B build_a6_map_1765.py >/dev/null 2>&1\ntimeout 280 /home/faisal/EventMarketDB/venv/bin/python3 -B $U/launcher/boundary.py --host $UNIT/a6_map_1765.tsv $UNIT/a6_tests_1765.py \\\n  isolation_1768c test_a6_fixture_isolation_1768.py test_a6_fixture_isolation_after_1768.py > logs/run_isolation_1768c.out 2>&1\necho \"[rc=$?]\"\ntail -4 logs/isolation_1768c.log 2>/dev/null || tail -4 logs/run_isolation_1768c.out",
+   "result_line": 173889,
+   "result_line_sha256": "9f2349c91dec32bd406d6ac8e7b738dba684e44546a9c9a4ec2d3709335c3153",
+   "result_is_error": false,
+   "result_text": "patched: the expected shape is derived, not listed\n[rc=0]\n....                                                                     [100%]\n4 passed in 1.12s\n\n[rc=0]\nShell cwd was reset to /home/faisal/EventMarketDB",
+   "linked_log": "logs/isolation_1768c.log",
+   "linked_log_bytes": 303,
+   "linked_log_sha256": "da44c24733e7bf0060f5ac627acaa8d68c23bd3e311eac0cc9c0394c2a448dc5",
+   "linked_log_exit": [
+    "[rc=0]"
+   ]
+  },
+  {
+   "tool_use_id": "toolu_0157pTcb6XhYCcmxyXjW5nBt",
+   "what": "the full ten-suite launch - this result records a BACKGROUND LAUNCH only; the completed rc=0 lives in the linked log, not in this response",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+   "invocation_line": 173893,
+   "invocation_line_sha256": "624c3787c7d1eb6a95cd48546bd72deaffb2937c52aabd9e4faa4ab3cdd26266",
+   "command": "R=/home/faisal/EventMarketDB-driver-recovery; UNIT=$R/a6_recovery/unit_1765\nU=$R/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683\ncd $UNIT\nsetsid nohup /home/faisal/EventMarketDB/venv/bin/python3 -B $U/launcher/boundary.py --host $UNIT/a6_map_1765.tsv $UNIT/a6_tests_1765.py \\\n  full_ten_1768 test_a6_final_lock_1515.py test_a6_launch_freeze_1409.py test_a6_locked_rows_1476.py \\\n  test_a5_corrected_inventory_1514.py test_a5_final_lock_1513.py test_a5_route_1406.py test_a5_gate_1469.py \\\n  test_a7_runstates_1470.py test_a7_closeout_integrity_1482.py test_a7_raw_binding_1483.py \\\n  > $UNIT/logs/run_full_ten_1768.out 2>&1 &\necho \"launched pgid $! (the one authorized full regression)\"",
+   "result_line": 173894,
+   "result_line_sha256": "1e5df357c6b9be717a5fe1d970513eda2314ca5a1323ac7615bdfdbe94c30bcf",
+   "result_is_error": false,
+   "result_text": "launched pgid 3496937 (the one authorized full regression)\nShell cwd was reset to /home/faisal/EventMarketDB",
+   "linked_log": "logs/full_ten_1768.log",
+   "linked_log_bytes": 683,
+   "linked_log_sha256": "5e0807ca3a148b4557bd15d80813045abceaa37a77f1629dfe1866ff25506101",
+   "linked_log_exit": [
+    "[rc=0]"
+   ]
+  }
+ ],
+ "superseded_failed_diagnostics": [
+  {
+   "path": "evidence/PREPARED_RUN_MATRIX.txt",
+   "bytes": 748,
+   "sha256": "09f9b6d62ca9fd274fac4739eac33f9e2e5840b86e9e93ec3e461630856bda53",
+   "status": "superseded failed diagnostic, preserved unchanged; resolved by the exact recorded dependencies and the published alias document - not a blocker"
+  },
+  {
+   "path": "evidence/REFERENCE_INVENTORY_GAP.txt",
+   "bytes": 1091,
+   "sha256": "422a70d8f96f60b357d1e74d0e7911796d081757e767a08c7cbb08c41393b05a",
+   "status": "superseded failed diagnostic, preserved unchanged; resolved by the exact recorded dependencies and the published alias document - not a blocker"
+  },
+  {
+   "path": "evidence/REFERENCE_DOCUMENT_GAP.txt",
+   "bytes": 1404,
+   "sha256": "8fef04f731f0a16e3d1d8cda2f0d67b83df81a9b3e6e6660212d14d2f1df706f",
+   "status": "superseded failed diagnostic, preserved unchanged; resolved by the exact recorded dependencies and the published alias document - not a blocker"
+  }
+ ]
+}

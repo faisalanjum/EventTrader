@@ -1,0 +1,35 @@
+{
+ "base": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_closure_1624/replay/scratch/a6_launch_freeze.py",
+  "bytes": 22146,
+  "sha256": "549be88835adc0744b34f4da1d1c7569c192b489d221912f1511ced6002d7e53"
+ },
+ "edits": [
+  {
+   "transcript": "/home/faisal/EventMarketDB-driver-recovery/a3_recovery/regen_1541/evidence/transcript/accepted_prefix.jsonl",
+   "line": 88987,
+   "tool_use_id": "toolu_01J4uYCboGVWXSumzksB27SM",
+   "line_sha256": "9b92a6d2e54916d73d8fd1ad9c3ee7ca8457249562a36032c7f3ec0bcf3ea6fa",
+   "file_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a6_launch_freeze.py",
+   "old_bytes": 765,
+   "new_bytes": 2789,
+   "text_sha256_after": "7fee5cf40867d4724d8b89edbfe6c34dfb79bed3c93f8f0b94b512f44add2e54"
+  },
+  {
+   "transcript": "/home/faisal/EventMarketDB-driver-recovery/a3_recovery/regen_1541/evidence/transcript/accepted_prefix.jsonl",
+   "line": 89026,
+   "tool_use_id": "toolu_01UPA8cgV9CjExmGpSmvrfSL",
+   "line_sha256": "2f0d1480a2969d594115c6130a51410e843127bfe1e540ca82ed0a443a08ac54",
+   "file_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a6_launch_freeze.py",
+   "old_bytes": 369,
+   "new_bytes": 491,
+   "text_sha256_after": "2c666040853f611a90f368b9f2dddb1adc8879cb0abfa9fe3923c1eace07118c"
+  }
+ ],
+ "result": {
+  "bytes": 24292,
+  "sha256": "2c666040853f611a90f368b9f2dddb1adc8879cb0abfa9fe3923c1eace07118c",
+  "written_to": "/home/faisal/EventMarketDB-driver-recovery/a6_recovery/unit_1765/owners/a6_launch_freeze.py"
+ },
+ "note": "the published A5 tree carries an OLDER incidental copy of this file; it is left untouched and is not the A6 owner"
+}

@@ -1,0 +1,58 @@
+one_ledger_and_adds_nothing _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_g1_consumes_the_one_ledge0')
+
+    def test_g1_consumes_the_one_ledger_and_adds_nothing(tmp_path):
+        A6 = _ledger()
+        run = _copy(tmp_path, "consume")
+>       doc, _p, problems = G.freeze(PR.load(run))
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:441: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2129: in freeze
+    primary = run_of(run)
+              ^^^^^^^^^^^
+a7_g1_build.py:168: in run_of
+    fresh = PR.current(run["run_dir"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/pytest-of-faisal/pytest-0/test_g1_consumes_the_one_ledge0/consume'
+expect_freeze_sha = None
+
+    def current(run_dir, expect_freeze_sha=None):
+        """The identity of a run prepared for the CURRENT producer era.
+    
+        `load` accepts ANY lawful prepared run, including the old v1 one - that is
+        what makes it useful for reading history. The CURRENT A7 route must not
+        accept history: grading the run that is about to be called is the whole
+        point, and a v1 run silently standing in for it is exactly the substitution
+        this identity exists to prevent (Codex SEQ 1469 item 3).
+        """
+        import build_launch_manifest as BLM
+        ident = load(run_dir, expect_freeze_sha)
+        want = BLM.PRODUCER_CONTRACT_SUFFIX
+        if ident["contract_suffix"] != want:
+>           raise ValueError(
+                "%s: %s was prepared for era %r, not the current producer era %r; "
+                "the current route refuses a run from another era"
+                % (SCHEMA, run_dir, ident["contract_suffix"], want))
+E           ValueError: a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_g1_consumes_the_one_ledge0/consume was prepared for era None, not the current producer era '.v3'; the current route refuses a run from another era
+
+a7_prepared_run.py:229: ValueError
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_the_real_run_is_the_control - ValueErr...
+FAILED test_a7_runstates_1470.py::test_a_clean_primary_owing_no_retry_needs_no_retry_directory
+FAILED test_a7_runstates_1470.py::test_an_owed_retry_that_is_not_finalized_is_a_NAMED_wait
+FAILED test_a7_runstates_1470.py::test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second
+FAILED test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+FAILED test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer
+FAILED test_a7_runstates_1470.py::test_two_valid_runs_cannot_cross - ValueErr...
+FAILED test_a7_runstates_1470.py::test_the_reference_lookup_has_no_default_run
+FAILED test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+9 failed, 89 passed in 46.93s
+
+[rc=1]
+
+WROTE focused_a6_1765e.log  19877 bytes  rc=1
