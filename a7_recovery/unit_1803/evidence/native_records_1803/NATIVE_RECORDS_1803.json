@@ -1,0 +1,49 @@
+{
+ "what": "the four exact parent JSONL records of the authorized permission insertion and the native read that followed it, completing the SEQ 1802 capture without reopening unit_1802 (Codex SEQ 1803 item 4)",
+ "parent_transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+ "records": [
+  {
+   "line": 179557,
+   "what": "native Edit",
+   "file": "record_179557.jsonl",
+   "bytes": 1937,
+   "sha256": "c64e9ad3920b99a427ed78c1c98edd4a8a4cd0f21e62713eeb4d040643b1c3f0",
+   "bytes_match": true,
+   "sha256_match": true,
+   "ends_with_newline": true
+  },
+  {
+   "line": 179559,
+   "what": "its result",
+   "file": "record_179559.jsonl",
+   "bytes": 10140,
+   "sha256": "6fc1f8cff0828489fb7ef17b754d8c88edfef2990d1169f38885e7db22e24549",
+   "bytes_match": true,
+   "sha256_match": true,
+   "ends_with_newline": true
+  },
+  {
+   "line": 179566,
+   "what": "native Read limit 1",
+   "file": "record_179566.jsonl",
+   "bytes": 1552,
+   "sha256": "3d9123c6c929ce6c52dfd12bf4440cad36b1e7e9fb8d9c9f8e6894ed7f2be185",
+   "bytes_match": true,
+   "sha256_match": true,
+   "ends_with_newline": true
+  },
+  {
+   "line": 179567,
+   "what": "its result",
+   "file": "record_179567.jsonl",
+   "bytes": 958,
+   "sha256": "4719b5240d7dc0ce9439345d26bd7515cb9d7cefa6e6b1dd0e77f7d0f29fdac7",
+   "bytes_match": true,
+   "sha256_match": true,
+   "ends_with_newline": true
+  }
+ ],
+ "all_four_match": true,
+ "settings_not_edited_again": true,
+ "classification_correction_carried_here": "the earlier export of parent line 179774 is my own Bash capture-report RESULT, linked to toolu_011d76KtA2PSKEfVYU9sfBg4 - NOT a native Workflow return. It stays in unit_1802 as historical capture evidence, is not counted as another native result, and unit_1802 is not rewritten. The actual Workflow dispatch and result plus the three native completion records were already preserved correctly."
+}

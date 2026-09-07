@@ -1,0 +1,27 @@
+{
+ "captured_at": "2026-09-07T08:12:24Z",
+ "task_id": "wxrar4p8v",
+ "run_id": "wf_feabb3a2-628",
+ "launched_once": true,
+ "run_id_supplied": false,
+ "resume_from_run_id": false,
+ "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_feabb3a2-628",
+ "transcript_dir_exists": true,
+ "files_now": [
+  "agent-a168efbc34ae7f730.jsonl",
+  "agent-a168efbc34ae7f730.meta.json",
+  "agent-a483cd772b80bd783.jsonl",
+  "agent-a483cd772b80bd783.meta.json",
+  "agent-a9355e3106ff82c60.jsonl",
+  "agent-a9355e3106ff82c60.meta.json",
+  "agent-adf9ada2c60cd9216.jsonl",
+  "agent-adf9ada2c60cd9216.meta.json",
+  "journal.jsonl"
+ ],
+ "official_state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_feabb3a2-628.json",
+ "official_state_exists_at_launch": false,
+ "journal_exists": true,
+ "journal_bytes": 1699,
+ "journal_sha256": "9e9b38554f9bc0d76b3135bd7c44a2d3a74c0728ccab26cb60ace225149ee6f5",
+ "note": "A NEW run: the initial absence or emptiness of the official state and journal is recorded as measured. Nothing is fabricated and no pre-existing state is claimed."
+}

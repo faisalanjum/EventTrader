@@ -1,0 +1,83 @@
+{
+ "what": "the complete relevant raw parent JSONL records for this call, exact bytes; the enormous parent transcript itself is NOT copied",
+ "run_id": "wf_feabb3a2-628",
+ "task_id": "wxrar4p8v",
+ "records": [
+  {
+   "line": 179594,
+   "file": "parent_line_179594.jsonl",
+   "bytes": 18961,
+   "raw_sha256": "41a5dc4def3ecababa03317e40724f2e4e3dfa587c1a635219dce3732142a289",
+   "record_type": "assistant",
+   "timestamp": "2026-09-07T08:12:03.247Z",
+   "content_block_types": [
+    "tool_use"
+   ]
+  },
+  {
+   "line": 179595,
+   "file": "parent_line_179595.jsonl",
+   "bytes": 2273,
+   "raw_sha256": "dc74cfc3596d4d63c7f2cf8aba2d941e90e8a94f1316f9f0ace16571d47e9c10",
+   "record_type": "user",
+   "timestamp": "2026-09-07T08:12:03.406Z",
+   "content_block_types": [
+    "tool_result"
+   ]
+  },
+  {
+   "line": 179742,
+   "file": "parent_line_179742.jsonl",
+   "bytes": 28228,
+   "raw_sha256": "2f48fa37a93b9e64a84d497e26d59776cfa0948360ca63f842e1a95b62af1d36",
+   "record_type": "queue-operation",
+   "timestamp": "2026-09-07T08:20:37.727Z",
+   "content_block_types": []
+  },
+  {
+   "line": 179753,
+   "file": "parent_line_179753.jsonl",
+   "bytes": 28256,
+   "raw_sha256": "d6018909450016ffa612517c33da5a77338a7935a5440a8519b8b1171a7140a3",
+   "record_type": "queue-operation",
+   "timestamp": "2026-09-07T08:20:38.015Z",
+   "content_block_types": []
+  },
+  {
+   "line": 179754,
+   "file": "parent_line_179754.jsonl",
+   "bytes": 28629,
+   "raw_sha256": "f6111f77ce6e7d14c756a2cb0692c40110a71de1ee86f03b2fe1b8b7696768a2",
+   "record_type": "attachment",
+   "timestamp": "2026-09-07T08:20:37.727Z",
+   "content_block_types": []
+  },
+  {
+   "line": 179774,
+   "file": "parent_line_179774.jsonl",
+   "bytes": 9981,
+   "raw_sha256": "751bf64a124f2a5ddb949cb7bbedbb91e39c7c24709704088684c85158b6fce1",
+   "record_type": "user",
+   "timestamp": "2026-09-07T08:21:09.786Z",
+   "content_block_types": [
+    "tool_result"
+   ]
+  }
+ ],
+ "record_count": 6,
+ "actual_wire": {
+  "tool_use_id": "toolu_01LW1wgSKagWjiBaVB3Yap3P",
+  "line": 179594,
+  "args_wire_type": "str",
+  "args_wire_len": 15641,
+  "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/out/run_1798/grade_batch.seg05.js",
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "decoded_equals_committed_array": true,
+  "decoded_rows": 40,
+  "decoded_compact_sha256": "de01d88aa3d128f8744885676728157b6524cd9114b1adfc5b80d6d494c84ef8"
+ },
+ "selection_rule": "kept ONLY the raw parent lines carrying this call's tool_use id toolu_01LW1wgSKagWjiBaVB3Yap3P - its dispatch and its result. 27 further lines merely mention the run or task id because my own read-only monitoring commands named them; they are not call records and are not copied."
+}

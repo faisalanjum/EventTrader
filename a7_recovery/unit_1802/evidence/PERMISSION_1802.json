@@ -1,0 +1,18 @@
+{
+ "before": {
+  "bytes": 7750,
+  "sha256": "e1344fbc45eb8bb8750ae6ddc07244162e4a7efe3b42346a1ffbcc81668840a2",
+  "allow_entries": 136
+ },
+ "after": {
+  "bytes": 7865,
+  "sha256": "c0173a7fb806b7ca75afca08a8b0f7633055d694c94c476f6b730af27de19715",
+  "allow_entries": 137
+ },
+ "entry_added": "Read(//home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/out/run_1798/grade_batch.seg05.js)",
+ "added_exactly_one": true,
+ "byte_delta": 115,
+ "seg04_still_present": true,
+ "other_keys_unchanged": true,
+ "method": "native Edit tool, one insertion, all other bytes preserved"
+}

@@ -1,0 +1,69 @@
+{
+ "task": "Codex SEQ 1802: execute the prepared segment-5 native Workflow ONCE and preserve the complete raw outcome. No ingestion, finalization, scoring, retry or second segment.",
+ "call": {
+  "invoked_times": 1,
+  "run_id": "wf_feabb3a2-628",
+  "task_id": "wxrar4p8v",
+  "tool_use_id": "toolu_01LW1wgSKagWjiBaVB3Yap3P",
+  "run_id_supplied": false,
+  "resume_from_run_id": false,
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "args_on_the_wire": {
+   "type": "str",
+   "length": 15641,
+   "decoded_rows": 40,
+   "decoded_equals_the_committed_array": true,
+   "decoded_compact_sha256": "de01d88aa3d128f8744885676728157b6524cd9114b1adfc5b80d6d494c84ef8",
+   "note": "the transport carried args as a JSON string, the already-resolved native conversion; its ONE decoded value is byte-equal to the committed array"
+  },
+  "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/out/run_1798/grade_batch.seg05.js",
+  "script_sha256": "1e8abc063e25b407e643774b5a1c7d9eed8add8b120c06c3f6fe9c248b00bd62"
+ },
+ "outcome": {
+  "official_state_present": true,
+  "official_state_sha256": "d170aca7a80c59d00a7008feda2779b9a041e0b5cee880185eda59484b98adcb",
+  "official_state_bytes": 687387,
+  "state_status": "completed",
+  "new_starts": 40,
+  "result_returns": 40,
+  "started_without_result": 0,
+  "empty_results": 0,
+  "refusals_or_errors": 0,
+  "rows_done": 40,
+  "rows_claiming_cache": 0,
+  "unexpected_extra_start": 0,
+  "transcripts": 40,
+  "files_in_run_dir": 81
+ },
+ "accounting": {
+  "required": 206,
+  "selected_before_this_batch": 116,
+  "never_started_before": 90,
+  "new_starts_here": 40,
+  "conservative_carry_forward_before": 5769,
+  "conservative_carry_forward_after": 5809,
+  "if_all_are_later_validated": "selected would reach 156 with 50 still pending",
+  "this_is_not": "meaning finalization, recall, a score, or A7 completion; JSON validity and native success are NOT evidence of a grade"
+ },
+ "not_done_deliberately": [
+  "ingestion",
+  "finalization",
+  "adjudication",
+  "scoring",
+  "any retry",
+  "a second segment",
+  "any owner parsing"
+ ],
+ "preserved_under": [
+  "capture/after (official state + every transcript, agent, meta and journal file, exact bytes)",
+  "capture/parent_records (the raw parent lines of this call only)",
+  "capture/journal.before.jsonl",
+  "capture/LAUNCH_1802.json",
+  "capture/OUTCOME_1802.json",
+  "evidence/PRECALL_1802.json",
+  "evidence/PERMISSION_1802.json"
+ ]
+}

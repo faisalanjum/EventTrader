@@ -1,0 +1,13 @@
+{
+ "pinned_root": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "pinned_receipt": "deee46c97dbd4819e5298a3cbb599260260d0656861072da03cfb438d991e467",
+ "problems": [],
+ "zero_problems": true,
+ "logical_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg05.js",
+ "durable_script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/out/run_1798/grade_batch.seg05.js",
+ "paths_differ": true,
+ "same_regular_file": true,
+ "args_rows": 40,
+ "first_lane": "G1-058/G1a",
+ "last_lane": "G1-077/G1b"
+}

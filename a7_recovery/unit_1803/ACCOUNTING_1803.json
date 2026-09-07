@@ -1,0 +1,84 @@
+{
+ "task": "Codex SEQ 1803: segment-5 intake and accounting, plus ONE next prepared batch. No model call, no test, no publication, no acceptance-code change.",
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "root_unchanged": true,
+ "segment5_intake": {
+  "receipt_supplied": "deee46c97dbd4819e5298a3cbb599260260d0656861072da03cfb438d991e467",
+  "run_id": "wf_feabb3a2-628",
+  "logical_script_is_the_executed_file": true,
+  "ledger": "{\"invalid\":0,\"retry\":0,\"scheduled\":40,\"uncalled\":0,\"valid\":40}",
+  "retry": [],
+  "uncalled": [],
+  "problems": "{}",
+  "finalization_sha256": "8097f8afdfba56615a21c73f5c75776daef681e60fb43824194bb63213329c91",
+  "accounting_sha256": "af6d3d7f97621b620437aa27bb55a6394980f054c0660e6fa156a61c6ef8e3f4",
+  "owner_counts": {
+   "valid": 40,
+   "invalid": 0,
+   "retry": 0,
+   "uncalled": 0,
+   "selected": 156,
+   "never_started": 50,
+   "required": 206
+  },
+  "differences_from_the_reviewer_expectation": {},
+  "first_four_intakes_rerun": false
+ },
+ "next_batch_prepared_not_launched": {
+  "segment": 6,
+  "lane_count": 10,
+  "first_lane": "G1-078/G1a",
+  "last_lane": "G1-082/G1b",
+  "attempt": 1,
+  "receipt_sha256": "2b0e8a4153a2d32461f5630a7821e6d29bbb831a82a7f8859ac7f212b50677fb",
+  "reservation_sha256": "714a1ef40a661a248fb6dfa2b0d06374fdb950eab441348a6e89db3f2ced2d3c",
+  "invocation_sha256": "bb6d26359c1728a5d220011ee65a3b28861af36273d95ff267749ec31e5ab68a",
+  "args_rows": 10,
+  "args_compact_sha256": "030353e579f66b8101534f06936e4d6a5dd12e75451b7663b3c7ef0a92980751",
+  "args_sorted_default_sha256": "e32922c6323e89c8242708c27d1f4a448f5e54eec310b4601b9623d55db0ec3c",
+  "script_sha256": "3d25e52f3bcad283bd0b2ac5fb7712a7fb7db63b1804ff25f2c3c375350f0d71",
+  "script_bytes": 510132,
+  "call_settings": {
+   "model": "sonnet",
+   "runtime_model_id": "claude-sonnet-5",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000"
+  },
+  "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+  "owners": {
+   "a7_g1_build": "977a17681277bcd8fb612b091cb634d669a1023f49e0b2938844c40aafaf2b6f",
+   "a7_g1_complete_v2": "da067c23a5cd5d47afdd2ffbbd57cd94bf37fe7e683bd92c6ddb6f057f69580a",
+   "audit_worker_access": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+   "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+   "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+   "raw_transport": "cf22ccd6e045ff1187d996c27d3caf770c1c6bf2dd23a768b5494c5ccde00a72",
+   "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+  },
+  "expected_input_of_the_first_lane": {
+   "payload_field": "attachment",
+   "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+   "record_index": 1,
+   "record_type": "attachment"
+  },
+  "nothing_launched": true,
+  "later_receipts_created": 0
+ },
+ "scorer_not_run": true,
+ "meaning_not_reconciled": true,
+ "live_conservative_counter": 5809,
+ "historical_frozen_baseline": 5612,
+ "counters_kept_separate": true,
+ "immutable": [
+  "unit_1802",
+  "unit_1798",
+  "unit_1792",
+  "unit_1791",
+  "unit_1786",
+  "unit_1781",
+  "unit_1778"
+ ]
+}
