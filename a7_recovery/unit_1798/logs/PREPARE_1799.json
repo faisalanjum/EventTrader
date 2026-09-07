@@ -1,0 +1,84 @@
+{
+ "phase": "prepare",
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "rows": 206,
+ "declaring_an_input": 120,
+ "declaring_none": 86,
+ "segment4_receipt_sha256": "5404cb6ac9bbc1cc454d449c021345bee1c4247f2c2407f9b83d7b71b9d233dc",
+ "segment4_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg04.js",
+ "segment4_script_sha256": "36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757",
+ "steps": [
+  {
+   "label": "seg1_prepare",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "prepare"
+   ],
+   "exit": 0
+  },
+  {
+   "label": "seg1_ingest",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "ingest",
+    "1",
+    "17de2eefddf1d32720ca4eeadb169aa864796a0fa22d5fc1eb4151af0216b549",
+    "85692dcf-0e8"
+   ],
+   "exit": 0,
+   "ledger": "{\"invalid\":0,\"retry\":0,\"scheduled\":30,\"uncalled\":0,\"valid\":30}",
+   "reproduces_published_outcome": true
+  },
+  {
+   "label": "seg2_prepare",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "prepare"
+   ],
+   "exit": 0
+  },
+  {
+   "label": "seg2_ingest",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "ingest",
+    "2",
+    "4303f8340ea71d9e4afb68400f403e284e8f584b8c8e9e2be3e34a5a06d16f45",
+    "f309e723-949"
+   ],
+   "exit": 0,
+   "ledger": "{\"invalid\":1,\"retry\":1,\"scheduled\":52,\"uncalled\":0,\"valid\":51}",
+   "reproduces_published_outcome": true
+  },
+  {
+   "label": "seg3_prepare",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "retry",
+    "G1-018/G1a"
+   ],
+   "exit": 0
+  },
+  {
+   "label": "seg3_ingest",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "ingest",
+    "3",
+    "730053d41588efa3c280b718bc45d1f6d57e9cbde9a4cc63b1eaa674e5ae491a",
+    "87012c93-dba"
+   ],
+   "exit": 0,
+   "ledger": "{\"invalid\":0,\"retry\":0,\"scheduled\":1,\"uncalled\":0,\"valid\":1}",
+   "reproduces_published_outcome": true
+  },
+  {
+   "label": "seg4_prepare",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "prepare"
+   ],
+   "exit": 0
+  }
+ ]
+}

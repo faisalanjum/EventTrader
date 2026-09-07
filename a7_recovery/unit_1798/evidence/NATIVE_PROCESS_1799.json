@@ -1,0 +1,91 @@
+{
+ "running_process": {
+  "pid": 1037924,
+  "exe": "/home/faisal/.local/share/claude/versions/2.1.261",
+  "exe_sha256": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+  "declared_runtime_sha256": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+  "is_the_declared_runtime": true,
+  "resume_flag": true,
+  "bound_sid_on_the_command_line": true,
+  "permission_mode": "auto",
+  "installed_launcher_now": "/home/faisal/.local/share/claude/versions/2.1.263",
+  "launcher_is_the_running_executable": false
+ },
+ "call_settings": {
+  "output_cap": "128000",
+  "model_forcing_variables_present": [],
+  "api_key_in_the_process_environment": false
+ },
+ "producer_function": {
+  "range": [
+   185568213,
+   185568665
+  ],
+  "bytes": 452,
+  "sha256": "9592e3972496988d78b5ff4e2d342c3ce1a3b5b38c7a1f21d14da0e527b1436f",
+  "tool_literal_at_178416951": "Bw=\"SendUserFile",
+  "emits_the_flag_from_this_query_s_tools": true
+ },
+ "child_agent_definition": {
+  "path": "/home/faisal/EventMarketDB/.claude/agents/lean-probe.md",
+  "present": true,
+  "sha256": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "frozen_invocation_agent_type": "lean-probe",
+  "frozen_invocation_disallows": [
+   "Read"
+  ],
+  "frozen_invocation_model_effort": [
+   "sonnet",
+   "high"
+  ],
+  "frozen_invocation_output_cap": "128000",
+  "so_the_child_has_no_tool_that_could_set_the_flag": true
+ },
+ "child_projection_observed": {
+  "records": 30,
+  "distinct": 1,
+  "hashes": {
+   "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1": 30
+  },
+  "declared": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+  "matches_the_declaration": true
+ },
+ "parent_records": [
+  {
+   "line": 172586,
+   "timestamp": "2026-09-06T16:25:16.662Z",
+   "raw_sha256": "4df98b0b78dbeac0b1f3e6f4566b06a13c529a35e1c78580d7e79aecd98f43f4",
+   "payload_sha256": "3da7287d40756ef73e6573038e4bf889226283a1f9fb2110551dbd80e93aa59e",
+   "sendUserFileHint": true
+  },
+  {
+   "line": 174354,
+   "timestamp": "2026-09-06T18:18:06.515Z",
+   "raw_sha256": "a7a639d1da34bfe8c653b123dd23ab53fa451d937ec128fc6378f232ad02e5bf",
+   "payload_sha256": "3da7287d40756ef73e6573038e4bf889226283a1f9fb2110551dbd80e93aa59e",
+   "sendUserFileHint": true
+  },
+  {
+   "line": 177787,
+   "timestamp": "2026-09-07T05:51:59.476Z",
+   "raw_sha256": "ecc9b8a8401e6d86a3785a6ac090eacd2277c8ad442315152c03a1bf8d7a0d51",
+   "payload_sha256": "3da7287d40756ef73e6573038e4bf889226283a1f9fb2110551dbd80e93aa59e",
+   "sendUserFileHint": true
+  }
+ ],
+ "parent_value_predates_the_batch": true,
+ "session_descriptor": {
+  "path": "/home/faisal/.claude/sessions/1037924.json",
+  "present": true,
+  "fields_read": [
+   "bridgeSessionId",
+   "sessionId"
+  ],
+  "values": {
+   "sessionId": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "bridgeSessionId": "session_0149ri6SsRYLKgMzFYwt48qy"
+  },
+  "bridge_matches_the_declaration": true
+ },
+ "conclusion": "The grader run is bound to the DECLARED runtime, not the newly installed one, and the flag that differs is computed from THIS query's tools - so a tool-stripped grader child keeps the value the 30 observed child transcripts already carry. The exact child payload 25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1 therefore stands for all pending lanes; nothing is weakened and no probe call is needed."
+}

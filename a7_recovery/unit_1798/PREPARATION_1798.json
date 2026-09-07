@@ -1,0 +1,76 @@
+{
+ "task": "Codex SEQ 1798 items 1-5, resumed under the SEQ 1799 measurement correction",
+ "no_model_call": true,
+ "no_lane_launched": true,
+ "nothing_staged_or_committed": true,
+ "item_1_population": {
+  "required": 206,
+  "selected": 116,
+  "never_started": 90,
+  "accounting_scope": "the reviewed conservative carry-forward is reused as labelled: frozen 5612 and live CONSERVATIVE 5739 are already separated by unit_1773/ACCOUNTING.json and the 1775/1778/1786 archives, and unit_1786's captured journal adds exactly 30 to 5769. No new census, no ledger engine and no unitemised subtraction is presented here.",
+  "retry_entries_are_not_permission": "latest_retry names G1-018/G1a as the OLD invalid source; its attempt 2 is already finalized, and G1-043/G1a has consumed its one physical retry. Neither authorizes another call."
+ },
+ "item_2_root": {
+  "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+  "rows": 206,
+  "declaring_the_child_input": 120,
+  "declaring_no_added_input": 86,
+  "declaration": {
+   "payload_field": "attachment",
+   "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+   "record_index": 1,
+   "record_type": "attachment"
+  },
+  "evidence": "evidence/NATIVE_PROCESS_1799.json",
+  "pending_range": [
+   "G1-058/G1a",
+   "G1-102/G1b"
+  ]
+ },
+ "item_3_replay": {
+  "segments_reproducing_the_published_outcome": 3,
+  "segment4_script_sha256": "36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757",
+  "segment4_intake": "34 rows, 34 valid, 0 invalid, 0 retry, 0 uncalled, clean"
+ },
+ "item_4_next_batch": {
+  "segment": 5,
+  "lane_count": 40,
+  "first_lane": "G1-058/G1a",
+  "last_lane": "G1-077/G1b",
+  "attempt": 1,
+  "receipt_sha256": "deee46c97dbd4819e5298a3cbb599260260d0656861072da03cfb438d991e467",
+  "reservation_sha256": "9102a427daf43d0364221213f5533a54713a66ff8de09eb92c24b0ca42861bb0",
+  "invocation_sha256": "18e9e7e7bfeff170eb5678802cb9bd8612bc0346ebe9add0243b83f910373d43",
+  "args_rows": 40,
+  "args_canonical_sha256": "a8f3e4afb09fe988c22bbcb0dbf6a9ebbacd17e8a4ba56f2bcf4356d1c21b407",
+  "script_sha256": "1e8abc063e25b407e643774b5a1c7d9eed8add8b120c06c3f6fe9c248b00bd62",
+  "script_bytes": 520662,
+  "call_settings": {
+   "model": "sonnet",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000"
+  },
+  "owners": {
+   "a7_g1_build": "977a17681277bcd8fb612b091cb634d669a1023f49e0b2938844c40aafaf2b6f",
+   "a7_g1_complete_v2": "da067c23a5cd5d47afdd2ffbbd57cd94bf37fe7e683bd92c6ddb6f057f69580a",
+   "audit_worker_access": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+   "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+   "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+   "raw_transport": "cf22ccd6e045ff1187d996c27d3caf770c1c6bf2dd23a768b5494c5ccde00a72",
+   "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+  }
+ },
+ "item_5_permission": {
+  "exact_narrow_native_read_the_durable_script_needs": "Read(//home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/out/run_1798/grade_batch.seg05.js)",
+  "durable_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/out/run_1798/grade_batch.seg05.js",
+  "sha256": "1e8abc063e25b407e643774b5a1c7d9eed8add8b120c06c3f6fe9c248b00bd62",
+  "logical_path_the_receipt_names": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg05.js",
+  "scope": "ONE file, read only. Not requested and not broadened in this task.",
+  "granted_precedent_for_the_published_batch": "Read(//home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/proposed_run/grade_batch.seg04.js)"
+ },
+ "nothing_launched_note": "the prepared segment stops at preflight: no Workflow was dispatched, no agent directory was created and no receipt beyond this segment exists"
+}

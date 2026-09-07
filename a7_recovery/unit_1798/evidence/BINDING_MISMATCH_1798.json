@@ -1,0 +1,40 @@
+{
+ "verdict": "BLOCKED: the native bindings the published declaration was measured under have CHANGED, so the exact input for the 90 pending lanes cannot be derived without assuming compatibility. Reported before freezing anything (Codex SEQ 1798 item 2).",
+ "what_is_unchanged": {
+  "bound_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "parent_bridge_session_id": "session_0149ri6SsRYLKgMzFYwt48qy",
+  "projection_schema": "both binaries carry the SAME shape and the SAME type guard at the projection site: c({url:s().nullable(),commit:s(),pr:s(),sendUserFileHint:P()}) and e.type===\"attachment\" && e.attachment.type===\"remote_session_change\". The only textual difference is minified identifier renaming and a constant 13292-byte offset shift, so the RECORD SHAPE is compatible.",
+  "the_published_batch_still_matches_its_declaration": true
+ },
+ "what_changed": {
+  "runtime_version": {
+   "declared": "2.1.261",
+   "live": "2.1.263 (Claude Code)"
+  },
+  "runtime_sha256": {
+   "declared": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+   "live": "26d020351e8112f4006790f3cfce43b4c9df0c1bb1d0e542364d64151b81d5ba"
+  },
+  "running_the_declared_binary": false,
+  "payload_field_value": [
+   {
+    "field": "sendUserFileHint",
+    "declared": false,
+    "parent_now": true
+   }
+  ]
+ },
+ "why_it_blocks": "The one field that differs, sendUserFileHint, is a runtime VALUE, not part of the binary's shape. It reads false in all 30 subagent projections of the published batch and true in all 3 of the parent session's own current records. What a NEWLY started subagent would receive under 2.1.263 cannot be measured without starting one, and starting one is a model call this task forbids. Declaring the published payload sha would refuse all 90 lanes if the value is now true; declaring a true variant is equally unproven for subagents; declaring null refuses them outright. None of the three is derivable from evidence, so none was frozen.",
+ "measured_payloads": {
+  "declared_subagent_projection": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+  "parent_session_now": [
+   "3da7287d40756ef73e6573038e4bf889226283a1f9fb2110551dbd80e93aa59e"
+  ]
+ },
+ "nothing_was_frozen": true,
+ "what_would_unblock_it": [
+  "a ruling that the published payload stands for the 90, accepting the risk that a changed sendUserFileHint would refuse them all at audit;",
+  "or authorising ONE minimal native start whose only purpose is to measure the projection under 2.1.263, which is a model call and needs owner opt-in;",
+  "or a declaration form that binds the fields whose values are proved and leaves that one boolean unbound - which would change the accepted owner and is out of scope here."
+ ]
+}

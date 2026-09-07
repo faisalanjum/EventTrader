@@ -1,0 +1,16 @@
+== phase 1: freeze the declaring root, replay 1-3, publish 4 ==
+  root 6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0  rows 206  declaring an input 120  declaring none 86
+  segment 1  receipt 17de2eefddf1d327  ledger {"invalid":0,"retry":0,"scheduled":30,"uncalled":0,"valid":30}  reproduces published: True
+  segment 2  receipt 4303f8340ea71d9e  ledger {"invalid":1,"retry":1,"scheduled":52,"uncalled":0,"valid":51}  reproduces published: True
+  segment 3  receipt 730053d41588efa3  ledger {"invalid":0,"retry":0,"scheduled":1,"uncalled":0,"valid":1}  reproduces published: True
+  segment 4 published: receipt 5404cb6ac9bbc1cc script 36c3e792270693b1
+
+== the published script vs the one that ran ==
+  identical bytes: True   the same file: False   36c3e792270693b1
+
+== phase 2: intake segment 4, then prepare the next batch, no call ==
+  segment 4 intake resolves to the executed file: True
+  segment 4: rows 34 ledger {"invalid":0,"retry":0,"scheduled":34,"uncalled":0,"valid":34} nonvalid [] why {} clean True
+  NEXT BATCH: segment 5, 40 lanes G1-058/G1a .. G1-077/G1b, attempt 1
+  receipt deee46c97dbd4819  args rows 40  script 1e8abc063e25b407 (520662 bytes)
+  settings {"agentType":"lean-probe","disallowedTools":["Read"],"effort":"high","max_output_tokens":"128000","model":"sonnet"}

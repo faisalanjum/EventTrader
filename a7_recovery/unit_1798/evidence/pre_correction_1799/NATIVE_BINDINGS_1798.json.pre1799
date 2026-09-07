@@ -1,0 +1,88 @@
+{
+ "executable": {
+  "link": "/home/faisal/.local/bin/claude",
+  "resolves_to": "/home/faisal/.local/share/claude/versions/2.1.263",
+  "version_reported": "2.1.263 (Claude Code)",
+  "sha256": "26d020351e8112f4006790f3cfce43b4c9df0c1bb1d0e542364d64151b81d5ba",
+  "declared_runtime": "2.1.261",
+  "declared_runtime_sha256": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+  "declared_binary_still_present": true,
+  "declared_binary_sha256": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+  "running_the_declared_binary": false,
+  "declared_binary_hash_holds": true
+ },
+ "session": {
+  "bound_sid": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+  "transcript_present": true,
+  "declared_parent_bridge_session_id": "session_0149ri6SsRYLKgMzFYwt48qy"
+ },
+ "parent_records": {
+  "of_the_declared_type": 3,
+  "distinct_payloads": 1,
+  "payload_hashes": {
+   "3da7287d40756ef73e6573038e4bf889226283a1f9fb2110551dbd80e93aa59e": 3
+  },
+  "newest_line": 177787,
+  "newest_payload": {
+   "type": "remote_session_change",
+   "url": "https://claude.ai/code/session_0149ri6SsRYLKgMzFYwt48qy",
+   "commit": "Claude-Session: https://claude.ai/code/session_0149ri6SsRYLKgMzFYwt48qy",
+   "pr": "https://claude.ai/code/session_0149ri6SsRYLKgMzFYwt48qy",
+   "sendUserFileHint": true
+  }
+ },
+ "subagent_projection_in_the_published_batch": {
+  "records": 30,
+  "distinct_payloads": 1,
+  "payload_hashes": {
+   "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1": 30
+  },
+  "declared_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+  "matches_the_declaration": true
+ },
+ "field_difference_parent_now_vs_declared": [
+  {
+   "field": "sendUserFileHint",
+   "declared": false,
+   "parent_now": true
+  }
+ ],
+ "projection_site": {
+  "declared_2.1.261": {
+   "present": true,
+   "bytes": 215641584,
+   "occurrences": 6,
+   "offsets": [
+    95979356,
+    185567091,
+    185567834,
+    185568470,
+    185568541,
+    185568645
+   ],
+   "context": [
+    "e user can follow this conversation from another device; to put a file in front of them there (a report, a screenshot, a built artifact), send it with .....=...sendUserFileHint....9...live_unrecorded......)z.from_snapshot.........5.live_recorded...V.......Cannot destructure property 'createStreamingToolExecutor' from n",
+    "d`:\"\",ue=`${y} (${F}% ${x}-shotted by ${q}${re})`;return n(`PR Attribution: returning summary: ${ue}`),ue}var fpt=m(()=>c({url:s().nullable(),commit:s(),pr:s(),sendUserFileHint:P()}));function tZo(e){return e.type===\"attachment\"&&e.attachment.type===\"remote_session_change\"}function her(e){for(let t=e.length-1;t>=0;t--)"
+   ]
+  },
+  "live": {
+   "present": true,
+   "bytes": 215662064,
+   "occurrences": 6,
+   "offsets": [
+    95980160,
+    185580383,
+    185581126,
+    185581762,
+    185581833,
+    185581937
+   ],
+   "context": [
+    "e user can follow this conversation from another device; to put a file in front of them there (a report, a screenshot, a built artifact), send it with .....=...sendUserFileHint....9...live_unrecorded......)z.from_snapshot.........5.live_recorded...V.......Cannot destructure property 'createStreamingToolExecutor' from n",
+    "d`:\"\",ue=`${y} (${F}% ${x}-shotted by ${q}${re})`;return n(`PR Attribution: returning summary: ${ue}`),ue}var gpt=m(()=>c({url:s().nullable(),commit:s(),pr:s(),sendUserFileHint:P()}));function iZo(e){return e.type===\"attachment\"&&e.attachment.type===\"remote_session_change\"}function ber(e){for(let t=e.length-1;t>=0;t--)"
+   ]
+  }
+ },
+ "projection_context_identical_across_binaries": false
+}

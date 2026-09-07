@@ -1,0 +1,12 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py --host /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/a7_map_1798_intake.tsv /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1798/ledger/prepare_1799.py intake_next
+--- STDOUT ---
+  segment 4 intake resolves to the executed file: True
+  segment 4: rows 34 ledger {"invalid":0,"retry":0,"scheduled":34,"uncalled":0,"valid":34} nonvalid [] why {} clean True
+  NEXT BATCH: segment 5, 40 lanes G1-058/G1a .. G1-077/G1b, attempt 1
+  receipt deee46c97dbd4819  args rows 40  script 1e8abc063e25b407 (520662 bytes)
+  settings {"agentType":"lean-probe","disallowedTools":["Read"],"effort":"high","max_output_tokens":"128000","model":"sonnet"}
+
+--- STDERR ---
+
+--- EXIT ---
+0
