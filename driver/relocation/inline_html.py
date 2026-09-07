@@ -3666,7 +3666,7 @@ def printed_value(displayed, fmt_expanded, sign):
         return None
     # SIGN LAST, exactly as §10.1.2 orders it: the transform supplies neither
     # sign nor scale, and scale is applied later still, in reconciliation.
-    return -value if sign == '-' else value
+    return value.copy_negate() if sign == '-' else value
 
 
 #: (the ONE `_XSI_NS` definition lives beside the context shape law above —

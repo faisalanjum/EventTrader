@@ -9,7 +9,7 @@ the materializer stays dormant — flip = extending _ALLOWED_FIELDS under owner 
 import re
 from collections import namedtuple
 from datetime import MAXYEAR, MINYEAR, date, datetime
-from decimal import Decimal
+from decimal import Decimal, MAX_EMAX, MIN_EMIN, localcontext
 
 from driver.core.driver_ids import (ACTUAL_BASIS, CONSENSUS_BASELINE,
                                     GUIDANCE_BASIS, GUIDANCE_SUFFIX,
@@ -474,13 +474,24 @@ def _movement(fact, lane, add):
     clo, chi = fact.get("comparison_low"), fact.get("comparison_high")
     if None in (lo, hi, clo, chi):
         return                     # open/missing shapes: the validator skips
-    mid, cmid = (lo + hi) / 2, (clo + chi) / 2
+    # Both midpoints divide by the same positive 2, so compare exact sums.
+    # Align the finite decimal coefficients and allow one carry digit. Zero's
+    # representation exponent must not widen this arithmetic's precision.
+    numbers = [Decimal(n) if n else Decimal(0) for n in (lo, hi, clo, chi)]
+    nonzero = [n for n in numbers if n]
+    with localcontext() as ctx:
+        ctx.prec = (max(n.adjusted() for n in nonzero)
+                    - min(n.as_tuple().exponent for n in nonzero) + 2
+                    if nonzero else 1)
+        ctx.Emax, ctx.Emin, ctx.clamp = MAX_EMAX, MIN_EMIN, 0
+        current_sum = numbers[0] + numbers[1]
+        previous_sum = numbers[2] + numbers[3]
     state = fact["driver_state"]
-    ok = (mid > cmid) if state == "raised" else \
-         (mid < cmid) if state == "lowered" else (mid == cmid)
+    ok = (current_sum > previous_sum) if state == "raised" else \
+         (current_sum < previous_sum) if state == "lowered" else (current_sum == previous_sum)
     if not ok:
         add("MOVEMENT", "REJECT",
-            f"stated {state} contradicts the midpoint rule ({mid} vs prior {cmid})")
+            f"stated {state} contradicts the midpoint rule")
 
 
 def _surprise_contract_violations(basis, baseline, *, lane):
