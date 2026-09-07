@@ -1,0 +1,23 @@
+label affected exit 1
+  |         # path. They are one file, reached by two names.
+  |         durable = DURABLE_SCRIPT
+  |         assert durable != published, "the two names must differ for this to test anything"
+  |         st = _state()
+  |         st["scriptPath"] = durable
+  |         got = _audit_fixture(st)
+  |         same = os.path.samefile(durable, published)
+  | >       assert same, "the boundary did not present one file under two paths"
+  | E       AssertionError: the boundary did not present one file under two paths
+  | E       assert False
+  | test_g1_cached_resume_1781.py:164: AssertionError
+  | =========================== short test summary info ============================
+  | FAILED test_g1_cached_resume_1781.py::test_the_same_file_under_its_durable_path_is_accepted
+  | 1 failed, 96 passed in 120.37s (0:02:00)
+on']"]
+  | a6_launch_freeze.py:259: ValueError
+  | =========================== short test summary info ============================
+  | FAILED test_a7_postrun_identity_1521_recovery_1774.py::test_completed_run_loads_against_accepted_freeze_and_reports_5612_once
+  | FAILED test_a7_postrun_identity_1521_recovery_1774.py::test_completed_run_freeze_budget_counts_once_not_as_future_plan
+  | FAILED test_a7_postrun_identity_1521_recovery_1774.py::test_omitted_or_wrong_freeze_hash_refuses
+  | FAILED test_a7_postrun_identity_1521_recovery_1774.py::test_re_adding_the_completed_392_yields_6004_and_breaches_the_ceiling
+  | 4 failed, 37 passed, 49 skipped, 7 errors in 73.16s (0:01:13)

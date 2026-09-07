@@ -1,0 +1,10 @@
+{
+ "native_task_id": "w5ejk3v1l",
+ "native_run_id": "wf_41b934cf-f76",
+ "tool_use_line": 177285,
+ "tool_use_raw_sha256": "9a8e23024bbce218f5f1d055e7ccd2bd00ae1df8303ad71b2b895ec681c65004",
+ "args_actual_type": "str",
+ "args_actual_len": 13277,
+ "tool_result_line": 177286,
+ "tool_result_raw_sha256": "30fbe7acf93c6d4fc511f4f7a3c103c74a60e5f2224c5f1a9ea1e81d48abfc23"
+}

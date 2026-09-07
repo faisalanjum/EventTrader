@@ -1,0 +1,23 @@
+== phase 1: freeze the declaring root, replay 1-3, publish 4 ==
+  root            : 7619400131cb05777a5c4d5e338a22f4167f0e1712e2a6e43a291e9065bf124f  rows 206
+  lanes declaring an input : 30
+  lanes declaring none     : 176
+  segment 1  lanes 30 predicted_bytes 519064  receipt a320a13ca36dc74f  ledger {"invalid":0,"retry":0,"scheduled":30,"uncalled":0,"valid":30}  reproduces the published outcome: True
+  segment 2  lanes 52 predicted_bytes 522334  receipt c98f0391278358d4  ledger {"invalid":1,"retry":1,"scheduled":52,"uncalled":0,"valid":51}  reproduces the published outcome: True
+  segment 3  lanes 1  receipt 9cc4388bd566cfbf  ledger {"invalid":0,"retry":0,"scheduled":1,"uncalled":0,"valid":1}  reproduces the published outcome: True
+  segment 4 published: receipt 8a3ccbfc708f5a1e  script 36c3e792270693b1
+  the state's script IS this file: False
+  same 34 lanes as approved: True   args equal published: True   args equal the saved state: True
+
+== the published script vs the one that ran ==
+  candidate : 36c3e792270693b1  /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1792/out/candidate_run_1794/grade_batch.seg04.js
+  executed  : 36c3e792270693b1  /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/proposed_run/grade_batch.seg04.js
+  identical bytes: True   the same file: False
+
+== phase 2: intake, audit and finalization, no call ==
+  the segment-4 intake resolves to the executed file: True
+  official_rows  34
+  ledger         {"invalid":0,"retry":0,"scheduled":34,"uncalled":0,"valid":34}
+  retry          [] UNCALLED []
+  nonvalid       [] why {}
+  clean          True

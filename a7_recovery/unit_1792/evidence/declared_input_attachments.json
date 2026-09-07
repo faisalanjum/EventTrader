@@ -1,0 +1,18 @@
+{
+ "note": "The administrative input the installed runtime projects into every NEWLY started subagent of this parent session. Declared as DATA and frozen into the run root; acceptance code never carries this payload and never infers it from the transcript being audited (Codex SEQ 1792 item 2).",
+ "adjudication": "POST-RUN compatibility adjudication. This envelope was NOT separately declared in the original pre-call manifest of unit_1786; that manifest and every original byte are preserved unchanged.",
+ "origin": {
+  "runtime": "2.1.261",
+  "runtime_sha256": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+  "renderer_offset": 185567182,
+  "model_facing_projection_offset": 186713305,
+  "parent_bridge_session_id": "session_0149ri6SsRYLKgMzFYwt48qy"
+ },
+ "attachments": [
+  {
+   "object": {"type":"remote_session_change","url":"https://claude.ai/code/session_0149ri6SsRYLKgMzFYwt48qy","commit":"Claude-Session: https://claude.ai/code/session_0149ri6SsRYLKgMzFYwt48qy","pr":"https://claude.ai/code/session_0149ri6SsRYLKgMzFYwt48qy","sendUserFileHint":false},
+   "canonical_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+   "canonicalisation": "json.dumps(obj, sort_keys=True, separators=(',',':')).encode('utf-8')"
+  }
+ ]
+}

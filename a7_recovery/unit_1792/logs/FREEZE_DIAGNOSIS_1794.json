@@ -1,0 +1,27 @@
+{
+ "question": "do the named producer-freeze failures come from the interrupted pre-fix implementation, or from something else?",
+ "modules": [
+  "test_a7_postrun_identity_1521_recovery_1774.py",
+  "test_a7_g1_precall_freeze_1525.py",
+  "test_a7_cached_rows_1413.py"
+ ],
+ "with_the_prefix_owners": {
+  "label": "diagnose_with_the_prefix_owners",
+  "log": "tests_diagnose_with_the_prefix_owners.log",
+  "summary": "37 passed in 117.16s (0:01:57)",
+  "failed": [],
+  "errors": 0
+ },
+ "with_the_corrected_owners": {
+  "label": "diagnose_with_the_corrected_owners",
+  "log": "tests_diagnose_with_the_corrected_owners.log",
+  "summary": "37 passed in 117.82s (0:01:57)",
+  "failed": [],
+  "errors": 0
+ },
+ "owners_restored": {
+  "audit_worker_access.py": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+  "a7_g1_build.py": "977a17681277bcd8fb612b091cb634d669a1023f49e0b2938844c40aafaf2b6f"
+ },
+ "owners_unchanged": true
+}

@@ -1,0 +1,13 @@
+{
+ "candidate_published": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1792/out/candidate_run_1794/grade_batch.seg04.js",
+  "sha256": "36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757"
+ },
+ "actually_executed": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/proposed_run/grade_batch.seg04.js",
+  "sha256": "36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757"
+ },
+ "identical_bytes": true,
+ "the_same_file_on_disk": false,
+ "intake_presents_the_executed_file_by_a_scoped_read_only_bind": true
+}

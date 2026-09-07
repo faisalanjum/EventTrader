@@ -1,0 +1,16 @@
+{
+ "outcome": "refused before launch; no native run started, no model call made",
+ "tool": "Workflow",
+ "input_keys": ["args", "resumeFromRunId", "scriptPath"],
+ "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/proposed_run/grade_batch.seg04.js",
+ "resumeFromRunId": "wf_41b934cf-f76",
+ "args_rows": 34,
+ "args_canonical_sha256": "3d0a7d57a8196e22842046b9eadbe2cfb044d434ae2aee48c54a393f36433a52",
+ "envelope_sha256": "59525cdb10f82c95431e98344ad68f93dc1f969bef71e34d1c53ab8db0fa152c",
+ "verbatim_error": "scriptPath must be a script path this tool returned, or a file you can already read (the working directory or a directory you have added): /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/proposed_run/grade_batch.seg04.js",
+ "cause": "the frozen script lives in the recovery worktree, which is outside this session's working directory /home/faisal/EventMarketDB; the Workflow tool only accepts a scriptPath it returned or one inside an allowed directory",
+ "no_retry_or_substitution": "no second invocation, no copy of the script to an allowed path, no setting or directory change",
+ "journal_sha256_after": "164961de0b745a510fe34fb07015e396ec0c60390132a46fc985b5d3f331ded6",
+ "new_starts": 0,
+ "cached_hits": 0
+}

@@ -1,0 +1,67 @@
+{
+ "suite": "test_g1_declared_input_1792.py",
+ "lawful_control": "test_control_every_newly_served_worker_passes_with_its_declared_input",
+ "owner_restored_sha256": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+ "owner_unchanged": true,
+ "green_before": true,
+ "green_after": true,
+ "not_proved": [],
+ "mutants": [
+  {
+   "mutant": "position_not_required",
+   "disabled": "if i != index or not isinstance(rec, dict):",
+   "test_that_must_fail": "test_a_displaced_input_is_refused_where_it_actually_sits",
+   "it_failed": true,
+   "lawful_control_still_passes": true,
+   "failures": 3,
+   "failed_tests": [
+    "test_the_forgeries_codex_proved_are_refused",
+    "test_a_displaced_input_is_refused_where_it_actually_sits",
+    "test_a_declared_index_past_the_end_of_the_transcript_is_refused"
+   ],
+   "exit": 1,
+   "intended_failure_proved": true
+  },
+  {
+   "mutant": "outer_type_not_required",
+   "disabled": "if rec.get(\"type\") != kind or rec.get(\"message\") is not None:",
+   "test_that_must_fail": "test_the_forgeries_codex_proved_are_refused",
+   "it_failed": true,
+   "lawful_control_still_passes": true,
+   "failures": 1,
+   "failed_tests": [
+    "test_the_forgeries_codex_proved_are_refused"
+   ],
+   "exit": 1,
+   "intended_failure_proved": true
+  },
+  {
+   "mutant": "presence_not_required",
+   "disabled": "if expected_input is not None and not seen:",
+   "test_that_must_fail": "test_a_missing_input_is_refused_by_name",
+   "it_failed": true,
+   "lawful_control_still_passes": true,
+   "failures": 3,
+   "failed_tests": [
+    "test_the_forgeries_codex_proved_are_refused",
+    "test_a_missing_input_is_refused_by_name",
+    "test_a_message_bearing_record_cannot_carry_the_declared_input"
+   ],
+   "exit": 1,
+   "intended_failure_proved": true
+  },
+  {
+   "mutant": "payload_not_required",
+   "disabled": "return hashlib.sha256(canon.encode(\"utf-8\")).hexdigest() == want",
+   "test_that_must_fail": "test_an_undeclared_payload_is_refused",
+   "it_failed": true,
+   "lawful_control_still_passes": true,
+   "failures": 1,
+   "failed_tests": [
+    "test_an_undeclared_payload_is_refused"
+   ],
+   "exit": 1,
+   "intended_failure_proved": true
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "supersedes": "capture/REFUSAL_1789.json (kept, not erased)",
+ "what_was_wrong": "REFUSAL_1789.json reported the INTENDED envelope (13440 bytes, 59525cdb) as if it were what the tool received, and my SEQ 1787 claimed the args were 'never stringified'. Codex read the real record: args arrived as a STRING. Both claims were incorrect.",
+ "rule_learned": "capture the actual envelope from the real tool_use record, never from pre-call expectations",
+ "dispatch_1_refused": {
+   "transcript_line": 177180,
+   "tool_use_id": "toolu_013oFLEu2M9BbVeecMiQ5MEJ",
+   "raw_line_sha256": "98d0f060fb30e7b047934409d8aae1b10e5419e526efa714b5b02676a7973d1d",
+   "result_line": 177181,
+   "args_actual_type": "string",
+   "args_actual_len": 13277,
+   "outcome": "refused before launch on scriptPath permission; 0 model starts"
+ },
+ "dispatch_2_launched": {
+   "transcript_line": 177285,
+   "tool_use_id": "toolu_01TNg7baDLmuL1N9hkidD7fJ",
+   "raw_line_sha256": "9a8e23024bbce218f5f1d055e7ccd2bd00ae1df8303ad71b2b895ec681c65004",
+   "args_actual_type": "string",
+   "args_actual_len": 13277,
+   "args_decoded_canonical_sha256": "3d0a7d57a8196e22842046b9eadbe2cfb044d434ae2aee48c54a393f36433a52",
+   "outcome": "LAUNCHED; run resumed as wf_41b934cf-f76, task w5ejk3v1l"
+ },
+ "open_discrepancy": "Codex 1790 required the args as a typed ARRAY. I passed a JSON array literal both times; the parent tool interface serialised it to a string on the wire in both dispatches. The DECODED content is exactly the approved 34 rows (3d0a7d57), and the run launched and is progressing on that content, but the wire type is string, not array. I could not make the interface send an array and did not attempt a workaround.",
+ "settings_delta": {
+   "file": "/home/faisal/EventMarketDB/.claude/settings.local.json",
+   "before_sha256": "129e4f80348b8170bb268e956c8d54f4039b20049ffafb26e84b338a0bb429c3",
+   "after_sha256": "e1344fbc45eb8bb8750ae6ddc07244162e4a7efe3b42346a1ffbcc81668840a2",
+   "allow_entries": "135 -> 136",
+   "added": "Read(//home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1781/out/proposed_run/grade_batch.seg04.js)",
+   "removed": "none; every prior entry, hook and setting preserved; no deny/ask added"
+ }
+}

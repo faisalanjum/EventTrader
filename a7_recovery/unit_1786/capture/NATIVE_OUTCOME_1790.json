@@ -1,0 +1,31 @@
+{
+ "rows_returned": 34,
+ "calls": 34,
+ "new_starts": 30,
+ "authorised_max_new_starts": 30,
+ "cached_reused": 4,
+ "cached_reused_identically": 4,
+ "errors": 0,
+ "skipped": 0,
+ "empty_results": 0,
+ "refusals": 0,
+ "waits": 0,
+ "missing_rows": 0,
+ "subagent_tokens": 731815,
+ "tool_uses": 0,
+ "duration_ms": null,
+ "journal_before_sha256": "164961de0b745a510fe34fb07015e396ec0c60390132a46fc985b5d3f331ded6",
+ "journal_after_sha256": "a1a6e29660aa45b4226ed5445fc6b22ef1e16209421f45c1fb90d56ee0342d4b",
+ "journal_prefix_preserved": true,
+ "official_state_created": true,
+ "ledger_before": 5739,
+ "ledger_after": 5769,
+ "stopped_before": [
+  "ingestion",
+  "finalization",
+  "reconciliation",
+  "scoring",
+  "further batches",
+  "automatic retries"
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "what": "The four native Edit/Read records Codex SEQ 1795 item 2 requested, exported as exact full JSONL bytes including the trailing newline.",
+ "parent_transcript": {
+  "path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200.jsonl",
+  "session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "lines_at_export": 178827
+ },
+ "requested_tool_ids": [
+  "toolu_01CKEtTYhNzBC7PZkHL3rsid",
+  "toolu_01FWchigFCTknBcTxnSKSrA6"
+ ],
+ "resolution": "each record was located by its expected raw sha256 over the whole line including newline, so a moved offset cannot mis-select it",
+ "records": [
+  {
+   "original_line": 177259,
+   "current_line": 177259,
+   "offset_moved": false,
+   "file": "record_177259.jsonl",
+   "bytes": 1733,
+   "ends_with_newline": true,
+   "sha256": "327ef3912cca6e7dcf5e5d969f0e241a8b99d5780d3f888baced32cd586fd058",
+   "matches_expected": true,
+   "type": "assistant",
+   "uuid": "28d0b3f0-b5ea-4b01-a2ec-0cdf4b2628e0",
+   "tool_ids": [
+    "toolu_01CKEtTYhNzBC7PZkHL3rsid"
+   ],
+   "names_a_requested_tool_id": true
+  },
+  {
+   "original_line": 177262,
+   "current_line": 177262,
+   "offset_moved": false,
+   "file": "record_177262.jsonl",
+   "bytes": 9699,
+   "ends_with_newline": true,
+   "sha256": "d3e96615237f4cc551d5153995ae4883f2260b7d9ac3b97c871a4d9b0e18c7df",
+   "matches_expected": true,
+   "type": "user",
+   "uuid": "81a0cd59-6b66-4e47-a3a2-befca6022fc8",
+   "tool_ids": [
+    "toolu_01CKEtTYhNzBC7PZkHL3rsid"
+   ],
+   "names_a_requested_tool_id": true
+  },
+  {
+   "original_line": 177280,
+   "current_line": 177280,
+   "offset_moved": false,
+   "file": "record_177280.jsonl",
+   "bytes": 1557,
+   "ends_with_newline": true,
+   "sha256": "2ebc31f4a62b1aa6f689a8daaf81350668efb07e17a5cf3755f537f143bc42ba",
+   "matches_expected": true,
+   "type": "assistant",
+   "uuid": "bd395ad7-e5b7-4e6c-b7cf-b746e32d2ec7",
+   "tool_ids": [
+    "toolu_01FWchigFCTknBcTxnSKSrA6"
+   ],
+   "names_a_requested_tool_id": true
+  },
+  {
+   "original_line": 177281,
+   "current_line": 177281,
+   "offset_moved": false,
+   "file": "record_177281.jsonl",
+   "bytes": 962,
+   "ends_with_newline": true,
+   "sha256": "d63a7a90fdd00b4c3e5402e83a7d8f08b97787a8a9e09465f82bf29f20dc68c0",
+   "matches_expected": true,
+   "type": "user",
+   "uuid": "4c3868a4-e990-4a67-8618-63455e14b9bc",
+   "tool_ids": [
+    "toolu_01FWchigFCTknBcTxnSKSrA6"
+   ],
+   "names_a_requested_tool_id": true
+  }
+ ]
+}

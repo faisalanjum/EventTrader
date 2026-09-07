@@ -1,0 +1,56 @@
+{
+ "owner": {
+  "label": "corrected_1794",
+  "path": "view/harness_g1v3/audit_worker_access.py",
+  "declaration_parameter": "expected_input"
+ },
+ "agents": {
+  "served": "a0642230ae87bb728",
+  "precall_cached": "a3ca49e3af13b9c32"
+ },
+ "wrong": 0,
+ "cases": [
+  {
+   "case": "control: the real served worker",
+   "must_refuse": false,
+   "verdict": "ACCEPTED",
+   "correct": true,
+   "first_problem": null
+  },
+  {
+   "case": "control: the real precall-cached worker",
+   "must_refuse": false,
+   "verdict": "ACCEPTED",
+   "correct": true,
+   "first_problem": null
+  },
+  {
+   "case": "forgery: deleted",
+   "must_refuse": true,
+   "verdict": "REFUSED",
+   "correct": true,
+   "first_problem": "the one input this lane declares is not at record 1"
+  },
+  {
+   "case": "forgery: moved",
+   "must_refuse": true,
+   "verdict": "REFUSED",
+   "correct": true,
+   "first_problem": "agent a39a24be9717a9636's record 2 carries a NoneType message, not an object"
+  },
+  {
+   "case": "forgery: wrong_outer_type",
+   "must_refuse": true,
+   "verdict": "REFUSED",
+   "correct": true,
+   "first_problem": "agent a0642230ae87bb728's record 1 carries a NoneType message, not an object"
+  },
+  {
+   "case": "forgery: the payload injected into a cached worker",
+   "must_refuse": true,
+   "verdict": "REFUSED",
+   "correct": true,
+   "first_problem": "agent a3ca49e3af13b9c32's record 1 carries a NoneType message, not an object"
+  }
+ ]
+}

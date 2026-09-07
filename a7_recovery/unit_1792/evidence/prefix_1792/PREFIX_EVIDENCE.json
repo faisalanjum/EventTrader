@@ -1,0 +1,37 @@
+{
+ "label": "PRE-FIX EVIDENCE, preserved before the SEQ 1794 correction",
+ "what": "The INTERRUPTED unit_1792 implementation of remedy A and the logs it produced. Codex SEQ 1793 proved its rule accepts a deleted, a wrong-typed and a moved attachment; SEQ 1794 orders it replaced by ONE exact expected input per lane. Kept unedited so the defect and its evidence stay reproducible.",
+ "status": "superseded, never deleted, never re-run as a candidate",
+ "baseline_before_any_1792_edit": {
+  "source": "published unit_1781 view (read-only)",
+  "audit_worker_access.py": "816bbc722a8aff2a2385513c542afa292d6ad34f559e1897497fa02823f63780",
+  "a7_g1_build.py": "747d1f9d439d9402cf02c6702b904b0e3cd8daf4ec39df15d90b535725c8e2a7"
+ },
+ "preserved": {
+  "a7_g1_build.py.prefix": {
+   "bytes": 103209,
+   "sha256": "3beddc8383dd30383994b76d5adf1e1a8e9f3721c4a07a5828a761b770bcb4be"
+  },
+  "affected_1792.log.prefix": {
+   "bytes": 1522,
+   "sha256": "3905993a1c81f42d0c1d52730058842ec6f10a1e37fa2308ac2528eb74fa1586"
+  },
+  "audit_worker_access.py.prefix": {
+   "bytes": 74060,
+   "sha256": "dd80dc49262c67c530524d5a9937f1b45a325b1f5a9c2bdf1d5907b2cb946e86"
+  },
+  "declared_input_first_run.txt.prefix": {
+   "bytes": 19,
+   "sha256": "58e770703492c5aca7829e00fc0e4868f0d7d01bf65b01b33e5ac5f121ae4856"
+  },
+  "patch_1792.py.prefix": {
+   "bytes": 5816,
+   "sha256": "963c5b59da8e8bcbcc99a0611cc66adcf9c6a31baeb863aaac6f8e30b85fe691"
+  },
+  "test_g1_declared_input_1792.py.prefix": {
+   "bytes": 7849,
+   "sha256": "17af2cd018c674256ff448cc1119898c4bb0cd868e826b5ca7c1e4ddd0a708ed"
+  }
+ },
+ "note_on_logs": "logs/affected_1792.log stays in place as well; its tails are truncated, which is the binding defect SEQ 1794 item 3 orders fixed. Nothing in it is discarded."
+}

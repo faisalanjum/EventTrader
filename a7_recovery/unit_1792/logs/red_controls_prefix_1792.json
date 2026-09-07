@@ -1,0 +1,56 @@
+{
+ "owner": {
+  "label": "prefix_1792",
+  "path": "evidence/prefix_1792/audit_worker_access.py.prefix",
+  "declaration_parameter": "declared"
+ },
+ "agents": {
+  "served": "a0642230ae87bb728",
+  "precall_cached": "a3ca49e3af13b9c32"
+ },
+ "wrong": 3,
+ "cases": [
+  {
+   "case": "control: the real served worker",
+   "must_refuse": false,
+   "verdict": "ACCEPTED",
+   "correct": true,
+   "first_problem": null
+  },
+  {
+   "case": "control: the real precall-cached worker",
+   "must_refuse": false,
+   "verdict": "ACCEPTED",
+   "correct": true,
+   "first_problem": null
+  },
+  {
+   "case": "forgery: deleted",
+   "must_refuse": true,
+   "verdict": "ACCEPTED",
+   "correct": false,
+   "first_problem": null
+  },
+  {
+   "case": "forgery: moved",
+   "must_refuse": true,
+   "verdict": "ACCEPTED",
+   "correct": false,
+   "first_problem": null
+  },
+  {
+   "case": "forgery: wrong_outer_type",
+   "must_refuse": true,
+   "verdict": "ACCEPTED",
+   "correct": false,
+   "first_problem": null
+  },
+  {
+   "case": "forgery: the payload injected into a cached worker",
+   "must_refuse": true,
+   "verdict": "REFUSED",
+   "correct": true,
+   "first_problem": "agent a3ca49e3af13b9c32's record 1 carries a NoneType message, not an object"
+  }
+ ]
+}

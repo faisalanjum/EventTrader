@@ -1,0 +1,202 @@
+# -*- coding: utf-8 -*-
+"""THE ONE DECLARED ADMINISTRATIVE INPUT (Codex SEQ 1792).
+
+The installed runtime projects exactly one administrative attachment into every
+NEWLY started subagent of this parent session. Both input owners refuse it: the
+shape owner because the record carries no message object, and the input-topology
+owner because a later record is not an assistant answer. A shape-only exemption
+is therefore not enough.
+
+The remedy under test is narrow: an attachment record is tolerated ONLY when its
+canonical object is byte-exactly one the RUN ROOT declares. The payload lives in
+the frozen root, never in this code and never inferred from the transcript being
+audited. Everything else - identities, model, effort, no-tool, response
+uniqueness, terminal text, ordering - stays exactly as it was.
+
+Population is derived from the journal AND the official served rows, and every
+transcript is read with the owners' own whole-file reader, which returns None if
+ANY line is malformed. Nothing is silently skipped.
+"""
+import hashlib
+import io
+import json
+import os
+import sys
+
+import pytest
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+
+import audit_worker_access as AUD                                # noqa: E402
+
+R = "/home/faisal/EventMarketDB-driver-recovery"
+CAP = R + "/a7_recovery/unit_1786/capture"
+RUN = CAP + "/after/wf_41b934cf-f76"
+STATE = CAP + "/after/wf_41b934cf-f76.json"
+BEFORE = CAP + "/journal.before.jsonl"
+DECL = R + "/a7_recovery/unit_1792/evidence/declared_input_attachments.json"
+#: the OLD incomplete worker: preserved, accounted separately, never an answer
+INCOMPLETE = "a72461c662aeeac39"
+
+_needs = pytest.mark.skipif(not os.path.isfile(STATE),
+                            reason="the captured batch is absent")
+
+
+def _canon(obj):
+    return hashlib.sha256(json.dumps(obj, sort_keys=True,
+                                     separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def declared():
+    d = json.load(io.open(DECL, encoding="utf-8"))
+    return [a["canonical_sha256"] for a in d["attachments"]]
+
+
+def declared_object():
+    return json.load(io.open(DECL, encoding="utf-8"))["attachments"][0]["object"]
+
+
+def _population():
+    """Served workers, from the journal AND the official rows - not the directory."""
+    served = {}
+    for l in io.open(RUN + "/journal.jsonl", encoding="utf-8"):
+        l = l.strip()
+        if not l:
+            continue
+        r = json.loads(l)
+        if r.get("type") == "result":
+            served[r["agentId"]] = r
+    st = json.load(io.open(STATE, encoding="utf-8"))
+    official = {p["agentId"] for p in st.get("workflowProgress", [])
+                if p.get("type") == "workflow_agent" and p.get("agentId")}
+    assert set(served) == official, (
+        "journal and official rows disagree: %s" % (set(served) ^ official))
+    cached = {json.loads(l)["agentId"] for l in io.open(BEFORE, encoding="utf-8")
+              if l.strip() and json.loads(l).get("type") == "result"}
+    return sorted(served), sorted(cached), sorted(set(served) - cached)
+
+
+def _recs(agent_id):
+    """The owners' OWN whole-file reader: None if any line is malformed."""
+    recs = AUD._jsonl(os.path.join(RUN, "agent-%s.jsonl" % agent_id))
+    assert recs is not None, "agent %s has a malformed transcript line" % agent_id
+    return recs
+
+
+# =============================================== the population itself
+@_needs
+def test_the_served_population_is_exactly_thirty_four():
+    served, cached, new = _population()
+    assert len(served) == 34, len(served)
+    assert len(cached) == 4, cached
+    assert len(new) == 30, len(new)
+    assert INCOMPLETE not in served, "the incomplete worker is not a served answer"
+    assert os.path.isfile(RUN + "/agent-%s.jsonl" % INCOMPLETE), (
+        "the incomplete worker's transcript must still be preserved")
+
+
+# =============================================== both boundaries
+@_needs
+def test_every_cached_control_passes_both_owners_unchanged():
+    _served, cached, _new = _population()
+    for aid in cached:
+        recs = _recs(aid)
+        assert AUD._g1_shape_problems(recs, aid, declared()) == [], aid
+        pin = hashlib.sha256(_prompt_of(recs).encode("utf-8")).hexdigest()
+        assert AUD._input(recs, pin, declared()) == [], aid
+
+
+def _prompt_of(recs):
+    c = (recs[0].get("message") or {}).get("content")
+    return c if isinstance(c, str) else json.dumps(c)
+
+
+@_needs
+def test_every_new_worker_passes_both_owners_with_the_declared_input():
+    _served, _cached, new = _population()
+    for aid in new:
+        recs = _recs(aid)
+        assert AUD._g1_shape_problems(recs, aid, declared()) == [], (aid, "shape")
+        pin = hashlib.sha256(_prompt_of(recs).encode("utf-8")).hexdigest()
+        assert AUD._input(recs, pin, declared()) == [], (aid, "input")
+
+
+@_needs
+def test_the_declared_input_is_present_exactly_once_and_at_index_one():
+    _served, cached, new = _population()
+    want = _canon(declared_object())
+    for aid in new:
+        recs = _recs(aid)
+        at = [i for i, r in enumerate(recs) if not isinstance(r.get("message"), dict)]
+        assert at == [1], (aid, at)
+        assert _canon(recs[1]["attachment"]) == want, aid
+    for aid in cached:
+        recs = _recs(aid)
+        assert [r for r in recs if not isinstance(r.get("message"), dict)] == [], aid
+
+
+# =============================================== the negatives
+@_needs
+def test_an_undeclared_attachment_still_refuses():
+    _s, _c, new = _population()
+    recs = list(_recs(new[0]))
+    recs[1] = dict(recs[1], attachment=dict(declared_object(), url="https://elsewhere"))
+    assert AUD._g1_shape_problems(recs, new[0], declared()), "unknown payload must refuse"
+    assert AUD._input(recs, hashlib.sha256(_prompt_of(recs).encode()).hexdigest(),
+                      declared()), "unknown payload must refuse in the topology too"
+
+
+@_needs
+def test_one_altered_byte_still_refuses():
+    _s, _c, new = _population()
+    obj = declared_object()
+    recs = list(_recs(new[0]))
+    recs[1] = dict(recs[1], attachment=dict(obj, sendUserFileHint=True))
+    assert AUD._g1_shape_problems(recs, new[0], declared())
+
+
+@_needs
+def test_a_second_declared_attachment_still_refuses():
+    _s, _c, new = _population()
+    recs = list(_recs(new[0]))
+    recs.insert(2, dict(recs[1]))
+    assert AUD._input(recs, hashlib.sha256(_prompt_of(recs).encode()).hexdigest(),
+                      declared()), "a duplicate administrative record must refuse"
+
+
+@_needs
+def test_a_declared_attachment_in_position_zero_still_refuses():
+    _s, _c, new = _population()
+    recs = list(_recs(new[0]))
+    recs.insert(0, dict(recs[1]))
+    assert AUD._input(recs, hashlib.sha256(_prompt_of(recs[1:]).encode()).hexdigest(),
+                      declared()), "the prompt must still be record 0"
+
+
+@_needs
+def test_with_no_declaration_the_new_workers_still_refuse():
+    """The exemption comes ONLY from the root: with nothing declared, refuse."""
+    _s, _c, new = _population()
+    recs = _recs(new[0])
+    assert AUD._g1_shape_problems(recs, new[0], []), "no declaration must mean refusal"
+    assert AUD._input(recs, hashlib.sha256(_prompt_of(recs).encode()).hexdigest(), [])
+
+
+@_needs
+def test_a_non_attachment_record_without_a_message_still_refuses():
+    _s, _c, new = _population()
+    recs = list(_recs(new[0]))
+    recs[1] = {"type": "system", "uuid": recs[1].get("uuid"),
+               "parentUuid": recs[1].get("parentUuid")}
+    assert AUD._g1_shape_problems(recs, new[0], declared())
+
+
+@_needs
+def test_a_corrupted_declaration_is_not_coerced_to_equality():
+    _s, _c, new = _population()
+    recs = _recs(new[0])
+    for bad in (None, "", 0, [], {}, ["25394a53"]):
+        assert AUD._g1_shape_problems(recs, new[0], bad), (
+            "declaration %r must not admit anything" % (bad,))

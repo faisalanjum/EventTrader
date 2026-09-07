@@ -1,0 +1,16 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py --host /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1792/a7_map_1792_candidate.tsv /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1792/ledger/candidate_1794.py prepare
+--- STDOUT ---
+  root            : 7619400131cb05777a5c4d5e338a22f4167f0e1712e2a6e43a291e9065bf124f  rows 206
+  lanes declaring an input : 30
+  lanes declaring none     : 176
+  segment 1  lanes 30 predicted_bytes 519064  receipt a320a13ca36dc74f  ledger {"invalid":0,"retry":0,"scheduled":30,"uncalled":0,"valid":30}  reproduces the published outcome: True
+  segment 2  lanes 52 predicted_bytes 522334  receipt c98f0391278358d4  ledger {"invalid":1,"retry":1,"scheduled":52,"uncalled":0,"valid":51}  reproduces the published outcome: True
+  segment 3  lanes 1  receipt 9cc4388bd566cfbf  ledger {"invalid":0,"retry":0,"scheduled":1,"uncalled":0,"valid":1}  reproduces the published outcome: True
+  segment 4 published: receipt 8a3ccbfc708f5a1e  script 36c3e792270693b1
+  the state's script IS this file: False
+  same 34 lanes as approved: True   args equal published: True   args equal the saved state: True
+
+--- STDERR ---
+
+--- EXIT ---
+0

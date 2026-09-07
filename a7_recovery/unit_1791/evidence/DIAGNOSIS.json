@@ -1,0 +1,47 @@
+{
+ "failing_boundary": {
+  "owner": "audit_worker_access._g1_shape_problems",
+  "owner_sha256": "816bbc722a8aff2a2385513c542afa292d6ad34f559e1897497fa02823f63780",
+  "rule": "every record must carry a dict 'message'; a record without one is a NAMED problem",
+  "observed": "agent <id>'s record 1 carries a NoneType message, not an object",
+  "population": {"transcripts": 35, "new_refused": 30, "cached_controls_refused": 0,
+                 "problems_per_affected_transcript": 1}
+ },
+ "the_extra_input": {
+  "record_type": "attachment",
+  "payload_type": "remote_session_change",
+  "identical_across_all_30": true,
+  "canonical_payload_fields": ["url", "commit", "pr", "sendUserFileHint"],
+  "carries_evidence_or_conclusions": false,
+  "carries_other_grader_output": false,
+  "carries_provenance_or_family_labels": false,
+  "origin": "the parent session's own attribution setting; the runtime projects it into each NEW subagent as a model-facing meta user message. The 4 cached lanes replay pre-existing results and never receive it."
+ },
+ "live_rule_basis": {
+  "FableExperimentWorkOrder.md:165": "Grader input = RAW evidence (quotes, names, values) - never detector conclusions, never the other grader's output, never provenance/family labels",
+  "FableExperimentWorkOrder.md:461": "two independent agent() instances, zero shared context",
+  "reading": "the frozen bar is SEMANTIC independence of grader input. The shape rule in _g1_shape_problems is an implementation assumption about native record shape written when no attachment record existed; it is not itself a frozen bar."
+ },
+ "why_this_is_not_automatically_benign": "the runtime does show it to the model, so the served input was not byte-exactly the frozen packet. The semantic bar is intact, but the input-exactness assumption is not.",
+ "remedy_A_represent_and_verify": {
+  "change": "teach the ONE existing shape owner that a record may lack 'message' only when it is byte-exactly the single declared administrative attachment pinned in the root; anything else still refuses",
+  "satisfies": ["no semantic prompt change", "input is represented and verified, not hidden",
+                "no source or answer context accepted - the pinned bytes provably contain none",
+                "no frozen bar weakened - semantic independence is untouched",
+                "no fabricated official evidence"],
+  "cost": "no new calls; the 30 existing paid answers stay usable",
+  "risk": "it is still an acceptance change to a published owner, and the pin is session-specific: a different session URL changes the bytes and must refuse"
+ },
+ "remedy_B_native_configuration": {
+  "change": "suppress the parent attribution projection so new grader subagents receive no attachment; the served input then equals the frozen packet exactly",
+  "cost": "the 30 affected lanes must be re-run: +30 new starts (ledger 5769 -> 5799) and the 30 existing answers become superseded evidence",
+  "risk": "spends real calls to remove an input already proved to carry no evidence"
+ },
+ "focused_proof_needed_before_either": [
+  "the pinned payload is byte-identical across all 30 and contains no evidence, conclusion, label or other-grader output - already reproduced here",
+  "a negative control: any other non-message record, or an altered attachment byte, must still refuse",
+  "the four cached controls must remain clean and unchanged under whichever remedy is chosen",
+  "for A: the pin must live in the frozen root/packet, not in code, so it is reviewable evidence rather than a runtime exemption"
+ ],
+ "no_change_made": "this task is diagnosis only; no acceptance code, transcript, state, journal, prompt, key or scorer byte was modified"
+}

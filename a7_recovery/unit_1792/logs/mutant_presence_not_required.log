@@ -1,0 +1,67 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -p no:cacheprovider -q --no-header -rf test_g1_declared_input_1792.py
+CWD: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1792/view/harness_g1v3
+--- STDOUT ---
+....F..F..................F                                              [100%]
+=================================== FAILURES ===================================
+_____________ test_the_forgeries_codex_proved_are_refused[deleted] _____________
+
+name = 'deleted'
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-108/test_the_forgeries_codex_prove0')
+
+    @_needs
+    @pytest.mark.parametrize("name", sorted(FORGERIES))
+    def test_the_forgeries_codex_proved_are_refused(name, tmp_path):
+        spec = served_spec()
+        agent_id, recs = FORGERIES[name](spec)
+>       assert judge(recs, agent_id, spec, tmp_path), "%s must be refused" % name
+E       AssertionError: deleted must be refused
+E       assert []
+E        +  where [] = judge([{'agentId': 'a0642230ae87bb728', 'cwd': '/home/faisal/EventMarketDB', 'entrypoint': 'cli', 'gitBranch': 'main', ...},...: 'a0642230ae87bb728', 'apiBlockIndex': 0, 'attributionAgent': 'lean-probe', 'cwd': '/home/faisal/EventMarketDB', ...}], 'a0642230ae87bb728', {'payload_field': 'attachment', 'payload_sha256': '25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1', 'record_index': 1, 'record_type': 'attachment'}, PosixPath('/tmp/pytest-of-faisal/pytest-108/test_the_forgeries_codex_prove0'))
+
+test_g1_declared_input_1792.py:246: AssertionError
+___________________ test_a_missing_input_is_refused_by_name ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-108/test_a_missing_input_is_refuse0')
+
+    @_needs
+    def test_a_missing_input_is_refused_by_name(tmp_path):
+        """Refused FOR THE RIGHT REASON: the lane declares an input and has none."""
+        spec = served_spec()
+        agent_id, recs = forge_deleted(spec)
+        got = judge(recs, agent_id, spec, tmp_path)
+>       assert any(ABSENT in str(p) for p in got), got
+E       AssertionError: []
+E       assert False
+E        +  where False = any(<generator object test_a_missing_input_is_refused_by_name.<locals>.<genexpr> at 0x7f5a5f0b9b60>)
+
+test_g1_declared_input_1792.py:255: AssertionError
+________ test_a_message_bearing_record_cannot_carry_the_declared_input _________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-108/test_a_message_bearing_record_0')
+
+    @_needs
+    def test_a_message_bearing_record_cannot_carry_the_declared_input(tmp_path):
+        """The declared input is a message-LESS record. Giving it a message does
+        not smuggle it past the topology owner."""
+        _served, _cached, new = population()
+        spec = served_spec()
+        recs = [copy.deepcopy(r) for r in transcript(new[0])]
+        recs[spec["record_index"]]["message"] = {"role": "user", "content": "anything"}
+        got = judge(recs, new[0], spec, tmp_path)
+        assert got, "a message-bearing record must not satisfy the declaration"
+>       assert any(ABSENT in str(p) for p in got), got
+E       AssertionError: ["record 1 is 'attachment'/'user' — a no-tool A3 worker receives one prompt and answers it, so nothing else may appear between them"]
+E       assert False
+E        +  where False = any(<generator object test_a_message_bearing_record_cannot_carry_the_declared_input.<locals>.<genexpr> at 0x7f5a5f0b89e0>)
+
+test_g1_declared_input_1792.py:416: AssertionError
+=========================== short test summary info ============================
+FAILED test_g1_declared_input_1792.py::test_the_forgeries_codex_proved_are_refused[deleted]
+FAILED test_g1_declared_input_1792.py::test_a_missing_input_is_refused_by_name
+FAILED test_g1_declared_input_1792.py::test_a_message_bearing_record_cannot_carry_the_declared_input
+3 failed, 24 passed in 0.17s
+
+--- STDERR ---
+
+--- EXIT ---
+1

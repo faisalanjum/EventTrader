@@ -1,0 +1,37 @@
+{
+ "what": "the exact repo-relative paths this checkpoint proposes to publish, across the three units that must land together",
+ "staged": false,
+ "committed": false,
+ "units": [
+  {
+   "unit": "unit_1786",
+   "manifest_sha256": "449a0f11876160f784134afb03f39993d6d08c3908371800bf38e66798f1ae6b",
+   "files_on_disk": 89,
+   "its_own_whitelist_rows": 89,
+   "omitted_by_its_whitelist_and_added_here": [],
+   "not_republished": null
+  },
+  {
+   "unit": "unit_1791",
+   "manifest_sha256": "a2d37ebd44630cf6e508d72182c83adc250ccf9d49da6b51dcbc468ad7eaf88e",
+   "files_on_disk": 11,
+   "its_own_whitelist_rows": 9,
+   "omitted_by_its_whitelist_and_added_here": [
+    "MANIFEST.sha256",
+    "WHITELIST.tsv"
+   ],
+   "not_republished": null
+  },
+  {
+   "unit": "unit_1792",
+   "manifest_sha256": "4bf79b0d29bd6d8f2719cc0bb24b696d4be7ab8e5fd32a81dd332df7a44b7ca2",
+   "files_on_disk": 1383,
+   "its_own_whitelist_rows": 1383,
+   "omitted_by_its_whitelist_and_added_here": [],
+   "not_republished": "view/workflows"
+  }
+ ],
+ "total_paths": 1483,
+ "already_git_tracked": [],
+ "view_supplied_by_recipe": "a7_recovery/unit_1792/compose_views_1792.sh rebuilds unit_1792/view/workflows from unit_1781's published view plus unit_1786's captured state, which this same checkpoint publishes"
+}

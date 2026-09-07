@@ -1,0 +1,22 @@
+{
+ "label": "PRE-CORRECTION EVIDENCE, preserved before the SEQ 1795 fixture closeout",
+ "what": "The suite and results as they stood when Codex accepted the implementation. SEQ 1795 corrects TWO negative fixtures only: the cached-injection case carried its donor's agent/session identity, and the second-copy case duplicated a uuid, so each refusal could be credited to an unrelated fault. The acceptance code is unchanged.",
+ "owners_unchanged": {
+  "audit_worker_access.py": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+  "a7_g1_build.py": "977a17681277bcd8fb612b091cb634d669a1023f49e0b2938844c40aafaf2b6f"
+ },
+ "preserved": {
+  "MUTANT_RECORDS_1794.json.pre1795": {
+   "bytes": 2186,
+   "sha256": "0efa448e38adb5d9767667afc11131d3c74bceb31ae4ef6837a3e300137136e4"
+  },
+  "test_g1_declared_input_1792.py.pre1795": {
+   "bytes": 15837,
+   "sha256": "f61ed3cad0f79fe457e49d4cd1a5f843332f221b2de368a7455be0b489a40ffc"
+  },
+  "tests_final_affected_1794.log.pre1795": {
+   "bytes": 1419,
+   "sha256": "532f044abadcb1590608fe020bd05ea3d3cdeb18f49d7a2be4956b640b2df74b"
+  }
+ }
+}

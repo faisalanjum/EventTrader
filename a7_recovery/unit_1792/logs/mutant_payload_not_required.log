@@ -1,0 +1,30 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -p no:cacheprovider -q --no-header -rf test_g1_declared_input_1792.py
+CWD: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1792/view/harness_g1v3
+--- STDOUT ---
+............F..............                                              [100%]
+=================================== FAILURES ===================================
+____________________ test_an_undeclared_payload_is_refused _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-109/test_an_undeclared_payload_is_0')
+
+    @_needs
+    def test_an_undeclared_payload_is_refused(tmp_path):
+        _served, _cached, new = population()
+        spec = served_spec()
+        recs = [copy.deepcopy(r) for r in transcript(new[0])]
+        field = spec["payload_field"]
+        recs[spec["record_index"]][field] = dict(recs[spec["record_index"]][field],
+                                                 url="https://elsewhere")
+>       assert judge(recs, new[0], spec, tmp_path)
+E       AssertionError: assert []
+E        +  where [] = judge([{'agentId': 'a0642230ae87bb728', 'cwd': '/home/faisal/EventMarketDB', 'entrypoint': 'cli', 'gitBranch': 'main', ...},...: 'a0642230ae87bb728', 'apiBlockIndex': 0, 'attributionAgent': 'lean-probe', 'cwd': '/home/faisal/EventMarketDB', ...}], 'a0642230ae87bb728', {'payload_field': 'attachment', 'payload_sha256': '25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1', 'record_index': 1, 'record_type': 'attachment'}, PosixPath('/tmp/pytest-of-faisal/pytest-109/test_an_undeclared_payload_is_0'))
+
+test_g1_declared_input_1792.py:334: AssertionError
+=========================== short test summary info ============================
+FAILED test_g1_declared_input_1792.py::test_an_undeclared_payload_is_refused
+1 failed, 26 passed in 0.16s
+
+--- STDERR ---
+
+--- EXIT ---
+1

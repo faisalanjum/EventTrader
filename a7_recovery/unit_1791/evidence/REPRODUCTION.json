@@ -1,0 +1,489 @@
+{
+ "rows": [
+  {
+   "agent": "a0642230ae87bb728",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a0642230ae87bb728's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a2db47a5f0129b968",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a2db47a5f0129b968's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a3351dd1cbabc64bd",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a3351dd1cbabc64bd's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a39a24be9717a9636",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent a39a24be9717a9636's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a3ca49e3af13b9c32",
+   "cached": true,
+   "records": 2,
+   "problems": 0,
+   "first": null,
+   "types": [
+    "user",
+    "assistant"
+   ],
+   "no_message_records": 0
+  },
+  {
+   "agent": "a402682a76191af96",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a402682a76191af96's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a47544b599516949a",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent a47544b599516949a's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a5ec73a4541def5ba",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent a5ec73a4541def5ba's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a5fb435ceb2f40c39",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a5fb435ceb2f40c39's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a6464473fc4ca17c6",
+   "cached": true,
+   "records": 3,
+   "problems": 0,
+   "first": null,
+   "types": [
+    "user",
+    "assistant",
+    "assistant"
+   ],
+   "no_message_records": 0
+  },
+  {
+   "agent": "a68444a9ab36c7e76",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a68444a9ab36c7e76's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a71764de53f1c2f0e",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a71764de53f1c2f0e's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a72461c662aeeac39",
+   "cached": false,
+   "records": 1,
+   "problems": 0,
+   "first": null,
+   "types": [
+    "user"
+   ],
+   "no_message_records": 0
+  },
+  {
+   "agent": "a774bfa6343fa911b",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a774bfa6343fa911b's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a7fd18ed51c332060",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a7fd18ed51c332060's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a85810cca5979d4a6",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a85810cca5979d4a6's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a90ec354c87268500",
+   "cached": true,
+   "records": 2,
+   "problems": 0,
+   "first": null,
+   "types": [
+    "user",
+    "assistant"
+   ],
+   "no_message_records": 0
+  },
+  {
+   "agent": "a91b730ea6317ab48",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a91b730ea6317ab48's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a98589868ad785245",
+   "cached": true,
+   "records": 3,
+   "problems": 0,
+   "first": null,
+   "types": [
+    "user",
+    "assistant",
+    "assistant"
+   ],
+   "no_message_records": 0
+  },
+  {
+   "agent": "a9b6ea3287807884a",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent a9b6ea3287807884a's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "a9cd47d620494e01d",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent a9cd47d620494e01d's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "aac49dea58131ee74",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent aac49dea58131ee74's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "aac57f8d5f3b7a25c",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent aac57f8d5f3b7a25c's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "ab25bcf88d4d50bd4",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent ab25bcf88d4d50bd4's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "ac49644ee8f9127f3",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent ac49644ee8f9127f3's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "ac7a389a55bea55ce",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent ac7a389a55bea55ce's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "ad9c4b345706d3001",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent ad9c4b345706d3001's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "add018f78c21e8387",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent add018f78c21e8387's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "addf70e0146e3131c",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent addf70e0146e3131c's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "ae2a3f7e358f9bd9a",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent ae2a3f7e358f9bd9a's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "ae7c1438ff993d810",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent ae7c1438ff993d810's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "aec7f3008d48e302f",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent aec7f3008d48e302f's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "af266268cf82fde65",
+   "cached": false,
+   "records": 3,
+   "problems": 1,
+   "first": "agent af266268cf82fde65's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "af8c4702d6dd2263f",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent af8c4702d6dd2263f's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  },
+  {
+   "agent": "afb3c7dd8c390b9e5",
+   "cached": false,
+   "records": 4,
+   "problems": 1,
+   "first": "agent afb3c7dd8c390b9e5's record 1 carries a NoneType message, not an object",
+   "types": [
+    "user",
+    "attachment",
+    "assistant"
+   ],
+   "no_message_records": 1
+  }
+ ],
+ "new_refused": 30,
+ "cached_refused": 0,
+ "attachment_payloads": {
+  "ce3ff90db941667df2e45e786fb63a07f1d0b07bed108b74adf652da4e178bd2": 1,
+  "5e71bbe2e54b374beb036c99062b457ae583cb854b383d26d353b131facf1f46": 1,
+  "862468a65e55f118627f4006555b0d007ba0edfc4cdac0b522c18c06c1b5b20f": 1,
+  "0ceb5cd6ff75776e9863ae8004040bebe977d900c006c5d048ce66ba382ff6ec": 1,
+  "f4e787c90f090f67bd10b3a9f88993f4f87b0ad240e1aa64568f1209393db6a6": 1,
+  "a4380a9446f5dbeefe85211c348746784b0979404c71466e3d137e0ec4aa4054": 1,
+  "130962281c54407581851075f06e7e5ea0788689ed4e5ec9225343a27a611eaa": 1,
+  "551afc995f8c1c7f5533f3878a3edb7450719a94c9256da04934cf440327c05c": 1,
+  "1ae81b4307f40bf748fde4a57f027c33f36391e164ba350984453c844814738e": 1,
+  "7904d896bd24699666568e04e8239b550892a19062ac5cdf516c695fee41b193": 1,
+  "7baf3f34606a2a5446f05ab8dddd885493f2aa0afa410a85f36ec9ff12f81736": 1,
+  "7da80f08a76004f10a7a49cf8cd6ee33f85108b6cd19333f8a94504ecbf7e4df": 1,
+  "ef01993c37a9aa3d3e68e7127d0488e3413d47aa7ca42dbc564bd8b01fd99054": 1,
+  "259548e125a749bb7fd0bdb4bf1b33971101efb8eee128664dfaf736557b2916": 1,
+  "a51278ccaa8d689f96e6fb5b2e83f50632d2ef5e38608aa0a35256c75d116a61": 1,
+  "914dfcbf8f5e23c4de8077c9c58d1af64ac6bcc0b2b7fc7fd7d850798fbd1bb6": 1,
+  "18e8071158d480393de02a307db14c19d2c5cba10a88fbe06c73abe144a023ea": 1,
+  "8a87932c7c36902caaf84f7da5c948289fa84fa6133d9a78b7006cf41aab5b7b": 1,
+  "8eaff4b97bbb7a58b08df4217ca59818d22f3aa0a0d5389d551ca6b82f207e85": 1,
+  "f1c12080c4fd45c3b2f3aa6c25b143e6a263d64cb1b55c99721a364ba6cddcee": 1,
+  "404946ef4b4d8c2c5641fb7018d83ebbb2da6f3352701b99cd56fcbdbb17b6f2": 1,
+  "0ed2ce4904395d1fc2289986fa29d44d95e6df6fee23f9c1b6e7b74bc001bfeb": 1,
+  "2caa05070f6ba18b7ac9bdbe078a50809f8c0aa8baa43a92e6347e3a4ac65d1e": 1,
+  "bb3fabff2e6c9524deb0d1c4a67febc19ad0e360ca5c49d38d48e3b377644f48": 1,
+  "b50762e97f7812b8dfeeb91a9dcc91c60f9ec8db4829e4c039ad143945e50d19": 1,
+  "e510f7cc4b84fc7bdfae40a8ac571a606506f0dd6308bc3667dfe03fa733f7f9": 1,
+  "44d9e64a5bc84f64d1c8759364fa487539ab808846f6a94bd7f66ba849886ed6": 1,
+  "61a7475468e6dc81f828b99d54099131dd2ef04000d41f5e6779f1575d7ab3c1": 1,
+  "22489c715141158521d2090da10a15f1350d6b76c04a1b495897500cb62dd31c": 1,
+  "52c5cdbcc6be3b90ea2a5c8974e40c807f81dd742716e834deb10a5a220e00c6": 1
+ }
+}

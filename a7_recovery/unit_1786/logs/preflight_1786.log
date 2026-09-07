@@ -1,0 +1,17 @@
+  ok    preflight_problems     []
+  ok    script_sha             36c3e792270693b1a1749ee63ab3ce2efb0e26fbd5767978de8903c2ec7a1757
+  ok    script_bytes           520690
+  ok    args_type              list
+  ok    args_rows              34
+  ok    args_sha               3d0a7d57a8196e22842046b9eadbe2cfb044d434ae2aee48c54a393f36433a52
+  ok    first_lane             G1-041/G1a
+  ok    last_lane              G1-057/G1b
+  ok    unique_lanes           34
+  ok    arg_keys               ['agentType', 'attempt', 'batch_id', 'candidate_sha256', 'disallow
+  ok    envelope_sha           59525cdb10f82c95431e98344ad68f93dc1f969bef71e34d1c53ab8db0fa152c
+  ok    envelope_bytes         13440
+  ok    logical_is_durable_same_file True
+  ok    paths_actually_differ  True
+
+14 checks, 0 bad 
+[rc=0]
