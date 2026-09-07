@@ -1,0 +1,76 @@
+{
+ "envelope": {
+  "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1803/out/run_1803/grade_batch.seg06.js",
+  "script_bytes": 510132,
+  "script_sha256": "3d25e52f3bcad283bd0b2ac5fb7712a7fb7db63b1804ff25f2c3c375350f0d71",
+  "args_rows": 10,
+  "first_lane": "G1-078/G1a",
+  "last_lane": "G1-082/G1b",
+  "attempts": [
+   1
+  ],
+  "args_compact_bytes": 3911,
+  "args_compact_sha256": "030353e579f66b8101534f06936e4d6a5dd12e75451b7663b3c7ef0a92980751",
+  "typed_input_bytes": 4034,
+  "typed_input_sha256": "0346c6c1f61f50be58a3ef19c5d80923d7a45124446efbfc71d2ab66e09a60c0",
+  "typed_input_keys": [
+   "args",
+   "scriptPath"
+  ]
+ },
+ "live": {
+  "pid": 1037924,
+  "exe": "/home/faisal/.local/share/claude/versions/2.1.261",
+  "exe_bytes": 215641584,
+  "exe_sha256": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+  "permission_mode": "auto",
+  "output_cap": "128000",
+  "model_force_present": [],
+  "bridge_session_id": "session_0149ri6SsRYLKgMzFYwt48qy"
+ },
+ "checks": {
+  "script_sha256": true,
+  "script_bytes": true,
+  "args_compact_sha256": true,
+  "args_compact_bytes": true,
+  "typed_input_sha256": true,
+  "typed_input_bytes": true,
+  "args_rows_10": true,
+  "attempt_1_only": true,
+  "receipt": true,
+  "reservation": true,
+  "invocation": true,
+  "root": true,
+  "runtime_is_the_declared_one": true,
+  "runtime_bytes": true,
+  "output_cap_128000": true,
+  "no_model_forcing": true,
+  "bridge_unchanged": true
+ },
+ "all_checks_pass": true,
+ "existing_run_directories_before_the_call": 822,
+ "lane_ids": [
+  "G1-078/G1a",
+  "G1-078/G1b",
+  "G1-079/G1a",
+  "G1-079/G1b",
+  "G1-080/G1a",
+  "G1-080/G1b",
+  "G1-081/G1a",
+  "G1-081/G1b",
+  "G1-082/G1a",
+  "G1-082/G1b"
+ ],
+ "call_settings": {
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "max_output_tokens": "128000"
+ },
+ "no_run_id_supplied": true,
+ "no_resume_from_run_id": true
+}

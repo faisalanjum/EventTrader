@@ -1,0 +1,79 @@
+{
+ "task": "Codex SEQ 1805: execute the prepared segment-6 native Workflow ONCE and preserve the complete raw outcome. No ingestion, finalization, reconciliation, scoring, retry or another batch.",
+ "call": {
+  "invoked_times": 1,
+  "run_id": "wf_ea5fdfab-8e9",
+  "task_id": "w9syv3tm2",
+  "tool_use_id": "toolu_013vcZgmbhuTZ1ZBtq23cBuw",
+  "run_id_supplied": false,
+  "resume_from_run_id": false,
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "args_on_the_wire": {
+   "type": "str",
+   "length": 3911,
+   "decoded_rows": 10,
+   "decoded_equals_the_committed_array": true,
+   "decoded_compact_sha256": "030353e579f66b8101534f06936e4d6a5dd12e75451b7663b3c7ef0a92980751",
+   "typed_projection_sha256": "0346c6c1f61f50be58a3ef19c5d80923d7a45124446efbfc71d2ab66e09a60c0"
+  },
+  "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1803/out/run_1803/grade_batch.seg06.js",
+  "script_sha256": "3d25e52f3bcad283bd0b2ac5fb7712a7fb7db63b1804ff25f2c3c375350f0d71"
+ },
+ "outcome": {
+  "state_status": "completed",
+  "official_state_sha256": "4b983ae56062a0d7d9859b92b9d2a02552a7438044b1da8adfa96f3511361e9a",
+  "official_state_bytes": 563582,
+  "journal_sha256": "f067b33600fba6fea7061e4644b48d7b4fc18dd48a17c5c92f7fe596f8698179",
+  "new_starts": 10,
+  "authorized_max": 10,
+  "result_returns": 10,
+  "started_without_result": 0,
+  "empty_results": 0,
+  "refusals_or_errors": 0,
+  "rows_claiming_cache": 0,
+  "unexpected_extra_start": 0,
+  "official_agent_rows": 10,
+  "rows_done": 10,
+  "transcripts": 10
+ },
+ "permission": {
+  "before": {
+   "bytes": 7865,
+   "allow_entries": 137,
+   "sha256": "c0173a7fb806b7ca75afca08a8b0f7633055d694c94c476f6b730af27de19715"
+  },
+  "after": {
+   "bytes": 7980,
+   "allow_entries": 138,
+   "sha256": "e1b3137ea067727a16485e474966b92a949a96a744658cb3d7eb0cbc440b7f71"
+  },
+  "byte_delta": 115,
+  "entry_delta": 1,
+  "added_exactly_one": true,
+  "earlier_script_rules_kept": 2,
+  "four_native_records_preserved": 4
+ },
+ "accounting": {
+  "required": 206,
+  "selected_before_this_batch": 156,
+  "never_started_before": 50,
+  "new_starts_here": 10,
+  "conservative_carry_forward_before": 5809,
+  "conservative_carry_forward_after": 5819,
+  "if_all_are_later_validated": "selected would reach 166 with 40 still pending",
+  "this_is_not": "meaning finalization, recall, a score or A7 completion",
+  "further_37_and_3_primary_calls": "remain unauthorized until their own later gates"
+ },
+ "not_done_deliberately": [
+  "ingestion",
+  "finalization",
+  "reconciliation",
+  "scoring",
+  "any retry",
+  "another batch",
+  "any owner parsing"
+ ]
+}

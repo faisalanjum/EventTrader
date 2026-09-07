@@ -1,0 +1,83 @@
+{
+ "task": "Codex SEQ 1806: segment-6 intake and accounting, plus ONE next prepared batch. No model call and no publication.",
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "root_unchanged": true,
+ "segment6_intake": {
+  "receipt_supplied": "2b0e8a4153a2d32461f5630a7821e6d29bbb831a82a7f8859ac7f212b50677fb",
+  "run_id": "wf_ea5fdfab-8e9",
+  "logical_script_is_the_executed_file": true,
+  "ledger": "{\"invalid\":0,\"retry\":0,\"scheduled\":10,\"uncalled\":0,\"valid\":10}",
+  "retry": [],
+  "uncalled": [],
+  "problems": "{}",
+  "finalization_sha256": "54e7908f4e67231023fa435413b3ac22115b25eda5219e0802db7e150f2a9033",
+  "accounting_sha256": "ab7808dad182d1a83d565e78f1962cb84f31db9cf12f281e53d937fb03d0893a",
+  "owner_counts": {
+   "valid": 10,
+   "invalid": 0,
+   "retry": 0,
+   "uncalled": 0,
+   "selected": 166,
+   "never_started": 40,
+   "required": 206
+  },
+  "differences_from_the_reviewer_expectation": {},
+  "earlier_intakes_rerun": false,
+  "raw_reply_files": 167,
+  "raw_note": "one file per paid reply, including the one historical invalid reply; a file count, not a count of selected lanes"
+ },
+ "next_batch_prepared_not_launched": {
+  "segment": 7,
+  "lane_count": 37,
+  "first_lane": "G1-083/G1a",
+  "last_lane": "G1-101/G1a",
+  "attempt": 1,
+  "receipt_sha256": "c27ba2f5a9b42ffe7492ff65da2a6319fed60cc968050432816bcdc6fa3c414e",
+  "reservation_sha256": "09994ad4514d481f0baf5e04f076d8768b551f66f969e76e7ba300a7e768be40",
+  "invocation_sha256": "d576b57a5e5f919c802fd287496cc91c4d91bc6c384fd6c0b74048c7c137cc89",
+  "args_rows": 37,
+  "args_compact_sha256": "84f3f525c4851ffc9c2e7ba4261b18f4f06c4335b84ded89dcb16fc8d0b6ef83",
+  "args_sorted_default_sha256": "bce04d657c7c25fb791a75ba3ccaaa38d606d0c0c83a30f6fe61256e0ce8b26a",
+  "script_sha256": "68c04edc2d748e543a4684aeb9a6fc667d906e787c75945471edc419adf71dc3",
+  "script_bytes": 522176,
+  "call_settings": {
+   "model": "sonnet",
+   "runtime_model_id": "claude-sonnet-5",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000"
+  },
+  "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+  "owners": {
+   "a7_g1_build": "977a17681277bcd8fb612b091cb634d669a1023f49e0b2938844c40aafaf2b6f",
+   "a7_g1_complete_v2": "da067c23a5cd5d47afdd2ffbbd57cd94bf37fe7e683bd92c6ddb6f057f69580a",
+   "audit_worker_access": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+   "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+   "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+   "raw_transport": "cf22ccd6e045ff1187d996c27d3caf770c1c6bf2dd23a768b5494c5ccde00a72",
+   "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+  },
+  "expected_input_of_the_first_lane": {
+   "payload_field": "attachment",
+   "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+   "record_index": 1,
+   "record_type": "attachment"
+  },
+  "nothing_launched": true,
+  "later_receipts_created": 0
+ },
+ "scorer_not_run": true,
+ "meaning_not_reconciled": true,
+ "live_conservative_counter": 5819,
+ "historical_frozen_baseline": 5612,
+ "immutable": [
+  "unit_1805",
+  "unit_1803",
+  "unit_1802",
+  "unit_1798",
+  "unit_1792"
+ ]
+}

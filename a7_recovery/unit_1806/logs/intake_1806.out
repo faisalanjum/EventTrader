@@ -1,0 +1,9 @@
+  root unchanged            : True
+  seg6 logical IS the executed file: True
+  segment 6 ledger          : {"invalid":0,"retry":0,"scheduled":10,"uncalled":0,"valid":10}
+  nonvalid                  : [] why {}
+  selected 166, never started 40 of 206
+  matches the reviewer's expectation: True 
+  NEXT BATCH: segment 7, 37 lanes G1-083/G1a .. G1-101/G1a, attempt 1
+  receipt c27ba2f5a9b42ffe  args 37 rows  script 68c04edc2d748e54 (522176 bytes)
+  settings {"agentType":"lean-probe","disallowedTools":["Read"],"effort":"high","max_output_tokens":"128000","model":"sonnet","runtime_model_id":"claude-sonnet-5"}

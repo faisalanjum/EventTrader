@@ -1,0 +1,118 @@
+{
+ "run_id": "wf_ea5fdfab-8e9",
+ "task_id": "w9syv3tm2",
+ "captured_at": "2026-09-07T09:04:26Z",
+ "terminal_outcome_observed": "the runtime reported the run completed; capture is on that actual terminal outcome, not on a target count",
+ "official_state_present": true,
+ "official_state_sha256": "4b983ae56062a0d7d9859b92b9d2a02552a7438044b1da8adfa96f3511361e9a",
+ "official_state_bytes": 563582,
+ "state_status": "completed",
+ "journal_sha256": "f067b33600fba6fea7061e4644b48d7b4fc18dd48a17c5c92f7fe596f8698179",
+ "journal_bytes": 4736,
+ "counts": {
+  "authorized_max_new_starts": 10,
+  "actual_new_starts": 10,
+  "distinct_started_agents": 10,
+  "result_returns": 10,
+  "distinct_result_agents": 10,
+  "started_without_result": 0,
+  "empty_results": 0,
+  "official_agent_rows": 10,
+  "rows_done": 10,
+  "rows_in_error": 0,
+  "rows_claiming_cache": 0,
+  "unexpected_extra_start": 0,
+  "transcript_files": 10,
+  "files_in_run_dir": 21
+ },
+ "started_without_result_ids": [],
+ "empty_result_ids": [],
+ "files": {
+  "agent-a123f5baeab284420.jsonl": {
+   "bytes": 19311,
+   "sha256": "ca28a75f871a68e766175cc38bcb9971525c1748cd8589d15f8db526d259246d"
+  },
+  "agent-a123f5baeab284420.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-a20bc35e179cf7bb8.jsonl": {
+   "bytes": 32498,
+   "sha256": "a1852572febae3f91590816f89c1f5b31bcf20f24d3764d417c5f1fadefaaa0b"
+  },
+  "agent-a20bc35e179cf7bb8.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-a3afbf1c0163f8d02.jsonl": {
+   "bytes": 15575,
+   "sha256": "588ca64fafdd9008d7486eb14ce81d7d7351fc5550b9f4bd6d63b0b2becbe140"
+  },
+  "agent-a3afbf1c0163f8d02.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-a3ff2fc1959be02b8.jsonl": {
+   "bytes": 30852,
+   "sha256": "b4745d62d235e1de5db8f84b5cb32dea22ac155266562489f742e18cc6f0d80b"
+  },
+  "agent-a3ff2fc1959be02b8.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-a52029cef5bde9447.jsonl": {
+   "bytes": 21007,
+   "sha256": "d222df00dde224a8c472c4707b9e5f3a0f4ea5fbf63a4140603ede0d1795333b"
+  },
+  "agent-a52029cef5bde9447.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-a7e1e6c224218b693.jsonl": {
+   "bytes": 15783,
+   "sha256": "bcec44ef61858dc31d2fb7c2edf06c815f975568f143c382a0fe87088bae826f"
+  },
+  "agent-a7e1e6c224218b693.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-ab3ca56a5b3dd9fd7.jsonl": {
+   "bytes": 19095,
+   "sha256": "028cc2e4f6acefae94ade069b9709efa4b48dac7fdcd80a748c0e207b10093ec"
+  },
+  "agent-ab3ca56a5b3dd9fd7.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-acdecde3162b79671.jsonl": {
+   "bytes": 195310,
+   "sha256": "918e1c698caf14c862b772187f6b15f44ba94ece02a8ec3220d8b22c8e41e22e"
+  },
+  "agent-acdecde3162b79671.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-ad714bb0ada8d2a59.jsonl": {
+   "bytes": 217196,
+   "sha256": "71809c38d71c0062094fd232214cd446784fdae3efb44dc5f52caca95ee9b30a"
+  },
+  "agent-ad714bb0ada8d2a59.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "agent-af69854f4388ba3d3.jsonl": {
+   "bytes": 17080,
+   "sha256": "a7898631d5778c86759e62c0ab8cc0544d064ab27b0b52d5d35e7d9bc55067d4"
+  },
+  "agent-af69854f4388ba3d3.meta.json": {
+   "bytes": 58,
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  "journal.jsonl": {
+   "bytes": 4736,
+   "sha256": "f067b33600fba6fea7061e4644b48d7b4fc18dd48a17c5c92f7fe596f8698179"
+  }
+ },
+ "preserved_under": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1805/capture/after",
+ "nothing_parsed_by_an_owner_yet": true
+}

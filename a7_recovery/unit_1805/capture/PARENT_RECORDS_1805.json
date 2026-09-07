@@ -1,0 +1,44 @@
+{
+ "what": "the raw parent records of THIS Workflow call, selected by actual tool-use linkage - a record is kept only when one of its content blocks carries this tool_use id, never because the id happens to appear in my own shell output",
+ "run_id": "wf_ea5fdfab-8e9",
+ "task_id": "w9syv3tm2",
+ "tool_use_id": "toolu_013vcZgmbhuTZ1ZBtq23cBuw",
+ "records": [
+  {
+   "line": 180098,
+   "file": "parent_line_180098.jsonl",
+   "bytes": 5909,
+   "raw_sha256": "321ab0061eb6bdd93abea55980d263ca7f0b4ae348035e3556718535248cc217",
+   "record_type": "assistant",
+   "content_block_types": [
+    "tool_use"
+   ]
+  },
+  {
+   "line": 180099,
+   "file": "parent_line_180099.jsonl",
+   "bytes": 2273,
+   "raw_sha256": "cc6667f237d41204db439b39d2f60a3365a04d81c1e49238093f0743fbfdab79",
+   "record_type": "user",
+   "content_block_types": [
+    "tool_result"
+   ]
+  }
+ ],
+ "record_count": 2,
+ "actual_wire": {
+  "tool_use_id": "toolu_013vcZgmbhuTZ1ZBtq23cBuw",
+  "line": 180098,
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "args_wire_type": "str",
+  "args_wire_len": 3911,
+  "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1803/out/run_1803/grade_batch.seg06.js",
+  "decoded_rows": 10,
+  "decoded_equals_the_committed_array": true,
+  "decoded_compact_sha256": "030353e579f66b8101534f06936e4d6a5dd12e75451b7663b3c7ef0a92980751",
+  "typed_projection_sha256": "0346c6c1f61f50be58a3ef19c5d80923d7a45124446efbfc71d2ab66e09a60c0"
+ }
+}

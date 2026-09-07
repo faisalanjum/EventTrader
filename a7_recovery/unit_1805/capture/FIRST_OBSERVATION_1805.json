@@ -1,0 +1,25 @@
+{
+ "observed_at": "2026-09-07T09:01:01Z",
+ "task_id": "w9syv3tm2",
+ "run_id": "wf_ea5fdfab-8e9",
+ "dispatched_once": true,
+ "run_id_supplied": false,
+ "resume_from_run_id": false,
+ "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_ea5fdfab-8e9",
+ "transcript_dir_exists": true,
+ "files_at_first_observation": [
+  "agent-a3afbf1c0163f8d02.jsonl",
+  "agent-a3afbf1c0163f8d02.meta.json",
+  "agent-a52029cef5bde9447.jsonl",
+  "agent-a52029cef5bde9447.meta.json",
+  "agent-a7e1e6c224218b693.jsonl",
+  "agent-a7e1e6c224218b693.meta.json",
+  "journal.jsonl"
+ ],
+ "official_state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ea5fdfab-8e9.json",
+ "official_state_exists_at_first_observation": false,
+ "journal_exists": true,
+ "journal_bytes": 1075,
+ "journal_sha256": "ee27197bf81b6d309c4a807f489bf7ad49108256b9bbd8ade0e8ddd6cdf63601",
+ "note": "a NEW run: this records what was ACTUALLY there at my first observation, a moment after dispatch. No pre-existing state is claimed and nothing is fabricated."
+}

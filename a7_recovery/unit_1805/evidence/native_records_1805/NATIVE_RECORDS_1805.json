@@ -1,0 +1,50 @@
+{
+ "what": "the four raw native records of the ONE authorized permission insertion and the read that followed it, located by actual tool-use linkage rather than by a string appearing in my own shell output",
+ "records": [
+  {
+   "what": "native Edit dispatch",
+   "line": 180071,
+   "tool_use_id": "toolu_01PhCbXMbKirHhPXFhetvJug",
+   "bytes": 1929,
+   "raw_sha256": "012047a49afee0a1280a5ed3e7a16d901f163958ee36a327706121322a04b49e"
+  },
+  {
+   "what": "its result",
+   "line": 180073,
+   "tool_use_id": "toolu_01PhCbXMbKirHhPXFhetvJug",
+   "bytes": 10346,
+   "raw_sha256": "becf7ce7877055dd3951be83a7384157adb0bc8e9b04a52f28d66ad804e51352"
+  },
+  {
+   "what": "native Read dispatch",
+   "line": 180075,
+   "tool_use_id": "toolu_016Qx7zax9UQCSa2ojCS1nKZ",
+   "bytes": 1547,
+   "raw_sha256": "1ca6912e77c04b087f3199dad5190449c45aac0f4ad7b0d480e2860353561a67"
+  },
+  {
+   "what": "its result",
+   "line": 180076,
+   "tool_use_id": "toolu_016Qx7zax9UQCSa2ojCS1nKZ",
+   "bytes": 958,
+   "raw_sha256": "ff4a60dfa8434d8857d8449d808a7fc36029d500fbe35fde02ffad4671214add"
+  }
+ ],
+ "record_count": 4,
+ "settings_before": {
+  "bytes": 7865,
+  "allow_entries": 137,
+  "sha256": "c0173a7fb806b7ca75afca08a8b0f7633055d694c94c476f6b730af27de19715"
+ },
+ "settings_after": {
+  "bytes": 7980,
+  "allow_entries": 138,
+  "sha256": "e1b3137ea067727a16485e474966b92a949a96a744658cb3d7eb0cbc440b7f71"
+ },
+ "byte_delta": 115,
+ "entry_delta": 1,
+ "entry_added": "Read(//home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1803/out/run_1803/grade_batch.seg06.js)",
+ "added_exactly_one": true,
+ "earlier_script_rules_kept": 2,
+ "method": "native Edit, one insertion; native Read with limit 1 succeeded, so nothing was denied and no workaround was used"
+}
