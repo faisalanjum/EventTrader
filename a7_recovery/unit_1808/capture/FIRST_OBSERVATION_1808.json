@@ -1,0 +1,25 @@
+{
+ "observed_at": "2026-09-07T09:42:40Z",
+ "task_id": "wew4ljpnu",
+ "run_id": "wf_317ef88a-df4",
+ "dispatched_once": true,
+ "run_id_supplied": false,
+ "resume_from_run_id": false,
+ "transcript_dir": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_317ef88a-df4",
+ "transcript_dir_exists": true,
+ "files_at_first_observation": [
+  "agent-a150d6eb86cdad632.jsonl",
+  "agent-a150d6eb86cdad632.meta.json",
+  "agent-a3c32b6e3a0ff5970.jsonl",
+  "agent-a3c32b6e3a0ff5970.meta.json",
+  "agent-ad2634c265c138685.jsonl",
+  "agent-ad2634c265c138685.meta.json",
+  "journal.jsonl"
+ ],
+ "official_state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_317ef88a-df4.json",
+ "official_state_exists_at_first_observation": false,
+ "journal_exists": true,
+ "journal_bytes": 1562,
+ "journal_sha256": "00e8834ecae1892cd1e301e9789bd51cb3fde0a8f655d2a0752903e02a39de95",
+ "note": "a NEW run: what was ACTUALLY present at my first observation, a moment after dispatch. No pre-existing state is claimed and nothing is fabricated."
+}

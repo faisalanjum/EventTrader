@@ -1,0 +1,145 @@
+{
+ "task": "Codex SEQ 1808: run segment 7 once, preserve raw first, then intake and prepare ONE next packet. No commit, push or scoring.",
+ "call": {
+  "invoked_times": 1,
+  "run_id": "wf_317ef88a-df4",
+  "task_id": "wew4ljpnu",
+  "tool_use_id": "toolu_01PC1LYWVDWhb86ncVhTR8qJ",
+  "run_id_supplied": false,
+  "resume_from_run_id": false,
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "args_wire_type": "str",
+  "args_wire_len": 14468,
+  "decoded_equals_the_committed_array": true,
+  "decoded_compact_sha256": "84f3f525c4851ffc9c2e7ba4261b18f4f06c4335b84ded89dcb16fc8d0b6ef83",
+  "typed_projection_sha256": "065130b87624784fcf48452a08f91f6d0d6403d8aa2bb0ccb2cda4396f7273c5",
+  "script_sha256": "68c04edc2d748e543a4684aeb9a6fc667d906e787c75945471edc419adf71dc3"
+ },
+ "raw_outcome": {
+  "state_status": "completed",
+  "official_state_sha256": "90ce6065b2d9591685886dfe78a9b567d46b88d0cb2b8f2cbb421e1465a7d8cd",
+  "official_state_bytes": 679927,
+  "journal_sha256": "87a8358d7c592653da99ffa909c305a3c08d39cdaf40b64fef4d5f9d77c68bad",
+  "new_starts": 37,
+  "authorized_max": 37,
+  "result_returns": 37,
+  "started_without_result": 0,
+  "empty_results": 0,
+  "refusals_or_errors": 0,
+  "rows_claiming_cache": 0,
+  "unexpected_extra_start": 0,
+  "transcripts": 37,
+  "runtime_usage": {
+   "source": "the runtime's own completion notification for task wew4ljpnu, recorded verbatim",
+   "agent_count": 37,
+   "agents_done": 37,
+   "agents_error": 0,
+   "agents_skipped": 0,
+   "agents_empty_result": 0,
+   "subagent_tokens": 881941,
+   "tool_uses": 0,
+   "duration_ms": 333776
+  },
+  "raw_identity_gate": "clean"
+ },
+ "permission": {
+  "before": {
+   "bytes": 7980,
+   "allow_entries": 138,
+   "sha256": "e1b3137ea067727a16485e474966b92a949a96a744658cb3d7eb0cbc440b7f71"
+  },
+  "after": {
+   "bytes": 8095,
+   "allow_entries": 139,
+   "sha256": "7bf06c3503d4179c2926f9cd211010e7df42f10a6a13f9ac1b09b0e9c457c750"
+  },
+  "byte_delta": 115,
+  "entry_delta": 1,
+  "added_exactly_one": true,
+  "earlier_script_rules_kept": 3,
+  "native_records_preserved": 4
+ },
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "root_unchanged": true,
+ "segment7_intake": {
+  "receipt_supplied": "c27ba2f5a9b42ffe7492ff65da2a6319fed60cc968050432816bcdc6fa3c414e",
+  "run_id": "wf_317ef88a-df4",
+  "logical_script_is_the_executed_file": true,
+  "ledger": "{\"invalid\":0,\"retry\":0,\"scheduled\":37,\"uncalled\":0,\"valid\":37}",
+  "retry": [],
+  "uncalled": [],
+  "problems": "{}",
+  "finalization_sha256": "23b3bb40c1b0bc60436f63b30911bfb86bb113f9b443fbdcb715fa7cf32e13bc",
+  "accounting_sha256": "18f1058494994b538e67fe9d6b209912a82066db64d37cfc6846aac3c70a2cfe",
+  "owner_counts": {
+   "valid": 37,
+   "invalid": 0,
+   "retry": 0,
+   "uncalled": 0,
+   "selected": 203,
+   "never_started": 3,
+   "required": 206
+  },
+  "differences_from_the_reviewer_expectation": {},
+  "earlier_intakes_rerun": false,
+  "raw_reply_files": 204,
+  "console_label_note": "the preserved intake log's console line reads 'seg6 logical IS the executed file' - a leftover format string in the adapted script. The value it prints is segment 7's, the recorded JSON key is seg7_logical_is_the_executed_file, and neither the script nor the log was edited after the run"
+ },
+ "next_batch_prepared_not_launched": {
+  "segment": 8,
+  "lane_count": 3,
+  "first_lane": "G1-101/G1b",
+  "last_lane": "G1-102/G1b",
+  "attempt": 1,
+  "receipt_sha256": "40e95878c57b92db27e45dff372716eeea159721d3277287a100b64e597cf62b",
+  "reservation_sha256": "1d62a5cd7b21b6127bada23f19552ef8c448fb695e174c0b2aa10700859e3b7a",
+  "invocation_sha256": "aadc00529ae4b971383d617e2d8d53ff7d8e4e60d9cd3bdc4b3d173f0b032ea8",
+  "args_rows": 3,
+  "args_compact_sha256": "5a397266d4c37e461bcdb512af6ac5b267ad9b4dc2c929632ae82a714ddc224c",
+  "args_sorted_default_sha256": "923f2abf36e3d62fcf0846e6e9b0e39cc61d935117924c08be2e5083dfc6894b",
+  "script_sha256": "0fa03ab1a35e3f4cfbc933dd4319bb88f54aaa8a7d1a482beb519e1b7b879b1f",
+  "script_bytes": 23594,
+  "call_settings": {
+   "model": "sonnet",
+   "runtime_model_id": "claude-sonnet-5",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000"
+  },
+  "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+  "owners": {
+   "a7_g1_build": "977a17681277bcd8fb612b091cb634d669a1023f49e0b2938844c40aafaf2b6f",
+   "a7_g1_complete_v2": "da067c23a5cd5d47afdd2ffbbd57cd94bf37fe7e683bd92c6ddb6f057f69580a",
+   "audit_worker_access": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+   "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+   "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+   "raw_transport": "cf22ccd6e045ff1187d996c27d3caf770c1c6bf2dd23a768b5494c5ccde00a72",
+   "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+  },
+  "expected_input_of_the_first_lane": {
+   "payload_field": "attachment",
+   "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+   "record_index": 1,
+   "record_type": "attachment"
+  },
+  "nothing_launched": true,
+  "later_receipts_created": 0
+ },
+ "scorer_not_run": true,
+ "meaning_not_reconciled": true,
+ "live_conservative_counter": 5856,
+ "historical_frozen_baseline": 5612,
+ "not_done_deliberately": [
+  "scoring",
+  "meaning reconciliation",
+  "any retry",
+  "another batch",
+  "stage, commit or push"
+ ]
+}

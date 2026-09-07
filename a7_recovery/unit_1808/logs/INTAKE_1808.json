@@ -1,0 +1,47 @@
+{
+ "phase": "segment7_intake",
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "receipt_supplied": "c27ba2f5a9b42ffe7492ff65da2a6319fed60cc968050432816bcdc6fa3c414e",
+ "run_id": "wf_317ef88a-df4",
+ "seg7_logical_is_the_executed_file": true,
+ "ledger": "{\"invalid\":0,\"retry\":0,\"scheduled\":37,\"uncalled\":0,\"valid\":37}",
+ "retry": [],
+ "uncalled": [],
+ "problems": "{}",
+ "finalization_sha256": "23b3bb40c1b0bc60436f63b30911bfb86bb113f9b443fbdcb715fa7cf32e13bc",
+ "accounting_sha256": "18f1058494994b538e67fe9d6b209912a82066db64d37cfc6846aac3c70a2cfe",
+ "state_record_sha256": "ad0d221bac957de01aca0035d321b4190834ea444626a8d09d508cb27d88b505",
+ "owner_counts": {
+  "valid": 37,
+  "invalid": 0,
+  "retry": 0,
+  "uncalled": 0,
+  "selected": 203,
+  "never_started": 3,
+  "required": 206
+ },
+ "reviewer_expectation": {
+  "valid": 37,
+  "invalid": 0,
+  "retry": 0,
+  "uncalled": 0,
+  "selected": 203,
+  "never_started": 3,
+  "required": 206
+ },
+ "differences_from_the_expectation": {},
+ "first_four_intakes_rerun": false,
+ "steps": [
+  {
+   "label": "seg7_intake",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "ingest",
+    "7",
+    "c27ba2f5a9b42ffe7492ff65da2a6319fed60cc968050432816bcdc6fa3c414e",
+    "317ef88a-df4"
+   ],
+   "exit": 0
+  }
+ ]
+}

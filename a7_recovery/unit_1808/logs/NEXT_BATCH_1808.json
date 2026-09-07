@@ -1,0 +1,73 @@
+{
+ "phase": "next_batch",
+ "segment": 8,
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "lane_count": 3,
+ "first_lane": "G1-101/G1b",
+ "last_lane": "G1-102/G1b",
+ "lanes": [
+  "G1-101/G1b",
+  "G1-102/G1a",
+  "G1-102/G1b"
+ ],
+ "attempt": 1,
+ "receipt_sha256": "40e95878c57b92db27e45dff372716eeea159721d3277287a100b64e597cf62b",
+ "reservation_sha256": "1d62a5cd7b21b6127bada23f19552ef8c448fb695e174c0b2aa10700859e3b7a",
+ "invocation_sha256": "aadc00529ae4b971383d617e2d8d53ff7d8e4e60d9cd3bdc4b3d173f0b032ea8",
+ "args_rows": 3,
+ "args_compact_sha256": "5a397266d4c37e461bcdb512af6ac5b267ad9b4dc2c929632ae82a714ddc224c",
+ "args_sorted_default_sha256": "923f2abf36e3d62fcf0846e6e9b0e39cc61d935117924c08be2e5083dfc6894b",
+ "logical_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_precall_run_1525/grade_batch.seg08.js",
+ "script_sha256": "0fa03ab1a35e3f4cfbc933dd4319bb88f54aaa8a7d1a482beb519e1b7b879b1f",
+ "script_bytes": 23594,
+ "predicted_bytes_line": "3 predicted_bytes 23594",
+ "call_settings": {
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "max_output_tokens": "128000"
+ },
+ "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+ "owners": {
+  "a7_g1_build": "977a17681277bcd8fb612b091cb634d669a1023f49e0b2938844c40aafaf2b6f",
+  "a7_g1_complete_v2": "da067c23a5cd5d47afdd2ffbbd57cd94bf37fe7e683bd92c6ddb6f057f69580a",
+  "audit_worker_access": "e7868e4546e8488705c88e4130be4a23716269f2932ecdca6c222491fc9911ef",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "cf22ccd6e045ff1187d996c27d3caf770c1c6bf2dd23a768b5494c5ccde00a72",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "expected_input_of_the_first_lane": {
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+  "record_index": 1,
+  "record_type": "attachment"
+ },
+ "nothing_launched": true,
+ "later_receipts_created": 0,
+ "steps": [
+  {
+   "label": "seg7_intake",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "ingest",
+    "7",
+    "c27ba2f5a9b42ffe7492ff65da2a6319fed60cc968050432816bcdc6fa3c414e",
+    "317ef88a-df4"
+   ],
+   "exit": 0
+  },
+  {
+   "label": "seg8_prepare",
+   "command": [
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py",
+    "prepare"
+   ],
+   "exit": 0
+  }
+ ]
+}

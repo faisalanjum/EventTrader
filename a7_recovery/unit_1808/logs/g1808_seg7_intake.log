@@ -1,0 +1,13 @@
+COMMAND: /home/faisal/EventMarketDB/venv/bin/python3 -B /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/g1_run_1525.py ingest 7 c27ba2f5a9b42ffe7492ff65da2a6319fed60cc968050432816bcdc6fa3c414e 317ef88a-df4
+--- STDOUT ---
+SEGMENT     : 7 state_file wf_317ef88a-df4.json
+OFFICIAL_ROWS: 37
+LEDGER      : {"invalid":0,"retry":0,"scheduled":37,"uncalled":0,"valid":37}
+RETRY       : [] UNCALLED []
+NONVALID    : [] why {}
+SEGMENT_CLEAN: True
+
+--- STDERR ---
+
+--- EXIT ---
+0

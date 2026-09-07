@@ -1,0 +1,181 @@
+{
+ "accounting_sha256": "af6d3d7f97621b620437aa27bb55a6394980f054c0660e6fa156a61c6ef8e3f4",
+ "attempt": 1,
+ "candidate_sha256": "2be60129ee18c99996b31079b155d3f4558bec4141e1d3574cdb8b3129c7746a",
+ "ledger": {
+  "invalid": 0,
+  "retry": 0,
+  "scheduled": 40,
+  "uncalled": 0,
+  "valid": 40
+ },
+ "problems": {},
+ "receipt_sha256": "deee46c97dbd4819e5298a3cbb599260260d0656861072da03cfb438d991e467",
+ "retry": [],
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 5,
+ "uncalled": [],
+ "validity": [
+  [
+   "G1-058/G1a",
+   true
+  ],
+  [
+   "G1-058/G1b",
+   true
+  ],
+  [
+   "G1-059/G1a",
+   true
+  ],
+  [
+   "G1-059/G1b",
+   true
+  ],
+  [
+   "G1-060/G1a",
+   true
+  ],
+  [
+   "G1-060/G1b",
+   true
+  ],
+  [
+   "G1-061/G1a",
+   true
+  ],
+  [
+   "G1-061/G1b",
+   true
+  ],
+  [
+   "G1-062/G1a",
+   true
+  ],
+  [
+   "G1-062/G1b",
+   true
+  ],
+  [
+   "G1-063/G1a",
+   true
+  ],
+  [
+   "G1-063/G1b",
+   true
+  ],
+  [
+   "G1-064/G1a",
+   true
+  ],
+  [
+   "G1-064/G1b",
+   true
+  ],
+  [
+   "G1-065/G1a",
+   true
+  ],
+  [
+   "G1-065/G1b",
+   true
+  ],
+  [
+   "G1-066/G1a",
+   true
+  ],
+  [
+   "G1-066/G1b",
+   true
+  ],
+  [
+   "G1-067/G1a",
+   true
+  ],
+  [
+   "G1-067/G1b",
+   true
+  ],
+  [
+   "G1-068/G1a",
+   true
+  ],
+  [
+   "G1-068/G1b",
+   true
+  ],
+  [
+   "G1-069/G1a",
+   true
+  ],
+  [
+   "G1-069/G1b",
+   true
+  ],
+  [
+   "G1-070/G1a",
+   true
+  ],
+  [
+   "G1-070/G1b",
+   true
+  ],
+  [
+   "G1-071/G1a",
+   true
+  ],
+  [
+   "G1-071/G1b",
+   true
+  ],
+  [
+   "G1-072/G1a",
+   true
+  ],
+  [
+   "G1-072/G1b",
+   true
+  ],
+  [
+   "G1-073/G1a",
+   true
+  ],
+  [
+   "G1-073/G1b",
+   true
+  ],
+  [
+   "G1-074/G1a",
+   true
+  ],
+  [
+   "G1-074/G1b",
+   true
+  ],
+  [
+   "G1-075/G1a",
+   true
+  ],
+  [
+   "G1-075/G1b",
+   true
+  ],
+  [
+   "G1-076/G1a",
+   true
+  ],
+  [
+   "G1-076/G1b",
+   true
+  ],
+  [
+   "G1-077/G1a",
+   true
+  ],
+  [
+   "G1-077/G1b",
+   true
+  ]
+ ]
+}
