@@ -1,0 +1,4 @@
+  ordinary positive run : GREEN
+  mutants caught        : 15 of 15
+  escaped               : 0
+  sibling-span swap     : CAUGHT (the owner ACCEPTED it as a valid span: True)

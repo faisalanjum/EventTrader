@@ -1,0 +1,107 @@
+{
+ "owner": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+ "overrides": 36,
+ "build_problems": [],
+ "rows_built": 206,
+ "checks": [
+  {
+   "check": "0000027904-26-000022 g2",
+   "expected": "1% increase in capacity",
+   "observed": "1% increase in capacity",
+   "status": "GREEN"
+  },
+  {
+   "check": "0000063908-26-000032 g2",
+   "expected": "positive global comparable guest counts",
+   "observed": "positive global comparable guest counts",
+   "status": "GREEN"
+  },
+  {
+   "check": "0000940944-25-000038 g3",
+   "expected": "alcoholic beverages accounting for 4.7 percent",
+   "observed": "alcoholic beverages accounting for 4.7 percent",
+   "status": "GREEN"
+  },
+  {
+   "check": "0000940944-26-000009 g2",
+   "expected": "3.9 percent increase in average check",
+   "observed": "3.9 percent increase in average check",
+   "status": "GREEN"
+  },
+  {
+   "check": "0000940944-26-000009 g3",
+   "expected": "3.3 percent increase in same-restaurant guest counts",
+   "observed": "3.3 percent increase in same-restaurant guest counts",
+   "status": "GREEN"
+  },
+  {
+   "check": "0001104659-25-102611 g6",
+   "expected": "the vast majority of our stores in Mexico and Brazil",
+   "observed": "the vast majority of our stores in Mexico and Brazil",
+   "status": "GREEN"
+  },
+  {
+   "check": "0001104659-26-027061 g1",
+   "expected": "4.2% increase in average ticket",
+   "observed": "4.2% increase in average ticket",
+   "status": "GREEN"
+  },
+  {
+   "check": "0001104659-26-027061 g2",
+   "expected": "1.6% increase in transactions",
+   "observed": "1.6% increase in transactions",
+   "status": "GREEN"
+  },
+  {
+   "check": "0001104659-26-027061 g9",
+   "expected": "$1.8 billion remained available",
+   "observed": "$1.8 billion remained available",
+   "status": "GREEN"
+  },
+  {
+   "check": "AAL_2026-04-23T08.30 g4",
+   "expected": "break-even RASM on the quarter",
+   "observed": "break-even RASM on the quarter",
+   "status": "GREEN"
+  },
+  {
+   "check": "DAL_2026-04-08T10.00 g1",
+   "expected": "pre-tax profit of $1 billion",
+   "observed": "pre-tax profit of $1 billion",
+   "status": "GREEN"
+  },
+  {
+   "check": "DAL_2026-04-08T10.00 g6",
+   "expected": "gross leverage of 2.4 times",
+   "observed": "gross leverage of 2.4 times",
+   "status": "GREEN"
+  },
+  {
+   "check": "DAL_2026-04-08T10.00 g7",
+   "expected": "low teens revenue growth in the June quarter",
+   "observed": "low teens revenue growth in the June quarter",
+   "status": "GREEN"
+  },
+  {
+   "check": "ULTA_2026-03-12T16.30 g2",
+   "expected": "12.4% of sales",
+   "observed": "12.4% of sales",
+   "status": "GREEN"
+  },
+  {
+   "check": "POSITIVE CONTROL DAL_2026-04-08T10.00 g9",
+   "expected": "more than $2 billion of fuel headwind",
+   "observed": "more than $2 billion of fuel headwind",
+   "status": "GREEN"
+  },
+  {
+   "check": "the 192 untouched rows stay byte-exact",
+   "expected": 0,
+   "observed": 0,
+   "status": "GREEN"
+  }
+ ],
+ "red": 0,
+ "green": 16,
+ "untouched_drift": []
+}

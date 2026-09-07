@@ -1,0 +1,26 @@
+42a43,44
+>     (("0000027904-26-000022", 2), "1% increase in capacity"),
+>     (("0000063908-26-000032", 2), "positive global comparable guest counts"),
+45a48,49
+>     (("0000940944-25-000038", 3),
+>      "alcoholic beverages accounting for 4.7 percent"),
+47a52,54
+>     (("0000940944-26-000009", 2), "3.9 percent increase in average check"),
+>     (("0000940944-26-000009", 3),
+>      "3.3 percent increase in same-restaurant guest counts"),
+49a57,58
+>     (("0001104659-25-102611", 6),
+>      "the vast majority of our stores in Mexico and Brazil"),
+51a61,63
+>     (("0001104659-26-027061", 1), "4.2% increase in average ticket"),
+>     (("0001104659-26-027061", 2), "1.6% increase in transactions"),
+>     (("0001104659-26-027061", 9), "$1.8 billion remained available"),
+55a68,69
+>     (("AAL_2026-04-23T08.30", 4), "break-even RASM on the quarter"),
+>     (("DAL_2026-04-08T10.00", 1), "pre-tax profit of $1 billion"),
+60a75,77
+>     (("DAL_2026-04-08T10.00", 6), "gross leverage of 2.4 times"),
+>     (("DAL_2026-04-08T10.00", 7),
+>      "low teens revenue growth in the June quarter"),
+65a83
+>     (("ULTA_2026-03-12T16.30", 2), "12.4% of sales"),

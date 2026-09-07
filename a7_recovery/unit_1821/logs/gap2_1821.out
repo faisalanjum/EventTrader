@@ -1,0 +1,11 @@
+  old        owner 31c2ef67abf5a2b8 (22 overrides)  inventory ae81caf4936c4343  cards 14
+  new        owner 65f8e34128041d82 (36 overrides)  inventory 9bb503da40b31125  cards 14
+  codex_old_sha256             True
+  codex_new_sha256             True
+  codex_old_bytes              True
+  codex_new_bytes              True
+  only_the_name_moved          True
+  frozen_document_untouched    True
+  0000027904-26-000022 g2
+    old 216 B a3afa11c35e1022d  'Domestic passenger revenue'
+    new 213 B 611690a4b5bf1dc2  '1% increase in capacity'

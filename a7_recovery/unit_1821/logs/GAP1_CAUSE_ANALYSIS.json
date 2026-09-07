@@ -1,0 +1,32 @@
+{
+ "original_cause_verbatim": "E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a356624c3b708...3d",
+ "candidate_cause_verbatim": "E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb339bc4bad75e...c8",
+ "exception_class": [
+  "AssertionError",
+  "AssertionError"
+ ],
+ "asserted_substring": [
+  "'no longer measures the supplied identity'",
+  "'no longer measures the supplied identity'"
+ ],
+ "same_exception_class": true,
+ "same_asserted_substring": true,
+ "differing_tokens": [
+  {
+   "original": "/tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated",
+   "candidate": "/tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated"
+  },
+  {
+   "original": "b57a356624c3b708...3d",
+   "candidate": "b0bb339bc4bad75e...c8"
+  }
+ ],
+ "what_the_differing_tokens_are": "pytest's own per-invocation tmp directory index and the freeze digest of the temporary run directory that test itself creates; both are properties of the invocation, not of the reference owner under test",
+ "failed_test_sets_identical": true,
+ "failed_tests": [
+  "test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer"
+ ],
+ "conclusion": "the SAME test fails for the SAME reason under both paired owners; the correction does not cause it",
+ "earlier_claim_corrected": "Core SEQ 1819 said this failure was pre-existing on evidence that could not support it: those subprocesses never actually loaded the candidate owner. With the owner asserted AND its own document served, the claim now holds - but it was unproved when I made it.",
+ "unpaired_run_for_the_record": "with the candidate owner served the STALE document, 3 tests fail: the validation owner refuses the mismatch, which is correct behaviour"
+}

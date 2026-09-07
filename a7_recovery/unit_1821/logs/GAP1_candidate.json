@@ -1,0 +1,33 @@
+{
+ "label": "candidate",
+ "selected_owner": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+ "selected_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+ "test_file": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py",
+ "exit": 1,
+ "loaded_before": {
+  "when": "before",
+  "module_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "module_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+  "build_code_filename": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "overrides": 36
+ },
+ "loaded_after": {
+  "when": "after",
+  "module_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "module_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+  "build_code_filename": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "overrides": 36
+ },
+ "owner_held_through_the_test": true,
+ "wrapper_exit": 0,
+ "pytest_summary": "3 failed, 28 passed, 2 warnings in 47.95s",
+ "failed_tests": [
+  "test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer",
+  "test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed",
+  "test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing"
+ ],
+ "first_failure_cause": "E           ValueError: the reference inventory is not the expected document: /override_rows: expected '36', document has '22'",
+ "stdout_sha256": "dae67394d72f8e5546157ad812927751e0d71a5b2004ae5794dc5fb23990bd95",
+ "stdout_bytes": 8778,
+ "stderr_bytes": 0
+}

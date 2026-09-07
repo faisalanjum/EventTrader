@@ -1,0 +1,171 @@
+{
+ "label": "old",
+ "owner": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py",
+ "owner_sha256": "31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5",
+ "overrides": 22,
+ "inventory": "/home/faisal/EventMarketDB-driver-recovery/a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/budget_inputs_1720/out_g23/tmp__a7_reference_inventory.json",
+ "inventory_sha256": "ae81caf4936c43432fe27d5ac686dfa090539c615620ce029eaeb00b2f900106",
+ "inventory_rows_validated": 206,
+ "rows": [
+  {
+   "source_id": "0000027904-26-000022",
+   "gold_idx": 2,
+   "card_text": "{\n \"quote\": \"Domestic passenger revenue increased 8% in the March 2026 quarter compared to the March 2025 quarter on a 1% increase in capacity.\",\n \"reference_name\": \"Domestic passenger revenue\",\n \"values\": [\n  1\n ]\n}",
+   "card_bytes": 216,
+   "card_sha256": "a3afa11c35e1022dff6ea3ff70de2d4397266c4fbe75fda9623560cac2e00572",
+   "reference_name": "Domestic passenger revenue",
+   "quote_sha256": "0464c5134201a1bc996f819dc9a1d4b5de9e75abb2f47732d6ddba5b6f340d3f",
+   "values": [
+    1
+   ]
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "gold_idx": 2,
+   "card_text": "{\n \"quote\": \"Global comparable sales in the fourth quarter increased 5.7%, with positive global comparable guest counts and strong comparable sales growth across all segments\",\n \"reference_name\": \"Global comparable sales\",\n \"values\": []\n}",
+   "card_bytes": 238,
+   "card_sha256": "41c6d2b4cdd8bcb8926651b1177800d2be7d0bab35feab344f1b8deae56c3c4a",
+   "reference_name": "Global comparable sales",
+   "quote_sha256": "acc9e6a74fe1beded756a3edd712feec6278b2ffb6006ab6a057fa4df755518c",
+   "values": []
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "gold_idx": 3,
+   "card_text": "{\n \"quote\": \"During fiscal 2025, the average check per person (defined as total sales divided by number of entr\\u00e9es sold) was approximately $24.00, with alcoholic beverages accounting for 4.7 percent of Olive Garden\\u2019s sales.\",\n \"reference_name\": \"average check per person\",\n \"values\": [\n  \"4.7\"\n ]\n}",
+   "card_bytes": 308,
+   "card_sha256": "34c90ebec8adb2b3b992e2a16113350f2401669cab0cbec2c83cdf237b7cc216",
+   "reference_name": "average check per person",
+   "quote_sha256": "cde99396785f810884a4620cb24596f2f90864eb9ed08da993ae23738f2e5c46",
+   "values": [
+    "4.7"
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "gold_idx": 2,
+   "card_text": "{\n \"quote\": \"LongHorn Steakhouse\\u2019s sales increase for the third quarter of fiscal 2026 was primarily driven by same-restaurant sales increases, as well as revenue from new restaurants. The increase in same-restaurant sales for the third quarter of fiscal 2026 resulted from a 3.9 percent increase in average check combined with a 3.3 percent increase in same-restaurant guest counts.\",\n \"reference_name\": \"LongHorn Steakhouse\\u2019s sales increase for the third quarter of fiscal 2026\",\n \"values\": [\n  \"3.9\"\n ]\n}",
+   "card_bytes": 517,
+   "card_sha256": "4b76004cdb8cabdd77dd1c82e56caa4fac0039b3b9da753f9018660ce09b6af4",
+   "reference_name": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+   "quote_sha256": "5265999094704a227c86f8fbef1b642e76b196bb3298925e62179302ca5e723e",
+   "values": [
+    "3.9"
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "gold_idx": 3,
+   "card_text": "{\n \"quote\": \"LongHorn Steakhouse\\u2019s sales increase for the third quarter of fiscal 2026 was primarily driven by same-restaurant sales increases, as well as revenue from new restaurants. The increase in same-restaurant sales for the third quarter of fiscal 2026 resulted from a 3.9 percent increase in average check combined with a 3.3 percent increase in same-restaurant guest counts.\",\n \"reference_name\": \"LongHorn Steakhouse\\u2019s sales increase for the third quarter of fiscal 2026\",\n \"values\": [\n  \"3.3\"\n ]\n}",
+   "card_bytes": 517,
+   "card_sha256": "7635f4ba0931d5a1e224852bd84ba69ba527e9797e06a299db8fa63daaaefaa7",
+   "reference_name": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+   "quote_sha256": "5265999094704a227c86f8fbef1b642e76b196bb3298925e62179302ca5e723e",
+   "values": [
+    "3.3"
+   ]
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "gold_idx": 6,
+   "card_text": "{\n \"quote\": \"in 6,098 of our domestic stores as well as the vast majority of our stores in Mexico and Brazil, we had a commercial sales program that provides prompt delivery of parts and other products and commercial credit to local, regional and national repair garages, dealers, service stations, fleet owners and other accounts.\",\n \"reference_name\": \"6,098 of our domestic stores\",\n \"values\": []\n}",
+   "card_bytes": 400,
+   "card_sha256": "a7cb0e740d31b1efd30f7563ea0d347bfcfc00816b9cfe9f170a76ebadc613a5",
+   "reference_name": "6,098 of our domestic stores",
+   "quote_sha256": "e00ea01aacfab42e3967019c0fca51fb454dc9591a8f5d1a86f568b4b327ae10",
+   "values": []
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "gold_idx": 1,
+   "card_text": "{\n \"quote\": \"Comparable sales increased 5.8%, driven by a 4.2% increase in average ticket and a 1.6% increase in transactions.\",\n \"reference_name\": \"Comparable sales\",\n \"values\": [\n  \"4.2\"\n ]\n}",
+   "card_bytes": 193,
+   "card_sha256": "b0d0133e6d71de8b07f85e807b20645e97805f5da9078586efeb3bbf685df5ce",
+   "reference_name": "Comparable sales",
+   "quote_sha256": "10506a3207e8843e620dc8a0962cd74b8c5127f66cf9871b2bd0ad6a0bb25c89",
+   "values": [
+    "4.2"
+   ]
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "gold_idx": 2,
+   "card_text": "{\n \"quote\": \"Comparable sales increased 5.8%, driven by a 4.2% increase in average ticket and a 1.6% increase in transactions.\",\n \"reference_name\": \"Comparable sales\",\n \"values\": [\n  \"1.6\"\n ]\n}",
+   "card_bytes": 193,
+   "card_sha256": "ba9c460a2f0986f6d81cc1902b1c6a1c12d881648e9e7a1866bb04b2efe7ac09",
+   "reference_name": "Comparable sales",
+   "quote_sha256": "10506a3207e8843e620dc8a0962cd74b8c5127f66cf9871b2bd0ad6a0bb25c89",
+   "values": [
+    "1.6"
+   ]
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "gold_idx": 9,
+   "card_text": "{\n \"quote\": \"As of January 31, 2026, $1.8 billion remained available under the $3.0 billion share repurchase program announced in October 2024.\",\n \"reference_name\": \"the $3.0 billion share repurchase program announced in October 2024\",\n \"values\": [\n  \"1.8\"\n ]\n}",
+   "card_bytes": 261,
+   "card_sha256": "e7ee6f2ddcdfc3ec1da684ffa658969c89a656bc2f9d4339a98d7df675e4f238",
+   "reference_name": "the $3.0 billion share repurchase program announced in October 2024",
+   "quote_sha256": "883bcf038303eb6276efa7f89a476c5e77033188f9b8eef32a62ff2797509c29",
+   "values": [
+    "1.8"
+   ]
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "gold_idx": 4,
+   "card_text": "{\n \"quote\": \"Latin America, roughly 15%, mixed bag with break-even RASM on the quarter\",\n \"reference_name\": \"Latin America\",\n \"values\": []\n}",
+   "card_bytes": 140,
+   "card_sha256": "c14cd10536040190e3284c88a2d267065ab59085c1c6665c1e2abe8b1b75264f",
+   "reference_name": "Latin America",
+   "quote_sha256": "150808ba4f202d1a2678d02ce086a9140d4b4240fa969e9def95f808fe27611a",
+   "values": []
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "gold_idx": 1,
+   "card_text": "{\n \"quote\": \"we expect to deliver a 6% to 8% operating margin with a pre-tax profit of $1 billion.\",\n \"reference_name\": \"6% to 8% operating margin\",\n \"values\": [\n  1\n ]\n}",
+   "card_bytes": 170,
+   "card_sha256": "5f21ff930be0f51f2b0f70acd5e963d09f7e78d6f1614641a5c5f8fccf5d92f7",
+   "reference_name": "6% to 8% operating margin",
+   "quote_sha256": "65f3a14ad4b933fc5dab8cb31f05b534017fa16c80703659b97fe256a1ab357d",
+   "values": [
+    1
+   ]
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "gold_idx": 6,
+   "card_text": "{\n \"quote\": \"we ended the quarter with adjusted net debt of 13.5 billion down 20% from last year and gross leverage of 2.4 times.\",\n \"reference_name\": \"adjusted net debt of 13.5 billion down 20% from last year\",\n \"values\": [\n  \"2.4\"\n ]\n}",
+   "card_bytes": 237,
+   "card_sha256": "87c6cde5ce65b7a5874d8a00b8df0509cb3ef136813df6eec3d83f1e40f29383",
+   "reference_name": "adjusted net debt of 13.5 billion down 20% from last year",
+   "quote_sha256": "d1b1a0adcd195bcc24b34ac11592e079f1942e770208155b041eb76da4334fff",
+   "values": [
+    "2.4"
+   ]
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "gold_idx": 7,
+   "card_text": "{\n \"quote\": \"we expect low teens revenue growth in the June quarter, recapturing 40% to 50% of the more than $2 billion of fuel headwind in the quarter.\",\n \"reference_name\": \"more than $2 billion of fuel headwind\",\n \"values\": []\n}",
+   "card_bytes": 230,
+   "card_sha256": "04694529e40cd3f24b3af04db01788f7bb2b94fff24f9c44cc25756f9e9ee765",
+   "reference_name": "more than $2 billion of fuel headwind",
+   "quote_sha256": "8dc078377f130bcfdf91b2e0a04a466a85d27d8adb6cc9c427a1318443a728ad",
+   "values": []
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "gold_idx": 2,
+   "card_text": "{\n \"quote\": \"delivered operating income of $1.5 billion, or 12.4% of sales\",\n \"reference_name\": \"operating income of $1.5 billion\",\n \"values\": [\n  \"12.4\"\n ]\n}",
+   "card_bytes": 158,
+   "card_sha256": "4d2deb8f15ab379276b142a113876cd72a11d1163e7b761c14e0317ca363d424",
+   "reference_name": "operating income of $1.5 billion",
+   "quote_sha256": "b7cea4bf3d30a7317047826f75b9dcdd5d359a20caaf67a73b304ec60ac4354b",
+   "values": [
+    "12.4"
+   ]
+  }
+ ]
+}

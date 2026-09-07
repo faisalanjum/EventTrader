@@ -1,0 +1,119 @@
+{
+ "mutants": [
+  {
+   "mutant": "none (ordinary positive run)",
+   "expectation_holds": true,
+   "build_problems": [],
+   "verdict": "GREEN"
+  },
+  {
+   "mutant": "restore old label at 0000027904-26-000022 g2",
+   "label": "Domestic passenger revenue",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0000063908-26-000032 g2",
+   "label": "Global comparable sales",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0000940944-25-000038 g3",
+   "label": "average check per person",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0000940944-26-000009 g2",
+   "label": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0000940944-26-000009 g3",
+   "label": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0001104659-25-102611 g6",
+   "label": "6,098 of our domestic stores",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0001104659-26-027061 g1",
+   "label": "Comparable sales",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0001104659-26-027061 g2",
+   "label": "Comparable sales",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at 0001104659-26-027061 g9",
+   "label": "the $3.0 billion share repurchase program announced in October 2024",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at AAL_2026-04-23T08.30 g4",
+   "label": "Latin America",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at DAL_2026-04-08T10.00 g1",
+   "label": "6% to 8% operating margin",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at DAL_2026-04-08T10.00 g6",
+   "label": "adjusted net debt of 13.5 billion down 20% from last year",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at DAL_2026-04-08T10.00 g7",
+   "label": "more than $2 billion of fuel headwind",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "restore old label at ULTA_2026-03-12T16.30 g2",
+   "label": "operating income of $1.5 billion",
+   "expectation_holds": false,
+   "build_problems": [],
+   "verdict": "CAUGHT"
+  },
+  {
+   "mutant": "sibling span swap at 0001104659-26-027061 g1",
+   "label": "1.6% increase in transactions",
+   "is_verbatim_substring_of_the_same_quote": true,
+   "owner_accepted_it_as_a_span": true,
+   "expectation_holds": false,
+   "verdict": "CAUGHT"
+  }
+ ],
+ "caught": 15,
+ "escaped": 0,
+ "positive_run": "GREEN"
+}

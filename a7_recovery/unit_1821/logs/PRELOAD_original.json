@@ -1,0 +1,22 @@
+{
+ "label": "original",
+ "selected_owner": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py",
+ "selected_sha256": "31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5",
+ "test_file": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py",
+ "exit": 1,
+ "loaded_before": {
+  "when": "before",
+  "module_file": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py",
+  "module_sha256": "31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5",
+  "build_code_filename": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py",
+  "overrides": 22
+ },
+ "loaded_after": {
+  "when": "after",
+  "module_file": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py",
+  "module_sha256": "31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5",
+  "build_code_filename": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py",
+  "overrides": 22
+ },
+ "owner_held_through_the_test": true
+}

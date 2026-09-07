@@ -1,0 +1,35 @@
+...............F...............                                          [100%]
+=================================== FAILURES ===================================
+_______ test_a_mutation_after_identity_capture_refuses_before_any_answer _______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0')
+
+    def test_a_mutation_after_identity_capture_refuses_before_any_answer(tmp_path):
+        """Shape-checking a caller-owned dict proved only that a caller can build a
+        dict. The run could move, be re-finalized or have a byte change after the
+        identity was captured and every consumer would still read its answers."""
+        run = _copy(tmp_path, "mutated")
+        ident = PR.load(run)
+        assert G.run_of(ident) == os.path.abspath(run)      # the control
+        io.open(os.path.join(run, "a5_menu_backmap.json"), "a").write(" ")
+        with pytest.raises(ValueError) as exc:
+            G.run_of(ident)
+>       assert "no longer measures the supplied identity" in str(exc.value)
+E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a356624c3b708...3d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e'
+E        +  where 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a356624c3b708...3d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e' = str(ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a3...d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e'))
+E        +    where ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a3...d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e') = <ExceptionInfo ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated f...29ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e') tblen=4>.value
+
+test_a7_runstates_1470.py:314: AssertionError
+=============================== warnings summary ===============================
+../../../../../../../../../../../home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:475
+  /home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:475: PytestCacheWarning: could not create cache path /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/.pytest_cache/v/cache/nodeids: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/pytest-cache-files-17l67_hk'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+../../../../../../../../../../../home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:429
+  /home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:429: PytestCacheWarning: could not create cache path /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/.pytest_cache/v/cache/lastfailed: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/pytest-cache-files-dpcuxsq5'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer
+1 failed, 30 passed, 2 warnings in 62.68s (0:01:02)

@@ -1,0 +1,22 @@
+{
+ "label": "candidate",
+ "selected_owner": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+ "selected_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+ "test_file": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py",
+ "exit": 1,
+ "loaded_before": {
+  "when": "before",
+  "module_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "module_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+  "build_code_filename": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "overrides": 36
+ },
+ "loaded_after": {
+  "when": "after",
+  "module_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "module_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+  "build_code_filename": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "overrides": 36
+ },
+ "owner_held_through_the_test": true
+}

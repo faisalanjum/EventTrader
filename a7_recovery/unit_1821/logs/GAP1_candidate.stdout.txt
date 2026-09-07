@@ -1,0 +1,123 @@
+.......F.......F........F......                                          [100%]
+=================================== FAILURES ===================================
+______________ test_freeze_needs_no_retry_file_when_none_is_owed _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_freeze_needs_no_retry_fil0')
+
+    def test_freeze_needs_no_retry_file_when_none_is_owed(tmp_path):
+        """`freeze` read the retry ledger unconditionally too."""
+        run = _lawful_zero_retry(tmp_path, "freezeclean")
+>       doc, _prompts, problems = G.freeze(PR.load(run))
+                                  ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:245: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2152: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:661: in questions
+    ("reference_card", A7C.reference_card(
+a7_g23_build.py:819: in reference_card
+    row = _inventory(run).get((source_id, gold_idx))
+          ^^^^^^^^^^^^^^^
+a7_g23_build.py:801: in _inventory
+    _INVENTORY["rows"] = R.validate(run=run)
+                         ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = None
+run = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/pytest-of-faisal/pytest-1/test_freeze_needs_no_retry_f...rderedDict([('run_digest', '58f4b7bb2e6949bd4ef65a60139475f913f98249690bd73affa9cdfcbc36cffd'), ('run_files', 861)]))])
+
+    def validate(path=None, run=None):
+        """-> {(source_id, gold_idx): row}, EXACT-COMPARED to the expected document.
+    
+        A REFUSAL, never a repair: an inventory that is not byte-for-byte the
+        document the live authorities produce is not a weaker inventory, it is a
+        different one.
+        """
+        doc = read(path)
+        want = expected_document(run)
+        if G._plain(doc) != G._plain(want):
+>           raise ValueError("the reference inventory is not the expected "
+                             "document: %s" % _first_difference(want, doc))
+E           ValueError: the reference inventory is not the expected document: /override_rows: expected '36', document has '22'
+
+/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py:341: ValueError
+_______ test_a_mutation_after_identity_capture_refuses_before_any_answer _______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0')
+
+    def test_a_mutation_after_identity_capture_refuses_before_any_answer(tmp_path):
+        """Shape-checking a caller-owned dict proved only that a caller can build a
+        dict. The run could move, be re-finalized or have a byte change after the
+        identity was captured and every consumer would still read its answers."""
+        run = _copy(tmp_path, "mutated")
+        ident = PR.load(run)
+        assert G.run_of(ident) == os.path.abspath(run)      # the control
+        io.open(os.path.join(run, "a5_menu_backmap.json"), "a").write(" ")
+        with pytest.raises(ValueError) as exc:
+            G.run_of(ident)
+>       assert "no longer measures the supplied identity" in str(exc.value)
+E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb339bc4bad75e...c89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f'
+E        +  where 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb339bc4bad75e...c89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f' = str(ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb3...89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f'))
+E        +    where ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb3...89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f') = <ExceptionInfo ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated f...2eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f') tblen=4>.value
+
+test_a7_runstates_1470.py:314: AssertionError
+_______________ test_g1_consumes_the_one_ledger_and_adds_nothing _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_g1_consumes_the_one_ledge0')
+
+    def test_g1_consumes_the_one_ledger_and_adds_nothing(tmp_path):
+        A6 = _ledger()
+        run = _copy(tmp_path, "consume")
+>       doc, _p, problems = G.freeze(PR.load(run))
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_runstates_1470.py:444: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2152: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:661: in questions
+    ("reference_card", A7C.reference_card(
+a7_g23_build.py:819: in reference_card
+    row = _inventory(run).get((source_id, gold_idx))
+          ^^^^^^^^^^^^^^^
+a7_g23_build.py:801: in _inventory
+    _INVENTORY["rows"] = R.validate(run=run)
+                         ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = None
+run = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/pytest-of-faisal/pytest-1/test_g1_consumes_the_one_led...rderedDict([('run_digest', 'b0bf3cc781f7d92e612ed2f9710980c9acd6e12622433a8330967a0e2769ad16'), ('run_files', 866)]))])
+
+    def validate(path=None, run=None):
+        """-> {(source_id, gold_idx): row}, EXACT-COMPARED to the expected document.
+    
+        A REFUSAL, never a repair: an inventory that is not byte-for-byte the
+        document the live authorities produce is not a weaker inventory, it is a
+        different one.
+        """
+        doc = read(path)
+        want = expected_document(run)
+        if G._plain(doc) != G._plain(want):
+>           raise ValueError("the reference inventory is not the expected "
+                             "document: %s" % _first_difference(want, doc))
+E           ValueError: the reference inventory is not the expected document: /override_rows: expected '36', document has '22'
+
+/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py:341: ValueError
+=============================== warnings summary ===============================
+../../../../../../../../../../../home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:475
+  /home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:475: PytestCacheWarning: could not create cache path /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/.pytest_cache/v/cache/nodeids: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/pytest-cache-files-vgiypwa3'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+../../../../../../../../../../../home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:429
+  /home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:429: PytestCacheWarning: could not create cache path /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/.pytest_cache/v/cache/lastfailed: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/pytest-cache-files-_j36bfjr'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed
+FAILED test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer
+FAILED test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing
+3 failed, 28 passed, 2 warnings in 47.95s

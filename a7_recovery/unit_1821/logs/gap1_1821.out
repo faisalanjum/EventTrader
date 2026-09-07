@@ -1,0 +1,13 @@
+  original   owner 31c2ef67abf5a2b8  overrides 22 -> held True
+             build code file: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_reference_inventory.py
+             pytest exit 1  1 failed, 30 passed, 2 warnings in 62.28s (0:01:02)
+             failed: ['test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer']
+  candidate  owner 65f8e34128041d82  overrides 36 -> held True
+             build code file: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py
+             pytest exit 1  3 failed, 28 passed, 2 warnings in 47.95s
+             failed: ['test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer', 'test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed', 'test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing']
+
+  two DIFFERENT owners actually loaded : True
+  same failed test set                 : False
+  same first failure CAUSE             : False
+  -> the correction DID cause it

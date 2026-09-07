@@ -1,0 +1,176 @@
+{
+ "disposition_counts": {
+  "KEEP": 193,
+  "CHANGE": 13
+ },
+ "rows_total": 206,
+ "proposed_span_checks": [
+  {
+   "source_id": "0000063908-26-000032",
+   "gold_idx": 2,
+   "proposed": "positive global comparable guest counts",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "gold_idx": 3,
+   "proposed": "alcoholic beverages accounting for 4.7 percent",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "gold_idx": 2,
+   "proposed": "3.9 percent increase in average check",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "gold_idx": 3,
+   "proposed": "3.3 percent increase in same-restaurant guest counts",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "gold_idx": 6,
+   "proposed": "the vast majority of our stores in Mexico and Brazil",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "gold_idx": 1,
+   "proposed": "4.2% increase in average ticket",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "gold_idx": 2,
+   "proposed": "1.6% increase in transactions",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "gold_idx": 9,
+   "proposed": "$1.8 billion remained available",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "gold_idx": 4,
+   "proposed": "break-even RASM on the quarter",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "gold_idx": 1,
+   "proposed": "pre-tax profit of $1 billion",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "gold_idx": 6,
+   "proposed": "gross leverage of 2.4 times",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "gold_idx": 7,
+   "proposed": "low teens revenue growth in the June quarter",
+   "verbatim_substring_of_its_own_quote": true
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "gold_idx": 2,
+   "proposed": "12.4% of sales",
+   "verbatim_substring_of_its_own_quote": true
+  }
+ ],
+ "all_proposed_spans_verbatim": true,
+ "producer_checks": [
+  {
+   "check": "0000063908-26-000032 g2 card identifies its own branch",
+   "expected": "positive global comparable guest counts",
+   "observed": "Global comparable sales",
+   "status": "RED"
+  },
+  {
+   "check": "0000940944-25-000038 g3 card identifies its own branch",
+   "expected": "alcoholic beverages accounting for 4.7 percent",
+   "observed": "average check per person",
+   "status": "RED"
+  },
+  {
+   "check": "0000940944-26-000009 g2 card identifies its own branch",
+   "expected": "3.9 percent increase in average check",
+   "observed": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+   "status": "RED"
+  },
+  {
+   "check": "0000940944-26-000009 g3 card identifies its own branch",
+   "expected": "3.3 percent increase in same-restaurant guest counts",
+   "observed": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+   "status": "RED"
+  },
+  {
+   "check": "0001104659-25-102611 g6 card identifies its own branch",
+   "expected": "the vast majority of our stores in Mexico and Brazil",
+   "observed": "6,098 of our domestic stores",
+   "status": "RED"
+  },
+  {
+   "check": "0001104659-26-027061 g1 card identifies its own branch",
+   "expected": "4.2% increase in average ticket",
+   "observed": "Comparable sales",
+   "status": "RED"
+  },
+  {
+   "check": "0001104659-26-027061 g2 card identifies its own branch",
+   "expected": "1.6% increase in transactions",
+   "observed": "Comparable sales",
+   "status": "RED"
+  },
+  {
+   "check": "0001104659-26-027061 g9 card identifies its own branch",
+   "expected": "$1.8 billion remained available",
+   "observed": "the $3.0 billion share repurchase program announced in October 2024",
+   "status": "RED"
+  },
+  {
+   "check": "AAL_2026-04-23T08.30 g4 card identifies its own branch",
+   "expected": "break-even RASM on the quarter",
+   "observed": "Latin America",
+   "status": "RED"
+  },
+  {
+   "check": "DAL_2026-04-08T10.00 g1 card identifies its own branch",
+   "expected": "pre-tax profit of $1 billion",
+   "observed": "6% to 8% operating margin",
+   "status": "RED"
+  },
+  {
+   "check": "DAL_2026-04-08T10.00 g6 card identifies its own branch",
+   "expected": "gross leverage of 2.4 times",
+   "observed": "adjusted net debt of 13.5 billion down 20% from last year",
+   "status": "RED"
+  },
+  {
+   "check": "DAL_2026-04-08T10.00 g7 card identifies its own branch",
+   "expected": "low teens revenue growth in the June quarter",
+   "observed": "more than $2 billion of fuel headwind",
+   "status": "RED"
+  },
+  {
+   "check": "ULTA_2026-03-12T16.30 g2 card identifies its own branch",
+   "expected": "12.4% of sales",
+   "observed": "operating income of $1.5 billion",
+   "status": "RED"
+  },
+  {
+   "check": "POSITIVE CONTROL DAL_2026-04-08T10.00 g9 already correct",
+   "expected": "more than $2 billion of fuel headwind",
+   "observed": "more than $2 billion of fuel headwind",
+   "status": "GREEN"
+  }
+ ],
+ "red": 13,
+ "green": 1
+}

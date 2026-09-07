@@ -1,0 +1,8 @@
+  original_paired   owner 31c2ef67abf5a2b8  inv ae81caf4936c4343
+      held True   exit 1   1 failed, 30 passed, 2 warnings in 62.68s (0:01:02)
+      failed: ['test_a_mutation_after_identity_capture_refuses_before_any_answer']
+  candidate_paired  owner 65f8e34128041d82  inv 9bb503da40b31125
+      held True   exit 1   1 failed, 30 passed, 2 warnings in 62.79s (0:01:02)
+      failed: ['test_a_mutation_after_identity_capture_refuses_before_any_answer']
+
+  same failed set: True   same cause: False   -> the correction DID cause it

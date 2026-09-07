@@ -1,0 +1,31 @@
+{
+ "label": "candidate_paired",
+ "selected_owner": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+ "selected_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+ "test_file": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_runstates_1470.py",
+ "exit": 1,
+ "loaded_before": {
+  "when": "before",
+  "module_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "inventory_path": "/tmp/a7_logs_1781/candidate_reference_inventory.json",
+  "module_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+  "build_code_filename": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "overrides": 36
+ },
+ "loaded_after": {
+  "when": "after",
+  "module_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "inventory_path": "/tmp/a7_logs_1781/candidate_reference_inventory.json",
+  "module_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+  "build_code_filename": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1820/candidate/a7_reference_inventory.py",
+  "overrides": 36
+ },
+ "owner_held_through_the_test": true,
+ "inventory_served": "/tmp/a7_logs_1781/candidate_reference_inventory.json",
+ "pytest_summary": "1 failed, 30 passed, 2 warnings in 62.79s (0:01:02)",
+ "failed_tests": [
+  "test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer"
+ ],
+ "first_failure_cause": "E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb339bc4bad75e...c8",
+ "stdout_sha256": "e85f41c1942d33604fe2050bc2cd00dd363db902755fb984d87f1114a082b88d"
+}

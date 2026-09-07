@@ -1,0 +1,8 @@
+{
+ "distinct_owners_loaded": true,
+ "distinct_documents_served": true,
+ "same_failed_test_set": true,
+ "same_first_failure_cause": false,
+ "failure_is_pre_existing": false,
+ "caused_by_the_correction": true
+}

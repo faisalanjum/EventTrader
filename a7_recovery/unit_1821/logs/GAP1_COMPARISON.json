@@ -1,0 +1,10 @@
+{
+ "two_distinct_owners_were_actually_loaded": true,
+ "original_sha256": "31c2ef67abf5a2b89bd820d0aa27a1a603ef8e3c0fd6414ae129bb71ad3ddae5",
+ "candidate_sha256": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+ "same_exit": true,
+ "same_failed_test_set": false,
+ "same_first_failure_cause": false,
+ "failure_is_pre_existing": false,
+ "failure_caused_by_the_correction": true
+}

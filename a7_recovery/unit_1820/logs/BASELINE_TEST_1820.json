@@ -1,0 +1,27 @@
+{
+ "test": "test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer",
+ "original": {
+  "label": "ORIGINAL owner",
+  "exit": 1,
+  "summary": "1 failed, 2 warnings in 0.75s",
+  "assert_lines": [
+   "assert G.run_of(ident) == os.path.abspath(run)      # the control",
+   "E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a356624c3b708...3d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e'",
+   "E        +  where 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a356624c3b708...3d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e' = str(ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a3...d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e'))",
+   "E        +    where ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to b57a3...d3e67a3a829ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e') = <ExceptionInfo ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated f...29ae95257e1adb48ec281d919, not the required 20e8984c3149c85702d3088060e4ff5b8a0768096cbcb53a979117422ee75b2e') tblen=4>.value"
+  ]
+ },
+ "candidate": {
+  "label": "corrected candidate",
+  "exit": 1,
+  "summary": "1 failed, 2 warnings in 0.74s",
+  "assert_lines": [
+   "assert G.run_of(ident) == os.path.abspath(run)      # the control",
+   "E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb339bc4bad75e...c89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f'",
+   "E        +  where 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb339bc4bad75e...c89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f' = str(ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb3...89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f'))",
+   "E        +    where ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated freezes to b0bb3...89200b2652eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f') = <ExceptionInfo ValueError('a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-1/test_a_mutation_after_identity0/mutated f...2eced805b444ce6fad16b9dbf, not the required 0a338fba8f2a082db65c0376dae518963e2c471b9baeee70bedd309b658fed7f') tblen=4>.value"
+  ]
+ },
+ "identical_outcome": true,
+ "caused_by_this_correction": false
+}
