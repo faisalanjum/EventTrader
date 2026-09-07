@@ -1,0 +1,9 @@
+  root unchanged            : True
+  seg8 logical IS the executed file: True
+  segment 8 ledger          : {"invalid":0,"retry":0,"scheduled":3,"uncalled":0,"valid":3}
+  nonvalid                  : [] why {}
+  selected 206, never started 0 of 206
+  matches the reviewer's expectation: True 
+  raw reply files           : 204 -> 207
+  finalizations present     : 8
+  LAST PRIMARY BATCH: no prepare, no ninth receipt

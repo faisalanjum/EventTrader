@@ -1,0 +1,11 @@
+```json
+[
+  {"question_id": "Q5810cfeb311a7a17", "produced_idxs": [0]},
+  {"question_id": "Q3cd12f68b0461045", "produced_idxs": [1]},
+  {"question_id": "Qe1c2774aa98bc82d", "produced_idxs": [3]},
+  {"question_id": "Qdded340064b9e6ec", "produced_idxs": [6]},
+  {"question_id": "Qbd1e6ec8ff532e0a", "produced_idxs": [7, 13]},
+  {"question_id": "Q24a48008dabde177", "produced_idxs": [8, 14]},
+  {"question_id": "Q34fba805bbc72577", "produced_idxs": []}
+]
+```

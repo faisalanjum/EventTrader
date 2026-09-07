@@ -1,0 +1,12 @@
+{
+ "attempt": 1,
+ "lanes": [
+  "G1-101/G1b",
+  "G1-102/G1a",
+  "G1-102/G1b"
+ ],
+ "parent": null,
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 8
+}

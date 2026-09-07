@@ -1,0 +1,6 @@
+  envelope: 3 rows G1-101/G1b..G1-102/G1b attempt [1]
+  script  : 0fa03ab1a35e3f4c (23594 bytes)
+  args    : compact 5a397266d4c37e46 (1174 B) | sorted-default 923f2abf36e3d62f | typed 55b56959bbc260c9 (1297 B)
+  live    : pid 1037924 2.1.261 215641584 B cap 128000 force none bridge session_0149ri6SsRYLKgMzFYwt48qy
+  settings: {"agentType": "lean-probe", "disallowedTools": ["Read"], "effort": "high", "max_output_tokens": "128000", "model": "sonnet", "runtime_model_id": "claude-sonnet-5"}
+  existing run dirs: 824   ALL CHECKS PASS: True

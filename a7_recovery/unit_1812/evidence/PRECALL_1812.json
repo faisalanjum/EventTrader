@@ -1,0 +1,77 @@
+{
+ "envelope": {
+  "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1808/out/run_1808/grade_batch.seg08.js",
+  "script_bytes": 23594,
+  "script_sha256": "0fa03ab1a35e3f4cfbc933dd4319bb88f54aaa8a7d1a482beb519e1b7b879b1f",
+  "args_rows": 3,
+  "first_lane": "G1-101/G1b",
+  "last_lane": "G1-102/G1b",
+  "attempts": [
+   1
+  ],
+  "args_compact_bytes": 1174,
+  "args_compact_sha256": "5a397266d4c37e461bcdb512af6ac5b267ad9b4dc2c929632ae82a714ddc224c",
+  "args_sorted_default_sha256": "923f2abf36e3d62fcf0846e6e9b0e39cc61d935117924c08be2e5083dfc6894b",
+  "typed_input_bytes": 1297,
+  "typed_input_sha256": "55b56959bbc260c9720d9a4137d609fc4a32b51e3e69bd33962363663c364ea8",
+  "typed_input_keys": [
+   "args",
+   "scriptPath"
+  ]
+ },
+ "live": {
+  "pid": 1037924,
+  "exe": "/home/faisal/.local/share/claude/versions/2.1.261",
+  "exe_bytes": 215641584,
+  "exe_sha256": "4ae40dd1784e85753e742e09f267d29ecbb82890361ad3817d27560866d364a6",
+  "permission_mode": "auto",
+  "output_cap": "128000",
+  "model_force_present": [],
+  "api_key_in_environment": false,
+  "bridge_session_id": "session_0149ri6SsRYLKgMzFYwt48qy"
+ },
+ "checks": {
+  "script_sha256": true,
+  "script_bytes": true,
+  "args_compact_sha256": true,
+  "args_compact_bytes": true,
+  "args_sorted_default_sha256": true,
+  "typed_input_sha256": true,
+  "typed_input_bytes": true,
+  "args_rows_3": true,
+  "attempt_1_only": true,
+  "root": true,
+  "receipt": true,
+  "reservation": true,
+  "invocation": true,
+  "runtime_is_the_declared_one": true,
+  "runtime_bytes": true,
+  "output_cap_128000": true,
+  "no_model_forcing": true,
+  "bridge_unchanged": true,
+  "no_previous_start_of_this_exact_script": true,
+  "no_previous_start_of_these_lanes": true,
+  "reused_preflight_unchanged": true,
+  "reused_read_record_unchanged": true
+ },
+ "all_checks_pass": true,
+ "existing_run_directories_before_the_call": 824,
+ "lane_ids": [
+  "G1-101/G1b",
+  "G1-102/G1a",
+  "G1-102/G1b"
+ ],
+ "call_settings": {
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "max_output_tokens": "128000"
+ },
+ "child_input_payload": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1",
+ "no_run_id_supplied": true,
+ "no_resume_from_run_id": true
+}

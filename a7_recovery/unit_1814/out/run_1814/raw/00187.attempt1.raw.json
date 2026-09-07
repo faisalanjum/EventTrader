@@ -1,0 +1,10 @@
+```json
+[
+  {"question_id": "Q4bfde1b613342a62", "produced_idxs": [0]},
+  {"question_id": "Qe79bcf44da41cbf4", "produced_idxs": [2]},
+  {"question_id": "Q1586dcfed3de3b4b", "produced_idxs": [4]},
+  {"question_id": "Qf276e39dbe7fcd46", "produced_idxs": [5, 7]},
+  {"question_id": "Qebe942b3a491b47c", "produced_idxs": [6, 8]},
+  {"question_id": "Q6494d4639aff53d1", "produced_idxs": []}
+]
+```

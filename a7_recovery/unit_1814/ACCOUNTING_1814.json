@@ -1,0 +1,119 @@
+{
+ "task": "Codex SEQ 1814: run the final segment 8 once under the owner-granted permission, preserve raw first, then intake and close the full 206-lane input/reply accounting. No prepare, no ninth receipt, no commit, push or scoring.",
+ "call": {
+  "invoked_times": 1,
+  "run_id": "wf_b0543d14-6c2",
+  "task_id": "wge95fvzz",
+  "tool_use_id": "toolu_01SsiMZkb2x2bFd5YVevkSoG",
+  "run_id_supplied": false,
+  "resume_from_run_id": false,
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "args_wire_type": "str",
+  "args_wire_len": 1174,
+  "decoded_equals_the_committed_array": true,
+  "decoded_compact_sha256": "5a397266d4c37e461bcdb512af6ac5b267ad9b4dc2c929632ae82a714ddc224c",
+  "typed_projection_sha256": "55b56959bbc260c9720d9a4137d609fc4a32b51e3e69bd33962363663c364ea8",
+  "script_sha256": "0fa03ab1a35e3f4cfbc933dd4319bb88f54aaa8a7d1a482beb519e1b7b879b1f",
+  "earlier_refused_workflow_not_repeated": true
+ },
+ "raw_outcome": {
+  "state_status": "completed",
+  "official_state_sha256": "62bbf817ca734d1199aa83e87e6ff16ee393d93e7b20c266927669c87470a92b",
+  "official_state_bytes": 31666,
+  "journal_sha256": "561ddf71f65fa84a9b05a675356e8c49c599ca67135b16947535fe79bdee56ac",
+  "new_starts": 3,
+  "authorized_max": 3,
+  "result_returns": 3,
+  "started_without_result": 0,
+  "empty_results": 0,
+  "refusals_or_errors": 0,
+  "rows_claiming_cache": 0,
+  "unexpected_extra_start": 0,
+  "transcript_files": 3,
+  "files_in_run_dir": 7,
+  "tool_uses": 0,
+  "subagent_tokens": 60325,
+  "duration_ms": 15384,
+  "raw_identity_gate": "clean",
+  "parent_records_kept": [
+   181312,
+   181313
+  ]
+ },
+ "permission": {
+  "granted_by": "the owner, through the built-in permissions command",
+  "before": {
+   "bytes": 8095,
+   "allow_entries": 139,
+   "sha256": "7bf06c3503d4179c2926f9cd211010e7df42f10a6a13f9ac1b09b0e9c457c750"
+  },
+  "after": {
+   "bytes": 8210,
+   "allow_entries": 140,
+   "sha256": "cda1e0aa3980c7d265c4684c334fc4e4383d8c46b07eb9c2e162017054b398b7"
+  },
+  "byte_delta": 115,
+  "entry_delta": 1,
+  "added_exactly_one": true,
+  "earlier_script_rules_kept": 4,
+  "core_edited_settings": false,
+  "owner_permission_records_preserved": 2,
+  "native_records_preserved": 4
+ },
+ "root_sha256": "6667bb30c18f0ed2a3de6eb8b916c6d270974617f9dfd3d9d73515dbfe656fc0",
+ "root_unchanged": true,
+ "segment8_intake": {
+  "receipt_supplied": "40e95878c57b92db27e45dff372716eeea159721d3277287a100b64e597cf62b",
+  "run_id": "wf_b0543d14-6c2",
+  "logical_script_is_the_executed_file": true,
+  "ledger": "{\"invalid\":0,\"retry\":0,\"scheduled\":3,\"uncalled\":0,\"valid\":3}",
+  "retry": [],
+  "uncalled": [],
+  "problems": "{}",
+  "finalization_sha256": "811a05b19a98a3b209cff917f5ee871789193d36f9933d4f04a0f998234958c1",
+  "accounting_sha256": "91b347d2b6b08940575a6c10a7dd23b702049a3b1592bd884057a961e981b35d",
+  "owner_counts": {
+   "valid": 3,
+   "invalid": 0,
+   "retry": 0,
+   "uncalled": 0,
+   "selected": 206,
+   "never_started": 0,
+   "required": 206
+  },
+  "differences_from_the_reviewer_expectation": {},
+  "earlier_intakes_rerun": false,
+  "raw_reply_files": 207,
+  "finalizations_present": 8
+ },
+ "whole_root_now_complete": {
+  "selected": 206,
+  "required": 206,
+  "never_started": 0,
+  "what_this_means": "every root lane has an input-valid and reply-valid G1 record. It is identity and schema validity ONLY.",
+  "what_this_does_not_mean": "no meaning is adjudicated, no scorer has run, no production replay has happened, and no grade or score exists."
+ },
+ "no_next_packet": {
+  "prepare_run": false,
+  "ninth_receipt_created": false,
+  "reason": "the root is fully accounted for; there is no remainder"
+ },
+ "scorer_not_run": true,
+ "meaning_not_reconciled": true,
+ "live_conservative_counter": 5859,
+ "historical_frozen_baseline": 5612,
+ "not_done_deliberately": [
+  "scoring",
+  "meaning reconciliation",
+  "any retry",
+  "prepare of an empty remainder",
+  "receipt 9",
+  "staging, commit or push",
+  "cleanup",
+  "A3-A6 reopening",
+  "Step 14"
+ ]
+}

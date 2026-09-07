@@ -1,0 +1,14 @@
+{
+ "owner_permission_181219": {
+  "transcript_line": 181219,
+  "bytes": 604,
+  "sha256": "c1d7a985799f4f5f5217f8a9d966195953d5c7b8d90a807c6fc06f4c3acf9a4a",
+  "matches_codex_pin": true
+ },
+ "owner_permission_181220": {
+  "transcript_line": 181220,
+  "bytes": 789,
+  "sha256": "72eccb78416609af05e5c154541a2f9c686ea533ca96acc21ba68b81f084baea",
+  "matches_codex_pin": true
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "composed_views": {
+  "view/subagent_runs": {
+   "digest": "1419c50f38688805e8a052fefd46ef0d718af0a9c225f742c9dcf4a94e44cc4d",
+   "files": 4040,
+   "compose_command": "compose_views_1814.sh"
+  },
+  "view/workflows": {
+   "digest": "0b0b8afe8197c69f30246fea08cf550c612aafc22e304bcc81c2abe588a5108e",
+   "files": 629,
+   "compose_command": "compose_views_1814.sh"
+  }
+ },
+ "map": {
+  "a7_map_1814.tsv": "59953e7d0b426e99219d6636d2d0ee06841c7d1836e4d40b10c336b21f596738"
+ },
+ "derived_from": {
+  "run": "unit_1808/out/run_1808 copied to out/run_1814",
+  "views": "unit_1808/view/* plus this unit's captured run",
+  "map": "unit_1808/a7_map_1808.tsv"
+ },
+ "note": "both views are rebuilt into NEW absent destinations from published bytes by compose_views_1814.sh and are recorded as one directory digest each instead of being republished"
+}

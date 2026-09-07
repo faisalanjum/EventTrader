@@ -1,0 +1,11 @@
+{
+ "source": "the runtime's own completion notification for task wge95fvzz, recorded verbatim",
+ "agent_count": 3,
+ "agents_done": 3,
+ "agents_error": 0,
+ "agents_skipped": 0,
+ "agents_empty_result": 0,
+ "subagent_tokens": 60325,
+ "tool_uses": 0,
+ "duration_ms": 15384
+}

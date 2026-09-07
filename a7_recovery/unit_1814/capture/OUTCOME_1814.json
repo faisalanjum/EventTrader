@@ -1,0 +1,77 @@
+{
+ "run_id": "wf_b0543d14-6c2",
+ "task_id": "wge95fvzz",
+ "tool_use_id": "toolu_01SsiMZkb2x2bFd5YVevkSoG",
+ "captured_at": "2026-09-07T11:05:40Z",
+ "terminal_outcome_observed": "the runtime reported the run completed; capture is on that actual terminal outcome, not on a target count",
+ "official_state_sha256": "62bbf817ca734d1199aa83e87e6ff16ee393d93e7b20c266927669c87470a92b",
+ "official_state_bytes": 31666,
+ "state_status": "completed",
+ "journal_sha256": "561ddf71f65fa84a9b05a675356e8c49c599ca67135b16947535fe79bdee56ac",
+ "journal_bytes": 987,
+ "counts": {
+  "authorized_max_new_starts": 3,
+  "actual_new_starts": 3,
+  "distinct_started_agents": 3,
+  "result_returns": 3,
+  "distinct_result_agents": 3,
+  "started_without_result": 0,
+  "empty_results": 0,
+  "official_agent_rows": 3,
+  "rows_done": 3,
+  "rows_in_error": 0,
+  "rows_claiming_cache": 0,
+  "unexpected_extra_start": 0,
+  "transcript_files": 3,
+  "files_in_run_dir": 7
+ },
+ "started_without_result_ids": [],
+ "empty_result_ids": [],
+ "actual_wire": {
+  "tool_use_id": "toolu_01SsiMZkb2x2bFd5YVevkSoG",
+  "line": 181312,
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "args_wire_type": "str",
+  "args_wire_len": 1174,
+  "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1808/out/run_1808/grade_batch.seg08.js",
+  "decoded_rows": 3,
+  "decoded_equals_the_committed_array": true,
+  "decoded_compact_sha256": "5a397266d4c37e461bcdb512af6ac5b267ad9b4dc2c929632ae82a714ddc224c",
+  "typed_projection_sha256": "55b56959bbc260c9720d9a4137d609fc4a32b51e3e69bd33962363663c364ea8",
+  "run_id_supplied": false,
+  "resume_from_run_id_supplied": false,
+  "parent_records_kept": [
+   181312,
+   181313
+  ]
+ },
+ "lane_results": [
+  {
+   "lane_id": "G1-101/G1b",
+   "agent_id": "a4073dd9bb1d70aba",
+   "state": "done",
+   "model": "claude-sonnet-5",
+   "agent_type": "lean-probe",
+   "attempt": 1
+  },
+  {
+   "lane_id": "G1-102/G1a",
+   "agent_id": "ac5ddffd046bf6eaa",
+   "state": "done",
+   "model": "claude-sonnet-5",
+   "agent_type": "lean-probe",
+   "attempt": 1
+  },
+  {
+   "lane_id": "G1-102/G1b",
+   "agent_id": "a5612c0fcb8d6e1c4",
+   "state": "done",
+   "model": "claude-sonnet-5",
+   "agent_type": "lean-probe",
+   "attempt": 1
+  }
+ ]
+}

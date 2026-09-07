@@ -1,0 +1,36 @@
+{
+ "workflow_dispatch": {
+  "transcript_line": 181095,
+  "bytes": 2866,
+  "sha256": "2cd1526299d3625287b72a2a2c5d723feeebdb0f31bbea4b5fb107ba9b9beb93",
+  "tool_use_id": "toolu_01Vbh9KTBihVEEnZEoabtU8f",
+  "input_keys": [
+   "args",
+   "scriptPath"
+  ],
+  "args_wire_type": "str",
+  "args_rows": 3,
+  "args_equal_approved_array": true,
+  "args_compact_sha256": "5a397266d4c37e461bcdb512af6ac5b267ad9b4dc2c929632ae82a714ddc224c",
+  "typed_input_sha256": "55b56959bbc260c9720d9a4137d609fc4a32b51e3e69bd33962363663c364ea8",
+  "run_id_supplied": false,
+  "resume_from_run_id_supplied": false
+ },
+ "workflow_result": {
+  "transcript_line": 181096,
+  "bytes": 1208,
+  "sha256": "6f9df0805dec9a09a24f27758d2fd1d4376d0852345e7c52f0215b9d464a1ba2",
+  "is_error": true,
+  "text": "<tool_use_error>scriptPath must be a script path this tool returned, or a file you can already read (the working directory or a directory you have added): /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1808/out/run_1808/grade_batch.seg08.js</tool_use_error>"
+ },
+ "outcome": "REFUSED by the Workflow tool's own scriptPath validation, before any run, task, agent or model start",
+ "attempts": 1,
+ "retried": false,
+ "bypassed": false,
+ "nothing_started": {
+  "new_model_starts": 0,
+  "run_directories_before": 824,
+  "run_directories_after": 824,
+  "lanes_started": 0
+ }
+}

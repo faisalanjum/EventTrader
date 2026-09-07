@@ -1,0 +1,21 @@
+{
+ "observed_at": "2026-09-07T11:03:37Z",
+ "run_id": "wf_b0543d14-6c2",
+ "task_id": "wge95fvzz",
+ "run_directory": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_b0543d14-6c2",
+ "run_directory_exists": true,
+ "files_at_first_observation": 7,
+ "names_at_first_observation": [
+  "agent-a4073dd9bb1d70aba.jsonl",
+  "agent-a4073dd9bb1d70aba.meta.json",
+  "agent-a5612c0fcb8d6e1c4.jsonl",
+  "agent-a5612c0fcb8d6e1c4.meta.json",
+  "agent-ac5ddffd046bf6eaa.jsonl",
+  "agent-ac5ddffd046bf6eaa.meta.json",
+  "journal.jsonl"
+ ],
+ "journal_present": true,
+ "official_state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1808/out/run_1808/state/official_state.seg08.json",
+ "official_state_absent_at_first_observation": true,
+ "run_directories_total": 825
+}
