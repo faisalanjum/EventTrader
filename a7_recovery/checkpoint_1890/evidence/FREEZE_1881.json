@@ -1,0 +1,29 @@
+{
+ "unit_1881": {
+  "members": 4810,
+  "manifest_external_sha256": "95abc7762f57f346c55a73e898bcae425022b91985ddeaddaa99dfb984753b55",
+  "excludes": [
+   "MANIFEST.sha256",
+   "MANIFEST.sha256.tmp",
+   "logs/FREEZE_1881.json"
+  ],
+  "all_members_verified": true,
+  "nothing_unlisted": true,
+  "non_regular_skipped": 38,
+  "non_regular_dangling": 35,
+  "non_regular_existing_aliases": 3,
+  "non_regular_names": [
+   "logs/attempt_final1/pytest_tmp/test_a_changed_grader_run_REFUcurrent",
+   "logs/attempt_final1/pytest_tmp/test_a_changed_producer_run_recurrent",
+   "logs/attempt_final1/pytest_tmp/test_a_kind_swap_between_candicurrent",
+   "logs/attempt_final1/pytest_tmp/test_a_lawful_handle_and_kind_current",
+   "logs/attempt_final1/pytest_tmp/test_a_lawful_reply_completes_current",
+   "logs/attempt_final1/pytest_tmp/test_a_malformed_extras_bucketcurrent"
+  ]
+ },
+ "prior_unit_preserved": {
+  "members_listed": 4706,
+  "self_rows_it_should_not_have": [],
+  "non_self_members_mismatched": []
+ }
+}

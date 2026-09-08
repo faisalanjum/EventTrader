@@ -1,0 +1,40 @@
+{
+ "tag": "collide1",
+ "reads_only": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/out",
+ "prior_work_dirs": [
+  "cont_cont1",
+  "cont_cont2",
+  "cont_cont3",
+  "cont_retry1",
+  "cont_retry2"
+ ],
+ "case_run_dirs": 17,
+ "distinct_state_files": 2,
+ "state_files": [
+  "projects/proj/sess/workflows/wf_g1seg01.json",
+  "projects/proj/sess/workflows/wf_g1seg02.json"
+ ],
+ "surviving_state": {
+  "projects/proj/sess/workflows/wf_g1seg01.json": {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/out/cont_retry2/projects/proj/sess/workflows/wf_g1seg01.json",
+   "sha256": "9b19084ca556797019b8252d580ffb05b1a79108cf41ae38fd81b636e228a9b8",
+   "runId": "wf_g1seg01",
+   "final_scriptPath": null
+  },
+  "projects/proj/sess/workflows/wf_g1seg02.json": {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/out/cont_retry2/projects/proj/sess/workflows/wf_g1seg02.json",
+   "sha256": "f3670802cfaf95a282c8a168665b9dc2643984def3de1d90940992950c327439",
+   "runId": "wf_g1seg02",
+   "final_scriptPath": null
+  }
+ },
+ "cases_the_surviving_state_matches": [],
+ "overwritten_case_histories": 17,
+ "checks": {
+  "1_every_case_wrote_the_same_state_file": false,
+  "2_the_surviving_state_describes_only_one_case": false
+ },
+ "n_checks": 2,
+ "n_green": 0,
+ "all_green": false
+}

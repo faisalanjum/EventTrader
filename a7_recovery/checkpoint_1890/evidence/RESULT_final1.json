@@ -1,0 +1,551 @@
+{
+ "tag": "final1",
+ "pytest_args": [
+  "test_a7_g23_lifecycle_1464.py"
+ ],
+ "child_exit": 0,
+ "summary": "79 passed in 12.31s",
+ "failed_ids": [],
+ "error_ids": [],
+ "boundaries_reached": {
+  "run_dirs": 65,
+  "published_root": 65,
+  "published_receipt": 63,
+  "raw_captured": 59,
+  "accounted": 59,
+  "finalized": 57,
+  "whole_answers_bound": 57
+ },
+ "per_run": {
+  "test_an_unlawful_reply_is_refu13/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_tampered_prompt_stops_t1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": false,
+   "finalization": false,
+   "raw_captures": 0,
+   "whole_answer_files": 0
+  },
+  "test_zero_replies_credit_nothi0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_tampered_raw_bytes_are_ca3/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu8/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_the_completion_is_persist0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_two_agreeing_lanes_reconc1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_recomputed_caller_sourc1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu2/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_wrong_root_or_receipt_h0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": false,
+   "finalization": false,
+   "raw_captures": 0,
+   "whole_answer_files": 0
+  },
+  "test_a_kind_swap_between_candi1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_changed_producer_run_re0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_tampered_ignored_comple0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu9/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_the_completion_is_persist1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_one_mixed_batch_splits_pe1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_null_answer_is_lawful_b1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_wrong_root_or_receipt_h1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": false,
+   "finalization": false,
+   "raw_captures": 0,
+   "whole_answer_files": 0
+  },
+  "test_an_unlawful_reply_is_refu12/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_changed_grader_run_REFU1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_second_freeze_of_the_sa0/run_G2": {
+   "root": true,
+   "receipt": false,
+   "accounting": false,
+   "finalization": false,
+   "raw_captures": 0,
+   "whole_answer_files": 0
+  },
+  "test_two_lanes_from_different_1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_the_whole_lifecycle_spend0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu7/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_one_whole_fenced_json_blo1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_recomputed_caller_sourc0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_kind_swap_between_candi0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_the_official_entry_derive0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_second_freeze_of_the_sa1/run_G3": {
+   "root": true,
+   "receipt": false,
+   "accounting": false,
+   "finalization": false,
+   "raw_captures": 0,
+   "whole_answer_files": 0
+  },
+  "test_tampered_raw_bytes_are_ca2/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_changed_grader_run_REFU0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_two_disagreeing_lanes_are0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_the_official_entry_derive1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_one_whole_fenced_json_blo0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_interrupted_segment_re0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 1,
+   "whole_answer_files": 1
+  },
+  "test_a_malformed_meaning_verdi0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_two_disagreeing_lanes_are1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu6/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_post_run_tampering_with_t0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_tampered_raw_bytes_are_ca0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": false,
+   "raw_captures": 2,
+   "whole_answer_files": 0
+  },
+  "test_an_absent_leg_gets_no_ver0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_tampered_raw_bytes_are_ca1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": false,
+   "raw_captures": 2,
+   "whole_answer_files": 0
+  },
+  "test_an_unlawful_reply_is_refu10/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_tampered_prompt_stops_t0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": false,
+   "finalization": false,
+   "raw_captures": 0,
+   "whole_answer_files": 0
+  },
+  "test_the_whole_lifecycle_spend1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_interrupted_segment_re1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 1,
+   "whole_answer_files": 1
+  },
+  "test_a_malformed_extras_bucket0/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_null_answer_is_lawful_b0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_one_usable_lane_is_never_1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu11/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu4/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_two_lanes_from_different_0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu3/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_unlawful_reply_is_refu5/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_interrupted_run_resume1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_one_mixed_batch_splits_pe0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_lawful_reply_completes_0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_post_run_tampering_with_t1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_two_agreeing_lanes_reconc0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_tampered_ignored_comple1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_a_lawful_reply_completes_1/run_G3": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_an_interrupted_run_resume0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  },
+  "test_one_usable_lane_is_never_0/run_G2": {
+   "root": true,
+   "receipt": true,
+   "accounting": true,
+   "finalization": true,
+   "raw_captures": 2,
+   "whole_answer_files": 1
+  }
+ },
+ "route_module": [
+  "asserted in-child against A7_DRIVER_VALIDATORS_SHA",
+  "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5"
+ ],
+ "named": {
+  "A7_PRODUCER_IDENTITY": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/logs/PREFLIGHT_1851_historical.json",
+  "A7_G1_PINS": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1871/logs/G1_PINS_1871.json",
+  "A7_G23_CANDIDATE": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1871/out/native/g23_candidate",
+  "A7_DRIVER_VALIDATORS_SHA": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5"
+ }
+}

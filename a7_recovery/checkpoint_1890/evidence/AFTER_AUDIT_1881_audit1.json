@@ -1,0 +1,146 @@
+{
+ "tag": "audit1",
+ "baseline": "/tmp/a7_logs_1781/CONTINUATION_1881_base1.json",
+ "cases": {
+  "G2_single_group_positive": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_single_group_positive_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_single_group_positive_state/projects",
+   "state_sha256_now": "9213cacd0de69ab18fdd8f9a1004e55e9f326fcb0bd3510bb9b97300ce145be8",
+   "state_sha256_then": "9213cacd0de69ab18fdd8f9a1004e55e9f326fcb0bd3510bb9b97300ce145be8",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G2-000/G1a": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45",
+    "G2-000/G1b": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45"
+   },
+   "whole_sha256_then": {
+    "G2-000/G1a": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45",
+    "G2-000/G1b": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45"
+   },
+   "whole_matches": true
+  },
+  "G2_empty_earlier_continuation": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_empty_earlier_continuation_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_empty_earlier_continuation_state/projects",
+   "state_sha256_now": "34ce967ee1902f6fbad5c748096b4431dcc5a9f7313d98b2d0c8efc336be52c2",
+   "state_sha256_then": "34ce967ee1902f6fbad5c748096b4431dcc5a9f7313d98b2d0c8efc336be52c2",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G2-000/G1a": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45",
+    "G2-000/G1b": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45"
+   },
+   "whole_sha256_then": {
+    "G2-000/G1a": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45",
+    "G2-000/G1b": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45"
+   },
+   "whole_matches": true
+  },
+  "G2_A_tail_valid_whole_invalid": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_A_tail_valid_whole_invalid_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_A_tail_valid_whole_invalid_state/projects",
+   "state_sha256_now": "c124ed777be889765be6449e1b66941568cbd604b0b60a755c5226b437e06c6e",
+   "state_sha256_then": "c124ed777be889765be6449e1b66941568cbd604b0b60a755c5226b437e06c6e",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G2-000/G1a": "42d58053084fa61a78466306401291edaf423d841ff9e72321a57764e2a24312",
+    "G2-000/G1b": "42d58053084fa61a78466306401291edaf423d841ff9e72321a57764e2a24312"
+   },
+   "whole_sha256_then": {
+    "G2-000/G1a": "42d58053084fa61a78466306401291edaf423d841ff9e72321a57764e2a24312",
+    "G2-000/G1b": "42d58053084fa61a78466306401291edaf423d841ff9e72321a57764e2a24312"
+   },
+   "whole_matches": true
+  },
+  "G2_B_valid_answer_split": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_B_valid_answer_split_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G2_G2_B_valid_answer_split_state/projects",
+   "state_sha256_now": "1bc42f4d36774ca81aa8608805368b4a179c914110502256bf05fd8448a10da1",
+   "state_sha256_then": "1bc42f4d36774ca81aa8608805368b4a179c914110502256bf05fd8448a10da1",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G2-000/G1a": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45",
+    "G2-000/G1b": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45"
+   },
+   "whole_sha256_then": {
+    "G2-000/G1a": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45",
+    "G2-000/G1b": "393f53e5932b7aae6afad88f62d9e1d9c5476fb84f259ba18d20be0f2cf12a45"
+   },
+   "whole_matches": true
+  },
+  "G3_single_group_positive": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_single_group_positive_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_single_group_positive_state/projects",
+   "state_sha256_now": "529d324fda0f86204faa5342b0fd0b962baf3fa7f64dbe3c045198cb0d800289",
+   "state_sha256_then": "529d324fda0f86204faa5342b0fd0b962baf3fa7f64dbe3c045198cb0d800289",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G3-000/G1a": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65",
+    "G3-000/G1b": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65"
+   },
+   "whole_sha256_then": {
+    "G3-000/G1a": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65",
+    "G3-000/G1b": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65"
+   },
+   "whole_matches": true
+  },
+  "G3_empty_earlier_continuation": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_empty_earlier_continuation_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_empty_earlier_continuation_state/projects",
+   "state_sha256_now": "5f4b4062664164dffde0e23edbf84a4aed1d5bb5c7f07b9488b46c8e66575d37",
+   "state_sha256_then": "5f4b4062664164dffde0e23edbf84a4aed1d5bb5c7f07b9488b46c8e66575d37",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G3-000/G1a": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65",
+    "G3-000/G1b": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65"
+   },
+   "whole_sha256_then": {
+    "G3-000/G1a": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65",
+    "G3-000/G1b": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65"
+   },
+   "whole_matches": true
+  },
+  "G3_A_tail_valid_whole_invalid": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_A_tail_valid_whole_invalid_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_A_tail_valid_whole_invalid_state/projects",
+   "state_sha256_now": "e6b31a8ada715e768ec90e290de57ecde5749cf60dde55ce3aa96b4bf71e73c6",
+   "state_sha256_then": "e6b31a8ada715e768ec90e290de57ecde5749cf60dde55ce3aa96b4bf71e73c6",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G3-000/G1a": "f6e6883ff2285d9394722166f4ff7598be34a72771dd1967632ca683b681ca10",
+    "G3-000/G1b": "f6e6883ff2285d9394722166f4ff7598be34a72771dd1967632ca683b681ca10"
+   },
+   "whole_sha256_then": {
+    "G3-000/G1a": "f6e6883ff2285d9394722166f4ff7598be34a72771dd1967632ca683b681ca10",
+    "G3-000/G1b": "f6e6883ff2285d9394722166f4ff7598be34a72771dd1967632ca683b681ca10"
+   },
+   "whole_matches": true
+  },
+  "G3_B_valid_answer_split": {
+   "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_B_valid_answer_split_state/projects/proj/sess/workflows/wf_g1seg01.json",
+   "projects_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/out/cont_base1/G3_G3_B_valid_answer_split_state/projects",
+   "state_sha256_now": "0510197c7f018694bfab4253c76c0db73422adfea50b1c33f917339f2e555d3a",
+   "state_sha256_then": "0510197c7f018694bfab4253c76c0db73422adfea50b1c33f917339f2e555d3a",
+   "audit_problems": [],
+   "whole_sha256_now": {
+    "G3-000/G1a": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65",
+    "G3-000/G1b": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65"
+   },
+   "whole_sha256_then": {
+    "G3-000/G1a": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65",
+    "G3-000/G1b": "e97546764d55027b858075a34533b1fa57c047f7a8ccc88447ca54fa63ac5e65"
+   },
+   "whole_matches": true
+  }
+ },
+ "cases_audited": 8,
+ "distinct_state_paths": 8,
+ "distinct_projects_roots": 8,
+ "checks": {
+  "1_every_case_kept_its_own_state_path": true,
+  "2_every_saved_state_is_still_its_own_bytes": true,
+  "3_the_real_audit_owner_still_accepts_every_case": true,
+  "4_the_whole_answers_still_bind_to_the_same_bytes": true
+ },
+ "n_checks": 4,
+ "n_green": 4,
+ "all_green": true
+}

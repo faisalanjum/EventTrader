@@ -1,0 +1,107 @@
+{
+ "module_sha256": "021f6170b47f387e8db2f2596d90af8a0a07c5187870dda3c7c38161d1aed847",
+ "tests": 42,
+ "prior_mapping": {
+  "file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/logs/INVENTORY_TO_PROOF_1880.json",
+  "sha256": "47fa14289c2a86451f09498a752fe71942211717cda05f7aa049c7ef7927afc8"
+ },
+ "rows_not_proved_by_running_this_module": {
+  "test_the_derived_route_reaches_score_arm_STRUCTURALLY": {
+   "state": "RETIRED by Codex SEQ 1879",
+   "covered_by": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1876/logs/NATIVE_1876_nat3.json",
+   "proof_sha256": "0cbf0853fedb5550da43a7bd89a4b992fbd4cd5367eeb4acea16548ddfebbb5e",
+   "proof_checks": "8/8"
+  },
+  "test_the_official_entry_REFUSES_before_grader_evidence_exists": {
+   "state": "PASSES, but at a WEAKER boundary than its name says",
+   "actual_scope": "it supplies g1=None, so it stops at the missing G1 check and never reaches the empty-grader-set check (Codex SEQ 1880)",
+   "empty_grader_set_covered_by": "Codex's own scoped closure of B._score_leg_bound: all 48 combinations of P1/P2/UNION x every subset of G2/G3/extra G9 x with/without the approved G1, all passing; removing the G1 guard was caught by 24 cases, allowing an empty review set by 3, removing the required-kind guard by 21, and all 3 lawful positives survived every mutation",
+   "owner_of_that_proof": "Codex SEQ 1880; no file was written",
+   "status": "CLOSED - the required handle/kind mutations are not to be repeated here"
+  }
+ },
+ "saved_proofs_this_unit": {
+  "AFTER_AUDIT_1881_audit1.json": {
+   "sha256": "5533581cc426cf21da06cf597dab0b7d53d32b1118efe7a40ef6ed892b944bbd",
+   "checks": "4/4",
+   "all_green": true,
+   "owner_bytes_restored": null
+  },
+  "COLLISION_1881_collide1.json": {
+   "sha256": "8052ed0e6621fdb6fbb75ca2e5bce024fde304002c235d507a5380642f6b2df9",
+   "checks": "0/2",
+   "all_green": false,
+   "owner_bytes_restored": null
+  },
+  "COLLISION_1881_collide3.json": {
+   "sha256": "b803bf4711a8353f581974b24f090d3e6bc9aaf9cb8a25923b99181c3c825e1f",
+   "checks": "0/2",
+   "all_green": false,
+   "owner_bytes_restored": null
+  },
+  "COLLISION_1881_collide4.json": {
+   "sha256": "e400ad172b879945b968ddba224bb63d1f51641aedc857d789cd2540590ea3e3",
+   "checks": "0/2",
+   "all_green": false,
+   "owner_bytes_restored": null
+  },
+  "COLLISION_1881_collide5.json": {
+   "sha256": "9d5f86bfe496ad5765c16d09f7907cc9738eebb785d3969596580591eeccb1a4",
+   "checks": "0/2",
+   "all_green": false,
+   "owner_bytes_restored": null
+  },
+  "COLLISION_1881_collide6.json": {
+   "sha256": "883f168ad870ea2e2b63c738b34ebfd8f5d610141adba4cce279d72e4ab49e1d",
+   "checks": "2/2",
+   "all_green": true,
+   "owner_bytes_restored": null
+  },
+  "CONTINUATION_1881_base1.json": {
+   "sha256": "d9c6bb44bbe29326b479fbf75fabe265d6ad4937756b40e09c779b213db14005",
+   "checks": "4/4",
+   "all_green": true,
+   "owner_bytes_restored": true
+  },
+  "RETRY_MUTATIONS_1881_retry1.json": {
+   "sha256": "7a4618285e41419f6062de16d108ab66d8ac3dbef859efefd2c107ddc9154abe",
+   "checks": "9/9",
+   "all_green": true,
+   "owner_bytes_restored": true
+  }
+ },
+ "attempts": {
+  "audit1": {
+   "exit": "0"
+  },
+  "base1": {
+   "exit": "0"
+  },
+  "collide1": {
+   "exit": "1"
+  },
+  "collide2": {
+   "exit": "1"
+  },
+  "collide3": {
+   "exit": "1"
+  },
+  "collide4": {
+   "exit": "1"
+  },
+  "collide5": {
+   "exit": "1"
+  },
+  "collide6": {
+   "exit": "0"
+  },
+  "final1": {
+   "exit": "0",
+   "summary": "79 passed in 12.31s",
+   "failed_ids": []
+  },
+  "retry1": {
+   "exit": "0"
+  }
+ }
+}

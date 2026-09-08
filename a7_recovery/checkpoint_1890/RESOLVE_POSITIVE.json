@@ -1,0 +1,22 @@
+{
+ "dropped_for_this_run": [],
+ "steps": {
+  "raw_transport.a1_plan_path": "ok",
+  "raw_transport.a1_plan": "ok",
+  "a7_g1_build.owner_hashes": "ok",
+  "import build_kfields_key": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_serial_dir.txt'",
+  "import a7_g23_build": "ok",
+  "import a7_g23_run": "ok",
+  "import a7_g1_complete_v2": "ok",
+  "import audit_worker_access": "ok",
+  "import scorers.score_exp5_current": "ok",
+  "import validate_benchmark_inventory": "ok",
+  "read the inventory through its link": "ok"
+ },
+ "denied_paths": {
+  "driver/core/guidance_ids.py": 1,
+  "driver/core/.claude/skills/earnings-orchestrator/scripts/guidance_ids.py": 1,
+  "driver/.claude/skills/earnings-orchestrator/scripts/guidance_ids.py": 1
+ },
+ "all_ok": false
+}

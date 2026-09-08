@@ -1,0 +1,105 @@
+{
+ "tag": "collide3",
+ "reads_only": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/out",
+ "prior_work_dirs": [
+  "cont_cont1",
+  "cont_cont2",
+  "cont_cont3",
+  "cont_retry1",
+  "cont_retry2"
+ ],
+ "per_attempt": {
+  "cont_cont1": {
+   "case_run_dirs": 0,
+   "cases": [],
+   "distinct_state_files": 0,
+   "surviving_state": {},
+   "cases_the_state_describes": [],
+   "overwritten_case_histories": 0
+  },
+  "cont_cont2": {
+   "case_run_dirs": 1,
+   "cases": [
+    "G2_G2_single_group_positive_run"
+   ],
+   "distinct_state_files": 0,
+   "surviving_state": {},
+   "cases_the_state_describes": [],
+   "overwritten_case_histories": 1
+  },
+  "cont_cont3": {
+   "case_run_dirs": 8,
+   "cases": [
+    "G2_G2_A_tail_valid_whole_invalid_run",
+    "G2_G2_B_valid_answer_split_run",
+    "G2_G2_empty_earlier_continuation_run",
+    "G2_G2_single_group_positive_run",
+    "G3_G3_A_tail_valid_whole_invalid_run",
+    "G3_G3_B_valid_answer_split_run",
+    "G3_G3_empty_earlier_continuation_run",
+    "G3_G3_single_group_positive_run"
+   ],
+   "distinct_state_files": 1,
+   "surviving_state": {
+    "projects/proj/sess/workflows/wf_g1seg01.json": {
+     "sha256": "f21399dc10279a6124efcc3c3f75639ec97863161b2877a58b9601f9cf0220ef",
+     "runId": "wf_g1seg01",
+     "final_scriptPath": null
+    }
+   },
+   "cases_the_state_describes": [],
+   "overwritten_case_histories": 8
+  },
+  "cont_retry1": {
+   "case_run_dirs": 0,
+   "cases": [],
+   "distinct_state_files": 0,
+   "surviving_state": {},
+   "cases_the_state_describes": [],
+   "overwritten_case_histories": 0
+  },
+  "cont_retry2": {
+   "case_run_dirs": 8,
+   "cases": [
+    "G2_m1_single_G2_run",
+    "G2_m1_split_G2_run",
+    "G2_m2_lanes_run",
+    "G2_m2_repeat_run",
+    "G2_retry_run",
+    "G3_m1_single_G3_run",
+    "G3_m1_split_G3_run",
+    "G3_retry_run"
+   ],
+   "distinct_state_files": 2,
+   "surviving_state": {
+    "projects/proj/sess/workflows/wf_g1seg01.json": {
+     "sha256": "9b19084ca556797019b8252d580ffb05b1a79108cf41ae38fd81b636e228a9b8",
+     "runId": "wf_g1seg01",
+     "final_scriptPath": null
+    },
+    "projects/proj/sess/workflows/wf_g1seg02.json": {
+     "sha256": "f3670802cfaf95a282c8a168665b9dc2643984def3de1d90940992950c327439",
+     "runId": "wf_g1seg02",
+     "final_scriptPath": null
+    }
+   },
+   "cases_the_state_describes": [],
+   "overwritten_case_histories": 8
+  }
+ },
+ "attempt_with_all_cases": [
+  "cont_cont3",
+  "cont_retry2"
+ ],
+ "overwritten_case_histories": {
+  "cont_cont3": 8,
+  "cont_retry2": 8
+ },
+ "checks": {
+  "1_one_shared_state_file_served_every_case": false,
+  "2_that_state_describes_only_one_of_them": false
+ },
+ "n_checks": 2,
+ "n_green": 0,
+ "all_green": false
+}
