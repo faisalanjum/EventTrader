@@ -1,0 +1,55 @@
+{
+  "label": "missing_module",
+  "export": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_module",
+  "removed": [
+    "a7_recovery/unit_1939/view/tree/harness_g1v3/a1_reader.py"
+  ],
+  "staged_entries": 39454,
+  "removed_present_before": [
+    "a7_recovery/unit_1939/view/tree/harness_g1v3/a1_reader.py"
+  ],
+  "sibling_pairs_checked": 46,
+  "siblings_missing": [
+    "build_launch_manifest -> a1_reader.py"
+  ],
+  "siblings_differing": [],
+  "scorer_meaning_fields": 7,
+  "scorer_sha256": "0f769167dcac0bb634e57e6d30a030f569264f8be1c14cd6f83cab0385268e52",
+  "modules_loaded": 32,
+  "loaded_outside_the_export": [],
+  "loaded_but_unstaged": [],
+  "bytes_differ_from_staged_blob": [],
+  "steps": {
+    "import raw_transport": "ok",
+    "import a1_reader": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import kf_lint": "ok",
+    "import audit_worker_access": "ok",
+    "import build_launch_manifest": "ok",
+    "import build_exp5_contract": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import build_inventory_review": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import build_kfields_key": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import build_kfields_hard_review": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import build_kfields_hr_correction": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import build_kfields_final": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import build_a5_exp5_kit": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import a6_launch_freeze": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import a7_prepared_run": "ok",
+    "import a7_g1_build": "ok",
+    "import a7_g23_build": "ok",
+    "import a7_g23_run": "ok",
+    "import a7_g1_complete_v2": "ok",
+    "import a7_reference_inventory": "ok",
+    "import a7_key_correction": "ok",
+    "import validate_benchmark_inventory": "ok",
+    "a7_g1_build.owner_hashes (hashes sibling owners)": "ok",
+    "every sibling file resolves and matches its blob": "AssertionError: (['build_launch_manifest -> a1_reader.py'], [])",
+    "raw_transport.a1_plan_path": "ok",
+    "import signer_proof": "ModuleNotFoundError: No module named 'a1_reader'",
+    "import build_final_key_candidate": "ModuleNotFoundError: No module named 'a1_reader'",
+    "bind_grading_scorer on the current scorer": "ok",
+    "the loaded scorer is the accepted bytes": "ok"
+  },
+  "ok_steps": 16,
+  "total_steps": 28,
+  "all_ok": false
+}

@@ -1,0 +1,74 @@
+{
+  "kind": "KIND_ROWS_FIELD_CORRECTION",
+  "inputs": {
+    "empty_G2.json": {
+      "sha256": "e7f015772e29d2cffee3a13e0ab2a6b73a8dc60346d53e7ffaa06d82432975dc",
+      "batch_rows": 0,
+      "questions": 0,
+      "has_top_level_rows": false
+    },
+    "empty_G3.json": {
+      "sha256": "594f0aa3c400de823111273d0e56f089e7e37033ddf19f25b07262b11da506d3",
+      "batch_rows": 0,
+      "questions": 0,
+      "has_top_level_rows": false
+    },
+    "nonempty_G2.json": {
+      "sha256": "477f700c76bec00a70aca0ecd12b2fdef3e5a96d3cbaa3b924d8af184a081ab7",
+      "batch_rows": 20,
+      "questions": 174,
+      "has_top_level_rows": false
+    },
+    "nonempty_G3.json": {
+      "sha256": "656495a3af136d7b2a6d2159d6ab19ab73a8f3758baee34aff618d937c1235aa",
+      "batch_rows": 54,
+      "questions": 466,
+      "has_top_level_rows": false
+    }
+  },
+  "missing_field_case": {
+    "built_from": "nonempty_G2.json",
+    "removed": "batch_rows"
+  },
+  "dispatch": {
+    "empty_G2.json": {
+      "expected": "empty",
+      "old": "empty",
+      "new": "empty"
+    },
+    "empty_G3.json": {
+      "expected": "empty",
+      "old": "empty",
+      "new": "empty"
+    },
+    "nonempty_G2.json": {
+      "expected": "nonempty",
+      "old": "empty",
+      "new": "nonempty"
+    },
+    "nonempty_G3.json": {
+      "expected": "nonempty",
+      "old": "empty",
+      "new": "nonempty"
+    }
+  },
+  "on_missing_field": {
+    "old": {
+      "selected": "empty",
+      "refused": null
+    },
+    "new": {
+      "selected": null,
+      "refused": "KeyError: 'batch_rows'"
+    }
+  },
+  "checks": {
+    "1_RED_the_old_statement_calls_a_nonempty_kind_empty": true,
+    "2_RED_it_is_wrong_on_every_document_that_carries_batches": true,
+    "3_GREEN_the_corrected_statement_is_right_on_all_four": true,
+    "4_the_empty_cases_stay_empty": true,
+    "5_a_missing_required_field_refuses_rather_than_defaulting": true,
+    "6_no_document_carries_a_top_level_rows_field": true
+  },
+  "all_green": true
+}

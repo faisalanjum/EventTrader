@@ -1,0 +1,12 @@
+  empty_G2.json      expected empty     old empty     new empty     
+  empty_G3.json      expected empty     old empty     new empty     
+  nonempty_G2.json   expected nonempty  old empty     new nonempty  OLD WRONG
+  nonempty_G3.json   expected nonempty  old empty     new nonempty  OLD WRONG
+  missing field      old -> {"selected": "empty", "refused": null}   new -> {"selected": null, "refused": "KeyError: 'batch_rows'"}
+6/6 -> True
+  GREEN 1_RED_the_old_statement_calls_a_nonempty_kind_empty
+  GREEN 2_RED_it_is_wrong_on_every_document_that_carries_batches
+  GREEN 3_GREEN_the_corrected_statement_is_right_on_all_four
+  GREEN 4_the_empty_cases_stay_empty
+  GREEN 5_a_missing_required_field_refuses_rather_than_defaulting
+  GREEN 6_no_document_carries_a_top_level_rows_field

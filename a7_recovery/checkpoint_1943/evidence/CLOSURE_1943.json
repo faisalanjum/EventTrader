@@ -1,0 +1,306 @@
+{
+  "entrypoints": [
+    "build_a5_exp5_kit",
+    "build_kfields_key",
+    "build_kfields_final",
+    "a6_launch_freeze",
+    "a7_prepared_run",
+    "a7_g1_build",
+    "a7_g23_build",
+    "a7_g23_run",
+    "a7_g1_complete_v2",
+    "a7_reference_inventory",
+    "a7_key_correction",
+    "build_launch_manifest",
+    "raw_transport",
+    "audit_worker_access"
+  ],
+  "entrypoints_absent": [],
+  "closure_modules": 24,
+  "closure_assets": 15,
+  "files": {
+    "a1_reader.py": {
+      "current": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+      "published": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+      "state": "unchanged",
+      "bytes": 15417
+    },
+    "a6_launch_freeze.py": {
+      "current": "bbcba73d587a2bc2e8fc34ce27ba555065b52d89480783b2440568cede19c4b2",
+      "published": "226e5d71c25307fc4c9b23961a162c6875ea5970f6d37e1460e078af3811e454",
+      "state": "changed",
+      "bytes": 27659
+    },
+    "a7_g1_build.py": {
+      "current": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+      "published": "524be73b325a8c2c929d08f07e1a8668d031306bc4cfa0b7b8e049fcfa20001e",
+      "state": "changed",
+      "bytes": 112836
+    },
+    "a7_g1_complete_v2.py": {
+      "current": "7a284f30296e698948155923c9ff1cc040eeba8b79dd0c3d22bbfade3a93250d",
+      "published": "7a284f30296e698948155923c9ff1cc040eeba8b79dd0c3d22bbfade3a93250d",
+      "state": "unchanged",
+      "bytes": 20328
+    },
+    "a7_g23_build.py": {
+      "current": "4fce0781e770ce48ca51b6d2b0a412b3357a49ba668160604a88eb39dc738b40",
+      "published": "4fce0781e770ce48ca51b6d2b0a412b3357a49ba668160604a88eb39dc738b40",
+      "state": "unchanged",
+      "bytes": 97519
+    },
+    "a7_g23_run.py": {
+      "current": "c247b909c51f23b34947c08891d97f2915c437d6b5779bd0070735e8e1979596",
+      "published": "c247b909c51f23b34947c08891d97f2915c437d6b5779bd0070735e8e1979596",
+      "state": "unchanged",
+      "bytes": 25123
+    },
+    "a7_key_correction.py": {
+      "current": "6ba1218c397191360ee4ea5705c26ce6d0ac6e3b7763baa716105f4d6c022235",
+      "published": "76cccc9afe9fbb099d9adf23d3af8d0e432c4e26de10d9299e30bbd98d3ea245",
+      "state": "changed",
+      "bytes": 12534
+    },
+    "a7_prepared_run.py": {
+      "current": "43dcbd35d95d31123741f77f81e41599497101807790649cf7b1167651130751",
+      "published": "43dcbd35d95d31123741f77f81e41599497101807790649cf7b1167651130751",
+      "state": "unchanged",
+      "bytes": 14965
+    },
+    "a7_reference_inventory.py": {
+      "current": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+      "published": "65f8e34128041d82e28ae92992e542675f2d2acfd9e2b67dc73b8c3b54cf5a63",
+      "state": "changed",
+      "bytes": 19651
+    },
+    "a7_source_meta.py": {
+      "current": "4addd2f2e4b79bb292a8291a9cfbbcfd1efdc3d637b172ef40e1909275aa9d4a",
+      "published": "4addd2f2e4b79bb292a8291a9cfbbcfd1efdc3d637b172ef40e1909275aa9d4a",
+      "state": "unchanged",
+      "bytes": 11850
+    },
+    "audit_worker_access.py": {
+      "current": "24020d39823c80938fb287785c6230a2f73f4096c9429e5908b53821c8dc30eb",
+      "published": "24020d39823c80938fb287785c6230a2f73f4096c9429e5908b53821c8dc30eb",
+      "state": "unchanged",
+      "bytes": 75658
+    },
+    "build_a5_exp5_kit.py": {
+      "current": "7d427f095f775cc3c706640880b893d2c29c7638233d23b3f52b2ce91d8e72ed",
+      "published": "89853599d61b2c80e4c1bcbf009695d3d586fe869fbfbf3c7fb4308fc58d9101",
+      "state": "changed",
+      "bytes": 36388
+    },
+    "build_exp5_contract.py": {
+      "current": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+      "published": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+      "state": "unchanged",
+      "bytes": 28938
+    },
+    "build_inventory_review.py": {
+      "current": "30e20c60f5c9e859befeeeb68c747515ff4baa643f97ce55a8d2855e25efddce",
+      "published": "fcd18139f6c1393c55b81042820c3004ec8eae362fbe4bc7e219639c5754dcf7",
+      "state": "changed",
+      "bytes": 105203
+    },
+    "build_kfields_final.py": {
+      "current": "5d83bf326f5d7d2dd6ddc143203c30f3a83f51a0c4c5f8bdf792c525521937e9",
+      "published": "bad84b2f9fab14443a167660dc631b8d556c143cf09233f54bf1c3b6b2649fee",
+      "state": "changed",
+      "bytes": 185370
+    },
+    "build_kfields_hard_review.py": {
+      "current": "a2ac2fa2622a69841087f6c225b2e602e535c00a84b39f760c75aad79e95df62",
+      "published": "8eb98ec03331a2a605d7ec04570a875004ed989099de4f74c4a22b511ad90986",
+      "state": "changed",
+      "bytes": 56322
+    },
+    "build_kfields_hr_correction.py": {
+      "current": "d4a0323a43ddd8e68487347652986dedf16a9ec2a277ca41d82a55db3d248ed4",
+      "published": "d4a0323a43ddd8e68487347652986dedf16a9ec2a277ca41d82a55db3d248ed4",
+      "state": "unchanged",
+      "bytes": 33042
+    },
+    "build_kfields_key.py": {
+      "current": "df19a68b6ea661af5365c6ec95a62194e738658e2dcd743996b506e49d1553ed",
+      "published": "2d90aed33aab8b99857c43cb12458344fe5cd7c76ed70936cbbcba53e5999bde",
+      "state": "changed",
+      "bytes": 85983
+    },
+    "build_kfields_key_targeted.py": {
+      "current": "0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588",
+      "published": "0c1f335077926603011ee78a9ca63315ad158147bcf714dac36f185b88ad6588",
+      "state": "unchanged",
+      "bytes": 18720
+    },
+    "build_launch_manifest.py": {
+      "current": "3f04dae5d7ffa8b661b1c008586598f36f24411196e3317754613b9a554d1e75",
+      "published": "3f04dae5d7ffa8b661b1c008586598f36f24411196e3317754613b9a554d1e75",
+      "state": "unchanged",
+      "bytes": 64340
+    },
+    "key_lint.py": {
+      "current": "ff4c3a06cbd534796d29f755531880641cb173697151af70ac892b64ad12cf78",
+      "published": "ff4c3a06cbd534796d29f755531880641cb173697151af70ac892b64ad12cf78",
+      "state": "unchanged",
+      "bytes": 15142
+    },
+    "kf_lint.py": {
+      "current": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+      "published": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+      "state": "unchanged",
+      "bytes": 14359
+    },
+    "raw_transport.py": {
+      "current": "f05054d33091cb51ce9be4005bd3e2dd5287e987e7c7304c5ec57c8d3f11876e",
+      "published": "cf22ccd6e045ff1187d996c27d3caf770c1c6bf2dd23a768b5494c5ccde00a72",
+      "state": "changed",
+      "bytes": 90613
+    },
+    "validate_benchmark_inventory.py": {
+      "current": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+      "published": "68ce2c1b487e1e0f16a084562da99675951bc57e31c4657700fa387da2ef4193",
+      "state": "changed",
+      "bytes": 9850
+    },
+    "/home/faisal/EventMarketDB/.claude/agents/lean-probe.md": {
+      "current": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+      "published": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+      "state": "unchanged",
+      "bytes": 358
+    },
+    "a2_runtime_freeze.json": {
+      "current": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a",
+      "published": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a",
+      "state": "unchanged",
+      "bytes": 2337
+    },
+    "decision_rules_1387.txt": {
+      "current": "d5830182899461c7a34f3eed3f3cc374a40412618f9c80e2047f029c6a933fb2",
+      "published": "d5830182899461c7a34f3eed3f3cc374a40412618f9c80e2047f029c6a933fb2",
+      "state": "unchanged",
+      "bytes": 3029
+    },
+    "exp5_prompt_contract.manifest.json": {
+      "current": "b76a9de31fb24cda3736b99ad9919c82fc0cb6d439c0b78bab58974bd5b29625",
+      "published": "b76a9de31fb24cda3736b99ad9919c82fc0cb6d439c0b78bab58974bd5b29625",
+      "state": "unchanged",
+      "bytes": 1568
+    },
+    "exp5_prompt_drafter.md": {
+      "current": "a13289a8a135fe7f26beaeef1168a219496f197345063c963e677fa7fa452fef",
+      "published": "a13289a8a135fe7f26beaeef1168a219496f197345063c963e677fa7fa452fef",
+      "state": "unchanged",
+      "bytes": 23953
+    },
+    "exp5_prompt_producer.md": {
+      "current": "060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc",
+      "published": "060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc",
+      "state": "unchanged",
+      "bytes": 25639
+    },
+    "exp5_rev4_package.md": {
+      "current": "c5211a1f8e96b053d0c7688b138bea7cb7e502bb4e6ffdc7456bf194a6f94359",
+      "published": "c5211a1f8e96b053d0c7688b138bea7cb7e502bb4e6ffdc7456bf194a6f94359",
+      "state": "unchanged",
+      "bytes": 97988
+    },
+    "launch_exp5_readers.manifest.json": {
+      "current": "bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070",
+      "published": "bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070",
+      "state": "unchanged",
+      "bytes": 17994
+    },
+    "launch_kfields_a1.bundle.json": {
+      "current": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+      "published": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+      "state": "unchanged",
+      "bytes": 65448
+    },
+    "launch_kfields_a1_slice.template.js": {
+      "current": "368bf01cb205ccad7e9af90355ab124af5aca5b9efe3f702311f1f4f836b121b",
+      "published": "368bf01cb205ccad7e9af90355ab124af5aca5b9efe3f702311f1f4f836b121b",
+      "state": "unchanged",
+      "bytes": 7340
+    },
+    "launch_kfields_drafts.manifest.json": {
+      "current": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+      "published": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+      "state": "unchanged",
+      "bytes": 1444527
+    },
+    "owner_rulings_1383.txt": {
+      "current": "a925ba6ffce6ae14a47c942f5c660c626d13c1060910c2e79055680c7632dbca",
+      "published": null,
+      "state": "new",
+      "bytes": 3369
+    },
+    "v4_findings_1390.txt": {
+      "current": "0b669decd55e430fb86271378db177a0b1c2525eaa6ec6455dfbb22d7fdce6e0",
+      "published": null,
+      "state": "new",
+      "bytes": 3279
+    },
+    "v5_findings_1394.txt": {
+      "current": "11a086123f4081be6561839527625ed42773faa800226520f6b7e01d6d98a1d1",
+      "published": null,
+      "state": "new",
+      "bytes": 808
+    },
+    "v6_findings_1396.txt": {
+      "current": "b9842d7db6d3454587fc6bda25ec9bec41c3183832010b2a3f6d5189dda43ef3",
+      "published": null,
+      "state": "new",
+      "bytes": 1557
+    }
+  },
+  "new": [
+    "owner_rulings_1383.txt",
+    "v4_findings_1390.txt",
+    "v5_findings_1394.txt",
+    "v6_findings_1396.txt"
+  ],
+  "new_count": 4,
+  "changed": [
+    "a6_launch_freeze.py",
+    "a7_g1_build.py",
+    "a7_key_correction.py",
+    "a7_reference_inventory.py",
+    "build_a5_exp5_kit.py",
+    "build_inventory_review.py",
+    "build_kfields_final.py",
+    "build_kfields_hard_review.py",
+    "build_kfields_key.py",
+    "raw_transport.py",
+    "validate_benchmark_inventory.py"
+  ],
+  "changed_count": 11,
+  "unchanged": [
+    "/home/faisal/EventMarketDB/.claude/agents/lean-probe.md",
+    "a1_reader.py",
+    "a2_runtime_freeze.json",
+    "a7_g1_complete_v2.py",
+    "a7_g23_build.py",
+    "a7_g23_run.py",
+    "a7_prepared_run.py",
+    "a7_source_meta.py",
+    "audit_worker_access.py",
+    "build_exp5_contract.py",
+    "build_kfields_hr_correction.py",
+    "build_kfields_key_targeted.py",
+    "build_launch_manifest.py",
+    "decision_rules_1387.txt",
+    "exp5_prompt_contract.manifest.json",
+    "exp5_prompt_drafter.md",
+    "exp5_prompt_producer.md",
+    "exp5_rev4_package.md",
+    "key_lint.py",
+    "kf_lint.py",
+    "launch_exp5_readers.manifest.json",
+    "launch_kfields_a1.bundle.json",
+    "launch_kfields_a1_slice.template.js",
+    "launch_kfields_drafts.manifest.json"
+  ],
+  "unchanged_count": 24,
+  "bytes_to_stage": 751422
+}

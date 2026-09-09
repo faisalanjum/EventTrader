@@ -1,0 +1,64 @@
+{
+ "batch_rows": [],
+ "batching": {
+  "batches": 0,
+  "max_items_per_call": 10
+ },
+ "g1_identity": {
+  "candidate_sha256": "3c7e009a5c6de3ebcd134d373399c38ebe21f680f2d05b1080ecede471e21f36",
+  "git_head": "5f81248e3c1070b8343aa26473865e749ba0d5a0",
+  "git_tree": "cd80e3b85238b69ab609519d7e9ea655530a4711",
+  "prompt_tree_sha256": "072f6166d72d4ae23266706f5ed4348ccc5397d89afd1a1e2d0fb58c2847ff07",
+  "root_sha256": "20d44c5eedcfbc95ccc30c6309e1eca1d241b4eda4c6e7d4e41cea7a3003e218",
+  "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+  "run_file_count": 417,
+  "run_tree_sha256": "4b604ee7635b2a1b27323df606786cdc1b37f5f47ec26748468c1872e880a192"
+ },
+ "key_identity": {
+  "accepted_rows": 35,
+  "acted_rows": 0,
+  "approved_lock_sha256": "df67408054ca7ecf20c8fcbb94ee0c26c73002ee129aca46b2b7fd3a292634dc",
+  "approved_receipt_sha256": "ab1620e1a5e9d170bca999a1113b3a830ead37943ccaf7f18199a0096ad8635f",
+  "base_owner": "a7_g1_build.gold_by_event",
+  "events": 36,
+  "key_digest": "601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e",
+  "schema": "a7-current-key/approved"
+ },
+ "launchers": {
+  "count": 0,
+  "lanes_per_batch": 2,
+  "owner_sha256": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "rows": []
+ },
+ "made_calls": 0,
+ "population": {},
+ "population_counts": {
+  "batches": 0,
+  "largest_batch": 0,
+  "questions": 0
+ },
+ "producer_identity": {
+  "a4_lock_receipt_sha256": "ab1620e1a5e9d170bca999a1113b3a830ead37943ccaf7f18199a0096ad8635f",
+  "a4_lock_sha256": "df67408054ca7ecf20c8fcbb94ee0c26c73002ee129aca46b2b7fd3a292634dc",
+  "a5_bundle_sha256": "23717e3cb00b9696a04cc0d439adb03f577d8f3c81a5d3e5e388a0c244c24733",
+  "a5_manifest_sha256": "9cf7c85c66b5e1f4655f179ce72e862d35ab1aa8b9e2d7a41af0291a385e2245",
+  "a6_freeze_sha256": "49173fd10457bad1b480035e643848db53b5f7b18e85b718b131f269961b2f41",
+  "contract_suffix": ".v3",
+  "corrected_inventory_sha256": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+  "executed": {
+   "run_digest": "f8c88b4302e82a1c70755289e11516c9aa4d8ea50ce2d75d7a778a675672c56b",
+   "run_files": 485
+  },
+  "finalizations": {
+   "primary": "fdf81bb7edfcf3d89dba5012e8163d54ddabd71f32477aeb6836dc9ce8a6cbc4"
+  },
+  "receipt_sha256": "56fe357f018abae5cf485b79e2a569798574929a5cd93da56f3e44e9aaedbea8",
+  "run_dir": "/tmp/a7_logs_1781/attempt_mut5/positive/run",
+  "scheduled_calls": 204,
+  "schema": "a7_prepared_run/1"
+ },
+ "questions": 0,
+ "rules_block_sha256": "17e700d162188c464d8279de06c06632923a42dc3b8ea9f3647a69fefbdf48ac",
+ "schema": "a7_g23_candidate/1",
+ "task_kind": "G2"
+}

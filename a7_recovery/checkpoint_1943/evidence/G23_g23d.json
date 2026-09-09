@@ -1,0 +1,276 @@
+{
+  "tag": "g23d",
+  "kind": "G23_NATIVE_CURRENT",
+  "label": "SYNTHETIC_TEST_G23_UNRESOLVED_ANSWERS_NOT_QUALIFICATION",
+  "reused_g1": {
+    "candidate_dir": "/tmp/a7_logs_1781/attempt_g1a/g1_cand",
+    "run_dir": "/tmp/a7_logs_1781/attempt_g1a/g1_run",
+    "root_sha256": "20d44c5eedcfbc95ccc30c6309e1eca1d241b4eda4c6e7d4e41cea7a3003e218"
+  },
+  "producer_run_dir": "/tmp/a7_logs_1781/attempt_mut5/positive/run",
+  "reference_inventory": "bf5bd256b644cebe9d1fb4f392981e60556973b3323d96ffcbfa9ee191567d52",
+  "inputs": {
+    "manifest_sha256": "9cf7c85c66b5e1f4655f179ce72e862d35ab1aa8b9e2d7a41af0291a385e2245",
+    "n": 4
+  },
+  "g23_write_problems": [],
+  "g23_candidate_sha256": "1f842b700ed45812cf7bb33ce44dcc1826f12d333b4d6a71ae38d3cf8533fc06",
+  "g23_made_calls": 0,
+  "g23_g1_identity": {
+    "candidate_sha256": "3c7e009a5c6de3ebcd134d373399c38ebe21f680f2d05b1080ecede471e21f36",
+    "git_head": "5f81248e3c1070b8343aa26473865e749ba0d5a0",
+    "git_tree": "cd80e3b85238b69ab609519d7e9ea655530a4711",
+    "prompt_tree_sha256": "072f6166d72d4ae23266706f5ed4348ccc5397d89afd1a1e2d0fb58c2847ff07",
+    "root_sha256": "20d44c5eedcfbc95ccc30c6309e1eca1d241b4eda4c6e7d4e41cea7a3003e218",
+    "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+    "run_file_count": 417,
+    "run_tree_sha256": "4b604ee7635b2a1b27323df606786cdc1b37f5f47ec26748468c1872e880a192"
+  },
+  "g23_prompts": 0,
+  "populations": {
+    "g2_keys": 0,
+    "g2_pairs": 0,
+    "g3_keys": 0,
+    "g3_obligations": 0,
+    "arms": [
+      "P1",
+      "P2",
+      "UNION"
+    ],
+    "gold_events": 36,
+    "problems": [],
+    "unroutable": 0,
+    "resolutions": 3
+  },
+  "population_is_empty": true,
+  "kinds": {
+    "G2": {
+      "lanes": 0,
+      "empty_population": true,
+      "candidate_sha256": "e7f015772e29d2cffee3a13e0ab2a6b73a8dc60346d53e7ffaa06d82432975dc"
+    },
+    "G3": {
+      "lanes": 0,
+      "empty_population": true,
+      "candidate_sha256": "594f0aa3c400de823111273d0e56f089e7e37033ddf19f25b07262b11da506d3"
+    }
+  },
+  "both_kinds_empty": true,
+  "derived": {
+    "events": 36,
+    "legs": 3,
+    "expected_event_leg_routes": 108
+  },
+  "obliged_kinds_by_leg": {
+    "P1": [],
+    "P2": [],
+    "UNION": []
+  },
+  "tier": {
+    "failure": null,
+    "decisions": {
+      "P1": null,
+      "P2": null
+    },
+    "counts": {
+      "g1_validation": 1,
+      "event_leg_routes": 108
+    },
+    "distinct_event_leg_routes": 108,
+    "distinct_completions": []
+  },
+  "score_objects": {
+    "P1": {
+      "route_codes": {
+        "rejected:STATE": 34,
+        "rejected:PERIOD_LANE": 34,
+        "rejected:LANE": 34,
+        "abstention:diagnostic": 35,
+        "abstained_on_gold:READER_ABSTAINED": 33
+      },
+      "recall": 0.0,
+      "wrong_lane": 0,
+      "name_spelling_differences": 0,
+      "error_table_by_rule": {
+        "OD-9": 0,
+        "OD-11": 0,
+        "OD-12": 0,
+        "OD-13": 0,
+        "OD-14": 0,
+        "OD-21": 0,
+        "ISS-16": 0,
+        "shapes": 0,
+        "slices": 0,
+        "other": 170
+      },
+      "value_shape_acc": 1.0,
+      "state_acc": null,
+      "other_meaning_acc": null,
+      "would_park": 0.4925,
+      "gold_n": 35,
+      "matched": 0,
+      "ambiguous_rows": [],
+      "ambiguities_unresolved": 0,
+      "verdicts_missing": 0,
+      "confirmed_wrong_accepted": 0,
+      "safety_result": "PASS",
+      "extras": {
+        "duplicate": 0,
+        "key_miss": 0,
+        "unsupported": 0
+      },
+      "duplicate_violations": 0,
+      "open_identity_findings": 0,
+      "reliability_failed": false,
+      "reliability_unobserved": false,
+      "reliability": {
+        "applicable": true,
+        "rate": 0.0,
+        "upper95": 0.029411764705882353,
+        "over_bar": false,
+        "bar": 0.02,
+        "total": 102,
+        "invalid": 0
+      },
+      "required_grading_unfinished": true,
+      "error_table": {
+        "rejected:STATE": 34,
+        "rejected:PERIOD_LANE": 34,
+        "rejected:LANE": 34,
+        "abstention:diagnostic": 35,
+        "abstained_on_gold:READER_ABSTAINED": 33
+      },
+      "PASS": false
+    },
+    "P2": {
+      "route_codes": {
+        "rejected:STATE": 34,
+        "rejected:PERIOD_LANE": 34,
+        "rejected:LANE": 34,
+        "abstention:diagnostic": 35,
+        "abstained_on_gold:READER_ABSTAINED": 33
+      },
+      "recall": 0.0,
+      "wrong_lane": 0,
+      "name_spelling_differences": 0,
+      "error_table_by_rule": {
+        "OD-9": 0,
+        "OD-11": 0,
+        "OD-12": 0,
+        "OD-13": 0,
+        "OD-14": 0,
+        "OD-21": 0,
+        "ISS-16": 0,
+        "shapes": 0,
+        "slices": 0,
+        "other": 170
+      },
+      "value_shape_acc": 1.0,
+      "state_acc": null,
+      "other_meaning_acc": null,
+      "would_park": 0.4925,
+      "gold_n": 35,
+      "matched": 0,
+      "ambiguous_rows": [],
+      "ambiguities_unresolved": 0,
+      "verdicts_missing": 0,
+      "confirmed_wrong_accepted": 0,
+      "safety_result": "PASS",
+      "extras": {
+        "duplicate": 0,
+        "key_miss": 0,
+        "unsupported": 0
+      },
+      "duplicate_violations": 0,
+      "open_identity_findings": 0,
+      "reliability_failed": false,
+      "reliability_unobserved": false,
+      "reliability": {
+        "applicable": true,
+        "rate": 0.0,
+        "upper95": 0.029411764705882353,
+        "over_bar": false,
+        "bar": 0.02,
+        "total": 102,
+        "invalid": 0
+      },
+      "required_grading_unfinished": true,
+      "error_table": {
+        "rejected:STATE": 34,
+        "rejected:PERIOD_LANE": 34,
+        "rejected:LANE": 34,
+        "abstention:diagnostic": 35,
+        "abstained_on_gold:READER_ABSTAINED": 33
+      },
+      "PASS": false
+    },
+    "UNION": {
+      "route_codes": {
+        "rejected:STATE": 34,
+        "rejected:PERIOD_LANE": 34,
+        "rejected:LANE": 34
+      },
+      "recall": 0.0,
+      "wrong_lane": 0,
+      "name_spelling_differences": 0,
+      "error_table_by_rule": {
+        "OD-9": 0,
+        "OD-11": 0,
+        "OD-12": 0,
+        "OD-13": 0,
+        "OD-14": 0,
+        "OD-21": 0,
+        "ISS-16": 0,
+        "shapes": 0,
+        "slices": 0,
+        "other": 102
+      },
+      "value_shape_acc": 1.0,
+      "state_acc": null,
+      "other_meaning_acc": null,
+      "would_park": 0.0,
+      "gold_n": 35,
+      "matched": 0,
+      "ambiguous_rows": [],
+      "ambiguities_unresolved": 0,
+      "verdicts_missing": 0,
+      "confirmed_wrong_accepted": 0,
+      "safety_result": "PASS",
+      "extras": {
+        "duplicate": 0,
+        "key_miss": 0,
+        "unsupported": 0
+      },
+      "duplicate_violations": 0,
+      "open_identity_findings": 0,
+      "reliability_failed": false,
+      "reliability_unobserved": false,
+      "reliability": {
+        "applicable": false,
+        "rate": null,
+        "upper95": null,
+        "over_bar": null,
+        "why": "no responses observed \u2014 Step 3 makes no model call"
+      },
+      "required_grading_unfinished": true,
+      "error_table": {
+        "rejected:STATE": 34,
+        "rejected:PERIOD_LANE": 34,
+        "rejected:LANE": 34
+      },
+      "PASS": false
+    }
+  },
+  "checks": {
+    "1_the_G23_candidate_is_derived_from_this_G1": true,
+    "2_the_candidate_belongs_to_that_exact_G1": true,
+    "3_the_required_population_is_derived_by_its_owner": true,
+    "4_each_kind_is_either_completed_or_accounted_empty": true,
+    "5_the_tier_decision_returns_both_claims": true,
+    "6_three_whole_score_objects_are_returned": true,
+    "7_the_lifecycle_is_validated_exactly_once": true,
+    "8_every_derived_event_leg_route_happened_exactly_once": true,
+    "9_every_existing_completion_is_loaded_exactly_once": true
+  },
+  "all_green": true
+}
