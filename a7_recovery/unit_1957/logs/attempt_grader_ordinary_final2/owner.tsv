@@ -1,0 +1,9 @@
+attempt	grader_ordinary_final2
+payload	../../grader_20260909/attempts/ordinary_final2/regression.py
+map	map_codex_grader_ordinary_final2.tsv
+command	run_1957.sh map_codex_grader_ordinary_final2.tsv ../../grader_20260909/attempts/ordinary_final2/regression.py grader_ordinary_final2 2400
+wrapper_pid	1219397
+payload_pid	1219401
+payload_pgid	1219397
+started_utc	2026-09-09T17:17:35Z
+state	finished exit 0

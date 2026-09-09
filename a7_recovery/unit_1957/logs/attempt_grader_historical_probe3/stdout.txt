@@ -1,0 +1,16 @@
+{
+  "bound": {
+    "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_final",
+    "evidence": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-phase1-196-20260821T163310Z",
+    "hr": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z",
+    "fix": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hrfix-4-20260822T050131Z",
+    "events": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-final-36-20260822T162832Z",
+    "corrections": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-corr-32-20260823T030745Z",
+    "decision": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-decision-36-20260823T075249Z",
+    "decision_correction": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "decision_correction_v5": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "decision_correction_v6": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z",
+    "hr_package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_hard_review"
+  },
+  "error": "the accepted event phase is not clean: ['0000006201-26-000031: the state did not run the pinned launcher bytes', '0000006201-26-000031: the scriptPath bytes are not the pinned script']"
+}

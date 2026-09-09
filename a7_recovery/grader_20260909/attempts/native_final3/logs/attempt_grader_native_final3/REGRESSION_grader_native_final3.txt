@@ -1,0 +1,2226 @@
+........................................................................ [ 12%]
+.............................................................EEEEEEEEEEE [ 25%]
+EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE.... [ 38%]
+........................................................................ [ 51%]
+........................................................................ [ 64%]
+........................................................................ [ 77%]
+........................................................................ [ 90%]
+......................................................                   [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_a_lawful_reply_completes_the_real_lifecycle_with_zero_calls[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_lawful_reply_completes_the_real_lifecycle_with_zero_calls[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_candidate_declares_its_kind_and_dispatches_to_its_own_parser[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_candidate_declares_its_kind_and_dispatches_to_its_own_parser[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[missing-G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[missing-G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[duplicate-G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[duplicate-G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[extra-G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[extra-G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_membership-G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_membership-G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_type-G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_type-G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[malformed-G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[malformed-G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[prose-G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_unlawful_reply_is_refused_and_retried_never_credited[prose-G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_______ ERROR at setup of test_one_whole_fenced_json_block_is_lawful[G2] _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_______ ERROR at setup of test_one_whole_fenced_json_block_is_lawful[G3] _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_a_null_answer_is_lawful_but_settles_nothing[G2] ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_a_null_answer_is_lawful_but_settles_nothing[G3] ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_tampered_raw_bytes_are_caught_BEFORE_the_first_finalize[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_tampered_raw_bytes_are_caught_BEFORE_the_first_finalize[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_tampered_raw_bytes_are_caught_after_capture[G2] ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_tampered_raw_bytes_are_caught_after_capture[G3] ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_______ ERROR at setup of test_a_tampered_prompt_stops_the_preflight[G2] _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_______ ERROR at setup of test_a_tampered_prompt_stops_the_preflight[G3] _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+______ ERROR at setup of test_a_wrong_root_or_receipt_hash_is_refused[G2] ______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+______ ERROR at setup of test_a_wrong_root_or_receipt_hash_is_refused[G3] ______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_interrupted_run_resumes_without_repeating_a_segment[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_interrupted_run_resumes_without_repeating_a_segment[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_a_second_freeze_of_the_same_run_is_refused[G2] _____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_a_second_freeze_of_the_same_run_is_refused[G3] _____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+___ ERROR at setup of test_two_agreeing_lanes_reconcile_and_are_credited[G2] ___
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+___ ERROR at setup of test_two_agreeing_lanes_reconcile_and_are_credited[G3] ___
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_____ ERROR at setup of test_two_disagreeing_lanes_are_never_credited[G2] ______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_____ ERROR at setup of test_two_disagreeing_lanes_are_never_credited[G3] ______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+__________ ERROR at setup of test_one_usable_lane_is_never_enough[G2] __________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+__________ ERROR at setup of test_one_usable_lane_is_never_enough[G3] __________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_interrupted_segment_retries_only_the_lane_that_failed[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_an_interrupted_segment_retries_only_the_lane_that_failed[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_whole_lifecycle_spends_nothing_measured_from_the_ledger[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_whole_lifecycle_spends_nothing_measured_from_the_ledger[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_completion_is_persisted_once_and_reloads_bound_to_its_run[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_completion_is_persisted_once_and_reloads_bound_to_its_run[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_post_run_tampering_with_the_completion_is_refused[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_post_run_tampering_with_the_completion_is_refused[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_two_lanes_from_different_attempts_are_combined_whole_run[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_two_lanes_from_different_attempts_are_combined_whole_run[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_one_mixed_batch_splits_per_question_and_is_never_both[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_one_mixed_batch_splits_per_question_and_is_never_both[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_official_entry_derives_its_maps_from_saved_evidence[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_official_entry_derives_its_maps_from_saved_evidence[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_kind_swap_between_candidate_and_completion_REFUSES[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_kind_swap_between_candidate_and_completion_REFUSES[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+___________ ERROR at setup of test_a_changed_grader_run_REFUSES[G2] ____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+___________ ERROR at setup of test_a_changed_grader_run_REFUSES[G3] ____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_recomputed_caller_source_cannot_substitute_a_candidate[G2] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_recomputed_caller_source_cannot_substitute_a_candidate[G3] _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_lawful_handle_and_kind_set_REACHES_the_downstream_boundary _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_official_entry_REFUSES_before_grader_evidence_exists _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+________ ERROR at setup of test_a_missing_required_grader_kind_REFUSES _________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+___________ ERROR at setup of test_an_unrequired_grader_kind_REFUSES ___________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_________ ERROR at setup of test_the_approved_G1_lifecycle_is_REQUIRED _________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_____ ERROR at setup of test_no_builder_api_can_stamp_a_separate_producer ______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_freeze_document_stores_the_validated_producer_identity _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_incomplete_pins_give_the_NAMED_lifecycle_refusal_not_KeyError _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_non_G1_candidate_refuses_BY_TASK_KIND_before_derivation _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_G1_state_with_the_SAME_producer_reaches_derivation __
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_G1_state_with_a_DIFFERENT_producer_refuses_after_the_lifecycle _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_a_tampered_ignored_completion_field_REFUSES[G2] ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____ ERROR at setup of test_a_tampered_ignored_completion_field_REFUSES[G3] ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+______________ ERROR at setup of test_zero_replies_credit_nothing ______________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+____________ ERROR at setup of test_an_absent_leg_gets_no_verdicts _____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_____ ERROR at setup of test_a_malformed_meaning_verdict_is_never_credited _____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+______ ERROR at setup of test_a_malformed_extras_bucket_is_never_credited ______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_a_changed_producer_run_refuses_at_the_official_entry __
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+_ ERROR at setup of test_the_official_entry_takes_no_caller_population_or_verdicts _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/candidate', 'pins': {'candidate_s...5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_native_final3/pytest/current_g14/run'}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_native_final3/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module", autouse=True)
+    def _current_candidate(run, inputs, g1, tmp_path_factory):
+        """Build once from the named current producer and current TEST G1 pins.
+    
+        No historical era relaxation, old pins, model calls or pre-import from
+        main/recovery to hide a missing dependency in the served package.
+        """
+        global RUN
+        import driver.core.driver_validators as DV
+        bench = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
+        assert DV.__file__ == os.path.join(bench, "driver/core/driver_validators.py")
+        digest = hashlib.sha256(io.open(DV.__file__, "rb").read()).hexdigest()
+>       assert digest == os.environ["A7_DRIVER_VALIDATORS_SHA"]
+E       AssertionError: assert '4b90aa83595c...ce6eeb7a5dff5' == '4b90aa83595c...89df958876414'
+E         
+E         Skipping 33 identical leading characters in diff, use -v to show
+E         - 036559782d3279a14659389df958876414
+E         + 036559782d7479138cce6eeb7a5dff5
+
+test_a7_g23_lifecycle_1464.py:44: AssertionError
+=========================== short test summary info ============================
+ERROR test_a7_g23_lifecycle_1464.py::test_a_lawful_reply_completes_the_real_lifecycle_with_zero_calls[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_lawful_reply_completes_the_real_lifecycle_with_zero_calls[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_candidate_declares_its_kind_and_dispatches_to_its_own_parser[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_candidate_declares_its_kind_and_dispatches_to_its_own_parser[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[missing-G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[missing-G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[duplicate-G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[duplicate-G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[extra-G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[extra-G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_membership-G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_membership-G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_type-G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[wrong_type-G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[malformed-G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[malformed-G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[prose-G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unlawful_reply_is_refused_and_retried_never_credited[prose-G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_one_whole_fenced_json_block_is_lawful[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_one_whole_fenced_json_block_is_lawful[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_null_answer_is_lawful_but_settles_nothing[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_null_answer_is_lawful_but_settles_nothing[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_tampered_raw_bytes_are_caught_BEFORE_the_first_finalize[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_tampered_raw_bytes_are_caught_BEFORE_the_first_finalize[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_tampered_raw_bytes_are_caught_after_capture[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_tampered_raw_bytes_are_caught_after_capture[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_tampered_prompt_stops_the_preflight[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_tampered_prompt_stops_the_preflight[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_wrong_root_or_receipt_hash_is_refused[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_wrong_root_or_receipt_hash_is_refused[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_interrupted_run_resumes_without_repeating_a_segment[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_interrupted_run_resumes_without_repeating_a_segment[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_second_freeze_of_the_same_run_is_refused[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_second_freeze_of_the_same_run_is_refused[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_two_agreeing_lanes_reconcile_and_are_credited[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_two_agreeing_lanes_reconcile_and_are_credited[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_two_disagreeing_lanes_are_never_credited[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_two_disagreeing_lanes_are_never_credited[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_one_usable_lane_is_never_enough[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_one_usable_lane_is_never_enough[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_interrupted_segment_retries_only_the_lane_that_failed[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_an_interrupted_segment_retries_only_the_lane_that_failed[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_whole_lifecycle_spends_nothing_measured_from_the_ledger[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_whole_lifecycle_spends_nothing_measured_from_the_ledger[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_completion_is_persisted_once_and_reloads_bound_to_its_run[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_completion_is_persisted_once_and_reloads_bound_to_its_run[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_post_run_tampering_with_the_completion_is_refused[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_post_run_tampering_with_the_completion_is_refused[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_two_lanes_from_different_attempts_are_combined_whole_run[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_two_lanes_from_different_attempts_are_combined_whole_run[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_one_mixed_batch_splits_per_question_and_is_never_both[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_one_mixed_batch_splits_per_question_and_is_never_both[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_official_entry_derives_its_maps_from_saved_evidence[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_the_official_entry_derives_its_maps_from_saved_evidence[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_kind_swap_between_candidate_and_completion_REFUSES[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_kind_swap_between_candidate_and_completion_REFUSES[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_changed_grader_run_REFUSES[G2] - ...
+ERROR test_a7_g23_lifecycle_1464.py::test_a_changed_grader_run_REFUSES[G3] - ...
+ERROR test_a7_g23_lifecycle_1464.py::test_a_recomputed_caller_source_cannot_substitute_a_candidate[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_recomputed_caller_source_cannot_substitute_a_candidate[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_lawful_handle_and_kind_set_REACHES_the_downstream_boundary
+ERROR test_a7_g23_lifecycle_1464.py::test_the_official_entry_REFUSES_before_grader_evidence_exists
+ERROR test_a7_g23_lifecycle_1464.py::test_a_missing_required_grader_kind_REFUSES
+ERROR test_a7_g23_lifecycle_1464.py::test_an_unrequired_grader_kind_REFUSES
+ERROR test_a7_g23_lifecycle_1464.py::test_the_approved_G1_lifecycle_is_REQUIRED
+ERROR test_a7_g23_lifecycle_1464.py::test_no_builder_api_can_stamp_a_separate_producer
+ERROR test_a7_g23_lifecycle_1464.py::test_the_freeze_document_stores_the_validated_producer_identity
+ERROR test_a7_g23_lifecycle_1464.py::test_incomplete_pins_give_the_NAMED_lifecycle_refusal_not_KeyError
+ERROR test_a7_g23_lifecycle_1464.py::test_a_non_G1_candidate_refuses_BY_TASK_KIND_before_derivation
+ERROR test_a7_g23_lifecycle_1464.py::test_a_G1_state_with_the_SAME_producer_reaches_derivation
+ERROR test_a7_g23_lifecycle_1464.py::test_a_G1_state_with_a_DIFFERENT_producer_refuses_after_the_lifecycle
+ERROR test_a7_g23_lifecycle_1464.py::test_a_tampered_ignored_completion_field_REFUSES[G2]
+ERROR test_a7_g23_lifecycle_1464.py::test_a_tampered_ignored_completion_field_REFUSES[G3]
+ERROR test_a7_g23_lifecycle_1464.py::test_zero_replies_credit_nothing - Asser...
+ERROR test_a7_g23_lifecycle_1464.py::test_an_absent_leg_gets_no_verdicts - As...
+ERROR test_a7_g23_lifecycle_1464.py::test_a_malformed_meaning_verdict_is_never_credited
+ERROR test_a7_g23_lifecycle_1464.py::test_a_malformed_extras_bucket_is_never_credited
+ERROR test_a7_g23_lifecycle_1464.py::test_a_changed_producer_run_refuses_at_the_official_entry
+ERROR test_a7_g23_lifecycle_1464.py::test_the_official_entry_takes_no_caller_population_or_verdicts
+479 passed, 79 errors in 201.11s (0:03:21)
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

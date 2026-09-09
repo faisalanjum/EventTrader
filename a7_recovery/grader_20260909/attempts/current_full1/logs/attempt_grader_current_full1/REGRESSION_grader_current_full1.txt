@@ -1,0 +1,21 @@
+........................................................................ [ 51%]
+..................................................................F      [100%]
+=================================== FAILURES ===================================
+________ test_preflight_zero_problems_and_attempt1_budget_under_ceiling ________
+
+built = {'base': '/tmp/a7_logs_1781/attempt_grader_current_full1/pytest/g1pkg0', 'cd': '/tmp/a7_logs_1781/attempt_grader_curre...nt'}, 'budget': {'after_initial': 755, 'after_max': 959, 'ceiling': 6000, 'initial_grader_calls': 204, ...}, ...}, ...}
+
+    def test_preflight_zero_problems_and_attempt1_budget_under_ceiling(built):
+        _lanes, _size, problems = W.next_admissible(built["cd"], built["rd"],
+                                                    built["rsha"])
+        assert problems == []
+        b = built["doc"]["budget"]
+>       assert b["spent_before"] == 5612
+E       assert 551 == 5612
+
+test_a7_g1_precall_freeze_1525.py:168: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_g1_precall_freeze_1525.py::test_preflight_zero_problems_and_attempt1_budget_under_ceiling
+1 failed, 138 passed in 145.44s (0:02:25)
+
+--- stderr ---

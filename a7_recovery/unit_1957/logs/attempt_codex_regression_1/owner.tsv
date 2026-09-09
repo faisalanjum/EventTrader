@@ -1,0 +1,9 @@
+attempt	codex_regression_1
+payload	a1_aligned_1957.py
+map	map_codex_regression_1.tsv
+command	run_1957.sh map_codex_regression_1.tsv a1_aligned_1957.py codex_regression_1 5400
+wrapper_pid	875948
+payload_pid	875952
+payload_pgid	875948
+started_utc	2026-09-09T12:52:33Z
+state	finished exit 0

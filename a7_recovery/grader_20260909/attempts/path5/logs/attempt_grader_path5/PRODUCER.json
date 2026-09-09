@@ -1,0 +1,20 @@
+{
+  "schema": "a7_prepared_run/1",
+  "run_dir": "/tmp/a7_logs_1781/attempt_grader_path5/producer",
+  "contract_suffix": ".v3",
+  "a5_manifest_sha256": "939bad3100f2842354c45d14641b15041ae9a952c057cb00588833c7de4aa1c9",
+  "a5_bundle_sha256": "f89f4ddedd8d92942af854486787fd49dc0feb29242083042d481b0f213707b5",
+  "receipt_sha256": "b5220b6a6f848f66176408f646ae2316e576cb58d402a2e7172b423578d62997",
+  "scheduled_calls": 204,
+  "a6_freeze_sha256": "d1ba2222ee5cf8498f4ec41788d7977e2b64ceda0422bebaa4c71be2cff711bc",
+  "a4_lock_sha256": "f1d8e080eeb7327f0123a4d1f811825befeaac3dc81c74f95c0b61a8db7a5ac2",
+  "a4_lock_receipt_sha256": "25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7",
+  "corrected_inventory_sha256": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+  "finalizations": {
+    "primary": "4bf1685b77f56d14b6b25e38fff17936ef22ffc5abde636b469959565c413f56"
+  },
+  "executed": {
+    "run_digest": "3c0c10887a6f0997163d8d9f510d1b79b2632c9a0ab7c54de97ea4227ad82d45",
+    "run_files": 485
+  }
+}

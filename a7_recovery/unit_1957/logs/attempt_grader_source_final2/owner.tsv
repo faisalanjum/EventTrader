@@ -1,0 +1,9 @@
+attempt	grader_source_final2
+payload	../../grader_20260909/attempts/source_final2/source_paths.py
+map	map_codex_grader_source_final2.tsv
+command	run_1957.sh map_codex_grader_source_final2.tsv ../../grader_20260909/attempts/source_final2/source_paths.py grader_source_final2 5400
+wrapper_pid	1320621
+payload_pid	1320625
+payload_pgid	1320621
+started_utc	2026-09-09T18:30:12Z
+state	finished exit 0

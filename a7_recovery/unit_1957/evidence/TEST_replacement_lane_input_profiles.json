@@ -1,0 +1,9 @@
+{
+ "expected_input_for_served_lanes": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+ },
+ "note": "TEST replacement, used only to prove the boundary pin refuses it."
+}

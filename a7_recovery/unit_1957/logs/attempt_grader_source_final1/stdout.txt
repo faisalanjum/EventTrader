@@ -1,0 +1,17 @@
+Saved real answer: exact attempt accepted; 35 missing; materialize/lock refused; no retry.
+owner ee03028747c662c319b238b05ed976d42427089ee1096c334b11d8b974f46825
+10/10 -> True
+  GREEN 1_materialize_is_intact
+  GREEN 2_finalize_writes_every_artifact
+  GREEN 3_lock_accepts_the_proved_run
+  GREEN 4_a_repeated_successful_event_is_refused
+  GREEN 5_a_repeated_successful_sign_is_refused
+  GREEN 6_a_wrong_prompt_is_refused
+  GREEN 7_a_wrong_raw_identity_is_refused
+  GREEN 8_a_wrong_transcript_identity_is_refused
+  GREEN 9_a_missing_required_result_is_refused
+  GREEN 10_bound_artifact_drift_is_refused
+counts {"events_covered": 36, "proposed_lawful_abstention_controls": 34, "proposed_negative_controls": 33, "proposed_real_items": 34, "records": 101, "source_events": 36}
+finalize {'ok': True, 'problems': [], 'written': ['final_inventory.json', 'adjudication_sidecar.json', 'validator_receipt.json', 'final_sign_input.json']}  lock {'ok': True, 'problems': []}
+saved /tmp/a7_logs_1781/attempt_grader_source_final1/LIFECYCLE_grader_source_final1.json
+Complete TEST source: native lock proved; removed handoff refused; original restored.

@@ -1,0 +1,83 @@
+{
+  "tag": "grader_closure3",
+  "kind": "ALIGNED_SIDE",
+  "artifacts_before": {
+    "launch_kfields_drafts.manifest.json": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+    "launch_kfields_a1.bundle.json": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+    "a7_g1_build.py": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "292cda334e14449fd2d678650318219d2de5886e112dd555822e14d9965eb66c",
+    "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff"
+  },
+  "artifacts_after_build": {
+    "launch_kfields_drafts.manifest.json": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+    "launch_kfields_a1.bundle.json": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+    "a7_g1_build.py": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "292cda334e14449fd2d678650318219d2de5886e112dd555822e14d9965eb66c",
+    "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff"
+  },
+  "plan_counts": {
+    "n_packets": 196,
+    "n_calls": 392
+  },
+  "inventory_sha256": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff",
+  "comparable": 31,
+  "changed_owner_affected": 31,
+  "fixture_dependent": 6,
+  "affected_minus_comparable": [],
+  "fixture_minus_comparable": [],
+  "union_modules": [
+    "test_a7_corrections_1454.py::test_defect1_control_lawful_suffixed_family_routes_and_bare_one_does_not",
+    "test_a7_corrections_1454.py::test_defect3_control_lawful_synonym_passes_and_wrong_meaning_fails_safety",
+    "test_a7_corrections_1454.py::test_one_raw_input_with_two_facts_keeps_BOTH_branches",
+    "test_a7_corrections_1454.py::test_a_split_with_mixed_outcomes_loses_neither_branch",
+    "../../../../../driver/core/test_exact_movement.py",
+    "../../../../../driver/relocation/test_exact_sign.py"
+  ],
+  "union_size": 6,
+  "command": [
+    "/home/faisal/EventMarketDB/venv/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "--no-header",
+    "-rfE",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/tmp/a7_logs_1781/attempt_grader_closure3/pytest",
+    "test_a7_corrections_1454.py::test_defect1_control_lawful_suffixed_family_routes_and_bare_one_does_not",
+    "test_a7_corrections_1454.py::test_defect3_control_lawful_synonym_passes_and_wrong_meaning_fails_safety",
+    "test_a7_corrections_1454.py::test_one_raw_input_with_two_facts_keeps_BOTH_branches",
+    "test_a7_corrections_1454.py::test_a_split_with_mixed_outcomes_loses_neither_branch",
+    "../../../../../driver/core/test_exact_movement.py",
+    "../../../../../driver/relocation/test_exact_sign.py"
+  ],
+  "collection_exit": 0,
+  "child_exit": 1,
+  "failed_ids": [
+    "../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-1]",
+    "../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-2]",
+    "../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-1]",
+    "../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-2]"
+  ],
+  "failed_id_count": 4,
+  "collection_errors": [],
+  "summary": "4 failed, 165 passed, 3 warnings in 7.82s",
+  "artifacts_after_run": {
+    "launch_kfields_drafts.manifest.json": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+    "launch_kfields_a1.bundle.json": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+    "a7_g1_build.py": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "292cda334e14449fd2d678650318219d2de5886e112dd555822e14d9965eb66c",
+    "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff"
+  },
+  "artifacts_stable": true
+}

@@ -1,0 +1,20 @@
+manifest: 78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2
+bundle: 91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68 slices 36 largest 248011
+events=36 packets=102 calls=204
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_extra_review_template_shows_a_shape_not_an_example_answer ________
+
+    def test_extra_review_template_shows_a_shape_not_an_example_answer():
+        output = B.extras_rules().split("[OUTPUT]", 1)[1].split(G.BOUNDARY, 1)[0]
+        template = json.loads(re.search(r"\n(\[\s*\{.*?\}\s*\])\n", output, re.S).group(1))
+        placeholder = template[0]["bucket"]
+>       assert placeholder not in B.extras_buckets() + [None]
+E       AssertionError: assert 'duplicate' not in (['duplicate', 'key_miss', 'unsupported'] + [None])
+E        +  where ['duplicate', 'key_miss', 'unsupported'] = <function extras_buckets at 0x7f52ae6fccc0>()
+E        +    where <function extras_buckets at 0x7f52ae6fccc0> = B.extras_buckets
+
+test_a7_score_boundaries.py:18: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_score_boundaries.py::test_extra_review_template_shows_a_shape_not_an_example_answer
+1 failed in 0.16s

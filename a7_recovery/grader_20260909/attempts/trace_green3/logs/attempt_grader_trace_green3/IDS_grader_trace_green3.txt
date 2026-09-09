@@ -1,0 +1,2 @@
+test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts
+test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace

@@ -1,0 +1,3110 @@
+FFFFF..FF.F.FFFF.FFFFF.FFFFFF.F.FFFF...F..FFF........................... [ 33%]
+.......................................................FFFF............. [ 67%]
+....................................................................     [100%]
+=================================== FAILURES ===================================
+____ test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect ____
+
+    def test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect():
+        """A4-v6 is historical evidence and must NOT be silently corrected."""
+>       bare = [1 for _sid, f in _du_facts(corrected=False)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+                if f.get("fact_type") in REQUIRED_SUFFIX
+                and split_terminal_suffix(_name(f) or "")[1] is None]
+
+test_a7_corrections_1454.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:77: in _du_facts
+    gold, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+_ test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix _
+
+    def test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix():
+        """NAME-17 + OD-2. A guidance/surprise fact on a BARE name is a NAMING
+        defect, so the CORRECTED key must not contain one."""
+        bad = []
+>       for sid, fact in _du_facts():
+                         ^^^^^^^^^^^
+
+test_a7_corrections_1454.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:77: in _du_facts
+    gold, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+________ test_defect1_no_event_reuses_one_driver_name_across_fact_types ________
+
+    def test_defect1_no_event_reuses_one_driver_name_across_fact_types():
+        """exp5_scoring_spec_v3.md:87 - one name cannot be two types."""
+        seen, clashes = {}, []
+>       for sid, f in _du_facts():
+                      ^^^^^^^^^^^
+
+test_a7_corrections_1454.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:77: in _du_facts
+    gold, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+___ test_defect1_control_lawful_suffixed_family_routes_and_bare_one_does_not ___
+
+    def test_defect1_control_lawful_suffixed_family_routes_and_bare_one_does_not():
+        """The positive control and its mutation, through the UNCHANGED route."""
+        lawful = _same_base_event("revenue", "revenue_guidance")
+>       routed = _route_for(lawful)
+                 ^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+_____ test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event ______
+
+    def test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event():
+        """ChannelContract fixes `event_time` as the SOURCE PUBLIC timestamp. The
+        K-fields `date + T00:00:00` anchor is only the menu cutoff and must never
+        become a route input."""
+        import a7_source_meta as SM
+        side = SM.load()
+>       gold, _sc = G.gold_by_event()
+                    ^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+__ test_defect3_control_lawful_synonym_passes_and_wrong_meaning_fails_safety ___
+
+    def test_defect3_control_lawful_synonym_passes_and_wrong_meaning_fails_safety():
+        """Control plus mutation, both through the versioned scorer."""
+        # the versioned scorer IS the one copied scorer of this tree; there is no
+        # second scorer and no wrapper.
+        from scorers import score_exp5 as S2
+        from test_harness_guards import _gold_fact
+        q = "s" * 60
+        gold = {"E1": [_gold_fact(q, fact_type="metric",
+                                  item=_v2_item(q, driver_name="revenue",
+                                                fiscal_year=2050,
+                                                fiscal_quarter=1,
+                                                time_type="duration",
+                                                level_low=_v2_slot(q, value=5),
+                                                level_high=_v2_slot(q, value=5),
+                                                level_shape_hint="point",
+                                                level_unit="m_usd"))]}
+        arm = {"E1": {"facts": [_v2_fact(q, fact_type="metric", item=_v2_item(
+            q, driver_name="total_revenue", fiscal_year=2050, fiscal_quarter=1,
+            time_type="duration", level_low=_v2_slot(q, value=5),
+            level_high=_v2_slot(q, value=5), level_shape_hint="point",
+            level_unit="m_usd"))], "abstentions": []}}
+        meta = {"E1": {"event_date": "2026-04-23T16:00:00-04:00", "fye_month": 12}}
+>       route = _route_for(arm)
+                ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+_______ test_defect3_an_incomplete_run_is_never_failed_by_spelling_alone _______
+
+    def test_defect3_an_incomplete_run_is_never_failed_by_spelling_alone():
+        """The false-fail the wrapper hid: `definite_fail` gated on the retired
+        exact-string counter INSIDE the scorer, so an incomplete run with a lawful
+        synonym and a still-pending verdict was reported as a definite failure."""
+        from scorers import score_exp5 as S
+        from test_harness_guards import _gold_fact
+        q = "p" * 60
+        gold = {"E1": [_gold_fact(q, fact_type="metric", item=_v2_item(
+            q, driver_name="revenue", fiscal_year=2050, fiscal_quarter=1,
+            time_type="duration", level_low=_v2_slot(q, value=5),
+            level_high=_v2_slot(q, value=5), level_shape_hint="point",
+            level_unit="m_usd"))]}
+        arm = {"E1": {"facts": [_v2_fact(q, fact_type="metric", item=_v2_item(
+            q, driver_name="total_revenue", fiscal_year=2050, fiscal_quarter=1,
+            time_type="duration", level_low=_v2_slot(q, value=5),
+            level_high=_v2_slot(q, value=5), level_shape_hint="point",
+            level_unit="m_usd"))], "abstentions": []}}
+        meta = {"E1": {"event_date": "2026-04-23T16:00:00-04:00", "fye_month": 12}}
+        # the pair is linked by G1 but its meaning verdict has NOT arrived yet
+        res = S.score_arm(gold, arm, meta, None, {("E1", 0): 0},
+>                         route=_route_for(arm), extras_verdicts={})
+                                ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:299: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+___ test_defect3_the_route_refuses_a_malformed_name_and_accepts_a_lawful_one ___
+
+    def test_defect3_the_route_refuses_a_malformed_name_and_accepts_a_lawful_one():
+        """The STRUCTURAL check stays with code, proven where production enforces
+        it: the public write-disabled route, not a unit call on the predicate."""
+        q = "n" * 60
+        def arm(name):
+            return {"E1": {"facts": [_v2_fact(q, fact_type="metric", item=_v2_item(
+                q, driver_name=name, fiscal_year=2050, fiscal_quarter=1,
+                time_type="duration", level_low=_v2_slot(q, value=5),
+                level_high=_v2_slot(q, value=5), level_shape_hint="point",
+                level_unit="m_usd"))], "abstentions": []}}
+>       lawful = _route_for(arm("revenue"))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:324: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+______________ test_od1_door_accepts_plain_and_fenced_identically ______________
+
+    def test_od1_door_accepts_plain_and_fenced_identically():
+>       plain, p1 = _od1(_OD1_GOOD)
+                    ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:378: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '{"verdict": "YES", "evidence_phrase": "in constant currency"}'
+quote = 'our international sales, in constant currency, were slightly below our expectations'
+
+    def _od1(text, quote=_OD1_QUOTE):
+>       import a7_od1_admission as A
+E       ModuleNotFoundError: No module named 'a7_od1_admission'
+
+test_a7_corrections_1454.py:373: ModuleNotFoundError
+________________ test_od1_door_refuses_every_malformed_envelope ________________
+
+    def test_od1_door_refuses_every_malformed_envelope():
+        bad = {
+            "surrounding text": "Here is my answer:\n" + _OD1_GOOD,
+            "trailing text": _OD1_GOOD + "\nHope that helps.",
+            "a second block": "```json\n" + _OD1_GOOD + "\n```\n```json\n"
+                              + _OD1_GOOD + "\n```",
+            "an unclosed fence": "```json\n" + _OD1_GOOD,
+            "duplicate keys": '{"verdict": "YES", "verdict": "NO", '
+                              '"evidence_phrase": "in constant currency"}',
+            "an extra field": '{"verdict": "YES", "evidence_phrase": '
+                              '"in constant currency", "why": "because"}',
+            "a missing field": '{"verdict": "YES"}',
+            "an unlawful verdict": '{"verdict": "MAYBE", "evidence_phrase": '
+                                   '"in constant currency"}',
+        }
+        for label, text in bad.items():
+>           answer, problems = _od1(text)
+                               ^^^^^^^^^^
+
+test_a7_corrections_1454.py:400: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = 'Here is my answer:\n{"verdict": "YES", "evidence_phrase": "in constant currency"}'
+quote = 'our international sales, in constant currency, were slightly below our expectations'
+
+    def _od1(text, quote=_OD1_QUOTE):
+>       import a7_od1_admission as A
+E       ModuleNotFoundError: No module named 'a7_od1_admission'
+
+test_a7_corrections_1454.py:373: ModuleNotFoundError
+______ test_od1_door_refuses_an_evidence_phrase_that_is_not_in_the_quote _______
+
+    def test_od1_door_refuses_an_evidence_phrase_that_is_not_in_the_quote():
+        """A made-up phrase is the one failure a JSON check cannot catch."""
+        made_up = '{"verdict": "YES", "evidence_phrase": "revenue grew strongly"}'
+>       answer, problems = _od1(made_up)
+                           ^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:407: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '{"verdict": "YES", "evidence_phrase": "revenue grew strongly"}'
+quote = 'our international sales, in constant currency, were slightly below our expectations'
+
+    def _od1(text, quote=_OD1_QUOTE):
+>       import a7_od1_admission as A
+E       ModuleNotFoundError: No module named 'a7_od1_admission'
+
+test_a7_corrections_1454.py:373: ModuleNotFoundError
+____________ test_od1_prompt_serves_only_the_four_permitted_fields _____________
+
+    def test_od1_prompt_serves_only_the_four_permitted_fields():
+        """The LEAK control. No identity and no answer field may reach the model."""
+>       import a7_od1_admission as A
+E       ModuleNotFoundError: No module named 'a7_od1_admission'
+
+test_a7_corrections_1454.py:416: ModuleNotFoundError
+_______________ test_the_applier_refuses_a_row_whose_bytes_moved _______________
+
+    def test_the_applier_refuses_a_row_whose_bytes_moved():
+        """MUTATION: the recorded old identity is the permission to act."""
+        import a7_key_correction as K
+>       gold, _ = G.gold_by_event()
+                  ^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:448: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+___________ test_the_ledger_covers_the_acted_population_exactly_once ___________
+
+    def test_the_ledger_covers_the_acted_population_exactly_once():
+        """The CURRENT ledger names every row it acts on exactly once, and its
+        published counts are the ones SEQ 1458 item 1 required: the actionable
+        naming population, the wider family audit it was derived from, and the
+        controls that are checked unchanged rather than acted on."""
+        import a7_key_correction as K
+        ledger = K.load()
+        keys = [(r["source_id"], r["gold_idx"]) for r in ledger["rows"]]
+        assert len(keys) == len(set(keys)) == ledger["acted_rows"]
+        assert ledger["actionable_population"] == 52
+        assert ledger["family_audit_population"] == 68
+        assert ledger["unchanged_controls"] == 16
+        assert (ledger["actionable_population"] + ledger["unchanged_controls"]
+                == ledger["family_audit_population"])
+>       gold, _ = G.gold_by_event()
+                  ^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:470: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+_________ test_g2_prompt_carries_the_live_rule_and_every_meaning_field _________
+
+    def test_g2_prompt_carries_the_live_rule_and_every_meaning_field():
+        from scorers import score_exp5 as S
+>       B, packet = _g2_packet()
+                    ^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:503: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:493: in _g2_packet
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:482: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+_____________ test_g2_door_requires_exactly_the_complete_field_set _____________
+
+    def test_g2_door_requires_exactly_the_complete_field_set():
+        from scorers import score_exp5 as S
+>       B, packet = _g2_packet()
+                    ^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:521: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:493: in _g2_packet
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:482: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+______________ test_g2_door_accepts_the_four_lawful_answer_shapes ______________
+
+    def test_g2_door_accepts_the_four_lawful_answer_shapes():
+        """correct name, lawful alternative, wrong name, and uncertain."""
+        from scorers import score_exp5 as S
+>       B, packet = _g2_packet()
+                    ^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:546: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:493: in _g2_packet
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:482: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+______________ test_g2_prompt_defines_every_aspect_in_plain_words ______________
+
+    def test_g2_prompt_defines_every_aspect_in_plain_words():
+        """SEQ 1457 item 8: six opaque labels cannot be answered."""
+        import a7_g23_build as B
+        from scorers import score_exp5 as S
+        text = B.meaning_rules()
+        for field in S.MEANING_FIELDS:
+            definition = B.ASPECT_DEFINITIONS[field]
+            assert len(definition) > 40, field
+            assert definition in text, "the rendered prompt omits %s's meaning" % field
+        # the true/false/null contract must be stated, not implied
+>       assert "null means the evidence does not" in text
+E       AssertionError: assert 'null means the evidence does not' in '[ROLE]\nFor each question below, judge ONE produced record against the reviewed record\nof the SAME claim, using only...y one\nfenced JSON block.\n\n---------------------------------- BOUNDARY ----------------------------------\n[EVENT]\n'
+
+test_a7_corrections_1454.py:579: AssertionError
+_____________________ test_g2_output_example_is_valid_json _____________________
+
+    def test_g2_output_example_is_valid_json():
+        import a7_g23_build as B
+        import re
+        text = B.meaning_rules()
+        block = text[text.index("[OUTPUT]"):text.index("No prose")]
+        found = re.search(r"\[\s*\{.*?\}\s*\]", block, re.S)
+        assert found, "no output example found"
+        parsed = json.loads(found.group(0))          # must be REAL JSON
+        assert isinstance(parsed, list) and len(parsed) == 1
+        from scorers import score_exp5 as S
+>       assert sorted(parsed[0]["verdicts"]) == sorted(S.MEANING_FIELDS)
+E       AssertionError: assert ['driver_name..._source', ...] == ['driver_name...lice_vs_menu']
+E         
+E         At index 5 diff: 'record_matches_source' != 'slice_vs_menu'
+E         Left contains one more item: 'slice_vs_menu'
+E         Use -v to get more diff
+
+test_a7_corrections_1454.py:593: AssertionError
+__________________ test_g2_two_graders_must_agree_per_aspect ___________________
+
+    def test_g2_two_graders_must_agree_per_aspect():
+        import a7_g23_build as B
+        from scorers import score_exp5 as S
+        full = {f: True for f in S.MEANING_FIELDS}
+        agreed, unresolved = B.reconcile_meaning({"M1": dict(full)},
+                                                 {"M1": dict(full)})
+>       assert agreed == {"M1": full} and not unresolved
+E       AssertionError: assert ({} == {'M1': {'driv...': True, ...}}
+E         
+E         Right contains 1 more item:
+E         {'M1': {'driver_name_meaning': True,
+E                 'driver_state': True,
+E                 'favorability': True,
+E                 'growth_basis': True,
+E                 'lane_routing': True,
+E                 'slice_vs_menu': True}}
+E         Use -v to get more diff)
+
+test_a7_corrections_1454.py:602: AssertionError
+____________ test_rule6_an_exact_duration_window_is_all_or_nothing _____________
+
+    def test_rule6_an_exact_duration_window_is_all_or_nothing():
+        """Control, control, mutation — all through the public route."""
+        # complete fiscal framing, no exact dates: lawful
+>       assert _decisions(_period_arm())[0][0] == "written"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:646: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:640: in _decisions
+    for r in _route_for(arm)["E1"]["result"]["items"]]
+             ^^^^^^^^^^^^^^^
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+____________ test_rule5a_a_numberless_growth_basis_uses_level_unit _____________
+
+    def test_rule5a_a_numberless_growth_basis_uses_level_unit():
+        """Control and mutation for the unit clarification."""
+        q = "u" * 60
+        def arm(level_unit, change_unit):
+            # genuinely NUMBERLESS: every value slot and shape hint null, which is
+            # the shape the corrected key rows actually carry. A fixture with a
+            # level value is rejected on SHAPE and proves nothing about units.
+            return {"E1": {"facts": [_v2_fact(q, fact_type="metric", item=_v2_item(
+                q, driver_name="revenue", fiscal_year=2050, fiscal_quarter=1,
+                time_type="duration", driver_state="increased",
+                level_low=None, level_high=None, change_value=None,
+                comparison_low=None, comparison_high=None,
+                level_shape_hint=None, comparison_shape_hint=None,
+                level_unit=level_unit, change_unit=change_unit))],
+                "abstentions": []}}
+        # lawful: the numberless growth basis rides in level_unit
+>       assert _decisions(arm("percent_yoy", None))[0][0] == "written"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:673: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:640: in _decisions
+    for r in _route_for(arm)["E1"]["result"]["items"]]
+             ^^^^^^^^^^^^^^^
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+_____ test_the_corrected_prompt_version_is_frozen_beside_its_predecessors ______
+
+    def test_the_corrected_prompt_version_is_frozen_beside_its_predecessors():
+        """Version 3 carries both clarifications and is FROZEN. It is not yet the
+        served contract: the committed plan, its pins, the launchers and every A1
+        proof belong to version 1, and switching the served version without
+        re-planning the launch broke 103 tests in that chain. Serving it is a
+        re-plan, and that decision is not this test's to make.
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+        def read(name):
+            return io.open(os.path.join(here, name), encoding="utf-8").read()
+        v3 = read("exp5_prompt_producer.v3.md")
+        assert "exact duration window is all-or-nothing" in v3
+        assert "numberless growth fact states its basis in `level_unit`" in v3
+        assert "MUST end in `_guidance`" in v3
+        # every earlier version stays exactly as it was
+        v1 = read("exp5_prompt_producer.md")
+        assert "may end a name" in v1 and "all-or-nothing" not in v1
+>       v2 = read("exp5_prompt_producer.v2.md")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:696: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'exp5_prompt_producer.v2.md'
+
+    def read(name):
+>       return io.open(os.path.join(here, name), encoding="utf-8").read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/exp5_prompt_producer.v2.md'
+
+test_a7_corrections_1454.py:688: FileNotFoundError
+______________ test_the_reference_card_is_a_structural_whitelist _______________
+
+    def test_the_reference_card_is_a_structural_whitelist():
+        """SEQ 1460 item 4: a string scan cannot prove zero hidden answers - it
+        ignores numbers, booleans, short strings, lists and dicts. The card is an
+        exact key whitelist and the proof is structural."""
+        import a7_g23_build as B
+        import a7_key_correction as K
+>       key, _identity = K.current_key()
+                         ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:740: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+_________ test_quote_only_could_not_identify_a_claim_but_the_card_can __________
+
+    def test_quote_only_could_not_identify_a_claim_but_the_card_can():
+        """The defect the earlier quote-only rule froze, measured on the live key."""
+        import a7_g23_build as B
+        import a7_key_correction as K
+>       key, _identity = K.current_key()
+                         ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:787: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+___________ test_g3_prompt_defines_every_bucket_and_shows_valid_json ___________
+
+    def test_g3_prompt_defines_every_bucket_and_shows_valid_json():
+        import re
+>       B, packet = _g3()
+                    ^^^^^
+
+test_a7_corrections_1454.py:819: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:809: in _g3
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:482: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+___________________ test_g3_door_is_strict_and_never_crashes ___________________
+
+    def test_g3_door_is_strict_and_never_crashes():
+>       B, packet = _g3()
+                    ^^^^^
+
+test_a7_corrections_1454.py:829: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:809: in _g3
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:482: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+_______________ test_g3_two_answers_must_agree_on_a_named_bucket _______________
+
+    def test_g3_two_answers_must_agree_on_a_named_bucket():
+>       B, _packet = _g3()
+                     ^^^^^
+
+test_a7_corrections_1454.py:848: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:809: in _g3
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:482: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+________ test_an_unresolved_reference_stops_the_launch_before_any_call _________
+
+    def test_an_unresolved_reference_stops_the_launch_before_any_call():
+        """SEQ 1461 item 3. Two reviewed claims whose PERMITTED card is identical
+        cannot be asked about lawfully, so the candidate must refuse to launch
+        rather than spend calls it can never resolve."""
+        import a7_g23_build as B
+        import a7_key_correction as K
+>       key, _identity = K.current_key()
+                         ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:950: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:345: in gold_by_event
+    shards, _raws, _origins, bad = F.v6_shards(bound)
+                                   ^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3806: in v6_shards
+    shards, raws, origins, bad = v5_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3627: in v5_shards
+    shards, raws, origins, bad = v4_shards(bound)
+                                 ^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3471: in v4_shards
+    base, braws, bad = decided_shards(bound)
+                       ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3191: in decided_shards
+    shards, raws, bad = accepted_shards(bound.decision, bound, "decision")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2057: in accepted_shards
+    sh, raws, bad = _accepted_shards_cached(
+build_kfields_final.py:2067: in _accepted_shards_cached
+    return _accepted_shards(event_dir, bound, phase)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2089: in _accepted_shards
+    proved, probs = run_evidence(base, bound, receipt)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:1738: in run_evidence
+    prompt, want_script = _decision_context(bound, label, attempt)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:3021: in _decision_context
+    return (decision_prompt(bound, label),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2995: in decision_prompt
+    payload(bound, task))
+    ^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:510: in payload
+    ("leads", event_leads(bound, task))])
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:331: in event_leads
+    reading = _hard_readings(bound)
+              ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:166: in _hard_readings
+    for label, o in _hard_outcomes(bound)[0].items() if o[0] == "valid"}
+                    ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+bound = Bound(package='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/...cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-v6corr-3-20260823T171830Z', hr_package=None)
+
+    @functools.lru_cache(maxsize=None)
+    def _hard_outcomes(bound):
+        """-> ({call label: (state, why, RAW text or None, origin)}, [run problems])
+    
+        Nothing is dropped: a reading that could not be proved keeps the state and
+        the reason it reached, so the gate above can name it.
+    
+        Derived in Codex's order: the original primary, then its invalid-only
+        child, then the accepted four-call correction. First valid wins.
+        """
+        evidence_dir, hr_run, fix_run = bound.evidence, bound.hr, bound.fix
+        by = HR._by_label(evidence_dir)
+        out, run_problems = {}, []
+        sources = []
+        if hr_run:                # a run with no hard task has no hard review
+            sources.append((hr_run, "hard_review_primary", HR.read_reply, HR))
+            sources.append((os.path.join(hr_run, "retry"), "hard_review_child",
+                            HR.read_reply, HR))
+        if fix_run:               # and none owed a correction
+            sources.append((fix_run, "group_shape_correction", FIX.read_reply, FIX))
+        if hr_run and not bound.hr_package:
+>           raise ValueError("%s was given as a hard-review run with no package to "
+                             "prove its calls against" % hr_run)
+E           ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against
+
+build_kfields_final.py:190: ValueError
+____________ test_one_raw_input_with_two_facts_keeps_BOTH_branches _____________
+
+    def test_one_raw_input_with_two_facts_keeps_BOTH_branches():
+        """The production route preserves several rows at one raw index. The old
+        replay turned every fact into its own raw input, so this shape could not
+        occur at all and nothing tested it."""
+        from scorers.score_exp5 import _rows_for_event
+        facts = _one_quote_pair("revenue", "margin")
+>       grouped = _route_entry(facts, groups=[[0, 1]])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:1077: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:1068: in _route_entry
+    return _route_for(arm, groups_by_sid={"E1": groups} if groups else None)["E1"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+____________ test_a_split_with_mixed_outcomes_loses_neither_branch _____________
+
+    def test_a_split_with_mixed_outcomes_loses_neither_branch():
+        """One lawful fact and one the route cannot write, on ONE raw index."""
+        from scorers.score_exp5 import _rows_for_event
+        q = "z" * 60
+        lawful = _v2_fact(q, fact_type="metric",
+                          item=_v2_item(q, driver_name="revenue",
+                                        fiscal_year=2050, fiscal_quarter=1,
+                                        time_type="duration",
+                                        level_low=_v2_slot(q, value=5),
+                                        level_high=_v2_slot(q, value=5),
+                                        level_shape_hint="point",
+                                        level_unit="m_usd"))
+        unknown = _v2_fact(q, fact_type="metric",
+                           item=_v2_item(q, driver_name="not_a_stored_driver",
+                                         fiscal_year=2050, fiscal_quarter=1,
+                                         time_type="duration",
+                                         level_low=_v2_slot(q, value=6),
+                                         level_high=_v2_slot(q, value=6),
+                                         level_shape_hint="point",
+                                         level_unit="m_usd"))
+        facts = [lawful, unknown]
+>       entry = _route_entry(facts, groups=[[0, 1]])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:1111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:1068: in _route_entry
+    return _route_for(arm, groups_by_sid={"E1": groups} if groups else None)["E1"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+_______ test_the_rejection_accounting_is_required_and_exactly_rederived ________
+
+    def test_the_rejection_accounting_is_required_and_exactly_rederived():
+        from scorers.score_exp5 import _rows_for_event
+        facts = _one_quote_pair("revenue", "margin")
+>       entry = _route_entry(facts, groups=[[0, 1]])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:1122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:1068: in _route_entry
+    return _route_for(arm, groups_by_sid={"E1": groups} if groups else None)["E1"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3170: in _route_for
+    return _route_for(arm_by_event, td, groups_by_sid)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_harness_guards.py:3184: in _route_for
+    out[sid] = route_reply(reply, event, str(tmp_path),
+scorers/score_exp5.py:460: in route_reply
+    result = run_event({**event, "items": items}, store=store,
+../../../../../driver/core/driver_write_cli.py:343: in run_event
+    return _run_event_v2(run_input, store=store, audit_dir=audit_dir,
+../../../../../driver/core/driver_write_cli.py:1471: in _run_event_v2
+    stored = prepared_fact_v2.to_stored_fact(
+../../../../../driver/core/prepared_fact_v2.py:604: in to_stored_fact
+    period = ensure_driver_period(
+../../../../../driver/core/driver_period_resolver.py:223: in ensure_driver_period
+    lk = lookups if lookups is not None else (_default_lookups() if ticker else None)
+                                              ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _default_lookups():
+        """The live cascade (Neo4j/Redis), imported LAZILY by reference from the read-only
+        guidance substrate — never at module import, so tests and dry-runs stay pure.
+        Transition note (GuidancePeriod.md): the existing-window lookup still searches the old
+        guidance graph; it gains DriverPeriod once DriverUpdates exist (writer step, S3.4/5)."""
+>       import guidance_write_cli as g
+E       ModuleNotFoundError: No module named 'guidance_write_cli'
+
+../../../../../driver/core/driver_period_resolver.py:550: ModuleNotFoundError
+____________ test_guidance_movement_through_both_event_routes[6-1] _____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure2/pytest/test_guidance_movement_through0')
+version = 1, precision = 6
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:62: in <module>
+    import test_stage_a_v2 as SA                                         # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../scripts/driver_seed/test_stage_a_v2.py:22: in <module>
+    from driver.channels.fiscal_ai import build_packets as BP
+../../../../../driver/channels/fiscal_ai/build_packets.py:16: in <module>
+    from driver.channels.fiscal_ai import run_code_tier as RC
+../../../../../driver/channels/fiscal_ai/run_code_tier.py:25: in <module>
+    import quarter_identity as QI          # LIVE lane + trust gate (AUTO_OK); labels NOT used here (round-15)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """Quarter identity resolver — single canonical source of truth.
+    
+    This module answers ONE question: given an earnings 8-K accession, what fiscal
+    quarter is it announcing? The output (quarter_label, safety_action) drives the
+    orchestrator's destructive-write guard — wrong answers corrupt event
+    directories / predictions / learner artifacts, so the resolver MUST fail
+    closed when it cannot prove identity.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    WHY THIS EXISTS — the FCX bug
+    ══════════════════════════════════════════════════════════════════════════════
+    Pre-2026-05 the resolver used a stale-match cascade (the old
+    `_STALE_MATCH_DAYS` constant set to 150 days) that
+    silently accepted the previous quarter's 10-K as authoritative for a live
+    8-K before the same-quarter 10-Q/10-K existed. FCX Q1 FY2026 accession
+    0000831259-26-000021 was mislabeled as Q4_FY2025, causing the orchestrator
+    to write Q1 data into the Q4 event directory and overwrite/delete the real
+    Q4 prediction. Goals 4 / 6c / 6g rebuilt this resolver around PIT-visible
+    prior-periodic projection with structural safety guards, replacing stale-
+    match cascading entirely.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    DESIGN PHILOSOPHY (load-bearing — read before refactoring)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PIT-safe. Every Cypher path is bounded by `created <= filed_8k`. A live
+       8-K MUST NOT see a future-filed 10-Q/10-K.
+    2. Fail-closed > wrong-fire. A wrong AUTO_OK corrupts downstream event
+       directories. A FAIL_CLOSED is recoverable (manual override, soft-tier
+       future). Zero new wrong AUTO_OK is a hard invariant on every change.
+    3. Structural rules only. No EX-99.1 text parsing in production
+       (LOCKED 2026-05-05, decision D8). No external HTTP / SEC EDGAR live
+       lookups. No ML/LLM. No industry/sector/SIC/GICS/NAICS/CIK dispatch.
+    4. One named ticker container allowed: `TRUST_XBRL_ADVANCE` (Goal 6g).
+       Ticker-level rules MUST apply uniformly to all periods of a ticker —
+       no per-(ticker, period) data structures. This is the architectural
+       guarantee against exception sprawl.
+    5. Accession-level overrides allowed via `XBRL_DENY_PERIODIC_ACCESSIONS`
+       in get_quarterly_filings.py (specific filings with bad XBRL).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ARCHITECTURE — layered rules (see resolve_quarter_via_prior_periodic)
+    ══════════════════════════════════════════════════════════════════════════════
+    For each earnings 8-K, find the most recent PIT-visible prior 10-Q/10-K and:
+    1. Cold-start guards: no prior → `prior_periodic_projection_no_prior`
+       FAIL_CLOSED. Long-gap (>150d) → `prior_periodic_projection_long_gap_*`
+       FAIL_CLOSED. Denylisted prior accession → fail-closed.
+    2. Branch on prior period-end shape:
+       • Calendar-shaped (regular month-end / Saturday) → calendar branch.
+       • Odd 52/53-week shape → Rule F branch.
+    3. Calendar branch (Goal 6c Rule G family + Goal 6g override):
+       • <24h since prior filed → use prior label directly (rule_g_strict_*).
+       • XBRL FY ≠ math FY → fail-closed (rule_g_fail_closed_fy_disagreement_calendar)
+         UNLESS ticker ∈ TRUST_XBRL_ADVANCE → advance prior XBRL one quarter
+         (rule_h_trusted_issuer_xbrl_advance, Goal 6g).
+       • Other calendar guards: no-prev-short-gap, same-filing-cycle.
+       • Default: math-derived projection (prior_periodic_projection_qN_to_qM).
+    4. Rule F branch (Goal 4): same shape but for non-calendar periods.
+       • <24h → rule_f_direct_recent_prior.
+       • FY disagree → rule_f_fail_closed_fy_disagreement.
+       • Else → rule_f_advance_xbrl.
+    
+    The orchestrator's destructive-write guard refuses to write event-directory
+    files unless safety_action == "AUTO_OK". FAIL_CLOSED + NO_RESOLUTION block
+    all destructive writes (see scripts/earnings/earnings_orchestrator.py
+    `enforce_quarter_identity_write_guard`).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    SHIPPED SCOPE
+    ══════════════════════════════════════════════════════════════════════════════
+    Goal 4  (commit e43cfc8): structural rebuild — PIT prior periodic projection,
+             Rule F (5 sources), old stale-match constant removed, orchestrator
+             destructive-write guard wired in.
+    Goal 6c (commit a61636a): Candidate D's 5 calendar-branch guards
+             (rule_g_strict_direct_recent_prior_calendar +
+              rule_g_strict_fail_closed_recent_disagreement_calendar +
+              rule_g_fail_closed_fy_disagreement_calendar +
+              rule_g_fail_closed_no_prev_short_gap_calendar +
+              rule_g_fail_closed_same_filing_short_gap_calendar).
+    Goal 6e (commit be4c2cc): guidance 10-Q/10-K NULL-fiscal-label fallback
+             hardened in scripts/harvest_guidance_sessions.py with denylist +
+             proximity + triple-check guards. It now routes through
+             get_quarterly_filings.choose_periodic_fiscal_identity(), the shared
+             periodic-filing chooser. Separate file; do NOT swap
+             resolve_quarter_info() into that fallback.
+    Goal 6g (commit 237f53c): 18-ticker TRUST_XBRL_ADVANCE override on the
+             calendar-FY-disagreement gate. +1.84pp warm-start correct, 0 new
+             wrongs. The per-ticker autopsy + 5-subagent SEC EDGAR
+             re-inspection that produced this bucket lives in git history
+             (see commit dd709da and `.claude/plans/quarter-identity-resolver.md`
+             for the consolidated narrative). This docstring + the bucket
+             comment below are the load-bearing in-code record.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ACCURACY BENCHMARKS (as of Goal 6g)
+    ══════════════════════════════════════════════════════════════════════════════
+    On the 10,674-row scoreable historical corpus:
+      Subset                  | correct  | wrong   | fail-closed
+      Full historical (10674) |  90.62%  |  0.22%  |  9.15%
+      Warm-start (9878)       |  97.92%  |  0.24%  |  1.83%
+      Latest-per-ticker (781) |  97.82%  |  0.38%  |  1.79%
+    
+    The 0.24% warm-start wrong-fire rate is the structural ceiling under
+    current locks. Forward expectation: ~0.24% of live earnings 8-Ks will
+    wrong-write (~7-8/year on a 781-ticker × ~4 events/year universe).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    KNOWN UNFIXED CLASSES (not yet shipped, documented for future work)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PHR/PINC/PRU class (3 latest-per-ticker wrong-fires): transcript-only
+       supplements / 10-Q-before-8-K inversions / voluntary recasts. Unifying
+       structural signal: prior periodic snapshot already covers the SAME or
+       LATER period the new 8-K is announcing → advancing is wrong. Future
+       Goal 6h would test a structural rule for this; not implemented because
+       blast radius is universe-wide and needs empirical verification.
+    2. GIII-class issuer-convention divergence (XBRL year-of-start vs EX-99.1
+       year-of-end). Structurally indistinguishable from SAFE issuers without
+       EX-99.1 parsing. Approximately 4.4% of universe (34/781 tickers) is
+       structurally fail-closed under current locks; GIII alone in this class
+       is genuinely irreducible. Empirically validated 2026-05-07 against
+       408 rows × 34 edge tickers + Goal 6f's 4-candidate research probe
+       (KEEP_D verdict). DO NOT add issuer FY-convention tables — they don't
+       generalize and the 34-ticker audit + Goal 6f rejected this branch.
+    3. CNM stale-XBRL on prior 10-K (single accession). Fix is to add the bad
+       10-K accession to XBRL_DENY_PERIODIC_ACCESSIONS in get_quarterly_filings.py
+       AND add CNM to TRUST_XBRL_ADVANCE (denylist alone is insufficient —
+       would just cascade-fail to next prior).
+    4. ANF/DKS/PVH/PLCE bucket expansion (8 audit-truth-label-error rows).
+       ChatGPT-verified candidates for TRUST_XBRL_ADVANCE expansion to 22
+       AFTER independent re-audit of each disputed Tier-B truth row.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    LOCKED DECISIONS — do not relitigate without re-running the audit/research
+    ══════════════════════════════════════════════════════════════════════════════
+    - No ticker allowlists/denylists/FY tables EXCEPT `TRUST_XBRL_ADVANCE`.
+    - No industry/sector/SIC/GICS/NAICS/CIK dispatch (Goal 5 Candidate E rejected).
+    - No EX-99.1 / press-release text parsing in production (D8 lock 2026-05-05).
+    - No external HTTP / SEC EDGAR live lookups in production.
+    - No ML/LLM classifiers in production resolver.
+    - 24h direct-recent threshold + 150d long-gap threshold are calibrated.
+      DO NOT confuse the new long-gap with the old stale-match constant
+      (different concept, opposite policy: old was permissive cascade,
+      new is conservative fail-close).
+    - Goal 6g's `TRUST_XBRL_ADVANCE` is a frozenset[str] — no period dimension
+      by construction. Any per-(ticker, period) data structure violates the
+      uniform-application invariant.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    RECOMMENDED OPERATIONAL MONITORING
+    ══════════════════════════════════════════════════════════════════════════════
+    Wrong-fire monitor: passive cron job that compares this resolver's AUTO_OK
+    output against the eventual companion 10-Q/10-K's XBRL FY/Q (when it lands).
+    Any disagreement → alert. This catches:
+      - new GIII-class issuers entering the universe
+      - existing TRUST_XBRL_ADVANCE issuers changing their FY naming convention
+      - new PHR/PINC/PRU-class structural patterns
+    Add the alerted accession to XBRL_DENY_PERIODIC_ACCESSIONS or remove
+    the issuer from TRUST_XBRL_ADVANCE per the failure type. This is the
+    safety net that bounds the 0.24% wrong-fire rate in practice.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    INVOCATION
+    ══════════════════════════════════════════════════════════════════════════════
+    Public API: `resolve_quarter_info(ticker, accession_8k, *, session=None)`.
+    Returns dict with keys: quarter_label (e.g. "Q1_FY2026" or None on fail),
+    quarter_identity_source (rule name), safety_action ("AUTO_OK" | "FAIL_CLOSED"),
+    plus diagnostic fields. Callers MUST gate destructive writes on
+    safety_action == "AUTO_OK". The orchestrator does this in
+    `enforce_quarter_identity_write_guard`.
+    """
+    from __future__ import annotations
+    
+    import calendar
+    import os
+    import sys
+    from datetime import date, datetime
+    from pathlib import Path
+    
+    _PROJECT_ROOT = Path(__file__).resolve().parents[2]
+    sys.path.insert(0, str(_PROJECT_ROOT / ".claude/skills/earnings-orchestrator/scripts"))
+    sys.path.insert(0, str(_PROJECT_ROOT / "scripts/earnings"))
+    
+    from fiscal_math import period_to_fiscal, _compute_fiscal_dates
+    from fye_month import get_fye_month
+>   from get_quarterly_filings import (
+        parse_xbrl_fiscal_identity,
+        XBRL_DENY_PERIODIC_ACCESSIONS,
+    )
+E   ModuleNotFoundError: No module named 'get_quarterly_filings'
+
+../../../../../scripts/earnings/quarter_identity.py:185: ModuleNotFoundError
+____________ test_guidance_movement_through_both_event_routes[6-2] _____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure2/pytest/test_guidance_movement_through1')
+version = 2, precision = 6
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:62: in <module>
+    import test_stage_a_v2 as SA                                         # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../scripts/driver_seed/test_stage_a_v2.py:22: in <module>
+    from driver.channels.fiscal_ai import build_packets as BP
+../../../../../driver/channels/fiscal_ai/build_packets.py:16: in <module>
+    from driver.channels.fiscal_ai import run_code_tier as RC
+../../../../../driver/channels/fiscal_ai/run_code_tier.py:25: in <module>
+    import quarter_identity as QI          # LIVE lane + trust gate (AUTO_OK); labels NOT used here (round-15)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """Quarter identity resolver — single canonical source of truth.
+    
+    This module answers ONE question: given an earnings 8-K accession, what fiscal
+    quarter is it announcing? The output (quarter_label, safety_action) drives the
+    orchestrator's destructive-write guard — wrong answers corrupt event
+    directories / predictions / learner artifacts, so the resolver MUST fail
+    closed when it cannot prove identity.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    WHY THIS EXISTS — the FCX bug
+    ══════════════════════════════════════════════════════════════════════════════
+    Pre-2026-05 the resolver used a stale-match cascade (the old
+    `_STALE_MATCH_DAYS` constant set to 150 days) that
+    silently accepted the previous quarter's 10-K as authoritative for a live
+    8-K before the same-quarter 10-Q/10-K existed. FCX Q1 FY2026 accession
+    0000831259-26-000021 was mislabeled as Q4_FY2025, causing the orchestrator
+    to write Q1 data into the Q4 event directory and overwrite/delete the real
+    Q4 prediction. Goals 4 / 6c / 6g rebuilt this resolver around PIT-visible
+    prior-periodic projection with structural safety guards, replacing stale-
+    match cascading entirely.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    DESIGN PHILOSOPHY (load-bearing — read before refactoring)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PIT-safe. Every Cypher path is bounded by `created <= filed_8k`. A live
+       8-K MUST NOT see a future-filed 10-Q/10-K.
+    2. Fail-closed > wrong-fire. A wrong AUTO_OK corrupts downstream event
+       directories. A FAIL_CLOSED is recoverable (manual override, soft-tier
+       future). Zero new wrong AUTO_OK is a hard invariant on every change.
+    3. Structural rules only. No EX-99.1 text parsing in production
+       (LOCKED 2026-05-05, decision D8). No external HTTP / SEC EDGAR live
+       lookups. No ML/LLM. No industry/sector/SIC/GICS/NAICS/CIK dispatch.
+    4. One named ticker container allowed: `TRUST_XBRL_ADVANCE` (Goal 6g).
+       Ticker-level rules MUST apply uniformly to all periods of a ticker —
+       no per-(ticker, period) data structures. This is the architectural
+       guarantee against exception sprawl.
+    5. Accession-level overrides allowed via `XBRL_DENY_PERIODIC_ACCESSIONS`
+       in get_quarterly_filings.py (specific filings with bad XBRL).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ARCHITECTURE — layered rules (see resolve_quarter_via_prior_periodic)
+    ══════════════════════════════════════════════════════════════════════════════
+    For each earnings 8-K, find the most recent PIT-visible prior 10-Q/10-K and:
+    1. Cold-start guards: no prior → `prior_periodic_projection_no_prior`
+       FAIL_CLOSED. Long-gap (>150d) → `prior_periodic_projection_long_gap_*`
+       FAIL_CLOSED. Denylisted prior accession → fail-closed.
+    2. Branch on prior period-end shape:
+       • Calendar-shaped (regular month-end / Saturday) → calendar branch.
+       • Odd 52/53-week shape → Rule F branch.
+    3. Calendar branch (Goal 6c Rule G family + Goal 6g override):
+       • <24h since prior filed → use prior label directly (rule_g_strict_*).
+       • XBRL FY ≠ math FY → fail-closed (rule_g_fail_closed_fy_disagreement_calendar)
+         UNLESS ticker ∈ TRUST_XBRL_ADVANCE → advance prior XBRL one quarter
+         (rule_h_trusted_issuer_xbrl_advance, Goal 6g).
+       • Other calendar guards: no-prev-short-gap, same-filing-cycle.
+       • Default: math-derived projection (prior_periodic_projection_qN_to_qM).
+    4. Rule F branch (Goal 4): same shape but for non-calendar periods.
+       • <24h → rule_f_direct_recent_prior.
+       • FY disagree → rule_f_fail_closed_fy_disagreement.
+       • Else → rule_f_advance_xbrl.
+    
+    The orchestrator's destructive-write guard refuses to write event-directory
+    files unless safety_action == "AUTO_OK". FAIL_CLOSED + NO_RESOLUTION block
+    all destructive writes (see scripts/earnings/earnings_orchestrator.py
+    `enforce_quarter_identity_write_guard`).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    SHIPPED SCOPE
+    ══════════════════════════════════════════════════════════════════════════════
+    Goal 4  (commit e43cfc8): structural rebuild — PIT prior periodic projection,
+             Rule F (5 sources), old stale-match constant removed, orchestrator
+             destructive-write guard wired in.
+    Goal 6c (commit a61636a): Candidate D's 5 calendar-branch guards
+             (rule_g_strict_direct_recent_prior_calendar +
+              rule_g_strict_fail_closed_recent_disagreement_calendar +
+              rule_g_fail_closed_fy_disagreement_calendar +
+              rule_g_fail_closed_no_prev_short_gap_calendar +
+              rule_g_fail_closed_same_filing_short_gap_calendar).
+    Goal 6e (commit be4c2cc): guidance 10-Q/10-K NULL-fiscal-label fallback
+             hardened in scripts/harvest_guidance_sessions.py with denylist +
+             proximity + triple-check guards. It now routes through
+             get_quarterly_filings.choose_periodic_fiscal_identity(), the shared
+             periodic-filing chooser. Separate file; do NOT swap
+             resolve_quarter_info() into that fallback.
+    Goal 6g (commit 237f53c): 18-ticker TRUST_XBRL_ADVANCE override on the
+             calendar-FY-disagreement gate. +1.84pp warm-start correct, 0 new
+             wrongs. The per-ticker autopsy + 5-subagent SEC EDGAR
+             re-inspection that produced this bucket lives in git history
+             (see commit dd709da and `.claude/plans/quarter-identity-resolver.md`
+             for the consolidated narrative). This docstring + the bucket
+             comment below are the load-bearing in-code record.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ACCURACY BENCHMARKS (as of Goal 6g)
+    ══════════════════════════════════════════════════════════════════════════════
+    On the 10,674-row scoreable historical corpus:
+      Subset                  | correct  | wrong   | fail-closed
+      Full historical (10674) |  90.62%  |  0.22%  |  9.15%
+      Warm-start (9878)       |  97.92%  |  0.24%  |  1.83%
+      Latest-per-ticker (781) |  97.82%  |  0.38%  |  1.79%
+    
+    The 0.24% warm-start wrong-fire rate is the structural ceiling under
+    current locks. Forward expectation: ~0.24% of live earnings 8-Ks will
+    wrong-write (~7-8/year on a 781-ticker × ~4 events/year universe).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    KNOWN UNFIXED CLASSES (not yet shipped, documented for future work)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PHR/PINC/PRU class (3 latest-per-ticker wrong-fires): transcript-only
+       supplements / 10-Q-before-8-K inversions / voluntary recasts. Unifying
+       structural signal: prior periodic snapshot already covers the SAME or
+       LATER period the new 8-K is announcing → advancing is wrong. Future
+       Goal 6h would test a structural rule for this; not implemented because
+       blast radius is universe-wide and needs empirical verification.
+    2. GIII-class issuer-convention divergence (XBRL year-of-start vs EX-99.1
+       year-of-end). Structurally indistinguishable from SAFE issuers without
+       EX-99.1 parsing. Approximately 4.4% of universe (34/781 tickers) is
+       structurally fail-closed under current locks; GIII alone in this class
+       is genuinely irreducible. Empirically validated 2026-05-07 against
+       408 rows × 34 edge tickers + Goal 6f's 4-candidate research probe
+       (KEEP_D verdict). DO NOT add issuer FY-convention tables — they don't
+       generalize and the 34-ticker audit + Goal 6f rejected this branch.
+    3. CNM stale-XBRL on prior 10-K (single accession). Fix is to add the bad
+       10-K accession to XBRL_DENY_PERIODIC_ACCESSIONS in get_quarterly_filings.py
+       AND add CNM to TRUST_XBRL_ADVANCE (denylist alone is insufficient —
+       would just cascade-fail to next prior).
+    4. ANF/DKS/PVH/PLCE bucket expansion (8 audit-truth-label-error rows).
+       ChatGPT-verified candidates for TRUST_XBRL_ADVANCE expansion to 22
+       AFTER independent re-audit of each disputed Tier-B truth row.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    LOCKED DECISIONS — do not relitigate without re-running the audit/research
+    ══════════════════════════════════════════════════════════════════════════════
+    - No ticker allowlists/denylists/FY tables EXCEPT `TRUST_XBRL_ADVANCE`.
+    - No industry/sector/SIC/GICS/NAICS/CIK dispatch (Goal 5 Candidate E rejected).
+    - No EX-99.1 / press-release text parsing in production (D8 lock 2026-05-05).
+    - No external HTTP / SEC EDGAR live lookups in production.
+    - No ML/LLM classifiers in production resolver.
+    - 24h direct-recent threshold + 150d long-gap threshold are calibrated.
+      DO NOT confuse the new long-gap with the old stale-match constant
+      (different concept, opposite policy: old was permissive cascade,
+      new is conservative fail-close).
+    - Goal 6g's `TRUST_XBRL_ADVANCE` is a frozenset[str] — no period dimension
+      by construction. Any per-(ticker, period) data structure violates the
+      uniform-application invariant.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    RECOMMENDED OPERATIONAL MONITORING
+    ══════════════════════════════════════════════════════════════════════════════
+    Wrong-fire monitor: passive cron job that compares this resolver's AUTO_OK
+    output against the eventual companion 10-Q/10-K's XBRL FY/Q (when it lands).
+    Any disagreement → alert. This catches:
+      - new GIII-class issuers entering the universe
+      - existing TRUST_XBRL_ADVANCE issuers changing their FY naming convention
+      - new PHR/PINC/PRU-class structural patterns
+    Add the alerted accession to XBRL_DENY_PERIODIC_ACCESSIONS or remove
+    the issuer from TRUST_XBRL_ADVANCE per the failure type. This is the
+    safety net that bounds the 0.24% wrong-fire rate in practice.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    INVOCATION
+    ══════════════════════════════════════════════════════════════════════════════
+    Public API: `resolve_quarter_info(ticker, accession_8k, *, session=None)`.
+    Returns dict with keys: quarter_label (e.g. "Q1_FY2026" or None on fail),
+    quarter_identity_source (rule name), safety_action ("AUTO_OK" | "FAIL_CLOSED"),
+    plus diagnostic fields. Callers MUST gate destructive writes on
+    safety_action == "AUTO_OK". The orchestrator does this in
+    `enforce_quarter_identity_write_guard`.
+    """
+    from __future__ import annotations
+    
+    import calendar
+    import os
+    import sys
+    from datetime import date, datetime
+    from pathlib import Path
+    
+    _PROJECT_ROOT = Path(__file__).resolve().parents[2]
+    sys.path.insert(0, str(_PROJECT_ROOT / ".claude/skills/earnings-orchestrator/scripts"))
+    sys.path.insert(0, str(_PROJECT_ROOT / "scripts/earnings"))
+    
+    from fiscal_math import period_to_fiscal, _compute_fiscal_dates
+    from fye_month import get_fye_month
+>   from get_quarterly_filings import (
+        parse_xbrl_fiscal_identity,
+        XBRL_DENY_PERIODIC_ACCESSIONS,
+    )
+E   ModuleNotFoundError: No module named 'get_quarterly_filings'
+
+../../../../../scripts/earnings/quarter_identity.py:185: ModuleNotFoundError
+____________ test_guidance_movement_through_both_event_routes[28-1] ____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure2/pytest/test_guidance_movement_through2')
+version = 1, precision = 28
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:62: in <module>
+    import test_stage_a_v2 as SA                                         # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../scripts/driver_seed/test_stage_a_v2.py:22: in <module>
+    from driver.channels.fiscal_ai import build_packets as BP
+../../../../../driver/channels/fiscal_ai/build_packets.py:16: in <module>
+    from driver.channels.fiscal_ai import run_code_tier as RC
+../../../../../driver/channels/fiscal_ai/run_code_tier.py:25: in <module>
+    import quarter_identity as QI          # LIVE lane + trust gate (AUTO_OK); labels NOT used here (round-15)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """Quarter identity resolver — single canonical source of truth.
+    
+    This module answers ONE question: given an earnings 8-K accession, what fiscal
+    quarter is it announcing? The output (quarter_label, safety_action) drives the
+    orchestrator's destructive-write guard — wrong answers corrupt event
+    directories / predictions / learner artifacts, so the resolver MUST fail
+    closed when it cannot prove identity.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    WHY THIS EXISTS — the FCX bug
+    ══════════════════════════════════════════════════════════════════════════════
+    Pre-2026-05 the resolver used a stale-match cascade (the old
+    `_STALE_MATCH_DAYS` constant set to 150 days) that
+    silently accepted the previous quarter's 10-K as authoritative for a live
+    8-K before the same-quarter 10-Q/10-K existed. FCX Q1 FY2026 accession
+    0000831259-26-000021 was mislabeled as Q4_FY2025, causing the orchestrator
+    to write Q1 data into the Q4 event directory and overwrite/delete the real
+    Q4 prediction. Goals 4 / 6c / 6g rebuilt this resolver around PIT-visible
+    prior-periodic projection with structural safety guards, replacing stale-
+    match cascading entirely.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    DESIGN PHILOSOPHY (load-bearing — read before refactoring)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PIT-safe. Every Cypher path is bounded by `created <= filed_8k`. A live
+       8-K MUST NOT see a future-filed 10-Q/10-K.
+    2. Fail-closed > wrong-fire. A wrong AUTO_OK corrupts downstream event
+       directories. A FAIL_CLOSED is recoverable (manual override, soft-tier
+       future). Zero new wrong AUTO_OK is a hard invariant on every change.
+    3. Structural rules only. No EX-99.1 text parsing in production
+       (LOCKED 2026-05-05, decision D8). No external HTTP / SEC EDGAR live
+       lookups. No ML/LLM. No industry/sector/SIC/GICS/NAICS/CIK dispatch.
+    4. One named ticker container allowed: `TRUST_XBRL_ADVANCE` (Goal 6g).
+       Ticker-level rules MUST apply uniformly to all periods of a ticker —
+       no per-(ticker, period) data structures. This is the architectural
+       guarantee against exception sprawl.
+    5. Accession-level overrides allowed via `XBRL_DENY_PERIODIC_ACCESSIONS`
+       in get_quarterly_filings.py (specific filings with bad XBRL).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ARCHITECTURE — layered rules (see resolve_quarter_via_prior_periodic)
+    ══════════════════════════════════════════════════════════════════════════════
+    For each earnings 8-K, find the most recent PIT-visible prior 10-Q/10-K and:
+    1. Cold-start guards: no prior → `prior_periodic_projection_no_prior`
+       FAIL_CLOSED. Long-gap (>150d) → `prior_periodic_projection_long_gap_*`
+       FAIL_CLOSED. Denylisted prior accession → fail-closed.
+    2. Branch on prior period-end shape:
+       • Calendar-shaped (regular month-end / Saturday) → calendar branch.
+       • Odd 52/53-week shape → Rule F branch.
+    3. Calendar branch (Goal 6c Rule G family + Goal 6g override):
+       • <24h since prior filed → use prior label directly (rule_g_strict_*).
+       • XBRL FY ≠ math FY → fail-closed (rule_g_fail_closed_fy_disagreement_calendar)
+         UNLESS ticker ∈ TRUST_XBRL_ADVANCE → advance prior XBRL one quarter
+         (rule_h_trusted_issuer_xbrl_advance, Goal 6g).
+       • Other calendar guards: no-prev-short-gap, same-filing-cycle.
+       • Default: math-derived projection (prior_periodic_projection_qN_to_qM).
+    4. Rule F branch (Goal 4): same shape but for non-calendar periods.
+       • <24h → rule_f_direct_recent_prior.
+       • FY disagree → rule_f_fail_closed_fy_disagreement.
+       • Else → rule_f_advance_xbrl.
+    
+    The orchestrator's destructive-write guard refuses to write event-directory
+    files unless safety_action == "AUTO_OK". FAIL_CLOSED + NO_RESOLUTION block
+    all destructive writes (see scripts/earnings/earnings_orchestrator.py
+    `enforce_quarter_identity_write_guard`).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    SHIPPED SCOPE
+    ══════════════════════════════════════════════════════════════════════════════
+    Goal 4  (commit e43cfc8): structural rebuild — PIT prior periodic projection,
+             Rule F (5 sources), old stale-match constant removed, orchestrator
+             destructive-write guard wired in.
+    Goal 6c (commit a61636a): Candidate D's 5 calendar-branch guards
+             (rule_g_strict_direct_recent_prior_calendar +
+              rule_g_strict_fail_closed_recent_disagreement_calendar +
+              rule_g_fail_closed_fy_disagreement_calendar +
+              rule_g_fail_closed_no_prev_short_gap_calendar +
+              rule_g_fail_closed_same_filing_short_gap_calendar).
+    Goal 6e (commit be4c2cc): guidance 10-Q/10-K NULL-fiscal-label fallback
+             hardened in scripts/harvest_guidance_sessions.py with denylist +
+             proximity + triple-check guards. It now routes through
+             get_quarterly_filings.choose_periodic_fiscal_identity(), the shared
+             periodic-filing chooser. Separate file; do NOT swap
+             resolve_quarter_info() into that fallback.
+    Goal 6g (commit 237f53c): 18-ticker TRUST_XBRL_ADVANCE override on the
+             calendar-FY-disagreement gate. +1.84pp warm-start correct, 0 new
+             wrongs. The per-ticker autopsy + 5-subagent SEC EDGAR
+             re-inspection that produced this bucket lives in git history
+             (see commit dd709da and `.claude/plans/quarter-identity-resolver.md`
+             for the consolidated narrative). This docstring + the bucket
+             comment below are the load-bearing in-code record.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ACCURACY BENCHMARKS (as of Goal 6g)
+    ══════════════════════════════════════════════════════════════════════════════
+    On the 10,674-row scoreable historical corpus:
+      Subset                  | correct  | wrong   | fail-closed
+      Full historical (10674) |  90.62%  |  0.22%  |  9.15%
+      Warm-start (9878)       |  97.92%  |  0.24%  |  1.83%
+      Latest-per-ticker (781) |  97.82%  |  0.38%  |  1.79%
+    
+    The 0.24% warm-start wrong-fire rate is the structural ceiling under
+    current locks. Forward expectation: ~0.24% of live earnings 8-Ks will
+    wrong-write (~7-8/year on a 781-ticker × ~4 events/year universe).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    KNOWN UNFIXED CLASSES (not yet shipped, documented for future work)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PHR/PINC/PRU class (3 latest-per-ticker wrong-fires): transcript-only
+       supplements / 10-Q-before-8-K inversions / voluntary recasts. Unifying
+       structural signal: prior periodic snapshot already covers the SAME or
+       LATER period the new 8-K is announcing → advancing is wrong. Future
+       Goal 6h would test a structural rule for this; not implemented because
+       blast radius is universe-wide and needs empirical verification.
+    2. GIII-class issuer-convention divergence (XBRL year-of-start vs EX-99.1
+       year-of-end). Structurally indistinguishable from SAFE issuers without
+       EX-99.1 parsing. Approximately 4.4% of universe (34/781 tickers) is
+       structurally fail-closed under current locks; GIII alone in this class
+       is genuinely irreducible. Empirically validated 2026-05-07 against
+       408 rows × 34 edge tickers + Goal 6f's 4-candidate research probe
+       (KEEP_D verdict). DO NOT add issuer FY-convention tables — they don't
+       generalize and the 34-ticker audit + Goal 6f rejected this branch.
+    3. CNM stale-XBRL on prior 10-K (single accession). Fix is to add the bad
+       10-K accession to XBRL_DENY_PERIODIC_ACCESSIONS in get_quarterly_filings.py
+       AND add CNM to TRUST_XBRL_ADVANCE (denylist alone is insufficient —
+       would just cascade-fail to next prior).
+    4. ANF/DKS/PVH/PLCE bucket expansion (8 audit-truth-label-error rows).
+       ChatGPT-verified candidates for TRUST_XBRL_ADVANCE expansion to 22
+       AFTER independent re-audit of each disputed Tier-B truth row.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    LOCKED DECISIONS — do not relitigate without re-running the audit/research
+    ══════════════════════════════════════════════════════════════════════════════
+    - No ticker allowlists/denylists/FY tables EXCEPT `TRUST_XBRL_ADVANCE`.
+    - No industry/sector/SIC/GICS/NAICS/CIK dispatch (Goal 5 Candidate E rejected).
+    - No EX-99.1 / press-release text parsing in production (D8 lock 2026-05-05).
+    - No external HTTP / SEC EDGAR live lookups in production.
+    - No ML/LLM classifiers in production resolver.
+    - 24h direct-recent threshold + 150d long-gap threshold are calibrated.
+      DO NOT confuse the new long-gap with the old stale-match constant
+      (different concept, opposite policy: old was permissive cascade,
+      new is conservative fail-close).
+    - Goal 6g's `TRUST_XBRL_ADVANCE` is a frozenset[str] — no period dimension
+      by construction. Any per-(ticker, period) data structure violates the
+      uniform-application invariant.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    RECOMMENDED OPERATIONAL MONITORING
+    ══════════════════════════════════════════════════════════════════════════════
+    Wrong-fire monitor: passive cron job that compares this resolver's AUTO_OK
+    output against the eventual companion 10-Q/10-K's XBRL FY/Q (when it lands).
+    Any disagreement → alert. This catches:
+      - new GIII-class issuers entering the universe
+      - existing TRUST_XBRL_ADVANCE issuers changing their FY naming convention
+      - new PHR/PINC/PRU-class structural patterns
+    Add the alerted accession to XBRL_DENY_PERIODIC_ACCESSIONS or remove
+    the issuer from TRUST_XBRL_ADVANCE per the failure type. This is the
+    safety net that bounds the 0.24% wrong-fire rate in practice.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    INVOCATION
+    ══════════════════════════════════════════════════════════════════════════════
+    Public API: `resolve_quarter_info(ticker, accession_8k, *, session=None)`.
+    Returns dict with keys: quarter_label (e.g. "Q1_FY2026" or None on fail),
+    quarter_identity_source (rule name), safety_action ("AUTO_OK" | "FAIL_CLOSED"),
+    plus diagnostic fields. Callers MUST gate destructive writes on
+    safety_action == "AUTO_OK". The orchestrator does this in
+    `enforce_quarter_identity_write_guard`.
+    """
+    from __future__ import annotations
+    
+    import calendar
+    import os
+    import sys
+    from datetime import date, datetime
+    from pathlib import Path
+    
+    _PROJECT_ROOT = Path(__file__).resolve().parents[2]
+    sys.path.insert(0, str(_PROJECT_ROOT / ".claude/skills/earnings-orchestrator/scripts"))
+    sys.path.insert(0, str(_PROJECT_ROOT / "scripts/earnings"))
+    
+    from fiscal_math import period_to_fiscal, _compute_fiscal_dates
+    from fye_month import get_fye_month
+>   from get_quarterly_filings import (
+        parse_xbrl_fiscal_identity,
+        XBRL_DENY_PERIODIC_ACCESSIONS,
+    )
+E   ModuleNotFoundError: No module named 'get_quarterly_filings'
+
+../../../../../scripts/earnings/quarter_identity.py:185: ModuleNotFoundError
+____________ test_guidance_movement_through_both_event_routes[28-2] ____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure2/pytest/test_guidance_movement_through3')
+version = 2, precision = 28
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:62: in <module>
+    import test_stage_a_v2 as SA                                         # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../scripts/driver_seed/test_stage_a_v2.py:22: in <module>
+    from driver.channels.fiscal_ai import build_packets as BP
+../../../../../driver/channels/fiscal_ai/build_packets.py:16: in <module>
+    from driver.channels.fiscal_ai import run_code_tier as RC
+../../../../../driver/channels/fiscal_ai/run_code_tier.py:25: in <module>
+    import quarter_identity as QI          # LIVE lane + trust gate (AUTO_OK); labels NOT used here (round-15)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    #!/usr/bin/env python3
+    """Quarter identity resolver — single canonical source of truth.
+    
+    This module answers ONE question: given an earnings 8-K accession, what fiscal
+    quarter is it announcing? The output (quarter_label, safety_action) drives the
+    orchestrator's destructive-write guard — wrong answers corrupt event
+    directories / predictions / learner artifacts, so the resolver MUST fail
+    closed when it cannot prove identity.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    WHY THIS EXISTS — the FCX bug
+    ══════════════════════════════════════════════════════════════════════════════
+    Pre-2026-05 the resolver used a stale-match cascade (the old
+    `_STALE_MATCH_DAYS` constant set to 150 days) that
+    silently accepted the previous quarter's 10-K as authoritative for a live
+    8-K before the same-quarter 10-Q/10-K existed. FCX Q1 FY2026 accession
+    0000831259-26-000021 was mislabeled as Q4_FY2025, causing the orchestrator
+    to write Q1 data into the Q4 event directory and overwrite/delete the real
+    Q4 prediction. Goals 4 / 6c / 6g rebuilt this resolver around PIT-visible
+    prior-periodic projection with structural safety guards, replacing stale-
+    match cascading entirely.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    DESIGN PHILOSOPHY (load-bearing — read before refactoring)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PIT-safe. Every Cypher path is bounded by `created <= filed_8k`. A live
+       8-K MUST NOT see a future-filed 10-Q/10-K.
+    2. Fail-closed > wrong-fire. A wrong AUTO_OK corrupts downstream event
+       directories. A FAIL_CLOSED is recoverable (manual override, soft-tier
+       future). Zero new wrong AUTO_OK is a hard invariant on every change.
+    3. Structural rules only. No EX-99.1 text parsing in production
+       (LOCKED 2026-05-05, decision D8). No external HTTP / SEC EDGAR live
+       lookups. No ML/LLM. No industry/sector/SIC/GICS/NAICS/CIK dispatch.
+    4. One named ticker container allowed: `TRUST_XBRL_ADVANCE` (Goal 6g).
+       Ticker-level rules MUST apply uniformly to all periods of a ticker —
+       no per-(ticker, period) data structures. This is the architectural
+       guarantee against exception sprawl.
+    5. Accession-level overrides allowed via `XBRL_DENY_PERIODIC_ACCESSIONS`
+       in get_quarterly_filings.py (specific filings with bad XBRL).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ARCHITECTURE — layered rules (see resolve_quarter_via_prior_periodic)
+    ══════════════════════════════════════════════════════════════════════════════
+    For each earnings 8-K, find the most recent PIT-visible prior 10-Q/10-K and:
+    1. Cold-start guards: no prior → `prior_periodic_projection_no_prior`
+       FAIL_CLOSED. Long-gap (>150d) → `prior_periodic_projection_long_gap_*`
+       FAIL_CLOSED. Denylisted prior accession → fail-closed.
+    2. Branch on prior period-end shape:
+       • Calendar-shaped (regular month-end / Saturday) → calendar branch.
+       • Odd 52/53-week shape → Rule F branch.
+    3. Calendar branch (Goal 6c Rule G family + Goal 6g override):
+       • <24h since prior filed → use prior label directly (rule_g_strict_*).
+       • XBRL FY ≠ math FY → fail-closed (rule_g_fail_closed_fy_disagreement_calendar)
+         UNLESS ticker ∈ TRUST_XBRL_ADVANCE → advance prior XBRL one quarter
+         (rule_h_trusted_issuer_xbrl_advance, Goal 6g).
+       • Other calendar guards: no-prev-short-gap, same-filing-cycle.
+       • Default: math-derived projection (prior_periodic_projection_qN_to_qM).
+    4. Rule F branch (Goal 4): same shape but for non-calendar periods.
+       • <24h → rule_f_direct_recent_prior.
+       • FY disagree → rule_f_fail_closed_fy_disagreement.
+       • Else → rule_f_advance_xbrl.
+    
+    The orchestrator's destructive-write guard refuses to write event-directory
+    files unless safety_action == "AUTO_OK". FAIL_CLOSED + NO_RESOLUTION block
+    all destructive writes (see scripts/earnings/earnings_orchestrator.py
+    `enforce_quarter_identity_write_guard`).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    SHIPPED SCOPE
+    ══════════════════════════════════════════════════════════════════════════════
+    Goal 4  (commit e43cfc8): structural rebuild — PIT prior periodic projection,
+             Rule F (5 sources), old stale-match constant removed, orchestrator
+             destructive-write guard wired in.
+    Goal 6c (commit a61636a): Candidate D's 5 calendar-branch guards
+             (rule_g_strict_direct_recent_prior_calendar +
+              rule_g_strict_fail_closed_recent_disagreement_calendar +
+              rule_g_fail_closed_fy_disagreement_calendar +
+              rule_g_fail_closed_no_prev_short_gap_calendar +
+              rule_g_fail_closed_same_filing_short_gap_calendar).
+    Goal 6e (commit be4c2cc): guidance 10-Q/10-K NULL-fiscal-label fallback
+             hardened in scripts/harvest_guidance_sessions.py with denylist +
+             proximity + triple-check guards. It now routes through
+             get_quarterly_filings.choose_periodic_fiscal_identity(), the shared
+             periodic-filing chooser. Separate file; do NOT swap
+             resolve_quarter_info() into that fallback.
+    Goal 6g (commit 237f53c): 18-ticker TRUST_XBRL_ADVANCE override on the
+             calendar-FY-disagreement gate. +1.84pp warm-start correct, 0 new
+             wrongs. The per-ticker autopsy + 5-subagent SEC EDGAR
+             re-inspection that produced this bucket lives in git history
+             (see commit dd709da and `.claude/plans/quarter-identity-resolver.md`
+             for the consolidated narrative). This docstring + the bucket
+             comment below are the load-bearing in-code record.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    ACCURACY BENCHMARKS (as of Goal 6g)
+    ══════════════════════════════════════════════════════════════════════════════
+    On the 10,674-row scoreable historical corpus:
+      Subset                  | correct  | wrong   | fail-closed
+      Full historical (10674) |  90.62%  |  0.22%  |  9.15%
+      Warm-start (9878)       |  97.92%  |  0.24%  |  1.83%
+      Latest-per-ticker (781) |  97.82%  |  0.38%  |  1.79%
+    
+    The 0.24% warm-start wrong-fire rate is the structural ceiling under
+    current locks. Forward expectation: ~0.24% of live earnings 8-Ks will
+    wrong-write (~7-8/year on a 781-ticker × ~4 events/year universe).
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    KNOWN UNFIXED CLASSES (not yet shipped, documented for future work)
+    ══════════════════════════════════════════════════════════════════════════════
+    1. PHR/PINC/PRU class (3 latest-per-ticker wrong-fires): transcript-only
+       supplements / 10-Q-before-8-K inversions / voluntary recasts. Unifying
+       structural signal: prior periodic snapshot already covers the SAME or
+       LATER period the new 8-K is announcing → advancing is wrong. Future
+       Goal 6h would test a structural rule for this; not implemented because
+       blast radius is universe-wide and needs empirical verification.
+    2. GIII-class issuer-convention divergence (XBRL year-of-start vs EX-99.1
+       year-of-end). Structurally indistinguishable from SAFE issuers without
+       EX-99.1 parsing. Approximately 4.4% of universe (34/781 tickers) is
+       structurally fail-closed under current locks; GIII alone in this class
+       is genuinely irreducible. Empirically validated 2026-05-07 against
+       408 rows × 34 edge tickers + Goal 6f's 4-candidate research probe
+       (KEEP_D verdict). DO NOT add issuer FY-convention tables — they don't
+       generalize and the 34-ticker audit + Goal 6f rejected this branch.
+    3. CNM stale-XBRL on prior 10-K (single accession). Fix is to add the bad
+       10-K accession to XBRL_DENY_PERIODIC_ACCESSIONS in get_quarterly_filings.py
+       AND add CNM to TRUST_XBRL_ADVANCE (denylist alone is insufficient —
+       would just cascade-fail to next prior).
+    4. ANF/DKS/PVH/PLCE bucket expansion (8 audit-truth-label-error rows).
+       ChatGPT-verified candidates for TRUST_XBRL_ADVANCE expansion to 22
+       AFTER independent re-audit of each disputed Tier-B truth row.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    LOCKED DECISIONS — do not relitigate without re-running the audit/research
+    ══════════════════════════════════════════════════════════════════════════════
+    - No ticker allowlists/denylists/FY tables EXCEPT `TRUST_XBRL_ADVANCE`.
+    - No industry/sector/SIC/GICS/NAICS/CIK dispatch (Goal 5 Candidate E rejected).
+    - No EX-99.1 / press-release text parsing in production (D8 lock 2026-05-05).
+    - No external HTTP / SEC EDGAR live lookups in production.
+    - No ML/LLM classifiers in production resolver.
+    - 24h direct-recent threshold + 150d long-gap threshold are calibrated.
+      DO NOT confuse the new long-gap with the old stale-match constant
+      (different concept, opposite policy: old was permissive cascade,
+      new is conservative fail-close).
+    - Goal 6g's `TRUST_XBRL_ADVANCE` is a frozenset[str] — no period dimension
+      by construction. Any per-(ticker, period) data structure violates the
+      uniform-application invariant.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    RECOMMENDED OPERATIONAL MONITORING
+    ══════════════════════════════════════════════════════════════════════════════
+    Wrong-fire monitor: passive cron job that compares this resolver's AUTO_OK
+    output against the eventual companion 10-Q/10-K's XBRL FY/Q (when it lands).
+    Any disagreement → alert. This catches:
+      - new GIII-class issuers entering the universe
+      - existing TRUST_XBRL_ADVANCE issuers changing their FY naming convention
+      - new PHR/PINC/PRU-class structural patterns
+    Add the alerted accession to XBRL_DENY_PERIODIC_ACCESSIONS or remove
+    the issuer from TRUST_XBRL_ADVANCE per the failure type. This is the
+    safety net that bounds the 0.24% wrong-fire rate in practice.
+    
+    ══════════════════════════════════════════════════════════════════════════════
+    INVOCATION
+    ══════════════════════════════════════════════════════════════════════════════
+    Public API: `resolve_quarter_info(ticker, accession_8k, *, session=None)`.
+    Returns dict with keys: quarter_label (e.g. "Q1_FY2026" or None on fail),
+    quarter_identity_source (rule name), safety_action ("AUTO_OK" | "FAIL_CLOSED"),
+    plus diagnostic fields. Callers MUST gate destructive writes on
+    safety_action == "AUTO_OK". The orchestrator does this in
+    `enforce_quarter_identity_write_guard`.
+    """
+    from __future__ import annotations
+    
+    import calendar
+    import os
+    import sys
+    from datetime import date, datetime
+    from pathlib import Path
+    
+    _PROJECT_ROOT = Path(__file__).resolve().parents[2]
+    sys.path.insert(0, str(_PROJECT_ROOT / ".claude/skills/earnings-orchestrator/scripts"))
+    sys.path.insert(0, str(_PROJECT_ROOT / "scripts/earnings"))
+    
+    from fiscal_math import period_to_fiscal, _compute_fiscal_dates
+    from fye_month import get_fye_month
+>   from get_quarterly_filings import (
+        parse_xbrl_fiscal_identity,
+        XBRL_DENY_PERIODIC_ACCESSIONS,
+    )
+E   ModuleNotFoundError: No module named 'get_quarterly_filings'
+
+../../../../../scripts/earnings/quarter_identity.py:185: ModuleNotFoundError
+=============================== warnings summary ===============================
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:516: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:535: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:680: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_a7_corrections_1454.py::test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect
+FAILED test_a7_corrections_1454.py::test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix
+FAILED test_a7_corrections_1454.py::test_defect1_no_event_reuses_one_driver_name_across_fact_types
+FAILED test_a7_corrections_1454.py::test_defect1_control_lawful_suffixed_family_routes_and_bare_one_does_not
+FAILED test_a7_corrections_1454.py::test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event
+FAILED test_a7_corrections_1454.py::test_defect3_control_lawful_synonym_passes_and_wrong_meaning_fails_safety
+FAILED test_a7_corrections_1454.py::test_defect3_an_incomplete_run_is_never_failed_by_spelling_alone
+FAILED test_a7_corrections_1454.py::test_defect3_the_route_refuses_a_malformed_name_and_accepts_a_lawful_one
+FAILED test_a7_corrections_1454.py::test_od1_door_accepts_plain_and_fenced_identically
+FAILED test_a7_corrections_1454.py::test_od1_door_refuses_every_malformed_envelope
+FAILED test_a7_corrections_1454.py::test_od1_door_refuses_an_evidence_phrase_that_is_not_in_the_quote
+FAILED test_a7_corrections_1454.py::test_od1_prompt_serves_only_the_four_permitted_fields
+FAILED test_a7_corrections_1454.py::test_the_applier_refuses_a_row_whose_bytes_moved
+FAILED test_a7_corrections_1454.py::test_the_ledger_covers_the_acted_population_exactly_once
+FAILED test_a7_corrections_1454.py::test_g2_prompt_carries_the_live_rule_and_every_meaning_field
+FAILED test_a7_corrections_1454.py::test_g2_door_requires_exactly_the_complete_field_set
+FAILED test_a7_corrections_1454.py::test_g2_door_accepts_the_four_lawful_answer_shapes
+FAILED test_a7_corrections_1454.py::test_g2_prompt_defines_every_aspect_in_plain_words
+FAILED test_a7_corrections_1454.py::test_g2_output_example_is_valid_json - As...
+FAILED test_a7_corrections_1454.py::test_g2_two_graders_must_agree_per_aspect
+FAILED test_a7_corrections_1454.py::test_rule6_an_exact_duration_window_is_all_or_nothing
+FAILED test_a7_corrections_1454.py::test_rule5a_a_numberless_growth_basis_uses_level_unit
+FAILED test_a7_corrections_1454.py::test_the_corrected_prompt_version_is_frozen_beside_its_predecessors
+FAILED test_a7_corrections_1454.py::test_the_reference_card_is_a_structural_whitelist
+FAILED test_a7_corrections_1454.py::test_quote_only_could_not_identify_a_claim_but_the_card_can
+FAILED test_a7_corrections_1454.py::test_g3_prompt_defines_every_bucket_and_shows_valid_json
+FAILED test_a7_corrections_1454.py::test_g3_door_is_strict_and_never_crashes
+FAILED test_a7_corrections_1454.py::test_g3_two_answers_must_agree_on_a_named_bucket
+FAILED test_a7_corrections_1454.py::test_an_unresolved_reference_stops_the_launch_before_any_call
+FAILED test_a7_corrections_1454.py::test_one_raw_input_with_two_facts_keeps_BOTH_branches
+FAILED test_a7_corrections_1454.py::test_a_split_with_mixed_outcomes_loses_neither_branch
+FAILED test_a7_corrections_1454.py::test_the_rejection_accounting_is_required_and_exactly_rederived
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-1]
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-2]
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-1]
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-2]
+36 failed, 176 passed, 3 warnings in 16.01s
+
+--- stderr ---

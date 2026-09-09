@@ -1,0 +1,96 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+____________ test_the_REAL_downstream_paths_consume_only_the_trace _____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+sealed = <function sealed.<locals>._seal at 0x7f1ef35dfa60>
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_red4/pytest/test_the_REAL_downstream_paths0')
+
+    def test_the_REAL_downstream_paths_consume_only_the_trace(run, sealed, tmp_path):
+        """The actual conservation, G1 and G23 entries - not a private helper.
+    
+        Each of these used to reach `materialize` again, walking the schedule and
+        reparsing every answer. After ONE materialization the reads are sealed and
+        the real paths must still finish (Codex SEQ 1472 item 4).
+        """
+        import a7_g23_run as R
+        arms, meta, problems = G.materialize(run)      # the ONE materialization
+        assert problems == []
+        sealed()
+    
+>       doc, _p = C.terminals(run, str(tmp_path / "conservation"))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:94: in terminals
+    rows, arms, problems = contributions(primary)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+a7_conservation.py:49: in contributions
+    slots, plan, problems = G.effective_slots(primary)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...},)
+k = {}
+
+    def no_walk(*a, **k):
+>       raise AssertionError("the schedule was walked a second time")
+E       AssertionError: the schedule was walked a second time
+
+test_a7_trace_1471.py:54: AssertionError
+________ test_every_status_and_route_outcome_is_conserved_exactly_once _________
+
+    def test_every_status_and_route_outcome_is_conserved_exactly_once():
+        """One branch per produced fact, one terminal per packet that produced
+        none - across every status and both route-loss cases."""
+        base = {"arm": "P1", "packet_id": "p#000", "source_id": "p",
+                "lane_id": "p#000/L1", "abstentions": [], "continuity_hints": [],
+                "attempts": [], "facts": [], "fact_positions": [], "why": [],
+                "readable": False, "status": "uncalled"}
+    
+        def row(**kw):
+            out = dict(base)
+            out.update(kw)
+            return out
+    
+        cases = [
+            ("valid primary", row(status="answered", readable=True,
+                                  facts=[{}], fact_positions=[0]),
+             {("fact", 0): {"decision": "written", "index": 0}}, ["written"]),
+            ("valid retry, both attempts",
+             row(status="answered", readable=True, facts=[{}], fact_positions=[0],
+                 attempts=[{"attempt": 1}, {"attempt": 2}]),
+             {("fact", 0): {"decision": "parked", "index": 1}}, ["parked"]),
+            ("invalid", row(status="invalid"), {}, ["invalid_unreadable"]),
+            ("refusal", row(status="refused"), {}, ["refused_unreadable"]),
+            ("uncalled", row(status="uncalled"), {}, ["uncalled"]),
+            ("abstention only", row(status="answered", readable=True,
+                                    abstentions=[{"reason": "TEST"}]),
+             {}, ["abstained_only"]),
+            ("empty success is invalid", row(status="answered", readable=True),
+             {}, [None]),
+            ("mixed split", row(status="answered", readable=True,
+                                facts=[{}, {}, {}, {}, {}],
+                                fact_positions=[0, 1, 2, 3, 4]),
+             {("fact", i): {"decision": d, "index": 0, "codes": []}
+              for i, d in enumerate(("written", "parked", "rejected", "merged", "skipped"))},
+             ["written", "parked", "rejected", "merged", "skipped"]),
+            ("missing route", row(status="answered", readable=True, facts=[{}],
+                                  fact_positions=[0]), {}, [None]),
+            ("unknown route", row(status="answered", readable=True, facts=[{}],
+                                  fact_positions=[0]),
+             {("fact", 0): {"decision": "a decision no owner declares"}}, [None]),
+        ]
+        for label, r, per_fact, want in cases:
+>           got = C._branches_of(r, per_fact)
+                  ^^^^^^^^^^^^^^
+E           AttributeError: module 'a7_conservation' has no attribute '_branches_of'
+
+test_a7_trace_1471.py:157: AttributeError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+FAILED test_a7_trace_1471.py::test_every_status_and_route_outcome_is_conserved_exactly_once
+2 failed, 1 passed in 2.74s
+
+--- stderr ---

@@ -1,0 +1,9 @@
+attempt	grader_mut_identity1
+payload	../../grader_20260909/attempts/mut_identity1/mutation_probe.py
+map	map_codex_grader_mut_identity1.tsv
+command	run_1957.sh map_codex_grader_mut_identity1.tsv ../../grader_20260909/attempts/mut_identity1/mutation_probe.py grader_mut_identity1 900
+wrapper_pid	1241669
+payload_pid	1241674
+payload_pgid	1241669
+started_utc	2026-09-09T17:30:13Z
+state	finished exit 1

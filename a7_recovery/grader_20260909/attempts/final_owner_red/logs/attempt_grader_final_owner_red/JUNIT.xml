@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.238" timestamp="2026-09-09T14:22:56.603682-04:00" hostname="minisforum"><testcase classname="test_a7_score_boundaries" name="test_current_extra_answers_do_not_consult_the_producer_scorer" time="0.111"><failure message="AssertionError: current grading read the producer-era bucket owner">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7fb4d010a950&gt;
+
+    def test_current_extra_answers_do_not_consult_the_producer_scorer(monkeypatch):
+        expected = ["duplicate", "key_miss", "unsupported"]  # Step 1 A7 extras rule.
+        assert B.extras_buckets() == list(B._scorer().EXTRAS_BUCKETS) == expected
+        rules = B.extras_rules()
+    
+        def retired_owner():
+            raise AssertionError("current grading read the producer-era bucket owner")
+    
+        monkeypatch.setattr(G._a6(), "_extras_buckets", retired_owner)
+&gt;       assert B.extras_buckets() == expected
+               ^^^^^^^^^^^^^^^^^^
+
+test_a7_score_boundaries.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g23_build.py:130: in extras_buckets
+    return list(G._a6()._extras_buckets())
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def retired_owner():
+&gt;       raise AssertionError("current grading read the producer-era bucket owner")
+E       AssertionError: current grading read the producer-era bucket owner
+
+test_a7_score_boundaries.py:20: AssertionError</failure></testcase></testsuite></testsuites>

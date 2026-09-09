@@ -1,0 +1,200 @@
+{
+  "decisions": {
+    "P1": null,
+    "P2": null
+  },
+  "scores": {
+    "P1": {
+      "route_codes": {
+        "park:ID_LAW": 1,
+        "abstained_on_gold:READER_ABSTAINED": 34,
+        "abstention:diagnostic": 67,
+        "extras:extras_verdict_missing": 1
+      },
+      "recall": 0.0286,
+      "wrong_lane": 0,
+      "name_spelling_differences": 0,
+      "error_table_by_rule": {
+        "OD-9": 0,
+        "OD-11": 0,
+        "OD-12": 0,
+        "OD-13": 0,
+        "OD-14": 0,
+        "OD-21": 0,
+        "ISS-16": 0,
+        "shapes": 0,
+        "slices": 0,
+        "other": 103
+      },
+      "value_shape_acc": 1.0,
+      "state_acc": 1.0,
+      "other_meaning_acc": 1.0,
+      "would_park": 0.9722,
+      "gold_n": 35,
+      "matched": 1,
+      "ambiguous_rows": [
+        {
+          "sid": "0000006201-26-000031",
+          "reason": "extras_verdict_missing",
+          "produced_idx": 1
+        }
+      ],
+      "ambiguities_unresolved": 0,
+      "verdicts_missing": 0,
+      "confirmed_wrong_accepted": 0,
+      "safety_result": "PASS",
+      "extras": {
+        "duplicate": 0,
+        "key_miss": 0,
+        "unsupported": 0
+      },
+      "duplicate_violations": 0,
+      "open_identity_findings": 0,
+      "reliability_failed": false,
+      "reliability_unobserved": false,
+      "reliability": {
+        "applicable": true,
+        "rate": 0.0,
+        "upper95": 0.029411764705882353,
+        "over_bar": false,
+        "bar": 0.02,
+        "total": 102,
+        "invalid": 0
+      },
+      "required_grading_unfinished": true,
+      "error_table": {
+        "park:ID_LAW": 1,
+        "abstained_on_gold:READER_ABSTAINED": 34,
+        "abstention:diagnostic": 67,
+        "extras:extras_verdict_missing": 1
+      },
+      "PASS": false
+    },
+    "P2": {
+      "route_codes": {
+        "park:ID_LAW": 1,
+        "abstained_on_gold:READER_ABSTAINED": 34,
+        "abstention:diagnostic": 67,
+        "extras:extras_verdict_missing": 1
+      },
+      "recall": 0.0286,
+      "wrong_lane": 0,
+      "name_spelling_differences": 0,
+      "error_table_by_rule": {
+        "OD-9": 0,
+        "OD-11": 0,
+        "OD-12": 0,
+        "OD-13": 0,
+        "OD-14": 0,
+        "OD-21": 0,
+        "ISS-16": 0,
+        "shapes": 0,
+        "slices": 0,
+        "other": 103
+      },
+      "value_shape_acc": 1.0,
+      "state_acc": 1.0,
+      "other_meaning_acc": 1.0,
+      "would_park": 0.9722,
+      "gold_n": 35,
+      "matched": 1,
+      "ambiguous_rows": [
+        {
+          "sid": "0000006201-26-000031",
+          "reason": "extras_verdict_missing",
+          "produced_idx": 1
+        }
+      ],
+      "ambiguities_unresolved": 0,
+      "verdicts_missing": 0,
+      "confirmed_wrong_accepted": 0,
+      "safety_result": "PASS",
+      "extras": {
+        "duplicate": 0,
+        "key_miss": 0,
+        "unsupported": 0
+      },
+      "duplicate_violations": 0,
+      "open_identity_findings": 0,
+      "reliability_failed": false,
+      "reliability_unobserved": false,
+      "reliability": {
+        "applicable": true,
+        "rate": 0.0,
+        "upper95": 0.029411764705882353,
+        "over_bar": false,
+        "bar": 0.02,
+        "total": 102,
+        "invalid": 0
+      },
+      "required_grading_unfinished": true,
+      "error_table": {
+        "park:ID_LAW": 1,
+        "abstained_on_gold:READER_ABSTAINED": 34,
+        "abstention:diagnostic": 67,
+        "extras:extras_verdict_missing": 1
+      },
+      "PASS": false
+    },
+    "UNION": {
+      "route_codes": {
+        "park:ID_LAW": 1,
+        "extras:extras_verdict_missing": 1
+      },
+      "recall": 0.0286,
+      "wrong_lane": 0,
+      "name_spelling_differences": 0,
+      "error_table_by_rule": {
+        "OD-9": 0,
+        "OD-11": 0,
+        "OD-12": 0,
+        "OD-13": 0,
+        "OD-14": 0,
+        "OD-21": 0,
+        "ISS-16": 0,
+        "shapes": 0,
+        "slices": 0,
+        "other": 2
+      },
+      "value_shape_acc": 1.0,
+      "state_acc": 1.0,
+      "other_meaning_acc": 1.0,
+      "would_park": 0.5,
+      "gold_n": 35,
+      "matched": 1,
+      "ambiguous_rows": [
+        {
+          "sid": "0000006201-26-000031",
+          "reason": "extras_verdict_missing",
+          "produced_idx": 1
+        }
+      ],
+      "ambiguities_unresolved": 0,
+      "verdicts_missing": 0,
+      "confirmed_wrong_accepted": 0,
+      "safety_result": "PASS",
+      "extras": {
+        "duplicate": 0,
+        "key_miss": 0,
+        "unsupported": 0
+      },
+      "duplicate_violations": 0,
+      "open_identity_findings": 0,
+      "reliability_failed": false,
+      "reliability_unobserved": false,
+      "reliability": {
+        "applicable": false,
+        "rate": null,
+        "upper95": null,
+        "over_bar": null,
+        "why": "no responses observed \u2014 Step 3 makes no model call"
+      },
+      "required_grading_unfinished": true,
+      "error_table": {
+        "park:ID_LAW": 1,
+        "extras:extras_verdict_missing": 1
+      },
+      "PASS": false
+    }
+  }
+}

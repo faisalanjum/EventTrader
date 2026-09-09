@@ -1,0 +1,353 @@
+{
+ "parent_session_id": "TESTsess1894",
+ "transport": "subscription",
+ "max_output_tokens": "128000",
+ "subscription_proof": "/tmp/a7_logs_1781/attempt_grader_source_final2/subscription.json",
+ "base_commit": "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc",
+ "base_tree": "74b231655193c14daccd877915daa051b078b330",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "attempts": [
+  {
+   "task": "event",
+   "ordinal": 0,
+   "attempt": 1,
+   "source_id": "0000006201-26-000031",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_001.json",
+   "agent_id": "TEST1894agent001",
+   "raw_name": "0000006201-26-000031.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 0,
+   "attempt": 2,
+   "source_id": "0000006201-26-000031",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_038.json",
+   "agent_id": "TEST1894agent038",
+   "raw_name": "0000006201-26-000031.TEST.attempt2.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 1,
+   "attempt": 1,
+   "source_id": "0000006201-26-000032",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_002.json",
+   "agent_id": "TEST1894agent002",
+   "raw_name": "0000006201-26-000032.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 2,
+   "attempt": 1,
+   "source_id": "0000027904-26-000013",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_003.json",
+   "agent_id": "TEST1894agent003",
+   "raw_name": "0000027904-26-000013.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 3,
+   "attempt": 1,
+   "source_id": "0000027904-26-000020",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_004.json",
+   "agent_id": "TEST1894agent004",
+   "raw_name": "0000027904-26-000020.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 4,
+   "attempt": 1,
+   "source_id": "0000027904-26-000022",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_005.json",
+   "agent_id": "TEST1894agent005",
+   "raw_name": "0000027904-26-000022.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 5,
+   "attempt": 1,
+   "source_id": "0000063908-26-000032",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_006.json",
+   "agent_id": "TEST1894agent006",
+   "raw_name": "0000063908-26-000032.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 6,
+   "attempt": 1,
+   "source_id": "0000092380-26-000044",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_007.json",
+   "agent_id": "TEST1894agent007",
+   "raw_name": "0000092380-26-000044.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 7,
+   "attempt": 1,
+   "source_id": "0000764478-25-000057",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_008.json",
+   "agent_id": "TEST1894agent008",
+   "raw_name": "0000764478-25-000057.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 8,
+   "attempt": 1,
+   "source_id": "0000764478-26-000005",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_009.json",
+   "agent_id": "TEST1894agent009",
+   "raw_name": "0000764478-26-000005.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 9,
+   "attempt": 1,
+   "source_id": "0000898173-26-000006",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_010.json",
+   "agent_id": "TEST1894agent010",
+   "raw_name": "0000898173-26-000006.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 10,
+   "attempt": 1,
+   "source_id": "0000940944-25-000038",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_011.json",
+   "agent_id": "TEST1894agent011",
+   "raw_name": "0000940944-25-000038.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 11,
+   "attempt": 1,
+   "source_id": "0000940944-26-000005",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_012.json",
+   "agent_id": "TEST1894agent012",
+   "raw_name": "0000940944-26-000005.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 12,
+   "attempt": 1,
+   "source_id": "0000940944-26-000009",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_013.json",
+   "agent_id": "TEST1894agent013",
+   "raw_name": "0000940944-26-000009.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 13,
+   "attempt": 1,
+   "source_id": "0001041061-25-000109",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_014.json",
+   "agent_id": "TEST1894agent014",
+   "raw_name": "0001041061-25-000109.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 14,
+   "attempt": 1,
+   "source_id": "0001041061-26-000003",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_015.json",
+   "agent_id": "TEST1894agent015",
+   "raw_name": "0001041061-26-000003.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 15,
+   "attempt": 1,
+   "source_id": "0001041061-26-000084",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_016.json",
+   "agent_id": "TEST1894agent016",
+   "raw_name": "0001041061-26-000084.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 16,
+   "attempt": 1,
+   "source_id": "0001058090-26-000007",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_017.json",
+   "agent_id": "TEST1894agent017",
+   "raw_name": "0001058090-26-000007.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 17,
+   "attempt": 1,
+   "source_id": "0001104659-25-102611",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_018.json",
+   "agent_id": "TEST1894agent018",
+   "raw_name": "0001104659-25-102611.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 18,
+   "attempt": 1,
+   "source_id": "0001104659-25-105631",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_019.json",
+   "agent_id": "TEST1894agent019",
+   "raw_name": "0001104659-25-105631.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 19,
+   "attempt": 1,
+   "source_id": "0001104659-25-118458",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_020.json",
+   "agent_id": "TEST1894agent020",
+   "raw_name": "0001104659-25-118458.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 20,
+   "attempt": 1,
+   "source_id": "0001104659-26-017090",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_021.json",
+   "agent_id": "TEST1894agent021",
+   "raw_name": "0001104659-26-017090.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 21,
+   "attempt": 1,
+   "source_id": "0001104659-26-027061",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_022.json",
+   "agent_id": "TEST1894agent022",
+   "raw_name": "0001104659-26-027061.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 22,
+   "attempt": 1,
+   "source_id": "0001104659-26-032757",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_023.json",
+   "agent_id": "TEST1894agent023",
+   "raw_name": "0001104659-26-032757.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 23,
+   "attempt": 1,
+   "source_id": "0001171843-26-001288",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_024.json",
+   "agent_id": "TEST1894agent024",
+   "raw_name": "0001171843-26-001288.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 24,
+   "attempt": 1,
+   "source_id": "AAL_2026-04-23T08.30",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_025.json",
+   "agent_id": "TEST1894agent025",
+   "raw_name": "AAL_2026-04-23T08.30.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 25,
+   "attempt": 1,
+   "source_id": "BBY_2026-03-03T08.00",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_026.json",
+   "agent_id": "TEST1894agent026",
+   "raw_name": "BBY_2026-03-03T08.00.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 26,
+   "attempt": 1,
+   "source_id": "CMG_2026-02-03T16.30",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_027.json",
+   "agent_id": "TEST1894agent027",
+   "raw_name": "CMG_2026-02-03T16.30.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 27,
+   "attempt": 1,
+   "source_id": "DAL_2026-04-08T10.00",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_028.json",
+   "agent_id": "TEST1894agent028",
+   "raw_name": "DAL_2026-04-08T10.00.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 28,
+   "attempt": 1,
+   "source_id": "DRI_2026-03-19T08.30",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_029.json",
+   "agent_id": "TEST1894agent029",
+   "raw_name": "DRI_2026-03-19T08.30.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 29,
+   "attempt": 1,
+   "source_id": "MCD_2026-02-11T16.30",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_030.json",
+   "agent_id": "TEST1894agent030",
+   "raw_name": "MCD_2026-02-11T16.30.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 30,
+   "attempt": 1,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_031.json",
+   "agent_id": "TEST1894agent031",
+   "raw_name": "ULTA_2026-03-12T16.30.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 31,
+   "attempt": 1,
+   "source_id": "YUM_2026-02-04T08.15",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_032.json",
+   "agent_id": "TEST1894agent032",
+   "raw_name": "YUM_2026-02-04T08.15.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 32,
+   "attempt": 1,
+   "source_id": "bzNews_42014391",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_033.json",
+   "agent_id": "TEST1894agent033",
+   "raw_name": "bzNews_42014391.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 33,
+   "attempt": 1,
+   "source_id": "bzNews_49256211",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_034.json",
+   "agent_id": "TEST1894agent034",
+   "raw_name": "bzNews_49256211.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 34,
+   "attempt": 1,
+   "source_id": "bzNews_50877032",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_035.json",
+   "agent_id": "TEST1894agent035",
+   "raw_name": "bzNews_50877032.TEST.raw.json"
+  },
+  {
+   "task": "event",
+   "ordinal": 35,
+   "attempt": 1,
+   "source_id": "bzNews_51962983",
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_event_036.json",
+   "agent_id": "TEST1894agent036",
+   "raw_name": "bzNews_51962983.TEST.raw.json"
+  },
+  {
+   "task": "final_sign",
+   "ordinal": 36,
+   "attempt": 1,
+   "source_id": null,
+   "state_path": "/tmp/a7_logs_1781/attempt_grader_source_final2/TEST_projects/TESTproj1894/TESTsess1894/workflows/wf_TEST1894_final_sign_037.json",
+   "agent_id": "TEST1894agent037",
+   "raw_name": "final_sign.TEST.raw.json"
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+manifest: d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28
+bundle: dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494 slices 36 largest 252123
+events=36 packets=196 calls=392
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_current_extra_answers_do_not_consult_the_producer_scorer _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f65741a58d0>
+
+    def test_current_extra_answers_do_not_consult_the_producer_scorer(monkeypatch):
+        expected = ["duplicate", "key_miss", "unsupported"]  # Step 1 A7 extras rule.
+        assert B.extras_buckets() == list(B._scorer().EXTRAS_BUCKETS) == expected
+        rules = B.extras_rules()
+    
+        def retired_owner():
+            raise AssertionError("current grading read the producer-era bucket owner")
+    
+        monkeypatch.setattr(G._a6(), "_extras_buckets", retired_owner)
+>       assert B.extras_buckets() == expected
+               ^^^^^^^^^^^^^^^^^^
+
+test_a7_score_boundaries.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<intentional-mutation-R8>:3: in extras_buckets
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def retired_owner():
+>       raise AssertionError("current grading read the producer-era bucket owner")
+E       AssertionError: current grading read the producer-era bucket owner
+
+test_a7_score_boundaries.py:20: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_score_boundaries.py::test_current_extra_answers_do_not_consult_the_producer_scorer
+1 failed in 0.18s

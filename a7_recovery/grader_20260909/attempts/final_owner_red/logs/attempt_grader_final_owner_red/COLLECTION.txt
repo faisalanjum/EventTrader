@@ -1,0 +1,5 @@
+test_a7_score_boundaries.py::test_current_extra_answers_do_not_consult_the_producer_scorer
+
+1 test collected in 0.07s
+
+--- stderr ---

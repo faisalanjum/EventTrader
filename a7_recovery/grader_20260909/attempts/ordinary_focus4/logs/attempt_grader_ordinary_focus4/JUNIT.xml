@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="10" time="5.707" timestamp="2026-09-09T13:12:06.490566-04:00" hostname="minisforum"><testcase classname="test_harness_guards" name="test_final_gate_or_semantics" time="0.029" /><testcase classname="test_harness_guards" name="test_final_gate_union_axes_govern" time="0.000" /><testcase classname="test_harness_guards" name="test_clean_union_rescues_incomplete_single" time="0.000" /><testcase classname="test_harness_guards" name="test_definite_failures_never_none" time="0.042" /><testcase classname="test_harness_guards" name="test_1134_an_UNSAFE_arm_is_never_rescued_by_union_recall" time="0.000" /><testcase classname="test_harness_guards" name="test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-1-0.01-True]" time="0.000" /><testcase classname="test_harness_guards" name="test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-2-0.02-True]" time="0.000" /><testcase classname="test_harness_guards" name="test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-3-0.03-False]" time="0.000" /><testcase classname="test_harness_guards" name="test_a1_the_whole_launch_double_builds_byte_identically" time="0.844"><failure message="TypeError: role_prompt_headers() takes 0 positional arguments but 1 was given">tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_ordinary_focus4/pytest/test_a1_the_whole_launch_doubl0')
+
+    def test_a1_the_whole_launch_double_builds_byte_identically(tmp_path):
+        """Build twice into a copied tree; every artifact must be the same bytes."""
+        import build_launch_manifest as _blm
+        # THE COPY KEEPS THE REAL RELATIVE LAYOUT, so the generator derives the same
+        # repo-relative paths and writes byte-identical artifacts. `keys/` and
+        # `driver/` are symlinked because the generator reads the frozen inputs and
+        # imports the live package (which pulls top-level siblings and cannot be
+        # copied whole). NOTHING is written into the artifact's own tree.
+        work = _mirror(tmp_path)
+        names = ["launch_kfields_drafts.manifest.json",
+                 "launch_kfields_a1.bundle.json",
+                 "launch_exp5_readers.manifest.json",
+                 # the generated PROMPT artifacts: the drafter prompt drifted from
+                 # its builder once already, and only the launchers caught it
+                 # because they render live (Codex SEQ 1312 item 9)
+                 "exp5_prompt_drafter.md", "exp5_prompt_producer.md",
+                 "exp5_prompt_contract.manifest.json"]
+        names += ["launchers_a1/" + n for n in sorted(os.listdir(
+            os.path.join(_HERE, "launchers_a1")))]
+        def snapshot():
+            env = dict(os.environ, PYTHONPATH=str(tmp_path) + os.pathsep + _REPO,
+                       PYTHONDONTWRITEBYTECODE="1")
+            # EVERY generated artifact from ITS OWN builder, both of them
+            for builder in ("build_exp5_contract.py", "build_launch_manifest.py"):
+                out = subprocess.run([_sys.executable, "-B", builder],
+                                     cwd=str(work), capture_output=True, text=True,
+                                     env=env)
+                assert out.returncode == 0, (builder, out.stderr[-2000:])
+            return {n: hashlib.sha256(
+                io.open(str(work / n), "rb").read()).hexdigest() for n in names}
+        first = snapshot()
+        assert first == snapshot(), "the launch does not double-build"
+        live = {n: hashlib.sha256(
+            io.open(os.path.join(_HERE, n), "rb").read()).hexdigest() for n in names}
+        # The archived V1 text and its retired rendering differ in explicit
+        # period fields and the polarity enum. Preserve paid history; pin that
+        # exact difference rather than accepting arbitrary drift. The active V3
+        # contract below must rebuild without any allowance.
+        differences = {n: (live[n], first[n]) for n in names if live[n] != first[n]}
+        assert differences == {"exp5_prompt_producer.md": (
+            "060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc",
+            "8d3d7231ab3cc4c702eecfebec99221300e8fb2f122776fd23ce7cbb380000a9")}, differences
+        # The actively served V3 contract has no historical-drift allowance.
+        import build_exp5_contract as contract
+&gt;       for role in contract.role_prompt_headers(".v3"):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: role_prompt_headers() takes 0 positional arguments but 1 was given
+
+test_harness_guards.py:7189: TypeError</failure></testcase><testcase classname="test_a7_source_correction_1487" name="test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today" time="3.860" /></testsuite></testsuites>

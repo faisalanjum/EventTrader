@@ -1,0 +1,9 @@
+attempt	grader_ordinary_recheck2
+payload	../../grader_20260909/attempts/ordinary_recheck2/regression.py
+map	map_codex_grader_ordinary_recheck2.tsv
+command	run_1957.sh map_codex_grader_ordinary_recheck2.tsv ../../grader_20260909/attempts/ordinary_recheck2/regression.py grader_ordinary_recheck2 1800
+wrapper_pid	1158561
+payload_pid	1158566
+payload_pgid	1158561
+started_utc	2026-09-09T16:38:07Z
+state	finished exit 1

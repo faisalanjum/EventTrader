@@ -1,0 +1,263 @@
+........................................................................ [ 42%]
+............FFFF........................................................ [ 85%]
+.........................                                                [100%]
+=================================== FAILURES ===================================
+____________ test_guidance_movement_through_both_event_routes[6-1] _____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure3/pytest/test_guidance_movement_through0')
+version = 1, precision = 6
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:390: in <module>
+    _ATTACKS = _shape_attacks()          # built ONCE, not twice by the decorator
+               ^^^^^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:334: in _shape_attacks
+    ev = _v2_events()[CE_EVENT]
+         ^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:86: in _v2_events
+    for packet in SA._real_v1_packets():
+                  ^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in _real_v1_packets
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in <listcomp>
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+                                                           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl'
+
+/usr/local/lib/python3.11/pathlib.py:1044: FileNotFoundError
+____________ test_guidance_movement_through_both_event_routes[6-2] _____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure3/pytest/test_guidance_movement_through1')
+version = 2, precision = 6
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:390: in <module>
+    _ATTACKS = _shape_attacks()          # built ONCE, not twice by the decorator
+               ^^^^^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:334: in _shape_attacks
+    ev = _v2_events()[CE_EVENT]
+         ^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:86: in _v2_events
+    for packet in SA._real_v1_packets():
+                  ^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in _real_v1_packets
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in <listcomp>
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+                                                           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl'
+
+/usr/local/lib/python3.11/pathlib.py:1044: FileNotFoundError
+____________ test_guidance_movement_through_both_event_routes[28-1] ____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure3/pytest/test_guidance_movement_through2')
+version = 1, precision = 28
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:390: in <module>
+    _ATTACKS = _shape_attacks()          # built ONCE, not twice by the decorator
+               ^^^^^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:334: in _shape_attacks
+    ev = _v2_events()[CE_EVENT]
+         ^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:86: in _v2_events
+    for packet in SA._real_v1_packets():
+                  ^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in _real_v1_packets
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in <listcomp>
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+                                                           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl'
+
+/usr/local/lib/python3.11/pathlib.py:1044: FileNotFoundError
+____________ test_guidance_movement_through_both_event_routes[28-2] ____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_closure3/pytest/test_guidance_movement_through3')
+version = 2, precision = 28
+
+    @pytest.mark.parametrize("version", [1, 2])
+    @pytest.mark.parametrize("precision", [6, 28])
+    def test_guidance_movement_through_both_event_routes(tmp_path, version, precision):
+        from driver.core.driver_write_cli import run_event
+        from driver.core.test_driver_write_cli import FakeStore, fact, run
+        from driver.core.test_v2_attacks import slot
+>       from driver.core.test_v2_event_route import _reply, _text_event, _text_fact
+
+../../../../../driver/core/test_exact_movement.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<frozen importlib._bootstrap>:1176: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:690: in _load_unlocked
+    ???
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+../../../../../driver/core/test_v2_event_route.py:390: in <module>
+    _ATTACKS = _shape_attacks()          # built ONCE, not twice by the decorator
+               ^^^^^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:334: in _shape_attacks
+    ev = _v2_events()[CE_EVENT]
+         ^^^^^^^^^^^^
+../../../../../driver/core/test_v2_event_route.py:86: in _v2_events
+    for packet in SA._real_v1_packets():
+                  ^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in _real_v1_packets
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../../scripts/driver_seed/test_stage_a_v2.py:300: in <listcomp>
+    return [json.loads(line) for path in paths for line in path.read_text().splitlines()]
+                                                           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/data/driver_catalog_seed/wp3_ce_compliant/packets.jsonl'
+
+/usr/local/lib/python3.11/pathlib.py:1044: FileNotFoundError
+=============================== warnings summary ===============================
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:516: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:535: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:680: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-1]
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-2]
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-1]
+FAILED ../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-2]
+4 failed, 165 passed, 3 warnings in 7.82s
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

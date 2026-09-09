@@ -1,0 +1,8 @@
+........................................................................ [ 25%]
+........................................................................ [ 50%]
+........................................................................ [ 76%]
+...................................................................      [100%]
+283 passed in 193.29s (0:03:13)
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

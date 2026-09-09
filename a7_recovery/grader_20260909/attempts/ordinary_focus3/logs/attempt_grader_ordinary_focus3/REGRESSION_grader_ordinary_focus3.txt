@@ -1,0 +1,206 @@
+EEEEEEEEEE                                                               [100%]
+==================================== ERRORS ====================================
+________________ ERROR at setup of test_final_gate_or_semantics ________________
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+_____________ ERROR at setup of test_final_gate_union_axes_govern ______________
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+_________ ERROR at setup of test_clean_union_rescues_incomplete_single _________
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+_____________ ERROR at setup of test_definite_failures_never_none ______________
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+__ ERROR at setup of test_1134_an_UNSAFE_arm_is_never_rescued_by_union_recall __
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+_ ERROR at setup of test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-1-0.01-True] _
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+_ ERROR at setup of test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-2-0.02-True] _
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+_ ERROR at setup of test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-3-0.03-False] _
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+__ ERROR at setup of test_a1_the_whole_launch_double_builds_byte_identically ___
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+_ ERROR at setup of test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today _
+
+    @pytest.fixture(autouse=True, scope="session")
+    def _bound_grading_scorer():
+        import hashlib
+        import a7_g23_build as B
+        # the CURRENT grading scorer, kept beside the ERA scorer under its own
+        # name: a6_launch_freeze hashes "score_exp5.py" into the producer era
+        # freeze, so the era file must stay exactly what the era pinned.
+        path = os.path.join(_HERE, "scorers", "score_exp5_current.py")
+        if not os.path.isfile(path):
+            return
+        with open(path, "rb") as fh:
+            digest = hashlib.sha256(fh.read()).hexdigest()
+>       B.bind_grading_scorer(path, digest)
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'a7_g23_build' has no attribute 'bind_grading_scorer'
+
+conftest.py:70: AttributeError
+=========================== short test summary info ============================
+ERROR test_harness_guards.py::test_final_gate_or_semantics - AttributeError: ...
+ERROR test_harness_guards.py::test_final_gate_union_axes_govern - AttributeEr...
+ERROR test_harness_guards.py::test_clean_union_rescues_incomplete_single - At...
+ERROR test_harness_guards.py::test_definite_failures_never_none - AttributeEr...
+ERROR test_harness_guards.py::test_1134_an_UNSAFE_arm_is_never_rescued_by_union_recall
+ERROR test_harness_guards.py::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-1-0.01-True]
+ERROR test_harness_guards.py::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-2-0.02-True]
+ERROR test_harness_guards.py::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-3-0.03-False]
+ERROR test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically
+ERROR test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today
+10 errors in 0.86s
+
+--- stderr ---

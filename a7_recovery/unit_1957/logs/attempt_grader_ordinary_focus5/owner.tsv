@@ -1,0 +1,9 @@
+attempt	grader_ordinary_focus5
+payload	../../grader_20260909/attempts/ordinary_focus5/regression.py
+map	map_codex_grader_ordinary_focus5.tsv
+command	run_1957.sh map_codex_grader_ordinary_focus5.tsv ../../grader_20260909/attempts/ordinary_focus5/regression.py grader_ordinary_focus5 900
+wrapper_pid	1215695
+payload_pid	1215699
+payload_pgid	1215695
+started_utc	2026-09-09T17:14:34Z
+state	finished exit 0

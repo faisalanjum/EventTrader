@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/verify_export.py", line 97, in <module>
+    result = child(Path(sys.argv[2]), json.loads(Path(sys.argv[3]).read_text()))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/verify_export.py", line 45, in child
+    loaded = {name: importlib.import_module(name) for name in ENTRIES}
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/verify_export.py", line 45, in <dictcomp>
+    loaded = {name: importlib.import_module(name) for name in ENTRIES}
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/exports/proposed1/a7_recovery/grader_20260909/harness_g1v3/kf_lint.py", line 39, in <module>
+    from driver.core.prepared_fact_v2 import (ITEM_FIELDS,                  # noqa: E402
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/exports/proposed1/driver/core/prepared_fact_v2.py", line 43, in <module>
+    from driver.core.driver_ids import split_terminal_suffix, valid_source_id
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/exports/proposed1/driver/core/driver_ids.py", line 15, in <module>
+    from driver.xml_names import graph_qname_parts   # THE shared XML QName owner (#827 B8)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/exports/proposed1/driver/xml_names.py", line 8, in <module>
+    from lxml import etree
+ModuleNotFoundError: No module named 'lxml'

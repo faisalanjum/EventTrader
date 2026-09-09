@@ -1,0 +1,30 @@
+manifest: 78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2
+bundle: 91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68 slices 36 largest 248011
+events=36 packets=102 calls=204
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_dropped_trace_arm_still_owes_the_full_frozen_schedule __________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_schedule2/pytest/test_dropped_trace_arm_still_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b92c396d0>
+
+    def test_dropped_trace_arm_still_owes_the_full_frozen_schedule(run, tmp_path, monkeypatch):
+        import raw_transport as RT
+        expected = len(RT.a1_schedule(RT.a1_plan_for_run(run["run_dir"])))
+        control, problems = C.terminals(run, str(tmp_path / "control"))
+        assert problems == [] and control["scheduled_calls"] == expected
+        arms, meta, problems = G.materialize(run)
+        assert problems == []
+        missing_arm = sorted(arms)[-1]
+        arms.pop(missing_arm)
+        meta["trace"] = [r for r in meta["trace"] if r["arm"] != missing_arm]
+        monkeypatch.setattr(G, "materialize", lambda _run: copy.deepcopy((arms, meta, problems)))
+        broken, errors = C.terminals(run, str(tmp_path / "broken"))
+>       assert broken["scheduled_calls"] == expected
+E       assert 102 == 204
+
+test_a7_trace_1471.py:323: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_dropped_trace_arm_still_owes_the_full_frozen_schedule
+1 failed in 4.40s

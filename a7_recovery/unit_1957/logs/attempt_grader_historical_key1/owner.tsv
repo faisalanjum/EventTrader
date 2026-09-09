@@ -1,0 +1,9 @@
+attempt	grader_historical_key1
+payload	../../grader_20260909/attempts/historical_key1/historical_key_fixture.py
+map	map_codex_grader_historical_key1.tsv
+command	run_1957.sh map_codex_grader_historical_key1.tsv ../../grader_20260909/attempts/historical_key1/historical_key_fixture.py grader_historical_key1 300
+wrapper_pid	1155443
+payload_pid	1155447
+payload_pgid	1155443
+started_utc	2026-09-09T16:35:46Z
+state	finished exit 1

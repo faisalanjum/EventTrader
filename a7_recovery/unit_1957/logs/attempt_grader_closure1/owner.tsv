@@ -1,0 +1,9 @@
+attempt	grader_closure1
+payload	../../grader_20260909/regression.py
+map	map_codex_grader_closure1.tsv
+command	run_1957.sh map_codex_grader_closure1.tsv ../../grader_20260909/regression.py grader_closure1 900
+wrapper_pid	1021889
+payload_pid	1021893
+payload_pgid	1021889
+started_utc	2026-09-09T14:50:22Z
+state	finished exit 1

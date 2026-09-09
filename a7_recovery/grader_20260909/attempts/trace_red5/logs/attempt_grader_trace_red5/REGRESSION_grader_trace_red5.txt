@@ -1,0 +1,218 @@
+FF.FFF                                                                   [100%]
+=================================== FAILURES ===================================
+____________ test_the_REAL_downstream_paths_consume_only_the_trace _____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+sealed = <function sealed.<locals>._seal at 0x7fe0d78725c0>
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_red5/pytest/test_the_REAL_downstream_paths0')
+
+    def test_the_REAL_downstream_paths_consume_only_the_trace(run, sealed, tmp_path):
+        """The actual conservation, G1 and G23 entries - not a private helper.
+    
+        Each of these used to reach `materialize` again, walking the schedule and
+        reparsing every answer. After ONE materialization the reads are sealed and
+        the real paths must still finish (Codex SEQ 1472 item 4).
+        """
+        import a7_g23_run as R
+        arms, meta, problems = G.materialize(run)      # the ONE materialization
+        assert problems == []
+        sealed()
+    
+>       doc, _p = C.terminals(run, str(tmp_path / "conservation"))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:94: in terminals
+    rows, arms, problems = contributions(primary)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+a7_conservation.py:49: in contributions
+    slots, plan, problems = G.effective_slots(primary)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...},)
+k = {}
+
+    def no_walk(*a, **k):
+>       raise AssertionError("the schedule was walked a second time")
+E       AssertionError: the schedule was walked a second time
+
+test_a7_trace_1471.py:56: AssertionError
+________ test_every_status_and_route_outcome_is_conserved_exactly_once _________
+
+    def test_every_status_and_route_outcome_is_conserved_exactly_once():
+        """One branch per produced fact, one terminal per packet that produced
+        none - across every status and both route-loss cases."""
+        base = {"arm": "P1", "packet_id": "p#000", "source_id": "p",
+                "lane_id": "p#000/L1", "abstentions": [], "continuity_hints": [],
+                "attempts": [], "facts": [], "fact_positions": [], "why": [],
+                "readable": False, "status": "uncalled"}
+    
+        def row(**kw):
+            out = dict(base)
+            out.update(kw)
+            return out
+    
+        cases = [
+            ("valid primary", row(status="answered", readable=True,
+                                  facts=[{}], fact_positions=[0]),
+             {("fact", 0): {"decision": "written", "index": 0}}, ["written"]),
+            ("valid retry, both attempts",
+             row(status="answered", readable=True, facts=[{}], fact_positions=[0],
+                 attempts=[{"attempt": 1}, {"attempt": 2}]),
+             {("fact", 0): {"decision": "parked", "index": 1}}, ["parked"]),
+            ("invalid", row(status="invalid"), {}, ["invalid_unreadable"]),
+            ("refusal", row(status="refused"), {}, ["refused_unreadable"]),
+            ("uncalled", row(status="uncalled"), {}, ["uncalled"]),
+            ("abstention only", row(status="answered", readable=True,
+                                    abstentions=[{"reason": "TEST"}]),
+             {}, ["abstained_only"]),
+            ("empty success is invalid", row(status="answered", readable=True),
+             {}, [None]),
+            ("mixed split", row(status="answered", readable=True,
+                                facts=[{}, {}, {}, {}, {}],
+                                fact_positions=[0, 1, 2, 3, 4]),
+             {("fact", i): {"decision": d, "index": 0, "codes": []}
+              for i, d in enumerate(("written", "parked", "rejected", "merged", "skipped"))},
+             ["written", "parked", "rejected", "merged", "skipped"]),
+            ("missing route", row(status="answered", readable=True, facts=[{}],
+                                  fact_positions=[0]), {}, [None]),
+            ("unknown route", row(status="answered", readable=True, facts=[{}],
+                                  fact_positions=[0]),
+             {("fact", 0): {"decision": "a decision no owner declares"}}, [None]),
+        ]
+        for label, r, per_fact, want in cases:
+>           got = C._branches_of(r, per_fact)
+                  ^^^^^^^^^^^^^^
+E           AttributeError: module 'a7_conservation' has no attribute '_branches_of'
+
+test_a7_trace_1471.py:159: AttributeError
+______ test_public_accounting_keeps_the_real_mixed_split_and_all_origins _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_red5/pytest/test_public_accounting_keeps_t0')
+
+    def test_public_accounting_keeps_the_real_mixed_split_and_all_origins(run, tmp_path):
+        import raw_transport as RT
+        arms, meta, problems = G.materialize(run)
+        assert problems == []
+        plan = RT.a1_plan_for_run(run["run_dir"])
+>       doc, problems = C.terminals(run, str(tmp_path))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:198: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:94: in terminals
+    rows, arms, problems = contributions(primary)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+primary = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    def contributions(primary=G.PRIMARY):
+        """-> (rows, arms, problems). ONE row per (arm, packet), before routing.
+    
+        Re-walks the SAME slots `materialize` walks, but keeps what it drops: which
+        packet produced which facts, and the continuity hints.
+        """
+        import a1_reader
+        import build_a5_exp5_kit as A5
+        import build_launch_manifest as blm
+        import kf_lint
+        slots, plan, problems = G.effective_slots(primary)
+        items = {pk["packet_id"]: pk["item"] for pk in plan["packets"]}
+        sources = {pk["packet_id"]: pk["source_id"] for pk in plan["packets"]}
+        menus = {e["source_id"]: e.get("menu_display_to_original", {})
+                 for e in plan.get("events", [])}
+        parts, arms, rows = {}, {}, []
+        for n, key, path, attempt in slots:
+            packet_id, lane_id = key
+            sid = sources[packet_id]
+            if sid not in parts:
+                parts[sid] = kf_lint.part_lookup(sid, blm.INPUTS)
+>           with io.open(path, encoding="utf-8") as fh:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: expected str, bytes or os.PathLike object, not list
+
+a7_conservation.py:60: TypeError
+______________ test_a_real_never_called_run_keeps_both_full_arms _______________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_red5/pytest/test_a_real_never_called_run_k0')
+
+    def test_a_real_never_called_run_keeps_both_full_arms(tmp_path):
+        import build_a5_exp5_kit as A5
+        import raw_transport as RT
+        producer = str(tmp_path / "uncalled")
+        prep = A5.prepare(producer)
+        assert prep["ok"], prep.get("problems")
+        run = PR.load(producer)
+        schedule = RT.a1_schedule(RT.a1_plan_for_run(producer))
+>       doc, problems = C.terminals(run, str(tmp_path / "audit"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:94: in terminals
+    rows, arms, problems = contributions(primary)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+primary = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a7_logs_1781/attempt_grader_trace_red5/pytest/test_a_r...6373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812'), ('finalizations', OrderedDict()), ('executed', None)])
+
+    def contributions(primary=G.PRIMARY):
+        """-> (rows, arms, problems). ONE row per (arm, packet), before routing.
+    
+        Re-walks the SAME slots `materialize` walks, but keeps what it drops: which
+        packet produced which facts, and the continuity hints.
+        """
+        import a1_reader
+        import build_a5_exp5_kit as A5
+        import build_launch_manifest as blm
+        import kf_lint
+        slots, plan, problems = G.effective_slots(primary)
+        items = {pk["packet_id"]: pk["item"] for pk in plan["packets"]}
+        sources = {pk["packet_id"]: pk["source_id"] for pk in plan["packets"]}
+        menus = {e["source_id"]: e.get("menu_display_to_original", {})
+                 for e in plan.get("events", [])}
+        parts, arms, rows = {}, {}, []
+        for n, key, path, attempt in slots:
+            packet_id, lane_id = key
+            sid = sources[packet_id]
+            if sid not in parts:
+                parts[sid] = kf_lint.part_lookup(sid, blm.INPUTS)
+>           with io.open(path, encoding="utf-8") as fh:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: expected str, bytes or os.PathLike object, not list
+
+a7_conservation.py:60: TypeError
+____________ test_same_count_cannot_hide_wrong_or_missing_identity _____________
+
+    def test_same_count_cannot_hide_wrong_or_missing_identity():
+        scheduled = [{"ordinal": i, "source_id": "s", "packet_id": "p%d" % i,
+                      "lane_id": "p%d/L%d" % (i, i + 1), "arm": "P%d" % (i + 1)}
+                     for i in range(2)]
+        rows = [dict(s, status="uncalled", readable=False, facts=[], fact_positions=[],
+                     abstentions=[], continuity_hints=[], attempts=[]) for s in scheduled]
+>       branches = [b for r in rows for b in C._branches_of(r, {})]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7fe0d7d49b10>
+
+>   branches = [b for r in rows for b in C._branches_of(r, {})]
+                                         ^^^^^^^^^^^^^^
+E   AttributeError: module 'a7_conservation' has no attribute '_branches_of'
+
+test_a7_trace_1471.py:246: AttributeError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+FAILED test_a7_trace_1471.py::test_every_status_and_route_outcome_is_conserved_exactly_once
+FAILED test_a7_trace_1471.py::test_public_accounting_keeps_the_real_mixed_split_and_all_origins
+FAILED test_a7_trace_1471.py::test_a_real_never_called_run_keeps_both_full_arms
+FAILED test_a7_trace_1471.py::test_same_count_cannot_hide_wrong_or_missing_identity
+5 failed, 1 passed in 3.95s
+
+--- stderr ---

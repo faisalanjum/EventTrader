@@ -1,0 +1,9 @@
+attempt	grader_final_owner_green
+payload	../../grader_20260909/attempts/final_owner_green/regression.py
+map	map_codex_grader_final_owner_green.tsv
+command	run_1957.sh map_codex_grader_final_owner_green.tsv ../../grader_20260909/attempts/final_owner_green/regression.py grader_final_owner_green 5400
+wrapper_pid	1313415
+payload_pid	1313419
+payload_pgid	1313415
+started_utc	2026-09-09T18:25:37Z
+state	finished exit 0

@@ -1,0 +1,3763 @@
+{
+  "inventory_scope": "Current rule-owner AST and requirement families; not line/branch coverage.",
+  "old_file_count": 88,
+  "new_file_count": 93,
+  "changes": [
+    {
+      "path": "a7_conservation.py",
+      "old_sha256": "921a24557d61505925a2ae81bef52d383069dbb6d5482833237179906fd3fe54",
+      "new_sha256": "41787f40f584abc5cf622072e54dead4c31d3942876a7b2f83c017d17cb7a4a6",
+      "changed": [
+        "_conservation_problems",
+        "contributions",
+        "dimensions",
+        "terminals"
+      ],
+      "added": [
+        "_branches_of",
+        "_identity"
+      ],
+      "removed": [
+        "_terminal_of"
+      ]
+    },
+    {
+      "path": "a7_g1_build.py",
+      "old_sha256": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+      "new_sha256": "6b55ae7f03b941d1c4b4f5ee634bd427fea88c665a61aa06ab3717721149510d",
+      "changed": [
+        "write"
+      ],
+      "added": [],
+      "removed": [
+        "_exists"
+      ]
+    },
+    {
+      "path": "a7_g1_complete_v2.py",
+      "old_sha256": "7a284f30296e698948155923c9ff1cc040eeba8b79dd0c3d22bbfade3a93250d",
+      "new_sha256": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+      "changed": [
+        "complete"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "a7_g23_build.py",
+      "old_sha256": "4fce0781e770ce48ca51b6d2b0a412b3357a49ba668160604a88eb39dc738b40",
+      "new_sha256": "47af659b1e04ff9458cd2cc92d703dbeaaf2048112e8cf9ffcbcbde4dd49c82e",
+      "changed": [
+        "extras_buckets",
+        "extras_rules",
+        "load_verified_inputs",
+        "meaning_packet",
+        "verified_event_context",
+        "write_atomic"
+      ],
+      "added": [
+        "packet_groups"
+      ],
+      "removed": []
+    },
+    {
+      "path": "a7_g23_run.py",
+      "old_sha256": "c247b909c51f23b34947c08891d97f2915c437d6b5779bd0070735e8e1979596",
+      "new_sha256": "33abdb564de370c3a368a85f0bddf8c4fbaef4adac6eeaae84988725ddcfaf15",
+      "changed": [
+        "populations",
+        "write",
+        "write_kind"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "a7_reference_inventory.py",
+      "old_sha256": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+      "new_sha256": "b9ed1546a16d8e41a9af25738846f9af76bbe3a53bb668658f1d0f356dddb438",
+      "changed": [
+        "write"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "audit_worker_access.py",
+      "old_sha256": "dda9db0440a764711739fb533c8af65bce2a854da967b197b05067dd68026314",
+      "new_sha256": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+      "changed": [
+        "g1_state_audit"
+      ],
+      "added": [],
+      "removed": [
+        "_lanes_in",
+        "_same_model"
+      ]
+    },
+    {
+      "path": "g1_fake_state.py",
+      "old_sha256": "ff5bad90c6b808ef19613a961bb6616816eb1facff4d58c29ac7ca996ee3d018",
+      "new_sha256": "bbdda84389bea3c8ae9667855f41f2b016d04f3ca2c9c663c9f56ec3b9420e34",
+      "changed": [
+        "build"
+      ],
+      "added": [
+        "complete_test_run"
+      ],
+      "removed": []
+    },
+    {
+      "path": "scorers/score_exp5_current.py",
+      "old_sha256": "0f769167dcac0bb634e57e6d30a030f569264f8be1c14cd6f83cab0385268e52",
+      "new_sha256": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+      "changed": [
+        "_leg"
+      ],
+      "added": [],
+      "removed": [
+        "_base_driver",
+        "_ev_key",
+        "_name_agrees",
+        "_resolved_period",
+        "_shape_pair"
+      ]
+    },
+    {
+      "path": "test_a5_launch_gate_1403.py",
+      "old_sha256": "75c48d45c928b83c82084f1b40d7da00fee91a830254b9c286431627feee04a2",
+      "new_sha256": "27da04d2d93c4058f4406789e231b42520ecb30555f1faf24f12dacbcdce5b61",
+      "changed": [
+        "test_frozen_source_byte_drift_arms_zero"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "test_a6_fixture_isolation_1768.py",
+      "old_sha256": "45cf4561d6d4f423c2537a5c947d6296b414320971e4ba9a69176f42c87933b7",
+      "new_sha256": "02ba6fd084d1f60ffb28cef5f092d8994915f08937175e0ba1786b89b3816b2e",
+      "changed": [
+        "test_1_outside_the_fixture_the_gate_refuses_the_old_era_run",
+        "test_2_outside_the_fixture_the_gate_accepts_the_current_zero_call_run",
+        "test_3_inside_the_fixture_the_old_era_is_permitted_and_still_fully_checked"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "test_a6_fixture_isolation_after_1768.py",
+      "old_sha256": "e80a0b3bffa3997749527257a06e8a18f2f4fd0af5eeec6c0f71d75a0455d778",
+      "new_sha256": "039016566a82c9080ec6d2845ff971a71f7cbd3c52610066d98acee005ddc88a",
+      "changed": [
+        "test_after_the_historical_module_the_refusal_returns"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "test_a7_corrections_1454.py",
+      "old_sha256": "ef91e0ea9b822b25f00c1190a2f07fed3786bcfc034bb31b6e617dd71d9f5cd9",
+      "new_sha256": "7d258f3ac00b7e93dbd8dd47cfd9d781917ada97c3f63bc164afe65119e4d1dd",
+      "changed": [
+        "_du_facts",
+        "_g2_packet",
+        "_od1",
+        "test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect",
+        "test_g2_door_accepts_the_four_lawful_answer_shapes",
+        "test_g2_door_requires_exactly_the_complete_field_set",
+        "test_g2_output_example_is_valid_json",
+        "test_g2_prompt_carries_the_live_rule_and_every_meaning_field",
+        "test_g2_prompt_defines_every_aspect_in_plain_words",
+        "test_g2_two_graders_must_agree_per_aspect",
+        "test_od1_prompt_serves_only_the_four_permitted_fields",
+        "test_quote_only_could_not_identify_a_claim_but_the_card_can",
+        "test_the_applier_refuses_a_row_whose_bytes_moved",
+        "test_the_contract_version_reaches_every_assembled_packet",
+        "test_the_ledger_covers_the_acted_population_exactly_once",
+        "test_the_reference_card_is_a_structural_whitelist"
+      ],
+      "added": [
+        "_current_context",
+        "_historical_od1"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_a7_current_1473.py",
+      "old_sha256": "abe8692a07fe7ca8b54611c773479543d8c3ea994266a234ddb5f3aa88625fbd",
+      "new_sha256": "b3f5ac0e9b14f3b88ff12052bc859062eedd535f053a42162b16691dab734000",
+      "changed": [
+        "current",
+        "test_the_old_v1_run_refuses_at_every_live_entry"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "test_a7_current_postrun.py",
+      "old_sha256": null,
+      "new_sha256": "b1943df231088f5e94d2cfa52c9e190f1d42b1c68fee5b305350334c760a7c14",
+      "changed": [],
+      "added": [
+        "test_completed_current_run_keeps_its_pin_and_counts_each_return_once",
+        "test_completed_current_run_materializes_and_freezes_without_retry_file",
+        "test_current_accounting_and_approved_g23_rebuild_identically",
+        "test_current_counts_and_names_do_not_consult_historical_values"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_a7_g1_precall_freeze_1525.py",
+      "old_sha256": "5870caaff6ce149621faa381431c62fd3913f17eef45c787547e0c3772d0faa9",
+      "new_sha256": "c5ca982da6645d4f628d7eb45e9492cf4cac2473bfcec0edaa61617132c376e6",
+      "changed": [
+        "built",
+        "test_every_batch_binds_the_current_producer_and_one_same_event",
+        "test_preflight_zero_problems_and_attempt1_budget_under_ceiling"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "test_a7_g23_lifecycle_1464.py",
+      "old_sha256": "021f6170b47f387e8db2f2596d90af8a0a07c5187870dda3c7c38161d1aed847",
+      "new_sha256": "7d4f912e6effccb0b69113a5f226244f22b2bdd8d73ffa1b5a6514658b6a419e",
+      "changed": [
+        "_approved_g1",
+        "_frozen",
+        "_record_state",
+        "test_one_mixed_batch_splits_per_question_and_is_never_both"
+      ],
+      "added": [
+        "_current_candidate"
+      ],
+      "removed": [
+        "_named_json",
+        "_named_path"
+      ]
+    },
+    {
+      "path": "test_a7_identity_relations.py",
+      "old_sha256": null,
+      "new_sha256": "0bc92370f73b4a6a3c732b85c6b058d5daf27ff0839b40011d0faeea1a2a9af2",
+      "changed": [],
+      "added": [
+        "_reply",
+        "test_every_two_by_two_blind_relation_preserves_only_uncontested_credit",
+        "test_invalid_produced_index_never_leaves_partial_credit",
+        "test_invalid_question_identity_never_leaves_partial_credit",
+        "test_missing_extra_duplicate_and_wrong_shape_answers_are_not_completion"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_a7_input_binding.py",
+      "old_sha256": null,
+      "new_sha256": "9ccb497eb5c1d526f44b71375903a6e4dd3aab418cee426dd4680d88cb44c28a",
+      "changed": [],
+      "added": [
+        "_freeze",
+        "inputs",
+        "test_changed_manifest_claim_is_not_an_authority",
+        "test_identical_bytes_under_a_durable_root_alias_are_allowed",
+        "test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2",
+        "test_the_manifest_row_cannot_be_replaced_at_its_approved_path"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_a7_interrupted_capture.py",
+      "old_sha256": null,
+      "new_sha256": "929654fc4f68a9cf316410a8823807a06ec166449ab8902047428e820c37ba7a",
+      "changed": [],
+      "added": [
+        "test_real_finalizer_handles_every_interrupted_capture_shape"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_a7_postrun_identity_1521.py",
+      "old_sha256": "7f73b68155367a4275dba04690ced8d12146271e049040b8cf73e729477514ee",
+      "new_sha256": "3b30ea114a5426dff1c3562271dd9893e52efefb47ffe3e89c02ebae9b1b4fd7",
+      "changed": [],
+      "added": [],
+      "removed": [
+        "test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+        "test_grading_inventories_derive_twice_identically_with_zero_problems"
+      ]
+    },
+    {
+      "path": "test_a7_postrun_identity_1521_recovery_1774.py",
+      "old_sha256": "fdac03d1da992cab73ba8520e02c0600e98656c14af3f8305d7e2caadab4dc5c",
+      "new_sha256": null,
+      "changed": [],
+      "added": [],
+      "removed": [
+        "_freeze_sha",
+        "_fresh",
+        "_row",
+        "_rows",
+        "test_a_genuinely_derived_over_ceiling_future_budget_is_under_ceiling_false",
+        "test_completed_run_freeze_budget_counts_once_not_as_future_plan",
+        "test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+        "test_inmemory_completed_primary_plus_retry_preserves_retry_and_owes_zero",
+        "test_inmemory_completed_primary_without_retry_owes_nothing",
+        "test_inmemory_impossible_over_schedule_primary_refuses",
+        "test_inmemory_zero_completed_primary_owes_the_whole_schedule",
+        "test_omitted_or_wrong_freeze_hash_refuses",
+        "test_re_adding_the_completed_392_yields_6004_and_breaches_the_ceiling"
+      ]
+    },
+    {
+      "path": "test_a7_publication.py",
+      "old_sha256": null,
+      "new_sha256": "91f33161b8f5b44991480971612a70717062d98d51114c4c34b717c1e6485d34",
+      "changed": [],
+      "added": [
+        "_bytes",
+        "_write",
+        "bundle",
+        "test_interrupted_prompt_write_never_publishes_a_candidate",
+        "test_second_public_write_refuses_and_preserves_every_original_byte",
+        "test_two_independent_writers_cannot_replace_one_another"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_a7_runstates_1470.py",
+      "old_sha256": "fe585d9ad6a0a2608e0e37d4710d41ced6e561cb657f5a61d42bdbd516165c02",
+      "new_sha256": "49200330985f559077abddaf376e877eb59eefd0fbe5a4dad7a0ace3f0b44a19",
+      "changed": [
+        "test_a_mutation_after_identity_capture_refuses_before_any_answer"
+      ],
+      "added": [],
+      "removed": [
+        "test_a_clean_primary_owing_no_retry_needs_no_retry_directory",
+        "test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second",
+        "test_freeze_needs_no_retry_file_when_none_is_owed",
+        "test_g1_consumes_the_one_ledger_and_adds_nothing"
+      ]
+    },
+    {
+      "path": "test_a7_score_boundaries.py",
+      "old_sha256": null,
+      "new_sha256": "e615ed4e2e11783f84f43d13e4b5a0d004cc07478bb78939745efbea280309ad",
+      "changed": [],
+      "added": [
+        "one_accepted_fact",
+        "score_population",
+        "test_a_known_wrong_accept_survives_every_other_missing_aspect",
+        "test_a_real_rounded_up_union_score_must_not_pass",
+        "test_all_seven_aspects_preserve_every_blind_agreement_and_wait",
+        "test_current_extra_answers_do_not_consult_the_producer_scorer",
+        "test_display_value_never_replaces_counts_and_failures_precede_unknown",
+        "test_every_legal_extra_answer_and_every_blind_pair_still_works",
+        "test_exact_count_boundaries_ignore_display_rounding",
+        "test_extra_review_template_shows_a_shape_not_an_example_answer",
+        "test_g1_findings_are_not_lost_before_the_final_gate",
+        "test_observed_reliability_and_missing_observations_reach_the_final_gate"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_a7_source_correction_1487.py",
+      "old_sha256": "bccf746677b8ae4105129bc8a442de7c6172b841af4661d25ebe822b46771ba3",
+      "new_sha256": "e979d08cfae26819a23184f290cf5052c3513fb2f7e94babcfb67d9b2f64cea0",
+      "changed": [
+        "test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today",
+        "test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "test_a7_trace_1471.py",
+      "old_sha256": "3d5c5e125ae07454401e10d030e1d03dd4f915d83ed0dd05bda841f61b03082a",
+      "new_sha256": "c9aad34eaa3eca170b345602b9bd64b631f22052d8dc6ff5bff13d10572ef8a1",
+      "changed": [
+        "run",
+        "sealed",
+        "test_every_status_and_route_outcome_is_conserved_exactly_once",
+        "test_the_REAL_downstream_paths_consume_only_the_trace"
+      ],
+      "added": [
+        "current_g1",
+        "test_a_real_never_called_run_keeps_both_full_arms",
+        "test_dropped_trace_arm_still_owes_the_full_frozen_schedule",
+        "test_one_wholly_uncalled_arm_is_not_removed_from_the_denominator",
+        "test_public_accounting_keeps_the_real_mixed_split_and_all_origins",
+        "test_public_route_loss_is_named_and_never_gets_credit",
+        "test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts",
+        "test_same_count_cannot_hide_wrong_or_missing_identity"
+      ],
+      "removed": []
+    },
+    {
+      "path": "test_g1_cached_resume_1781.py",
+      "old_sha256": "5863c78e673a502e9a22a8c53132b345d67fb793cff828fad92b63b540b4c204",
+      "new_sha256": "ce3ad4ab4c76ddb813cb6e3460d00e6259d303b8fa70bf39e0cf03478bfc5312",
+      "changed": [
+        "test_the_same_file_under_its_durable_path_is_accepted"
+      ],
+      "added": [],
+      "removed": []
+    },
+    {
+      "path": "test_harness_guards.py",
+      "old_sha256": "292cda334e14449fd2d678650318219d2de5886e112dd555822e14d9965eb66c",
+      "new_sha256": "ad2b35bc4c9d0dfbbe5a4b7433666d1bece9506c628b2d9eaf76a26c393782e8",
+      "changed": [
+        "_abst_case",
+        "_at_recall",
+        "_ceiling_case",
+        "_home_route_case",
+        "_lane_case",
+        "_mut_score",
+        "_route_for",
+        "_safety_case",
+        "_two_event_case",
+        "_union_route",
+        "test_1134_an_UNSAFE_arm_is_never_rescued_by_union_recall",
+        "test_1134_score_union_FORWARDS_extras_verdicts",
+        "test_1134_two_grader_inputs_are_scorable_ONLY_when_they_agree",
+        "test_1134_unrun_grading_with_unmatched_gold_cannot_PASS",
+        "test_1135_a_produced_DUPLICATE_earns_no_recall_and_blocks_PASS",
+        "test_1135_an_abstention_with_an_unsound_locator_is_REFUSED_upstream",
+        "test_1135_one_abstention_cannot_be_charged_against_TWO_gold_rows",
+        "test_1136_an_answered_gold_row_cannot_ALSO_be_charged_to_an_abstention",
+        "test_1136_presence_disagreement_returns_INCOMPLETE_end_to_end",
+        "test_1136_the_duplicate_bucket_is_filled_from_the_identity_owner",
+        "test_1139_a_grader_linked_surprise_is_not_ALSO_a_missing_twin",
+        "test_1139_duplicate_gold_is_an_inconclusive_KEY_erratum_not_model_failure",
+        "test_1140_a_gold_linked_abstention_does_NOT_answer_a_surprise_twin",
+        "test_1140_a_pure_duplicate_key_erratum_is_None_not_False",
+        "test_1140_a_real_hard_failure_still_returns_False",
+        "test_827B4_actual_surprise_finds_its_metric_home",
+        "test_827B4_false_homes_must_park_not_pair",
+        "test_827B4_guidance_surprise_finds_its_guidance_home",
+        "test_ABST_the_split_is_the_LOCATOR_not_the_route_decision",
+        "test_B14_replay_through_the_real_run_event_keeps_the_index_relation",
+        "test_MUT_invalid_grader_rulings_block_PASS",
+        "test_MUT_one_produced_fact_cannot_be_ruled_onto_two_golds",
+        "test_RED_replay_projection_exists_and_is_lossless",
+        "test_RED_replay_projection_keeps_duplicates_and_empty_answers_honest",
+        "test_RED_score_arm_consumes_route_outcomes_rather_than_validating_itself",
+        "test_RED_scorer_reaches_no_second_rule_engine",
+        "test_RED_scorer_uses_core_fact_match_not_its_own_matcher",
+        "test_a1_preflight_is_GO_on_the_live_tree_and_needs_A2s_frozen_runtime",
+        "test_a1_the_whole_launch_double_builds_byte_identically",
+        "test_a_rejected_fact_is_omitted_without_renumbering_the_survivors",
+        "test_clean_union_rescues_incomplete_single",
+        "test_definite_failures_never_none",
+        "test_every_frozen_v2_field_is_measured_EXACTLY_ONCE",
+        "test_final_gate_or_semantics",
+        "test_final_gate_union_axes_govern",
+        "test_no_scorer_runtime_imports_a_core_test_module",
+        "test_numberless_home_without_a_quote_is_REFUSED_by_the_route",
+        "test_replay_drivers_REJECTS_THE_NAME_not_the_whole_reply",
+        "test_replay_returns_each_record_once_in_order_and_never_calls_a_model",
+        "test_replay_store_REFUSES_a_transaction_because_scoring_never_writes",
+        "test_rule_bucket_actual_counts",
+        "test_step3_10_du_worthy_false_rows_never_enter_recall",
+        "test_step3_10_the_invalid_response_bar_is_2_percent_inclusive",
+        "test_step3_10_the_rule_of_three_bound_is_reported_for_a_clean_run",
+        "test_step3_10_zero_responses_is_NOT_APPLICABLE_not_zero_percent",
+        "test_step3_11_a_cross_tier_union_is_REFUSED",
+        "test_step3_11_a_same_tier_union_is_ALLOWED",
+        "test_step3_11_every_official_bar_is_inclusive_at_its_threshold",
+        "test_step3_11_score_arm_uses_that_same_bar_owner",
+        "test_step3_7_a_reader_exception_is_a_LOUD_failed_run_not_an_outcome",
+        "test_step3_8_no_shortcut_can_create_a_link_structurally",
+        "test_step3_9_the_would_park_formula_is_kept_EXACTLY",
+        "test_union_dedup_no_inflation",
+        "test_union_keeps_different_facts"
+      ],
+      "added": [],
+      "removed": []
+    }
+  ],
+  "rule_owner_inventory": [
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_required",
+      "line": 53,
+      "end_line": 84,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_a6",
+      "line": 107,
+      "end_line": 123,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_sha",
+      "line": 126,
+      "end_line": 127,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_sha_file",
+      "line": 130,
+      "end_line": 131,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_plain",
+      "line": 134,
+      "end_line": 140,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_pretty",
+      "line": 143,
+      "end_line": 148,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_finalization",
+      "line": 152,
+      "end_line": 156,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "run_of",
+      "line": 159,
+      "end_line": 215,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "effective_slots",
+      "line": 218,
+      "end_line": 290,
+      "if_nodes": 7,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_approved_bound",
+      "line": 293,
+      "end_line": 312,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "gold_by_event",
+      "line": 315,
+      "end_line": 351,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "live_key",
+      "line": 354,
+      "end_line": 364,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_measured",
+      "line": 382,
+      "end_line": 385,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "materialize",
+      "line": 388,
+      "end_line": 571,
+      "if_nodes": 11,
+      "exception_handlers": 1,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_leg_rows",
+      "line": 575,
+      "end_line": 598,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_cross_check",
+      "line": 601,
+      "end_line": 617,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "inventory",
+      "line": 620,
+      "end_line": 669,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "internal_key",
+      "line": 673,
+      "end_line": 679,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "question_id",
+      "line": 682,
+      "end_line": 691,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_display",
+      "line": 694,
+      "end_line": 702,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "accepted_positions",
+      "line": 705,
+      "end_line": 715,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "questions",
+      "line": 718,
+      "end_line": 752,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "locator",
+      "line": 755,
+      "end_line": 758,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "controls",
+      "line": 761,
+      "end_line": 825,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "event_groups",
+      "line": 878,
+      "end_line": 883,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "event_packet",
+      "line": 886,
+      "end_line": 909,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "read_event_reply",
+      "line": 915,
+      "end_line": 983,
+      "if_nodes": 13,
+      "exception_handlers": 1,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_components",
+      "line": 986,
+      "end_line": 1005,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "event_credit",
+      "line": 1008,
+      "end_line": 1065,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "terminal_categories",
+      "line": 1073,
+      "end_line": 1096,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "expected_groups",
+      "line": 1099,
+      "end_line": 1108,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "validate_merged",
+      "line": 1111,
+      "end_line": 1151,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_seg",
+      "line": 1178,
+      "end_line": 1179,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "root_path",
+      "line": 1182,
+      "end_line": 1183,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "receipt_path",
+      "line": 1186,
+      "end_line": 1187,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "reservation_path",
+      "line": 1190,
+      "end_line": 1191,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "state_path",
+      "line": 1194,
+      "end_line": 1195,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "invocation_path",
+      "line": 1198,
+      "end_line": 1199,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "script_path",
+      "line": 1202,
+      "end_line": 1203,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "accounting_path",
+      "line": 1206,
+      "end_line": 1207,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "finalization_path",
+      "line": 1210,
+      "end_line": 1211,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "capture_name",
+      "line": 1214,
+      "end_line": 1216,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "raw_stem",
+      "line": 1219,
+      "end_line": 1226,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_ensure",
+      "line": 1229,
+      "end_line": 1233,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_write_new",
+      "line": 1236,
+      "end_line": 1243,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_read",
+      "line": 1246,
+      "end_line": 1248,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "prior_g1_calls",
+      "line": 1264,
+      "end_line": 1277,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "probe_calls",
+      "line": 1280,
+      "end_line": 1289,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "all_prior_calls",
+      "line": 1292,
+      "end_line": 1308,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "confirmed_duplicate_groups",
+      "line": 1311,
+      "end_line": 1319,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "owner_hashes",
+      "line": 1322,
+      "end_line": 1342,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_bound_grading_scorer_sha",
+      "line": 1345,
+      "end_line": 1355,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "live_output_limit",
+      "line": 1358,
+      "end_line": 1359,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "prompt_tree_sha",
+      "line": 1362,
+      "end_line": 1367,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "load_frozen",
+      "line": 1370,
+      "end_line": 1379,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "freeze_root",
+      "line": 1383,
+      "end_line": 1437,
+      "if_nodes": 6,
+      "exception_handlers": 1,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "load_root",
+      "line": 1440,
+      "end_line": 1451,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "segments",
+      "line": 1455,
+      "end_line": 1462,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "segment_state",
+      "line": 1465,
+      "end_line": 1470,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_claimed",
+      "line": 1473,
+      "end_line": 1480,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_named_by_finalized",
+      "line": 1483,
+      "end_line": 1492,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "lane_states",
+      "line": 1495,
+      "end_line": 1515,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "latest_retry",
+      "line": 1518,
+      "end_line": 1529,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "lifecycle_problems",
+      "line": 1532,
+      "end_line": 1572,
+      "if_nodes": 9,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_parent_of",
+      "line": 1575,
+      "end_line": 1585,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_rows_for",
+      "line": 1588,
+      "end_line": 1615,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_bound_script",
+      "line": 1626,
+      "end_line": 1647,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "publish_run",
+      "line": 1650,
+      "end_line": 1728,
+      "if_nodes": 4,
+      "exception_handlers": 2,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "load_receipt",
+      "line": 1732,
+      "end_line": 1733,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "approved",
+      "line": 1737,
+      "end_line": 1768,
+      "if_nodes": 5,
+      "exception_handlers": 1,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "preflight",
+      "line": 1771,
+      "end_line": 1831,
+      "if_nodes": 12,
+      "exception_handlers": 1,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "record_official_state",
+      "line": 1834,
+      "end_line": 1843,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "capture_results",
+      "line": 1847,
+      "end_line": 1902,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_captures_of",
+      "line": 1905,
+      "end_line": 1910,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_outcome_of",
+      "line": 1913,
+      "end_line": 1946,
+      "if_nodes": 6,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "account_segment",
+      "line": 1949,
+      "end_line": 1982,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "whole_path",
+      "line": 1988,
+      "end_line": 1989,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "bind_whole_answers",
+      "line": 1992,
+      "end_line": 2017,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "whole_answers",
+      "line": 2020,
+      "end_line": 2035,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "audit_official_state",
+      "line": 2038,
+      "end_line": 2099,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "_capture_text",
+      "line": 2102,
+      "end_line": 2110,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "register_task_kind",
+      "line": 2120,
+      "end_line": 2127,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "task_kind",
+      "line": 2130,
+      "end_line": 2133,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "binding_and_parser",
+      "line": 2136,
+      "end_line": 2138,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "task_owners",
+      "line": 2141,
+      "end_line": 2150,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "event_binding",
+      "line": 2153,
+      "end_line": 2171,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "finalize_segment",
+      "line": 2174,
+      "end_line": 2287,
+      "if_nodes": 12,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "save_results",
+      "line": 2290,
+      "end_line": 2302,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "launchers",
+      "line": 2305,
+      "end_line": 2319,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "freeze",
+      "line": 2322,
+      "end_line": 2428,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_build.py",
+      "function_or_class": "write",
+      "line": 2431,
+      "end_line": 2446,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T04\u2013T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_sha",
+      "line": 43,
+      "end_line": 44,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_git",
+      "line": 47,
+      "end_line": 48,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "bind_grading_scorer",
+      "line": 63,
+      "end_line": 96,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_scorer",
+      "line": 99,
+      "end_line": 111,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "meaning_fields",
+      "line": 114,
+      "end_line": 116,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "extras_buckets",
+      "line": 119,
+      "end_line": 121,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "refuse",
+      "line": 130,
+      "end_line": 172,
+      "if_nodes": 8,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_withheld",
+      "line": 176,
+      "end_line": 185,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "g1_final",
+      "line": 188,
+      "end_line": 269,
+      "if_nodes": 8,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "resolutions",
+      "line": 272,
+      "end_line": 286,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_event_doc",
+      "line": 290,
+      "end_line": 299,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "packet_groups",
+      "line": 302,
+      "end_line": 309,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "route_for",
+      "line": 312,
+      "end_line": 329,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "event_meta",
+      "line": 332,
+      "end_line": 339,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "matched_pairs",
+      "line": 343,
+      "end_line": 375,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "extras_rows",
+      "line": 378,
+      "end_line": 390,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "observed_responses",
+      "line": 393,
+      "end_line": 423,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "score_leg",
+      "line": 426,
+      "end_line": 436,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "g1_identity",
+      "line": 439,
+      "end_line": 448,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "official_verdict_maps",
+      "line": 451,
+      "end_line": 455,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_verdict_maps_from",
+      "line": 458,
+      "end_line": 630,
+      "if_nodes": 21,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_lifecycle",
+      "line": 633,
+      "end_line": 646,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_resolutions_from",
+      "line": 649,
+      "end_line": 666,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "official_resolutions",
+      "line": 669,
+      "end_line": 682,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "official_resolution",
+      "line": 685,
+      "end_line": 702,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "official_safety_findings",
+      "line": 705,
+      "end_line": 715,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_safety_from",
+      "line": 718,
+      "end_line": 742,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "score_leg_official",
+      "line": 745,
+      "end_line": 755,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_official_derivation",
+      "line": 758,
+      "end_line": 782,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_score_leg_bound",
+      "line": 785,
+      "end_line": 847,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "official_tier_decision",
+      "line": 850,
+      "end_line": 882,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "meaning_questions",
+      "line": 885,
+      "end_line": 893,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "write_atomic",
+      "line": 896,
+      "end_line": 902,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "meaning_contract",
+      "line": 948,
+      "end_line": 1098,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "meaning_rules",
+      "line": 1101,
+      "end_line": 1168,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "event_context",
+      "line": 1179,
+      "end_line": 1199,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "load_verified_inputs",
+      "line": 1204,
+      "end_line": 1235,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "verified_event_context",
+      "line": 1238,
+      "end_line": 1264,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "meaning_question_id",
+      "line": 1267,
+      "end_line": 1271,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "meaning_packet",
+      "line": 1274,
+      "end_line": 1328,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "read_meaning_reply",
+      "line": 1331,
+      "end_line": 1382,
+      "if_nodes": 8,
+      "exception_handlers": 1,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "reconcile_meaning",
+      "line": 1385,
+      "end_line": 1428,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_inventory",
+      "line": 1454,
+      "end_line": 1479,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "reference_card",
+      "line": 1482,
+      "end_line": 1511,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "card_problems",
+      "line": 1514,
+      "end_line": 1552,
+      "if_nodes": 9,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "card_key",
+      "line": 1555,
+      "end_line": 1557,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "non_unique_cards",
+      "line": 1560,
+      "end_line": 1578,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "extras_rules",
+      "line": 1596,
+      "end_line": 1644,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "extras_question_id",
+      "line": 1647,
+      "end_line": 1649,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "extras_packet",
+      "line": 1652,
+      "end_line": 1690,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "_required_context",
+      "line": 1693,
+      "end_line": 1702,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "batch_packet",
+      "line": 1705,
+      "end_line": 1754,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "read_extras_reply",
+      "line": 1757,
+      "end_line": 1796,
+      "if_nodes": 7,
+      "exception_handlers": 1,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "reconcile_extras",
+      "line": 1799,
+      "end_line": 1819,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "pack_batches",
+      "line": 1834,
+      "end_line": 1870,
+      "if_nodes": 6,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "source_event",
+      "line": 1873,
+      "end_line": 1876,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "batch_problems",
+      "line": 1879,
+      "end_line": 1889,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "route_inventory",
+      "line": 1893,
+      "end_line": 1940,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "precall_unresolved",
+      "line": 1944,
+      "end_line": 1959,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_build.py",
+      "function_or_class": "preflight_problems",
+      "line": 1962,
+      "end_line": 1973,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T05\u2013T11,T15\u2013T18"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "_sha",
+      "line": 40,
+      "end_line": 41,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "populations",
+      "line": 50,
+      "end_line": 141,
+      "if_nodes": 4,
+      "exception_handlers": 1,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "_rows_and_prompts",
+      "line": 144,
+      "end_line": 162,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "_g2_packet_for",
+      "line": 165,
+      "end_line": 178,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "_g3_packet_for",
+      "line": 181,
+      "end_line": 188,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "freeze",
+      "line": 191,
+      "end_line": 343,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "kind_binding",
+      "line": 369,
+      "end_line": 377,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "kind_candidate",
+      "line": 386,
+      "end_line": 420,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "write_kind",
+      "line": 423,
+      "end_line": 434,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g23_run.py",
+      "function_or_class": "write",
+      "line": 437,
+      "end_line": 462,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T06\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "select_attempt",
+      "line": 18,
+      "end_line": 29,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "run_digest",
+      "line": 32,
+      "end_line": 47,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "evidence",
+      "line": 50,
+      "end_line": 195,
+      "if_nodes": 21,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "relations_from_run",
+      "line": 198,
+      "end_line": 201,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "lane_relations",
+      "line": 204,
+      "end_line": 225,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "g23_identity",
+      "line": 232,
+      "end_line": 243,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "complete_g23",
+      "line": 246,
+      "end_line": 334,
+      "if_nodes": 6,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "persist_g23",
+      "line": 337,
+      "end_line": 344,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "load_g23",
+      "line": 347,
+      "end_line": 372,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_complete_v2.py",
+      "function_or_class": "complete",
+      "line": 375,
+      "end_line": 422,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T06,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "owner_sha256",
+      "line": 50,
+      "end_line": 52,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "refusal_path",
+      "line": 55,
+      "end_line": 56,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_script_bytes",
+      "line": 60,
+      "end_line": 71,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_largest_prefix",
+      "line": 74,
+      "end_line": 90,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "next_admissible",
+      "line": 93,
+      "end_line": 116,
+      "if_nodes": 2,
+      "exception_handlers": 1,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_parent_records",
+      "line": 120,
+      "end_line": 150,
+      "if_nodes": 4,
+      "exception_handlers": 1,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_states_naming",
+      "line": 153,
+      "end_line": 187,
+      "if_nodes": 6,
+      "exception_handlers": 1,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_transcripts_for",
+      "line": 190,
+      "end_line": 204,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_no_output",
+      "line": 207,
+      "end_line": 238,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "inspect_prelaunch_refusal",
+      "line": 241,
+      "end_line": 374,
+      "if_nodes": 22,
+      "exception_handlers": 2,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_zero_capture_accounting",
+      "line": 377,
+      "end_line": 395,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "_stable",
+      "line": 398,
+      "end_line": 401,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_g1_workflow_gate.py",
+      "function_or_class": "close_prelaunch_refusal",
+      "line": 404,
+      "end_line": 497,
+      "if_nodes": 11,
+      "exception_handlers": 0,
+      "test_families": "T01,T12\u2013T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "_sha",
+      "line": 37,
+      "end_line": 39,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "_read_json",
+      "line": 42,
+      "end_line": 50,
+      "if_nodes": 1,
+      "exception_handlers": 1,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "load",
+      "line": 53,
+      "end_line": 177,
+      "if_nodes": 11,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "_finalizations",
+      "line": 180,
+      "end_line": 228,
+      "if_nodes": 6,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "_executed",
+      "line": 231,
+      "end_line": 242,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "require_current_era",
+      "line": 245,
+      "end_line": 254,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "current",
+      "line": 257,
+      "end_line": 276,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "current_era",
+      "line": 279,
+      "end_line": 286,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_prepared_run.py",
+      "function_or_class": "cli_run",
+      "line": 289,
+      "end_line": 316,
+      "if_nodes": 6,
+      "exception_handlers": 0,
+      "test_families": "T01,T04,T13,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "_sha",
+      "line": 86,
+      "end_line": 87,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "_approved_reference_names",
+      "line": 90,
+      "end_line": 104,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "_effective_origins",
+      "line": 107,
+      "end_line": 142,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "_packets",
+      "line": 145,
+      "end_line": 164,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "_values",
+      "line": 167,
+      "end_line": 186,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "_ledger_sha",
+      "line": 189,
+      "end_line": 191,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "build",
+      "line": 194,
+      "end_line": 282,
+      "if_nodes": 10,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "read",
+      "line": 295,
+      "end_line": 323,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "expected_document",
+      "line": 326,
+      "end_line": 355,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "_first_difference",
+      "line": 358,
+      "end_line": 376,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "validate",
+      "line": 379,
+      "end_line": 392,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "raw_value_occurrences",
+      "line": 394,
+      "end_line": 412,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_reference_inventory.py",
+      "function_or_class": "write",
+      "line": 415,
+      "end_line": 418,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16,T19"
+    },
+    {
+      "file": "a7_conservation.py",
+      "function_or_class": "contributions",
+      "line": 26,
+      "end_line": 29,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T04,T05,T11,T13,T18,T19"
+    },
+    {
+      "file": "a7_conservation.py",
+      "function_or_class": "_identity",
+      "line": 32,
+      "end_line": 33,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T04,T05,T11,T13,T18,T19"
+    },
+    {
+      "file": "a7_conservation.py",
+      "function_or_class": "_branches_of",
+      "line": 36,
+      "end_line": 59,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T04,T05,T11,T13,T18,T19"
+    },
+    {
+      "file": "a7_conservation.py",
+      "function_or_class": "_conservation_problems",
+      "line": 62,
+      "end_line": 92,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T04,T05,T11,T13,T18,T19"
+    },
+    {
+      "file": "a7_conservation.py",
+      "function_or_class": "terminals",
+      "line": 95,
+      "end_line": 159,
+      "if_nodes": 2,
+      "exception_handlers": 1,
+      "test_families": "T04,T05,T11,T13,T18,T19"
+    },
+    {
+      "file": "a7_conservation.py",
+      "function_or_class": "dimensions",
+      "line": 162,
+      "end_line": 182,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T04,T05,T11,T13,T18,T19"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "fact_sha256",
+      "line": 59,
+      "end_line": 61,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "required_suffix",
+      "line": 64,
+      "end_line": 68,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "affected",
+      "line": 71,
+      "end_line": 85,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "_period_rows",
+      "line": 88,
+      "end_line": 97,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "load",
+      "line": 100,
+      "end_line": 102,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "apply",
+      "line": 105,
+      "end_line": 208,
+      "if_nodes": 16,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "current_key",
+      "line": 211,
+      "end_line": 264,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_key_correction.py",
+      "function_or_class": "write",
+      "line": 267,
+      "end_line": 280,
+      "if_nodes": 2,
+      "exception_handlers": 1,
+      "test_families": "T01,T03,T05,T09,T16"
+    },
+    {
+      "file": "a7_source_meta.py",
+      "function_or_class": "_inputs",
+      "line": 76,
+      "end_line": 86,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T10,T11"
+    },
+    {
+      "file": "a7_source_meta.py",
+      "function_or_class": "_read_session",
+      "line": 95,
+      "end_line": 105,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T10,T11"
+    },
+    {
+      "file": "a7_source_meta.py",
+      "function_or_class": "freeze",
+      "line": 108,
+      "end_line": 228,
+      "if_nodes": 12,
+      "exception_handlers": 1,
+      "test_families": "T01,T09,T10,T11"
+    },
+    {
+      "file": "a7_source_meta.py",
+      "function_or_class": "load",
+      "line": 231,
+      "end_line": 234,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T10,T11"
+    },
+    {
+      "file": "a7_source_meta.py",
+      "function_or_class": "route_event",
+      "line": 237,
+      "end_line": 262,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T10,T11"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "A1ReaderError",
+      "line": 53,
+      "end_line": 54,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "sparse_fact_keys",
+      "line": 57,
+      "end_line": 62,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "item_defaults",
+      "line": 65,
+      "end_line": 78,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "required_item_fields",
+      "line": 81,
+      "end_line": 91,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "readable_menu",
+      "line": 96,
+      "end_line": 125,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "restore_menu_pick",
+      "line": 128,
+      "end_line": 134,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "_nonblank",
+      "line": 139,
+      "end_line": 140,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "_exact",
+      "line": 143,
+      "end_line": 153,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "read_one",
+      "line": 156,
+      "end_line": 180,
+      "if_nodes": 3,
+      "exception_handlers": 1,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "normalize",
+      "line": 183,
+      "end_line": 275,
+      "if_nodes": 16,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "validate",
+      "line": 278,
+      "end_line": 338,
+      "if_nodes": 9,
+      "exception_handlers": 1,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "a1_reader.py",
+      "function_or_class": "owner_sha256",
+      "line": 341,
+      "end_line": 344,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T02\u2013T04,T09,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "RawTransportError",
+      "line": 53,
+      "end_line": 54,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_raw_filename",
+      "line": 57,
+      "end_line": 60,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "save_raw",
+      "line": 63,
+      "end_line": 98,
+      "if_nodes": 2,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_reject_duplicate_keys",
+      "line": 101,
+      "end_line": 112,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_reject_nonstandard_constant",
+      "line": 115,
+      "end_line": 119,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "unfence",
+      "line": 129,
+      "end_line": 163,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "parse_reply",
+      "line": 166,
+      "end_line": 170,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "parse_exact",
+      "line": 173,
+      "end_line": 186,
+      "if_nodes": 0,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "manifest_events",
+      "line": 198,
+      "end_line": 206,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "prompt_pin",
+      "line": 209,
+      "end_line": 223,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "prompt_evidence_problem",
+      "line": 226,
+      "end_line": 243,
+      "if_nodes": 2,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_attempt_valid",
+      "line": 246,
+      "end_line": 264,
+      "if_nodes": 2,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "invalid_pairs",
+      "line": 267,
+      "end_line": 312,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "schedule_from_manifest",
+      "line": 315,
+      "end_line": 349,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "replies_from_result",
+      "line": 352,
+      "end_line": 378,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_ingest_by_schedule",
+      "line": 381,
+      "end_line": 527,
+      "if_nodes": 15,
+      "exception_handlers": 2,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "resolve_with_one_retry",
+      "line": 530,
+      "end_line": 573,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "ingest_workflow_result",
+      "line": 577,
+      "end_line": 719,
+      "if_nodes": 15,
+      "exception_handlers": 2,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_limits",
+      "line": 754,
+      "end_line": 764,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_schedule",
+      "line": 767,
+      "end_line": 785,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_ordinals",
+      "line": 788,
+      "end_line": 792,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_identity_problems",
+      "line": 795,
+      "end_line": 810,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_pair_problems",
+      "line": 813,
+      "end_line": 837,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_readable_rows",
+      "line": 840,
+      "end_line": 866,
+      "if_nodes": 4,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_raw_bindings",
+      "line": 869,
+      "end_line": 883,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_raw_binding_problems",
+      "line": 886,
+      "end_line": 926,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "save_or_reuse_raw",
+      "line": 929,
+      "end_line": 959,
+      "if_nodes": 3,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_preserve",
+      "line": 962,
+      "end_line": 980,
+      "if_nodes": 0,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_classify_rows",
+      "line": 983,
+      "end_line": 1022,
+      "if_nodes": 6,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_classify",
+      "line": 1025,
+      "end_line": 1043,
+      "if_nodes": 3,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_plan_for_run",
+      "line": 1058,
+      "end_line": 1112,
+      "if_nodes": 7,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_plan_identity",
+      "line": 1115,
+      "end_line": 1126,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_expected_receipt",
+      "line": 1129,
+      "end_line": 1164,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_exact_keys",
+      "line": 1167,
+      "end_line": 1179,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_run_contract_problems",
+      "line": 1182,
+      "end_line": 1241,
+      "if_nodes": 14,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_a1_child_problems",
+      "line": 1244,
+      "end_line": 1277,
+      "if_nodes": 6,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_a1_keyed",
+      "line": 1280,
+      "end_line": 1292,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_primary_retry_keys",
+      "line": 1295,
+      "end_line": 1304,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_primary_evidence_problems",
+      "line": 1307,
+      "end_line": 1310,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_finalization_problems",
+      "line": 1313,
+      "end_line": 1420,
+      "if_nodes": 28,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_ledger",
+      "line": 1423,
+      "end_line": 1434,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_pairs_of",
+      "line": 1443,
+      "end_line": 1453,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "declared_lane_input",
+      "line": 1462,
+      "end_line": 1468,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "approved_lane_input_problems",
+      "line": 1471,
+      "end_line": 1508,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "approved_lane_input_fields",
+      "line": 1511,
+      "end_line": 1520,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_sha_file",
+      "line": 1523,
+      "end_line": 1525,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_fsync_dir",
+      "line": 1528,
+      "end_line": 1533,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "write_new",
+      "line": 1536,
+      "end_line": 1558,
+      "if_nodes": 0,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "receipt_bytes",
+      "line": 1561,
+      "end_line": 1568,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_atomic_json",
+      "line": 1571,
+      "end_line": 1578,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_plan_path",
+      "line": 1581,
+      "end_line": 1583,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_plan",
+      "line": 1586,
+      "end_line": 1588,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_canonical_calls",
+      "line": 1591,
+      "end_line": 1593,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_projection",
+      "line": 1596,
+      "end_line": 1598,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_source_order",
+      "line": 1601,
+      "end_line": 1608,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_args_for",
+      "line": 1611,
+      "end_line": 1630,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_expected_args",
+      "line": 1633,
+      "end_line": 1638,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_retry_set",
+      "line": 1641,
+      "end_line": 1647,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_load_receipt_loosely",
+      "line": 1650,
+      "end_line": 1672,
+      "if_nodes": 3,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "_a1_publish",
+      "line": 1675,
+      "end_line": 1768,
+      "if_nodes": 7,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_prepare_run",
+      "line": 1771,
+      "end_line": 1773,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_prepare_retry",
+      "line": 1776,
+      "end_line": 1805,
+      "if_nodes": 4,
+      "exception_handlers": 1,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "raw_transport.py",
+      "function_or_class": "a1_finalize",
+      "line": 1808,
+      "end_line": 1978,
+      "if_nodes": 12,
+      "exception_handlers": 4,
+      "test_families": "T01\u2013T04,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_load",
+      "line": 121,
+      "end_line": 123,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_load_pinned",
+      "line": 126,
+      "end_line": 147,
+      "if_nodes": 2,
+      "exception_handlers": 2,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_resumed_cached_row",
+      "line": 165,
+      "end_line": 185,
+      "if_nodes": 3,
+      "exception_handlers": 1,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_same_published_script",
+      "line": 188,
+      "end_line": 204,
+      "if_nodes": 3,
+      "exception_handlers": 1,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "record_state",
+      "line": 207,
+      "end_line": 246,
+      "if_nodes": 4,
+      "exception_handlers": 1,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_jsonl",
+      "line": 249,
+      "end_line": 264,
+      "if_nodes": 1,
+      "exception_handlers": 1,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_blocks",
+      "line": 267,
+      "end_line": 269,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_text_of",
+      "line": 272,
+      "end_line": 277,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_role",
+      "line": 280,
+      "end_line": 281,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_rejection",
+      "line": 284,
+      "end_line": 317,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_preview_ok",
+      "line": 326,
+      "end_line": 341,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_next_is_input",
+      "line": 344,
+      "end_line": 352,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_LaterInput",
+      "line": 355,
+      "end_line": 358,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_input",
+      "line": 361,
+      "end_line": 409,
+      "if_nodes": 7,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_expected_input",
+      "line": 412,
+      "end_line": 445,
+      "if_nodes": 7,
+      "exception_handlers": 1,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_pairs",
+      "line": 448,
+      "end_line": 460,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_chain",
+      "line": 463,
+      "end_line": 573,
+      "if_nodes": 10,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_official_location",
+      "line": 576,
+      "end_line": 588,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_armed",
+      "line": 591,
+      "end_line": 601,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "audit",
+      "line": 604,
+      "end_line": 1140,
+      "if_nodes": 75,
+      "exception_handlers": 3,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_g1_shape_problems",
+      "line": 1149,
+      "end_line": 1184,
+      "if_nodes": 7,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "_g1_transcript",
+      "line": 1187,
+      "end_line": 1259,
+      "if_nodes": 12,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "g1_state_audit",
+      "line": 1262,
+      "end_line": 1478,
+      "if_nodes": 40,
+      "exception_handlers": 1,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "audit_worker_access.py",
+      "function_or_class": "main",
+      "line": 1480,
+      "end_line": 1494,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T01,T09,T12\u2013T16,T19"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_code_fields",
+      "line": 74,
+      "end_line": 89,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "field_accounting",
+      "line": 95,
+      "end_line": 114,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_bucket",
+      "line": 148,
+      "end_line": 178,
+      "if_nodes": 9,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_item",
+      "line": 181,
+      "end_line": 186,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "ExactValueError",
+      "line": 189,
+      "end_line": 190,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_dec",
+      "line": 193,
+      "end_line": 213,
+      "if_nodes": 5,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_canon_item_values",
+      "line": 216,
+      "end_line": 248,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_canon_level",
+      "line": 251,
+      "end_line": 253,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_meas_tokens",
+      "line": 256,
+      "end_line": 258,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_ReplayStore",
+      "line": 264,
+      "end_line": 321,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "conflicting_driver_names",
+      "line": 324,
+      "end_line": 342,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "facts_bearing",
+      "line": 345,
+      "end_line": 348,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_replay_drivers",
+      "line": 351,
+      "end_line": 361,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "route_reply",
+      "line": 364,
+      "end_line": 401,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "eligible_produced",
+      "line": 404,
+      "end_line": 421,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_to_v2_with_positions",
+      "line": 424,
+      "end_line": 447,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "identity_key",
+      "line": 450,
+      "end_line": 460,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "dedup_items",
+      "line": 463,
+      "end_line": 478,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "classify_extras",
+      "line": 488,
+      "end_line": 525,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "reconcile_rulings",
+      "line": 528,
+      "end_line": 552,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_locator",
+      "line": 558,
+      "end_line": 566,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "classify_abstentions",
+      "line": 569,
+      "end_line": 608,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "grade_unmatched",
+      "line": 611,
+      "end_line": 670,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_rows_for_event",
+      "line": 673,
+      "end_line": 764,
+      "if_nodes": 11,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "invalid_response_stats",
+      "line": 771,
+      "end_line": 803,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "passes_official_bars",
+      "line": 806,
+      "end_line": 844,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "score_arm",
+      "line": 847,
+      "end_line": 1283,
+      "if_nodes": 32,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "union_answer",
+      "line": 1286,
+      "end_line": 1319,
+      "if_nodes": 0,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "score_union",
+      "line": 1322,
+      "end_line": 1355,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "presence_disagreement",
+      "line": 1358,
+      "end_line": 1434,
+      "if_nodes": 4,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "_leg",
+      "line": 1437,
+      "end_line": 1461,
+      "if_nodes": 7,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "final_gate",
+      "line": 1464,
+      "end_line": 1537,
+      "if_nodes": 10,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "project_replay_items",
+      "line": 1550,
+      "end_line": 1583,
+      "if_nodes": 2,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    },
+    {
+      "file": "scorers/score_exp5_current.py",
+      "function_or_class": "replay_reader",
+      "line": 1586,
+      "end_line": 1618,
+      "if_nodes": 1,
+      "exception_handlers": 0,
+      "test_families": "T03\u2013T08,T11,T16\u2013T18"
+    }
+  ],
+  "exact_repeated_current_bodies": [
+    [
+      "a7_g1_build.py::_sha",
+      "a7_g23_build.py::_sha",
+      "a7_reference_inventory.py::_sha"
+    ]
+  ],
+  "test_modules": [
+    "test_a1_invalid_response.py",
+    "test_a1_no_tools.py",
+    "test_a1_prompt_contract.py",
+    "test_a1_serial_transport.py",
+    "test_a5_contract_1401.py",
+    "test_a5_corrected_inventory_1514.py",
+    "test_a5_exp5_kit_1400.py",
+    "test_a5_final_lock_1513.py",
+    "test_a5_gate_1469.py",
+    "test_a5_launch_gate_1403.py",
+    "test_a5_route_1406.py",
+    "test_a6_final_lock_1515.py",
+    "test_a6_fixture_isolation_1768.py",
+    "test_a6_fixture_isolation_after_1768.py",
+    "test_a6_launch_freeze_1409.py",
+    "test_a6_locked_rows_1476.py",
+    "test_a7_cached_rows_1413.py",
+    "test_a7_closeout_integrity_1482.py",
+    "test_a7_corrections_1454.py",
+    "test_a7_current_1473.py",
+    "test_a7_current_postrun.py",
+    "test_a7_g1_precall_freeze_1525.py",
+    "test_a7_g23_lifecycle_1464.py",
+    "test_a7_identity_relations.py",
+    "test_a7_input_binding.py",
+    "test_a7_interrupted_capture.py",
+    "test_a7_postrun_identity_1521.py",
+    "test_a7_publication.py",
+    "test_a7_raw_binding_1483.py",
+    "test_a7_runstates_1470.py",
+    "test_a7_score_boundaries.py",
+    "test_a7_source_correction_1487.py",
+    "test_a7_trace_1471.py",
+    "test_g1_cached_resume_1781.py",
+    "test_g1_declared_input_1792.py",
+    "test_harness_guards.py"
+  ],
+  "collected_tests": 1578,
+  "passed": 1576,
+  "skipped": [
+    {
+      "id": "test_a7_source_correction_1487.py::test_the_v10_ledger_shell_derives_exactly_the_v9_key",
+      "status": "skipped",
+      "why": "v10 shell not prepared"
+    },
+    {
+      "id": "test_a7_source_correction_1487.py::test_the_budget_receipt_is_derived_from_live_owners",
+      "status": "skipped",
+      "why": "budget not derived"
+    }
+  ]
+}

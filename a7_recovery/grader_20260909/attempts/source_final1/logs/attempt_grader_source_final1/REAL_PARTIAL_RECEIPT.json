@@ -1,0 +1,20 @@
+{
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "subscription",
+  "max_output_tokens": "128000",
+  "subscription_proof": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/real_source_review/subscription.json",
+  "base_commit": "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc",
+  "base_tree": "74b231655193c14daccd877915daa051b078b330",
+  "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+  "attempts": [
+    {
+      "task": "event",
+      "ordinal": 0,
+      "attempt": 1,
+      "source_id": "0000006201-26-000031",
+      "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b5890dc2-781.json",
+      "agent_id": "a9dce3dc893074b40",
+      "raw_name": "0000006201-26-000031.attempt1.complete.raw.json"
+    }
+  ]
+}

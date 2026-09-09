@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/ledger/../../grader_20260909/attempts/historical_probe2/historical_probe.py", line 28, in <module>
+    with open(os.environ["A7_ATTEMPT_DIR"] + "/HISTORICAL_PROBE.json", "x") as stream:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/a7_logs_1781/attempt_grader_historical_probe2/HISTORICAL_PROBE.json'

@@ -1,0 +1,9 @@
+attempt	grader_native_final4
+payload	../../grader_20260909/attempts/native_final4/regression.py
+map	map_codex_grader_native_final4.tsv
+command	run_1957.sh map_codex_grader_native_final4.tsv ../../grader_20260909/attempts/native_final4/regression.py grader_native_final4 1800
+wrapper_pid	1258529
+payload_pid	1258533
+payload_pgid	1258529
+started_utc	2026-09-09T17:43:57Z
+state	finished exit 0

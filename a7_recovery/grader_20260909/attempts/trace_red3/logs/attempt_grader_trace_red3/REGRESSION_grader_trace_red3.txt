@@ -1,0 +1,293 @@
+EFE                                                                      [100%]
+==================================== ERRORS ====================================
+___ ERROR at setup of test_the_REAL_downstream_paths_consume_only_the_trace ____
+
+    @pytest.fixture(scope="module")
+    def run():
+        assert FIXTURE, "serve a complete current TEST path via A7_TRACE_FIXTURE"
+        import audit_worker_access as AUD
+        import a7_reference_inventory as REF
+        AUD.PROJECTS_ROOT = os.environ["A7_FIXTURE_PROJECTS"]
+        REF.INVENTORY_PATH = os.path.join(FIXTURE, "reference_inventory.json")
+        with io.open(os.path.join(FIXTURE, "PRODUCER.json"), encoding="utf-8") as fh:
+            identity = json.load(fh)
+        snapshot = _A6.precall_view(_A6.freeze(identity["run_dir"]), identity["run_dir"])
+        with io.open(os.path.join(os.environ["A7_ATTEMPT_DIR"], "TRACE_FIXTURE_FREEZE.json"),
+                     "x", encoding="utf-8") as fh:
+            fh.write(_A6.render(snapshot))
+>       assert PR.current(identity["run_dir"], identity["a6_freeze_sha256"]) == identity
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/a7_logs_1781/attempt_grader_path7/producer'
+expect_freeze_sha = '7854e925b1c53da9f1dadc25efad7bd6788e21a10da25934c7050595378b42dc'
+
+    def load(run_dir, expect_freeze_sha=None):
+        """-> the identity of ONE lawful prepared run. Raises on anything else."""
+        if not run_dir or not isinstance(run_dir, str):
+            raise ValueError("%s: no run was supplied" % SCHEMA)
+        run_dir = os.path.abspath(run_dir)
+        if not os.path.isdir(run_dir):
+            raise ValueError("%s: no run directory at %s" % (SCHEMA, run_dir))
+    
+        plan_dir = os.path.join(run_dir, PLAN_DIRNAME)
+        if not os.path.isdir(plan_dir):
+            raise ValueError("%s: %s has no %s/" % (SCHEMA, run_dir, PLAN_DIRNAME))
+        if not os.listdir(plan_dir):
+            # AN EXISTING BUT EMPTY PLAN DIRECTORY. Checking only that the
+            # directory exists accepted this, and the K-fields fallback then
+            # lawfully answered from somewhere else entirely.
+            raise ValueError("%s: the plan directory at %s is empty"
+                             % (SCHEMA, plan_dir))
+    
+        manifest_path = os.path.join(plan_dir, A5_MANIFEST)
+        manifest = _read_json(manifest_path, "A5 reader manifest")
+        missing = [k for k in A5_REQUIRED
+                   if not isinstance(manifest, dict) or k not in manifest]
+        if missing:
+            raise ValueError("%s: %s is not an A5 reader manifest; it has no %s"
+                             % (SCHEMA, manifest_path, ", ".join(missing)))
+    
+        receipt_path = os.path.join(run_dir, RECEIPT)
+        receipt = _read_json(receipt_path, "receipt")
+        allowed = receipt.get("allowed")
+        if not isinstance(allowed, list) or not allowed:
+            raise ValueError("%s: %s allows no calls" % (SCHEMA, receipt_path))
+    
+        # THE A6 LAUNCH FREEZE, RE-DERIVED FROM THIS RUN. A recorded freeze proves
+        # only that a freeze was once written; re-deriving proves it still
+        # describes this run.
+        # THE GUARDED LOADER, not a bare import. `a7_g1_build._a6()` already
+        # refuses an `a6_launch_freeze` that resolved to another directory,
+        # because that owner derives its pointer paths from its own file location
+        # - a byte-identical copy elsewhere silently yields a different bound()
+        # and a different every-count. A bare import here walked straight past
+        # that guard and picked up a stale copy.
+        import a7_g1_build as _G
+        # THE SAME IMPORT CLASS (Codex SEQ 1490 item 3): a preloaded foreign
+        # a7_g1_build would pass ITS OWN `_a6()` guard with its matching foreign
+        # A6, so the exact-directory rule is asked here first, before it is trusted.
+        _got = os.path.dirname(os.path.abspath(_G.__file__))
+        if _got != _HERE:
+            raise RuntimeError(
+                "a7_g1_build resolved to %s, not the harness copy in %s; run from "
+                "one clean harness path" % (_G.__file__, _HERE))
+        A6 = _G._a6()
+        frozen = A6.freeze(run_dir)
+        bad = A6.problems(frozen)
+        executed = _executed(run_dir)
+        if executed:
+            # AN EXECUTED RUN HAS SPENT SOMETHING - that is what executed means,
+            # and A6 says so as a problem because A6 exists to guard a PRE-launch
+            # freeze. Which problems those are is DERIVED, not named: re-ask A6
+            # about the same freeze with its spend counters at zero, and the
+            # problems that disappear are exactly the ones the spend caused. Any
+            # problem that survives is a real mismatch and still refuses.
+            import copy
+            probe = copy.deepcopy(frozen)
+            probe["zeros"] = dict.fromkeys(probe["zeros"], 0)
+            still = set(A6.problems(probe))
+            bad = [x for x in bad if x in still]
+        if bad:
+            raise ValueError("%s: the A6 freeze of %s does not hold: %s"
+                             % (SCHEMA, run_dir, bad[:2]))
+        # A6 IS THE ONLY FREEZE SERIALIZER (Codex SEQ 1517 seam 1). Hashing a
+        # SECOND json rendering here gave A6 identity two owners and a hash that
+        # differed from the exact bytes A6 itself writes and locks - an unpinned
+        # substitution could pass one while failing the other. Hash the exact
+        # A6-rendered bytes, so `a6_freeze_sha256` IS the frozen A6 document.
+        #
+        # A6 is a PRE-LAUNCH guard, so a completed run's live freeze differs from
+        # the accepted pre-call freeze (spent zeros, grown receipt, counted ledger)
+        # (Codex SEQ 1521). The identity pin is over the run's ACCEPTED pre-launch
+        # view - reconstructed by A6 from the run's own evidence, a no-op before
+        # execution - so a completed run remains bound to the exact accepted freeze
+        # while its ledger still counts its returned calls once.
+        freeze_sha = hashlib.sha256(
+            A6.render(A6.precall_view(frozen, run_dir)).encode("utf-8")).hexdigest()
+        if expect_freeze_sha is not None and expect_freeze_sha != freeze_sha:
+>           raise ValueError("%s: %s freezes to %s, not the required %s"
+                             % (SCHEMA, run_dir, freeze_sha, expect_freeze_sha))
+E           ValueError: a7_prepared_run/1: /tmp/a7_logs_1781/attempt_grader_path7/producer freezes to 31a3e6ed3089a7e02c7bebe0587d539df32d5e9c86881394ab7da8bc8c1e542d, not the required 7854e925b1c53da9f1dadc25efad7bd6788e21a10da25934c7050595378b42dc
+
+a7_prepared_run.py:137: ValueError
+_______ ERROR at setup of test_raw_drift_after_identity_capture_refuses ________
+
+    @pytest.fixture(scope="module")
+    def run():
+        assert FIXTURE, "serve a complete current TEST path via A7_TRACE_FIXTURE"
+        import audit_worker_access as AUD
+        import a7_reference_inventory as REF
+        AUD.PROJECTS_ROOT = os.environ["A7_FIXTURE_PROJECTS"]
+        REF.INVENTORY_PATH = os.path.join(FIXTURE, "reference_inventory.json")
+        with io.open(os.path.join(FIXTURE, "PRODUCER.json"), encoding="utf-8") as fh:
+            identity = json.load(fh)
+        snapshot = _A6.precall_view(_A6.freeze(identity["run_dir"]), identity["run_dir"])
+        with io.open(os.path.join(os.environ["A7_ATTEMPT_DIR"], "TRACE_FIXTURE_FREEZE.json"),
+                     "x", encoding="utf-8") as fh:
+            fh.write(_A6.render(snapshot))
+>       assert PR.current(identity["run_dir"], identity["a6_freeze_sha256"]) == identity
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_prepared_run.py:276: in current
+    return current_era(load(run_dir, expect_freeze_sha))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_dir = '/tmp/a7_logs_1781/attempt_grader_path7/producer'
+expect_freeze_sha = '7854e925b1c53da9f1dadc25efad7bd6788e21a10da25934c7050595378b42dc'
+
+    def load(run_dir, expect_freeze_sha=None):
+        """-> the identity of ONE lawful prepared run. Raises on anything else."""
+        if not run_dir or not isinstance(run_dir, str):
+            raise ValueError("%s: no run was supplied" % SCHEMA)
+        run_dir = os.path.abspath(run_dir)
+        if not os.path.isdir(run_dir):
+            raise ValueError("%s: no run directory at %s" % (SCHEMA, run_dir))
+    
+        plan_dir = os.path.join(run_dir, PLAN_DIRNAME)
+        if not os.path.isdir(plan_dir):
+            raise ValueError("%s: %s has no %s/" % (SCHEMA, run_dir, PLAN_DIRNAME))
+        if not os.listdir(plan_dir):
+            # AN EXISTING BUT EMPTY PLAN DIRECTORY. Checking only that the
+            # directory exists accepted this, and the K-fields fallback then
+            # lawfully answered from somewhere else entirely.
+            raise ValueError("%s: the plan directory at %s is empty"
+                             % (SCHEMA, plan_dir))
+    
+        manifest_path = os.path.join(plan_dir, A5_MANIFEST)
+        manifest = _read_json(manifest_path, "A5 reader manifest")
+        missing = [k for k in A5_REQUIRED
+                   if not isinstance(manifest, dict) or k not in manifest]
+        if missing:
+            raise ValueError("%s: %s is not an A5 reader manifest; it has no %s"
+                             % (SCHEMA, manifest_path, ", ".join(missing)))
+    
+        receipt_path = os.path.join(run_dir, RECEIPT)
+        receipt = _read_json(receipt_path, "receipt")
+        allowed = receipt.get("allowed")
+        if not isinstance(allowed, list) or not allowed:
+            raise ValueError("%s: %s allows no calls" % (SCHEMA, receipt_path))
+    
+        # THE A6 LAUNCH FREEZE, RE-DERIVED FROM THIS RUN. A recorded freeze proves
+        # only that a freeze was once written; re-deriving proves it still
+        # describes this run.
+        # THE GUARDED LOADER, not a bare import. `a7_g1_build._a6()` already
+        # refuses an `a6_launch_freeze` that resolved to another directory,
+        # because that owner derives its pointer paths from its own file location
+        # - a byte-identical copy elsewhere silently yields a different bound()
+        # and a different every-count. A bare import here walked straight past
+        # that guard and picked up a stale copy.
+        import a7_g1_build as _G
+        # THE SAME IMPORT CLASS (Codex SEQ 1490 item 3): a preloaded foreign
+        # a7_g1_build would pass ITS OWN `_a6()` guard with its matching foreign
+        # A6, so the exact-directory rule is asked here first, before it is trusted.
+        _got = os.path.dirname(os.path.abspath(_G.__file__))
+        if _got != _HERE:
+            raise RuntimeError(
+                "a7_g1_build resolved to %s, not the harness copy in %s; run from "
+                "one clean harness path" % (_G.__file__, _HERE))
+        A6 = _G._a6()
+        frozen = A6.freeze(run_dir)
+        bad = A6.problems(frozen)
+        executed = _executed(run_dir)
+        if executed:
+            # AN EXECUTED RUN HAS SPENT SOMETHING - that is what executed means,
+            # and A6 says so as a problem because A6 exists to guard a PRE-launch
+            # freeze. Which problems those are is DERIVED, not named: re-ask A6
+            # about the same freeze with its spend counters at zero, and the
+            # problems that disappear are exactly the ones the spend caused. Any
+            # problem that survives is a real mismatch and still refuses.
+            import copy
+            probe = copy.deepcopy(frozen)
+            probe["zeros"] = dict.fromkeys(probe["zeros"], 0)
+            still = set(A6.problems(probe))
+            bad = [x for x in bad if x in still]
+        if bad:
+            raise ValueError("%s: the A6 freeze of %s does not hold: %s"
+                             % (SCHEMA, run_dir, bad[:2]))
+        # A6 IS THE ONLY FREEZE SERIALIZER (Codex SEQ 1517 seam 1). Hashing a
+        # SECOND json rendering here gave A6 identity two owners and a hash that
+        # differed from the exact bytes A6 itself writes and locks - an unpinned
+        # substitution could pass one while failing the other. Hash the exact
+        # A6-rendered bytes, so `a6_freeze_sha256` IS the frozen A6 document.
+        #
+        # A6 is a PRE-LAUNCH guard, so a completed run's live freeze differs from
+        # the accepted pre-call freeze (spent zeros, grown receipt, counted ledger)
+        # (Codex SEQ 1521). The identity pin is over the run's ACCEPTED pre-launch
+        # view - reconstructed by A6 from the run's own evidence, a no-op before
+        # execution - so a completed run remains bound to the exact accepted freeze
+        # while its ledger still counts its returned calls once.
+        freeze_sha = hashlib.sha256(
+            A6.render(A6.precall_view(frozen, run_dir)).encode("utf-8")).hexdigest()
+        if expect_freeze_sha is not None and expect_freeze_sha != freeze_sha:
+>           raise ValueError("%s: %s freezes to %s, not the required %s"
+                             % (SCHEMA, run_dir, freeze_sha, expect_freeze_sha))
+E           ValueError: a7_prepared_run/1: /tmp/a7_logs_1781/attempt_grader_path7/producer freezes to 31a3e6ed3089a7e02c7bebe0587d539df32d5e9c86881394ab7da8bc8c1e542d, not the required 7854e925b1c53da9f1dadc25efad7bd6788e21a10da25934c7050595378b42dc
+
+a7_prepared_run.py:137: ValueError
+=================================== FAILURES ===================================
+________ test_every_status_and_route_outcome_is_conserved_exactly_once _________
+
+    def test_every_status_and_route_outcome_is_conserved_exactly_once():
+        """One branch per produced fact, one terminal per packet that produced
+        none - across every status and both route-loss cases."""
+        base = {"arm": "P1", "packet_id": "p#000", "source_id": "p",
+                "lane_id": "p#000/L1", "abstentions": [], "continuity_hints": [],
+                "attempts": [], "facts": [], "fact_positions": [], "why": [],
+                "readable": False, "status": "uncalled"}
+    
+        def row(**kw):
+            out = dict(base)
+            out.update(kw)
+            return out
+    
+        cases = [
+            ("valid primary", row(status="answered", readable=True,
+                                  facts=[{}], fact_positions=[0]),
+             {("fact", 0): {"decision": "written", "index": 0}}, ["written"]),
+            ("valid retry, both attempts",
+             row(status="answered", readable=True, facts=[{}], fact_positions=[0],
+                 attempts=[{"attempt": 1}, {"attempt": 2}]),
+             {("fact", 0): {"decision": "parked", "index": 1}}, ["parked"]),
+            ("invalid", row(status="invalid"), {}, ["invalid_unreadable"]),
+            ("refusal", row(status="refused"), {}, ["refused_unreadable"]),
+            ("uncalled", row(status="uncalled"), {}, ["uncalled"]),
+            ("abstention only", row(status="answered", readable=True,
+                                    abstentions=[{"reason": "TEST"}]),
+             {}, ["abstained_only"]),
+            ("empty success is invalid", row(status="answered", readable=True),
+             {}, [None]),
+            ("mixed split", row(status="answered", readable=True,
+                                facts=[{}, {}, {}, {}, {}],
+                                fact_positions=[0, 1, 2, 3, 4]),
+             {("fact", i): {"decision": d, "index": 0, "codes": []}
+              for i, d in enumerate(("written", "parked", "rejected", "merged", "skipped"))},
+             ["written", "parked", "rejected", "merged", "skipped"]),
+            ("missing route", row(status="answered", readable=True, facts=[{}],
+                                  fact_positions=[0]), {}, [None]),
+            ("unknown route", row(status="answered", readable=True, facts=[{}],
+                                  fact_positions=[0]),
+             {("fact", 0): {"decision": "a decision no owner declares"}}, [None]),
+        ]
+        for label, r, per_fact, want in cases:
+>           got = C._branches_of(r, per_fact)
+                  ^^^^^^^^^^^^^^
+E           AttributeError: module 'a7_conservation' has no attribute '_branches_of'
+
+test_a7_trace_1471.py:157: AttributeError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_every_status_and_route_outcome_is_conserved_exactly_once
+ERROR test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+ERROR test_a7_trace_1471.py::test_raw_drift_after_identity_capture_refuses - ...
+1 failed, 2 errors in 0.34s
+
+--- stderr ---

@@ -1,0 +1,9 @@
+attempt	grader_current_full1
+payload	../../grader_20260909/attempts/current_full1/regression.py
+map	map_codex_grader_current_full1.tsv
+command	run_1957.sh map_codex_grader_current_full1.tsv ../../grader_20260909/attempts/current_full1/regression.py grader_current_full1 1800
+wrapper_pid	1143928
+payload_pid	1143932
+payload_pgid	1143928
+started_utc	2026-09-09T16:25:28Z
+state	finished exit 1

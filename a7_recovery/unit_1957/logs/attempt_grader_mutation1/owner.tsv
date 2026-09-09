@@ -1,0 +1,9 @@
+attempt	grader_mutation1
+payload	../../grader_20260909/attempts/mutation1/mutation_probe.py
+map	map_codex_grader_mutation1.tsv
+command	run_1957.sh map_codex_grader_mutation1.tsv ../../grader_20260909/attempts/mutation1/mutation_probe.py grader_mutation1 300
+wrapper_pid	1191959
+payload_pid	1191963
+payload_pgid	1191959
+started_utc	2026-09-09T16:57:13Z
+state	finished exit 1

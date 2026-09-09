@@ -1,0 +1,28 @@
+........................................................................ [  7%]
+........................................................................ [ 14%]
+........................................................................ [ 21%]
+........................................................................ [ 28%]
+...................................ss................................... [ 35%]
+........................................................................ [ 42%]
+........................................................................ [ 49%]
+........................................................................ [ 56%]
+........................................................................ [ 63%]
+........................................................................ [ 70%]
+........................................................................ [ 77%]
+........................................................................ [ 84%]
+........................................................................ [ 91%]
+........................................................................ [ 98%]
+...........                                                              [100%]
+=============================== warnings summary ===============================
+test_harness_guards.py::test_home_slice_must_match_through_the_PUBLIC_ROUTE
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/test_v2_event_route.py:954: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] test_a7_source_correction_1487.py:332: v10 shell not prepared
+SKIPPED [1] test_a7_source_correction_1487.py:346: budget not derived
+1017 passed, 2 skipped, 1 warning in 752.94s (0:12:32)
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

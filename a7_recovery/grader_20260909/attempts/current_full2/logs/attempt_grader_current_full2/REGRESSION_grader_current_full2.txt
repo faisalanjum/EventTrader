@@ -1,0 +1,44 @@
+........................................................................ [ 25%]
+........................................................................ [ 51%]
+........................................................................ [ 76%]
+..........................................................F.......       [100%]
+=================================== FAILURES ===================================
+_________ test_the_old_v1_run_refuses_at_every_live_entry[G23 freeze] __________
+
+entry = ('G23 freeze', <function <lambda> at 0x7fc0b5a54e00>)
+
+    @pytest.mark.skipif(not os.path.isdir(G.PRIMARY),
+                        reason="the executed run is absent")
+    @pytest.mark.parametrize("entry", [
+        ("materialize", lambda run: G.materialize(run)),
+        ("inventory", lambda run: G.inventory(run)),
+        ("questions", lambda run: G.questions(run)),
+        ("G1 freeze", lambda run: G.freeze(run)),
+        ("conservation", lambda run: C.terminals(run)),
+        ("G23 populations", lambda run: R.populations(run, _AUDIT)),
+        ("G23 freeze", lambda run: R.freeze(run)),
+        ("reference packets", lambda run: I._packets(run)),
+        ("reference card", lambda run: B.reference_card({}, "s", 0, run)),
+    ], ids=lambda e: e[0] if isinstance(e, tuple) else str(e))
+    def test_the_old_v1_run_refuses_at_every_live_entry(entry):
+        _label, call = entry
+        old = _historical_identity()
+        if _label == "G23 freeze":
+            # This public entry refuses absent approved G1 before inspecting the
+            # producer era. Its current, approved-G1 positive is exercised by
+            # test_a7_input_binding and the complete G23 lifecycle module.
+            doc, prompts, problems = call(old)
+            assert doc is None and not prompts
+>           assert problems == ["g1_lifecycle_required"]
+E           AssertionError: assert [OrderedDict(...-G1 floor')])] == ['g1_lifecycle_required']
+E             
+E             At index 0 diff: OrderedDict([('reason', 'g1_lifecycle_required'), ('why', 'the G2/G3 populations are defined by the G1 identity rulings; without the approved lifecycle these questions would be asked over the pre-G1 floor')]) != 'g1_lifecycle_required'
+E             Use -v to get more diff
+
+test_a7_current_1473.py:86: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_current_1473.py::test_the_old_v1_run_refuses_at_every_live_entry[G23 freeze]
+1 failed, 281 passed in 226.84s (0:03:46)
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

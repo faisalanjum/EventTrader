@@ -1,0 +1,92 @@
+{
+  "tag": "grader_publication_red",
+  "kind": "ALIGNED_SIDE",
+  "environment": {
+    "A7_APPROVED_KEY_DIR": "/tmp/a7_logs_1781/life_native5/candidate_owed_002",
+    "A7_TRACE_FIXTURE": "/tmp/a7_logs_1781/attempt_grader_path7",
+    "A7_FIXTURE_PROJECTS": "/tmp/a7_logs_1781/life_native5/TEST_projects",
+    "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_publication_red.tsv",
+    "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"
+  },
+  "artifacts_before": {
+    "launch_kfields_drafts.manifest.json": "78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2",
+    "launch_kfields_a1.bundle.json": "91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+    "a7_g1_build.py": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "292cda334e14449fd2d678650318219d2de5886e112dd555822e14d9965eb66c",
+    "inventory": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812"
+  },
+  "artifacts_after_build": {
+    "launch_kfields_drafts.manifest.json": "78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2",
+    "launch_kfields_a1.bundle.json": "91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+    "a7_g1_build.py": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "292cda334e14449fd2d678650318219d2de5886e112dd555822e14d9965eb66c",
+    "inventory": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812"
+  },
+  "plan_counts": {
+    "n_packets": 102,
+    "n_calls": 204
+  },
+  "inventory_sha256": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+  "comparable": 34,
+  "changed_owner_affected": 34,
+  "fixture_dependent": 10,
+  "affected_minus_comparable": [],
+  "fixture_minus_comparable": [],
+  "union_modules": [
+    "test_a7_publication.py",
+    "test_a7_interrupted_capture.py"
+  ],
+  "union_size": 2,
+  "command": [
+    "/home/faisal/EventMarketDB/venv/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "--no-header",
+    "-rfE",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/tmp/a7_logs_1781/attempt_grader_publication_red/pytest",
+    "test_a7_publication.py",
+    "test_a7_interrupted_capture.py"
+  ],
+  "collection_exit": 0,
+  "child_exit": 1,
+  "failed_ids": [
+    "test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-0-False]",
+    "test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-1-False]",
+    "test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-2-True]",
+    "test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G1]",
+    "test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G23]",
+    "test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G2]",
+    "test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G3]",
+    "test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G1]",
+    "test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G23]",
+    "test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G2]",
+    "test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G3]",
+    "test_a7_publication.py::test_two_independent_writers_cannot_replace_one_another[reference]",
+    "test_a7_publication.py::test_two_independent_writers_cannot_replace_one_another[sidecar]"
+  ],
+  "failed_id_count": 13,
+  "collection_errors": [],
+  "summary": "13 failed, 6 passed in 30.85s",
+  "artifacts_after_run": {
+    "launch_kfields_drafts.manifest.json": "78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2",
+    "launch_kfields_a1.bundle.json": "91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "16eb1581255912092d5f97e545affd2700c6ebfdf683e858668f4402bc7b96b5",
+    "a7_g1_build.py": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "292cda334e14449fd2d678650318219d2de5886e112dd555822e14d9965eb66c",
+    "inventory": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812"
+  },
+  "artifacts_stable": true
+}

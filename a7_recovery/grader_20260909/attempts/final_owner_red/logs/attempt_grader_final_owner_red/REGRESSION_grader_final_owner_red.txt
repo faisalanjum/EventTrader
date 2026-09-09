@@ -1,0 +1,35 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_current_extra_answers_do_not_consult_the_producer_scorer _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fb4d010a950>
+
+    def test_current_extra_answers_do_not_consult_the_producer_scorer(monkeypatch):
+        expected = ["duplicate", "key_miss", "unsupported"]  # Step 1 A7 extras rule.
+        assert B.extras_buckets() == list(B._scorer().EXTRAS_BUCKETS) == expected
+        rules = B.extras_rules()
+    
+        def retired_owner():
+            raise AssertionError("current grading read the producer-era bucket owner")
+    
+        monkeypatch.setattr(G._a6(), "_extras_buckets", retired_owner)
+>       assert B.extras_buckets() == expected
+               ^^^^^^^^^^^^^^^^^^
+
+test_a7_score_boundaries.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g23_build.py:130: in extras_buckets
+    return list(G._a6()._extras_buckets())
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def retired_owner():
+>       raise AssertionError("current grading read the producer-era bucket owner")
+E       AssertionError: current grading read the producer-era bucket owner
+
+test_a7_score_boundaries.py:20: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_score_boundaries.py::test_current_extra_answers_do_not_consult_the_producer_scorer
+1 failed in 0.24s
+
+--- stderr ---

@@ -1,0 +1,9 @@
+attempt	grader_publication_red
+payload	../../grader_20260909/regression.py
+map	map_codex_grader_publication_red.tsv
+command	run_1957.sh map_codex_grader_publication_red.tsv ../../grader_20260909/regression.py grader_publication_red 900
+wrapper_pid	1093725
+payload_pid	1093729
+payload_pgid	1093725
+started_utc	2026-09-09T15:49:10Z
+state	finished exit 1

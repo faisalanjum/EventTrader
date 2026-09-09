@@ -1,0 +1,18 @@
+test_a7_score_boundaries.py::test_extra_review_template_shows_a_shape_not_an_example_answer
+test_a7_score_boundaries.py::test_every_legal_extra_answer_and_every_blind_pair_still_works
+test_a7_score_boundaries.py::test_a_real_rounded_up_union_score_must_not_pass
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[18-20-0.95-False]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[19-20-0.95-True]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[20-20-0.95-True]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[48-50-0.98-False]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[49-50-0.98-True]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[50-50-0.98-True]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[0-0-0.95-False]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[0-0-0.98-False]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[440-449-0.98-False]
+test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[441-450-0.98-True]
+test_a7_score_boundaries.py::test_display_value_never_replaces_counts_and_failures_precede_unknown
+
+14 tests collected in 0.06s
+
+--- stderr ---

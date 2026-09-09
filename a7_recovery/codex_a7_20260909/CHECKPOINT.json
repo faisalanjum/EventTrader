@@ -1,0 +1,39 @@
+{
+  "scope": "Core1957 native-input connection; not an A7 score or production qualification",
+  "code_tree_sha256": "28a8d99ff230fefbb858cab890e4ffbb9745cafc5388ae5b23720eff3ea8dc72",
+  "application_code_changed_by_codex": false,
+  "source_test_checks": 10,
+  "source_real_completed": 1,
+  "source_real_unlaunched": 35,
+  "producer_populations": {
+    "native": {
+      "expected": 392,
+      "actual": 392,
+      "unique_agents": 392
+    },
+    "input_withheld": {
+      "expected": 392,
+      "actual": 392,
+      "unique_agents": 392
+    },
+    "handoff_omitted": {
+      "expected": 392,
+      "actual": 392,
+      "unique_agents": 392
+    }
+  },
+  "new_regression_failures": 0,
+  "shared_regression_failures": 198,
+  "remaining": [
+    "Independent review/publication of the preservation checkpoint",
+    "Remaining source reviews, aggregate meaning reconciliation, key preparation, then fresh EXP-5 answers and grading"
+  ],
+  "new_model_calls": 0,
+  "main_changed": false,
+  "database_writes": 0,
+  "test_setup_corrections": [
+    "source_1 used a legacy map and refused before reading the saved answer",
+    "producer_1 and regression_1 lacked the required output setting",
+    "producer_2/3 assertions confused two existing refusal categories; owner behavior was not changed"
+  ]
+}

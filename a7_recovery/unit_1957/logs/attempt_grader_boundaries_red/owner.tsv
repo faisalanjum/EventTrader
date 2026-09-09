@@ -1,0 +1,9 @@
+attempt	grader_boundaries_red
+payload	../../grader_20260909/regression.py
+map	map_codex_grader_boundaries_red.tsv
+command	run_1957.sh map_codex_grader_boundaries_red.tsv ../../grader_20260909/regression.py grader_boundaries_red 900
+wrapper_pid	1102495
+payload_pid	1102499
+payload_pgid	1102495
+started_utc	2026-09-09T15:56:44Z
+state	finished exit 1

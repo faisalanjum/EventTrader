@@ -1,0 +1,26 @@
+manifest: 78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2
+bundle: 91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68 slices 36 largest 248011
+events=36 packets=102 calls=204
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_a_real_rounded_up_union_score_must_not_pass _______________
+
+score_population = <function score_population.<locals>.score at 0x7f3c0a6c36a0>
+
+    def test_a_real_rounded_up_union_score_must_not_pass(score_population):
+        below = score_population(440, 449, "below")
+        exact = score_population(441, 450, "exact")
+        assert 440 * 100 < 449 * 98
+        assert 441 * 100 == 450 * 98
+        assert below["recall"] == exact["recall"] == 0.98
+        assert below["PASS"] is True and exact["PASS"] is True  # both meet the single's 95%
+        assert S._leg(exact, 0.98) is True
+>       assert S._leg(below, 0.98) is False
+E       AssertionError: assert True is False
+E        +  where True = <function _leg at 0x7f3c0c90e340>({'PASS': True, 'ambiguities_unresolved': 0, 'ambiguous_rows': [], 'confirmed_wrong_accepted': 0, ...}, 0.98)
+E        +    where <function _leg at 0x7f3c0c90e340> = S._leg
+
+test_a7_score_boundaries.py:175: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_score_boundaries.py::test_a_real_rounded_up_union_score_must_not_pass
+1 failed in 1.34s

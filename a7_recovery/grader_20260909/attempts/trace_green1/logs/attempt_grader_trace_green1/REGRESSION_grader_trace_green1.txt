@@ -1,0 +1,166 @@
+F..FF.                                                                   [100%]
+=================================== FAILURES ===================================
+____________ test_the_REAL_downstream_paths_consume_only_the_trace _____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+sealed = <function sealed.<locals>._seal at 0x7f5e98519ee0>
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_green1/pytest/test_the_REAL_downstream_paths0')
+
+    def test_the_REAL_downstream_paths_consume_only_the_trace(run, sealed, tmp_path):
+        """The actual conservation, G1 and G23 entries - not a private helper.
+    
+        Each of these used to reach `materialize` again, walking the schedule and
+        reparsing every answer. After ONE materialization the reads are sealed and
+        the real paths must still finish (Codex SEQ 1472 item 4).
+        """
+        import a7_g23_run as R
+        arms, meta, problems = G.materialize(run)      # the ONE materialization
+        assert problems == []
+        sealed()
+    
+>       doc, _p = C.terminals(run, str(tmp_path / "conservation"))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:158: in terminals
+    ("union_origins", origins), ("dimensions", dimensions(rows, arms, gold)),
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_conservation.py:182: in dimensions
+    out["precall_unresolved"] = len(B.precall_unresolved(gold))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_g23_build.py:1988: in precall_unresolved
+    for clash in non_unique_cards(key, run)]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_g23_build.py:1601: in non_unique_cards
+    seen.setdefault(card_key(reference_card(fact, sid, idx, run)),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fact = {'ambiguity_note': None, 'du_worthy': True, 'fact_type': 'metric', 'gold_extra': {'expectation_comparison_present': False}, ...}
+source_id = '0000006201-26-000031', gold_idx = 0, run = None
+
+    def reference_card(fact, source_id=None, gold_idx=None, run=None):
+        """-> the authority side of one grader question, from the INVENTORY.
+    
+        The card is never inferred from the fact: a name inferred from
+        `driver_name` is the reviewed conclusion, and a name inferred from the
+        packet label cannot identify a branch when one packet settled several
+        facts. The inventory already bound the exact span, so this reads it by
+        exact row identity and refuses when the row is not bound.
+        """
+        if source_id is None or gold_idx is None:
+            raise ValueError("a reference card is looked up by exact row identity")
+        if run is None:
+>           raise ValueError("a reference card is bound to ONE prepared run; "
+                             "supply its identity")
+E           ValueError: a reference card is bound to ONE prepared run; supply its identity
+
+a7_g23_build.py:1523: ValueError
+______ test_public_accounting_keeps_the_real_mixed_split_and_all_origins _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_green1/pytest/test_public_accounting_keeps_t0')
+
+    def test_public_accounting_keeps_the_real_mixed_split_and_all_origins(run, tmp_path):
+        import raw_transport as RT
+        arms, meta, problems = G.materialize(run)
+        assert problems == []
+        plan = RT.a1_plan_for_run(run["run_dir"])
+>       doc, problems = C.terminals(run, str(tmp_path))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:158: in terminals
+    ("union_origins", origins), ("dimensions", dimensions(rows, arms, gold)),
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_conservation.py:182: in dimensions
+    out["precall_unresolved"] = len(B.precall_unresolved(gold))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_g23_build.py:1988: in precall_unresolved
+    for clash in non_unique_cards(key, run)]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_g23_build.py:1601: in non_unique_cards
+    seen.setdefault(card_key(reference_card(fact, sid, idx, run)),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fact = {'ambiguity_note': None, 'du_worthy': True, 'fact_type': 'metric', 'gold_extra': {'expectation_comparison_present': False}, ...}
+source_id = '0000006201-26-000031', gold_idx = 0, run = None
+
+    def reference_card(fact, source_id=None, gold_idx=None, run=None):
+        """-> the authority side of one grader question, from the INVENTORY.
+    
+        The card is never inferred from the fact: a name inferred from
+        `driver_name` is the reviewed conclusion, and a name inferred from the
+        packet label cannot identify a branch when one packet settled several
+        facts. The inventory already bound the exact span, so this reads it by
+        exact row identity and refuses when the row is not bound.
+        """
+        if source_id is None or gold_idx is None:
+            raise ValueError("a reference card is looked up by exact row identity")
+        if run is None:
+>           raise ValueError("a reference card is bound to ONE prepared run; "
+                             "supply its identity")
+E           ValueError: a reference card is bound to ONE prepared run; supply its identity
+
+a7_g23_build.py:1523: ValueError
+______________ test_a_real_never_called_run_keeps_both_full_arms _______________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_green1/pytest/test_a_real_never_called_run_k0')
+
+    def test_a_real_never_called_run_keeps_both_full_arms(tmp_path):
+        import build_a5_exp5_kit as A5
+        import raw_transport as RT
+        producer = str(tmp_path / "uncalled")
+        prep = A5.prepare(producer)
+        assert prep["ok"], prep.get("problems")
+        run = PR.load(producer)
+        schedule = RT.a1_schedule(RT.a1_plan_for_run(producer))
+>       doc, problems = C.terminals(run, str(tmp_path / "audit"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:158: in terminals
+    ("union_origins", origins), ("dimensions", dimensions(rows, arms, gold)),
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_conservation.py:182: in dimensions
+    out["precall_unresolved"] = len(B.precall_unresolved(gold))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_g23_build.py:1988: in precall_unresolved
+    for clash in non_unique_cards(key, run)]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_g23_build.py:1601: in non_unique_cards
+    seen.setdefault(card_key(reference_card(fact, sid, idx, run)),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fact = {'ambiguity_note': None, 'du_worthy': True, 'fact_type': 'metric', 'gold_extra': {'expectation_comparison_present': False}, ...}
+source_id = '0000006201-26-000031', gold_idx = 0, run = None
+
+    def reference_card(fact, source_id=None, gold_idx=None, run=None):
+        """-> the authority side of one grader question, from the INVENTORY.
+    
+        The card is never inferred from the fact: a name inferred from
+        `driver_name` is the reviewed conclusion, and a name inferred from the
+        packet label cannot identify a branch when one packet settled several
+        facts. The inventory already bound the exact span, so this reads it by
+        exact row identity and refuses when the row is not bound.
+        """
+        if source_id is None or gold_idx is None:
+            raise ValueError("a reference card is looked up by exact row identity")
+        if run is None:
+>           raise ValueError("a reference card is bound to ONE prepared run; "
+                             "supply its identity")
+E           ValueError: a reference card is bound to ONE prepared run; supply its identity
+
+a7_g23_build.py:1523: ValueError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+FAILED test_a7_trace_1471.py::test_public_accounting_keeps_the_real_mixed_split_and_all_origins
+FAILED test_a7_trace_1471.py::test_a_real_never_called_run_keeps_both_full_arms
+3 failed, 3 passed in 7.40s
+
+--- stderr ---

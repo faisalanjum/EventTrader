@@ -1,0 +1,1712 @@
+{
+  "original": {
+    "rows": [
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_candidate_and_prompt_tree_and_root_rebuild_byte_identically",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_every_batch_binds_the_current_producer_and_one_same_event",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_every_lane_occurs_exactly_once",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_two_blind_lanes_are_blind_and_carry_no_answer",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_workflow_groups_are_maximal_under_the_exact_byte_boundary",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_the_run_is_empty_and_resumable",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_preflight_zero_problems_and_attempt1_budget_under_ceiling",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[stale target-<lambda>-stale]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[stale hash-<lambda>-stale]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[extra field-<lambda>-field]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[missing source bytes-<lambda>-occur]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[invalid location (not unique)-<lambda>-occur]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[claim outside the new quote-<lambda>-claim]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unowned_difference_REFUSES",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a5_launch_gate_1403.py::test_frozen_source_byte_drift_arms_zero",
+        "cause": "OSError: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/AAL_2026-04-23T08.30.json'"
+      },
+      {
+        "id": "test_a6_fixture_isolation_1768.py::test_1_outside_the_fixture_the_gate_refuses_the_old_era_run",
+        "cause": "AssertionError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a6_fixture_isolation_1768.py::test_2_outside_the_fixture_the_gate_accepts_the_current_zero_call_run",
+        "cause": "ValueError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a6_fixture_isolation_1768.py::test_3_inside_the_fixture_the_old_era_is_permitted_and_still_fully_checked",
+        "cause": "ValueError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a6_fixture_isolation_after_1768.py::test_after_the_historical_module_the_refusal_returns",
+        "cause": "AssertionError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_no_event_reuses_one_driver_name_across_fact_types",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_control_lawful_suffixed_family_routes_and_bare_one_does_not",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect3_control_lawful_synonym_passes_and_wrong_meaning_fails_safety",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect3_an_incomplete_run_is_never_failed_by_spelling_alone",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect3_the_route_refuses_a_malformed_name_and_accepts_a_lawful_one",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_door_accepts_plain_and_fenced_identically",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_door_refuses_every_malformed_envelope",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_door_refuses_an_evidence_phrase_that_is_not_in_the_quote",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_prompt_serves_only_the_four_permitted_fields",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_applier_refuses_a_row_whose_bytes_moved",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_ledger_covers_the_acted_population_exactly_once",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_prompt_carries_the_live_rule_and_every_meaning_field",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_door_requires_exactly_the_complete_field_set",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_door_accepts_the_four_lawful_answer_shapes",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_prompt_defines_every_aspect_in_plain_words",
+        "cause": "AssertionError: assert 'null means the evidence does not' in '[ROLE]\\nFor each question below, judge ONE produced record against the reviewed record\\nof the SAME claim, using only...y one\\nfenced JSON block.\\n\\n---------------------------------- BOUNDARY ----------------------------------\\n[EVENT]\\n'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_output_example_is_valid_json",
+        "cause": "AssertionError: assert ['driver_name..._source', ...] == ['driver_name...lice_vs_menu']"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_two_graders_must_agree_per_aspect",
+        "cause": "AssertionError: assert ({} == {'M1': {'driv...': True, ...}}"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_rule6_an_exact_duration_window_is_all_or_nothing",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_rule5a_a_numberless_growth_basis_uses_level_unit",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_corrected_prompt_version_is_frozen_beside_its_predecessors",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/exp5_prompt_producer.v2.md'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_reference_card_is_a_structural_whitelist",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_quote_only_could_not_identify_a_claim_but_the_card_can",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g3_prompt_defines_every_bucket_and_shows_valid_json",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g3_door_is_strict_and_never_crashes",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g3_two_answers_must_agree_on_a_named_bucket",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_an_unresolved_reference_stops_the_launch_before_any_call",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_one_raw_input_with_two_facts_keeps_BOTH_branches",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_a_split_with_mixed_outcomes_loses_neither_branch",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_rejection_accounting_is_required_and_exactly_rederived",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_current_1473.py::test_the_old_v1_run_refuses_at_every_live_entry[G23 freeze]",
+        "cause": "Failed: DID NOT RAISE <class 'ValueError'>"
+      },
+      {
+        "id": "test_a7_current_1473.py::test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_current_1473.py::test_mutation_after_a_WARM_INVENTORY_cache_refuses",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_current_1473.py::test_a_current_zero_call_run_reports_ONE_named_not_called_state",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_postrun_identity_1521.py::test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_postrun_identity_1521.py::test_grading_inventories_derive_twice_identically_with_zero_problems",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_postrun_identity_1521_recovery_1774.py::test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_a_clean_primary_owing_no_retry_needs_no_retry_directory",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer",
+        "cause": "AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to 62eefc9820f7e5ee...47868ad8da5e050ef4f7398461d608261d6, not the required d0793d010cb63e9acb4648ea85bdd41c6201374df32da3abc989a7a36085a136'"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_the_materialization_is_exactly_the_eleven",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_double_build_is_deterministic_and_history_is_untouched",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_the_targeted_package_is_the_phase1_shape_with_only_approved_bytes",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/a6_prepared_run was prepared for era None, not the current producer era '.v3'; the current route refuses a run from another era"
+      },
+      {
+        "id": "test_a7_trace_1471.py::test_every_status_and_route_outcome_is_conserved_exactly_once",
+        "cause": "AttributeError: module 'a7_conservation' has no attribute '_branches_of'"
+      },
+      {
+        "id": "test_a7_trace_1471.py::test_raw_drift_after_identity_capture_refuses",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/a6_prepared_run was prepared for era None, not the current producer era '.v3'; the current route refuses a run from another era"
+      },
+      {
+        "id": "test_g1_cached_resume_1781.py::test_the_same_file_under_its_durable_path_is_accepted",
+        "cause": "AssertionError: the boundary did not present one file under two paths"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_requires_event_meta",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_requires_complete_meta_per_event",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_parks_fiscal_only_future_surprise",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_wrong_slice_drops_accuracy",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_wrong_measurement_drops_accuracy",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_union_recall_beats_single",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_parks_grounded_surprise_without_home_sibling",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_emits_ambiguous_for_grader",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_correct_sibling_no_park",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_wrong_period_parks",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_unrelated_driver_parks",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_value_mismatch_parks",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_slice_must_match_through_the_PUBLIC_ROUTE",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_unresolved_tie_blocks_pass",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_state_accuracy_not_diluted",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_false_lane_verdict_increments_wrong_lane",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_wrong_driver_name_fails",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_value_shape_is_decided_by_the_PUBLIC_ROUTE[floor-parked-F9-a FLOOR lacks the matching high endpoint, so it is not a matching home]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_value_shape_is_decided_by_the_PUBLIC_ROUTE[point-written-None-equal point endpoints, unit, and the other \\xa7153 identity fields]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_numberless_sibling_pairing_is_enforced_by_the_route",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_union_accepts_tie_resolutions",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_empty_arm_is_definite_fail",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_error_table_rule_grouped",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_frozen_proof_artifact_has_before_and_after",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/frozen_proof_r15.txt'"
+      },
+      {
+        "id": "test_harness_guards.py::test_name_errors_never_dilute",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_numberless_home_without_a_quote_is_REFUSED_by_the_route",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_definite_failures_never_none",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_rule_bucket_actual_counts",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_guidance_surprise_finds_its_guidance_home",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_false_homes_must_park_not_pair[actual-fuel_cost-metric]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_false_homes_must_park_not_pair[guidance-revenue-guidance]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_actual_surprise_finds_its_metric_home",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step1_receipt_is_the_case_source",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/step1_inventory.json'"
+      },
+      {
+        "id": "test_harness_guards.py::test_RED_contract_builder_reads_archived_authority",
+        "cause": "AssertionError: authority does not exist: .claude/plans/Drivers/experiments/harness/exp5_rev4_package.md"
+      },
+      {
+        "id": "test_harness_guards.py::test_CONTROL_door_scoped_field_remains_lawful_reader_output",
+        "cause": "ImportError: cannot import name 'prepared_fact' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[2-1-facts and abstentions]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[2-0-duplicate facts only]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[0-1-an abstention only]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[0-0-a lawful EMPTY whole-event answer]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_event_set_mismatch[<lambda>-an EMPTY route hides every event]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_event_set_mismatch[<lambda>-an EXTRA event was routed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_duplicate_and_missing_outcome_indexes",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_a_map_pointing_outside_the_result",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_rejected_is_reported_with_its_real_code_never_renamed_parked",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_replay_store_serves_EVERY_v2_lane_not_just_metric",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_numberless_guidance_reaches_the_prior_unit_read_not_an_AttributeError[withdrawn]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_numberless_guidance_reaches_the_prior_unit_read_not_an_AttributeError[reaffirmed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_no_scorer_runtime_imports_a_core_test_module",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness/scorers/score_exp5.py'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_lawful_unchanged_pair_is_the_control",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[fact_type-kwargs0-lane]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[per_x-kwargs1-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[ordinary item field-kwargs2-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[slot value-kwargs3-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[slot scale_multiplier-kwargs4-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[slice MEMBERSHIP-kwargs5-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_equivalent_spellings_must_NOT_move_the_score[slice ORDER-kwargs0]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_equivalent_spellings_must_NOT_move_the_score[measurement SPELLING-kwargs1]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_invalid_grader_rulings_block_PASS[rulings0-ruling_out_of_range]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_invalid_grader_rulings_block_PASS[rulings1-ruling_missing]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_one_produced_fact_cannot_be_ruled_onto_two_golds",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_all_correct_lawful_path_passes_safety",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_unsupported_extra_is_a_confirmed_wrong_ACCEPTED_fact",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_genuine_key_miss_is_INCONCLUSIVE_not_a_failure",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_a_false_meaning_verdict_on_an_accepted_fact_is_confirmed_wrong",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts0-extras_verdict_malformed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts1-extras_verdict_out_of_range]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts2-extras_verdict_missing]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_a_refused_row_never_enters_the_accepted_fact_safety_count",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_unrun_grading_with_unmatched_gold_cannot_PASS",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_no_extras_verdict_for_an_accepted_extra_is_INCOMPLETE",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_no_extras_input_is_LAWFULLY_complete_when_nothing_is_eligible",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_score_union_FORWARDS_extras_verdicts",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ABST_a_gold_linked_abstention_is_charged_as_a_park",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ABST_a_diagnostic_abstention_is_charged_to_NEITHER_side",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ABST_the_split_is_the_LOCATOR_not_the_route_decision",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1135_a_produced_DUPLICATE_earns_no_recall_and_blocks_PASS",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1135_an_abstention_with_an_unsound_locator_is_REFUSED_upstream",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1136_an_answered_gold_row_cannot_ALSO_be_charged_to_an_abstention",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1136_the_duplicate_bucket_is_filled_from_the_identity_owner",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1139_a_grader_linked_surprise_is_not_ALSO_a_missing_twin",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1139_duplicate_gold_is_an_inconclusive_KEY_erratum_not_model_failure",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_unresolved_gold_WITH_enough_candidates_stays_PENDING",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_unresolved_gold_WITHOUT_candidates_is_a_definite_FAIL",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_an_explicit_None_ruling_earns_no_potential_credit",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_a_pure_duplicate_key_erratum_is_None_not_False",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_a_real_hard_failure_still_returns_False",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_a_gold_linked_abstention_does_NOT_answer_a_surprise_twin",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1141_a_spare_candidate_in_ANOTHER_event_cannot_raise_the_ceiling",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1141_a_SAME_event_candidate_still_raises_the_ceiling",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_recall_boundary_below_at_and_above[20-18-0.9-False]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_recall_boundary_below_at_and_above[20-19-0.95-True]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_recall_boundary_below_at_and_above[20-20-1.0-True]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_a_cross_tier_union_is_REFUSED",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_a_same_tier_union_is_ALLOWED",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_no_credential_machine_path_or_self_hash_is_bound",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.manifest.json'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_score_arm_uses_that_same_bar_owner",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_reader_launcher_executes_its_EXACT_156_schedule",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra0-has not been reviewed]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--bare-args']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra1-no K-fields lock supplied]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra2-does not match]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', '--id-sonnet=x', '--id-haiku=y', '--id-opus=z']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra3-no exact runtime model ID]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra4-ALIAS, not an exact runtime ID]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=sonnet', '--id-haiku=haiku', '--id-opus=opus']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_a_lawful_run_input_set_still_yields_the_exact_156",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_committed_plan_still_carries_NO_lock_and_NO_frozen_ids",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_two_independent_builds_are_byte_identical",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_two_independent_0/build_a/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[source-keys/K-fields/draft_inputs/{first_input}-bytes]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_the_gate_detects0/clean/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[contract-harness/exp5_prompt_contract.manifest.json-bytes]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_the_gate_detects1/clean/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[writes_disabled-harness/build_launch_manifest.py-made_calls]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_the_gate_detects2/clean/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_9_the_would_park_formula_is_kept_EXACTLY",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_the_menu_probe_carries_the_MATCHED_company_cik",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[None-missing]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[-empty]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[not-a-cik-malformed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[0000000001-mismatching registrant]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_10_du_worthy_false_rows_never_enter_recall",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_7_a_reader_exception_is_a_LOUD_failed_run_not_an_outcome",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_the_REAL_launcher_retries_exactly_once_end_to_end",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_a_lawful_first_launch_triggers_NO_retry",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_the_emitted_prompt_hash_equals_the_BYTES_ACTUALLY_SENT",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_a_MUTATED_prompt_is_caught_even_with_an_untouched_claim",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--mutate-prompt']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_first_pass_rows_need_prompt_evidence_too",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_actual_bytes_match_the_pin_on_BOTH_phases",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_a_second_invalid_answer_stops_with_no_third_launch",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_writes_happen_ONLY_at_an_ingest_measured_globally",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_a1_preflight_is_GO_on_the_live_tree_and_needs_A2s_frozen_runtime",
+        "cause": "OSError: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a2_runtime_freeze.json'"
+      },
+      {
+        "id": "test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically",
+        "cause": "AssertionError: the committed artifacts are not what the builder makes"
+      }
+    ],
+    "ambiguous": [],
+    "total": 198
+  },
+  "groups": {
+    "P02": [
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_candidate_and_prompt_tree_and_root_rebuild_byte_identically",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_every_batch_binds_the_current_producer_and_one_same_event",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_every_lane_occurs_exactly_once",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_two_blind_lanes_are_blind_and_carry_no_answer",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_workflow_groups_are_maximal_under_the_exact_byte_boundary",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_the_run_is_empty_and_resumable",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_g1_precall_freeze_1525.py::test_preflight_zero_problems_and_attempt1_budget_under_ceiling",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_postrun_identity_1521.py::test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_postrun_identity_1521.py::test_grading_inventories_derive_twice_identically_with_zero_problems",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      },
+      {
+        "id": "test_a7_postrun_identity_1521_recovery_1774.py::test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a6_a5run_1515 freezes to 28dc5bff641e192e8677fc1c6b0d9883a59feb88ad4f9b1ea8a1b5bba7b28a16, not the required 4123bb693f6b040af48f4ea53c533b2ad800e80102113844adb5afc69c65052d"
+      }
+    ],
+    "F01": [
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[stale target-<lambda>-stale]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[stale hash-<lambda>-stale]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[extra field-<lambda>-field]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[missing source bytes-<lambda>-occur]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[invalid location (not unique)-<lambda>-occur]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[claim outside the new quote-<lambda>-claim]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_an_unowned_difference_REFUSES",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_corrected_prompt_version_is_frozen_beside_its_predecessors",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/exp5_prompt_producer.v2.md'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_the_materialization_is_exactly_the_eleven",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_double_build_is_deterministic_and_history_is_untouched",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_the_targeted_package_is_the_phase1_shape_with_only_approved_bytes",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'"
+      },
+      {
+        "id": "test_harness_guards.py::test_frozen_proof_artifact_has_before_and_after",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/frozen_proof_r15.txt'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step1_receipt_is_the_case_source",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/step1_inventory.json'"
+      },
+      {
+        "id": "test_harness_guards.py::test_no_scorer_runtime_imports_a_core_test_module",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness/scorers/score_exp5.py'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_no_credential_machine_path_or_self_hash_is_bound",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.manifest.json'"
+      }
+    ],
+    "F03": [
+      {
+        "id": "test_a5_launch_gate_1403.py::test_frozen_source_byte_drift_arms_zero",
+        "cause": "OSError: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/AAL_2026-04-23T08.30.json'"
+      },
+      {
+        "id": "test_harness_guards.py::test_a1_preflight_is_GO_on_the_live_tree_and_needs_A2s_frozen_runtime",
+        "cause": "OSError: [Errno 30] Read-only file system: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a2_runtime_freeze.json'"
+      }
+    ],
+    "P03": [
+      {
+        "id": "test_a6_fixture_isolation_1768.py::test_1_outside_the_fixture_the_gate_refuses_the_old_era_run",
+        "cause": "AssertionError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a6_fixture_isolation_1768.py::test_2_outside_the_fixture_the_gate_accepts_the_current_zero_call_run",
+        "cause": "ValueError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a6_fixture_isolation_1768.py::test_3_inside_the_fixture_the_old_era_is_permitted_and_still_fully_checked",
+        "cause": "ValueError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a6_fixture_isolation_after_1768.py::test_after_the_historical_module_the_refusal_returns",
+        "cause": "AssertionError: a7_prepared_run/1: the CURRENT route requires the accepted A6 freeze hash; pass expect_freeze_sha so a run that is not the frozen launch cannot stand in for it (Codex SEQ 1517)."
+      },
+      {
+        "id": "test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/a6_prepared_run was prepared for era None, not the current producer era '.v3'; the current route refuses a run from another era"
+      },
+      {
+        "id": "test_a7_trace_1471.py::test_raw_drift_after_identity_capture_refuses",
+        "cause": "ValueError: a7_prepared_run/1: /tmp/a6_prepared_run was prepared for era None, not the current producer era '.v3'; the current route refuses a run from another era"
+      }
+    ],
+    "P01": [
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_no_event_reuses_one_driver_name_across_fact_types",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_applier_refuses_a_row_whose_bytes_moved",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_ledger_covers_the_acted_population_exactly_once",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_prompt_carries_the_live_rule_and_every_meaning_field",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_door_requires_exactly_the_complete_field_set",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_door_accepts_the_four_lawful_answer_shapes",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_reference_card_is_a_structural_whitelist",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_quote_only_could_not_identify_a_claim_but_the_card_can",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g3_prompt_defines_every_bucket_and_shows_valid_json",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g3_door_is_strict_and_never_crashes",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g3_two_answers_must_agree_on_a_named_bucket",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_an_unresolved_reference_stops_the_launch_before_any_call",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_current_1473.py::test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_current_1473.py::test_mutation_after_a_WARM_INVENTORY_cache_refuses",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_current_1473.py::test_a_current_zero_call_run_reports_ONE_named_not_called_state",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_a_clean_primary_owing_no_retry_needs_no_retry_directory",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_freeze_needs_no_retry_file_when_none_is_owed",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      },
+      {
+        "id": "test_a7_runstates_1470.py::test_g1_consumes_the_one_ledger_and_adds_nothing",
+        "cause": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/runs/kf-a4-hardreview-70-20260822T015053Z was given as a hard-review run with no package to prove its calls against"
+      }
+    ],
+    "D01": [
+      {
+        "id": "test_a7_corrections_1454.py::test_defect1_control_lawful_suffixed_family_routes_and_bare_one_does_not",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect3_control_lawful_synonym_passes_and_wrong_meaning_fails_safety",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect3_an_incomplete_run_is_never_failed_by_spelling_alone",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_defect3_the_route_refuses_a_malformed_name_and_accepts_a_lawful_one",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_rule6_an_exact_duration_window_is_all_or_nothing",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_rule5a_a_numberless_growth_basis_uses_level_unit",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_one_raw_input_with_two_facts_keeps_BOTH_branches",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_a_split_with_mixed_outcomes_loses_neither_branch",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_the_rejection_accounting_is_required_and_exactly_rederived",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_requires_event_meta",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_requires_complete_meta_per_event",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_parks_fiscal_only_future_surprise",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_wrong_slice_drops_accuracy",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_wrong_measurement_drops_accuracy",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_union_recall_beats_single",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_parks_grounded_surprise_without_home_sibling",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_scorer_emits_ambiguous_for_grader",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_correct_sibling_no_park",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_wrong_period_parks",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_unrelated_driver_parks",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_fact_value_mismatch_parks",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_slice_must_match_through_the_PUBLIC_ROUTE",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_unresolved_tie_blocks_pass",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_state_accuracy_not_diluted",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_false_lane_verdict_increments_wrong_lane",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_wrong_driver_name_fails",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_value_shape_is_decided_by_the_PUBLIC_ROUTE[floor-parked-F9-a FLOOR lacks the matching high endpoint, so it is not a matching home]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_value_shape_is_decided_by_the_PUBLIC_ROUTE[point-written-None-equal point endpoints, unit, and the other \\xa7153 identity fields]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_home_numberless_sibling_pairing_is_enforced_by_the_route",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_union_accepts_tie_resolutions",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_empty_arm_is_definite_fail",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_error_table_rule_grouped",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_name_errors_never_dilute",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_numberless_home_without_a_quote_is_REFUSED_by_the_route",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_definite_failures_never_none",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_rule_bucket_actual_counts",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_guidance_surprise_finds_its_guidance_home",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_false_homes_must_park_not_pair[actual-fuel_cost-metric]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_false_homes_must_park_not_pair[guidance-revenue-guidance]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_827B4_actual_surprise_finds_its_metric_home",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_CONTROL_door_scoped_field_remains_lawful_reader_output",
+        "cause": "ImportError: cannot import name 'prepared_fact' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[2-1-facts and abstentions]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[2-0-duplicate facts only]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[0-1-an abstention only]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B14_replay_through_the_real_run_event_keeps_the_index_relation[0-0-a lawful EMPTY whole-event answer]",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_event_set_mismatch[<lambda>-an EMPTY route hides every event]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_event_set_mismatch[<lambda>-an EXTRA event was routed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_duplicate_and_missing_outcome_indexes",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_route_refuses_a_map_pointing_outside_the_result",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_B16_rejected_is_reported_with_its_real_code_never_renamed_parked",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_replay_store_serves_EVERY_v2_lane_not_just_metric",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_numberless_guidance_reaches_the_prior_unit_read_not_an_AttributeError[withdrawn]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_numberless_guidance_reaches_the_prior_unit_read_not_an_AttributeError[reaffirmed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.test_v2_attacks'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_lawful_unchanged_pair_is_the_control",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[fact_type-kwargs0-lane]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[per_x-kwargs1-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[ordinary item field-kwargs2-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[slot value-kwargs3-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[slot scale_multiplier-kwargs4-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_each_axis_moves_its_own_denominator[slice MEMBERSHIP-kwargs5-field]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_equivalent_spellings_must_NOT_move_the_score[slice ORDER-kwargs0]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_equivalent_spellings_must_NOT_move_the_score[measurement SPELLING-kwargs1]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_invalid_grader_rulings_block_PASS[rulings0-ruling_out_of_range]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_invalid_grader_rulings_block_PASS[rulings1-ruling_missing]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_MUT_one_produced_fact_cannot_be_ruled_onto_two_golds",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_all_correct_lawful_path_passes_safety",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_unsupported_extra_is_a_confirmed_wrong_ACCEPTED_fact",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_genuine_key_miss_is_INCONCLUSIVE_not_a_failure",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_a_false_meaning_verdict_on_an_accepted_fact_is_confirmed_wrong",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts0-extras_verdict_malformed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts1-extras_verdict_out_of_range]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_malformed_extras_verdicts_block_PASS[verdicts2-extras_verdict_missing]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ADDA_a_refused_row_never_enters_the_accepted_fact_safety_count",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_unrun_grading_with_unmatched_gold_cannot_PASS",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_no_extras_verdict_for_an_accepted_extra_is_INCOMPLETE",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_no_extras_input_is_LAWFULLY_complete_when_nothing_is_eligible",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1134_score_union_FORWARDS_extras_verdicts",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ABST_a_gold_linked_abstention_is_charged_as_a_park",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ABST_a_diagnostic_abstention_is_charged_to_NEITHER_side",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_ABST_the_split_is_the_LOCATOR_not_the_route_decision",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1135_a_produced_DUPLICATE_earns_no_recall_and_blocks_PASS",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1135_an_abstention_with_an_unsound_locator_is_REFUSED_upstream",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1136_an_answered_gold_row_cannot_ALSO_be_charged_to_an_abstention",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1136_the_duplicate_bucket_is_filled_from_the_identity_owner",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1139_a_grader_linked_surprise_is_not_ALSO_a_missing_twin",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1139_duplicate_gold_is_an_inconclusive_KEY_erratum_not_model_failure",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_unresolved_gold_WITH_enough_candidates_stays_PENDING",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_unresolved_gold_WITHOUT_candidates_is_a_definite_FAIL",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_an_explicit_None_ruling_earns_no_potential_credit",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_a_pure_duplicate_key_erratum_is_None_not_False",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_a_real_hard_failure_still_returns_False",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1140_a_gold_linked_abstention_does_NOT_answer_a_surprise_twin",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1141_a_spare_candidate_in_ANOTHER_event_cannot_raise_the_ceiling",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_1141_a_SAME_event_candidate_still_raises_the_ceiling",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_recall_boundary_below_at_and_above[20-18-0.9-False]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_recall_boundary_below_at_and_above[20-19-0.95-True]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_recall_boundary_below_at_and_above[20-20-1.0-True]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_a_cross_tier_union_is_REFUSED",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_a_same_tier_union_is_ALLOWED",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_11_score_arm_uses_that_same_bar_owner",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_9_the_would_park_formula_is_kept_EXACTLY",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_the_menu_probe_carries_the_MATCHED_company_cik",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[None-missing]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[-empty]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[not-a-cik-malformed]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_3_a_bad_cik_FAILS_CLOSED_without_a_raw_exception[0000000001-mismatching registrant]",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.driver_neo4j_adapter'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_10_du_worthy_false_rows_never_enter_recall",
+        "cause": "ModuleNotFoundError: No module named 'driver.core.xbrl_attach'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_7_a_reader_exception_is_a_LOUD_failed_run_not_an_outcome",
+        "cause": "ImportError: cannot import name 'test_v2_event_route' from 'driver.core' (/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py)"
+      }
+    ],
+    "D02": [
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_door_accepts_plain_and_fenced_identically",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_door_refuses_every_malformed_envelope",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_door_refuses_an_evidence_phrase_that_is_not_in_the_quote",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_od1_prompt_serves_only_the_four_permitted_fields",
+        "cause": "ModuleNotFoundError: No module named 'a7_od1_admission'"
+      }
+    ],
+    "E01": [
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_prompt_defines_every_aspect_in_plain_words",
+        "cause": "AssertionError: assert 'null means the evidence does not' in '[ROLE]\\nFor each question below, judge ONE produced record against the reviewed record\\nof the SAME claim, using only...y one\\nfenced JSON block.\\n\\n---------------------------------- BOUNDARY ----------------------------------\\n[EVENT]\\n'"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_output_example_is_valid_json",
+        "cause": "AssertionError: assert ['driver_name..._source', ...] == ['driver_name...lice_vs_menu']"
+      },
+      {
+        "id": "test_a7_corrections_1454.py::test_g2_two_graders_must_agree_per_aspect",
+        "cause": "AssertionError: assert ({} == {'M1': {'driv...': True, ...}}"
+      }
+    ],
+    "E02": [
+      {
+        "id": "test_a7_current_1473.py::test_the_old_v1_run_refuses_at_every_live_entry[G23 freeze]",
+        "cause": "Failed: DID NOT RAISE <class 'ValueError'>"
+      }
+    ],
+    "E03": [
+      {
+        "id": "test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer",
+        "cause": "AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/pytest-of-faisal/pytest-0/test_a_mutation_after_identity0/mutated freezes to 62eefc9820f7e5ee...47868ad8da5e050ef4f7398461d608261d6, not the required d0793d010cb63e9acb4648ea85bdd41c6201374df32da3abc989a7a36085a136'"
+      }
+    ],
+    "E04": [
+      {
+        "id": "test_a7_trace_1471.py::test_every_status_and_route_outcome_is_conserved_exactly_once",
+        "cause": "AttributeError: module 'a7_conservation' has no attribute '_branches_of'"
+      }
+    ],
+    "E05": [
+      {
+        "id": "test_g1_cached_resume_1781.py::test_the_same_file_under_its_durable_path_is_accepted",
+        "cause": "AssertionError: the boundary did not present one file under two paths"
+      }
+    ],
+    "E06": [
+      {
+        "id": "test_harness_guards.py::test_RED_contract_builder_reads_archived_authority",
+        "cause": "AssertionError: authority does not exist: .claude/plans/Drivers/experiments/harness/exp5_rev4_package.md"
+      }
+    ],
+    "F02": [
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_reader_launcher_executes_its_EXACT_156_schedule",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra0-has not been reviewed]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--bare-args']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra1-no K-fields lock supplied]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra2-does not match]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', '--id-sonnet=x', '--id-haiku=y', '--id-opus=z']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra3-no exact runtime model ID]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_runner_REFUSES_before_the_first_call[extra4-ALIAS, not an exact runtime ID]",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=sonnet', '--id-haiku=haiku', '--id-opus=opus']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_a_lawful_run_input_set_still_yields_the_exact_156",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_5_the_committed_plan_still_carries_NO_lock_and_NO_frozen_ids",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_two_independent_builds_are_byte_identical",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_two_independent_0/build_a/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[source-keys/K-fields/draft_inputs/{first_input}-bytes]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_the_gate_detects0/clean/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[contract-harness/exp5_prompt_contract.manifest.json-bytes]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_the_gate_detects1/clean/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_12_the_gate_detects_a_mutation_in_every_protected_class[writes_disabled-harness/build_launch_manifest.py-made_calls]",
+        "cause": "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-faisal/pytest-0/test_step3_12_the_gate_detects2/clean/.claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js'"
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_the_REAL_launcher_retries_exactly_once_end_to_end",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_a_lawful_first_launch_triggers_NO_retry",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_the_emitted_prompt_hash_equals_the_BYTES_ACTUALLY_SENT",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_a_MUTATED_prompt_is_caught_even_with_an_untouched_claim",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--mutate-prompt']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_first_pass_rows_need_prompt_evidence_too",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_actual_bytes_match_the_pin_on_BOTH_phases",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_a_second_invalid_answer_stops_with_no_third_launch",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      },
+      {
+        "id": "test_harness_guards.py::test_step3_6_writes_happen_ONLY_at_an_ingest_measured_globally",
+        "cause": "subprocess.CalledProcessError: Command '['/home/faisal/.npm-global/bin/node', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/run_reader_launcher_fake.mjs', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.workflow.js', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_exp5_readers.manifest.json', '--plan-lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--lock=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--id-sonnet=claude-sonnet-5-20260101', '--id-haiku=claude-haiku-4-5-20251001', '--id-opus=claude-opus-5-20260101', '--bad=0000006201-26-000031']' returned non-zero exit status 1."
+      }
+    ],
+    "E07": [
+      {
+        "id": "test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically",
+        "cause": "AssertionError: the committed artifacts are not what the builder makes"
+      }
+    ]
+  },
+  "removed_tests": [
+    {
+      "file": "test_a7_postrun_identity_1521.py",
+      "test": "test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+      "sha256": "d53ffeba7b31e3d9d5c1a15492c37c486eb4208fe43819cf0f1ea261b3563d6e",
+      "replacement": "test_a7_current_postrun.py; retry preservation additionally test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts"
+    },
+    {
+      "file": "test_a7_postrun_identity_1521.py",
+      "test": "test_grading_inventories_derive_twice_identically_with_zero_problems",
+      "sha256": "903f1bad52d02a889ade33744e5f22b112bec3898fe2def5af75ab1adf491fdc",
+      "replacement": "test_a7_current_postrun.py; retry preservation additionally test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts"
+    },
+    {
+      "file": "test_a7_runstates_1470.py",
+      "test": "test_a_clean_primary_owing_no_retry_needs_no_retry_directory",
+      "sha256": "04cedca6bfa0ea93d282ab70fd5907782640f7827f27a55049dd2bbd386db6c5",
+      "replacement": "test_a7_current_postrun.py; retry preservation additionally test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts"
+    },
+    {
+      "file": "test_a7_runstates_1470.py",
+      "test": "test_a_completed_retry_keeps_BOTH_attempts_and_selects_the_second",
+      "sha256": "80844fb01d04eb94c6662bd1f794c67d784549112149fb12c3106d03c3c45f00",
+      "replacement": "test_a7_current_postrun.py; retry preservation additionally test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts"
+    },
+    {
+      "file": "test_a7_runstates_1470.py",
+      "test": "test_freeze_needs_no_retry_file_when_none_is_owed",
+      "sha256": "acdc42a68c2e1a2f582609427c3bb0a2b521ed6431dba3e38fe49f2ea336b16e",
+      "replacement": "test_a7_current_postrun.py; retry preservation additionally test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts"
+    },
+    {
+      "file": "test_a7_runstates_1470.py",
+      "test": "test_g1_consumes_the_one_ledger_and_adds_nothing",
+      "sha256": "6ee188716158e5b63836ffa63058e5a5dfce9f89d4a9450e74529c4892e1f30a",
+      "replacement": "test_a7_current_postrun.py; retry preservation additionally test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts"
+    },
+    {
+      "file": "test_a7_postrun_identity_1521_recovery_1774.py",
+      "sha256": "fdac03d1da992cab73ba8520e02c0600e98656c14af3f8305d7e2caadab4dc5c",
+      "identical_functions": [
+        "_freeze_sha",
+        "_fresh",
+        "test_completed_run_loads_against_accepted_freeze_and_reports_5612_once",
+        "test_completed_run_freeze_budget_counts_once_not_as_future_plan",
+        "_row",
+        "_rows",
+        "test_inmemory_zero_completed_primary_owes_the_whole_schedule",
+        "test_inmemory_completed_primary_without_retry_owes_nothing",
+        "test_inmemory_completed_primary_plus_retry_preserves_retry_and_owes_zero",
+        "test_inmemory_impossible_over_schedule_primary_refuses",
+        "test_omitted_or_wrong_freeze_hash_refuses",
+        "test_a_genuinely_derived_over_ceiling_future_budget_is_under_ceiling_false",
+        "test_re_adding_the_completed_392_yields_6004_and_breaches_the_ceiling"
+      ],
+      "replacement": "test_a7_postrun_identity_1521.py; completed-run positive now test_a7_current_postrun.py"
+    }
+  ],
+  "removed_scorer_helpers": {
+    "file_sha256": "115ddb826f76f1b2f64d378f3843f7d451879c97ed6b514c2d7e412ff384e51d",
+    "removed_functions": [
+      {
+        "function": "_ev_key",
+        "line": 264,
+        "sha256": "a9b59265d7d27adc07cf45c5113526fb54fd9782b664804c641d5e4019e74840"
+      },
+      {
+        "function": "_shape_pair",
+        "line": 292,
+        "sha256": "d92c3cd0d4e798bd94fe9cd424ed2dae0a032057ec5a52c10c94bf9cca3ca7f4"
+      },
+      {
+        "function": "_base_driver",
+        "line": 312,
+        "sha256": "b76ccd147bb15802d02700a094e23a219e442757ce7b3be73fd29bcbf988cf58"
+      },
+      {
+        "function": "_resolved_period",
+        "line": 318,
+        "sha256": "b92a2d4b6bf15bcfb5d32d60e80fab3c23a90edb443a51ed7fbbfce608b064af"
+      },
+      {
+        "function": "_name_agrees",
+        "line": 327,
+        "sha256": "af1c277dc0f5ec4d24141600bf1500b17bb0010ce5b95d939d8e2694e0fede39"
+      }
+    ]
+  }
+}

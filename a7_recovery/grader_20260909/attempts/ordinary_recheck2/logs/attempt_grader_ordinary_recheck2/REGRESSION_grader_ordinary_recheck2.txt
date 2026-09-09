@@ -1,0 +1,136 @@
+...........FF.................................FF..F....                  [100%]
+=================================== FAILURES ===================================
+___ test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets ____
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_prepare_run_writes_a_writ0')
+
+    @_needs_v2
+    def test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets(
+            tmp_path):
+        pkg = str(tmp_path / "pkg")
+        T.build_targeted(pkg, V2)
+        run = str(tmp_path / "run")
+>       got = T.publish(run, pkg)
+              ^^^^^^^^^
+E       AttributeError: module 'build_kfields_key_targeted' has no attribute 'publish'
+
+test_a7_source_correction_1487.py:267: AttributeError
+__ test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today ___
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_prepare_run_is_gated_by_t0')
+
+    @_needs_v2
+    def test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today(
+            tmp_path):
+        """The seam, recorded: the phase-one gate pins an A3 dependency digest that
+        earlier accepted rounds moved, so no targeted run can be prepared through
+        it until that baseline is re-ruled. Nothing is written past the gate."""
+        pkg = str(tmp_path / "pkg")
+        T.build_targeted(pkg, V2)
+        run = str(tmp_path / "run")
+>       got = T.prepare_run(run, pkg)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: prepare_run() takes 1 positional argument but 2 were given
+
+test_a7_source_correction_1487.py:293: TypeError
+_________ test_the_old_v1_run_refuses_at_every_live_entry[G23 freeze] __________
+
+entry = ('G23 freeze', <function <lambda> at 0x7fbb98e668e0>)
+
+    @pytest.mark.skipif(not os.path.isdir(G.PRIMARY),
+                        reason="the executed run is absent")
+    @pytest.mark.parametrize("entry", [
+        ("materialize", lambda run: G.materialize(run)),
+        ("inventory", lambda run: G.inventory(run)),
+        ("questions", lambda run: G.questions(run)),
+        ("G1 freeze", lambda run: G.freeze(run)),
+        ("conservation", lambda run: C.terminals(run)),
+        ("G23 populations", lambda run: R.populations(run, _AUDIT)),
+        ("G23 freeze", lambda run: R.freeze(run)),
+        ("reference packets", lambda run: I._packets(run)),
+        ("reference card", lambda run: B.reference_card({}, "s", 0, run)),
+    ], ids=lambda e: e[0] if isinstance(e, tuple) else str(e))
+    def test_the_old_v1_run_refuses_at_every_live_entry(entry):
+        _label, call = entry
+        old = _historical_identity()
+>       with pytest.raises(ValueError) as exc:
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_current_1473.py:79: Failed
+_______ test_a_mutation_after_identity_capture_refuses_before_any_answer _______
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_a_mutation_after_identity0')
+
+    def test_a_mutation_after_identity_capture_refuses_before_any_answer(tmp_path):
+        """Shape-checking a caller-owned dict proved only that a caller can build a
+        dict. The run could move, be re-finalized or have a byte change after the
+        identity was captured and every consumer would still read its answers."""
+        run = _copy(tmp_path, "mutated")
+        ident = PR.load(run)
+        assert G.run_of(ident) == os.path.abspath(run)      # the control
+        io.open(os.path.join(run, "a5_menu_backmap.json"), "a").write(" ")
+        with pytest.raises(ValueError) as exc:
+            G.run_of(ident)
+>       assert "no longer measures the supplied identity" in str(exc.value)
+E       AssertionError: assert 'no longer measures the supplied identity' in 'a7_prepared_run/1: /tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_a_mutation_after_identity0/mutated ...74780a840fc6aada4e5ea218a9629e4f179, not the required 62d7570843c40bd7f131ca34d34cc2b6e6ea30ceb6557ae6ef8badd637f938e2'
+E        +  where 'a7_prepared_run/1: /tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_a_mutation_after_identity0/mutated ...74780a840fc6aada4e5ea218a9629e4f179, not the required 62d7570843c40bd7f131ca34d34cc2b6e6ea30ceb6557ae6ef8badd637f938e2' = str(ValueError('a7_prepared_run/1: /tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_a_mutation_after_identit...4780a840fc6aada4e5ea218a9629e4f179, not the required 62d7570843c40bd7f131ca34d34cc2b6e6ea30ceb6557ae6ef8badd637f938e2'))
+E        +    where ValueError('a7_prepared_run/1: /tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_a_mutation_after_identit...4780a840fc6aada4e5ea218a9629e4f179, not the required 62d7570843c40bd7f131ca34d34cc2b6e6ea30ceb6557ae6ef8badd637f938e2') = <ExceptionInfo ValueError('a7_prepared_run/1: /tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_a_mutatio...c6aada4e5ea218a9629e4f179, not the required 62d7570843c40bd7f131ca34d34cc2b6e6ea30ceb6557ae6ef8badd637f938e2') tblen=4>.value
+
+test_a7_runstates_1470.py:314: AssertionError
+___________ test_a1_the_whole_launch_double_builds_byte_identically ____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_ordinary_recheck2/pytest/test_a1_the_whole_launch_doubl0')
+
+    def test_a1_the_whole_launch_double_builds_byte_identically(tmp_path):
+        """Build twice into a copied tree; every artifact must be the same bytes."""
+        import build_launch_manifest as _blm
+        # THE COPY KEEPS THE REAL RELATIVE LAYOUT, so the generator derives the same
+        # repo-relative paths and writes byte-identical artifacts. `keys/` and
+        # `driver/` are symlinked because the generator reads the frozen inputs and
+        # imports the live package (which pulls top-level siblings and cannot be
+        # copied whole). NOTHING is written into the artifact's own tree.
+        work = _mirror(tmp_path)
+        names = ["launch_kfields_drafts.manifest.json",
+                 "launch_kfields_a1.bundle.json",
+                 "launch_exp5_readers.manifest.json",
+                 # the generated PROMPT artifacts: the drafter prompt drifted from
+                 # its builder once already, and only the launchers caught it
+                 # because they render live (Codex SEQ 1312 item 9)
+                 "exp5_prompt_drafter.md", "exp5_prompt_producer.md",
+                 "exp5_prompt_contract.manifest.json"]
+        names += ["launchers_a1/" + n for n in sorted(os.listdir(
+            os.path.join(_HERE, "launchers_a1")))]
+        def snapshot():
+            env = dict(os.environ, PYTHONPATH=str(tmp_path) + os.pathsep + _REPO,
+                       PYTHONDONTWRITEBYTECODE="1")
+            # EVERY generated artifact from ITS OWN builder, both of them
+            for builder in ("build_exp5_contract.py", "build_launch_manifest.py"):
+                out = subprocess.run([_sys.executable, "-B", builder],
+                                     cwd=str(work), capture_output=True, text=True,
+                                     env=env)
+                assert out.returncode == 0, (builder, out.stderr[-2000:])
+            return {n: hashlib.sha256(
+                io.open(str(work / n), "rb").read()).hexdigest() for n in names}
+        first = snapshot()
+        assert first == snapshot(), "the launch does not double-build"
+        live = {n: hashlib.sha256(
+            io.open(os.path.join(_HERE, n), "rb").read()).hexdigest() for n in names}
+>       assert first == live, "the committed artifacts are not what the builder makes"
+E       AssertionError: the committed artifacts are not what the builder makes
+E       assert {'exp5_prompt...89c3070', ...} == {'exp5_prompt...89c3070', ...}
+E         
+E         Omitting 41 identical items, use -vv to show
+E         Differing items:
+E         {'exp5_prompt_producer.md': '8d3d7231ab3cc4c702eecfebec99221300e8fb2f122776fd23ce7cbb380000a9'} != {'exp5_prompt_producer.md': '060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc'}
+E         Use -v to get more diff
+
+test_harness_guards.py:7176: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_source_correction_1487.py::test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets
+FAILED test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today
+FAILED test_a7_current_1473.py::test_the_old_v1_run_refuses_at_every_live_entry[G23 freeze]
+FAILED test_a7_runstates_1470.py::test_a_mutation_after_identity_capture_refuses_before_any_answer
+FAILED test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically
+5 failed, 50 passed in 25.71s
+
+--- stderr ---

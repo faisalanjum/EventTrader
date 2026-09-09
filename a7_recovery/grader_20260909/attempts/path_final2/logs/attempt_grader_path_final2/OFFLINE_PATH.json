@@ -1,0 +1,309 @@
+{
+  "label": "SYNTHETIC_TEST_ONLY_NOT_MODEL_QUALIFICATION",
+  "model_calls": 0,
+  "producer": {
+    "schema": "a7_prepared_run/1",
+    "run_dir": "/tmp/a7_logs_1781/attempt_grader_path_final2/producer",
+    "contract_suffix": ".v3",
+    "a5_manifest_sha256": "54435061ee3024336a0f0009ed545ebeb8e5f75dad26920e57f5fed71711153b",
+    "a5_bundle_sha256": "37b002843f9e7aa5a0ef965554e760b632ce1cbcc1a9cee64fbb17432918c8bb",
+    "receipt_sha256": "275ea04e85f4fb8742a272d052f48e8f953618b5548baa1b6020f26eb4f85eb4",
+    "scheduled_calls": 204,
+    "a6_freeze_sha256": "9d5d054091fcc101ce4f4f99805786f7dc29cb68966621bbe8f07e9f95b152bc",
+    "a4_lock_sha256": "f1d8e080eeb7327f0123a4d1f811825befeaac3dc81c74f95c0b61a8db7a5ac2",
+    "a4_lock_receipt_sha256": "25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7",
+    "corrected_inventory_sha256": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+    "finalizations": {
+      "primary": "fb5a5248c5ea856b65305dcf83a1bb21a950890dce1252e8bb981fb7df008ddf"
+    },
+    "executed": {
+      "run_digest": "c044063049a7757d6db9c160e260b46effa421230802c1e6717269ce0e9b2048",
+      "run_files": 485
+    }
+  },
+  "g1": {
+    "candidate_dir": "/tmp/a7_logs_1781/attempt_grader_path_final2/g1_candidate",
+    "run_dir": "/tmp/a7_logs_1781/attempt_grader_path_final2/g1_run",
+    "pins": {
+      "root_sha256": "13848d5308ee317e76fd48f0c4f7d59cce3a4ea287b5f6ec65412d3884132e11",
+      "run_tree_sha256": "19f8e9f8825ff538f14db536957f43642f212e62a6ed288f03f4cdd7f149df09",
+      "run_file_count": 417,
+      "candidate_sha256": "d91b8102c27eb200ac5838561b68f2f74b8025cd262a4045020130a4bde63056",
+      "prompt_tree_sha256": "c40296ca4b68846b9a51a61a006d025d1e5af5e10a692ef8ffae5f5386c15f74",
+      "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+      "git_head": "5f81248e3c1070b8343aa26473865e749ba0d5a0",
+      "git_tree": "cd80e3b85238b69ab609519d7e9ea655530a4711"
+    }
+  },
+  "sources": {
+    "G2": {
+      "candidate_dir": "/tmp/a7_logs_1781/attempt_grader_path_final2/G2_candidate",
+      "run_dir": "/tmp/a7_logs_1781/attempt_grader_path_final2/G2_run",
+      "root_sha256": "cc8ce074deb97bd8d52448f5248d8b0604640382e4bfb76558cd19f207ee3cc8",
+      "completion_sha256": "3039a22baf94134569b26ff183111d00e22222847ce829ec2db91916a35e2ade",
+      "lanes": 6
+    },
+    "G3": {
+      "candidate_dir": "/tmp/a7_logs_1781/attempt_grader_path_final2/G3_candidate",
+      "run_dir": "/tmp/a7_logs_1781/attempt_grader_path_final2/G3_run",
+      "root_sha256": "a4511931e95bce7b3ef9bcb086088929f7a57f86787d608c6aae171070dae94b",
+      "completion_sha256": "559abf856b15a5c5ac05bdbb1819d53359e4a8d7e7c97de8c69a351e0b610a55",
+      "lanes": 6
+    }
+  },
+  "g23_candidate": "/tmp/a7_logs_1781/attempt_grader_path_final2/g23_candidate",
+  "g2_pairs": {
+    "P1|0000006201-26-000031": [
+      [
+        0,
+        0
+      ]
+    ],
+    "P2|0000006201-26-000031": [
+      [
+        0,
+        0
+      ]
+    ],
+    "UNION|0000006201-26-000031": [
+      [
+        0,
+        0
+      ]
+    ]
+  },
+  "g3_idxs": {
+    "P1|0000006201-26-000031": [
+      1
+    ],
+    "P2|0000006201-26-000031": [
+      1
+    ],
+    "UNION|0000006201-26-000031": [
+      1
+    ]
+  },
+  "decision": {
+    "decisions": {
+      "P1": null,
+      "P2": null
+    },
+    "scores": {
+      "P1": {
+        "route_codes": {
+          "park:ID_LAW": 1,
+          "abstained_on_gold:READER_ABSTAINED": 34,
+          "abstention:diagnostic": 67,
+          "extras:extras_verdict_missing": 1
+        },
+        "recall": 0.0286,
+        "wrong_lane": 0,
+        "name_spelling_differences": 0,
+        "error_table_by_rule": {
+          "OD-9": 0,
+          "OD-11": 0,
+          "OD-12": 0,
+          "OD-13": 0,
+          "OD-14": 0,
+          "OD-21": 0,
+          "ISS-16": 0,
+          "shapes": 0,
+          "slices": 0,
+          "other": 103
+        },
+        "value_shape_acc": 1.0,
+        "state_acc": 1.0,
+        "other_meaning_acc": 1.0,
+        "would_park": 0.9722,
+        "gold_n": 35,
+        "matched": 1,
+        "ambiguous_rows": [
+          {
+            "sid": "0000006201-26-000031",
+            "reason": "extras_verdict_missing",
+            "produced_idx": 1
+          }
+        ],
+        "ambiguities_unresolved": 0,
+        "verdicts_missing": 0,
+        "confirmed_wrong_accepted": 0,
+        "safety_result": "PASS",
+        "extras": {
+          "duplicate": 0,
+          "key_miss": 0,
+          "unsupported": 0
+        },
+        "duplicate_violations": 0,
+        "open_identity_findings": 0,
+        "reliability_failed": false,
+        "reliability_unobserved": false,
+        "reliability": {
+          "applicable": true,
+          "rate": 0.0,
+          "upper95": 0.029411764705882353,
+          "over_bar": false,
+          "bar": 0.02,
+          "total": 102,
+          "invalid": 0
+        },
+        "required_grading_unfinished": true,
+        "error_table": {
+          "park:ID_LAW": 1,
+          "abstained_on_gold:READER_ABSTAINED": 34,
+          "abstention:diagnostic": 67,
+          "extras:extras_verdict_missing": 1
+        },
+        "PASS": false
+      },
+      "P2": {
+        "route_codes": {
+          "park:ID_LAW": 1,
+          "abstained_on_gold:READER_ABSTAINED": 34,
+          "abstention:diagnostic": 67,
+          "extras:extras_verdict_missing": 1
+        },
+        "recall": 0.0286,
+        "wrong_lane": 0,
+        "name_spelling_differences": 0,
+        "error_table_by_rule": {
+          "OD-9": 0,
+          "OD-11": 0,
+          "OD-12": 0,
+          "OD-13": 0,
+          "OD-14": 0,
+          "OD-21": 0,
+          "ISS-16": 0,
+          "shapes": 0,
+          "slices": 0,
+          "other": 103
+        },
+        "value_shape_acc": 1.0,
+        "state_acc": 1.0,
+        "other_meaning_acc": 1.0,
+        "would_park": 0.9722,
+        "gold_n": 35,
+        "matched": 1,
+        "ambiguous_rows": [
+          {
+            "sid": "0000006201-26-000031",
+            "reason": "extras_verdict_missing",
+            "produced_idx": 1
+          }
+        ],
+        "ambiguities_unresolved": 0,
+        "verdicts_missing": 0,
+        "confirmed_wrong_accepted": 0,
+        "safety_result": "PASS",
+        "extras": {
+          "duplicate": 0,
+          "key_miss": 0,
+          "unsupported": 0
+        },
+        "duplicate_violations": 0,
+        "open_identity_findings": 0,
+        "reliability_failed": false,
+        "reliability_unobserved": false,
+        "reliability": {
+          "applicable": true,
+          "rate": 0.0,
+          "upper95": 0.029411764705882353,
+          "over_bar": false,
+          "bar": 0.02,
+          "total": 102,
+          "invalid": 0
+        },
+        "required_grading_unfinished": true,
+        "error_table": {
+          "park:ID_LAW": 1,
+          "abstained_on_gold:READER_ABSTAINED": 34,
+          "abstention:diagnostic": 67,
+          "extras:extras_verdict_missing": 1
+        },
+        "PASS": false
+      },
+      "UNION": {
+        "route_codes": {
+          "park:ID_LAW": 1,
+          "extras:extras_verdict_missing": 1
+        },
+        "recall": 0.0286,
+        "wrong_lane": 0,
+        "name_spelling_differences": 0,
+        "error_table_by_rule": {
+          "OD-9": 0,
+          "OD-11": 0,
+          "OD-12": 0,
+          "OD-13": 0,
+          "OD-14": 0,
+          "OD-21": 0,
+          "ISS-16": 0,
+          "shapes": 0,
+          "slices": 0,
+          "other": 2
+        },
+        "value_shape_acc": 1.0,
+        "state_acc": 1.0,
+        "other_meaning_acc": 1.0,
+        "would_park": 0.5,
+        "gold_n": 35,
+        "matched": 1,
+        "ambiguous_rows": [
+          {
+            "sid": "0000006201-26-000031",
+            "reason": "extras_verdict_missing",
+            "produced_idx": 1
+          }
+        ],
+        "ambiguities_unresolved": 0,
+        "verdicts_missing": 0,
+        "confirmed_wrong_accepted": 0,
+        "safety_result": "PASS",
+        "extras": {
+          "duplicate": 0,
+          "key_miss": 0,
+          "unsupported": 0
+        },
+        "duplicate_violations": 0,
+        "open_identity_findings": 0,
+        "reliability_failed": false,
+        "reliability_unobserved": false,
+        "reliability": {
+          "applicable": false,
+          "rate": null,
+          "upper95": null,
+          "over_bar": null,
+          "why": "no responses observed \u2014 Step 3 makes no model call"
+        },
+        "required_grading_unfinished": true,
+        "error_table": {
+          "park:ID_LAW": 1,
+          "extras:extras_verdict_missing": 1
+        },
+        "PASS": false
+      }
+    }
+  },
+  "loaded_driver_modules": {
+    "driver.core": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/__init__.py",
+    "driver.xml_names": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/xml_names.py",
+    "driver.core.driver_ids": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_ids.py",
+    "driver.core.slot_convert": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/slot_convert.py",
+    "driver.core.outcome_codes": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/outcome_codes.py",
+    "driver.core.driver_period_resolver": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_period_resolver.py",
+    "driver.core.driver_validators": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_validators.py",
+    "driver.core.prepared_fact_v2": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/prepared_fact_v2.py",
+    "driver.core.driver_writer": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_writer.py",
+    "driver.core.driver_fusion": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_fusion.py",
+    "driver.core.unit_resolver": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/unit_resolver.py",
+    "driver.core.driver_units": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_units.py",
+    "driver.relocation.exact_numbers": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/exact_numbers.py",
+    "driver.core.driver_member_fold": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_member_fold.py",
+    "driver.core.slice_axis_frozen": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/slice_axis_frozen.py",
+    "driver.core.slice_menu": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/slice_menu.py",
+    "driver.core.driver_write_cli": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/driver_write_cli.py",
+    "driver.core.fact_match": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/fact_match.py",
+    "driver.core.graph_row_contract": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/graph_row_contract.py",
+    "driver.relocation.inline_html": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/inline_html.py",
+    "driver.core.xbrl_attach": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/xbrl_attach.py"
+  }
+}

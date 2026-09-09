@@ -1,0 +1,9 @@
+attempt	grader_mut_owner
+payload	../../grader_20260909/attempts/mut_owner/mutation_probe.py
+map	map_codex_grader_mut_owner.tsv
+command	run_1957.sh map_codex_grader_mut_owner.tsv ../../grader_20260909/attempts/mut_owner/mutation_probe.py grader_mut_owner 5400
+wrapper_pid	1320862
+payload_pid	1320866
+payload_pgid	1320862
+started_utc	2026-09-09T18:30:13Z
+state	finished exit 1

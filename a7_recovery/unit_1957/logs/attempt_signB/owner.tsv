@@ -1,0 +1,9 @@
+attempt	signB
+payload	signer_lock_1957.py
+map	map_1957_test.tsv
+command	run_1957.sh map_1957_test.tsv signer_lock_1957.py signB 380
+wrapper_pid	844012
+payload_pid	844016
+payload_pgid	844012
+started_utc	2026-09-09T12:31:48Z
+state	finished exit 1

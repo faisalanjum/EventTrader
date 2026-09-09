@@ -1,0 +1,59 @@
+[
+  {
+    "path": "a7_g1_build.py",
+    "before_sha256": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+    "after_sha256": "6b55ae7f03b941d1c4b4f5ee634bd427fea88c665a61aa06ab3717721149510d",
+    "removed": {
+      "_exists": "def _exists(run_dir, sub, stem, suffix):\n    return os.path.isfile(os.path.join(run_dir, sub, stem + suffix))"
+    },
+    "changed": {}
+  },
+  {
+    "path": "a7_g23_build.py",
+    "before_sha256": "1b86ffcc30dccf533da2eb329e423bac6206994c11dac312b7a3af9fd1dc9238",
+    "after_sha256": "47af659b1e04ff9458cd2cc92d703dbeaaf2048112e8cf9ffcbcbde4dd49c82e",
+    "removed": {},
+    "changed": {
+      "extras_buckets": {
+        "before": "def extras_buckets():\n    \"\"\"The extras buckets, from the scorer, through the A6 accessor.\"\"\"\n    return list(G._a6()._extras_buckets())",
+        "after": "def extras_buckets():\n    \"\"\"The extras buckets, from the same CURRENT scorer as the verdicts.\"\"\"\n    return list(_scorer().EXTRAS_BUCKETS)"
+      }
+    }
+  },
+  {
+    "path": "a7_g23_run.py",
+    "before_sha256": "8b693f1ec8873105557845ed0c3674f48babf57d4ea0a2f1bc586c7650f69ab4",
+    "after_sha256": "33abdb564de370c3a368a85f0bddf8c4fbaef4adac6eeaae84988725ddcfaf15",
+    "removed": {},
+    "changed": {}
+  },
+  {
+    "path": "a7_g1_complete_v2.py",
+    "before_sha256": "7a284f30296e698948155923c9ff1cc040eeba8b79dd0c3d22bbfade3a93250d",
+    "after_sha256": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+    "removed": {},
+    "changed": {
+      "complete": {
+        "before": "def complete(doc, legs, per_lane, run_pin=None):\n    \"\"\"-> (result, problems). The whole new-run completion, audit included.\"\"\"\n    relations, problems = lane_relations(doc, per_lane)\n    pairs, merged_problems, incomplete, report = G.validate_merged(\n        relations, legs)\n    categories = G.terminal_categories(relations, legs)\n    counts = collections.OrderedDict(\n        (k, sum(1 for v in categories.values() if v == k)) for k in G.TERMINAL)\n    total = sum(counts.values())\n    expected = sum(len(legs[l][s][\"unmatched_gold\"])\n                   for l, s in G.expected_groups(legs))\n    if total != expected:\n        problems.append(\"terminal categories cover %d gold rows, not %d\"\n                        % (total, expected))\n    # A scorer problem is a BLOCKING failure, not a stored note. Reporting\n    # success while parking it under result made the contract lie.\n    problems.extend(\"scorer: %s\" % json.dumps(p, sort_keys=True)\n                    for p in merged_problems)\n    credited = [p for leg in pairs for sid in pairs[leg]\n                for p in pairs[leg][sid]]\n    seen = collections.Counter(p[1] for p in credited)\n    result = collections.OrderedDict([\n        (\"schema\", \"a7_g1_completion/2\"),\n        (\"inputs\", collections.OrderedDict([\n            (\"run_tree_sha256\", None if run_pin is None else run_pin[0]),\n            (\"run_file_count\", None if run_pin is None else run_pin[1])])),\n        (\"events\", len(G.expected_groups(legs))),\n        (\"gold_rows\", expected),\n        (\"terminal_counts\", counts),\n        (\"terminal_total\", total),\n        (\"accepted_pairs\", credited),\n        (\"audit\", collections.OrderedDict(\n            (\"%s|%s\" % k, v) for k, v in sorted(report.items()))),\n        (\"incomplete\", incomplete),\n        (\"scorer_problems\", merged_problems),\n        # ONLY components both lanes asserted identically may feed the\n        # existing zero duplicate-emission bar.\n        (\"duplicate_emission_groups\", [\n            dict(c, leg=k[0], source_id=k[1])\n            for k, v in report.items()\n            for c in G.confirmed_duplicate_groups(v)]),\n        # a contested component is ONE lane's claim: unresolved identity\n        # evidence, never a confirmed duplicate\n        (\"disputed_identity_groups\", [\n            dict(c, leg=k[0], source_id=k[1])\n            for k, v in report.items() for c in v[\"components\"]\n            if c[\"contested\"]]),\n    ])\n    return result, problems",
+        "after": "def complete(doc, legs, per_lane, run_pin=None):\n    \"\"\"-> (result, problems). The whole new-run completion, audit included.\"\"\"\n    relations, problems = lane_relations(doc, per_lane)\n    pairs, merged_problems, incomplete, report = G.validate_merged(\n        relations, legs)\n    categories = G.terminal_categories(relations, legs)\n    counts = collections.OrderedDict(\n        (k, sum(1 for v in categories.values() if v == k)) for k in G.TERMINAL)\n    total = sum(counts.values())\n    expected = sum(len(legs[l][s][\"unmatched_gold\"])\n                   for l, s in G.expected_groups(legs))\n    if total != expected:\n        problems.append(\"terminal categories cover %d gold rows, not %d\"\n                        % (total, expected))\n    # A scorer problem is a BLOCKING failure, not a stored note. Reporting\n    # success while parking it under result made the contract lie.\n    problems.extend(\"scorer: %s\" % json.dumps(p, sort_keys=True)\n                    for p in merged_problems)\n    credited = [p for leg in pairs for sid in pairs[leg]\n                for p in pairs[leg][sid]]\n    result = collections.OrderedDict([\n        (\"schema\", \"a7_g1_completion/2\"),\n        (\"inputs\", collections.OrderedDict([\n            (\"run_tree_sha256\", None if run_pin is None else run_pin[0]),\n            (\"run_file_count\", None if run_pin is None else run_pin[1])])),\n        (\"events\", len(G.expected_groups(legs))),\n        (\"gold_rows\", expected),\n        (\"terminal_counts\", counts),\n        (\"terminal_total\", total),\n        (\"accepted_pairs\", credited),\n        (\"audit\", collections.OrderedDict(\n            (\"%s|%s\" % k, v) for k, v in sorted(report.items()))),\n        (\"incomplete\", incomplete),\n        (\"scorer_problems\", merged_problems),\n        # ONLY components both lanes asserted identically may feed the\n        # existing zero duplicate-emission bar.\n        (\"duplicate_emission_groups\", [\n            dict(c, leg=k[0], source_id=k[1])\n            for k, v in report.items()\n            for c in G.confirmed_duplicate_groups(v)]),\n        # a contested component is ONE lane's claim: unresolved identity\n        # evidence, never a confirmed duplicate\n        (\"disputed_identity_groups\", [\n            dict(c, leg=k[0], source_id=k[1])\n            for k, v in report.items() for c in v[\"components\"]\n            if c[\"contested\"]]),\n    ])\n    return result, problems"
+      }
+    }
+  },
+  {
+    "path": "audit_worker_access.py",
+    "before_sha256": "1f6e8efaba4dd95059aeebbd00f4a714f70cf38f3acd8132c8821989bb2cbdd6",
+    "after_sha256": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+    "removed": {
+      "_lanes_in": "def _lanes_in(script):\n    \"\"\"The lane table the runtime actually persisted inside the script bytes.\"\"\"\n    key = \"\\nconst LANES = \"\n    i = script.find(key)\n    if i < 0:\n        return None\n    line = script[i + len(key):script.find(\"\\n\", i + len(key))]\n    try:\n        return json.loads(line)\n    except Exception:\n        return None",
+      "_same_model": "def _same_model(planned, got):\n    \"\"\"A transcript drops the context-window suffix a plan may carry (observed:\n    claude-opus-4-8 against claude-opus-4-8[1m]). ONLY that may differ.\"\"\"\n    return got == planned or str(planned).split(\"[\")[0] == str(got)"
+    },
+    "changed": {}
+  },
+  {
+    "path": "scorers/score_exp5_current.py",
+    "before_sha256": "7482a6c395874b8a1d039b53d4a2bd533cfcdace15564e4430afe14a92afca23",
+    "after_sha256": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+    "removed": {},
+    "changed": {}
+  }
+]

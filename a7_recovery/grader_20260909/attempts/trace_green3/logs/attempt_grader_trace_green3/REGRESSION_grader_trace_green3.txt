@@ -1,0 +1,187 @@
+F........F.............................................................. [ 41%]
+........................................................................ [ 82%]
+...............................                                          [100%]
+=================================== FAILURES ===================================
+____________ test_the_REAL_downstream_paths_consume_only_the_trace _____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+sealed = <function sealed.<locals>._seal at 0x7f29a3db3ec0>
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_green3/pytest/test_the_REAL_downstream_paths0')
+
+    def test_the_REAL_downstream_paths_consume_only_the_trace(run, sealed, tmp_path):
+        """The actual conservation, G1 and G23 entries - not a private helper.
+    
+        Each of these used to reach `materialize` again, walking the schedule and
+        reparsing every answer. After ONE materialization the reads are sealed and
+        the real paths must still finish (Codex SEQ 1472 item 4).
+        """
+        import a7_g23_run as R
+        arms, meta, problems = G.materialize(run)      # the ONE materialization
+        assert problems == []
+        sealed()
+    
+        doc, _p = C.terminals(run, str(tmp_path / "conservation"))
+        assert _p == [], _p
+        assert doc["branches"], doc.keys()
+    
+        g1, _prompts, g1_problems = G.freeze(run)      # real G1
+        assert g1_problems == [], g1_problems[:2]
+        assert g1["batch_rows"]
+    
+        import a7_g23_build as B
+        with io.open(os.path.join(FIXTURE, "G1_PINS.json"), encoding="utf-8") as fh:
+            g1_handle = json.load(fh)
+        inputs = B.load_verified_inputs(
+            os.path.join(run["run_dir"], "plan/a5_exp5_reader.manifest.json"),
+            run, os.path.abspath(os.path.join(_HERE, "../../../../..")))
+>       g23, _pr, g23_problems = R.freeze(
+            run, inputs=inputs, g1=g1_handle, audit_root=str(tmp_path / "g23"))
+
+test_a7_trace_1471.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g23_run.py:229: in freeze
+    _derived) = populations(primary,
+a7_g23_run.py:76: in populations
+    g1_state = B._lifecycle(g1) if g1 else None
+               ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_path7/g1_candidate', 'pins': {'candidate_sha256': '40665d48e440cbb...46b9a51a61a006d025d1e5af5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_path7/g1_run'}
+
+    def _lifecycle(g1):
+        """THE approved G1 lifecycle, proved once. -> (root, doc, lanes).
+    
+        `official_resolutions` and `official_safety_findings` each walked it for
+        themselves, so one tier evaluation proved the same lifecycle six times
+        (Codex SEQ 1869 item 3). The checks are unchanged and still live in exactly
+        one place; only the number of times they run changes.
+        """
+        state, problems = refuse(g1["candidate_dir"], g1["run_dir"],
+                                 g1.get("pins") or {})
+        if problems or state is None:
+>           raise ValueError("the approved G1 lifecycle does not hold: %s"
+                             % (problems or ["no state"])[:2])
+E           ValueError: the approved G1 lifecycle does not hold: ['owner a7_g23_build is c8d72ace4369e32a91bfeaae3490f27040ef9b43f0a44becbb247112a6781bb7 at its own path, not the pinned 4fce0781e770ce48ca51b6d2b0a412b3357a49ba668160604a88eb39dc738b40', 'segment 1 preflight: owner a7_g23_build changed since publication: 4fce0781e770ce48ca51b6d2b0a412b3357a49ba668160604a88eb39dc738b40 -> c8d72ace4369e32a91bfeaae3490f27040ef9b43f0a44becbb247112a6781bb7']
+
+a7_g23_build.py:654: ValueError
+_______ test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts _______
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_green3/pytest/test_real_invalid_primary_and_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f29a3d6b310>
+
+    def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, monkeypatch):
+        import build_a5_exp5_kit as A5
+        import raw_transport as RT
+        import audit_worker_access as AUD
+        import g1_fake_state as FAKE
+        import test_harness_guards as TG
+        from pathlib import Path
+    
+        projects = str(tmp_path / "TEST_projects")
+        monkeypatch.setattr(AUD, "PROJECTS_ROOT", projects)
+        native = FAKE.declared_input_record()
+        assert native
+        original = TG._a1_transcript
+    
+        def transcript(prompt, answer, model, uuid0="u0", uuid1="u1", agent_id="a01", session_id="sess"):
+            records = original(prompt, answer, model, uuid0, uuid1, agent_id, session_id)
+            records.insert(native["record_index"], {
+                "type": native["record_type"], "uuid": "input-" + uuid0,
+                "agentId": agent_id, "sessionId": session_id,
+                native["payload_field"]: copy.deepcopy(native["payload"])})
+            for before, after in zip(records, records[1:]):
+                after["parentUuid"] = before["uuid"]
+            return records
+    
+        monkeypatch.setattr(TG, "_a1_transcript", transcript)
+        producer = str(tmp_path / "producer")
+        prep = A5.prepare(producer)
+        assert prep["ok"], prep.get("problems")
+        plan = RT.a1_plan_for_run(producer)
+        replies = {p["prompt_sha256"]: json.dumps({
+            "source_id": p["source_id"], "facts": [],
+            "abstentions": [{"reason": "TEST abstention"}], "continuity_hints": []})
+            for p in plan["packets"]}
+        bad = dict(replies)
+        bad[plan["packets"][0]["prompt_sha256"]] = "{bad json"
+        first = tmp_path / "primary_transport"
+        first.mkdir()
+        TG._a1_execute(Path(_HERE), first, prep, plan, projects, bad, "trace_primary")
+        final = RT.a1_finalize(producer)
+        expected = {(plan["packets"][0]["packet_id"], lane["lane_id"])
+                    for lane in plan["packets"][0]["lanes"]}
+        assert {tuple(k) for k in final["retry"]} == expected
+        retry = RT.a1_prepare_retry(producer)
+        assert retry["ok"], retry.get("problems")
+        second = tmp_path / "retry_transport"
+        second.mkdir()
+        TG._a1_execute(Path(_HERE), second, retry, plan, projects, replies, "trace_retry")
+        final_retry = RT.a1_finalize(os.path.join(producer, RT.RETRY_DIRNAME))
+        assert not final_retry["retry"]
+>       doc, problems = C.terminals(PR.load(producer), str(tmp_path / "audit"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:349: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:101: in terminals
+    rows, arms, problems = contributions(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_conservation.py:28: in contributions
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ['the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one', 'the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one']
+
+a7_g1_build.py:337: ValueError
+=============================== warnings summary ===============================
+driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-1]
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/test_v2_event_route.py:954: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:516: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:535: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+driver/relocation/test_exact_sign.py::test_locator_emits_exact_negative_and_refuses_rounded_graph_value
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/relocation/test_route_a.py:680: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+FAILED test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts
+2 failed, 173 passed, 4 warnings in 28.56s
+
+--- stderr ---

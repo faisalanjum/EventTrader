@@ -1,0 +1,64 @@
+{
+  "directory_hash_owner": "a4_recovery/regen_1570/targeted_1589/post_1500_exact_1626/out/a4_final_lock_1683/launcher/boundary.py::source_sha",
+  "kind": "PRESERVED_EXTERNAL_INPUTS_AND_COMPLETE_GENERATED_TEST_EVIDENCE_NOT_AI_QUALIFICATION",
+  "directories": [
+    {
+      "path": "a7_recovery/unit_1957/view/tree/harness_g1v3",
+      "sha256": "28a8d99ff230fefbb858cab890e4ffbb9745cafc5388ae5b23720eff3ea8dc72",
+      "files": 88,
+      "bytes": 4223010
+    },
+    {
+      "path": "a7_recovery/grader_20260909/attempts/ordinary_final4/view/harness_g1v3",
+      "sha256": "fd942f838908d404a4c7dc683a4893886cb413a9a5987db383182a2cf0213924",
+      "files": 97,
+      "bytes": 7882010
+    },
+    {
+      "path": "a7_recovery/grader_20260909/attempts/native_final5/view/harness_g1v3",
+      "sha256": "fd942f838908d404a4c7dc683a4893886cb413a9a5987db383182a2cf0213924",
+      "files": 97,
+      "bytes": 7882010
+    },
+    {
+      "path": "a7_recovery/grader_20260909/attempts/path_final5/view/harness_g1v3",
+      "sha256": "9ac1ee84855558232cfbb05e25671c2bfde3fbe8c40fa6b61432797df461b8d5",
+      "files": 93,
+      "bytes": 4254923
+    },
+    {
+      "path": "a7_recovery/grader_20260909/attempts/path_final5/logs/attempt_grader_path_final5",
+      "sha256": "b826de330425cab01559031cedc7291ca2793ceac44b1f00fcf8e69635f012c5",
+      "files": 1286,
+      "bytes": 35588519
+    },
+    {
+      "path": "a7_recovery/grader_20260909/attempts/source_final2/logs/attempt_grader_source_final2",
+      "sha256": "92dd2dba12f5311805f170231301d30e396d8934bd29886b8583676a6b912802",
+      "files": 245,
+      "bytes": 16693585
+    },
+    {
+      "path": "a7_recovery/unit_1957/logs/life_native5/candidate_owed_002",
+      "sha256": "1e704fad4c87755174abb9bf92eec81d2e2a1ea22e093bb1f5a5c1759803eeef",
+      "files": 13,
+      "bytes": 337794
+    },
+    {
+      "path": "a7_recovery/unit_1947/logs/real_source_review",
+      "sha256": "de2b3af26eeb6b8c66dcf2e8c858ce574401690466a0f38e0d09b276e07dab2c",
+      "files": 41,
+      "bytes": 4089216
+    }
+  ],
+  "final_snapshot_code_matches": true,
+  "code_files": 98,
+  "saved_real_raw": {
+    "path": "a7_recovery/unit_1947/logs/real_source_review/replies/0000006201-26-000031.attempt1.complete.raw.json",
+    "sha256": "625140d6eb637e029b885f356f3cb68a12ffb8c7ce1e8fded272e36b2471030b"
+  },
+  "production_unchanged": {
+    "driver/core/driver_validators.py": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5",
+    "driver/relocation/inline_html.py": "c58c1af9d35950b98c9891a00a195a47d5b078e1b258509e14b07b66ffc7f9ea"
+  }
+}

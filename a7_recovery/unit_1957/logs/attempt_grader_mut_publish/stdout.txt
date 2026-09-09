@@ -1,0 +1,109 @@
+manifest: 78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2
+bundle: 91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68 slices 36 largest 248011
+events=36 packets=102 calls=204
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+____ test_second_public_write_refuses_and_preserves_every_original_byte[G1] ____
+
+kind = 'G1'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_publish/pytest/test_second_public_write_refus0')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+___ test_second_public_write_refuses_and_preserves_every_original_byte[G23] ____
+
+kind = 'G23'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_publish/pytest/test_second_public_write_refus1')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+____ test_second_public_write_refuses_and_preserves_every_original_byte[G2] ____
+
+kind = 'G2'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_publish/pytest/test_second_public_write_refus2')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+____ test_second_public_write_refuses_and_preserves_every_original_byte[G3] ____
+
+kind = 'G3'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_publish/pytest/test_second_public_write_refus3')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+_ test_second_public_write_refuses_and_preserves_every_original_byte[reference] _
+
+kind = 'reference'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_publish/pytest/test_second_public_write_refus4')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+_ test_second_public_write_refuses_and_preserves_every_original_byte[sidecar] __
+
+kind = 'sidecar'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_publish/pytest/test_second_public_write_refus5')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+=========================== short test summary info ============================
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G1]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G23]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G2]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G3]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[reference]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[sidecar]
+6 failed in 21.76s

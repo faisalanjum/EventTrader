@@ -1,0 +1,70 @@
+F.....                                                                   [100%]
+=================================== FAILURES ===================================
+____________ test_the_REAL_downstream_paths_consume_only_the_trace _____________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+sealed = <function sealed.<locals>._seal at 0x7f2828741ee0>
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_trace_green2/pytest/test_the_REAL_downstream_paths0')
+
+    def test_the_REAL_downstream_paths_consume_only_the_trace(run, sealed, tmp_path):
+        """The actual conservation, G1 and G23 entries - not a private helper.
+    
+        Each of these used to reach `materialize` again, walking the schedule and
+        reparsing every answer. After ONE materialization the reads are sealed and
+        the real paths must still finish (Codex SEQ 1472 item 4).
+        """
+        import a7_g23_run as R
+        arms, meta, problems = G.materialize(run)      # the ONE materialization
+        assert problems == []
+        sealed()
+    
+        doc, _p = C.terminals(run, str(tmp_path / "conservation"))
+        assert _p == [], _p
+        assert doc["branches"], doc.keys()
+    
+        g1, _prompts, g1_problems = G.freeze(run)      # real G1
+        assert g1_problems == [], g1_problems[:2]
+        assert g1["batch_rows"]
+    
+        import a7_g23_build as B
+        with io.open(os.path.join(FIXTURE, "G1_PINS.json"), encoding="utf-8") as fh:
+            g1_handle = json.load(fh)
+        inputs = B.load_verified_inputs(
+            os.path.join(run["run_dir"], "plan/a5_exp5_reader.manifest.json"),
+            run, os.path.abspath(os.path.join(_HERE, "../../../../..")))
+>       g23, _pr, g23_problems = R.freeze(
+            run, inputs=inputs, g1=g1_handle, audit_root=str(tmp_path / "g23"))
+
+test_a7_trace_1471.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g23_run.py:229: in freeze
+    _derived) = populations(primary,
+a7_g23_run.py:76: in populations
+    g1_state = B._lifecycle(g1) if g1 else None
+               ^^^^^^^^^^^^^^^^
+a7_g23_build.py:651: in _lifecycle
+    state, problems = refuse(g1["candidate_dir"], g1["run_dir"],
+a7_g23_build.py:155: in refuse
+    root, doc, lanes, ev_problems = C.evidence(
+a7_g1_complete_v2.py:154: in evidence
+    if G._sha_file(raw) != cap["raw_sha256"]:
+       ^^^^^^^^^^^^^^^^
+a7_g1_build.py:131: in _sha_file
+    return hashlib.sha256(io.open(path, "rb").read()).hexdigest()
+                          ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = '/tmp/a7_logs_1781/attempt_grader_path7/g1_run/raw/00000.attempt1.raw.json'
+a = ('rb',), k = {}
+
+    def no_raw(path, *a, **k):
+        if not inside and isinstance(path, str) and ".raw.json" in path:
+>           raise AssertionError("a raw answer was reopened: %s" % path)
+E           AssertionError: a raw answer was reopened: /tmp/a7_logs_1781/attempt_grader_path7/g1_run/raw/00000.attempt1.raw.json
+
+test_a7_trace_1471.py:74: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+1 failed, 5 passed in 9.87s
+
+--- stderr ---

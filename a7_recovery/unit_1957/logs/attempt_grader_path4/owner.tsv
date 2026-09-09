@@ -1,0 +1,9 @@
+attempt	grader_path4
+payload	../../grader_20260909/offline_path.py
+map	map_codex_grader_path4.tsv
+command	run_1957.sh map_codex_grader_path4.tsv ../../grader_20260909/offline_path.py grader_path4 900
+wrapper_pid	1033744
+payload_pid	1033748
+payload_pgid	1033744
+started_utc	2026-09-09T14:59:26Z
+state	finished exit 1

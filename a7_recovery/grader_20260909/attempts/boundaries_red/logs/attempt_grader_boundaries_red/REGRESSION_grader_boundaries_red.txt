@@ -1,0 +1,70 @@
+F.F........F.F                                                           [100%]
+=================================== FAILURES ===================================
+________ test_extra_review_template_shows_a_shape_not_an_example_answer ________
+
+    def test_extra_review_template_shows_a_shape_not_an_example_answer():
+        output = B.extras_rules().split("[OUTPUT]", 1)[1].split(G.BOUNDARY, 1)[0]
+        template = json.loads(re.search(r"\n(\[\s*\{.*?\}\s*\])\n", output, re.S).group(1))
+        placeholder = template[0]["bucket"]
+>       assert placeholder not in B.extras_buckets() + [None]
+E       AssertionError: assert 'duplicate' not in (['duplicate', 'key_miss', 'unsupported'] + [None])
+E        +  where ['duplicate', 'key_miss', 'unsupported'] = <function extras_buckets at 0x7ff98612a020>()
+E        +    where <function extras_buckets at 0x7ff98612a020> = B.extras_buckets
+
+test_a7_score_boundaries.py:18: AssertionError
+_______________ test_a_real_rounded_up_union_score_must_not_pass _______________
+
+score_population = <function score_population.<locals>.score at 0x7ff985528fe0>
+
+    def test_a_real_rounded_up_union_score_must_not_pass(score_population):
+        below = score_population(440, 449, "below")
+        exact = score_population(441, 450, "exact")
+        assert 440 * 100 < 449 * 98
+        assert 441 * 100 == 450 * 98
+        assert below["recall"] == exact["recall"] == 0.98
+        assert below["PASS"] is True and exact["PASS"] is True  # both meet the single's 95%
+        assert S._leg(exact, 0.98) is True
+>       assert S._leg(below, 0.98) is False
+E       AssertionError: assert True is False
+E        +  where True = <function _leg at 0x7ff985e96ca0>({'PASS': True, 'ambiguities_unresolved': 0, 'ambiguous_rows': [], 'confirmed_wrong_accepted': 0, ...}, 0.98)
+E        +    where <function _leg at 0x7ff985e96ca0> = S._leg
+
+test_a7_score_boundaries.py:93: AssertionError
+___ test_exact_count_boundaries_ignore_display_rounding[440-449-0.98-False] ____
+
+matched = 440, total = 449, bar = 0.98, want = False
+
+    @pytest.mark.parametrize("matched,total,bar,want", [
+        (18, 20, 0.95, False), (19, 20, 0.95, True), (20, 20, 0.95, True),
+        (48, 50, 0.98, False), (49, 50, 0.98, True), (50, 50, 0.98, True),
+        (0, 0, 0.95, False), (0, 0, 0.98, False),
+        (440, 449, 0.98, False), (441, 450, 0.98, True),
+    ])
+    def test_exact_count_boundaries_ignore_display_rounding(matched, total, bar, want):
+        result = {"matched": matched, "gold_n": total, "recall": round(matched / total, 4) if total else 0,
+                  "PASS": True, "wrong_lane": 0, "would_park": 0, "value_shape_acc": 1}
+>       assert S._leg(result, bar) is want
+E       AssertionError: assert True is False
+E        +  where True = <function _leg at 0x7ff985e96ca0>({'PASS': True, 'gold_n': 449, 'matched': 440, 'recall': 0.98, ...}, 0.98)
+E        +    where <function _leg at 0x7ff985e96ca0> = S._leg
+
+test_a7_score_boundaries.py:109: AssertionError
+____ test_display_value_never_replaces_counts_and_failures_precede_unknown _____
+
+    def test_display_value_never_replaces_counts_and_failures_precede_unknown():
+        base = {"matched": 98, "gold_n": 100, "recall": 0,
+                "PASS": True, "wrong_lane": 0, "would_park": 0, "value_shape_acc": 1}
+>       assert S._leg(base, 0.98) is True
+E       AssertionError: assert False is True
+E        +  where False = <function _leg at 0x7ff985e96ca0>({'PASS': True, 'gold_n': 100, 'matched': 98, 'recall': 0, ...}, 0.98)
+E        +    where <function _leg at 0x7ff985e96ca0> = S._leg
+
+test_a7_score_boundaries.py:115: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_score_boundaries.py::test_extra_review_template_shows_a_shape_not_an_example_answer
+FAILED test_a7_score_boundaries.py::test_a_real_rounded_up_union_score_must_not_pass
+FAILED test_a7_score_boundaries.py::test_exact_count_boundaries_ignore_display_rounding[440-449-0.98-False]
+FAILED test_a7_score_boundaries.py::test_display_value_never_replaces_counts_and_failures_precede_unknown
+4 failed, 10 passed in 1.07s
+
+--- stderr ---

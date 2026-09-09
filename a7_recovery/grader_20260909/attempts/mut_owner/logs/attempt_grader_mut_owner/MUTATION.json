@@ -1,0 +1,12 @@
+{
+  "kind": "INTENTIONAL_IN_PROCESS_FUNCTION_MUTATION",
+  "case": "R8",
+  "module": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_build.py",
+  "module_sha256": "47af659b1e04ff9458cd2cc92d703dbeaaf2048112e8cf9ffcbcbde4dd49c82e",
+  "function": "extras_buckets",
+  "original_function": "def extras_buckets():\n    \"\"\"The extras buckets, from the same CURRENT scorer as the verdicts.\"\"\"\n    return list(_scorer().EXTRAS_BUCKETS)",
+  "mutant_function": "def extras_buckets():\n    \"\"\"The extras buckets, from the same CURRENT scorer as the verdicts.\"\"\"\n    return list(G._a6()._extras_buckets())",
+  "tests": [
+    "test_a7_score_boundaries.py::test_current_extra_answers_do_not_consult_the_producer_scorer"
+  ]
+}

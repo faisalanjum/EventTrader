@@ -1,0 +1,9 @@
+attempt	grader_historical_probe
+payload	../../grader_20260909/attempts/historical_probe/historical_probe.py
+map	map_codex_grader_historical_probe.tsv
+command	run_1957.sh map_codex_grader_historical_probe.tsv ../../grader_20260909/attempts/historical_probe/historical_probe.py grader_historical_probe 300
+wrapper_pid	1137586
+payload_pid	1137590
+payload_pgid	1137586
+started_utc	2026-09-09T16:20:39Z
+state	finished exit 1

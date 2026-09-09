@@ -1,0 +1,9 @@
+attempt	grader_native_focus3
+payload	../../grader_20260909/attempts/native_focus3/regression.py
+map	map_codex_grader_native_focus3.tsv
+command	run_1957.sh map_codex_grader_native_focus3.tsv ../../grader_20260909/attempts/native_focus3/regression.py grader_native_focus3 900
+wrapper_pid	1206863
+payload_pid	1206867
+payload_pgid	1206863
+started_utc	2026-09-09T17:08:10Z
+state	finished exit 4

@@ -1,0 +1,77 @@
+{
+  "tag": "grader_boundaries_all1",
+  "kind": "ALIGNED_SIDE",
+  "environment": {
+    "A7_APPROVED_KEY_DIR": "/tmp/a7_logs_1781/life_native5/candidate_owed_002",
+    "A7_TRACE_FIXTURE": "/tmp/a7_logs_1781/attempt_grader_path7",
+    "A7_FIXTURE_PROJECTS": "/tmp/a7_logs_1781/life_native5/TEST_projects",
+    "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_boundaries_all1.tsv",
+    "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json",
+    "A7_DRIVER_VALIDATORS_SHA": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"
+  },
+  "artifacts_before": {
+    "launch_kfields_drafts.manifest.json": "78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2",
+    "launch_kfields_a1.bundle.json": "91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "b9ed1546a16d8e41a9af25738846f9af76bbe3a53bb668658f1d0f356dddb438",
+    "a7_g1_build.py": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "517ffbebb5014307a66218a7439066af86207dea321117b01bb62e1d4caf831f",
+    "inventory": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812"
+  },
+  "artifacts_after_build": {
+    "launch_kfields_drafts.manifest.json": "78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2",
+    "launch_kfields_a1.bundle.json": "91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "b9ed1546a16d8e41a9af25738846f9af76bbe3a53bb668658f1d0f356dddb438",
+    "a7_g1_build.py": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "517ffbebb5014307a66218a7439066af86207dea321117b01bb62e1d4caf831f",
+    "inventory": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812"
+  },
+  "plan_counts": {
+    "n_packets": 102,
+    "n_calls": 204
+  },
+  "inventory_sha256": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+  "comparable": 35,
+  "changed_owner_affected": 35,
+  "fixture_dependent": 15,
+  "affected_minus_comparable": [],
+  "fixture_minus_comparable": [],
+  "union_modules": [
+    "test_a7_score_boundaries.py"
+  ],
+  "union_size": 1,
+  "command": [
+    "/home/faisal/EventMarketDB/venv/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "--no-header",
+    "-rfE",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/tmp/a7_logs_1781/attempt_grader_boundaries_all1/pytest",
+    "test_a7_score_boundaries.py"
+  ],
+  "collection_exit": 0,
+  "child_exit": 0,
+  "failed_ids": [],
+  "failed_id_count": 0,
+  "collection_errors": [],
+  "summary": "93 passed in 1.48s",
+  "artifacts_after_run": {
+    "launch_kfields_drafts.manifest.json": "78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2",
+    "launch_kfields_a1.bundle.json": "91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "b9ed1546a16d8e41a9af25738846f9af76bbe3a53bb668658f1d0f356dddb438",
+    "a7_g1_build.py": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "517ffbebb5014307a66218a7439066af86207dea321117b01bb62e1d4caf831f",
+    "inventory": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812"
+  },
+  "artifacts_stable": true
+}

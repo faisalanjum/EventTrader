@@ -1,0 +1,9 @@
+attempt	grader_mut_inputs
+payload	../../grader_20260909/attempts/mut_inputs/mutation_probe.py
+map	map_codex_grader_mut_inputs.tsv
+command	run_1957.sh map_codex_grader_mut_inputs.tsv ../../grader_20260909/attempts/mut_inputs/mutation_probe.py grader_mut_inputs 600
+wrapper_pid	1194425
+payload_pid	1194429
+payload_pgid	1194425
+started_utc	2026-09-09T16:58:25Z
+state	finished exit 1

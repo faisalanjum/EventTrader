@@ -1,0 +1,14 @@
+{
+  "candidate_dir": "/tmp/a7_logs_1781/attempt_grader_path_final5/g1_candidate",
+  "run_dir": "/tmp/a7_logs_1781/attempt_grader_path_final5/g1_run",
+  "pins": {
+    "root_sha256": "0e2e58a22f806309a6948513db930ceef00f2daab2d74fa10c1c19195f8199fd",
+    "run_tree_sha256": "bbb896116d5457c3755a9ed48ce617a5d9cc21dcf58390d5fdf4df9ae3aecd4a",
+    "run_file_count": 417,
+    "candidate_sha256": "cca2b26f9c8c20d7328755a0f6db1bcf28a2d31e042440264b0be55e425e4ac3",
+    "prompt_tree_sha256": "c40296ca4b68846b9a51a61a006d025d1e5af5e10a692ef8ffae5f5386c15f74",
+    "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+    "git_head": "5f81248e3c1070b8343aa26473865e749ba0d5a0",
+    "git_tree": "cd80e3b85238b69ab609519d7e9ea655530a4711"
+  }
+}

@@ -1,0 +1,5 @@
+test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically
+
+1 test collected in 0.72s
+
+--- stderr ---

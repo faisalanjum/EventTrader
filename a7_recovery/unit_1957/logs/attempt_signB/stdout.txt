@@ -1,0 +1,8 @@
+STOP: ['the one input this lane declares is not at record 1']
+REFUSED: ['bound artifact missing: signer_raw', 'bound artifact missing: signer_evidence', 'bound artifact missing: signer_reply']
+candidate /tmp/a7_logs_1781/life_native5/candidate_owed_001
+1/4 -> False
+  GREEN 1_a_frozen_candidate_packet_exists
+  RED   2_the_signature_is_harvested_and_proved
+  RED   3_the_compact_lock_is_written_and_every_value_refuses_mutation
+  RED   4_the_lock_and_its_receipt_exist

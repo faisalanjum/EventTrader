@@ -1,0 +1,2 @@
+test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today
+test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically

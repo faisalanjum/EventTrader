@@ -1,0 +1,4 @@
+../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-1]
+../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[28-2]
+../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-1]
+../../../../../driver/core/test_exact_movement.py::test_guidance_movement_through_both_event_routes[6-2]

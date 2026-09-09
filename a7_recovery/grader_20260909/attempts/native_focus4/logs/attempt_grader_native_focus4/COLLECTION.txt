@@ -1,0 +1,6 @@
+test_a7_trace_1471.py::test_dropped_trace_arm_still_owes_the_full_frozen_schedule
+test_a7_current_1473.py::test_the_old_v1_run_refuses_at_every_live_entry[G23 freeze]
+
+2 tests collected in 0.24s
+
+--- stderr ---

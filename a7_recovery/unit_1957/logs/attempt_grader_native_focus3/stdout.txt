@@ -1,0 +1,7 @@
+manifest: 78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2
+bundle: 91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68 slices 36 largest 248011
+events=36 packets=102 calls=204
+  union 2 modules (comparable 35, changed-owner 35, fixture 16)
+  plan 102/204  inventory 5636373c6bfbe255
+  child exit 4  unique ids 0  collection errors 0  stable True
+  no tests ran in 0.24s

@@ -1,0 +1,9 @@
+attempt	grader_scorer_full1
+payload	../../grader_20260909/attempts/scorer_full1/regression.py
+map	map_codex_grader_scorer_full1.tsv
+command	run_1957.sh map_codex_grader_scorer_full1.tsv ../../grader_20260909/attempts/scorer_full1/regression.py grader_scorer_full1 1800
+wrapper_pid	1175545
+payload_pid	1175549
+payload_pgid	1175545
+started_utc	2026-09-09T16:49:53Z
+state	finished exit 1

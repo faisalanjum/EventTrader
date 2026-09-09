@@ -1,0 +1,7 @@
+test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+test_a7_trace_1471.py::test_every_status_and_route_outcome_is_conserved_exactly_once
+test_a7_trace_1471.py::test_raw_drift_after_identity_capture_refuses
+
+3 tests collected in 0.13s
+
+--- stderr ---

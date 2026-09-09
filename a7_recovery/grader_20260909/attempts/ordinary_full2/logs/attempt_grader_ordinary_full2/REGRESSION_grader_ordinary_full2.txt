@@ -1,0 +1,107 @@
+........................................................................ [  7%]
+........................................................................ [ 14%]
+........................................................................ [ 21%]
+........................................................................ [ 28%]
+.................................F.ss................................... [ 35%]
+........................................................................ [ 42%]
+........................................................................ [ 49%]
+........................................................................ [ 56%]
+........................................................................ [ 63%]
+........................................................................ [ 70%]
+........................................................................ [ 77%]
+...............................................................F........ [ 84%]
+........................................................................ [ 91%]
+........................................................................ [ 98%]
+...........                                                              [100%]
+=================================== FAILURES ===================================
+__ test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today ___
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_ordinary_full2/pytest/test_prepare_run_is_gated_by_t0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1a74765fd0>
+
+    @_needs_v2
+    def test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today(
+            tmp_path, monkeypatch):
+        """The seam, recorded: the phase-one gate pins an A3 dependency digest that
+        earlier accepted rounds moved, so no targeted run can be prepared through
+        it until that baseline is re-ruled. Nothing is written past the gate."""
+        pkg = str(tmp_path / "pkg")
+        T.build_targeted(pkg, V2)
+        run = str(tmp_path / "run")
+        monkeypatch.setattr(T, "PKG_DIR", pkg)
+        got = T.prepare_run(run)
+        assert not got["ok"] and got["invocations"] == []
+>       assert any("A3 dependency byte moved" in p for p in got["problems"]), \
+            got["problems"][:3]
+E       AssertionError: ["this run's binding pins no read-only approved source lock at /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0...9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/approved_source/inventory_lock.json"]
+E       assert False
+E        +  where False = any(<generator object test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today.<locals>.<genexpr> at 0x7f1a73bd3440>)
+
+test_a7_source_correction_1487.py:303: AssertionError
+___________ test_a1_the_whole_launch_double_builds_byte_identically ____________
+
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_ordinary_full2/pytest/test_a1_the_whole_launch_doubl0')
+
+    def test_a1_the_whole_launch_double_builds_byte_identically(tmp_path):
+        """Build twice into a copied tree; every artifact must be the same bytes."""
+        import build_launch_manifest as _blm
+        # THE COPY KEEPS THE REAL RELATIVE LAYOUT, so the generator derives the same
+        # repo-relative paths and writes byte-identical artifacts. `keys/` and
+        # `driver/` are symlinked because the generator reads the frozen inputs and
+        # imports the live package (which pulls top-level siblings and cannot be
+        # copied whole). NOTHING is written into the artifact's own tree.
+        work = _mirror(tmp_path)
+        names = ["launch_kfields_drafts.manifest.json",
+                 "launch_kfields_a1.bundle.json",
+                 "launch_exp5_readers.manifest.json",
+                 # the generated PROMPT artifacts: the drafter prompt drifted from
+                 # its builder once already, and only the launchers caught it
+                 # because they render live (Codex SEQ 1312 item 9)
+                 "exp5_prompt_drafter.md", "exp5_prompt_producer.md",
+                 "exp5_prompt_contract.manifest.json"]
+        names += ["launchers_a1/" + n for n in sorted(os.listdir(
+            os.path.join(_HERE, "launchers_a1")))]
+        def snapshot():
+            env = dict(os.environ, PYTHONPATH=str(tmp_path) + os.pathsep + _REPO,
+                       PYTHONDONTWRITEBYTECODE="1")
+            # EVERY generated artifact from ITS OWN builder, both of them
+            for builder in ("build_exp5_contract.py", "build_launch_manifest.py"):
+                out = subprocess.run([_sys.executable, "-B", builder],
+                                     cwd=str(work), capture_output=True, text=True,
+                                     env=env)
+                assert out.returncode == 0, (builder, out.stderr[-2000:])
+            return {n: hashlib.sha256(
+                io.open(str(work / n), "rb").read()).hexdigest() for n in names}
+        first = snapshot()
+        assert first == snapshot(), "the launch does not double-build"
+        live = {n: hashlib.sha256(
+            io.open(os.path.join(_HERE, n), "rb").read()).hexdigest() for n in names}
+        # The archived V1 producer text predates the Core wire-shape correction
+        # (explicit period fields; polarity enum). It must remain byte-stable as
+        # paid history, not be silently regenerated under today's schema. Pin the
+        # exact observed difference; every other artifact still must match.
+        differences = {n: (live[n], first[n]) for n in names if live[n] != first[n]}
+>       assert differences == {"exp5_prompt_producer.md": (
+            "8d3d7231ab3cc4c702eecfebec99221300e8fb2f122776fd23ce7cbb380000a9",
+            "060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc")}, differences
+E       AssertionError: {'exp5_prompt_producer.md': ('060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc', '8d3d7231ab3cc4c702eecfebec99221300e8fb2f122776fd23ce7cbb380000a9')}
+E       assert {'exp5_prompt...cbb380000a9')} == {'exp5_prompt...e0d8b8792cc')}
+E         
+E         Differing items:
+E         {'exp5_prompt_producer.md': ('060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc', '8d3d7231ab3cc4c702eecfebec99221300e8fb2f122776fd23ce7cbb380000a9')} != {'exp5_prompt_producer.md': ('8d3d7231ab3cc4c702eecfebec99221300e8fb2f122776fd23ce7cbb380000a9', '060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc')}
+E         Use -v to get more diff
+
+test_harness_guards.py:7181: AssertionError
+=============================== warnings summary ===============================
+test_harness_guards.py::test_home_slice_must_match_through_the_PUBLIC_ROUTE
+  /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/driver/core/test_v2_event_route.py:954: PytestUnknownMarkWarning: Unknown pytest.mark.live - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.live
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today
+FAILED test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically
+2 failed, 1015 passed, 2 skipped, 1 warning in 795.82s (0:13:15)
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

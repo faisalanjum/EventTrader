@@ -1,0 +1,26 @@
+.............F                                                           [100%]
+=================================== FAILURES ===================================
+____ test_display_value_never_replaces_counts_and_failures_precede_unknown _____
+
+    def test_display_value_never_replaces_counts_and_failures_precede_unknown():
+        base = {"matched": 98, "gold_n": 100, "recall": 0,
+                "PASS": True, "wrong_lane": 0, "would_park": 0, "value_shape_acc": 1}
+        assert S._leg(base, 0.98) is True
+        with pytest.raises(KeyError):
+            S._leg({k: v for k, v in base.items() if k != "matched"}, 0.98)
+        pending = dict(base, required_grading_unfinished=True)
+        assert S.final_gate(base, pending, originals=[base, base], union_required=True) is None
+        for reason in ("confirmed_wrong_accepted", "duplicate_violations", "reliability_failed"):
+>           assert S.final_gate(dict(base, **{reason: True}), pending,
+                                originals=[base, base], union_required=True) is False
+E           AssertionError: assert None is False
+E            +  where None = <function final_gate at 0x7fbd9feb6d40>({'PASS': True, 'confirmed_wrong_accepted': True, 'gold_n': 100, 'matched': 98, ...}, {'PASS': True, 'gold_n': 100, 'matched': 98, 'recall': 0, ...}, originals=[{'PASS': True, 'gold_n': 100, 'matched': 98, 'recall': 0, ...}, {'PASS': True, 'gold_n': 100, 'matched': 98, 'recall': 0, ...}], union_required=True)
+E            +    where <function final_gate at 0x7fbd9feb6d40> = S.final_gate
+E            +    and   {'PASS': True, 'confirmed_wrong_accepted': True, 'gold_n': 100, 'matched': 98, ...} = dict({'PASS': True, 'gold_n': 100, 'matched': 98, 'recall': 0, ...}, **{'confirmed_wrong_accepted': True})
+
+test_a7_score_boundaries.py:121: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_score_boundaries.py::test_display_value_never_replaces_counts_and_failures_precede_unknown
+1 failed, 13 passed in 1.19s
+
+--- stderr ---

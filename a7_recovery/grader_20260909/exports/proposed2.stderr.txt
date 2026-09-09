@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/verify_export.py", line 100, in <module>
+    result = child(Path(sys.argv[2]), json.loads(Path(sys.argv[3]).read_text()))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/verify_export.py", line 63, in child
+    import test_harness_guards as tests
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/exports/proposed2/a7_recovery/grader_20260909/harness_g1v3/test_harness_guards.py", line 39, in <module>
+    [os.path.join(INPUTS, f) for f in sorted(os.listdir(INPUTS))]
+                                             ^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/exports/proposed2/a7_recovery/grader_20260909/harness_g1v3/../keys/K-fields/draft_inputs'

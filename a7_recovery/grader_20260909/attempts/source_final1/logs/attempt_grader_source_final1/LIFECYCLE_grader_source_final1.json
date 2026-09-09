@@ -1,0 +1,99 @@
+{
+  "tag": "grader_source_final1",
+  "kind": "SOURCE_LIFECYCLE_TEST",
+  "label": "TEST answers and TEST official records only, in a private store; no model call and no real approval",
+  "materialize_problems": [],
+  "report": {
+    "format_invalid": [],
+    "blocked_events": [],
+    "rows_final": 101,
+    "record_kinds": {
+      "real_item": 34,
+      "lawful_abstention_control": 34,
+      "negative_control": 33
+    },
+    "hard_classes": {
+      "point_range_floor_ceiling": 19,
+      "losses_and_sign": 20,
+      "sequential_comparison": 37,
+      "measurement_wording": 18,
+      "favourable_unfavourable_direction": 18,
+      "expectation_routing": 18,
+      "slices_and_unknown_axes": 18,
+      "portion_versus_whole": 18,
+      "ambiguous_menus": 18,
+      "corrections_and_amendments": 18
+    },
+    "sequential_comparison": 37,
+    "exclusions_accounted": 196,
+    "open_issues": 0
+  },
+  "artifacts": {
+    "final_inventory.json": "1162db89d9e7b28a9ab279b50c5fdf7d099428a66062ae2883ca3b67c526c987",
+    "adjudication_sidecar.json": "e4ababca5b6daa7833a56389d7b94b4c968fd4fd5b68761180894f40c4e5b535",
+    "validator_receipt.json": "275f257db944e64b14773ff48d54d5fa50195a1f8f130fc83ab3608ca5d7c24a",
+    "final_sign_input.json": "09993407c9c6a4f709e938fdd29d666f29bba8ed2cf4fde8b3aa572e6bed02a5"
+  },
+  "records": {
+    "events_covered": 36,
+    "proposed_lawful_abstention_controls": 34,
+    "proposed_negative_controls": 33,
+    "proposed_real_items": 34,
+    "records": 101,
+    "source_events": 36
+  },
+  "finalize": {
+    "ok": true,
+    "problems": [],
+    "written": [
+      "final_inventory.json",
+      "adjudication_sidecar.json",
+      "validator_receipt.json",
+      "final_sign_input.json"
+    ]
+  },
+  "lock": {
+    "ok": true,
+    "problems": []
+  },
+  "refusals": {
+    "repeat_event": [
+      "event 0 (0000006201-26-000031) was retried although attempt 1 was not an invalid-format reply: a schema-valid reply is a semantic result"
+    ],
+    "repeat_sign": [
+      "final_sign 36 was retried although attempt 1 was not an invalid-format reply: a schema-valid reply is a semantic result"
+    ],
+    "wrong_prompt": [
+      "event 0 (0000006201-26-000031) attempt 1: the official script is not the exact rendered launcher for this prompt",
+      "event 0 (0000006201-26-000031) attempt 1: the prompt actually received is not the manifest's pinned bytes"
+    ],
+    "wrong_raw": [
+      "event 0 (0000006201-26-000031) attempt 1: the saved raw output is not the proved complete assistant answer",
+      "event 1 (0000006201-26-000032) attempt 1: raw identity '0000006201-26-000032.TEST.raw.json' is used by another attempt"
+    ],
+    "wrong_transcript": [
+      "event 0 (0000006201-26-000031) attempt 1: the official agent is 'TEST1894agent001', not the named 'TEST1894agent002'",
+      "event 0 (0000006201-26-000031) attempt 1: the run carries surplus agent transcripts ['agent-TEST1894agent001.jsonl']"
+    ],
+    "missing_result": [
+      "event 0 (0000006201-26-000031) has no attempt",
+      "the run accepted 35 tasks, not the scheduled 36"
+    ],
+    "artifact_drift": [
+      "final_inventory.json on disk is not what the saved replies derive"
+    ]
+  },
+  "checks": {
+    "1_materialize_is_intact": true,
+    "2_finalize_writes_every_artifact": true,
+    "3_lock_accepts_the_proved_run": true,
+    "4_a_repeated_successful_event_is_refused": true,
+    "5_a_repeated_successful_sign_is_refused": true,
+    "6_a_wrong_prompt_is_refused": true,
+    "7_a_wrong_raw_identity_is_refused": true,
+    "8_a_wrong_transcript_identity_is_refused": true,
+    "9_a_missing_required_result_is_refused": true,
+    "10_bound_artifact_drift_is_refused": true
+  },
+  "all_green": true
+}

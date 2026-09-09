@@ -1,0 +1,12 @@
+{
+  "kind": "INTENTIONAL_IN_PROCESS_FUNCTION_MUTATION",
+  "case": "R4",
+  "module": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py",
+  "module_sha256": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+  "function": "_write_new",
+  "original_function": "def _write_new(path, text):\n    \"\"\"Atomic, and it REFUSES to replace. A published file is evidence.\n\n    THE primitive now lives in `raw_transport`, the lowest owner the A5 kit\n    and these builders share; this is the same function, not a second one.\n    \"\"\"\n    import raw_transport as RT\n    RT.write_new(path, text)",
+  "mutant_function": "def _write_new(path, text):\n    \"\"\"Atomic, and it REFUSES to replace. A published file is evidence.\n\n    THE primitive now lives in `raw_transport`, the lowest owner the A5 kit\n    and these builders share; this is the same function, not a second one.\n    \"\"\"\n    import raw_transport as RT\n    io.open(path, \"w\", encoding=\"utf-8\").write(text)",
+  "tests": [
+    "test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte"
+  ]
+}

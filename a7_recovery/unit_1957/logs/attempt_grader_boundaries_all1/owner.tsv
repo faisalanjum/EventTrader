@@ -1,0 +1,9 @@
+attempt	grader_boundaries_all1
+payload	../../grader_20260909/attempts/boundaries_all1/regression.py
+map	map_codex_grader_boundaries_all1.tsv
+command	run_1957.sh map_codex_grader_boundaries_all1.tsv ../../grader_20260909/attempts/boundaries_all1/regression.py grader_boundaries_all1 1800
+wrapper_pid	1178343
+payload_pid	1178347
+payload_pgid	1178343
+started_utc	2026-09-09T16:51:09Z
+state	finished exit 0

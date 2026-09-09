@@ -1,0 +1,1628 @@
+FFF.F.............FFFF........F.FFFF.F.F........FEEEEEEEEFFF             [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_current_accounting_and_approved_g23_rebuild_identically _
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+>       path, problems = G.write(str(candidate), run)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_ ERROR at setup of test_candidate_and_prompt_tree_and_root_rebuild_byte_identically _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    @pytest.fixture(scope="module")
+    def built(tmp_path_factory, run):
+        os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "128000"
+        ident = PR.current(run["run_dir"], run["a6_freeze_sha256"])
+        assert ident == run
+        base = tmp_path_factory.mktemp("g1pkg")
+>       cd, csha, doc = _candidate(base, ident, "cand")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_g1_precall_freeze_1525.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_g1_precall_freeze_1525.py:39: in _candidate
+    path, problems = G.write(cd, ident)
+                     ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_ ERROR at setup of test_every_batch_binds_the_current_producer_and_one_same_event _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    @pytest.fixture(scope="module")
+    def built(tmp_path_factory, run):
+        os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "128000"
+        ident = PR.current(run["run_dir"], run["a6_freeze_sha256"])
+        assert ident == run
+        base = tmp_path_factory.mktemp("g1pkg")
+>       cd, csha, doc = _candidate(base, ident, "cand")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_g1_precall_freeze_1525.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_g1_precall_freeze_1525.py:39: in _candidate
+    path, problems = G.write(cd, ident)
+                     ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+____________ ERROR at setup of test_every_lane_occurs_exactly_once _____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    @pytest.fixture(scope="module")
+    def built(tmp_path_factory, run):
+        os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "128000"
+        ident = PR.current(run["run_dir"], run["a6_freeze_sha256"])
+        assert ident == run
+        base = tmp_path_factory.mktemp("g1pkg")
+>       cd, csha, doc = _candidate(base, ident, "cand")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_g1_precall_freeze_1525.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_g1_precall_freeze_1525.py:39: in _candidate
+    path, problems = G.write(cd, ident)
+                     ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_____ ERROR at setup of test_two_blind_lanes_are_blind_and_carry_no_answer _____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    @pytest.fixture(scope="module")
+    def built(tmp_path_factory, run):
+        os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "128000"
+        ident = PR.current(run["run_dir"], run["a6_freeze_sha256"])
+        assert ident == run
+        base = tmp_path_factory.mktemp("g1pkg")
+>       cd, csha, doc = _candidate(base, ident, "cand")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_g1_precall_freeze_1525.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_g1_precall_freeze_1525.py:39: in _candidate
+    path, problems = G.write(cd, ident)
+                     ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_ ERROR at setup of test_workflow_groups_are_maximal_under_the_exact_byte_boundary _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    @pytest.fixture(scope="module")
+    def built(tmp_path_factory, run):
+        os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "128000"
+        ident = PR.current(run["run_dir"], run["a6_freeze_sha256"])
+        assert ident == run
+        base = tmp_path_factory.mktemp("g1pkg")
+>       cd, csha, doc = _candidate(base, ident, "cand")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_g1_precall_freeze_1525.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_g1_precall_freeze_1525.py:39: in _candidate
+    path, problems = G.write(cd, ident)
+                     ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+____________ ERROR at setup of test_the_run_is_empty_and_resumable _____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    @pytest.fixture(scope="module")
+    def built(tmp_path_factory, run):
+        os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "128000"
+        ident = PR.current(run["run_dir"], run["a6_freeze_sha256"])
+        assert ident == run
+        base = tmp_path_factory.mktemp("g1pkg")
+>       cd, csha, doc = _candidate(base, ident, "cand")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_g1_precall_freeze_1525.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_g1_precall_freeze_1525.py:39: in _candidate
+    path, problems = G.write(cd, ident)
+                     ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_ ERROR at setup of test_preflight_zero_problems_and_attempt1_budget_under_ceiling _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _trace=<pluggy._tr...setemp=PosixPath('/tmp/a7_logs_1781/attempt_grader_current_port1/pytest'), _retention_count=3, _retention_policy='all')
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    @pytest.fixture(scope="module")
+    def built(tmp_path_factory, run):
+        os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "128000"
+        ident = PR.current(run["run_dir"], run["a6_freeze_sha256"])
+        assert ident == run
+        base = tmp_path_factory.mktemp("g1pkg")
+>       cd, csha, doc = _candidate(base, ident, "cand")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_g1_precall_freeze_1525.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_g1_precall_freeze_1525.py:39: in _candidate
+    path, problems = G.write(cd, ident)
+                     ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:2438: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2336: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:722: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:625: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+=================================== FAILURES ===================================
+____ test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect ____
+
+    def test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect():
+        """Preserve the old key's exact evidence; it is not today's approved key.
+    
+        The retired assertion rederived 50 historical naming defects through a
+        different era's full A3/A4 workflow. Current correctness is tested by the
+        complete approved key below; these hashes prove its history was not edited.
+        """
+        import a7_key_correction as K
+        assert G._sha_file(K.LEDGER_PATH) == "e110c1eb642728c706530c87451a5e508b71b72d0ea68658107ed5a15255b2f6"
+        assert G._sha_file("/tmp/a7_key_v9_gold.json") == "71de3716ecfb12f478d2fdb50fded5cc3b41314616ee23ecbc301b5896458192"
+>       key, identity = K.current_key()
+                        ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_ test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix _
+
+    def test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix():
+        """NAME-17 + OD-2. A guidance/surprise fact on a BARE name is a NAMING
+        defect, so the CORRECTED key must not contain one."""
+        bad = []
+>       for sid, fact in _du_facts():
+                         ^^^^^^^^^^^
+
+test_a7_corrections_1454.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:85: in _du_facts
+    gold, _identity = K.current_key()
+                      ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+________ test_defect1_no_event_reuses_one_driver_name_across_fact_types ________
+
+    def test_defect1_no_event_reuses_one_driver_name_across_fact_types():
+        """exp5_scoring_spec_v3.md:87 - one name cannot be two types."""
+        seen, clashes = {}, []
+>       for sid, f in _du_facts():
+                      ^^^^^^^^^^^
+
+test_a7_corrections_1454.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:85: in _du_facts
+    gold, _identity = K.current_key()
+                      ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_____ test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event ______
+
+    def test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event():
+        """ChannelContract fixes `event_time` as the SOURCE PUBLIC timestamp. The
+        K-fields `date + T00:00:00` anchor is only the menu cutoff and must never
+        become a route input."""
+        import a7_source_meta as SM
+        side = SM.load()
+>       gold, _sc = G.gold_by_event()
+                    ^^^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+___________ test_the_ledger_covers_the_acted_population_exactly_once ___________
+
+    def test_the_ledger_covers_the_acted_population_exactly_once():
+        """The CURRENT ledger names every row it acts on exactly once, and its
+        published counts are the ones SEQ 1458 item 1 required: the actionable
+        naming population, the wider family audit it was derived from, and the
+        controls that are checked unchanged rather than acted on."""
+        import a7_key_correction as K
+        ledger = K.load()
+        keys = [(r["source_id"], r["gold_idx"]) for r in ledger["rows"]]
+        assert len(keys) == len(set(keys)) == ledger["acted_rows"]
+        assert ledger["actionable_population"] == 52
+        assert ledger["family_audit_population"] == 68
+        assert ledger["unchanged_controls"] == 16
+        assert (ledger["actionable_population"] + ledger["unchanged_controls"]
+                == ledger["family_audit_population"])
+        # This is historical ledger accounting, not permission to replay its
+        # corrections against the new signed key.
+>       current, identity = K.current_key()
+                            ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:510: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_________ test_g2_prompt_carries_the_live_rule_and_every_meaning_field _________
+
+    def test_g2_prompt_carries_the_live_rule_and_every_meaning_field():
+>       B, packet = _g2_packet()
+                    ^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:544: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:535: in _g2_packet
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:524: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_____________ test_g2_door_requires_exactly_the_complete_field_set _____________
+
+    def test_g2_door_requires_exactly_the_complete_field_set():
+>       B, packet = _g2_packet()
+                    ^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:561: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:535: in _g2_packet
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:524: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+______________ test_g2_door_accepts_the_four_lawful_answer_shapes ______________
+
+    def test_g2_door_accepts_the_four_lawful_answer_shapes():
+        """correct name, lawful alternative, wrong name, and uncertain."""
+>       B, packet = _g2_packet()
+                    ^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:585: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:535: in _g2_packet
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:524: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+______________ test_the_reference_card_is_a_structural_whitelist _______________
+
+    def test_the_reference_card_is_a_structural_whitelist():
+        """SEQ 1460 item 4: a string scan cannot prove zero hidden answers - it
+        ignores numbers, booleans, short strings, lists and dicts. The card is an
+        exact key whitelist and the proof is structural."""
+        import a7_g23_build as B
+        import a7_key_correction as K
+>       key, _identity = K.current_key()
+                         ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:778: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_________ test_quote_only_could_not_identify_a_claim_but_the_card_can __________
+
+    def test_quote_only_could_not_identify_a_claim_but_the_card_can():
+        """The defect the earlier quote-only rule froze, measured on the live key."""
+        import a7_g23_build as B
+        import a7_key_correction as K
+>       key, _identity = K.current_key()
+                         ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:826: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+___________ test_g3_prompt_defines_every_bucket_and_shows_valid_json ___________
+
+    def test_g3_prompt_defines_every_bucket_and_shows_valid_json():
+        import re
+>       B, packet = _g3()
+                    ^^^^^
+
+test_a7_corrections_1454.py:858: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:848: in _g3
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:524: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+___________________ test_g3_door_is_strict_and_never_crashes ___________________
+
+    def test_g3_door_is_strict_and_never_crashes():
+>       B, packet = _g3()
+                    ^^^^^
+
+test_a7_corrections_1454.py:868: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:848: in _g3
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:524: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_______________ test_g3_two_answers_must_agree_on_a_named_bucket _______________
+
+    def test_g3_two_answers_must_agree_on_a_named_bucket():
+>       B, _packet = _g3()
+                     ^^^^^
+
+test_a7_corrections_1454.py:887: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_a7_corrections_1454.py:848: in _g3
+    sid, facts, idxs = _real_rows(1)
+                       ^^^^^^^^^^^^^
+test_a7_corrections_1454.py:524: in _real_rows
+    key, _identity = K.current_key()
+                     ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+___________ test_the_contract_version_reaches_every_assembled_packet ___________
+
+    def test_the_contract_version_reaches_every_assembled_packet():
+        """EXACT BYTES, not meaning fragments.
+    
+        The previous version compared diff lines against a list of approved English
+        phrases. A phrase list can accept unrelated text that happens to contain
+        one of them, and it is exactly the semantic hardcoding the rules forbid.
+        Every assembled packet must instead BE the externally reviewed contract
+        with only its own event substituted.
+        """
+        import build_exp5_contract as bec
+        import build_launch_manifest as blm
+    
+        # the externally reviewed bytes, by hash
+        for role, want in (("drafter", REVIEWED_V3["drafter"]),
+                           ("producer", REVIEWED_V3["producer"])):
+            text = bec.build_prompt(role, contract_suffix=".v3")
+            assert hashlib.sha256(text.encode()).hexdigest() == want, role
+            on_disk = io.open(bec.prompt_path(role, ".v3"), encoding="utf-8").read()
+            assert text == on_disk, role
+    
+        events = blm._events()
+        _pk, served = blm._one_item_packets([dict(e) for e in events],
+                                            contract_suffix=".v3")
+>       assert len(served) == 196
+E       assert 102 == 196
+E        +  where 102 = len({'0000006201-26-000031#000': '[ROLE]\nYou are reading ONE already-located item from the event below. The item\'s\n`raw... revenue growth between 13.5% and 16.5% in the second quarter",\n  "raw_label_or_claim": "second quarter"\n }\n}', ...})
+
+test_a7_corrections_1454.py:948: AssertionError
+________ test_an_unresolved_reference_stops_the_launch_before_any_call _________
+
+    def test_an_unresolved_reference_stops_the_launch_before_any_call():
+        """SEQ 1461 item 3. Two reviewed claims whose PERMITTED card is identical
+        cannot be asked about lawfully, so the candidate must refuse to launch
+        rather than spend calls it can never resolve."""
+        import a7_g23_build as B
+        import a7_key_correction as K
+>       key, _identity = K.current_key()
+                         ^^^^^^^^^^^^^^^
+
+test_a7_corrections_1454.py:989: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+____ test_completed_current_run_materializes_and_freezes_without_retry_file ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+
+    def test_completed_current_run_materializes_and_freezes_without_retry_file(run):
+>       first = G.materialize(run)
+                ^^^^^^^^^^^^^^^^^^
+
+test_a7_current_postrun.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+___________ test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses ___________
+
+current = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a7_logs_1781/attempt_grader_current_port1/pytest/cur0/...6373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812'), ('finalizations', OrderedDict()), ('executed', None)])
+
+    def test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses(current):
+>       G.materialize(current)                            # warm it
+        ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_current_1473.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+______________ test_mutation_after_a_WARM_INVENTORY_cache_refuses ______________
+
+current = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a7_logs_1781/attempt_grader_current_port1/pytest/cur0/...6373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812'), ('finalizations', OrderedDict()), ('executed', None)])
+
+    def test_mutation_after_a_WARM_INVENTORY_cache_refuses(current):
+        """The cache was keyed from the caller's dict BEFORE the run was
+        re-measured, so a warm entry answered without noticing drift."""
+>       B._inventory(current)                             # warm it
+        ^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_current_1473.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g23_build.py:1491: in _inventory
+    _INVENTORY["rows"] = R.validate(run=run)
+                         ^^^^^^^^^^^^^^^^^^^
+a7_reference_inventory.py:387: in validate
+    want = expected_document(run)
+           ^^^^^^^^^^^^^^^^^^^^^^
+a7_reference_inventory.py:340: in expected_document
+    key, identity = K.current_key()
+                    ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+_______ test_a_current_zero_call_run_reports_ONE_named_not_called_state ________
+
+current = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a7_logs_1781/attempt_grader_current_port1/pytest/cur0/...6373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812'), ('finalizations', OrderedDict()), ('executed', None)])
+
+    def test_a_current_zero_call_run_reports_ONE_named_not_called_state(current):
+>       arms, meta, problems = G.materialize(current)
+                               ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_current_1473.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+a7_g1_build.py:335: in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:81: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:2139: in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:152: in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+build_kfields_final.py:180: in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:446: in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+build_kfields_hard_review.py:102: in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+build_kfields_hard_review.py:74: in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: 0000006201-26-000031: launcher bytes differ from the bundle', 'primary audit: 0000006201-26-000032: launcher bytes differ from the bundle', 'primary audit: 0000027904-26-000013: launcher bytes differ from the bundle']
+
+build_kfields_key.py:652: RuntimeError
+=========================== short test summary info ============================
+FAILED test_a7_corrections_1454.py::test_defect1_the_historical_key_is_preserved_with_its_bare_name_defect
+FAILED test_a7_corrections_1454.py::test_defect1_every_guidance_or_surprise_gold_row_carries_its_terminal_suffix
+FAILED test_a7_corrections_1454.py::test_defect1_no_event_reuses_one_driver_name_across_fact_types
+FAILED test_a7_corrections_1454.py::test_defect2_a_frozen_source_instant_sidecar_exists_for_every_event
+FAILED test_a7_corrections_1454.py::test_the_ledger_covers_the_acted_population_exactly_once
+FAILED test_a7_corrections_1454.py::test_g2_prompt_carries_the_live_rule_and_every_meaning_field
+FAILED test_a7_corrections_1454.py::test_g2_door_requires_exactly_the_complete_field_set
+FAILED test_a7_corrections_1454.py::test_g2_door_accepts_the_four_lawful_answer_shapes
+FAILED test_a7_corrections_1454.py::test_the_reference_card_is_a_structural_whitelist
+FAILED test_a7_corrections_1454.py::test_quote_only_could_not_identify_a_claim_but_the_card_can
+FAILED test_a7_corrections_1454.py::test_g3_prompt_defines_every_bucket_and_shows_valid_json
+FAILED test_a7_corrections_1454.py::test_g3_door_is_strict_and_never_crashes
+FAILED test_a7_corrections_1454.py::test_g3_two_answers_must_agree_on_a_named_bucket
+FAILED test_a7_corrections_1454.py::test_the_contract_version_reaches_every_assembled_packet
+FAILED test_a7_corrections_1454.py::test_an_unresolved_reference_stops_the_launch_before_any_call
+FAILED test_a7_current_postrun.py::test_completed_current_run_materializes_and_freezes_without_retry_file
+FAILED test_a7_current_1473.py::test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses
+FAILED test_a7_current_1473.py::test_mutation_after_a_WARM_INVENTORY_cache_refuses
+FAILED test_a7_current_1473.py::test_a_current_zero_call_run_reports_ONE_named_not_called_state
+ERROR test_a7_current_postrun.py::test_current_accounting_and_approved_g23_rebuild_identically
+ERROR test_a7_g1_precall_freeze_1525.py::test_candidate_and_prompt_tree_and_root_rebuild_byte_identically
+ERROR test_a7_g1_precall_freeze_1525.py::test_every_batch_binds_the_current_producer_and_one_same_event
+ERROR test_a7_g1_precall_freeze_1525.py::test_every_lane_occurs_exactly_once
+ERROR test_a7_g1_precall_freeze_1525.py::test_two_blind_lanes_are_blind_and_carry_no_answer
+ERROR test_a7_g1_precall_freeze_1525.py::test_workflow_groups_are_maximal_under_the_exact_byte_boundary
+ERROR test_a7_g1_precall_freeze_1525.py::test_the_run_is_empty_and_resumable
+ERROR test_a7_g1_precall_freeze_1525.py::test_preflight_zero_problems_and_attempt1_budget_under_ceiling
+19 failed, 33 passed, 8 errors in 23.54s
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

@@ -1,0 +1,43 @@
+{
+  "tag": "signC",
+  "kind": "COMPACT_KEY_LOCK",
+  "path": "owed",
+  "runtime_input": "native",
+  "candidates": [
+    "candidate_owed_000",
+    "candidate_owed_001",
+    "candidate_owed_002"
+  ],
+  "candidate_dir": "/tmp/a7_logs_1781/life_native5/candidate_owed_002",
+  "packet": {
+    "prompt_sha256": "17230cad5a248010d11c792d848c779dcb240cee733a31ab20240c4a2df6ace8",
+    "script_sha256": "7ca84825b2814882ef657768819c66ccb43dbcdccc4303d7f158e0fc8175bb0b",
+    "shards": 36
+  },
+  "resumed": false,
+  "finished_an_interrupted_call": false,
+  "signer_state": "/tmp/a7_logs_1781/life_native5/TEST_projects/TESTproj1909/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_TESTsign_owed_002.json",
+  "test_calls_made": [
+    "wf_TESTsign_owed_002"
+  ],
+  "harvest_exit": 0,
+  "signer_files": [
+    "final_sign.attempt1.evidence.json",
+    "final_sign.attempt1.js",
+    "final_sign.attempt1.raw.json",
+    "final_sign.attempt1.reply.json",
+    "final_sign.attempt2.js",
+    "signer.manifest.json",
+    "signer_prompt.txt"
+  ],
+  "lock_exit": 0,
+  "a4_final_key_lock.json": "f1d8e080eeb7327f0123a4d1f811825befeaac3dc81c74f95c0b61a8db7a5ac2",
+  "a4_final_key_lock_receipt.json": "25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7",
+  "checks": {
+    "1_a_frozen_candidate_packet_exists": true,
+    "2_the_signature_is_harvested_and_proved": true,
+    "3_the_compact_lock_is_written_and_every_value_refuses_mutation": true,
+    "4_the_lock_and_its_receipt_exist": true
+  },
+  "all_green": true
+}

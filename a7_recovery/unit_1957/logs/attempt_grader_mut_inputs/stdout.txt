@@ -1,0 +1,75 @@
+manifest: 78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2
+bundle: 91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68 slices 36 largest 248011
+events=36 packets=102 calls=204
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+____ test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2[False] ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_mut_inputs/pytest/current_g10/candidate', 'pins': {'candidate_sha2...5af5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_mut_inputs/pytest/current_g10/run'}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_inputs/pytest/test_mutable_path_and_hash_can0')
+warm = False
+
+    @pytest.mark.parametrize("warm", [False, True])
+    def test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2(run, inputs, g1, tmp_path, warm):
+        if not warm:
+            G._MATERIALIZED.clear()  # exercise the actual cold validation path too
+        control, prompts = _freeze(run, inputs, g1, tmp_path / "control")
+        key = next(k for k, pairs in control["g2_pairs"].items() if pairs)
+        sid = key.split("|", 1)[1]
+        row = inputs["rows"][sid]
+        with open(os.path.join(inputs["root"], row["input_path"]), encoding="utf-8") as stream:
+            raw = json.load(stream)
+        alternate = copy.deepcopy(raw)
+        alternate["fye_month"] = 11 if raw["fye_month"] != 11 else 12
+        assert alternate["source_id"] == sid == raw["source_id"]
+        assert B.event_context(alternate) != B.event_context(raw)
+        path = tmp_path / "alternate_same_source.json"
+        path.write_text(json.dumps(alternate), encoding="utf-8")
+        forged = copy.deepcopy(inputs)
+        forged["rows"][sid] = {"input_path": str(path),
+                                "input_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+        # The entire alternate file and its hash agree, but that is not the file
+        # the ORIGINAL producer manifest authorized. The public entry must refuse.
+>       with pytest.raises(ValueError, match="manifest|input.*(changed|differ|bind)"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_input_binding.py:50: Failed
+____ test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2[True] _____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+inputs = OrderedDict([('root', '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/ben...inputs/bzNews_51962983.json', 'input_sha256': '3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca'})]))])
+g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_mut_inputs/pytest/current_g10/candidate', 'pins': {'candidate_sha2...5af5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_mut_inputs/pytest/current_g10/run'}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_inputs/pytest/test_mutable_path_and_hash_can1')
+warm = True
+
+    @pytest.mark.parametrize("warm", [False, True])
+    def test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2(run, inputs, g1, tmp_path, warm):
+        if not warm:
+            G._MATERIALIZED.clear()  # exercise the actual cold validation path too
+        control, prompts = _freeze(run, inputs, g1, tmp_path / "control")
+        key = next(k for k, pairs in control["g2_pairs"].items() if pairs)
+        sid = key.split("|", 1)[1]
+        row = inputs["rows"][sid]
+        with open(os.path.join(inputs["root"], row["input_path"]), encoding="utf-8") as stream:
+            raw = json.load(stream)
+        alternate = copy.deepcopy(raw)
+        alternate["fye_month"] = 11 if raw["fye_month"] != 11 else 12
+        assert alternate["source_id"] == sid == raw["source_id"]
+        assert B.event_context(alternate) != B.event_context(raw)
+        path = tmp_path / "alternate_same_source.json"
+        path.write_text(json.dumps(alternate), encoding="utf-8")
+        forged = copy.deepcopy(inputs)
+        forged["rows"][sid] = {"input_path": str(path),
+                                "input_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+        # The entire alternate file and its hash agree, but that is not the file
+        # the ORIGINAL producer manifest authorized. The public entry must refuse.
+>       with pytest.raises(ValueError, match="manifest|input.*(changed|differ|bind)"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_input_binding.py:50: Failed
+=========================== short test summary info ============================
+FAILED test_a7_input_binding.py::test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2[False]
+FAILED test_a7_input_binding.py::test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2[True]
+2 failed in 20.34s

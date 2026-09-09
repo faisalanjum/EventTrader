@@ -1,0 +1,47 @@
+  raw final_sign.attempt1.raw.json sha e4e312bbb12bf9c0b60d3bcf339fa69b629cf93db7264dac5f16f8689b32a1f1 (174 chars)
+  run wf_TESTsign_owed_000 | agent TESTsign_owed_000 | model sonnet | effort high | lean-probe | tools 0 | runtime ['claude-sonnet-5']
+  OUTCOME: signed=True blocked=[]
+  why: TEST only: every scheduled row settled through its owners and the candidate re-derives; this signs the plumbing, never source truth.
+a4_final_key_lock.json 9c17ee0937693694b6dc2f2aaf6d25cf008956541d5ba3e104f9d13b11762380
+  signed=True blocked=[]  ledger 346 -> 347 of 6000
+  artifact:key_identity              refused
+  artifact:sidecar                   refused
+  artifact:validator_receipt         refused
+  artifact:provenance                refused
+  artifact:signer_prompt             refused
+  artifact:signer_launcher           refused
+  artifact:signer_manifest           refused
+  artifact:signer_raw                refused
+  artifact:signer_evidence           refused
+  artifact:signer_reply              refused
+  artifact:attempt1_record           refused
+  artifact:attempt1_launcher         refused
+  artifact:attempt1_raw              refused
+  artifact:attempt1_state            refused
+  artifact:attempt1_transcript       refused
+  signer:run_id                      refused
+  signer:agent_id                    refused
+  signer:raw_sha256                  refused
+  signer:transcript_sha256           refused
+  signer:state_sha256                refused
+  signer:parent_session_id           refused
+  signer:model                       refused
+  signer:effort                      refused
+  signer:agent_type                  refused
+  signer:prompt_sha256               refused
+  signer:script_sha256               refused
+  signer:signed                      refused
+  signer:blocked                     refused
+  block:counts                       refused
+  block:validator                    refused
+  block:call_accounting              refused
+  block:key                          refused
+  block:authority                    refused
+a4_final_key_lock_receipt.json 646f6c5baa25292d48698e36d4ed5d17c9f71bd5de8f84402ed582fc6500ef1f
+RESULT EVERY BOUND VALUE REFUSES WHEN MUTATED
+candidate /tmp/a7_logs_1781/life_native5/candidate_owed_000
+4/4 -> True
+  GREEN 1_a_frozen_candidate_packet_exists
+  GREEN 2_the_signature_is_harvested_and_proved
+  GREEN 3_the_compact_lock_is_written_and_every_value_refuses_mutation
+  GREEN 4_the_lock_and_its_receipt_exist

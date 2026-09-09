@@ -1,0 +1,168 @@
+................................F........................FFF             [100%]
+=================================== FAILURES ===================================
+_________ test_quote_only_could_not_identify_a_claim_but_the_card_can __________
+
+    def test_quote_only_could_not_identify_a_claim_but_the_card_can():
+        """The defect the earlier quote-only rule froze, measured on the live key."""
+        import a7_g23_build as B
+        import a7_key_correction as K
+        key, _identity = K.current_key()
+        by_quote = collections.defaultdict(list)
+        for sid in sorted(key):
+            for idx, fact in enumerate(key[sid]):
+                if fact.get("du_worthy") is not True:
+                    continue
+                by_quote[(sid, (fact.get("item") or {}).get("quote"))].append(idx)
+        repeated = {k: v for k, v in by_quote.items() if len(v) > 1}
+>       assert len(repeated) > 1, "the control cannot see the known ambiguity"
+E       AssertionError: the control cannot see the known ambiguity
+E       assert 1 > 1
+E        +  where 1 = len({('0000006201-26-000031', 'American expects total revenue growth between 13.5% and 16.5% in the second quarter'): [0, 1]})
+
+test_a7_corrections_1454.py:834: AssertionError
+___________ test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses ___________
+
+current = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a7_logs_1781/attempt_grader_current_port2/pytest/cur0/...6373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812'), ('finalizations', OrderedDict()), ('executed', None)])
+
+    def test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses(current):
+>       G.materialize(current)                            # warm it
+        ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_current_1473.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ['the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one', 'the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one']
+
+a7_g1_build.py:337: ValueError
+______________ test_mutation_after_a_WARM_INVENTORY_cache_refuses ______________
+
+current = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a7_logs_1781/attempt_grader_current_port2/pytest/cur0/...6373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812'), ('finalizations', OrderedDict()), ('executed', None)])
+
+    def test_mutation_after_a_WARM_INVENTORY_cache_refuses(current):
+        """The cache was keyed from the caller's dict BEFORE the run was
+        re-measured, so a warm entry answered without noticing drift."""
+>       B._inventory(current)                             # warm it
+        ^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_current_1473.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g23_build.py:1491: in _inventory
+    _INVENTORY["rows"] = R.validate(run=run)
+                         ^^^^^^^^^^^^^^^^^^^
+a7_reference_inventory.py:387: in validate
+    want = expected_document(run)
+           ^^^^^^^^^^^^^^^^^^^^^^
+a7_reference_inventory.py:340: in expected_document
+    key, identity = K.current_key()
+                    ^^^^^^^^^^^^^^^
+a7_key_correction.py:224: in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ['the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one', 'the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one']
+
+a7_g1_build.py:337: ValueError
+_______ test_a_current_zero_call_run_reports_ONE_named_not_called_state ________
+
+current = OrderedDict([('schema', 'a7_prepared_run/1'), ('run_dir', '/tmp/a7_logs_1781/attempt_grader_current_port2/pytest/cur0/...6373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812'), ('finalizations', OrderedDict()), ('executed', None)])
+
+    def test_a_current_zero_call_run_reports_ONE_named_not_called_state(current):
+>       arms, meta, problems = G.materialize(current)
+                               ^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_current_1473.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:518: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ['the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one', 'the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one']
+
+a7_g1_build.py:337: ValueError
+=========================== short test summary info ============================
+FAILED test_a7_corrections_1454.py::test_quote_only_could_not_identify_a_claim_but_the_card_can
+FAILED test_a7_current_1473.py::test_mutation_after_a_WARM_MATERIALIZATION_cache_refuses
+FAILED test_a7_current_1473.py::test_mutation_after_a_WARM_INVENTORY_cache_refuses
+FAILED test_a7_current_1473.py::test_a_current_zero_call_run_reports_ONE_named_not_called_state
+4 failed, 56 passed in 56.98s
+
+--- stderr ---
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.

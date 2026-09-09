@@ -1,0 +1,37 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/ledger/../../grader_20260909/offline_path.py", line 141, in <module>
+    gold, _key_identity = G.live_key()
+                          ^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 364, in live_key
+    return K.current_key()
+           ^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_key_correction.py", line 224, in current_key
+    base, _sidecar = G.gold_by_event()
+                     ^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 335, in gold_by_event
+    gate = F.signing_gate(bound.events, bound)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 81, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 2139, in signing_gate
+    ready = hard_reading_problems(bound)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 152, in hard_reading_problems
+    got, run_problems = _hard_outcomes(bound)
+                        ^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 180, in _hard_outcomes
+    by = HR._by_label(evidence_dir)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 446, in _by_label
+    return _by_label_of(_default(run_dir))
+                        ^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 102, in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 74, in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_key.py", line 652, in phase1_items
+    raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+RuntimeError: A3 evidence is not proved: ['primary audit: receipt.manifest_sha256 is not what a lawful run of this shape carries', 'primary finalization: the finalization was written against different plan bytes than the ones live now', 'the primary proves 0 of the canonical 204 A3 answers']

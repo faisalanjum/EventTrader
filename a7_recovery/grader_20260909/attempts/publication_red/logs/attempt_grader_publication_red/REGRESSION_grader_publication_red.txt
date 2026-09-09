@@ -1,0 +1,653 @@
+FFFF..FFFFFFFFF....                                                      [100%]
+=================================== FAILURES ===================================
+____ test_second_public_write_refuses_and_preserves_every_original_byte[G1] ____
+
+kind = 'G1'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_second_public_write_refus0')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+___ test_second_public_write_refuses_and_preserves_every_original_byte[G23] ____
+
+kind = 'G23'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_second_public_write_refus1')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+____ test_second_public_write_refuses_and_preserves_every_original_byte[G2] ____
+
+kind = 'G2'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_second_public_write_refus2')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+____ test_second_public_write_refuses_and_preserves_every_original_byte[G3] ____
+
+kind = 'G3'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_second_public_write_refus3')
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3", "reference", "sidecar"])
+    def test_second_public_write_refuses_and_preserves_every_original_byte(kind, bundle, tmp_path):
+        out = tmp_path / kind
+        path = _write(kind, out, bundle)
+        before = _bytes(out)
+        assert path.is_file() and before
+>       with pytest.raises(ValueError, match="already exists|once|overwrit"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_a7_publication.py:60: Failed
+________ test_interrupted_prompt_write_never_publishes_a_candidate[G1] _________
+
+kind = 'G1'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_interrupted_prompt_write_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f959104ca10>
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3"])
+    def test_interrupted_prompt_write_never_publishes_a_candidate(kind, bundle, tmp_path, monkeypatch):
+        calls = []
+        real = RT.write_new
+    
+        def interrupt(path, text):
+            calls.append(path)
+            if len(calls) == 2:
+                raise RuntimeError("TEST interrupted before publication")
+            return real(path, text)
+    
+        out = tmp_path / kind
+        monkeypatch.setattr(RT, "write_new", interrupt)
+>       with pytest.raises(RuntimeError, match="TEST interrupted"):
+E       Failed: DID NOT RAISE <class 'RuntimeError'>
+
+test_a7_publication.py:78: Failed
+________ test_interrupted_prompt_write_never_publishes_a_candidate[G23] ________
+
+kind = 'G23'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_interrupted_prompt_write_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9591286790>
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3"])
+    def test_interrupted_prompt_write_never_publishes_a_candidate(kind, bundle, tmp_path, monkeypatch):
+        calls = []
+        real = RT.write_new
+    
+        def interrupt(path, text):
+            calls.append(path)
+            if len(calls) == 2:
+                raise RuntimeError("TEST interrupted before publication")
+            return real(path, text)
+    
+        out = tmp_path / kind
+        monkeypatch.setattr(RT, "write_new", interrupt)
+>       with pytest.raises(RuntimeError, match="TEST interrupted"):
+E       Failed: DID NOT RAISE <class 'RuntimeError'>
+
+test_a7_publication.py:78: Failed
+________ test_interrupted_prompt_write_never_publishes_a_candidate[G2] _________
+
+kind = 'G2'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_interrupted_prompt_write_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9590fc4b90>
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3"])
+    def test_interrupted_prompt_write_never_publishes_a_candidate(kind, bundle, tmp_path, monkeypatch):
+        calls = []
+        real = RT.write_new
+    
+        def interrupt(path, text):
+            calls.append(path)
+            if len(calls) == 2:
+                raise RuntimeError("TEST interrupted before publication")
+            return real(path, text)
+    
+        out = tmp_path / kind
+        monkeypatch.setattr(RT, "write_new", interrupt)
+>       with pytest.raises(RuntimeError, match="TEST interrupted"):
+E       Failed: DID NOT RAISE <class 'RuntimeError'>
+
+test_a7_publication.py:78: Failed
+________ test_interrupted_prompt_write_never_publishes_a_candidate[G3] _________
+
+kind = 'G3'
+bundle = ({'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d...epted_rows', 35), ('events', 36), ('key_digest', '601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e')]))
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_interrupted_prompt_write_3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9590ead690>
+
+    @pytest.mark.parametrize("kind", ["G1", "G23", "G2", "G3"])
+    def test_interrupted_prompt_write_never_publishes_a_candidate(kind, bundle, tmp_path, monkeypatch):
+        calls = []
+        real = RT.write_new
+    
+        def interrupt(path, text):
+            calls.append(path)
+            if len(calls) == 2:
+                raise RuntimeError("TEST interrupted before publication")
+            return real(path, text)
+    
+        out = tmp_path / kind
+        monkeypatch.setattr(RT, "write_new", interrupt)
+>       with pytest.raises(RuntimeError, match="TEST interrupted"):
+E       Failed: DID NOT RAISE <class 'RuntimeError'>
+
+test_a7_publication.py:78: Failed
+______ test_two_independent_writers_cannot_replace_one_another[reference] ______
+
+kind = 'reference'
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_two_independent_writers_c0')
+
+    @pytest.mark.parametrize("kind", ["reference", "sidecar"])
+    def test_two_independent_writers_cannot_replace_one_another(kind, tmp_path):
+        # Force the former check-then-rename implementation's vulnerable ordering.
+        # The write_new implementation needs no freshness check: the link itself
+        # arbitrates both processes, including this exact race.
+        context = multiprocessing.get_context("fork")
+        barrier, queue = context.Barrier(2), context.Queue()
+        path = str(tmp_path / "published.json")
+    
+        def worker(number):
+            exists = os.path.exists
+    
+            def checked(name):
+                found = exists(name)
+                if name == path:
+                    barrier.wait(timeout=10)
+                return found
+    
+            os.path.exists = checked
+            try:
+                (REF.write({"writer": number}, path) if kind == "reference"
+                 else B.write_atomic(path, {"writer": number}))
+                queue.put((number, "published"))
+            except ValueError:
+                queue.put((number, "refused"))
+            except BaseException as exc:
+                queue.put((number, repr(exc)))
+    
+        children = [context.Process(target=worker, args=(n,)) for n in (1, 2)]
+        for process in children:
+            process.start()
+        for process in children:
+            process.join(15)
+            assert process.exitcode == 0
+        results = [queue.get(timeout=2) for _ in children]
+>       assert sorted(state for _n, state in results) == ["published", "refused"], results
+E       AssertionError: [(2, 'published'), (1, 'published')]
+E       assert ['published', 'published'] == ['published', 'refused']
+E         
+E         At index 1 diff: 'published' != 'refused'
+E         Use -v to get more diff
+
+test_a7_publication.py:131: AssertionError
+_______ test_two_independent_writers_cannot_replace_one_another[sidecar] _______
+
+kind = 'sidecar'
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_two_independent_writers_c1')
+
+    @pytest.mark.parametrize("kind", ["reference", "sidecar"])
+    def test_two_independent_writers_cannot_replace_one_another(kind, tmp_path):
+        # Force the former check-then-rename implementation's vulnerable ordering.
+        # The write_new implementation needs no freshness check: the link itself
+        # arbitrates both processes, including this exact race.
+        context = multiprocessing.get_context("fork")
+        barrier, queue = context.Barrier(2), context.Queue()
+        path = str(tmp_path / "published.json")
+    
+        def worker(number):
+            exists = os.path.exists
+    
+            def checked(name):
+                found = exists(name)
+                if name == path:
+                    barrier.wait(timeout=10)
+                return found
+    
+            os.path.exists = checked
+            try:
+                (REF.write({"writer": number}, path) if kind == "reference"
+                 else B.write_atomic(path, {"writer": number}))
+                queue.put((number, "published"))
+            except ValueError:
+                queue.put((number, "refused"))
+            except BaseException as exc:
+                queue.put((number, repr(exc)))
+    
+        children = [context.Process(target=worker, args=(n,)) for n in (1, 2)]
+        for process in children:
+            process.start()
+        for process in children:
+            process.join(15)
+            assert process.exitcode == 0
+        results = [queue.get(timeout=2) for _ in children]
+>       assert sorted(state for _n, state in results) == ["published", "refused"], results
+E       AssertionError: [(2, 'published'), (1, 'published')]
+E       assert ['published', 'published'] == ['published', 'refused']
+E         
+E         At index 1 diff: 'published' != 'refused'
+E         Use -v to get more diff
+
+test_a7_publication.py:131: AssertionError
+____ test_real_finalizer_handles_every_interrupted_capture_shape[1-2-True] _____
+
+current_g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/current_g11/candidate', 'pins': {'candidate...10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/current_g11/run'}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_real_finalizer_handles_ev0')
+error_at = 1, captures = 2, valid = True
+
+    @pytest.mark.parametrize("error_at,captures,valid", [
+        (1, 2, True),       # matching last error: lawful interrupted result
+        (1, 1, False),      # last error was never captured
+        (1, 0, False),      # no captures at all
+        (None, 2, True),    # two completed answers
+        (None, 1, False),   # completed answer missing its capture
+        (None, 3, False),   # extra capture
+        (0, 2, False),      # an errored row cannot precede another attempted row
+    ])
+    def test_real_finalizer_handles_every_interrupted_capture_shape(
+            current_g1, tmp_path, error_at, captures, valid):
+        candidate = current_g1["candidate_dir"]
+        document = os.path.join(candidate, G.CANDIDATE_NAME)
+        run_dir = str(tmp_path / "run")
+        root, root_sha, problems = G.freeze_root(candidate, run_dir, G._sha_file(document))
+        assert problems == [], problems
+        lanes = [r["lane_id"] for r in root["rows"]][:2]
+        identity, problems = G.publish_run(candidate, run_dir, root_sha, lanes)
+        assert problems == [], problems
+        segment, receipt_sha = identity["segment"], identity["receipt_sha256"]
+        packet, problems = G.preflight(candidate, run_dir, segment, root_sha, receipt_sha)
+        assert problems == [], problems
+        receipt = G.load_receipt(run_dir, segment)
+        doc = G._read(document)
+        answers, errors, results = {}, {}, []
+        for i, arg in enumerate(packet["args"]):
+            bound = G.binding_and_parser("G1")[0](doc, arg["batch_id"])
+            text = json.dumps([{"question_id": q["question_id"], "produced_idxs": []}
+                               for q in bound["questions"]])
+            error = "TEST interrupted" if i == error_at else None
+            text = None if error else text
+            row = collections.OrderedDict((k, arg.get(k)) for k in G.RESULT_BINDING)
+            row.update(invocation_sha256=receipt["invocation_sha256"], text=text, error=error)
+            results.append(row)
+            answers[arg["lane_id"]] = text
+            if error:
+                errors[arg["lane_id"]] = error
+        supplied = (results + results[:1])[:captures]
+        G.save_results(run_dir, segment, supplied, root_sha, receipt_sha)
+        state = FAKE.build(str(tmp_path), run_dir, segment, G,
+                           answers=answers, errors=errors, projects_root=AUD.PROJECTS_ROOT,
+                           run_id="wf_interrupt_" + G._sha(run_dir)[:20])
+        assert G.record_official_state(run_dir, segment, state, root_sha, receipt_sha) == []
+        # A missing capture is not repaired or generated to complete this test.
+        # The public finalizer itself must return a named refusal without credit.
+        final, rulings, problems = G.finalize_segment(candidate, run_dir, segment,
+                                                      root_sha, receipt_sha)
+        if valid:
+            assert final is not None and problems == [], problems
+            assert len(final["validity"]) == len(lanes)
+            if error_at is not None:
+>               assert sum(bool(v) for v in final["validity"].values()) == 1
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'list' object has no attribute 'values'
+
+test_a7_interrupted_capture.py:66: AttributeError
+____ test_real_finalizer_handles_every_interrupted_capture_shape[1-1-False] ____
+
+current_g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/current_g11/candidate', 'pins': {'candidate...10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/current_g11/run'}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_real_finalizer_handles_ev1')
+error_at = 1, captures = 1, valid = False
+
+    @pytest.mark.parametrize("error_at,captures,valid", [
+        (1, 2, True),       # matching last error: lawful interrupted result
+        (1, 1, False),      # last error was never captured
+        (1, 0, False),      # no captures at all
+        (None, 2, True),    # two completed answers
+        (None, 1, False),   # completed answer missing its capture
+        (None, 3, False),   # extra capture
+        (0, 2, False),      # an errored row cannot precede another attempted row
+    ])
+    def test_real_finalizer_handles_every_interrupted_capture_shape(
+            current_g1, tmp_path, error_at, captures, valid):
+        candidate = current_g1["candidate_dir"]
+        document = os.path.join(candidate, G.CANDIDATE_NAME)
+        run_dir = str(tmp_path / "run")
+        root, root_sha, problems = G.freeze_root(candidate, run_dir, G._sha_file(document))
+        assert problems == [], problems
+        lanes = [r["lane_id"] for r in root["rows"]][:2]
+        identity, problems = G.publish_run(candidate, run_dir, root_sha, lanes)
+        assert problems == [], problems
+        segment, receipt_sha = identity["segment"], identity["receipt_sha256"]
+        packet, problems = G.preflight(candidate, run_dir, segment, root_sha, receipt_sha)
+        assert problems == [], problems
+        receipt = G.load_receipt(run_dir, segment)
+        doc = G._read(document)
+        answers, errors, results = {}, {}, []
+        for i, arg in enumerate(packet["args"]):
+            bound = G.binding_and_parser("G1")[0](doc, arg["batch_id"])
+            text = json.dumps([{"question_id": q["question_id"], "produced_idxs": []}
+                               for q in bound["questions"]])
+            error = "TEST interrupted" if i == error_at else None
+            text = None if error else text
+            row = collections.OrderedDict((k, arg.get(k)) for k in G.RESULT_BINDING)
+            row.update(invocation_sha256=receipt["invocation_sha256"], text=text, error=error)
+            results.append(row)
+            answers[arg["lane_id"]] = text
+            if error:
+                errors[arg["lane_id"]] = error
+        supplied = (results + results[:1])[:captures]
+        G.save_results(run_dir, segment, supplied, root_sha, receipt_sha)
+        state = FAKE.build(str(tmp_path), run_dir, segment, G,
+                           answers=answers, errors=errors, projects_root=AUD.PROJECTS_ROOT,
+                           run_id="wf_interrupt_" + G._sha(run_dir)[:20])
+        assert G.record_official_state(run_dir, segment, state, root_sha, receipt_sha) == []
+        # A missing capture is not repaired or generated to complete this test.
+        # The public finalizer itself must return a named refusal without credit.
+>       final, rulings, problems = G.finalize_segment(candidate, run_dir, segment,
+                                                      root_sha, receipt_sha)
+
+test_a7_interrupted_capture.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2199: in finalize_segment
+    audit_problems, whole = audit_official_state(run_dir, n, expect_root_sha,
+a7_g1_build.py:2103: in audit_official_state
+    return AUD.g1_state_audit(states[0], expect)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_path = '/tmp/a7_logs_1781/life_native5/TEST_projects/proj/sess/workflows/wf_interrupt_a67bb90f768431656193.json'
+expect = OrderedDict([('script_path', '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_real_finalizer_handles_ev1/..., 'claude-sonnet-5'), ('text', '[{"question_id": "Q664fc96247cdfe8f", "produced_idxs": []}]'), ('error', None)]))])])])
+
+    def g1_state_audit(state_path, expect):
+        """Audit what a G1 invocation ACTUALLY ran. -> (problems, whole).
+    
+        `whole` is {lane_id: the exact WHOLE answer} that `_chain` already proves:
+        every response group's terminal text, in transcript order. This function
+        computed it and threw it away, so everything downstream parsed only the
+        LAST returned piece - judging a multi-group answer by its tail alone, in
+        both directions (Codex SEQ 1869 item 1). Nothing is parsed, repaired or
+        separated here; these are bytes the chain owner has already verified.
+    
+        `expect` is derived from the approved root and receipt by the G1 owner and
+        is never read out of the state being audited. Everything below must hold
+        together; any single failure refuses the whole segment.
+        """
+        session_dir, session_id = _official_location(state_path)
+        if session_dir is None:
+            return ["%s is not where the runtime writes an official state"
+                    % state_path], {}
+        if not os.path.isfile(state_path):
+            return ["the official state at %s is gone" % state_path], {}
+        try:
+            st = _load(state_path)
+        except Exception as exc:                          # noqa: BLE001 - by design
+            return ["the official state at %s is not readable: %s"
+                    % (state_path, exc)], {}
+        if not isinstance(st, dict) or not st:
+            return ["the official state at %s carries nothing" % state_path], {}
+    
+        problems = []
+        rid = os.path.basename(state_path)[:-len(".json")]
+        if st.get("runId") != rid:
+            problems.append("the state names run %r, its file names %r"
+                            % (st.get("runId"), rid))
+        if st.get("status") != "completed":
+            problems.append("the state's status is %r, not 'completed'"
+                            % st.get("status"))
+        if st.get("scriptPath") != expect["script_path"] and not _same_published_script(
+                st.get("scriptPath"), expect["script_path"]):
+            problems.append("the state ran %r, this segment published %r"
+                            % (st.get("scriptPath"), expect["script_path"]))
+        script = st.get("script")
+        if not isinstance(script, str):
+            problems.append("the state persisted no script bytes")
+        elif hashlib.sha256(script.encode("utf-8")).hexdigest() != \
+                expect["script_sha256"]:
+            problems.append("the state's persisted script is not the published one")
+        if json.dumps(st.get("args"), sort_keys=True) != \
+                json.dumps(expect["args"], sort_keys=True):
+            problems.append("the state's saved args are not the published ones")
+    
+        progress = st.get("workflowProgress")
+        if not isinstance(progress, list) or not progress:
+            return problems + ["the state records no per-agent rows; zero tool use "
+                               "cannot be proved from run totals"], {}
+        # A MALFORMED PROGRESS ENTRY IS REJECTED, never filtered away: silently
+        # dropping it is how a state that records nothing readable still passes.
+        for i, entry in enumerate(progress):
+            if not isinstance(entry, dict):
+                problems.append("workflowProgress entry %d is %s, not an object"
+                                % (i, type(entry).__name__))
+        if problems:
+            return problems, {}
+        rows = [r for r in progress if r.get("type") == G1_AGENT_ROW]
+        if not rows:
+            return problems + ["the state records no agent rows"], {}
+        want = expect["rows"]
+        if len(rows) > len(want):
+            problems.append("the state records %d agent rows for %d published"
+                            % (len(rows), len(want)))
+            return problems, {}
+        finals, seen, response_ids = [], set(), {}
+        for position, pr in enumerate(rows):
+            row = want[position]
+            label = pr.get("label")
+            if label != row["lane_id"]:
+                problems.append("official row %d is %r, published row %d is %r"
+                                % (position, label, position, row["lane_id"]))
+                continue
+            if label in seen:
+                problems.append("%s appears in two official agent rows" % label)
+                continue
+            seen.add(label)
+            # A row that ERRORED is lawful only as the LAST attempted row, and
+            # only when the capture records the same failure. Anything else must
+            # be a completed row.
+            errored = pr.get("state") == "error"
+            if errored and (position != len(rows) - 1
+>                           or not expect["captures"][position].get("error")):
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                           IndexError: list index out of range
+
+audit_worker_access.py:1368: IndexError
+____ test_real_finalizer_handles_every_interrupted_capture_shape[1-0-False] ____
+
+current_g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/current_g11/candidate', 'pins': {'candidate...10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/current_g11/run'}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_real_finalizer_handles_ev2')
+error_at = 1, captures = 0, valid = False
+
+    @pytest.mark.parametrize("error_at,captures,valid", [
+        (1, 2, True),       # matching last error: lawful interrupted result
+        (1, 1, False),      # last error was never captured
+        (1, 0, False),      # no captures at all
+        (None, 2, True),    # two completed answers
+        (None, 1, False),   # completed answer missing its capture
+        (None, 3, False),   # extra capture
+        (0, 2, False),      # an errored row cannot precede another attempted row
+    ])
+    def test_real_finalizer_handles_every_interrupted_capture_shape(
+            current_g1, tmp_path, error_at, captures, valid):
+        candidate = current_g1["candidate_dir"]
+        document = os.path.join(candidate, G.CANDIDATE_NAME)
+        run_dir = str(tmp_path / "run")
+        root, root_sha, problems = G.freeze_root(candidate, run_dir, G._sha_file(document))
+        assert problems == [], problems
+        lanes = [r["lane_id"] for r in root["rows"]][:2]
+        identity, problems = G.publish_run(candidate, run_dir, root_sha, lanes)
+        assert problems == [], problems
+        segment, receipt_sha = identity["segment"], identity["receipt_sha256"]
+        packet, problems = G.preflight(candidate, run_dir, segment, root_sha, receipt_sha)
+        assert problems == [], problems
+        receipt = G.load_receipt(run_dir, segment)
+        doc = G._read(document)
+        answers, errors, results = {}, {}, []
+        for i, arg in enumerate(packet["args"]):
+            bound = G.binding_and_parser("G1")[0](doc, arg["batch_id"])
+            text = json.dumps([{"question_id": q["question_id"], "produced_idxs": []}
+                               for q in bound["questions"]])
+            error = "TEST interrupted" if i == error_at else None
+            text = None if error else text
+            row = collections.OrderedDict((k, arg.get(k)) for k in G.RESULT_BINDING)
+            row.update(invocation_sha256=receipt["invocation_sha256"], text=text, error=error)
+            results.append(row)
+            answers[arg["lane_id"]] = text
+            if error:
+                errors[arg["lane_id"]] = error
+        supplied = (results + results[:1])[:captures]
+        G.save_results(run_dir, segment, supplied, root_sha, receipt_sha)
+        state = FAKE.build(str(tmp_path), run_dir, segment, G,
+                           answers=answers, errors=errors, projects_root=AUD.PROJECTS_ROOT,
+                           run_id="wf_interrupt_" + G._sha(run_dir)[:20])
+        assert G.record_official_state(run_dir, segment, state, root_sha, receipt_sha) == []
+        # A missing capture is not repaired or generated to complete this test.
+        # The public finalizer itself must return a named refusal without credit.
+>       final, rulings, problems = G.finalize_segment(candidate, run_dir, segment,
+                                                      root_sha, receipt_sha)
+
+test_a7_interrupted_capture.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2199: in finalize_segment
+    audit_problems, whole = audit_official_state(run_dir, n, expect_root_sha,
+a7_g1_build.py:2103: in audit_official_state
+    return AUD.g1_state_audit(states[0], expect)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_path = '/tmp/a7_logs_1781/life_native5/TEST_projects/proj/sess/workflows/wf_interrupt_654d49e6b9269a060ff0.json'
+expect = OrderedDict([('script_path', '/tmp/a7_logs_1781/attempt_grader_publication_red/pytest/test_real_finalizer_handles_ev2/...None)])]), ('runtime_model_id', 'claude-sonnet-5'), ('agentType', 'lean-probe'), ('effort', 'high'), ('captures', [])])
+
+    def g1_state_audit(state_path, expect):
+        """Audit what a G1 invocation ACTUALLY ran. -> (problems, whole).
+    
+        `whole` is {lane_id: the exact WHOLE answer} that `_chain` already proves:
+        every response group's terminal text, in transcript order. This function
+        computed it and threw it away, so everything downstream parsed only the
+        LAST returned piece - judging a multi-group answer by its tail alone, in
+        both directions (Codex SEQ 1869 item 1). Nothing is parsed, repaired or
+        separated here; these are bytes the chain owner has already verified.
+    
+        `expect` is derived from the approved root and receipt by the G1 owner and
+        is never read out of the state being audited. Everything below must hold
+        together; any single failure refuses the whole segment.
+        """
+        session_dir, session_id = _official_location(state_path)
+        if session_dir is None:
+            return ["%s is not where the runtime writes an official state"
+                    % state_path], {}
+        if not os.path.isfile(state_path):
+            return ["the official state at %s is gone" % state_path], {}
+        try:
+            st = _load(state_path)
+        except Exception as exc:                          # noqa: BLE001 - by design
+            return ["the official state at %s is not readable: %s"
+                    % (state_path, exc)], {}
+        if not isinstance(st, dict) or not st:
+            return ["the official state at %s carries nothing" % state_path], {}
+    
+        problems = []
+        rid = os.path.basename(state_path)[:-len(".json")]
+        if st.get("runId") != rid:
+            problems.append("the state names run %r, its file names %r"
+                            % (st.get("runId"), rid))
+        if st.get("status") != "completed":
+            problems.append("the state's status is %r, not 'completed'"
+                            % st.get("status"))
+        if st.get("scriptPath") != expect["script_path"] and not _same_published_script(
+                st.get("scriptPath"), expect["script_path"]):
+            problems.append("the state ran %r, this segment published %r"
+                            % (st.get("scriptPath"), expect["script_path"]))
+        script = st.get("script")
+        if not isinstance(script, str):
+            problems.append("the state persisted no script bytes")
+        elif hashlib.sha256(script.encode("utf-8")).hexdigest() != \
+                expect["script_sha256"]:
+            problems.append("the state's persisted script is not the published one")
+        if json.dumps(st.get("args"), sort_keys=True) != \
+                json.dumps(expect["args"], sort_keys=True):
+            problems.append("the state's saved args are not the published ones")
+    
+        progress = st.get("workflowProgress")
+        if not isinstance(progress, list) or not progress:
+            return problems + ["the state records no per-agent rows; zero tool use "
+                               "cannot be proved from run totals"], {}
+        # A MALFORMED PROGRESS ENTRY IS REJECTED, never filtered away: silently
+        # dropping it is how a state that records nothing readable still passes.
+        for i, entry in enumerate(progress):
+            if not isinstance(entry, dict):
+                problems.append("workflowProgress entry %d is %s, not an object"
+                                % (i, type(entry).__name__))
+        if problems:
+            return problems, {}
+        rows = [r for r in progress if r.get("type") == G1_AGENT_ROW]
+        if not rows:
+            return problems + ["the state records no agent rows"], {}
+        want = expect["rows"]
+        if len(rows) > len(want):
+            problems.append("the state records %d agent rows for %d published"
+                            % (len(rows), len(want)))
+            return problems, {}
+        finals, seen, response_ids = [], set(), {}
+        for position, pr in enumerate(rows):
+            row = want[position]
+            label = pr.get("label")
+            if label != row["lane_id"]:
+                problems.append("official row %d is %r, published row %d is %r"
+                                % (position, label, position, row["lane_id"]))
+                continue
+            if label in seen:
+                problems.append("%s appears in two official agent rows" % label)
+                continue
+            seen.add(label)
+            # A row that ERRORED is lawful only as the LAST attempted row, and
+            # only when the capture records the same failure. Anything else must
+            # be a completed row.
+            errored = pr.get("state") == "error"
+            if errored and (position != len(rows) - 1
+>                           or not expect["captures"][position].get("error")):
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                           IndexError: list index out of range
+
+audit_worker_access.py:1368: IndexError
+=========================== short test summary info ============================
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G1]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G23]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G2]
+FAILED test_a7_publication.py::test_second_public_write_refuses_and_preserves_every_original_byte[G3]
+FAILED test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G1]
+FAILED test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G23]
+FAILED test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G2]
+FAILED test_a7_publication.py::test_interrupted_prompt_write_never_publishes_a_candidate[G3]
+FAILED test_a7_publication.py::test_two_independent_writers_cannot_replace_one_another[reference]
+FAILED test_a7_publication.py::test_two_independent_writers_cannot_replace_one_another[sidecar]
+FAILED test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-2-True]
+FAILED test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-1-False]
+FAILED test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-0-False]
+13 failed, 6 passed in 30.85s
+
+--- stderr ---

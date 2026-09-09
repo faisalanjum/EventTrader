@@ -1,0 +1,7 @@
+
+no tests ran in 0.24s
+
+--- stderr ---
+ERROR: not found: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/test_a7_current_1473.py::test_old_g23_freeze_refuses_without_current_g1
+(no match in any of [<Module test_a7_current_1473.py>])
+

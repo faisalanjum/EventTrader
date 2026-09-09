@@ -1,0 +1,4 @@
+test_a7_input_binding.py::test_changed_manifest_claim_is_not_an_authority[manifest_path]
+test_a7_input_binding.py::test_changed_manifest_claim_is_not_an_authority[manifest_sha256]
+test_a7_input_binding.py::test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2[False]
+test_a7_input_binding.py::test_mutable_path_and_hash_cannot_change_the_public_nonempty_g2[True]

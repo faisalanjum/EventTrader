@@ -1,0 +1,10 @@
+test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+test_a7_trace_1471.py::test_every_status_and_route_outcome_is_conserved_exactly_once
+test_a7_trace_1471.py::test_raw_drift_after_identity_capture_refuses
+test_a7_trace_1471.py::test_public_accounting_keeps_the_real_mixed_split_and_all_origins
+test_a7_trace_1471.py::test_a_real_never_called_run_keeps_both_full_arms
+test_a7_trace_1471.py::test_same_count_cannot_hide_wrong_or_missing_identity
+
+6 tests collected in 0.14s
+
+--- stderr ---

@@ -1,0 +1,9 @@
+attempt	grader_lifecycle1
+payload	../../grader_20260909/regression.py
+map	map_codex_grader_lifecycle1.tsv
+command	run_1957.sh map_codex_grader_lifecycle1.tsv ../../grader_20260909/regression.py grader_lifecycle1 1800
+wrapper_pid	1121083
+payload_pid	1121087
+payload_pgid	1121083
+started_utc	2026-09-09T16:11:03Z
+state	finished exit 0

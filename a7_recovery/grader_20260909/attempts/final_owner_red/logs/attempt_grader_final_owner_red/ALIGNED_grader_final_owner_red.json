@@ -1,0 +1,81 @@
+{
+  "tag": "grader_final_owner_red",
+  "kind": "ALIGNED_SIDE",
+  "environment": {
+    "A7_APPROVED_KEY_DIR": null,
+    "A7_TRACE_FIXTURE": null,
+    "A7_FIXTURE_PROJECTS": null,
+    "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_final_owner_red.tsv",
+    "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json",
+    "A7_DRIVER_VALIDATORS_SHA": null,
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"
+  },
+  "artifacts_before": {
+    "launch_kfields_drafts.manifest.json": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+    "launch_kfields_a1.bundle.json": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "b9ed1546a16d8e41a9af25738846f9af76bbe3a53bb668658f1d0f356dddb438",
+    "a7_g1_build.py": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "ad2b35bc4c9d0dfbbe5a4b7433666d1bece9506c628b2d9eaf76a26c393782e8",
+    "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff"
+  },
+  "artifacts_after_build": {
+    "launch_kfields_drafts.manifest.json": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+    "launch_kfields_a1.bundle.json": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "b9ed1546a16d8e41a9af25738846f9af76bbe3a53bb668658f1d0f356dddb438",
+    "a7_g1_build.py": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "ad2b35bc4c9d0dfbbe5a4b7433666d1bece9506c628b2d9eaf76a26c393782e8",
+    "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff"
+  },
+  "plan_counts": {
+    "n_packets": 196,
+    "n_calls": 392
+  },
+  "inventory_sha256": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff",
+  "comparable": 36,
+  "changed_owner_affected": 36,
+  "fixture_dependent": 16,
+  "affected_minus_comparable": [],
+  "fixture_minus_comparable": [],
+  "union_modules": [
+    "test_a7_score_boundaries.py::test_current_extra_answers_do_not_consult_the_producer_scorer"
+  ],
+  "union_size": 1,
+  "command": [
+    "/home/faisal/EventMarketDB/venv/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "--no-header",
+    "-ra",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/tmp/a7_logs_1781/attempt_grader_final_owner_red/pytest",
+    "test_a7_score_boundaries.py::test_current_extra_answers_do_not_consult_the_producer_scorer",
+    "--junitxml",
+    "/tmp/a7_logs_1781/attempt_grader_final_owner_red/JUNIT.xml"
+  ],
+  "collection_exit": 0,
+  "child_exit": 1,
+  "failed_ids": [
+    "test_a7_score_boundaries.py::test_current_extra_answers_do_not_consult_the_producer_scorer"
+  ],
+  "failed_id_count": 1,
+  "collection_errors": [],
+  "summary": "1 failed in 0.24s",
+  "artifacts_after_run": {
+    "launch_kfields_drafts.manifest.json": "d65e4f877ebebfc22f51fb98c3af28ca24c3320772a73046cad90a8955133f28",
+    "launch_kfields_a1.bundle.json": "dc9442f344b59fae521dd6a6f672f7f9d627e143e24920977415ff591c995494",
+    "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+    "a7_reference_inventory.py": "b9ed1546a16d8e41a9af25738846f9af76bbe3a53bb668658f1d0f356dddb438",
+    "a7_g1_build.py": "98caea2697763942fc4dacda05ac80e7cbdcf5aef336735430e250b2c7f1ce26",
+    "test_a5_route_1406.py": "0125323ccb1b9601fa6ca2af9d7ed334080f36fcfc807371b7760cb7f2cb9a52",
+    "test_harness_guards.py": "ad2b35bc4c9d0dfbbe5a4b7433666d1bece9506c628b2d9eaf76a26c393782e8",
+    "inventory": "57a1cdd01125bc1953a4e31c3f534760c2c15eaea4bf2d10c5c451a5e36d03ff"
+  },
+  "artifacts_stable": true
+}

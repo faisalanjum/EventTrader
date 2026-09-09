@@ -1,0 +1,14 @@
+test_harness_guards.py::test_final_gate_or_semantics
+test_harness_guards.py::test_final_gate_union_axes_govern
+test_harness_guards.py::test_clean_union_rescues_incomplete_single
+test_harness_guards.py::test_definite_failures_never_none
+test_harness_guards.py::test_1134_an_UNSAFE_arm_is_never_rescued_by_union_recall
+test_harness_guards.py::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-1-0.01-True]
+test_harness_guards.py::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-2-0.02-True]
+test_harness_guards.py::test_step3_10_the_invalid_response_bar_is_2_percent_inclusive[100-3-0.03-False]
+test_harness_guards.py::test_a1_the_whole_launch_double_builds_byte_identically
+test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today
+
+10 tests collected in 0.80s
+
+--- stderr ---

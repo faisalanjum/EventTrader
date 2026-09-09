@@ -1,0 +1,149 @@
+manifest: 78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2
+bundle: 91439fbea77b560200765bae0a1b19fee52c1d23675f934a1557cf1bc15bdc68 slices 36 largest 248011
+events=36 packets=102 calls=204
+.FF....                                                                  [100%]
+=================================== FAILURES ===================================
+____ test_real_finalizer_handles_every_interrupted_capture_shape[1-1-False] ____
+
+current_g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/current_g10/candidate', 'pins': {'candidate_sha...af5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/current_g10/run'}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/test_real_finalizer_handles_ev1')
+error_at = 1, captures = 1, valid = False
+
+    @pytest.mark.parametrize("error_at,captures,valid", [
+        (1, 2, True),       # matching last error: lawful interrupted result
+        (1, 1, False),      # last error was never captured
+        (1, 0, False),      # no captures at all
+        (None, 2, True),    # two completed answers
+        (None, 1, False),   # completed answer missing its capture
+        (None, 3, False),   # extra capture
+        (0, 2, False),      # an errored row cannot precede another attempted row
+    ])
+    def test_real_finalizer_handles_every_interrupted_capture_shape(
+            current_g1, tmp_path, error_at, captures, valid):
+        candidate = current_g1["candidate_dir"]
+        document = os.path.join(candidate, G.CANDIDATE_NAME)
+        run_dir = str(tmp_path / "run")
+        root, root_sha, problems = G.freeze_root(candidate, run_dir, G._sha_file(document))
+        assert problems == [], problems
+        lanes = [r["lane_id"] for r in root["rows"]][:2]
+        identity, problems = G.publish_run(candidate, run_dir, root_sha, lanes)
+        assert problems == [], problems
+        segment, receipt_sha = identity["segment"], identity["receipt_sha256"]
+        packet, problems = G.preflight(candidate, run_dir, segment, root_sha, receipt_sha)
+        assert problems == [], problems
+        receipt = G.load_receipt(run_dir, segment)
+        doc = G._read(document)
+        answers, errors, results = {}, {}, []
+        for i, arg in enumerate(packet["args"]):
+            bound = G.binding_and_parser("G1")[0](doc, arg["batch_id"])
+            text = json.dumps([{"question_id": q["question_id"], "produced_idxs": []}
+                               for q in bound["questions"]])
+            error = "TEST interrupted" if i == error_at else None
+            text = None if error else text
+            row = collections.OrderedDict((k, arg.get(k)) for k in G.RESULT_BINDING)
+            row.update(invocation_sha256=receipt["invocation_sha256"], text=text, error=error)
+            results.append(row)
+            answers[arg["lane_id"]] = text
+            if error:
+                errors[arg["lane_id"]] = error
+        supplied = (results + results[:1])[:captures]
+        G.save_results(run_dir, segment, supplied, root_sha, receipt_sha)
+        state = FAKE.build(str(tmp_path), run_dir, segment, G,
+                           answers=answers, errors=errors, projects_root=AUD.PROJECTS_ROOT,
+                           run_id="wf_interrupt_" + G._sha(run_dir)[:20])
+        assert G.record_official_state(run_dir, segment, state, root_sha, receipt_sha) == []
+        # A missing capture is not repaired or generated to complete this test.
+        # The public finalizer itself must return a named refusal without credit.
+>       final, rulings, problems = G.finalize_segment(candidate, run_dir, segment,
+                                                      root_sha, receipt_sha)
+
+test_a7_interrupted_capture.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2199: in finalize_segment
+    audit_problems, whole = audit_official_state(run_dir, n, expect_root_sha,
+a7_g1_build.py:2103: in audit_official_state
+    return AUD.g1_state_audit(states[0], expect)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_path = '/tmp/a7_logs_1781/life_native5/TEST_projects/proj/sess/workflows/wf_interrupt_845ffdc3078943fb1449.json'
+expect = OrderedDict([('script_path', '/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/test_real_finalizer_handles_ev1/run/..., 'claude-sonnet-5'), ('text', '[{"question_id": "Q664fc96247cdfe8f", "produced_idxs": []}]'), ('error', None)]))])])])
+
+>   ???
+E   IndexError: list index out of range
+
+<intentional-mutation-R7>:89: IndexError
+____ test_real_finalizer_handles_every_interrupted_capture_shape[1-0-False] ____
+
+current_g1 = {'candidate_dir': '/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/current_g10/candidate', 'pins': {'candidate_sha...af5e10a692ef8ffae5f5386c15f74', ...}, 'run_dir': '/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/current_g10/run'}
+tmp_path = PosixPath('/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/test_real_finalizer_handles_ev2')
+error_at = 1, captures = 0, valid = False
+
+    @pytest.mark.parametrize("error_at,captures,valid", [
+        (1, 2, True),       # matching last error: lawful interrupted result
+        (1, 1, False),      # last error was never captured
+        (1, 0, False),      # no captures at all
+        (None, 2, True),    # two completed answers
+        (None, 1, False),   # completed answer missing its capture
+        (None, 3, False),   # extra capture
+        (0, 2, False),      # an errored row cannot precede another attempted row
+    ])
+    def test_real_finalizer_handles_every_interrupted_capture_shape(
+            current_g1, tmp_path, error_at, captures, valid):
+        candidate = current_g1["candidate_dir"]
+        document = os.path.join(candidate, G.CANDIDATE_NAME)
+        run_dir = str(tmp_path / "run")
+        root, root_sha, problems = G.freeze_root(candidate, run_dir, G._sha_file(document))
+        assert problems == [], problems
+        lanes = [r["lane_id"] for r in root["rows"]][:2]
+        identity, problems = G.publish_run(candidate, run_dir, root_sha, lanes)
+        assert problems == [], problems
+        segment, receipt_sha = identity["segment"], identity["receipt_sha256"]
+        packet, problems = G.preflight(candidate, run_dir, segment, root_sha, receipt_sha)
+        assert problems == [], problems
+        receipt = G.load_receipt(run_dir, segment)
+        doc = G._read(document)
+        answers, errors, results = {}, {}, []
+        for i, arg in enumerate(packet["args"]):
+            bound = G.binding_and_parser("G1")[0](doc, arg["batch_id"])
+            text = json.dumps([{"question_id": q["question_id"], "produced_idxs": []}
+                               for q in bound["questions"]])
+            error = "TEST interrupted" if i == error_at else None
+            text = None if error else text
+            row = collections.OrderedDict((k, arg.get(k)) for k in G.RESULT_BINDING)
+            row.update(invocation_sha256=receipt["invocation_sha256"], text=text, error=error)
+            results.append(row)
+            answers[arg["lane_id"]] = text
+            if error:
+                errors[arg["lane_id"]] = error
+        supplied = (results + results[:1])[:captures]
+        G.save_results(run_dir, segment, supplied, root_sha, receipt_sha)
+        state = FAKE.build(str(tmp_path), run_dir, segment, G,
+                           answers=answers, errors=errors, projects_root=AUD.PROJECTS_ROOT,
+                           run_id="wf_interrupt_" + G._sha(run_dir)[:20])
+        assert G.record_official_state(run_dir, segment, state, root_sha, receipt_sha) == []
+        # A missing capture is not repaired or generated to complete this test.
+        # The public finalizer itself must return a named refusal without credit.
+>       final, rulings, problems = G.finalize_segment(candidate, run_dir, segment,
+                                                      root_sha, receipt_sha)
+
+test_a7_interrupted_capture.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2199: in finalize_segment
+    audit_problems, whole = audit_official_state(run_dir, n, expect_root_sha,
+a7_g1_build.py:2103: in audit_official_state
+    return AUD.g1_state_audit(states[0], expect)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_path = '/tmp/a7_logs_1781/life_native5/TEST_projects/proj/sess/workflows/wf_interrupt_bb7af25bb41d76cf1fcb.json'
+expect = OrderedDict([('script_path', '/tmp/a7_logs_1781/attempt_grader_mut_capture/pytest/test_real_finalizer_handles_ev2/run/...None)])]), ('runtime_model_id', 'claude-sonnet-5'), ('agentType', 'lean-probe'), ('effort', 'high'), ('captures', [])])
+
+>   ???
+E   IndexError: list index out of range
+
+<intentional-mutation-R7>:89: IndexError
+=========================== short test summary info ============================
+FAILED test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-1-False]
+FAILED test_a7_interrupted_capture.py::test_real_finalizer_handles_every_interrupted_capture_shape[1-0-False]
+2 failed, 5 passed in 8.99s
