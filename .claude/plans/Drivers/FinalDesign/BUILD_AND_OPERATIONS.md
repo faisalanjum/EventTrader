@@ -729,7 +729,14 @@ Archived directly in the dated archive (`archive/2026-07-15_pre-consolidation/Ba
 
 ## 9. Experiment program (signed artifacts are the ONLY status authority)
 
-- `FableExperimentPlan.md` defines WHAT to test (sha-pinned `51966848…7472` — keep byte-identical, no banner).
+- **Owner amendment, 2026-09-10:** the [Plan's A7 evidence-reuse amendment](FableExperimentPlan.md#a7-evidence-reuse-amendment)
+  governs only A7 key timing, independent key ownership, saved-answer reuse
+  and corrected regrading, including the affected standing instructions below.
+  It changes no build, release or experiment passing gate. Prior byte-pinned
+  versions remain immutable historical evidence; current document hashes live
+  in `experiments/WORKORDER_STATUS.md`.
+- `FableExperimentPlan.md` defines WHAT to test (the original `51966848…7472`
+  snapshot and later frozen versions remain byte-identical in history).
   `FableExperimentWorkOrder.md` defines HOW (sha recorded, never pinned — the CURRENT sha lives on
   `experiments/WORKORDER_STATUS.md`, re-recorded at every edit incl. the Phase-5 21c re-point; the board was
   UPDATED at Phase-5 step 21c (2026-07-16) with the full hash chain — its current_workorder_sha256 line is

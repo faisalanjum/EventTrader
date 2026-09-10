@@ -597,7 +597,9 @@ Only after the owner rules:
 5. do not rewrite frozen experiment results;
 6. record that results were measured under the earlier pinned version;
 7. regenerate dependent prompts or manifests only when the approved rule actually changes them;
-8. if the change affects the test truth, return to Step 1 with a fresh answer sample;
+8. if the change affects the test truth, return to Step 1; A7 corrections follow
+   the [Plan's evidence-reuse amendment](../FableExperimentPlan.md#a7-evidence-reuse-amendment),
+   while other experiments retain their fresh-answer-sample rule;
 9. run the required document-reader check when rule meaning, mechanics, gates or owner decisions changed.
 
 No production implementation belongs in this step.

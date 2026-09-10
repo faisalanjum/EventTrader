@@ -1,6 +1,22 @@
 # WORKORDER_STATUS - FableExperimentWorkOrder v2.0 execution board
 
-> **CURRENT (2026-08-10):** WorkOrder v2.0 (sha `e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410`) · Plan v1.0 + EXP-5 Addendum A (sha `7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592`). The version title + round pin-lists below are PRESERVED history; this line is the current pin.
+> **CURRENT (2026-09-10):** WorkOrder v2.0 + A7 evidence-reuse amendment (sha `23854f459500e44d4ba238cc118bbd74bc1de405c071de2b43d9015875751343`) · Plan v1.0 + EXP-5 Addendum A + A7 evidence-reuse amendment (sha `a8e8989b1e8a49829021a4329789cc4b1c8a11c1d27e74f22a6e0314462512db`). The version title + round pin-lists below are PRESERVED history; this line is the current pin.
+>
+> **A7 amendment status (2026-09-10):** owner approved
+> [saved-answer reuse and corrected regrading](../FinalDesign/FableExperimentPlan.md#a7-evidence-reuse-amendment),
+> not a model qualification or later-step advance. The 382 saved replies in
+> recovery `a7_recovery/unit_1983/run` remain immutable evidence: receipt
+> `8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e`,
+> finalization `2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f`.
+> A fresh source-only independent key and actual grading remain open; no
+> additional producer call is owed merely because these were called drafts.
+> Publication changes documents only, not a frozen prompt, run, key or score.
+>
+> **Previous current pins (2026-08-10):** WorkOrder
+> `e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410`;
+> Plan `7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592`.
+> Both original blobs remain retrievable from commit
+> `a0b9d8b80fd36243c35046d120176624cd6f1733`; do not re-pin historical runs.
 >
 > *Corrected 2026-08-10 (#827): this line still claimed WorkOrder `d91443f8`, which stopped describing the file after it was edited. Only a place that CLAIMS TO BE CURRENT can be wrong, so only this line moves — the dated ROUND-30/31 entries below correctly record that `d91443f8` was the hash on 2026-07-25 and are left exactly as written. The Plan sha was re-verified against `FinalDesign/FableExperimentPlan.md` and still matches, so it is unchanged.*
 >

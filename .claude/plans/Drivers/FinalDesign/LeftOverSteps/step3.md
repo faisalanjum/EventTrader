@@ -86,8 +86,12 @@ rename detector. Step 4's dedicated judge still reviews every nonempty proposal.
 
 Step 1 preserves the original zero-call kit as history, then amends and
 re-freezes the EXP-5 reader door before its first call. Therefore every real
-EXP-5 reader reply already has the four-field shape. K-fields gold drafts use a
-different, non-production door and are never replayed as reader responses.
+EXP-5 reader reply already has the four-field shape. A saved K-fields draft
+may be replayed only if admitted under the
+[Plan's A7 evidence-reuse amendment](../FableExperimentPlan.md#a7-evidence-reuse-amendment)
+and proved compatible with that exact reader contract. Its original label
+alone neither qualifies nor disqualifies it. Prompt equivalence and all reader
+qualification requirements below remain unchanged.
 Production must reject the old three-field shape; do not build a compatibility
 adapter or derived reply copy. At least one fresh amended raw reply must prove
 a lawful nonempty proposal.
@@ -324,7 +328,8 @@ Malformed output, timeout, truncation, wrong-source output, or transport failure
 13. Connect it to the existing V2 event route without adding a new public entry point.
 
 14. Replay the saved four-field EXP-5 reader replies through the reader and
-    real Core route. Never treat K-fields gold drafts as reader replies.
+    real Core route, including only those saved drafts admitted under the A7
+    amendment and exact-contract proof above.
 
 15. Run focused, affected, and full regression tests.
 
