@@ -20,6 +20,12 @@
 
 ## §0 Implementer protocol (Opus/Sonnet — one experiment at a time)
 
+For A7 only, the [Plan's A7 evidence-reuse amendment](FableExperimentPlan.md#a7-evidence-reuse-amendment)
+governs saved-answer eligibility, key-owner identity and blindness, key timing,
+corrections and regrading instead of conflicting instructions below. Preserve
+original run artifacts; freeze a new evaluation binding, not replacement raw
+answers. All other experiment, grader, coverage and pass requirements remain.
+
 1. Read §1 (conventions) + §2 (assets) + your EXP block in §4 + its WP dependencies in §3. Open cited design docs ONLY at the cited sections; before trusting any topic-doc prose, check `95_Supersession.md` and `66 §0.2-B` for staleness (D-1/D-2/D-3 stale spots are known).
 2. Verify every dependency gate artifact exists (key `.lock.json` files, `catalog_fc/FREEZE.lock.json`, upstream `decision.json` with `outcome: PASS`). Missing → stop.
 3. Build/verify your harness pieces (§2.2). Every runner supports `--dry3` (first 3 records only). Show Fable the dry-3 output BEFORE any full arm.
@@ -125,7 +131,7 @@ Resolution: at run start, resolve every alias via the harness runtime, write the
  "locked_by": "fable", "locked_at": "<iso>", "drafted_by": "<exact model id>",
  "protocol_sha256": "<sha256 of protocol.md>"}
 ```
-Rules: runner MUST verify the key sha before the first call; scorer re-verifies; mismatch = abort the EXP. A locked key is never edited — corrections require a NEW versioned key file + Fable lock + the fresh-sample rule (plan §2.1).
+Rules: runner MUST verify the key sha before the first call; scorer re-verifies; mismatch = abort the EXP. A locked key is never edited — corrections require a NEW versioned key file + Fable lock + the fresh-sample rule (plan §2.1). For A7 reuse, apply the amendment's independently signed key and timing instead; the scorer still verifies every consumed key and artifact hash. Record the actual key owner's identity, never a substituted Fable signature.
 
 **wrong-merge exhibit — `exhibits/wm_<exp>_<nnnn>.json`**
 ```jsonc
@@ -614,6 +620,12 @@ ORDER BY usage DESC
 ---
 
 ### EXP-5 — DriverUpdate item-contract extraction probe
+
+Saved replies admitted under the Plan's A7 amendment use their actual original
+prompt and call identities. A new evaluation binding references those records,
+the independently locked key, current scorer and amendment; it neither rewrites
+the original launch nor authorizes another producer call. Later EXP-6 consumes
+only evidence meeting its unchanged eligibility and passing prerequisites.
 
 **Plan bars (verbatim):** recall ≥ **95%** single or ≥ **98%** 2-run union on market-moving facts · wrong-lane = **0** after routing rules · value/shape accuracy ≥ **98%** · driver_state ≥ **95%** · would-park ≤ **10%**. Cap ~150 extraction calls + ~400 grading calls.
 

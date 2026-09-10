@@ -11,6 +11,18 @@
 > live file: `15_CandidateFactPacket.md` (owner-frozen v1.0 + the two 2026-07-15 owner amendments Q4/Q1-ext,
 > current sha `aa7239ed…`).
 
+## A7 documentation amendment — 2026-09-10
+
+Owner approved the [Plan's A7 evidence-reuse amendment](FableExperimentPlan.md#a7-evidence-reuse-amendment)
+and publication to main and the recovery branch. It permits assessment of the
+382 saved `a3_run_1983` replies under their actual instructions, with a fresh
+independent source-only key. It grants no semantic approval, A7 PASS, later-step
+advance, model deployment or database write. Key construction and actual
+grading remain open. The prepared draft-fed A4 package is not a blind key for
+this reuse route and must not be launched as one. Older signed results,
+original document versions and their hashes remain unchanged historical
+evidence; the current authority pins are on `experiments/WORKORDER_STATUS.md`.
+
 ## 1. Current execution checkpoint (2026-08-13; identity re-measured 2026-08-16)
 
 **Plain truth:** the rule design is mostly settled and the deterministic Core
@@ -468,7 +480,7 @@ or test bar, and permits no Neo4j write. A failure stops before activation.
 EXP-1 PASS 07-09 (O13 dimension binding owner-ratified) · EXP-0 PASS 07-10 (grader = 2× `claude-sonnet-5`
 @effort=high; the (model,effort) pair binds) · WP-FC-EDITS `5db902f` 07-10 · WP-FA + O2 signed 07-10 · K-reader
 v3 LOCKED 07-10 · EXP-2 PASS 07-11 (sonnet-5@high/40k/1-run) · PENDING: EXP-3..6, remaining keys, WP-FC-RUN,
-F-C freeze. Standing gates: ra_0007 kernel-§6.1 review BEFORE K-pairs.v2; Plan sha `51966848…7472` byte-pinned;
+F-C freeze. Standing gates: ra_0007 kernel-§6.1 review BEFORE K-pairs.v2; original Plan sha `51966848…7472` remains historical;
 WorkOrder sha recorded, never pinned — authoritative record = `experiments/WORKORDER_STATUS.md`, re-recorded at
 every edit incl. the Phase-5 21c re-point (board UPDATED at Phase-5 step 21c 2026-07-16 — the full hash chain recorded, its current line authoritative;
 frozen original `4911a22f…` = archive MANIFEST). Artifacts:

@@ -34,13 +34,25 @@ Step 1 must not:
 * activate any channel;
 * use future information or hidden answers;
 * silently change a sample, answer key, threshold, model or pass requirement;
-* rerun a failed arm without a named correction and fresh answer sample.
+* rerun a failed arm without a named correction and fresh answer sample,
+  except the evidence reuse explicitly permitted by the amendment below.
+
+## A7 evidence reuse — owner-approved 2026-09-10
+
+Apply the [Plan's A7 evidence-reuse amendment](../FableExperimentPlan.md#a7-evidence-reuse-amendment)
+where it supersedes key timing, the key-owner model restriction, draft reuse
+and automatic fresh-sample/regrading requirements. All case-coverage, scoring,
+independent-grader and passing gates below remain unchanged. Existing saved
+calls are accounted as historical calls, never charged again as new calls.
+This changes neither A8's prerequisite nor Step 1's completion condition.
 
 ## Required starting state
 
 Step 0 must be complete first. Record its published commit and tree as this step’s starting identity.
 
-Verify these existing facts again:
+Verify the original freeze below against its recorded versions. Its zero-call
+counts and document hashes are historical, not the current run state; current
+authority pins and results live in `experiments/WORKORDER_STATUS.md`.
 
 * old public format remains active;
 
@@ -53,10 +65,10 @@ Verify these existing facts again:
 * EXP-5 kit manifest identity:
   bf9323bc3bdc75a45a7381ac97cf0d4e1403f8754f5ac419abe1136f589c3070;
 
-* current WorkOrder v2.0 identity:
+* WorkOrder v2.0 identity at the original freeze:
   e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410;
 
-* current experiment Plan identity:
+* experiment Plan identity at the original freeze:
   7d55a1c849d8ceeaf2b029264287552e9ea08a054bc6b8fb5d6dd347d6942592;
 
 * K-fields plan identity:
@@ -221,9 +233,11 @@ keeps the sole input item's exact `quote`, `raw_label_or_claim`, `part_ref`, and
 completes each returned object with only the source fields it requires.
 Run two blind independent Sonnet 5 high-effort arms per frozen item and per
 control. Derive and freeze the exact call count and package ceiling from the
-final inventory instead of retaining 72 or 100. The key drafts are
-independently adjudicated and sealed before any scoring. EXP-5 uses fresh
-responses and never reuses a key-draft reply as an evaluated answer.
+final inventory instead of retaining 72 or 100. The key is independently
+adjudicated and sealed before any scoring. EXP-5 normally uses separate
+responses; verified saved drafts may instead be evaluated only under the A7
+evidence-reuse amendment, with a key established without those drafts or their
+output-informed findings.
 
 **Separate completeness gate.** Source selection and location completeness stay
 separate, under the channel contract and its own certification gate. The
@@ -300,6 +314,10 @@ SUPERSEDED in part by the Lane-A amendment above: the drafts are per frozen
 benchmark item, not per whole event, and the count is derived from the final
 inventory. The numbered handling rules below stay in force.
 
+For eligible saved replies, verify the completed run under the A7 amendment;
+do not execute these calls again. Replies chosen as evaluated answers must
+remain outside the independent key owner's inputs in A4.
+
 For each frozen item and control in the inventory:
 
 1. send the exact same instructions to two independent Sonnet 5 calls, each
@@ -327,9 +345,10 @@ After the run, prove:
 The item and control inventory is already frozen before A2. Here the
 independent key owner adjudicates source truth for that same frozen inventory
 and locks the answer key; it does not build the benchmark after A3. Failed
-discovery rows and model drafts may be used as leads, but neither can create or
-grade truth. The drafts are independently adjudicated and sealed before any
-scoring.
+discovery rows and unevaluated model drafts may be used as leads, but neither
+can create or grade truth. If the drafts are the evaluated answers, the A7
+amendment requires source-only independent key construction with no draft or
+output-informed-note access. The completed key is sealed before scoring.
 
 Requirements:
 
@@ -371,9 +390,18 @@ Count sequential-comparison facts before locking:
 * if fewer than five exist, stop and present the frozen ULTA-to-LUV substitution;
 * never substitute automatically.
 
-Fable signs and hash-locks the completed key. Once locked, it is immutable. A correction requires a new version.
+The independent key owner signs and hash-locks the completed key, using the
+A7 amendment's exact reviewer identity where applicable. Once locked, it is
+immutable. A correction requires a new independently reviewed version.
 
 ### A5. Prepare EXP-5
+
+For saved-answer reuse, bind the unchanged original run, prompt, inputs and
+raw replies to the new independent key and reviewed scorer instead of
+regenerating producer instructions or launchers. Prove compatibility through
+the existing parser and no-write route; never repair the answers or credit
+later prompt clarifications as tested. The new-run preparation below applies
+only when a new run is independently required under the A7 amendment.
 
 Using the existing manifest builder:
 
@@ -386,10 +414,24 @@ Using the existing manifest builder:
 5. remove P3, P4, P5, and every different-model, escalation, or fallback arm
    from the active launch plan without altering their historical record;
 6. amend the one EXP-5 reader prompt and response owner only with the
-   2026-08-18 one-item and four-field amendment and the owner-frozen
-   `continuity_hints` field and rules from Steps 2 and 3; preserve the
+   2026-08-18 one-item and four-field amendment, the owner-frozen
+   `continuity_hints` field and rules from Steps 2 and 3, and the three
+   owner-approved v3 clarifications below; preserve the
    underlying 36 source-event bytes and identities, the fact rules, the answer
    key, the matcher, the scorer, and the pass bars;
+
+   The three owner-approved v3 clarifications, recorded here because the
+   sentences above still described the delta as the earlier amendments alone:
+
+   * a guidance fact's name ends `_guidance` and a surprise fact's name ends
+     `_surprise`; where the ending is wrong but the meaning is clear the name
+     is safely recoined, and where it is not the fact is abstained;
+   * a growth basis the source supports but states no number for belongs in
+     `level_unit`; `change_unit` is used only where a `change_value` is
+     present;
+   * an exact duration requires BOTH endpoint dates; one endpoint may be used
+     only where complete fiscal framing resolves the same window, and
+     otherwise the fact is parked;
 7. resolve and record the exact Sonnet 5 runtime identity;
 8. regenerate the launch manifest and launcher twice from their existing
    owners; never hand-edit generated files;
@@ -398,7 +440,8 @@ Using the existing manifest builder:
 10. prove the underlying 36 source-event bytes and identities, the answer key,
     the pass bars, and every non-arm kit identity are unchanged, and prove the
     generated prompt and per-item packet difference equals only the one-item and
-    four-field amendment and the `continuity_hints` amendment;
+    four-field amendment, the `continuity_hints` amendment, and the three
+    owner-approved v3 clarifications recorded in item 6;
 11. update only tests and derived inventories whose expected arm set, count,
     or exact reader reply shape changed, then run all existing harness and
     attack tests;
@@ -409,15 +452,18 @@ Using the existing manifest builder:
 Preserve the original 156-call freeze as historical evidence. The new
 Sonnet-only launch receives a new exact manifest identity before use.
 
-The K-fields gold-draft door is not a production-reader reply, and it changes
-only by the 2026-08-18 one-item and four-field amendment. Because EXP-5 has
-made zero reader calls, amend and re-freeze its reader door before the first
-call. Every resulting reader reply must use the
-four-field shape; do not build an old-shape adapter or derived reply copy.
+The original zero-call preparation and its separate draft door remain
+historical evidence. A saved draft is eligible as a reader reply only under
+the A7 amendment and proof of the required four-field contract; do not build
+an old-shape adapter or derived reply copy. A genuinely new reader run freezes
+its actual approved instructions before its first call.
 
 ### A6. Freeze the EXP-5 launch
 
-K-fields completion does not start EXP-5. Freeze a separate launch packet.
+K-fields completion does not start EXP-5. Freeze a separate evaluation packet;
+only genuinely required new calls need a launch packet. For reuse, record
+the original manifest/launcher identities and observed calls separately from
+new calls; new producer calls are zero when all required replies are reusable.
 
 Record:
 
@@ -745,7 +791,9 @@ For each tool:
 Do not rewrite the existing K-fields and EXP-5 rule, input, parsing, grading,
 or proof machinery. Change only their unrun model schedules and the exact
 owner-approved amendments above, namely the 2026-08-18 one-item and four-field
-amendment and the `continuity_hints` amendment; any other change needs a
+amendment, the `continuity_hints` amendment, the three owner-approved v3
+clarifications recorded in item 6, and the A7 evidence-reuse amendment; any
+other change needs a
 reproduced failure against unchanged underlying source-event inputs.
 
 For every new or changed temporary proof tool, cover every reachable branch and

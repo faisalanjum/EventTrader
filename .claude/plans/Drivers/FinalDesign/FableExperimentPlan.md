@@ -32,17 +32,77 @@ Plain summary:
 
 ---
 
-## §2 Standing rules (bind every EXP — no exceptions)
+## §2 Standing rules (bind every EXP; A7 exception below)
 
-1. **Pre-register before any arm runs:** N, arms, metrics, bars — recorded in this file's per-EXP blocks; keys **sha-locked** before the first arm call; **graded once**; a failed arm re-runs ONLY after a named fix and on a **fresh key sample** (PIPE-33/37 + OD-6 discipline — never retune-to-pass).
+1. **Pre-register before any arm runs:** N, arms, metrics, bars — recorded in this file's per-EXP blocks; keys **sha-locked** before the first arm call; **graded once**; a failed arm re-runs ONLY after a named fix and on a **fresh key sample** (PIPE-33/37 + OD-6 discipline — never retune-to-pass). The A7 evidence-reuse amendment below is the sole exception to key timing, answer reuse and regrading.
 2. **Judged, never string-matched** scoring against an adjudicated key (PIPE-32: quote-match measured ~99% while judged precision was ~29% — the historical false signal).
 3. **Zero tolerance in the merge direction** everywhere (the one law: over-merge permanent, over-split cheap).
 4. **PIT:** name-creation corpora may use full history (PIPE-34 exemption); every reuse view / routing probe filters `visible_from ≤ event date`; no realized returns or future facts near any producer (FS-14 · DU-23).
-5. **Billing:** in-session workflow `agent()` calls only, step-0 billing guard everywhere; embeddings are the ONE metered lane (suggest-never-decide, `min_score=0.60`); no `claude -p`/SDK (95 #22, `10` §11).
+5. **Billing:** in-session workflow `agent()` calls only, step-0 billing guard everywhere; embeddings are the ONE metered lane (suggest-never-decide, `min_score=0.60`); no `claude -p`/SDK (95 #22, `10` §11). The A7 amendment permits a Codex/Core subscription runner for the key owner only; this is a runner exception, not a billing exception, and authorizes no paid API calls.
 6. **Provenance:** exact pinned model IDs per run in a run manifest (the alias trap, PIPE-32) + git commit + prompt sha.
 7. **Rule-ambiguity exhibits:** any case where key adjudicators split, or the rule text under-determines the answer, is logged as `rule_ambiguity{doc, rule}`. Each exhibit becomes a one-line doc-amendment proposal **regardless of the experiment's pass/fail** — this is the dedicated "unclear rules" detection channel.
 8. **Honest denominators:** "0 wrong in n" is always published with its rule-of-three upper bound (≤3/n at 95%) — never bare "zero wrong".
 9. **Do not re-test rejected mechanisms:** same-prompt stability voting · alias layers · catalog-first display · curated XBRL dictionary · LLM-distilled anchors · threshold-decided admissions (kernel §13, `95`). Their rejections stand unless an experiment here fails in a way that names one.
+
+---
+
+### A7 evidence-reuse amendment
+
+Owner-approved 2026-09-10. This is the single owner of the following exception
+for Step 1 A3–A7 and later reuse of its evidence. Other experiments, product
+meaning, pass bars, required case coverage and roadmap gates are unchanged.
+
+1. **Reuse answers, not labels.** Verified saved independent reader replies may
+   be evaluated as A7 answers even when originally collected as key drafts.
+   Bind the original source inventory fixed before the calls, complete inputs,
+   actual prompt, model/runtime/settings, raw replies and call records. Prove the supported
+   response contract and absence of hidden-answer leakage; parseable JSON is
+   insufficient. Preserve every scheduled case and both required arms. Never
+   alter a raw saved answer, overwrite its manifest or relabel the original run.
+
+2. **Establish truth independently.** Before scoring reused drafts, one fresh,
+   isolated Codex or Core key owner must establish and sign the key from the
+   frozen text sources, benchmark and governing fact rules. It must not see
+   the evaluated replies, an answer-derived key, grades or output-informed
+   review notes. A session already exposed to those cannot claim blindness.
+   Use the owner's Codex or Core review model, not the Sonnet model under test.
+   Record its exact identity, model, supplied inputs and review evidence;
+   preserve the existing key schema, coverage, independent hard-disagreement
+   reviews and signing checks. Lock truth before exposing the replies for
+   grading. This permits only that non-production key-owner role through an
+   approved subscription runner; it changes no other model role or transport
+   rule. The existing qualified independent graders remain required.
+
+3. **Correct grading without restarting answers.** A reproduced code error or
+   independently source-verified key error permits a new version of the
+   affected key, grading evidence and score over the same saved replies.
+   Key corrections retain the same source-only independence rule.
+   Preserve the old versions and failure record; record the correction and
+   its exact code/key/input identities. Reuse unchanged valid judgments only
+   where their full bindings still hold. Never drop difficult cases, relax a
+   bar or derive truth from the tested output to obtain a pass. A key omission
+   remains inconclusive until independently resolved and regraded; it does
+   not automatically require a new sample.
+
+4. **New calls need a specific missing proof.** Do not repeat a valid completed
+   call or replace the whole sample merely because an arm failed, its label
+   changed, or its grader/key was corrected. Recover existing evidence first.
+   New calls are limited to required never-collected or unrecoverable results, the existing
+   invalid-only retry allowance, or proof of a changed AI-facing task, input
+   or configuration that saved evidence cannot establish. Freeze the reason,
+   affected population and call ceiling first. Never reroll a semantic error
+   with unchanged instructions until it passes. Tuning on known failures
+   makes those cases regression evidence, not unseen qualification evidence.
+
+5. **Keep the claim exact.** Score source truth under unchanged product rules
+   and identify the instructions actually received. Later prompt clarifications
+   inherit no measured qualification from earlier replies. Report model
+   errors, existing code's actual corrections/refusals, remaining wrong
+   accepts, misses and invalids separately using the existing accounting;
+   preserve all score formulas. A finished measurement is not a passing test.
+   A7 PASS, A8, Step 2 GO/LIMITED GO, production use and final closure retain
+   their existing gates. This amendment authorizes no production change,
+   graph write, automatic later-step advance or Step 14 activity.
 
 ---
 
@@ -146,7 +206,7 @@ Seed **gauntlet** X-G (kernel §8.3, zero-tolerance, pre-sync) · **X-IM** immun
 - **Metrics:** fact-presence recall (single + 2-run union) · per-field accuracy · wrong-lane rate (metric/guidance/surprise/action) · simulated would-park rate · run-to-run presence disagreement (ISS-62's measure) · per-OD-rule error table.
 - **Pass bars (pre-registered):** recall ≥ **95%** single or ≥ **98%** 2-run union on market-moving facts · wrong-lane = **0** after routing rules · value/shape accuracy ≥ **98%** (values are the trading substance) · driver_state ≥ **95%** · would-park ≤ **10%**.
 
-**EXP-5 Addendum A (2026-07-25, owner-approved) — the safety gate.** A SIXTH pass criterion, added because it changes the pass definition: a run may meet all five bars above yet FAIL here. ZERO confirmed-wrong ACCEPTED facts across every production field. "Accepted" = a produced fact that survives the real `run_event` dry-run (eligible for the later admission decision — NOT "written"; EXP-5 does not test create-vs-attach). "Confirmed-wrong" = qualified adjudication confirms any production field wrong (values, period, slice, state, units, basis, polarity, or the driver name's MEANING — lawful synonyms are correct), OR an unsupported extra (no gold and no text support). One confirmed-wrong accepted fact → EXP-5 FAILS. The five original bars keep their values and formulas (value/shape = the pooled `code_ok/code_all`). A genuine hidden-key omission makes the run INCONCLUSIVE (version the key + fresh cases), never a fail.
+**EXP-5 Addendum A (2026-07-25, owner-approved) — the safety gate.** A SIXTH pass criterion, added because it changes the pass definition: a run may meet all five bars above yet FAIL here. ZERO confirmed-wrong ACCEPTED facts across every production field. "Accepted" = a produced fact that survives the real `run_event` dry-run (eligible for the later admission decision — NOT "written"; EXP-5 does not test create-vs-attach). "Confirmed-wrong" = qualified adjudication confirms any production field wrong (values, period, slice, state, units, basis, polarity, or the driver name's MEANING — lawful synonyms are correct), OR an unsupported extra (no gold and no text support). One confirmed-wrong accepted fact → EXP-5 FAILS. The five original bars keep their values and formulas (value/shape = the pooled `code_ok/code_all`). A genuine hidden-key omission makes the run INCONCLUSIVE, never a fail; A7 resolves it under the evidence-reuse amendment above without an automatic fresh sample.
 - **Failure attribution → action:** errors cluster by FIELD → rule/prompt defect → doc fix (e.g., OD-9 span copying under-specified) · by MODEL → tier up (Haiku out; Sonnet default) · by SOURCE TYPE → packet/chunking fix · high presence-disagreement → 2-run union becomes the default (cost re-plan). Each cause has a different named fix; none is a redesign.
 - **By-product:** the empirical basis for part-2 producer packets + §12.5's [OWNER] thresholds.
 - **Cost cap:** ~150 extraction calls (large prompts) + ~400 grading calls.

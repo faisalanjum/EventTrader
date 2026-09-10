@@ -12,7 +12,9 @@ wrong accepted results and maximize measured recall without special cases or
 extra machinery.
 
 Use only a model qualified for the exact role and settings. Current Steps 1–13
-use Sonnet 5 at high effort. Do not enlarge a prompt to compensate for a
+use Sonnet 5 at high effort, except the isolated A7 key owner explicitly
+permitted by [the Plan](../FableExperimentPlan.md#a7-evidence-reuse-amendment).
+Do not enlarge a prompt to compensate for a
 weaker model. Cheaper-model qualification is a separate final step.
 
 Rules 1–7 apply to every prompt. Rule 8 applies only to a real multi-step agent

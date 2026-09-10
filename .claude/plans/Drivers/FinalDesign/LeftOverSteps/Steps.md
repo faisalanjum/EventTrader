@@ -117,6 +117,12 @@ evidence, locked answer key, sample, prompt, safety rule, or pass bar.
 
 ## First-release model ruling
 
+**A7 key-owner exception — owner-approved 2026-09-10:** apply only the
+[Plan's A7 evidence-reuse amendment](../FableExperimentPlan.md#a7-evidence-reuse-amendment)
+to its fresh, isolated, non-production key owner. This is the sole exception
+to the Sonnet-only role restriction in this roadmap and its prompt standard;
+it enables no alternative producer, grader, production model or Step 14 task.
+
 Owner ruling, 2026-08-14: every still-unrun model call in Steps 1–13 uses
 Sonnet 5 at high effort. Step 2 confirms whether that exact configuration
 passed each role's existing evidence gate; failure stops the role rather than
@@ -458,8 +464,10 @@ nonempty proposal. Do not ask the owner to decide this handoff again.
 Both Step 1 model runs were still at zero calls when this ruling was made.
 Step 1 therefore preserves the original zero-call kit as history, amends and
 re-freezes only the EXP-5 reader door, and requires every real reader reply to
-use the four-field shape. K-fields gold drafts remain a separate non-production
-door. Step 3 reuses those four-field reader replies directly; production
+use the four-field shape. Original K-fields gold drafts used a separate
+non-production door; their later eligibility as saved reader evidence follows
+the Plan's A7 evidence-reuse amendment. Step 3 reuses admitted four-field
+reader replies directly; production
 rejects the old three-field shape, with no adapter or derived reply copy.
 
 This is the single roadmap. Each numbered file contains the complete work order
