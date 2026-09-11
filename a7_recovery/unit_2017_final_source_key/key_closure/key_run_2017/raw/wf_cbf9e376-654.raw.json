@@ -1,0 +1,55 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_50877032",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "concourse_d_expansion",
+              "driver_state": "announced",
+              "level_low": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind of real_item is confirmed: the quote states a discrete company-announced build of a new Concourse D whose stated scope is 17 new gates, which is a real non-boilerplate action fact with a countable size, not a control."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "17 new gates",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The sentence is framed as the airline's forward 'vision' for a facility that does not yet exist, so a guidance reading was arguable, but the source states a decided, announced project rather than an outlook on a re-readable driver level, and a guidance reading would carry no lawful target period; I settled it as a lawfully periodless action_event and left the slice empty because a third-party airport concourse is not the company's own measured business population."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-032/b1",
+      "agrees": false,
+      "why": "It abstains by treating the 17 gates as period-less guidance, but the quote records a decided, company-announced construction project rather than a forward outlook on a driver level, and an action fact is lawfully periodless, so abstention was not required."
+    },
+    {
+      "lead_id": "sokc-032/b2",
+      "agrees": true,
+      "why": "Independently of the lead I settled the same lane (action_event), the same state (announced, the company's own stated action), and the same point level of 17 with unit count and null scale evidence, so its record matches what the evidence supports."
+    }
+  ],
+  "open_issues": []
+}
+```

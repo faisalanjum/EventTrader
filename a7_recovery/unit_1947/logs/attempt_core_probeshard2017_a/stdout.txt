@@ -1,0 +1,97 @@
+{
+ "counts": {
+  "shards": 33,
+  "raws": 33,
+  "problems": []
+ },
+ "shards_type": "OrderedDict",
+ "first_key": "0000006201-26-000031",
+ "first_shard_shape": {
+  "source_id": "str",
+  "rows": {
+   "0000006201-26-000031#000": {
+    "source_id": "str",
+    "facts": "list",
+    "abstentions": "list",
+    "continuity_hints": "list"
+   },
+   "0000006201-26-000031#001": {
+    "source_id": "str",
+    "facts": "list",
+    "abstentions": "list",
+    "continuity_hints": "list"
+   },
+   "0000006201-26-000031#002": {
+    "source_id": "str",
+    "facts": "list",
+    "abstentions": "list",
+    "continuity_hints": "list"
+   },
+   "0000006201-26-000031#003": {
+    "source_id": "str",
+    "facts": "list",
+    "abstentions": "list",
+    "continuity_hints": "list"
+   },
+   "0000006201-26-000031#004": {
+    "source_id": "str",
+    "facts": "list",
+    "abstentions": "list",
+    "continuity_hints": "list"
+   },
+   "0000006201-26-000031#005": {
+    "source_id": "str",
+    "facts": "list",
+    "abstentions": "list",
+    "continuity_hints": "list"
+   },
+   "0000006201-26-000031#006": {
+    "source_id": "str",
+    "facts": "list",
+    "abstentions": "list",
+    "continuity_hints": "list"
+   }
+  },
+  "outcomes": {
+   "0000006201-26-000031#000": "str",
+   "0000006201-26-000031#001": "str",
+   "0000006201-26-000031#002": "str",
+   "0000006201-26-000031#003": "str",
+   "0000006201-26-000031#004": "str",
+   "0000006201-26-000031#005": "str",
+   "0000006201-26-000031#006": "str"
+  },
+  "review": [
+   "list[6]",
+   {
+    "row_index": "int",
+    "fact_index": "int",
+    "hard_classes": "list",
+    "reference_name": "str",
+    "du_worthy": "bool",
+    "gold_extra": "dict",
+    "ambiguity_note": "NoneType"
+   }
+  ],
+  "groups": [
+   "list[0]"
+  ],
+  "lead_reconciliation": [
+   "list[2]",
+   {
+    "lead_id": "str",
+    "agrees": "bool",
+    "why": "str"
+   }
+  ],
+  "open_issues": [
+   "list[2]",
+   {
+    "what": "str",
+    "why": "str"
+   }
+  ]
+ },
+ "first_raw_type": "str",
+ "first_raw_head": "```json\n{\n  \"source_id\": \"0000006201-26-000031\",\n  \"rows\": [\n    {\n      \"row_index\": 1,\n      \"settled\": {\n        \"source_id\": \"0000006201-26-000031\",\n       "
+}

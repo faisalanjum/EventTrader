@@ -1,0 +1,41 @@
+{
+ "record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2017_final_source_key/PREPARED_FINAL_KEY_2017.core_final2017_real.json",
+ "record_sha256": "7aee43a7e296e68f4dffec91ce3c3229e685cace93b91933a5eb84412a62de89",
+ "review_outcomes": {
+  "valid": 66
+ },
+ "resume": {
+  "owed": 33,
+  "served": 0,
+  "problems": []
+ },
+ "launch_failures": [],
+ "a3_answer_run": {
+  "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+  "run_files": 799
+ },
+ "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_package_2017",
+ "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017",
+ "map_sha256": "a8654af2102a6f8c38b284c3f64cd0ffcf905ed48f94a537b4e0c6b868646274",
+ "checks": [
+  "1 the owners it names re-measure",
+  "2 every package file re-measures",
+  "3 the receipt re-measures",
+  "4 the receipt still schedules exactly the 33, unserved",
+  "5 no call has been made and the run cannot close",
+  "6 the completed review stage re-measures",
+  "7 all 66 review slots still read valid",
+  "8 every one of the 33 results is still owed, none served",
+  "9 the package still re-derives and preflight is still clean",
+  "10 two independent review leads per source, still 33 sources",
+  "11 all 33 launch paths carry the pinned script, read-only",
+  "12 the launch directory holds exactly those 33 scripts",
+  "13 the launch binding refuses a changed or missing source",
+  "14 the frozen accounting is the one that was recorded",
+  "15 the isolated key role is still the frozen non-Sonnet one",
+  "16 the original 382 answers are untouched"
+ ],
+ "passed": 16,
+ "model_calls": 0,
+ "launched": 0
+}

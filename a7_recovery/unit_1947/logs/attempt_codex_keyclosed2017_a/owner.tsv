@@ -1,0 +1,7 @@
+attempt	codex_keyclosed2017_a
+payload	../../unit_1997/ledger/../../unit_2017_codex_check/check_closed.py
+map	../unit_1997/../unit_2017_final_source_key/map_final_launch_2017.tsv
+wrapper_pid	4176513
+payload_pid	4176517
+started_utc	2026-09-11T05:05:06Z
+state	finished exit 0

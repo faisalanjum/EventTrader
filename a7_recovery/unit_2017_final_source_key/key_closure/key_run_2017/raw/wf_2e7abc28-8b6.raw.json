@@ -1,0 +1,251 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 2.97, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.97, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 2.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 2.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Diluted"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: the quote states a full-year diluted per-share earnings level of $2.97 against a stated prior-year $2.71, a lawful metric fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "selling_general_and_administrative_expenses",
+              "driver_state": "unknown",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "selling_general_and_administrative_expenses_surprise",
+              "driver_state": "missed",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "unfavorable",
+                "basis": "source_framing",
+                "evidence": "The source itself frames the overage as cost pressure - it attributes SG&A running past expectation to 'pressure from heightened inflation in team member health care and casualty claim costs', so the company presents the higher-than-expected expense as an adverse outcome rather than a good one.",
+                "sentence": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs."
+              },
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: a reported actual compared against a stated expectation, which under the expectation-routing rule yields the surprise plus its required numberless home metric sibling."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 6447, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6447, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:us"],
+              "period_end_date": "2025-12-31",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: a standing store-count level of 6,447 that can be re-read over time, carried on the company's own domestic geography part."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "shareholders_equity",
+              "driver_state": "reported",
+              "level_low": {"value": -763352, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+              "level_high": {"value": -763352, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "period_end_date": "2025-12-31",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: a stated balance-sheet level for total shareholders' equity, encoded as the negative region of that standard line rather than as a separate deficit driver."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote is generic statutory safe-harbor boilerplate claiming Private Securities Litigation Reform Act protection for forward-looking statements; it states no driver state, change, surprise, guidance, or action, so the gate returns no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and it behaves as one: the safe-harbor sentence is pure legal boilerplate and correctly yields a single abstention with no fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "stock_split",
+              "driver_state": "occurred",
+              "period_end_date": "2025-06-10",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one, though narrowly: the named target is the restatement clause, which is only meaningful through the completed 15-for-1 forward stock split stated in the same quote, and that discrete completed corporate action is the fact recorded."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "Diluted earnings per common share",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated 10% increase is left unstored because it is derivable from the two closed point values ($2.97 vs $2.71), even though the source's rounded 10% does not exactly equal the derived 9.6%."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing"],
+      "reference_name": "SG&A expenses",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The home sibling is numberless because the quote gives no SG&A level, so its state is unknown and the quote alone carries the content."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "SG&A expenses again exceeded our expectations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The possessive 'our expectations' is the company's own expectation rather than the Street, so the baseline is recorded as previous_guidance under the own-target mapping even though no published SG&A guide appears anywhere in this event."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "Ending domestic store count",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Domestic' is reused as the menu part geography:us, but elsewhere the event counts Puerto Rico inside its domestic figures, so the menu match is a judgment on same-meaning rather than an exact label match."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "Total shareholders’ deficit",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The located quote stops at the 2025 figure and does not include the prior-year total, so no comparison value or direction could lawfully be stored and the state stays reported."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording"],
+      "reference_name": "15-for-1 forward stock split",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The named target is the retroactive share-data adjustment, which is a presentation qualifier rather than a driver, so the fact is anchored on the completed split itself and the 15-for-1 ratio is left in the quote rather than forced into a numeric level slot."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-008/b1",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 3, 5 and 6, but it routes the SG&A surprise baseline to consensus when the source says 'our expectations' (the company's own), and it stores a prior-year comparison and an increased state for the shareholders' equity row using a figure that lies outside that row's located quote."
+    },
+    {
+      "lead_id": "sokc-008/b2",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 3, 4 and 5, but it likewise maps 'our expectations' to consensus rather than the company's own prior expectation, and it stores the 15-for-1 split ratio as a numeric level of an action driver, which the source's 'for-1' phrasing does not safely support."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 2 expectation baseline: 'our expectations' recorded as previous_guidance with no prior guide anywhere in the event.",
+      "why": "The own-target mapping forbids an internal-target value and forbids consensus for a clearly company-owned expectation, yet the resulting actual_vs_guidance composition points at a guide this source never published, so the pairing cannot be validated downstream."
+    },
+    {
+      "what": "Row 3 slice: whether 'domestic' is the same meaning as the menu value geography:us.",
+      "why": "The event's own footnote defines its domestic figures as U.S. and Puerto Rico operations, so a menu reuse may silently fold a slightly wider population into the U.S. series, and the alternative would be coining a separate geography value."
+    },
+    {
+      "what": "Row 4 evidence truncation: the located quote ends immediately after the 2025 figure.",
+      "why": "The prior-year total sits in the same table but outside the quote, so the real year-over-year improvement in the deficit cannot be stored without extending a fixed locator, and the fact is recorded as a bare level instead."
+    },
+    {
+      "what": "Row 6 target mismatch: the raw label names the retroactive share-data adjustment, not the split.",
+      "why": "A restatement-of-presentation clause is a measurement qualifier rather than a driver, so settling it required anchoring on the split action in the same quote; a reviewer applying the target strictly could instead read this row as yielding no fact."
+    }
+  ]
+}
+```

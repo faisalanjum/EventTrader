@@ -1,0 +1,395 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 10.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the quote states a company-measured revenue change of 10.8% on an explicit year-over-year basis for the reported quarter."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "unknown",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "revenue_surprise",
+              "driver_state": "beat",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "favorable",
+                "basis": "source_framing",
+                "evidence": "The company presents the outcome as a positive result in the same passage that reports strong demand and margin improvement, so revenue landing above its own initial expectation is framed as the good side.",
+                "sentence": "Revenue performance in the quarter exceeded our initial expectations."
+              },
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: a delivered quarterly actual is compared to the company's own initial expectation, which routes to a surprise plus its required numberless home sibling."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": -40, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": -40, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["Excluding net special items", "adjusted", "diluted"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: a stated per-share result for the reported quarter, recorded as the negative region of earnings per share rather than a separate loss driver."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "winter_storms",
+              "driver_state": "occurred",
+              "level_low": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: a discrete, completed disruption in the reported quarter carrying a stated dollar magnitude, so it is an event rather than a standing condition level."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 25, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:london"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the located target states a measured unit-revenue change for one market of the company's own network on the sentence's stated year-over-year basis."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 11, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "slice_parts": ["channel:tmc"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the target states a measured growth number for the company's travel-management-company selling channel, read as revenue from the list of corporate revenue numbers it belongs to."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "fuel_recapture_rate_guidance",
+              "driver_state": "unknown",
+              "value_text": "recapture rate in the nineties",
+              "conditions": "if fuel is still at the level with capacity reductions",
+              "company_confirmed": true,
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: a company executive states a conditional forward expectation for a re-readable rate in a named future quarter, which is guidance with no stated movement."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard safe-harbor wording that risks and uncertainties could cause actual results to differ; it names no driver state, change, surprise, guidance or action, so it is generic boilerplate and yields no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and settled as a control: the sentence is generic forward-looking-statement boilerplate and correctly yields no fact."
+    },
+    {
+      "row_index": 9,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_high": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent_sequential",
+              "comparison_baseline": "sequential_period",
+              "slice_parts": ["product:otherrevenue"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the target states a bounded increase of the other-revenue line measured against the immediately prior quarter named in the same sentence."
+    },
+    {
+      "row_index": 10,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "level_unit": "percent_sequential",
+              "comparison_baseline": "sequential_period",
+              "slice_parts": ["geography:domesticdestination"],
+              "month": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: a real qualitative improvement in domestic unit revenue through the quarter into March, which counts even though 'double digits' states no usable number."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "reference_name": "Total revenue grew 10.8% year-over-year",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing"],
+      "reference_name": "Revenue performance in the quarter",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "This numberless home sibling covers the same company-wide revenue and quarter as the valued revenue fact settled at row 1, so the two may need to be reconciled downstream rather than stored as two separate revenue states."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "exceeded our initial expectations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Two things are genuinely unsettled by the text: whether 'exceeded' counts as explicit favorability wording (I read it as a position verb, so false plus a polarity proof) and whether 'our initial expectations' is the company's own prior guide (recorded) or a looser internal plan."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "adjusted loss per diluted share of 40 cents",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "$320 million revenue impact from winter storms",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two unresolved points recorded rather than guessed away: weather can read as a standing condition (metric) yet these storms are a discrete completed incident (recorded as an event), and the stated magnitude is an adverse revenue effect, which I signed negative although the charge convention would sign an adverse magnitude positive."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "London up 25%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "London is not on the supplied menu, so the part is coined as a geography the company operates in, and its year-over-year basis is inherited from the first half of the same sentence."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "TMC performance is up 11%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote itself never names the measured variable behind 'performance'; I read it as revenue because the same answer lists managed corporate revenue and business-product growth in parallel, and the travel-management partners are read as a selling channel rather than a customer group."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "recapture rate would be in the 90s",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'in the 90s' is a vague quantity rather than a stated number, so the guide is recorded as qualitative, and the target year is taken as the current fiscal year from the surrounding balance-of-year discussion rather than stated in the quote."
+    },
+    {
+      "row_index": 9,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "just versus the fourth quarter was up you know something less than 10 percent",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The speaker blurs whether the bounded number describes the whole other-revenue line or only its marketing component (I kept the line item he goes on to size), and a year-over-year comparison is co-stated while the stated number is the prior-quarter one, so the prior-quarter baseline is carried."
+    },
+    {
+      "row_index": 10,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "we saw it increase sequentially up into March for double digits",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The word 'sequentially' is in-document evidence for a prior-period basis, but the double-digit figure for March may instead be a year-ago comparison stepping up month by month, and the text does not settle which."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-023/b1",
+      "agrees": false,
+      "why": "It matches my settlement on several rows (revenue growth in the change slot, the per-share loss, the London and TMC rows, the Q4 recapture guide and the boilerplate control), but it differs materially on row 2 (it asserts favorability wording and supplies no polarity proof), on row 4 (it puts the storm magnitude in the change slot rather than as the event's stated level), and on row 9 (it drops the stated 'less than 10 percent' bound and assigns the loyalty-marketing menu part instead of the other-revenue line)."
+    },
+    {
+      "lead_id": "sokc-023/b2",
+      "agrees": false,
+      "why": "It agrees on the per-share loss, the London and TMC growth readings, the Q4 recapture guide, the row 8 control and the ceiling shape on row 9, but it differs on row 1 and row 5 (growth put in level slots on drivers whose own level is absolute), on row 2 (favorability wording asserted with no polarity proof), on row 4 (a coined metric name carrying an effect word instead of an event on the named cause), and on row 10 (quarter framing where the target speaks about March)."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Sign convention for an adverse revenue impact attributed to an event driver (row 4).",
+      "why": "The signed-axis examples cover a loss (negative) and a charge (positive) but not a revenue hit stored on the causing event, so -320 versus +320 is not decidable from the rules alone."
+    },
+    {
+      "what": "A one-sided growth bound ('less than 10 percent') on a driver whose own level is absolute (row 9).",
+      "why": "The change slot carries no shape hint, so a ceiling can only be expressed by using the level slots with a growth unit, which conflicts with the rule that growth on an absolute-level driver belongs in the change slot."
+    },
+    {
+      "what": "Possible collision between the numberless revenue home sibling (row 2) and the valued revenue fact (row 1).",
+      "why": "Both cover company-wide revenue for the same reported quarter, and the rules require a numberless home for a numberless surprise while also forbidding one fact being stated twice."
+    },
+    {
+      "what": "The measured variable behind 'TMC performance' (row 6).",
+      "why": "The located quote names no metric; revenue is read from the neighbouring sentences, so the name rests on surrounding context rather than the target's own words."
+    },
+    {
+      "what": "Growth basis for the March 'double digits' step-up (row 10).",
+      "why": "The quote contains the word 'sequentially' (which the basis rule treats as in-document sequential evidence) while airline monthly figures of this kind are commonly year-ago comparisons, and the text does not resolve the conflict."
+    }
+  ]
+}
+```

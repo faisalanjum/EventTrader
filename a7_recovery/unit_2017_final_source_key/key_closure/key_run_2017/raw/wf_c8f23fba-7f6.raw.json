@@ -1,0 +1,242 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "effective_tax_rate_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 24, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 26, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "conditions": "though it may vary based on discrete items",
+              "company_confirmed": true,
+              "measurement_raw_spans": ["underlying"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real item: the CFO states a company forward range for fiscal 2026, which is a lawful guidance fact, so the frozen kind holds."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_openings",
+              "driver_state": "increased",
+              "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "change_value": {"value": 38, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["geography:canada"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real item: a counted opening level for Canada plus a source-stated year-over-year increase is a genuine metric change, so the frozen kind holds."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_high": {"value": 3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "slice_parts": ["unknown:group occasions"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real item: the current share of combined sales carried by the two group occasions is a readable standing level stated as an open ceiling, so the frozen kind holds."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "sales_mix_guidance",
+              "driver_state": "unknown",
+              "sentinel_class": "long_term",
+              "time_type": "duration",
+              "value_text": "double-digit percentage of sales",
+              "company_confirmed": true,
+              "slice_parts": ["unknown:group occasions"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real item: the company's own forward 'could be' statement over an explicitly stated longer-term horizon is numberless guidance, so the frozen kind holds."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "An umbrella claim that 'the results' were in line with expectations and guidance names no identifiable metric, period or value, so it is an ungrounded expectation comparison with no possible home sibling and yields no lawful fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed lawful_abstention_control and settled as a control: the sentence is a genuine expectation claim but has no identifiable metric home, so the single abstention is the correct outcome and the frozen kind holds."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "legal_contingencies",
+              "driver_state": "decreased",
+              "change_value": {"value": -4, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real item: a stated $4 million reduction in legal contingencies inside the quarter's G&A is a real, signed change on a standing driver, so the frozen kind holds."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is standard forward-looking-statement safe-harbor language directing listeners to the 10-K/10-Q risk factors; it states no driver state, change, surprise, guidance or action and is exactly the generic risk boilerplate the gate drops."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed negative_control and settled as a control: the quote is pure safe-harbor boilerplate that fails the fact gate, so the frozen kind holds."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "underlying effective tax rate",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "openings in Canada",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "these two group occasions represent less than 3% of combined sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The kind of the 'group occasions' part is genuinely unclear (catering reads as a channel while build-your-own reads as a product), so it is recorded as unknown rather than guessed, and the quote states no resolvable period for the share."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "could be double-digit percentage of sales longer term",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Double-digit percentage' is a vague quantity rather than a stated number, so it is recorded as numberless guidance with the same unresolved slice kind as row 3."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "a $4 million reduction in legal contingencies",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the reduction reads as a one-off action or a change on a standing accrual is arguable; it is settled as a metric change because the bare litigation root defaults to metric and the contingency level is re-readable."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [3, 4],
+      "members_are_one_fact": false,
+      "reason": "The one sentence states two different things about the same population: a present measured share of combined sales (a metric level, open ceiling at 3%) and a separate forward long-term aspiration of a double-digit share (numberless guidance), so they are distinct facts with different lanes and different periods."
+    }
+  ],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-025/b1",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 2, 5, 6 and 7 in lane, name, values and abstention reasoning, but it assigns 'product:group_occasions' to rows 3 and 4 where I found the slice kind genuinely unclear and recorded 'unknown:group occasions', and it also omits the time_type meaning judgment on row 3."
+    },
+    {
+      "lead_id": "sokc-025/b2",
+      "agrees": false,
+      "why": "It likewise matches rows 1, 2, 5, 6 and 7, but it guesses the same 'product:group_occasions' kind on rows 3 and 4 instead of the honest unknown constant, and it types the group-occasions share as 'instant' where I read a share of sales flows as a duration meaning."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Rows 3 and 4 carry the slice as 'unknown:group occasions' rather than a named kind.",
+      "why": "The two parts named in the surrounding prose are build-your-own-Chipotle (reads as product/offering) and catering (reads as channel), so two kinds stay reasonable and the ladder forbids guessing; a later governed decision is needed before this value can be promoted to a kinded slice."
+    },
+    {
+      "what": "Row 3 has no resolvable period; all period fields are null.",
+      "why": "The source says only 'Today', which is not a stated or clearly implied window, so the fact cannot be aligned to a quarter or year and may not join the same series as later restatements of that share."
+    },
+    {
+      "what": "Row 4 states both sentinel_class 'long_term' and a time_type.",
+      "why": "The period rule says a stated horizon excludes every other period field; I read time_type as a meaning judgment rather than a period field, but if the validator counts it as a period field this fact would park."
+    }
+  ]
+}
+```

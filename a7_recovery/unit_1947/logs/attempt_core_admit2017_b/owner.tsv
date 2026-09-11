@@ -1,0 +1,7 @@
+attempt	core_admit2017_b
+payload	../../unit_2017_final_source_key/lifecycle_2017.py
+map	../unit_2017_final_source_key/map_final_launch_2017.tsv
+wrapper_pid	4163566
+payload_pid	4163570
+started_utc	2026-09-11T04:58:07Z
+state	finished exit 0

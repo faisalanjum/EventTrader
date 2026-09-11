@@ -1,0 +1,226 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "dividend_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 0.75, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.75, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 0.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 0.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "instant",
+              "fiscal_year": 2026,
+              "month": 2
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the board's declared $0.75 quarterly per-share dividend, stated beside the prior $0.71 rate, is a readable per-share level with a source-stated increase, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "reported",
+              "level_low": {"value": -11, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -11, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["Special Item"],
+              "slice_parts": ["geography:ru"],
+              "time_type": "duration",
+              "fiscal_year": 2023
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: a stated net operating loss of $11 million for the year ended December 31, 2023 is a real signed level on the operating-profit metric, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_store_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:kfcglobaldivision", "entity_ownership:companyownedstores"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: Company same-store sales growth of 5% for 2025 in the KFC Division section is a stated, re-readable growth level, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "capital_loss_utilization_timing_correction",
+              "driver_state": "occurred",
+              "level_low": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["Special"],
+              "time_type": "duration",
+              "fiscal_year": 2023
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: a $41 million one-off expense from a discrete timing correction on capital loss utilization is a completed charge, so the frozen kind and my outcome agree (lane settled as action_event, not metric)."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "company_owned_unit_share",
+              "driver_state": "reported",
+              "level_low": {"value": 79, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 79, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "slice_parts": ["segment:thehabitburgergrillglobaldivision", "geography:us"],
+              "time_type": "instant",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the 79% company-owned share of Habit Burger & Grill U.S. units at the end of 2025 is a standing, re-readable ownership rate, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001041061-26-000084",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic risk-factor boilerplate: food- and beverage-borne illness and food safety issues 'have occurred and may occur within our system from time to time' names an undifferentiated hazard with no stated driver level, direction, period, size, guidance, expectation comparison, or discrete incident, and it is not a specific current source-flagged adverse threat, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and it behaves as one: the sentence is undated, unquantified industry-hazard boilerplate that yields no fact, so the frozen kind and my outcome agree."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "quarterly dividend of $0.75 per share of Common Stock",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The $0.71 rate was paid through all of 2025, so the stated baseline is readable as either the immediately prior quarterly dividend (sequential_period) or the year-ago rate (prior_year); I recorded prior_year on the source's own '\u2026paid in 2025' year framing, and left change_value null because the 6% is derivable from the two closed point shapes."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["losses_and_sign", "point_range_floor_ceiling", "measurement_wording", "slices_and_unknown_axes"],
+      "reference_name": "net Operating Loss of $11 million",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote itself names no population, so the Russia attribution comes from the surrounding exit footnote and the amount is a corporate-unallocated aggregate, leaving geography:ru versus a corporate/unallocated reading genuinely open; I recorded geography:ru as the business population and kept 'Special Item' in measurement under the never-drop sink."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "portion_versus_whole", "measurement_wording"],
+      "reference_name": "Company same-store sales growth of 5%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The 'excluding the impacts of foreign currency translation and lapping the 53rd week' qualifier sits on the Company sales increase rather than on the 5% figure, so I left measurement empty, and the Company-owned population is recorded as an entity_ownership slice rather than a name qualifier, which is the other reading."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording", "corrections_and_amendments"],
+      "reference_name": "$41 million of expense associated with a correction in the timing of capital loss utilization",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The item sits inside income tax expense, so a metric reading on tax expense is arguable, but the stated $41 million is a one-off correction charge rather than a standing tax level, so I settled it as a completed action carrying a positive charge."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu carries two same-kind labels for this brand's segment ('segment:thehabitburgergrillglobaldivision' and 'segment:habitdivision') and the ladder covers only cross-kind ambiguity, so I reused the label matching the filing's stated division name and the other division entries' pattern."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-014/b1",
+      "agrees": false,
+      "why": "It matches my settlement on rows 2, 3 and 6 in substance, but it records the dividend baseline as sequential_period where I settled prior_year, and it names row 5 'unit_count' with a percent level, which mislabels a 79% ownership ratio as a count driver; it also omits the Special-item measurement spans I kept on rows 2 and 4 and uses a bare 'capital_loss_utilization' name for a discrete timing correction."
+    },
+    {
+      "lead_id": "sokc-014/b2",
+      "agrees": false,
+      "why": "It agrees with my prior_year baseline on row 1 but stores a change_value of 6% that is derivable from the two stated closed point shapes, marks row 3 'reported' where the source states growth and drops the company-owned slice, picks the alternative 'segment:habitdivision' menu label on row 5 while also naming that driver 'unit_count' in percent, and omits the Special-item measurement spans on rows 2 and 4."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The company slice menu holds two same-kind labels for the Habit brand's operating segment ('segment:thehabitburgergrillglobaldivision' and 'segment:habitdivision').",
+      "why": "The slice-kind ladder resolves a label that appears under two KINDS, not two labels of one kind, so the reuse pick on row 5 is settled by the filing's own division naming rather than by a rule, and the catalog may need to park or merge the duplicate."
+    },
+    {
+      "what": "Row 1's comparison baseline (prior_year vs sequential_period) for the $0.71 quarterly dividend.",
+      "why": "YUM paid $0.71 in every quarter of 2025, so the stated prior rate is simultaneously the year-ago and the immediately prior quarter's value; the rules give a tiebreak only when both comparisons are co-stated, which they are not here."
+    }
+  ]
+}
+```

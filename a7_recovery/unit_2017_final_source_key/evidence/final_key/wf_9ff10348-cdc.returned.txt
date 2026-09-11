@@ -1,0 +1,227 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "lifo_impact",
+              "driver_state": "increased",
+              "level_low": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["non-cash"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the quote states a current-year LIFO charge against a prior-year LIFO benefit, a resolvable standing measure with a stated temporal baseline."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "vendor_concentration",
+              "driver_state": "reported",
+              "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_high": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: a stated 13 percent single-vendor share of total purchases is a re-readable standing condition, not a bare mention."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["product:failure", "product:maintenanceitems"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the failure and maintenance categories' ~85% share of total sales is a stated, re-readable mix level for named company product categories."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "change_value": {"value": 329.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:us", "unknown:commercial"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item, but as ONE fact rather than two: the $329.5 million and the 6.7% are the same stated change restated, so a single record carries the dollar change and the percent stays in the quote."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_low": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "slice_parts": ["geography:us", "unknown:commercial"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a real item: the targeted meaning is the 31.7% commercial share of total Domestic sales, a stated standing mix level distinct from the 6.7% growth also present in this quote."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic ordinary-course legal-proceedings boilerplate: it names no specific matter, no state, direction, magnitude, stage or outcome, so under the fact gate it is a bare topic mention and yields no record."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and settled as a control: the sentence is undifferentiated ordinary-course litigation boilerplate and carries no real driver fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "non-cash LIFO impact",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "I had to fix the signed axis myself (charge positive, benefit negative) and keep a cause name whose head word 'impact' sits close to the banned effect-word class, which I accepted because LIFO is the specific named force."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "one individual vendor",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu carries a vendor-axis value (unknown:azo:VendorsAxis__oneindividualvendor) while the naming rule says a vendor is never a slice, so I kept the vendor in the name and emitted no slice part."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole", "measurement_wording"],
+      "reference_name": "failure and maintenance related categories",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The prose label 'maintenance related categories' is not byte-identical to the menu's product:maintenanceitems, so the reuse rests on my same-meaning judgment, and I kept 'approximately' in measurement as a number modifier captured nowhere else."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "Domestic commercial sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two readings were live — one restated change (dollar plus percent) versus a two-basis split — and 'commercial' is plausible as both a customer population and a selling channel, so the part was coined unknown:commercial rather than guessed."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "31.7% of our total Domestic sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "This share's denominator is total Domestic sales rather than total company sales, a distinction the fact fields cannot carry, and 'commercial' stays kind-ambiguous so the part was coined unknown:commercial."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-016/b1",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 2, 3 and 6 in substance, but it splits row 4 into two records for the same stated change and assigns 'commercial' the customer kind on rows 4 and 5, both of which I settled differently on the rules rather than on its evidence."
+    },
+    {
+      "lead_id": "sokc-016/b2",
+      "agrees": false,
+      "why": "It agrees on rows 1, 2 and 6, but like the other lead it splits row 4's dollar-and-percent change into two records, names row 5 net_sales where I settled a mix level, and guesses customer:commercial where the kind ladder forces unknown."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a change stated as both a dollar amount and a percent ('increased $329.5 million, or 6.7%') is one fact or two.",
+      "why": "Rule 1.5 forbids restating one fact as two records while Rule 5a.4 splits a value stated on two or more bases; I read 'bases' as growth bases only and emitted one record, but the admission step needs the owner's reading before this is locked."
+    },
+    {
+      "what": "The slice kind for AutoZone's 'commercial' sales population.",
+      "why": "The filing frames commercial both as a customer population (repair garages, dealers, fleet owners) and as a selling program, no menu value exists for it, so the ladder forces unknown:commercial and a later kind promotion is unresolved."
+    },
+    {
+      "what": "Whether a vendor-concentration fact may carry the company's own vendor-axis menu value as a slice.",
+      "why": "The menu contains unknown:azo:VendorsAxis__oneindividualvendor while the naming rule states a vendor is never a slice; I followed the rule and left the slice empty, which leaves an existing menu value unusable."
+    }
+  ]
+}
+```

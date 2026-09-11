@@ -1,0 +1,309 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["adjusted"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "operating_margin_surprise",
+              "driver_state": "beat",
+              "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["adjusted"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and it settles as a real fact: the delivered 5% adjusted operating income rate is compared to the company's own plan, so the rules require the surprise plus its metric home sibling in this same row."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and it settles as a real fact: a stated, signed, dated comparable-sales level with its own prior-year basis."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "comparable_sales_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and it settles as a real fact: the actual result is placed against the company's own prior guidance range, which is the expectation half of the twin whose home fact is row 2."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "reported",
+              "level_low": {"value": 1.1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "slice_parts": ["unknown:best buy business"],
+              "time_type": "duration",
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and it settles as a real fact: a stated full-year revenue floor for a named, non-consolidated part of the company."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 0.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["unknown:international"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and it settles as a real fact: a stated quarterly revenue level with a separately stated year-over-year change for a named company part."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard forward-looking-statements safe-harbor language: it names no driver's state, change, surprise, guidance or action and is generic risk boilerplate, so the gate returns the one abstention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed negative_control and it behaves as one: the located text is pure safe-harbor boilerplate and correctly yields no fact."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "revenue_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 41.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 42.1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "range",
+              "level_unit": "m_usd",
+              "company_confirmed": true,
+              "time_type": "duration",
+              "fiscal_year": 2027
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and it settles as a real fact: the CFO states a closed full-year fiscal 27 revenue range, with no movement wording so the state stays unknown."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [],
+        "abstentions": [
+          {"reason": "An expectation comparison with no identifiable company value: the revenue and units are framed 'from an industry perspective' with no number, no period-anchored company level, and no home metric fact anywhere in this event to ground it, so the ungrounded surprise abstains."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed lawful_abstention_control and it behaves as one: the claim is a real observation but cannot be lawfully resolved into a grounded surprise, so it yields exactly one abstention."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "expectation_routing"],
+      "reference_name": "adjusted operating income rate",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "favourable_unfavourable_direction", "expectation_routing"],
+      "reference_name": "adjusted operating income rate of 5% was better than planned",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'Planned' is the company's own expectation rather than an explicitly named published guide, so the baseline is recorded as previous_guidance under the own-target mapping rather than consensus."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "expectation_routing"],
+      "reference_name": "Q4 comparable sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Comparable sales is itself a percentage metric, so the static-percentage gate was considered; the source's explicit 'versus last year' framing is what makes the year-over-year basis safe rather than unknown."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction", "expectation_routing"],
+      "reference_name": "within our guidance range",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The guidance range bounds are not stated in this quote, so the comparison slots stay null and the in_line verdict rests solely on the source's stated 'within' position with no favorability wording."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "Best Buy business team generated more than $1.1 billion in revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Best Buy business' is plausible as a customer population, an internal operating unit, or a sales channel and the menu offers no match, so the slice kind is recorded honestly as unknown rather than guessed."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "International revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The label 'International' sits under two kinds in this company's menu (geography and segment) and the quote's own framing selects neither, so the menu-ambiguous rung forces unknown:international."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "Revenue in the range of $41.2 to $42.1 billion",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [2, 3],
+      "members_are_one_fact": false,
+      "reason": "The one sentence states both a delivered comparable-sales level against last year and a separate placement of that result inside the company's own prior guidance range, and the expectation-comparison rule requires exactly two records for that pairing: the metric home and its surprise twin."
+    }
+  ],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-024/b1",
+      "agrees": false,
+      "why": "It matches me on rows 2, 3, 6, 7 (including the bare-guide state unknown) and 8, but it emits only the surprise for row 1 with no metric home sibling in the event, and it assigns confident slice kinds (customer:best_buy_business, geography:international) where the prose kind is unclear and the menu carries 'international' under two kinds."
+    },
+    {
+      "lead_id": "sokc-024/b2",
+      "agrees": false,
+      "why": "It matches me on the row 1 twin pair and on rows 2, 3, 6 and 8, but it sets the bare fiscal 27 revenue guide to 'introduced' where the source states no movement (must be unknown), leaves unit_scale_evidence null for percentage values whose '%' marker sits inside the quote, and guesses the same two slice kinds I settled as unknown."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Slice kind for 'International' revenue is recorded as unknown:international rather than a menu pick.",
+      "why": "The company menu carries geography:international, segment:international and segment:internationalsegment, and the located quote gives no selector, so any pick would manufacture an axis-grade confirmation and fork or wrongly merge the revenue series identity."
+    },
+    {
+      "what": "Slice kind for the Best Buy Business revenue part is recorded as unknown:best buy business.",
+      "why": "The prose supports customer, segment and channel readings of the same named part and there is no menu entry for it, so the kind cannot be settled without guessing and downstream promotion of this value needs a governed decision."
+    }
+  ]
+}
+```

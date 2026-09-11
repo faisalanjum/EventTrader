@@ -1,0 +1,218 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the quote states a company-wide same-restaurant sales growth level of 4.2% for the quarter, a readable standing metric with a stated direction."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 10.57, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 10.67, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["adjusted diluted"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the CFO states the company's own forward full-year adjusted diluted per-share earnings range, a bare guide whose movement the source does not state, so the state is recorded as unknown."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "segment_profit_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "change_value": {"value": -10, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:olivegarden"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: a stated 23% segment profit margin level for the Olive Garden segment with a source-stated 10 basis point decline versus last year."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic forward-looking-statement risk boilerplate saying actual results could differ from expectations; it names no driver state, change, surprise, guide or action, so the fact gate returns the one abstention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and settled as a control: the sentence is standard safe-harbor boilerplate and yields no fact, so the frozen proposal and my outcome agree."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_closure",
+              "driver_state": "announced",
+              "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["segment:otheroperatingsegmentbahamabreezebrand"]
+            }
+          },
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_conversion",
+              "driver_state": "announced",
+              "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["segment:otheroperatingsegmentbahamabreezebrand"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact, but as TWO facts rather than one: the located target names two independent causes with their own counts (14 permanent closures and 14 conversions), which the one-cause-one-name rule requires to be split."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "portion_versus_whole"],
+      "reference_name": "same-restaurant sales growth of 4.2%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The 4.2% could be read as a change on a sales level or as the level of a growth metric; I encoded it in the level slots because the driver itself is the comparable-sales growth rate, and the growth basis defaults to year-over-year on a dated quarter with no in-document sequential evidence."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "corrections_and_amendments"],
+      "reference_name": "adjusted diluted net earnings per share of $10.57 to $10.67",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Movement is genuinely unsettled: the quote states no raise/lower wording, and the only other closed guide in the event is the beginning-of-year $10.50 to $10.70, which is the initial rather than the immediately prior guide, so I stored the bare-number state unknown instead of deriving raised."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "segment profit margin of 23%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu carries two same-kind tokens for this brand, segment:olivegarden and segment:olivegardensegment, and the prose does not select between them; I reused the exact-label match segment:olivegarden and flag the duplicate as unresolved."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "14 locations will permanently close",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The located target bundles two distinct actions, so emitting the closure separately relies on the one-cause-one-name split even though the task text normally allows more than one fact per target only for a sibling or basis split."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "the remaining 14 will be converted to other Darden brands",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated window \"over the next 12 to 18 months\" is a numeric relative horizon with no lawful mapping onto the dateless horizon classes, so I left every period field null as a lawful periodless action fact rather than guess a sentinel."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-027/b1",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 3 (apart from the menu token), 4 and 5, but it records the bare full-year per-share guide as raised, which the source does not state, and it reuses segment:olivegardensegment where I reused the exact-label segment:olivegarden."
+    },
+    {
+      "lead_id": "sokc-027/b2",
+      "agrees": false,
+      "why": "It agrees with my unknown state on the guidance row, but it puts the 4.2% comparable-sales growth in change_value with no level, uses segment:olivegardensegment on row 3, and abstains entirely on row 5, dropping two real announced actions I settled as facts."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 5 emits two facts from one located target.",
+      "why": "The task text permits more than one fact per target only for a sibling or basis split, yet the target's own words state two independent causes each with its own count of 14, and collapsing them would conflate distinct actions while abstaining would drop real announced facts."
+    },
+    {
+      "what": "Guidance movement on row 2 is left unknown.",
+      "why": "The event elsewhere quotes an initial fiscal 2026 guide of $10.50 to $10.70 and says guidance was updated, but the prior-quarter guide is never stated, so a raised/lowered judgment cannot be made safely from the source."
+    },
+    {
+      "what": "Duplicate Olive Garden segment tokens on the menu.",
+      "why": "segment:olivegarden and segment:olivegardensegment carry the same meaning under the same kind, and nothing in the quote or the rules selects one, so the reuse pick is not verifiable."
+    },
+    {
+      "what": "No lawful period encoding for \"over the next 12 to 18 months\" on the conversion fact.",
+      "why": "It is a stated relative window with numbers, but the horizon classes are only short/medium/long/undefined and mapping 12 to 18 months onto one of them would be a guess."
+    }
+  ]
+}
+```

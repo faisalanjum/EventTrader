@@ -1,0 +1,53 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "customer_traffic",
+              "driver_state": "decreased"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind of real_item matches my settlement: the located target states a real, non-boilerplate qualitative decline in diner traffic, so the row carries one genuine metric fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": [],
+      "reference_name": "spooked diners away",
+      "du_worthy": true,
+      "gold_extra": {
+        "expectation_comparison_present": false
+      },
+      "ambiguity_note": "The target names the effect on diner counts rather than the outbreak itself, so I recorded the standing customer-traffic level as decreased and left every period field null because the source states no window, only the event date."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-031/b1",
+      "agrees": true,
+      "why": "Independently of the lead, I settled the same meaning from the quote alone - a numberless decline in diner traffic named as a metric with state decreased and no period, slice, or numeric slots - which is what this lead reports."
+    },
+    {
+      "lead_id": "sokc-031/b2",
+      "agrees": true,
+      "why": "This lead is byte-identical to the other and likewise matches what I settled from the quote alone; its agreement with its twin adds no evidence, but its content is independently correct."
+    }
+  ],
+  "open_issues": []
+}
+```

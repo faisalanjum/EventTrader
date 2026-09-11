@@ -1,0 +1,200 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_cost_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 15.29, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 15.29, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 14.54, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_high": {"value": 14.54, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["excluding net special items, fuel and profit sharing"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            },
+            "per_x": "available_seat_mile"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real item: the quote states a current unit-cost level, its prior-year level and the direction, so it carries a genuine metric fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "income_tax_expense",
+              "driver_state": "increased",
+              "level_low": {"value": -94, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -94, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -175, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -175, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real item: the tax benefit is a stated current value with its prior-year value beside it, a genuine metric fact on the signed tax axis."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "pretax_income",
+              "driver_state": "increased",
+              "level_low": {"value": -327, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -327, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -530, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -530, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["excluding net special items"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real item: a non-GAAP pre-tax loss level is stated for this quarter with the prior-year level beside it, so a real metric fact exists."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "full_time_equivalent_employees",
+              "driver_state": "increased",
+              "change_value": {"value": 3.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["product:mainline"],
+              "time_type": "instant",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real item: a stated 3.9% rise in the company's own mainline headcount versus the year-ago quarter is a real, re-readable metric change."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic catch-all risk boilerplate about unknown or currently immaterial risks that 'could also materially adversely affect our business' — no driver state, change, action, or guidance is stated, so the fact gate fails."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed as one: the sentence is unqualified risk boilerplate naming no driver and no state, so it correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "CASM excluding net special items, fuel and profit sharing",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "Income tax benefit",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The table's own 'Increase (Decrease)' column presents the move as (81), a decrease in the displayed benefit, while the signed-axis rule (a benefit is negative) makes −94 versus −175 an increase; I recorded increased on the signed axis and flagged the clash."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "Pre-tax loss excluding net special items",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The filing's prose calls this a 'decrease in pre-tax loss' while the pinned signed-axis fixture makes a narrowed loss an increase (−327 above −530); I followed the signed axis."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "mainline full-time equivalent employees",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Mainline' is plausible as either a product or a segment on prose alone; I reused the single menu token product:mainline rather than coining unknown:mainline, and that menu reuse is the only thing selecting the kind."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-001/b1",
+      "agrees": false,
+      "why": "It matches my names, values, units, slice and abstention, but it records 'decreased' for both the income tax benefit and the pre-tax loss excluding special items, which contradicts the signed-axis settlement I reached independently (−94 above −175 and −327 above −530 are increases)."
+    },
+    {
+      "lead_id": "sokc-001/b2",
+      "agrees": false,
+      "why": "It agrees with my lanes, names, values and both signed-axis directions, but it leaves unit_scale_evidence null on the 3.9% headcount change even though the '%' marker sits inside that row's quote, which the evidence rule does not permit at multiplier 1 when a marker exists."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Direction of a shrinking income tax benefit (row 2).",
+      "why": "The frozen fixtures pin 'loss narrowed' = increased but say nothing explicit about a benefit whose magnitude falls; I applied the same signed-axis logic, and the source's own column labels the move a decrease, so the two readings remain in tension until an owner pins the benefit case."
+    },
+    {
+      "what": "Slice-kind for 'mainline' on the headcount fact (row 4).",
+      "why": "The kind is carried only by the menu entry product:mainline; on prose alone segment is equally plausible, so a wrong menu reuse would silently manufacture an axis-grade kind that the source never confirms."
+    }
+  ]
+}
+```

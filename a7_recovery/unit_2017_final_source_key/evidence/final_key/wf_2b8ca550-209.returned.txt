@@ -1,0 +1,205 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["blended"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: the quote states a stated, directional, numeric level for a standing comparable-sales measure, which is a real metric fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 5.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted diluted", "from continuing operations"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: a stated per-share earnings level plus a separately stated growth figure is a real, re-readable metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_closure_impairment",
+              "driver_state": "occurred",
+              "level_low": {"value": 24.7, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 24.7, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: a discrete, sized impairment charge recognised in the quarter is a real one-off action fact, not a bare mention."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "divestiture",
+              "driver_state": "occurred",
+              "slice_parts": ["entity_ownership:canadianolivegardenrestaurants"],
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: the sale of the Canadian Olive Garden business is a discrete completed transaction, though only its per-share earnings adjustment is quantified, which I did not store as the transaction's own value."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence only states a segment-reporting classification convention (where Chuy's sales and profits are presented), with no driver state, change, surprise, guidance, or action, so it fails the fact gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but it carries no fact: it is a presentation/classification note, so I settle it as a named exclusion rather than letting the proposal pass silently."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic risk boilerplate from the safe-harbor forward-looking-statements list naming litigation and adverse publicity as possible risks, with no stated state, change, or action, so it is dropped by the gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed as one: the phrase is exactly the generic-risk-boilerplate class the gate drops, so it correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording", "portion_versus_whole"],
+      "reference_name": "blended same-restaurant sales1",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote itself carries no basis word, so the year-over-year basis and the prior-year baseline rest on the event's own section header rather than on words inside the located quote."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "reference_name": "adjusted diluted net earnings per share from continuing operations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The 5.4% increase is stated without a basis word inside the quote, so its year-over-year basis follows the dated-period default and the event's own prior-year column framing."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "reference_name": "Impairment due to restaurant closures3",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The row states four co-located numbers for the same item (24.7 pre-tax, 6.2 tax, 18.5 net, 0.16 per share) and I recorded the pre-tax charge, and I left the slice empty because the footnote attributes the charge only 'primarily' to Bahama Breeze closures."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["losses_and_sign", "slices_and_unknown_axes"],
+      "reference_name": "Gain on Olive Garden Canada sale",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The only stated figure is a negative per-share earnings-reconciliation adjustment, which would force a per-share denominator into the name of a transaction driver, so I recorded the transaction without numeric slots."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-010/b1",
+      "agrees": false,
+      "why": "It matches my rows 1, 2, 5 and 6, but it leaves the impairment charge numberless while asserting a Bahama Breeze slice the row-3 quote never states, and it attaches the -0.26 per-share reconciliation adjustment to the divestiture action without resolving the per-share denominator that the naming rule would then require."
+    },
+    {
+      "lead_id": "sokc-010/b2",
+      "agrees": false,
+      "why": "It matches my rows 1, 2, 5 and 6 and my pre-tax 24.7 reading of the impairment, but it still asserts a Bahama Breeze slice that the located quote does not state and that the footnote qualifies as only 'primarily', and it attaches the -0.26 per-share figure as the divestiture's own value."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Which column of the row-3 reconciliation line is the impairment's canonical value.",
+      "why": "The same located line states 24.7 pre-tax, 6.2 tax, 18.5 after-tax and 0.16 per share for one item; I stored the pre-tax charge, but the source does not say which is the intended series value, so a different column choice is defensible from the same evidence."
+    },
+    {
+      "what": "Whether the row-4 gain may carry its stated per-share magnitude.",
+      "why": "The only quantification is a per-share earnings adjustment; storing it would require a per-share denominator in a transaction driver's name, which collides with the rule that names carry no effect words, so the value is left unstored rather than guessed."
+    },
+    {
+      "what": "Whether a Bahama Breeze slice may ride the row-3 impairment.",
+      "why": "The footnote says the charges are only 'primarily' related to Bahama Breeze closures, so attaching that slice would over-attribute part of the charge, and the located quote names no business part at all."
+    }
+  ]
+}
+```

@@ -1,0 +1,297 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["core"],
+              "slice_parts": ["segment:tacobellglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: the quote states a delivered 10% divisional core operating profit growth attributable to the Taco Bell division for full-year 2025."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["core"],
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: the same sentence separately attributes the 10% divisional core operating profit growth to the KFC division for full-year 2025."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "strategic_review_costs",
+              "driver_state": "reported",
+              "level_low": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:pizzahutglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: a stated $40 million of special expenses inside Q4 reported G&A, driven by the Pizza Hut strategic options review."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "general_and_administrative_expense",
+              "driver_state": "increased",
+              "level_low": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["x special"]
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "general_and_administrative_expense_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["x special"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item, and the expectation-comparison rule makes it two: the reported full-year ex-special G&A actual is the home metric and its comparison against the company's own prior guide is the surprise twin."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "operating_profit_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": -15, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -15, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "company_confirmed": true,
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["core"],
+              "slice_parts": ["segment:pizzahutglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: management's own forward outlook for Pizza Hut Q1 2026 core operating profit, a bare guide with no stated movement wording."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "store_closures",
+              "driver_state": "announced",
+              "level_low": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "half": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:us", "segment:pizzahutglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: a company-stated plan to close approximately 250 underperforming US Pizza Hut units in the first half of 2026."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Administrative scheduling notice of the next earnings release date and call; it states nothing about a driver's state, change, surprise, guidance or action, so it fails the fact gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: the April 29th earnings-release date is call logistics with no driver content, so the row yields exactly one abstention and no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording", "sequential_comparison", "slices_and_unknown_axes", "point_range_floor_ceiling"],
+      "reference_name": "Taco Bell",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'core' is a measurement qualifier or part of the driver name is genuinely arguable; I recorded it as a measurement span per the measurement-versions rule."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording", "sequential_comparison", "slices_and_unknown_axes", "point_range_floor_ceiling"],
+      "reference_name": "KFC",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same 'core'-as-measurement-versus-name ambiguity as the Taco Bell twin, resolved the same way."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes", "portion_versus_whole"],
+      "reference_name": "40 million of special expenses",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two live ambiguities: a one-off review charge as a standing cost metric versus a discrete action_event, and whether a consolidated G&A special expense caused by the Pizza Hut review carries the Pizza Hut segment slice or no slice at all."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison", "expectation_routing"],
+      "reference_name": "x special gna",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "measurement_wording", "point_range_floor_ceiling"],
+      "reference_name": "in line with our guidance",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'In line with our guidance' states a match rather than favorable or unfavorable wording, so has_favorability_wording=false is a judgment call that could defensibly read as true."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording", "slices_and_unknown_axes", "corrections_and_amendments"],
+      "reference_name": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "A percent-only guide can be encoded either in the level slots with a growth-basis unit or as a change_value; I used the level slots per the percent-only-guidance rule, and the bare guide takes driver_state=unknown rather than a written-back 'introduced'."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "approximately 250 targeted closures of underperforming units",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "A forward-looking closure plan sits between announced action_event and guidance; the guidance-suffix test fails because a closure is an action, so I recorded action_event/announced."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [1, 2],
+      "members_are_one_fact": false,
+      "reason": "The one sentence attributes the same 10% divisional core operating profit growth to two different company divisions, so the meanings differ by slice and yield two distinct facts, one per division."
+    }
+  ],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-030/b1",
+      "agrees": false,
+      "why": "It matches me on the two divisional growth facts, the G&A metric-plus-surprise twin, the 250-closure action and the row-7 abstention, but diverges materially: it calls the $40M special expense an action_event where I settled a cost metric, it writes the Pizza Hut Q1 guide as change_value with driver_state 'introduced' where the bare-guide rule gives 'unknown' and the percent-only-guidance rule puts the value in the level slots, it drops the '%' scale evidence on stated percentages, and it keeps 'core' inside the driver name instead of the measurement span."
+    },
+    {
+      "lead_id": "sokc-030/b2",
+      "agrees": false,
+      "why": "It agrees on lane and shape for most rows (including the $40M as a cost metric and the G&A twin) but diverges: it sets has_favorability_wording=true for 'in line with our guidance' where I judged no favorability wording, it writes the Pizza Hut Q1 guide as change_value with 'introduced' rather than level-slot percent_yoy with 'unknown', it keeps 'core' in the driver name, and it uses an abbreviated 'g_and_a' name form rather than the spelled-out expense name."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Slice attribution for the $40M special expenses in row 3.",
+      "why": "The charge is stated inside consolidated reported G&A yet is caused by the Pizza Hut strategic options review, so the portion-versus-whole rule points to an empty slice while the own-segment rule points to segment:pizzahutglobaldivision; I recorded the segment slice but the evidence does not settle which population is being measured."
+    },
+    {
+      "what": "Encoding of the percent-only Pizza Hut Q1 2026 guide in row 5.",
+      "why": "The design text says percent-only guidance stores its growth basis in level_unit and reserves change_value for the guide's own revision size, but a decline stated as 'down approximately 15%' is also readable as a change value; the two encodings produce different stored shapes and the source does not disambiguate."
+    },
+    {
+      "what": "Whether 'core' is a measurement token or part of the driver name across rows 1, 2 and 5.",
+      "why": "'Core' is YUM's non-GAAP framing (excluding foreign currency and special items) defined earlier in the call rather than inside these quotes, so treating it as a measurement span keeps names comparable but relies on context outside the located quote."
+    }
+  ]
+}
+```

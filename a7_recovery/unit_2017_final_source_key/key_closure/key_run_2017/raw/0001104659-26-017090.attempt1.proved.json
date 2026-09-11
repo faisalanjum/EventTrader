@@ -1,0 +1,223 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "reported",
+              "level_low": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the quote states a company-reported adjusted net income level of $48.3 million for the fourth quarter of fiscal 2025, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The $24.6 million figure is a single net pre-tax total that fuses four independent causes named in the same sentence (asset impairment and lease termination, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); one name may cover only one cause, the causes must be split, and the quote states no per-cause amount, so the amount cannot be lawfully attached to any one driver and the fact is real but unresolvable."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real item but it does NOT pass silently as one: the disclosure is real yet its single blended figure spans four independent causes with no per-cause value inside the quote, so I settle it as a named exclusion (unresolvable), not as a fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "unknown",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "revenue_surprise",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: a delivered quarterly revenue actual is placed against the company's own expected range, which is an expectation comparison and therefore yields the required numberless home plus its surprise sibling."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:northitalia"],
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the line states North Italia comparable restaurant sales against the prior year, and the reported-quarter column is a real, directional, sliced metric value."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "slice_parts": ["segment:flowerchild"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the company states its own forward opening plan of six to seven Flower Child locations for fiscal 2026, a company-confirmed forward outlook with a closed numeric range."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is one entry in the safe-harbor list of factors that may affect forward-looking statements; it names a hypothetical adverse condition category with no stated current state, change, size, period, or company action, which is exactly the generic risk boilerplate the gate drops."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and it behaves as one: the located text is safe-harbor risk-factor boilerplate with no stated driver state, change, or event, so it correctly yields nothing."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "adjusted net income",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The sentence carries two measurement flavours - the word 'adjusted' and the longer 'Excluding the after-tax impact of these and certain other items' clause - and I kept only the contiguous qualifier token 'adjusted' as the measurement span."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing"],
+      "reference_name": "revenue for the quarter",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The home sibling is numberless because this row's quote states no revenue value, even though a quarterly revenue figure exists elsewhere in the event that I may not borrow into this row."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling"],
+      "reference_name": "revenue for the quarter finished within our expected range",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'our expected range' is read as the company's own prior guide rather than analyst consensus, and with no favourability wording and the actual stated as inside that closed range the state is in_line."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "North Italia operating information: Comparable restaurant sales vs. prior year",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quoted line carries four unlabelled columns whose periods can only be read from table headers outside the quote, so I settled only the reported-quarter column and left the other three columns unemitted rather than guess their scope."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "six to seven Flower Child locations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'now expects' hints at a revised plan but no prior guided figure is stated in the source, so the guidance movement stays unknown rather than raised or reaffirmed."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-019/b1",
+      "agrees": false,
+      "why": "It matches my settlements on rows 1, 2, 5 and 6, but it emits a surprise for row 3 with no home sibling in the same event and it emits two period facts for row 4, both of which differ from what I settled on the source alone."
+    },
+    {
+      "lead_id": "sokc-019/b2",
+      "agrees": false,
+      "why": "It matches my row 3 sibling pair and my rows 1, 2, 5 and 6 settlements, but it additionally emits a full-year comparable-sales fact for row 4, which exceeds the one target meaning that row's label names."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 4's located line states four period columns (reported quarter, prior-year quarter, full year, prior full year) but the row names one target meaning, so only the reported-quarter value was settled and the full-year (2)% value plus the two prior-year comparatives remain stated-but-unemitted.",
+      "why": "Whether one located table line may yield one fact per period column is not settled by the rules I was given - a period split is neither a required sibling nor a basis split - so emitting them would be a guess and dropping them silently would hide a real stated value."
+    },
+    {
+      "what": "Row 2's $24.6 million blended pre-tax net expense is a real disclosed charge that I had to exclude for lack of any per-cause amount inside its quote.",
+      "why": "If a blended one-off charge is permitted to be carried under a single action name, this row flips from exclusion to a fact, so the boundary needs an owner ruling before this row is locked either way."
+    },
+    {
+      "what": "Row 3's baseline rests on reading 'our expected range' as the company's own previously issued revenue guidance.",
+      "why": "The quote names an expectation but never shows its numeric range or its issuer explicitly, so the surprise routing depends on that reading and would change if the range were a non-company expectation."
+    }
+  ]
+}
+```

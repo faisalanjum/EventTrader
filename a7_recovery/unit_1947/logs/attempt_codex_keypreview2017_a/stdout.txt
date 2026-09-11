@@ -1,0 +1,216 @@
+{
+ "preview_only": true,
+ "formal_admission_or_finalization": false,
+ "preserved_primaries": 10,
+ "results": [
+  {
+   "source_id": "0000006201-26-000031",
+   "runId": "wf_fcb0d591-cac",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Row 6 slice scope: whether the Regional FTE population (footnote (4): wholly-owned regional airline subsidiaries only) is the same meaning as the menu value 'product:regionalcarrier'.",
+     "why": "The slice token is part of the fact identity; if the menu member covers third-party capacity-purchase carriers as well, the reuse silently widens the measured population, and coining instead would face a genuine segment-vs-product kind choice."
+    },
+    {
+     "what": "Row 4 baseline selection when a year-over-year headline and a sequential trend sit in one quote.",
+     "why": "Rule 9.2's 'prior_year wins' tiebreak assumes both comparisons describe the same fact, but this fact's stated basis is sequential, so the rules do not cleanly say whether the sequential baseline may be stored or must be left null."
+    }
+   ],
+   "returned_sha256": "ce9e4cb13a77e20284a320a126cf7e66c24618976654e00a46ce71476ad52911",
+   "duration_ms": 155810
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "runId": "wf_bcb38554-120",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Direction of a shrinking income tax benefit (row 2).",
+     "why": "The frozen fixtures pin 'loss narrowed' = increased but say nothing explicit about a benefit whose magnitude falls; I applied the same signed-axis logic, and the source's own column labels the move a decrease, so the two readings remain in tension until an owner pins the benefit case."
+    },
+    {
+     "what": "Slice-kind for 'mainline' on the headcount fact (row 4).",
+     "why": "The kind is carried only by the menu entry product:mainline; on prose alone segment is equally plausible, so a wrong menu reuse would silently manufacture an axis-grade kind that the source never confirms."
+    }
+   ],
+   "returned_sha256": "7b792da42e922f9a33c48f517d7472f02e0df87c50835a77966261babd651e6a",
+   "duration_ms": 131909
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "runId": "wf_4b214055-8e9",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Row 3: where the compared actual belongs on a surprise whose expectation is qualitative ('low-single digit growth').",
+     "why": "The rules reserve change_value on a surprise for a stated non-derivable delta and require the surprise to mirror its home's value when value-bearing, but the home's value-bearing slots are a cents level plus a percent_yoy change; I placed the 2.4% growth in the surprise's level slots as percent_yoy, and a different lawful reading would make the surprise numberless."
+    },
+    {
+     "what": "Row 3: whether 'in line with' counts as explicit favorability wording.",
+     "why": "has_favorability_wording is required on every surprise and cannot be null, yet 'in line with' names the position rather than a favorable or unfavorable outcome, so the boolean is a judgment the rules do not settle outright."
+    },
+    {
+     "what": "Row 5: the period for a 'currently own' ownership level.",
+     "why": "The quote states no date; the fiscal-year-end and the filing-date readings are both defensible, so the fact ships with all period fields null and a later step may need to attach the implied instant."
+    }
+   ],
+   "returned_sha256": "2f80a72d633a3220e9b0b412621c4c59ff6f7b6db4683cd824b86e0487b00eb2",
+   "duration_ms": 200866
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "runId": "wf_974365f1-91c",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Row 8 (corporate travel survey) cannot be lawfully lane-assigned.",
+     "why": "It is a specific, non-boilerplate demand signal that would pass the gate, but its outlook verb points to the guidance lane while its attribution is surveyed third parties rather than the company, and the reserved false value for company_confirmed leaves no lawful encoding; a ruling is needed on whether relayed third-party forward expectations are a qualitative metric or a permanent skip."
+    },
+    {
+     "what": "Measurement qualifiers for rows 3, 4, 5 and 6 sit outside the located quotes.",
+     "why": "Each of those figures is the adjusted/non-GAAP value, but the qualifier lives in a section header or footnote, so measurement spans stay empty and the resulting facts are not separable in-quote from their GAAP counterparts in the same event."
+    },
+    {
+     "what": "Row 9 primary baseline is contestable.",
+     "why": "The source computes only the sequential 1Q26-vs-4Q25 change while also displaying a March 31, 2025 column, so the headline-comparison rule points to sequential_period but the co-stated prior-year tiebreak points the other way."
+    },
+    {
+     "what": "Row 2 guidance period is read from outside the quote.",
+     "why": "The located quote is only 'Operating Margin 6% - 8%'; the 2Q26 target period comes from the surrounding guidance table, and guidance requires a target period, so the fact depends on context the locator did not include."
+    }
+   ],
+   "returned_sha256": "51a8a23951cc258fbf01d659af0c8cba8a62292d34fe70bc795960cac2107339",
+   "duration_ms": 251562
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "runId": "wf_829f1243-fb7",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Row 3's stated level of 1,517 is not carried on any fact.",
+     "why": "The only scale marker for that figure is the table's '(in millions)' header, which sits outside the located quote, so a lawful scale value cannot be cited and a real stated level is silently lost from the record."
+    },
+    {
+     "what": "Row 2's increase is stated on two units at once ($1.2 billion and 9.4%).",
+     "why": "One fact carries a single change value and unit, and no rule ranks a dollar change against a percentage change for the same movement, so the choice to carry the dollar figure is a judgment rather than a rule-forced answer."
+    },
+    {
+     "what": "Row 5 is a fuzzy-middle gate call with no locked boundary.",
+     "why": "A retrospective change to what a non-GAAP measure excludes is a real, deliberate company decision, yet its subject is a measurement construct with no driver name, and the gate text fixes no boundary for this class, so the exclusion should be confirmed by the owner before it is treated as settled."
+    }
+   ],
+   "returned_sha256": "233950a0b35b8e591655d567497f00e87e8f3c81b7b304fb8fb09671d1d8575b",
+   "duration_ms": 121513
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "runId": "wf_00f2d93d-75d",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "The slice menu carries the U.S. market four times: segment:usmarket, segment:u_s_market, entity_ownership:usmarket and entity_ownership:u_s_market.",
+     "why": "Row 3's stored slice identity depends on which token is canonical, and the menu offers no evidence to choose between the two segment spellings, so the same real population can fork into two ids."
+    },
+    {
+     "what": "Row 5 admits two lawful encodings: franchise share as a qualified driver name, or a restaurant-count metric sliced by channel:franchisedunits.",
+     "why": "The two encodings produce different fact identities for one statement, and the sentence alone does not select one."
+    }
+   ],
+   "returned_sha256": "75d7b166c794271b0a8a44f908e0e023ac1427d6f6927aa107e9517346fefebf",
+   "duration_ms": 195683
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "runId": "wf_931fc55b-646",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Row 4's located quote holds two windows (third quarter 31.8% vs 31.4%, nine months 32.1% vs 31.2%) and I settled only the third-quarter pair.",
+     "why": "The one target meaning yields one fact and no rule here licenses a period split, so the nine-month value is a genuinely different window that this row leaves unrecorded rather than guessed into a second record."
+    },
+    {
+     "what": "Menu-kind ambiguity for the \"domestic\" and \"international\" labels used in rows 2, 3 and 4.",
+     "why": "Each label sits on the menu under both a geography kind and a segment kind (and \"domestic\" also as both segment:domestic and segment:domesticsegment), so my pick rests on the filing's reportable-segment framing rather than an axis-confirmed match, and a wrong pick forks the slice identity."
+    },
+    {
+     "what": "The row 4 slice part channel:online is coined off-menu.",
+     "why": "The filing describes online revenue as sales initiated on a website, app or virtual store, which reads as how-it-sells, but no menu value exists to confirm the kind, so the part is provisional."
+    }
+   ],
+   "returned_sha256": "3fb132f5907436cffb3289ad426e25cfb08ea52d80b908504c5798633f2323ab",
+   "duration_ms": 167179
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "runId": "wf_4f09930c-294",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "The company menu holds two distinct values for each of the two brand segments used here ('segment:longhornsteakhouse' vs 'segment:longhornsteakhousesegment', 'segment:olivegarden' vs 'segment:olivegardensegment').",
+     "why": "Both are lawful same-meaning reuses under one clear kind, the rules forbid guessing and forbid merging existing identities, and the choice changes the stored fact identity, so the selection cannot be settled from this event alone."
+    },
+    {
+     "what": "Row 2's action stage and its period disagree inside one event: the located quote fixes the agreement in fourth quarter fiscal 2025, while the event states the sale closed on 2025-07-14, which falls in fiscal 2026.",
+     "why": "The latest-stage rule forces 'occurred' but the only window stated inside the located quote describes the agreement, so the stored period may label a stage earlier than the recorded state."
+    }
+   ],
+   "returned_sha256": "7c63e18a89a1b5cd615acf8688309ba9ccd096664c4c7c36596c9311889729be",
+   "duration_ms": 153057
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "runId": "wf_2b8ca550-209",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Which column of the row-3 reconciliation line is the impairment's canonical value.",
+     "why": "The same located line states 24.7 pre-tax, 6.2 tax, 18.5 after-tax and 0.16 per share for one item; I stored the pre-tax charge, but the source does not say which is the intended series value, so a different column choice is defensible from the same evidence."
+    },
+    {
+     "what": "Whether the row-4 gain may carry its stated per-share magnitude.",
+     "why": "The only quantification is a per-share earnings adjustment; storing it would require a per-share denominator in a transaction driver's name, which collides with the rule that names carry no effect words, so the value is left unstored rather than guessed."
+    },
+    {
+     "what": "Whether a Bahama Breeze slice may ride the row-3 impairment.",
+     "why": "The footnote says the charges are only 'primarily' related to Bahama Breeze closures, so attaching that slice would over-attribute part of the charge, and the located quote names no business part at all."
+    }
+   ],
+   "returned_sha256": "6bd81f43566b89977d451909bbc3f4894bc5649f48dcaebaac98106e5fc62ac8",
+   "duration_ms": 152098
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "runId": "wf_22f9cfb3-e46",
+   "native_status": "proved",
+   "schema_problems": [],
+   "open_issues": [
+    {
+     "what": "Row 6: whether a change in how segment profit is defined, with prior-year figures recast, should ever be written as an action_event driver or must stay excluded as an accounting/presentation construct.",
+     "why": "The rules both forbid accounting constructs as drivers and admit discrete decisions as action events, and the two leads split on exactly this point, so a safe final answer needs an owner ruling rather than my guess."
+    },
+    {
+     "what": "Row 4: the exact as-of date for the 87 franchised restaurants is stated in the surrounding overview paragraph, not inside the located sentence.",
+     "why": "I could not take the date without reaching outside my fixed location, so this instant fact carries fiscal framing only and any consumer needing a precise date must re-locate the sentence that states it."
+    }
+   ],
+   "returned_sha256": "1476557a6ffa8551089544f743faa19b9d60d1138f632ffe966f66d9c011f474",
+   "duration_ms": 161746
+  }
+ ],
+ "native_outcomes": {
+  "proved": 10
+ },
+ "model_calls": 0,
+ "key_truth_approved": false
+}

@@ -1,0 +1,270 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": -0.58, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": -0.58, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": -0.72, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": -0.72, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["Basic and diluted"]
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the row states a reported per-share loss of $(0.58) beside the prior-year $(0.72), a genuine metric level with a stated temporal comparison."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "earnings_per_share_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": -0.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 1.10, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["Adjusted", "diluted"],
+              "company_confirmed": true
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the row is the company's own FY2026 adjusted per-diluted-share outlook range, a lawful guidance fact with a stated target period."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "jet_fuel_expense_guidance",
+              "driver_state": "unknown",
+              "change_value": {"value": 4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the row is the company's own forward expectation of a greater-than-$4-billion full-year 2026 jet-fuel expense increase, an outlook statement rather than a reported level."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_unit_revenue",
+              "driver_state": "increased",
+              "level_unit": "percent_sequential",
+              "comparison_baseline": "sequential_period",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the targeted claim is a numberless but real month-over-month improvement in total unit revenue inside Q1 2026, which counts under the qualitative-facts rule."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "passenger_revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 18.57, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 18.57, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 17.41, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_high": {"value": 17.41, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:domesticdestination"]
+            },
+            "per_x": "available_seat_mile"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the row carries a domestic passenger revenue per ASM level of 18.57 cents against the prior-year 17.41 cents, a real sliced metric with a stated comparison."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "full_time_equivalent_employees",
+              "driver_state": "increased",
+              "level_low": {"value": 32500, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 32500, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "comparison_low": {"value": 30700, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_high": {"value": 30700, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "instant",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["product:regionalcarrier"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a real fact: the targeted Regional line states an end-of-period headcount of 32,500 against 30,700 a year earlier, a readable standing level."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic risk-factor boilerplate: 'we may be a party to litigation in the normal course of business or otherwise, which could affect our financial position and liquidity' names no specific current matter, no state, change, guidance or action, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and settled as a control: the sentence is hypothetical litigation boilerplate from the forward-looking-statements section and yields exactly one abstention, matching the proposed kind."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "Loss per common share: Basic and diluted",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "Adjusted earnings (loss) per diluted share3",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The range crosses zero and the label reads 'earnings (loss)', so the signed low bound is read as -0.40 from the parentheses notation rather than any stated word."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "increase in expense related to higher prices for jet fuel",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote itself states no period; the full-year 2026 framing is taken from the immediately surrounding guidance sentence, and 'greater than' makes the amount a floor that the change slot cannot shape-mark."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison"],
+      "reference_name": "Total unit revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote co-states a year-over-year 7.6% headline and a numberless sequential improvement, so the primary-baseline tiebreak (prior_year) conflicts with this fact's own sequential basis; I kept the sequential basis and baseline for the targeted claim."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "Regional (4) 32,500 30,700 5.9 %",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Footnote (4) narrows this Regional headcount to wholly-owned regional subsidiaries while the reused menu value 'product:regionalcarrier' plausibly covers the broader regional operation including capacity-purchase carriers, and segment vs product remains arguable for the label."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-000/b1",
+      "agrees": true,
+      "why": "Independently settled, my seven outcomes match this lead in meaning on every row (EPS metric with prior-year comparison, FY2026 EPS guidance range, forward fuel-expense guidance, numberless sequential total unit revenue, domestic PRASM with the geography menu slice, regional FTE count, litigation abstention); its fuel name 'aircraft_fuel_expense_guidance' is a lawful synonym of mine and its only real divergence is omitting the sequential baseline on row 4."
+    },
+    {
+      "lead_id": "sokc-000/b2",
+      "agrees": false,
+      "why": "It diverges from what I settled on three rows: it invents a per-available-seat-mile denominator for the bare phrase 'Total unit revenue' (a denominator that quote does not state), and it drops the verbatim measurement qualifiers 'Basic and diluted' on row 1 and 'Adjusted'/'diluted' on row 2 that Rule 8 requires be copied."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 6 slice scope: whether the Regional FTE population (footnote (4): wholly-owned regional airline subsidiaries only) is the same meaning as the menu value 'product:regionalcarrier'.",
+      "why": "The slice token is part of the fact identity; if the menu member covers third-party capacity-purchase carriers as well, the reuse silently widens the measured population, and coining instead would face a genuine segment-vs-product kind choice."
+    },
+    {
+      "what": "Row 4 baseline selection when a year-over-year headline and a sequential trend sit in one quote.",
+      "why": "Rule 9.2's 'prior_year wins' tiebreak assumes both comparisons describe the same fact, but this fact's stated basis is sequential, so the rules do not cleanly say whether the sequential baseline may be stored or must be left null."
+    }
+  ]
+}
+```

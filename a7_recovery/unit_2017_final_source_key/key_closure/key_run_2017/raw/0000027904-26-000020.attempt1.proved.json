@@ -1,0 +1,336 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "pretax_income",
+              "driver_state": "reported",
+              "level_low": {"value": -214, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -214, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: a stated pre-tax loss of $214 million is the negative region of pretax_income for the March 2026 quarter, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "operating_margin_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: the company's own June-quarter guidance table states a closed 6%-8% operating margin range, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: a stated per-share earnings level of $0.64 for the March 2026 quarter, which also serves as the home sibling for the row-4 surprise."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "earnings_per_share_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one, but only the surprise half: the delivered $0.64 is compared to the company's own initial guidance range, and its metric home is already settled at row 3 so the level is not emitted twice."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 14.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 14.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 9.4, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: a stated total-revenue level of $14.2 billion with a source-stated 9.4 percent year-over-year increase."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "total_revenue_surprise",
+              "driver_state": "beat",
+              "level_low": {"value": 14.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 14.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "favorable",
+                "basis": "source_framing",
+                "evidence": "The same sentence frames the outcome positively as a March quarter record driven by broad demand strength, so revenue landing several points above the company's own initial outlook is presented as a good outcome rather than a neutral position word.",
+                "sentence": "Total revenue of $14.2 billion was a March quarter record and nearly 10 percent higher than last year, growing several points above our initial outlook, on broad demand strength across corporate and leisure"
+              }
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: an actual-versus-own-prior-outlook revenue comparison, whose metric home is the total-revenue fact settled at row 5."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a hypothetical risk-factor item inside the forward-looking statements list ('the possible effects of serious accidents'), i.e. generic risk boilerplate with no stated state, change, surprise, guidance or action, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and it behaves as one: the quote is generic accident-risk boilerplate and correctly yields no fact."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The statement is a forward-looking expectation held by surveyed respondents about their own future travel spend: the outlook verb 'expect' forces the guidance lane, but guidance is defined as the company's own outlook and the attribution here is third-party respondents, so company_confirmed cannot lawfully be true and the lane cannot be resolved without guessing."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but it yields no fact here, and that disagreement is flagged rather than passed silently: the row states a real, specific corporate-demand signal, yet its forward outlook verb plus non-company attribution leaves no lane I can fill lawfully, so I exclude it as unresolvable rather than as boilerplate."
+    },
+    {
+      "row_index": 9,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_debt",
+              "driver_state": "decreased",
+              "level_low": {"value": 13540, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 13540, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 14300, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": 14300, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "sequential_period",
+              "measurement_raw_spans": ["Adjusted"],
+              "time_type": "instant",
+              "period_start_date": "2026-03-31",
+              "period_end_date": "2026-03-31",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it is one: the reconciliation states an adjusted net debt balance of $13,540 million at March 31, 2026 against $14,300 million at December 31, 2025 with an explicit $(760) change column."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "Pre-tax loss",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "Operating Margin",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The target period 2Q26 and the non-GAAP footnote sit in the guidance table header outside the located quote, so the period had to be read from event context rather than from the quote itself."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "Earnings per share",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "This $0.64 is the non-GAAP figure but the 'Non-GAAP' label sits outside the located quote, so measurement spans stay empty and the fact cannot be distinguished in-quote from the GAAP loss per share of ($0.44)."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "earnings of $0.64 per share, within our initial guidance range",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The initial guidance range endpoints are never stated in this event, so 'within' establishes in_line position without any storable comparison numbers, and the adjusted basis of the $0.64 is again unlabelled inside the quote."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "reference_name": "March quarter total revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The $14.2 billion is the adjusted (ex third-party refinery sales) revenue while the quote carries no measurement qualifier, so the fact risks colliding with the $15.9 billion GAAP revenue series."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "growing several points above our initial outlook",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'Several points' is a vague quantity so no beat size is storable, and the quote uses only the position word 'above', so the beat rests on a derived source-framing polarity proof rather than explicit favorability wording."
+    },
+    {
+      "row_index": 9,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "reference_name": "Adjusted net debt",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Only the sequential 1Q26-vs-4Q25 change is computed in the table, yet a prior-year column (March 31, 2025) is co-present, so the primary-baseline choice between sequential_period and prior_year is genuinely contestable."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-003/b1",
+      "agrees": false,
+      "why": "It lands where I did on rows 1, 2, 3, 4, 7 and 8, but I settled row 6 differently (I carry the stated $14.2 billion level and a source-framing polarity proof, while it emits a numberless surprise with level_unit percent_yoy and asserts favorability wording that the quote does not contain), and row 9 differently (it stores a change_value while omitting the stated prior comparison, whereas I store the closed comparison point and leave the derivable change null)."
+    },
+    {
+      "lead_id": "sokc-003/b2",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 2, 3, 4, 7 and 8, but on row 6 it emits a numberless surprise resting on a metric_meaning polarity basis where I carry the stated level and a source-framing proof, and on row 9 it stores both a closed comparison point and a change_value even though that change is merely derivable from the stated closed shape."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 8 (corporate travel survey) cannot be lawfully lane-assigned.",
+      "why": "It is a specific, non-boilerplate demand signal that would pass the gate, but its outlook verb points to the guidance lane while its attribution is surveyed third parties rather than the company, and the reserved false value for company_confirmed leaves no lawful encoding; a ruling is needed on whether relayed third-party forward expectations are a qualitative metric or a permanent skip."
+    },
+    {
+      "what": "Measurement qualifiers for rows 3, 4, 5 and 6 sit outside the located quotes.",
+      "why": "Each of those figures is the adjusted/non-GAAP value, but the qualifier lives in a section header or footnote, so measurement spans stay empty and the resulting facts are not separable in-quote from their GAAP counterparts in the same event."
+    },
+    {
+      "what": "Row 9 primary baseline is contestable.",
+      "why": "The source computes only the sequential 1Q26-vs-4Q25 change while also displaying a March 31, 2025 column, so the headline-comparison rule points to sequential_period but the co-stated prior-year tiebreak points the other way."
+    },
+    {
+      "what": "Row 2 guidance period is read from outside the quote.",
+      "why": "The located quote is only 'Operating Margin 6% - 8%'; the 2Q26 target period comes from the surrounding guidance table, and guidance requires a target period, so the fact depends on context the locator did not include."
+    }
+  ]
+}
+```

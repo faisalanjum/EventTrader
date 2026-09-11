@@ -1,0 +1,164 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restructuring_costs",
+              "driver_state": "reported",
+              "level_low": {"value": 80, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 80, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "measurement_raw_spans": ["pre-tax"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the sentence states a charge level of $80 million for the fourth quarter tied to the restructuring effort, a standing cost variable re-readable over time, so the frozen proposal and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The target 'Net pre-tax gains' is a NETTED prior-year aggregate: a $71 million quarter gain and a separate $70 million full-year charge, each fused from several independent causes (property sale gains, transaction costs and non-cash impairment on the South Korea business sale, plus transaction costs on the Israel business acquisition) with no per-cause amount given; one name cannot lawfully cover two independent causes and the source supplies no split, so the item cannot be resolved without inventing a driver or a number."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real item but it settles as an exclusion, and I say so plainly: the statement is real and non-boilerplate, yet its netted multi-cause figure cannot be given one lawful cause name or one lawful value, so it yields no emittable fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "slice_parts": ["segment:usmarket"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as one: the located line states a directional 6.8% comparable-sales level for the U.S. part of the company in the fourth quarter, which is a real metric state."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Safe-harbor boilerplate that only announces that the release contains forward-looking statements and that they speak as of the date hereof; it names no driver and states no level, change, outlook, expectation comparison or action, so it fails the fact gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and it behaves as one: the sentence is generic legal boilerplate with no driver-bearing content, so it correctly yields nothing."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "franchised_restaurant_share",
+              "driver_state": "reported",
+              "level_low": {"value": 95, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 95, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "instant",
+              "measurement_raw_spans": ["Approximately"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: although the sentence sits in the company-description section, it states a quantified standing level (about 95% of restaurants held by independent owner-operators) that can be re-read over time, and the gate explicitly excludes recurrence and materiality as grounds for dropping it."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "pre-tax charges of $80 million",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The cause could be named at the broad restructuring level or at the specific named internal programme; both are lawful readings of the same meaning and I recorded the broader cause name."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "U.S. increased 6.8%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The U.S. market appears in the menu under two kinds (segment and entity_ownership) and in two spellings (segment:usmarket and segment:u_s_market); the comparable-sales breakdown framing selects the operating-segment reading, but the duplicate spelling is genuinely unresolved."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "portion_versus_whole"],
+      "reference_name": "owned and operated by independent local business owners",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The franchised population could be carried as a qualifier inside the driver name (my reading) or as a channel slice on a restaurant-count metric, and the source line does not settle which encoding is intended; the hedge word 'Approximately' was kept as a number modifier rather than dropped."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-005/b1",
+      "agrees": false,
+      "why": "It lands where I did on rows 1, 2, 3 and 4, but it drops row 5 as company-profile boilerplate whereas I settled a real quantified standing level there, and on row 3 it left the scale evidence empty although a percent marker sits inside the quote."
+    },
+    {
+      "lead_id": "sokc-005/b2",
+      "agrees": false,
+      "why": "It matches my outcomes on rows 2, 3 and 4 and reaches the same lane and value on row 1 under a more specific programme-based name, but it drops row 5 explicitly because the sentence recurs across releases — a reason the gate forbids — while I settled a fact there."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The slice menu carries the U.S. market four times: segment:usmarket, segment:u_s_market, entity_ownership:usmarket and entity_ownership:u_s_market.",
+      "why": "Row 3's stored slice identity depends on which token is canonical, and the menu offers no evidence to choose between the two segment spellings, so the same real population can fork into two ids."
+    },
+    {
+      "what": "Row 5 admits two lawful encodings: franchise share as a qualified driver name, or a restaurant-count metric sliced by channel:franchisedunits.",
+      "why": "The two encodings produce different fact identities for one statement, and the sentence alone does not select one."
+    }
+  ]
+}
+```

@@ -1,0 +1,745 @@
+{
+ "authority": "Codex SEQ 2017 - preparation only, no call is authorized",
+ "model_calls": 0,
+ "launched": 0,
+ "finalized": false,
+ "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_package_2017",
+ "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017",
+ "review_run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2015",
+ "review_package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2015",
+ "map": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2017_final_source_key/map_final_2017.tsv",
+ "map_sha256": "67b7a9af2cc2d42411a3c382b32c21c17162f5add7476a3b20621164662fd3fb",
+ "environment": {
+  "A7_TAG": "core_final2017_real",
+  "A7_PREP_BASE": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4",
+  "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json",
+  "A7_SOURCE_CONTEXT": "/tmp/a7_source_context",
+  "A7_SOURCE_PROJECTS": "/home/faisal/.claude/projects",
+  "A7_REVIEW_OUT": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017",
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "PYTHONDONTWRITEBYTECODE": "1"
+ },
+ "owners": {
+  "review_composite": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+  "source_key": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "final_key": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "clarified_hard_review": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+  "source_closure": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "key_owner_role": "9783798a8a10bc2511cfd70c5e6c4dddb339d4d7dc55b0889623dfa7b0b57dbc"
+ },
+ "review_stage": {
+  "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2015",
+  "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2015",
+  "receipt_sha256": "63d39415cc74bf53a7a790a7f81170a9c7563ed776ab6f4d5b204d22870eefc6",
+  "finalization_sha256": "0bf9a9d60731529d3a41845e08466a633118f595b8a85ad57be892ef3946e35b",
+  "manifest_sha256": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083",
+  "slots": 66,
+  "outcomes": {
+   "valid": 66
+  }
+ },
+ "package_identity": {
+  "prompt_prefix_source_only_key.txt": "88072ba140ab257b5f33fc55879383a30c3e7bdfbe567056bd7ea327a89fefc1",
+  "source_only_key.manifest.json": "ec8b702a0028030e5de4078fef9212fd02420db00e217cf067780e21fe3624b0"
+ },
+ "receipt_sha256": "59939771b0f69c7a9cbcfa0633190de9f1380e5f548d5b3e7154eff820b85786",
+ "role": {
+  "kind": "LIVE",
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "max_output_tokens": "128000",
+  "transport": "Claude Code Workflow agent(), subscription"
+ },
+ "transport": {
+  "kind": "LIVE",
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "max_output_tokens": "128000",
+  "transport": "Claude Code Workflow agent(), subscription"
+ },
+ "counts": {
+  "source_events": 36,
+  "events_scheduled": 33,
+  "events_with_no_located_row": [
+   "0000764478-26-000005",
+   "bzNews_49256211",
+   "bzNews_51962983"
+  ],
+  "frozen_rows": 191,
+  "rows_scheduled": 191,
+  "locator_groups": 5,
+  "leads_shown": 66
+ },
+ "coverage": [
+  {
+   "event_index": 1,
+   "source_id": "0000006201-26-000031",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 2,
+   "source_id": "0000006201-26-000032",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 3,
+   "source_id": "0000027904-26-000013",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 4,
+   "source_id": "0000027904-26-000020",
+   "located_rows": 9,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 5,
+   "source_id": "0000027904-26-000022",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 6,
+   "source_id": "0000063908-26-000032",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 7,
+   "source_id": "0000092380-26-000044",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 8,
+   "source_id": "0000764478-25-000057",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 9,
+   "source_id": "0000764478-26-000005",
+   "located_rows": 0,
+   "scheduled": false,
+   "reason": "the frozen selection located no row in this event; it carries no key row and buys no call"
+  },
+  {
+   "event_index": 10,
+   "source_id": "0000898173-26-000006",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 11,
+   "source_id": "0000940944-25-000038",
+   "located_rows": 4,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 12,
+   "source_id": "0000940944-26-000005",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 13,
+   "source_id": "0000940944-26-000009",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 14,
+   "source_id": "0001041061-25-000109",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 15,
+   "source_id": "0001041061-26-000003",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 16,
+   "source_id": "0001041061-26-000084",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 17,
+   "source_id": "0001058090-26-000007",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 18,
+   "source_id": "0001104659-25-102611",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 19,
+   "source_id": "0001104659-25-105631",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 20,
+   "source_id": "0001104659-25-118458",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 21,
+   "source_id": "0001104659-26-017090",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 22,
+   "source_id": "0001104659-26-027061",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 23,
+   "source_id": "0001104659-26-032757",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 24,
+   "source_id": "0001171843-26-001288",
+   "located_rows": 4,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 25,
+   "source_id": "AAL_2026-04-23T08.30",
+   "located_rows": 10,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 26,
+   "source_id": "BBY_2026-03-03T08.00",
+   "located_rows": 8,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 27,
+   "source_id": "CMG_2026-02-03T16.30",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 28,
+   "source_id": "DAL_2026-04-08T10.00",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 29,
+   "source_id": "DRI_2026-03-19T08.30",
+   "located_rows": 5,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 30,
+   "source_id": "MCD_2026-02-11T16.30",
+   "located_rows": 6,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 31,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 32,
+   "source_id": "YUM_2026-02-04T08.15",
+   "located_rows": 7,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 33,
+   "source_id": "bzNews_42014391",
+   "located_rows": 1,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 34,
+   "source_id": "bzNews_49256211",
+   "located_rows": 0,
+   "scheduled": false,
+   "reason": "the frozen selection located no row in this event; it carries no key row and buys no call"
+  },
+  {
+   "event_index": 35,
+   "source_id": "bzNews_50877032",
+   "located_rows": 1,
+   "scheduled": true,
+   "reason": "settled by this key"
+  },
+  {
+   "event_index": 36,
+   "source_id": "bzNews_51962983",
+   "located_rows": 0,
+   "scheduled": false,
+   "reason": "the frozen selection located no row in this event; it carries no key row and buys no call"
+  }
+ ],
+ "budget": {
+  "before": 499,
+  "planned_key_calls": 33,
+  "planned_signer": 1,
+  "planned_note": "the independent signature remains separately gated",
+  "after_planned": 533,
+  "max_attempts_per_call": 2,
+  "retry_cap": 1,
+  "retry_cap_meaning": "PER CALL, invalid replies only, never a run total",
+  "retryable_states": [
+   "invalid_response"
+  ],
+  "worst_case_total": 68,
+  "worst_case_after": 567,
+  "package_ceiling": 567,
+  "global_ceiling": 6000,
+  "calls_made_by_this_package": 0,
+  "planned_total": 34
+ },
+ "capacity": {
+  "unit": "UTF-8 bytes of the serialized prompt plus the released launcher body; never summed across calls",
+  "transport_limit_bytes": 524288,
+  "released_body_bytes": 707,
+  "released_body_source": "build_kfields_hard_review.launcher_text with an empty prompt; the key owner's own alias will change it by the alias length",
+  "largest_prompt_bytes": 281112,
+  "smallest_prompt_bytes": 63475,
+  "largest_serialized_call_bytes": 288292,
+  "at_or_over_transport_limit": []
+ },
+ "preflight_ok": true,
+ "call_order": [
+  "0000006201-26-000031",
+  "0000006201-26-000032",
+  "0000027904-26-000013",
+  "0000027904-26-000020",
+  "0000027904-26-000022",
+  "0000063908-26-000032",
+  "0000092380-26-000044",
+  "0000764478-25-000057",
+  "0000898173-26-000006",
+  "0000940944-25-000038",
+  "0000940944-26-000005",
+  "0000940944-26-000009",
+  "0001041061-25-000109",
+  "0001041061-26-000003",
+  "0001041061-26-000084",
+  "0001058090-26-000007",
+  "0001104659-25-102611",
+  "0001104659-25-105631",
+  "0001104659-25-118458",
+  "0001104659-26-017090",
+  "0001104659-26-027061",
+  "0001104659-26-032757",
+  "0001171843-26-001288",
+  "AAL_2026-04-23T08.30",
+  "BBY_2026-03-03T08.00",
+  "CMG_2026-02-03T16.30",
+  "DAL_2026-04-08T10.00",
+  "DRI_2026-03-19T08.30",
+  "MCD_2026-02-11T16.30",
+  "ULTA_2026-03-12T16.30",
+  "YUM_2026-02-04T08.15",
+  "bzNews_42014391",
+  "bzNews_50877032"
+ ],
+ "leads_per_source": {
+  "0000006201-26-000031": 2,
+  "0000006201-26-000032": 2,
+  "0000027904-26-000013": 2,
+  "0000027904-26-000020": 2,
+  "0000027904-26-000022": 2,
+  "0000063908-26-000032": 2,
+  "0000092380-26-000044": 2,
+  "0000764478-25-000057": 2,
+  "0000898173-26-000006": 2,
+  "0000940944-25-000038": 2,
+  "0000940944-26-000005": 2,
+  "0000940944-26-000009": 2,
+  "0001041061-25-000109": 2,
+  "0001041061-26-000003": 2,
+  "0001041061-26-000084": 2,
+  "0001058090-26-000007": 2,
+  "0001104659-25-102611": 2,
+  "0001104659-25-105631": 2,
+  "0001104659-25-118458": 2,
+  "0001104659-26-017090": 2,
+  "0001104659-26-027061": 2,
+  "0001104659-26-032757": 2,
+  "0001171843-26-001288": 2,
+  "AAL_2026-04-23T08.30": 2,
+  "BBY_2026-03-03T08.00": 2,
+  "CMG_2026-02-03T16.30": 2,
+  "DAL_2026-04-08T10.00": 2,
+  "DRI_2026-03-19T08.30": 2,
+  "MCD_2026-02-11T16.30": 2,
+  "ULTA_2026-03-12T16.30": 2,
+  "YUM_2026-02-04T08.15": 2,
+  "bzNews_42014391": 2,
+  "bzNews_50877032": 2
+ },
+ "invocations": [
+  {
+   "label": "0000006201-26-000031",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000006201-26-000031.attempt1.js",
+   "args": null,
+   "script_sha256": "e3f441181a60def6002f69c4cf2f6690b4af80dfc3390720e6047402a715820f"
+  },
+  {
+   "label": "0000006201-26-000032",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000006201-26-000032.attempt1.js",
+   "args": null,
+   "script_sha256": "59aeb1230096e1b788103f62acea77f419230200309195a7671ff8de3d1e1127"
+  },
+  {
+   "label": "0000027904-26-000013",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000027904-26-000013.attempt1.js",
+   "args": null,
+   "script_sha256": "21c2255a97659337822cc0de9a10af137cd5d3a0146c70ce6feeb978094cb827"
+  },
+  {
+   "label": "0000027904-26-000020",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000027904-26-000020.attempt1.js",
+   "args": null,
+   "script_sha256": "ef8bb0a3948ad1c5adf30c97b2c8483ae1f615f9a86819a606246fada1f17203"
+  },
+  {
+   "label": "0000027904-26-000022",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000027904-26-000022.attempt1.js",
+   "args": null,
+   "script_sha256": "e87341f512e9a4ff93f739ca88ddb08bcdc18a1cf0825c4b2f165bccdaab5d9c"
+  },
+  {
+   "label": "0000063908-26-000032",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000063908-26-000032.attempt1.js",
+   "args": null,
+   "script_sha256": "c9c187a836a50d38f143037989231d6288d609c671d302310ef01d00cf53af15"
+  },
+  {
+   "label": "0000092380-26-000044",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000092380-26-000044.attempt1.js",
+   "args": null,
+   "script_sha256": "6b9e9ef928c92e929ac0b8c5e5e76c443d15ac6e82bc88abeec848c0e3a56bd7"
+  },
+  {
+   "label": "0000764478-25-000057",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000764478-25-000057.attempt1.js",
+   "args": null,
+   "script_sha256": "8821b6815b64f29ac43e714ee9e01bd2eb6e8b4bc3e02358a61ab7cfc516377f"
+  },
+  {
+   "label": "0000898173-26-000006",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000898173-26-000006.attempt1.js",
+   "args": null,
+   "script_sha256": "a88e0282ffc893a05d105121722b3b94cebfbb76cc1f041d2b20594cb479dacc"
+  },
+  {
+   "label": "0000940944-25-000038",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000940944-25-000038.attempt1.js",
+   "args": null,
+   "script_sha256": "c9f110f846d32f78b0b7a7cc2311ab129970812ef7defc238d9688dc6021e95e"
+  },
+  {
+   "label": "0000940944-26-000005",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000940944-26-000005.attempt1.js",
+   "args": null,
+   "script_sha256": "c6de45652c7091f259166ea72deb0573bd48af61811df9617c812c83be8aa9c9"
+  },
+  {
+   "label": "0000940944-26-000009",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0000940944-26-000009.attempt1.js",
+   "args": null,
+   "script_sha256": "7d587b4b4a608976c24478214d56b20ebb3e2d480abdee72954a0f1ec466d5b2"
+  },
+  {
+   "label": "0001041061-25-000109",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001041061-25-000109.attempt1.js",
+   "args": null,
+   "script_sha256": "f53245d9878889639b70b35d97f73a6378f12a372745d3dc54d4ee38b5f04aaf"
+  },
+  {
+   "label": "0001041061-26-000003",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001041061-26-000003.attempt1.js",
+   "args": null,
+   "script_sha256": "5753514a706b9c87c224d59673808573c72169bb0de91d0c32f78582a4841543"
+  },
+  {
+   "label": "0001041061-26-000084",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001041061-26-000084.attempt1.js",
+   "args": null,
+   "script_sha256": "f17e2102ab5c0d9223543f3e243c492a3d0fc27687de58d02870b1f491bbd4e5"
+  },
+  {
+   "label": "0001058090-26-000007",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001058090-26-000007.attempt1.js",
+   "args": null,
+   "script_sha256": "3c96611f6277027783b2e2b361fe8984afda9c8722d876a18131eb755d47c2df"
+  },
+  {
+   "label": "0001104659-25-102611",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001104659-25-102611.attempt1.js",
+   "args": null,
+   "script_sha256": "40af4b665bb385025109adec88adfd0b64615f0b2fad233a8361ee18b65ce609"
+  },
+  {
+   "label": "0001104659-25-105631",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001104659-25-105631.attempt1.js",
+   "args": null,
+   "script_sha256": "16b81e38801a3cdef15b7c793d1d12fd9134fcd741e23195ce51024860d7d1ff"
+  },
+  {
+   "label": "0001104659-25-118458",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001104659-25-118458.attempt1.js",
+   "args": null,
+   "script_sha256": "35f61e5e7081cd2312753d388cebbeb350bb7d751b2b3b7469327af60c169e1e"
+  },
+  {
+   "label": "0001104659-26-017090",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001104659-26-017090.attempt1.js",
+   "args": null,
+   "script_sha256": "652d389abf9d8382a06eeef702cd5b2ed2bebb1295174b65402d3655371e5bec"
+  },
+  {
+   "label": "0001104659-26-027061",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001104659-26-027061.attempt1.js",
+   "args": null,
+   "script_sha256": "9dad050f895ec1124e75a3464d27a29f3d6bf7a7cd2a0f66ffeb97a7de78df08"
+  },
+  {
+   "label": "0001104659-26-032757",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001104659-26-032757.attempt1.js",
+   "args": null,
+   "script_sha256": "54d759731af1024c548d2453989c6ffad1d27336a0b51fd6d4923d256f7d3690"
+  },
+  {
+   "label": "0001171843-26-001288",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/0001171843-26-001288.attempt1.js",
+   "args": null,
+   "script_sha256": "2771d3d05eafa054f74ed23b543cbb5858d68940c26b8155cee6c338107b1875"
+  },
+  {
+   "label": "AAL_2026-04-23T08.30",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/AAL_2026-04-23T08.30.attempt1.js",
+   "args": null,
+   "script_sha256": "51f04853f34fcf07a64b7dd58f7e84496a380a532d76e44cb2a72bdc4a539ac6"
+  },
+  {
+   "label": "BBY_2026-03-03T08.00",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/BBY_2026-03-03T08.00.attempt1.js",
+   "args": null,
+   "script_sha256": "1a93e3431c435a61e62dc5c801405996250f8f6718282ed255ddd00ba87397f3"
+  },
+  {
+   "label": "CMG_2026-02-03T16.30",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/CMG_2026-02-03T16.30.attempt1.js",
+   "args": null,
+   "script_sha256": "e3a4bd050be6ca15fe13a8c558adcf1f3bb47a013f91123789bace26aa9cc59e"
+  },
+  {
+   "label": "DAL_2026-04-08T10.00",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "args": null,
+   "script_sha256": "f8edd116905e38cafb98522f2978da1824e64c56b1ba63c32f60d87747413d94"
+  },
+  {
+   "label": "DRI_2026-03-19T08.30",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/DRI_2026-03-19T08.30.attempt1.js",
+   "args": null,
+   "script_sha256": "88660a22ff1c2e37f6348b60eac5c351dabcf548d82fe98c8c922b37f3c26d00"
+  },
+  {
+   "label": "MCD_2026-02-11T16.30",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/MCD_2026-02-11T16.30.attempt1.js",
+   "args": null,
+   "script_sha256": "87b945a3704fcf76b4d03eb22c5d5be08cc6528efd26c6ab92f5d5a99f0f7820"
+  },
+  {
+   "label": "ULTA_2026-03-12T16.30",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/ULTA_2026-03-12T16.30.attempt1.js",
+   "args": null,
+   "script_sha256": "5a5218f116278bae3d0160adc9029355034ae04b39548e328f9084b1bedd87c3"
+  },
+  {
+   "label": "YUM_2026-02-04T08.15",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/YUM_2026-02-04T08.15.attempt1.js",
+   "args": null,
+   "script_sha256": "c2cda8454d6ea51a85cfa914199a58c31472741bec7cd84bbc23435969234a38"
+  },
+  {
+   "label": "bzNews_42014391",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/bzNews_42014391.attempt1.js",
+   "args": null,
+   "script_sha256": "fa76299a5cc431f803222a7c06b792a4e3726f40c82f3cc011d5d09b3a12864c"
+  },
+  {
+   "label": "bzNews_50877032",
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017/scripts/bzNews_50877032.attempt1.js",
+   "args": null,
+   "script_sha256": "ac1b273c4ec507b4ef02b275080839a26ef5dcf1500239fc22727f5718110215"
+  }
+ ],
+ "resume": {
+  "owed": 33,
+  "served": 0,
+  "problems": []
+ },
+ "a3_answer_run": {
+  "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+  "files": 799,
+  "saved_answers_checked": 382
+ },
+ "checks": [
+  "1 the published composite is the loaded owner",
+  "2 the source-key owner is the unchanged unit_1997 one",
+  "3 the rejected unit_2008 composite is not loaded",
+  "4 the completed review run and package are bound READ-ONLY",
+  "5 the original 2004 run and package stay READ-ONLY too",
+  "6 every new byte lands in this unit alone",
+  "7 nothing in this binding is a TEST or fabricated store",
+  "8 the completed review stage is the one Codex verified",
+  "9 both review stages replay and all 66 slots are valid",
+  "10 the new paths are not an existing directory",
+  "11 the package re-derives from the live owners",
+  "12 preflight is clean",
+  "13 preparation passes and schedules exactly 33 adjudications",
+  "14 both real review stages are bound into the key package",
+  "15 the ledger starts at 499 and 33 adjudications make 532",
+  "16 the one signature is planned but separately gated, giving 533",
+  "17 the worst case is 567 and stays inside both ceilings",
+  "18 the package counts are the derived ones",
+  "19 all 36 source events are accounted, 33 scheduled",
+  "20 two independent review leads per source, none foreign or omitted",
+  "21 the isolated key role is the frozen non-Sonnet one",
+  "22 no request is at or over the transport limit",
+  "23 not one saved A3 answer appears in any of the 33 requests",
+  "24 the receipt schedules exactly the frozen call order, unserved",
+  "25 the emitted script is the pinned one: 0000006201-26-000031",
+  "25 the emitted script is the pinned one: 0000006201-26-000032",
+  "25 the emitted script is the pinned one: 0000027904-26-000013",
+  "25 the emitted script is the pinned one: 0000027904-26-000020",
+  "25 the emitted script is the pinned one: 0000027904-26-000022",
+  "25 the emitted script is the pinned one: 0000063908-26-000032",
+  "25 the emitted script is the pinned one: 0000092380-26-000044",
+  "25 the emitted script is the pinned one: 0000764478-25-000057",
+  "25 the emitted script is the pinned one: 0000898173-26-000006",
+  "25 the emitted script is the pinned one: 0000940944-25-000038",
+  "25 the emitted script is the pinned one: 0000940944-26-000005",
+  "25 the emitted script is the pinned one: 0000940944-26-000009",
+  "25 the emitted script is the pinned one: 0001041061-25-000109",
+  "25 the emitted script is the pinned one: 0001041061-26-000003",
+  "25 the emitted script is the pinned one: 0001041061-26-000084",
+  "25 the emitted script is the pinned one: 0001058090-26-000007",
+  "25 the emitted script is the pinned one: 0001104659-25-102611",
+  "25 the emitted script is the pinned one: 0001104659-25-105631",
+  "25 the emitted script is the pinned one: 0001104659-25-118458",
+  "25 the emitted script is the pinned one: 0001104659-26-017090",
+  "25 the emitted script is the pinned one: 0001104659-26-027061",
+  "25 the emitted script is the pinned one: 0001104659-26-032757",
+  "25 the emitted script is the pinned one: 0001171843-26-001288",
+  "25 the emitted script is the pinned one: AAL_2026-04-23T08.30",
+  "25 the emitted script is the pinned one: BBY_2026-03-03T08.00",
+  "25 the emitted script is the pinned one: CMG_2026-02-03T16.30",
+  "25 the emitted script is the pinned one: DAL_2026-04-08T10.00",
+  "25 the emitted script is the pinned one: DRI_2026-03-19T08.30",
+  "25 the emitted script is the pinned one: MCD_2026-02-11T16.30",
+  "25 the emitted script is the pinned one: ULTA_2026-03-12T16.30",
+  "25 the emitted script is the pinned one: YUM_2026-02-04T08.15",
+  "25 the emitted script is the pinned one: bzNews_42014391",
+  "25 the emitted script is the pinned one: bzNews_50877032",
+  "26 no result exists yet and the run cannot close",
+  "27 the real resume path names this run and owes every call",
+  "28 every completed review byte is unchanged",
+  "29 the original answer run is untouched"
+ ]
+}

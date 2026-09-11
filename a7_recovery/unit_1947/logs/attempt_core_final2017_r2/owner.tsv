@@ -1,0 +1,7 @@
+attempt	core_final2017_r2
+payload	../../unit_2017_final_source_key/prepare_final_2017.py
+map	../unit_2017_final_source_key/map_final_2017.tsv
+wrapper_pid	4126154
+payload_pid	4126158
+started_utc	2026-09-11T04:33:25Z
+state	finished exit 0

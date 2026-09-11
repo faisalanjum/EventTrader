@@ -1,0 +1,157 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_store_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the quote states a measured domestic same-store-sales growth level of 3.4% with an explicit direction word, which is a real non-boilerplate metric fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "lifo_charge",
+              "driver_state": "occurred",
+              "level_low": {"value": 138, "scale_multiplier": 1, "unit_scale_evidence": "basis point"},
+              "level_high": {"value": 138, "scale_multiplier": 1, "unit_scale_evidence": "basis point"},
+              "level_shape_hint": "point",
+              "level_unit": "basis_points",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["non-cash"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the quote states a discrete 138 basis point non-cash LIFO charge recognised in the quarter, a real sized fact, though its lane sits on the charge-versus-standing-cost boundary noted in the review."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "store_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 360, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["approximately"],
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the CEO states the company's own forward full-fiscal-year target of approximately 350-360 store openings, a real numeric guidance fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located quote is one undifferentiated entry in the safe-harbor forward-looking-statements risk list ('weather, including extreme temperatures and natural disasters'); it states no driver state, change, surprise, guidance or action for this company, so it is generic risk boilerplate dropped by the gate and by Rule 1.2."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "The frozen proposed_record_kind negative_control is confirmed: this located row is boilerplate risk-list wording and correctly yields no fact, even though the same event elsewhere carries a real weather statement about winter storms that is outside this row's fixed location."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "portion_versus_whole"],
+      "reference_name": "Domestic Same Store Sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "I had to judge that the quote's 'Domestic' carries the same meaning as the menu value geography:us rather than a segment axis, which the document supports only indirectly by reporting the identical 6,709 count under both 'Ending domestic stores' and 'stores in the U.S.'."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "138 basis point non-cash LIFO charge",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The lane is genuinely ambiguous: Rule 2 names a 'one-off charge' as action_event, but a LIFO charge is also a severity a reader could re-read at the next event, which would make it a metric, and I recorded the action_event reading rather than resolving the boundary by guessing."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "expectation_routing"],
+      "reference_name": "approximately 350-360 stores for the full fiscal year",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The quote does state an actual-versus-own-expectation comparison ('in line with our expectations'), but it sets a 12-week actual of 64 openings against a full-fiscal-year 350-360 target whose period has not ended, so no lawful surprise sibling exists and I recorded the guidance home alone."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-022/b1",
+      "agrees": false,
+      "why": "It matches my independent settlement on rows 1, 2 and 4 field for field, but its row-3 guidance record omits the stated number modifier 'approximately', which Rule 8's never-drop safety sink keeps because no name, period, unit, slice or basis field captures it."
+    },
+    {
+      "lead_id": "sokc-022/b2",
+      "agrees": true,
+      "why": "Every field of all four of its member records coincides with what I settled from the event alone, including the percent_yoy basis and geography:us slice on row 1, the action_event LIFO charge with the 'non-cash' span on row 2, the 350-360 count range with 'approximately' and company_confirmed true on row 3, and the boilerplate abstention on row 4."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 3's 'in line with our expectations' comparison is recorded but not encoded as a surprise fact.",
+      "why": "The compared operands sit on different periods (64 openings in the 12-week quarter versus a 350-360 full-fiscal-year target) and Rule 9.6 bars an actual-versus-expectation surprise stated before its target period has ended, so no home-matching surprise sibling can be built without inventing a quarterly expectation the source never states."
+    },
+    {
+      "what": "Row 2's lane (action_event versus metric) for the 138 basis point non-cash LIFO charge is unresolved by the rules as written.",
+      "why": "Rule 2 lists 'one-off charge' under action_event while its own persistence test points at metric for a LIFO impact that a reader can re-read each quarter, and no bare-root default covers LIFO, so the choice rests on a boundary the rulebook does not settle."
+    },
+    {
+      "what": "Whether 'approximately' belongs in measurement_raw_spans on row 3.",
+      "why": "Rule 8's literal never-drop sink keeps any number modifier not captured by name, period, unit, slice or basis, but 'approximately' is a hedge rather than a measurement flavour, and keeping it creates a measurement token that will not match later store-opening guidance facts."
+    }
+  ]
+}
+```

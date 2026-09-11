@@ -1,0 +1,1429 @@
+{
+ "kind": "the key owner's own unresolved semantic findings, copied verbatim from the owner-derived closeout",
+ "source_attempt": "unit_1947/logs/attempt_core_closeout2017_b/stdout.txt",
+ "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017",
+ "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_package_2017",
+ "receipt_sha256": "8fc9c91d56382ed71ea4414ee5a6e8cb452f9a2b8b342e801bc25c49973598b4",
+ "finalization_sha256": "76f6a35d161636a67360bbff4f7849959dfeb0a4bfeca5635e284cf5ea351112",
+ "settled": {
+  "rows": 191,
+  "row_outcomes": {
+   "fact": 150,
+   "control": 34,
+   "exclusion": 7
+  },
+  "per_source": {
+   "0000006201-26-000031": {
+    "rows": 7,
+    "facts": 6,
+    "outcomes": {
+     "fact": 6,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-000/b2"
+    ]
+   },
+   "0000006201-26-000032": {
+    "rows": 5,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-001/b1",
+     "sokc-001/b2"
+    ]
+   },
+   "0000027904-26-000013": {
+    "rows": 7,
+    "facts": 7,
+    "outcomes": {
+     "fact": 6,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-002/b1",
+     "sokc-002/b2"
+    ]
+   },
+   "0000027904-26-000020": {
+    "rows": 9,
+    "facts": 7,
+    "outcomes": {
+     "fact": 7,
+     "control": 1,
+     "exclusion": 1
+    },
+    "leads_disagreed": [
+     "sokc-003/b1",
+     "sokc-003/b2"
+    ]
+   },
+   "0000027904-26-000022": {
+    "rows": 5,
+    "facts": 3,
+    "outcomes": {
+     "fact": 3,
+     "control": 1,
+     "exclusion": 1
+    },
+    "leads_disagreed": [
+     "sokc-004/b2"
+    ]
+   },
+   "0000063908-26-000032": {
+    "rows": 5,
+    "facts": 3,
+    "outcomes": {
+     "fact": 3,
+     "exclusion": 1,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-005/b1",
+     "sokc-005/b2"
+    ]
+   },
+   "0000092380-26-000044": {
+    "rows": 7,
+    "facts": 9,
+    "outcomes": {
+     "fact": 6,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-006/b1",
+     "sokc-006/b2"
+    ]
+   },
+   "0000764478-25-000057": {
+    "rows": 5,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-007/b1",
+     "sokc-007/b2"
+    ]
+   },
+   "0000898173-26-000006": {
+    "rows": 6,
+    "facts": 6,
+    "outcomes": {
+     "fact": 5,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-008/b1",
+     "sokc-008/b2"
+    ]
+   },
+   "0000940944-25-000038": {
+    "rows": 4,
+    "facts": 3,
+    "outcomes": {
+     "fact": 3,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-009/b1",
+     "sokc-009/b2"
+    ]
+   },
+   "0000940944-26-000005": {
+    "rows": 6,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "exclusion": 1,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-010/b1",
+     "sokc-010/b2"
+    ]
+   },
+   "0000940944-26-000009": {
+    "rows": 6,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "control": 1,
+     "exclusion": 1
+    },
+    "leads_disagreed": [
+     "sokc-011/b2"
+    ]
+   },
+   "0001041061-25-000109": {
+    "rows": 5,
+    "facts": 5,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-012/b1",
+     "sokc-012/b2"
+    ]
+   },
+   "0001041061-26-000003": {
+    "rows": 5,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-013/b2"
+    ]
+   },
+   "0001041061-26-000084": {
+    "rows": 6,
+    "facts": 5,
+    "outcomes": {
+     "fact": 5,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-014/b1",
+     "sokc-014/b2"
+    ]
+   },
+   "0001058090-26-000007": {
+    "rows": 6,
+    "facts": 5,
+    "outcomes": {
+     "fact": 5,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-015/b1",
+     "sokc-015/b2"
+    ]
+   },
+   "0001104659-25-102611": {
+    "rows": 6,
+    "facts": 5,
+    "outcomes": {
+     "fact": 5,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-016/b1",
+     "sokc-016/b2"
+    ]
+   },
+   "0001104659-25-105631": {
+    "rows": 5,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-017/b1",
+     "sokc-017/b2"
+    ]
+   },
+   "0001104659-25-118458": {
+    "rows": 7,
+    "facts": 5,
+    "outcomes": {
+     "fact": 5,
+     "exclusion": 1,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-018/b1",
+     "sokc-018/b2"
+    ]
+   },
+   "0001104659-26-017090": {
+    "rows": 6,
+    "facts": 5,
+    "outcomes": {
+     "fact": 4,
+     "exclusion": 1,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-019/b1",
+     "sokc-019/b2"
+    ]
+   },
+   "0001104659-26-027061": {
+    "rows": 5,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-020/b1",
+     "sokc-020/b2"
+    ]
+   },
+   "0001104659-26-032757": {
+    "rows": 5,
+    "facts": 4,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-021/b1",
+     "sokc-021/b2"
+    ]
+   },
+   "0001171843-26-001288": {
+    "rows": 4,
+    "facts": 3,
+    "outcomes": {
+     "fact": 3,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-022/b1"
+    ]
+   },
+   "AAL_2026-04-23T08.30": {
+    "rows": 10,
+    "facts": 10,
+    "outcomes": {
+     "fact": 9,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-023/b1",
+     "sokc-023/b2"
+    ]
+   },
+   "BBY_2026-03-03T08.00": {
+    "rows": 8,
+    "facts": 7,
+    "outcomes": {
+     "fact": 6,
+     "control": 2
+    },
+    "leads_disagreed": [
+     "sokc-024/b1",
+     "sokc-024/b2"
+    ]
+   },
+   "CMG_2026-02-03T16.30": {
+    "rows": 7,
+    "facts": 5,
+    "outcomes": {
+     "fact": 5,
+     "control": 2
+    },
+    "leads_disagreed": [
+     "sokc-025/b1",
+     "sokc-025/b2"
+    ]
+   },
+   "DAL_2026-04-08T10.00": {
+    "rows": 7,
+    "facts": 6,
+    "outcomes": {
+     "fact": 6,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-026/b1",
+     "sokc-026/b2"
+    ]
+   },
+   "DRI_2026-03-19T08.30": {
+    "rows": 5,
+    "facts": 5,
+    "outcomes": {
+     "fact": 4,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-027/b1",
+     "sokc-027/b2"
+    ]
+   },
+   "MCD_2026-02-11T16.30": {
+    "rows": 6,
+    "facts": 7,
+    "outcomes": {
+     "fact": 5,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-028/b1",
+     "sokc-028/b2"
+    ]
+   },
+   "ULTA_2026-03-12T16.30": {
+    "rows": 7,
+    "facts": 5,
+    "outcomes": {
+     "fact": 5,
+     "control": 2
+    },
+    "leads_disagreed": [
+     "sokc-029/b1",
+     "sokc-029/b2"
+    ]
+   },
+   "YUM_2026-02-04T08.15": {
+    "rows": 7,
+    "facts": 7,
+    "outcomes": {
+     "fact": 6,
+     "control": 1
+    },
+    "leads_disagreed": [
+     "sokc-030/b1",
+     "sokc-030/b2"
+    ]
+   },
+   "bzNews_42014391": {
+    "rows": 1,
+    "facts": 1,
+    "outcomes": {
+     "fact": 1
+    },
+    "leads_disagreed": []
+   },
+   "bzNews_50877032": {
+    "rows": 1,
+    "facts": 1,
+    "outcomes": {
+     "fact": 1
+    },
+    "leads_disagreed": [
+     "sokc-032/b1"
+    ]
+   }
+  }
+ },
+ "open_issue_count": 90,
+ "open_issues": [
+  {
+   "source_id": "0000006201-26-000031",
+   "what": "Row 6 slice scope: whether the Regional FTE population (footnote (4): wholly-owned regional airline subsidiaries only) is the same meaning as the menu value 'product:regionalcarrier'.",
+   "why": "The slice token is part of the fact identity; if the menu member covers third-party capacity-purchase carriers as well, the reuse silently widens the measured population, and coining instead would face a genuine segment-vs-product kind choice."
+  },
+  {
+   "source_id": "0000006201-26-000031",
+   "what": "Row 4 baseline selection when a year-over-year headline and a sequential trend sit in one quote.",
+   "why": "Rule 9.2's 'prior_year wins' tiebreak assumes both comparisons describe the same fact, but this fact's stated basis is sequential, so the rules do not cleanly say whether the sequential baseline may be stored or must be left null."
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "what": "Direction of a shrinking income tax benefit (row 2).",
+   "why": "The frozen fixtures pin 'loss narrowed' = increased but say nothing explicit about a benefit whose magnitude falls; I applied the same signed-axis logic, and the source's own column labels the move a decrease, so the two readings remain in tension until an owner pins the benefit case."
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "what": "Slice-kind for 'mainline' on the headcount fact (row 4).",
+   "why": "The kind is carried only by the menu entry product:mainline; on prose alone segment is equally plausible, so a wrong menu reuse would silently manufacture an axis-grade kind that the source never confirms."
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "what": "Row 3: where the compared actual belongs on a surprise whose expectation is qualitative ('low-single digit growth').",
+   "why": "The rules reserve change_value on a surprise for a stated non-derivable delta and require the surprise to mirror its home's value when value-bearing, but the home's value-bearing slots are a cents level plus a percent_yoy change; I placed the 2.4% growth in the surprise's level slots as percent_yoy, and a different lawful reading would make the surprise numberless."
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "what": "Row 3: whether 'in line with' counts as explicit favorability wording.",
+   "why": "has_favorability_wording is required on every surprise and cannot be null, yet 'in line with' names the position rather than a favorable or unfavorable outcome, so the boolean is a judgment the rules do not settle outright."
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "what": "Row 5: the period for a 'currently own' ownership level.",
+   "why": "The quote states no date; the fiscal-year-end and the filing-date readings are both defensible, so the fact ships with all period fields null and a later step may need to attach the implied instant."
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "what": "Row 8 (corporate travel survey) cannot be lawfully lane-assigned.",
+   "why": "It is a specific, non-boilerplate demand signal that would pass the gate, but its outlook verb points to the guidance lane while its attribution is surveyed third parties rather than the company, and the reserved false value for company_confirmed leaves no lawful encoding; a ruling is needed on whether relayed third-party forward expectations are a qualitative metric or a permanent skip."
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "what": "Measurement qualifiers for rows 3, 4, 5 and 6 sit outside the located quotes.",
+   "why": "Each of those figures is the adjusted/non-GAAP value, but the qualifier lives in a section header or footnote, so measurement spans stay empty and the resulting facts are not separable in-quote from their GAAP counterparts in the same event."
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "what": "Row 9 primary baseline is contestable.",
+   "why": "The source computes only the sequential 1Q26-vs-4Q25 change while also displaying a March 31, 2025 column, so the headline-comparison rule points to sequential_period but the co-stated prior-year tiebreak points the other way."
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "what": "Row 2 guidance period is read from outside the quote.",
+   "why": "The located quote is only 'Operating Margin 6% - 8%'; the 2Q26 target period comes from the surrounding guidance table, and guidance requires a target period, so the fact depends on context the locator did not include."
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "what": "Row 3's stated level of 1,517 is not carried on any fact.",
+   "why": "The only scale marker for that figure is the table's '(in millions)' header, which sits outside the located quote, so a lawful scale value cannot be cited and a real stated level is silently lost from the record."
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "what": "Row 2's increase is stated on two units at once ($1.2 billion and 9.4%).",
+   "why": "One fact carries a single change value and unit, and no rule ranks a dollar change against a percentage change for the same movement, so the choice to carry the dollar figure is a judgment rather than a rule-forced answer."
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "what": "Row 5 is a fuzzy-middle gate call with no locked boundary.",
+   "why": "A retrospective change to what a non-GAAP measure excludes is a real, deliberate company decision, yet its subject is a measurement construct with no driver name, and the gate text fixes no boundary for this class, so the exclusion should be confirmed by the owner before it is treated as settled."
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "what": "The slice menu carries the U.S. market four times: segment:usmarket, segment:u_s_market, entity_ownership:usmarket and entity_ownership:u_s_market.",
+   "why": "Row 3's stored slice identity depends on which token is canonical, and the menu offers no evidence to choose between the two segment spellings, so the same real population can fork into two ids."
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "what": "Row 5 admits two lawful encodings: franchise share as a qualified driver name, or a restaurant-count metric sliced by channel:franchisedunits.",
+   "why": "The two encodings produce different fact identities for one statement, and the sentence alone does not select one."
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "what": "Row 5: where the \"-X\" exclusions of CASM-X belong once Rule 3.5 forces the per-X acronym to be spelled out in the name.",
+   "why": "The only verbatim span inside the located quote that carries those exclusions is the acronym itself, so keeping them losslessly means storing \"CASM-X\" as a measurement token, which reads oddly against a name that already spells the measure out."
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "what": "Row 5: the slot placement and groundedness of the CASM-X surprise.",
+   "why": "The prior guide's number is absent from the quote, so the surprise carries the actual growth rate in the level slots with empty comparison slots, and the home-sibling match is by value and unit across different slot groups rather than slot-for-slot."
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "what": "Rows 2 and 5: polarity proofs that draw their sentence from event text outside the located quote.",
+   "why": "Both comparisons are wordless inside their own fragments; the favorable/unfavorable reading comes from the release's headwind and cost-discipline framing elsewhere in the same document, and a stricter quote-bounded reading would send both to unknown."
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "what": "Row 4: the forward target of at least 300 Starlink-equipped aircraft by year-end 2026 is not recorded anywhere.",
+   "why": "The task allows more than one fact per row only where a sibling or basis split is required, so a genuine forward company target sits unencoded inside an action fact's quote."
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "what": "Row 1: whether \"in line with guidance\" counts as favorability wording.",
+   "why": "The required boolean has no neutral value, yet the phrase states a position outcome without naming a favorable or unfavorable direction, so the stored answer is a judgment either way."
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "what": "Row 3: reuse of the menu value product:cargoandfreight for the income-statement line labelled \"Freight\".",
+   "why": "The quote never links the label to that menu member, so the reuse is a same-meaning judgment; if it is wrong the correct outcome is a coined product slice, not a fold."
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "what": "Row 4's located quote holds two windows (third quarter 31.8% vs 31.4%, nine months 32.1% vs 31.2%) and I settled only the third-quarter pair.",
+   "why": "The one target meaning yields one fact and no rule here licenses a period split, so the nine-month value is a genuinely different window that this row leaves unrecorded rather than guessed into a second record."
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "what": "Menu-kind ambiguity for the \"domestic\" and \"international\" labels used in rows 2, 3 and 4.",
+   "why": "Each label sits on the menu under both a geography kind and a segment kind (and \"domestic\" also as both segment:domestic and segment:domesticsegment), so my pick rests on the filing's reportable-segment framing rather than an axis-confirmed match, and a wrong pick forks the slice identity."
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "what": "The row 4 slice part channel:online is coined off-menu.",
+   "why": "The filing describes online revenue as sales initiated on a website, app or virtual store, which reads as how-it-sells, but no menu value exists to confirm the kind, so the part is provisional."
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "what": "Row 2 expectation baseline: 'our expectations' recorded as previous_guidance with no prior guide anywhere in the event.",
+   "why": "The own-target mapping forbids an internal-target value and forbids consensus for a clearly company-owned expectation, yet the resulting actual_vs_guidance composition points at a guide this source never published, so the pairing cannot be validated downstream."
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "what": "Row 3 slice: whether 'domestic' is the same meaning as the menu value geography:us.",
+   "why": "The event's own footnote defines its domestic figures as U.S. and Puerto Rico operations, so a menu reuse may silently fold a slightly wider population into the U.S. series, and the alternative would be coining a separate geography value."
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "what": "Row 4 evidence truncation: the located quote ends immediately after the 2025 figure.",
+   "why": "The prior-year total sits in the same table but outside the quote, so the real year-over-year improvement in the deficit cannot be stored without extending a fixed locator, and the fact is recorded as a bare level instead."
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "what": "Row 6 target mismatch: the raw label names the retroactive share-data adjustment, not the split.",
+   "why": "A restatement-of-presentation clause is a measurement qualifier rather than a driver, so settling it required anchoring on the split action in the same quote; a reviewer applying the target strictly could instead read this row as yielding no fact."
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "what": "The company menu holds two distinct values for each of the two brand segments used here ('segment:longhornsteakhouse' vs 'segment:longhornsteakhousesegment', 'segment:olivegarden' vs 'segment:olivegardensegment').",
+   "why": "Both are lawful same-meaning reuses under one clear kind, the rules forbid guessing and forbid merging existing identities, and the choice changes the stored fact identity, so the selection cannot be settled from this event alone."
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "what": "Row 2's action stage and its period disagree inside one event: the located quote fixes the agreement in fourth quarter fiscal 2025, while the event states the sale closed on 2025-07-14, which falls in fiscal 2026.",
+   "why": "The latest-stage rule forces 'occurred' but the only window stated inside the located quote describes the agreement, so the stored period may label a stage earlier than the recorded state."
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "what": "Which column of the row-3 reconciliation line is the impairment's canonical value.",
+   "why": "The same located line states 24.7 pre-tax, 6.2 tax, 18.5 after-tax and 0.16 per share for one item; I stored the pre-tax charge, but the source does not say which is the intended series value, so a different column choice is defensible from the same evidence."
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "what": "Whether the row-4 gain may carry its stated per-share magnitude.",
+   "why": "The only quantification is a per-share earnings adjustment; storing it would require a per-share denominator in a transaction driver's name, which collides with the rule that names carry no effect words, so the value is left unstored rather than guessed."
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "what": "Whether a Bahama Breeze slice may ride the row-3 impairment.",
+   "why": "The footnote says the charges are only 'primarily' related to Bahama Breeze closures, so attaching that slice would over-attribute part of the charge, and the located quote names no business part at all."
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "what": "Row 6: whether a change in how segment profit is defined, with prior-year figures recast, should ever be written as an action_event driver or must stay excluded as an accounting/presentation construct.",
+   "why": "The rules both forbid accounting constructs as drivers and admit discrete decisions as action events, and the two leads split on exactly this point, so a safe final answer needs an owner ruling rather than my guess."
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "what": "Row 4: the exact as-of date for the 87 franchised restaurants is stated in the surrounding overview paragraph, not inside the located sentence.",
+   "why": "I could not take the date without reaching outside my fixed location, so this instant fact carries fiscal framing only and any consumer needing a precise date must re-locate the sentence that states it."
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "what": "Whether a discrete action fact (a stake sale, a store closure, a reserve release) should carry time_type instant or be left null.",
+   "why": "The rules define time_type as a meaning judgment for levels and flows but never say which value a one-off action takes, so my instant choice on rows 1, 4 and 5 is a judgment that a later owner could overturn."
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "what": "The fiscal year for the row-4 closures is read from the surrounding event text, not from the located quote, which says only 'in January'.",
+   "why": "If a period must be resolvable from the located quote alone, that fact's year framing would have to be dropped, leaving only the month."
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "what": "Row 2 slice kind for \"U.S.\": the company menu carries the same label as both segment:us and geography:us.",
+   "why": "The two tokens produce different stored fact identities, and if the reviewer judges the quote's framing not to select geography, the honest answer is unknown:us instead - so the pick should be confirmed before this row is locked."
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "what": "Row 3 off-menu channel part channel:digital has no menu counterpart.",
+   "why": "Digital ordering is defined in the release as how the transaction is placed, which reads as a channel, but a first coin creates a new company slice value that later readers will reuse, so the kind should be confirmed before promotion."
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "what": "The company slice menu holds two same-kind labels for the Habit brand's operating segment ('segment:thehabitburgergrillglobaldivision' and 'segment:habitdivision').",
+   "why": "The slice-kind ladder resolves a label that appears under two KINDS, not two labels of one kind, so the reuse pick on row 5 is settled by the filing's own division naming rather than by a rule, and the catalog may need to park or merge the duplicate."
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "what": "Row 1's comparison baseline (prior_year vs sequential_period) for the $0.71 quarterly dividend.",
+   "why": "YUM paid $0.71 in every quarter of 2025, so the stated prior rate is simultaneously the year-ago and the immediately prior quarter's value; the rules give a tiebreak only when both comparisons are co-stated, which they are not here."
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "what": "Row 3 period attribution: the same (1,518) gain is printed in both the three-months-ended and year-ended columns of the quoted table.",
+   "why": "One termination gain must be emitted exactly once, but the table alone cannot prove whether the intended record is the quarter, the year, or both; I chose the quarter and flagged it rather than duplicating the fact."
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "what": "Row 3 unit encoding: an amount stated 'in thousands' carried as value -1518 with scale_multiplier 1000 under level_unit m_usd.",
+   "why": "The rules forbid me rescaling and require an aggregate-dollar unit of m_usd, so the stored multiplier and the declared millions unit are resolved downstream by code, not by me."
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "what": "Row 2 placement of 'Restaurant level'.",
+   "why": "It is simultaneously a population qualifier (costs the restaurants control) and a company-declared non-GAAP measure, and the two rules point at the name and at the measurement slot respectively; a wrong choice forks the series identity."
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "what": "Row 6 role of 'Chipotlanes' (driver name vs channel/product slice) and the three bundled downstream effects (new restaurant sales, margins, returns).",
+   "why": "The kind is not selectable from the quote and no menu value exists, and splitting the bundled effects into separate numberless facts would invent directions the sentence does not separately state."
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "what": "Whether a change stated as both a dollar amount and a percent ('increased $329.5 million, or 6.7%') is one fact or two.",
+   "why": "Rule 1.5 forbids restating one fact as two records while Rule 5a.4 splits a value stated on two or more bases; I read 'bases' as growth bases only and emitted one record, but the admission step needs the owner's reading before this is locked."
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "what": "The slice kind for AutoZone's 'commercial' sales population.",
+   "why": "The filing frames commercial both as a customer population (repair garages, dealers, fleet owners) and as a selling program, no menu value exists for it, so the ladder forces unknown:commercial and a later kind promotion is unresolved."
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "what": "Whether a vendor-concentration fact may carry the company's own vendor-axis menu value as a slice.",
+   "why": "The menu contains unknown:azo:VendorsAxis__oneindividualvendor while the naming rule states a vendor is never a slice; I followed the rule and left the slice empty, which leaves an existing menu value unusable."
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "what": "Row 3's period rests on event metadata, not the quote.",
+   "why": "The quote says only 'currently' and contains no date, so the instant 2025-11-03 comes from the filing's event date; if deriving a period from metadata is disallowed for a metric, this fact would have to park instead."
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "what": "Row 2's polarity depends on reading 'loss' as the sign signal.",
+   "why": "The signed-axis rule makes a loss negative but a charge positive, and the non-GAAP reconciliation elsewhere in this filing shows the same amount as a positive add-back, which sits outside the located quote and cannot be used to settle it."
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "what": "Row 3's population qualifier versus a geography slice is unresolved by the rules alone.",
+   "why": "'Own and operate ... throughout the United States and Canada' both restricts the population (excluding 35 licensed international locations) and states a geography, and the rules do not clearly decide whether the geography is a slice or simply describes the whole company-operated base."
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "what": "Space NK's slice kind and token are unresolved: the business appears in the menu only as unknown:us-gaap:BusinessAcquisitionAxis__spacenk, while its prose role (wholly owned subsidiary) reads as entity_ownership.",
+   "why": "Equal value strings under different kinds never fold, so reusing the unknown menu token and coining entity_ownership:space_nk produce permanently different slice identities for rows 1 and 3; only the frozen axis table owner can settle which is correct."
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "what": "Whether a named share repurchase program is a lawful slice value at all (row 6).",
+   "why": "A repurchase program is not a business population for which 'revenue from ___' makes sense, yet the program identity is barred from the name by the no-period/no-digits rule, so if that axis is later classed non-slice the revoked program's identity has no lawful home."
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "what": "Row 2 sits in the gate's unlocked fuzzy middle: the sentence's verb ('is expanding our presence internationally') could support an ongoing international-expansion action, while the located target is only the Mexico joint venture as a structure.",
+   "why": "The gate locks a boundary only for at_risk, so I excluded the row as a bare mention rather than invent a boundary; if the owner treats descriptive expansion prose as an action, this row flips to a fact."
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "what": "Row 4's located line states four period columns (reported quarter, prior-year quarter, full year, prior full year) but the row names one target meaning, so only the reported-quarter value was settled and the full-year (2)% value plus the two prior-year comparatives remain stated-but-unemitted.",
+   "why": "Whether one located table line may yield one fact per period column is not settled by the rules I was given - a period split is neither a required sibling nor a basis split - so emitting them would be a guess and dropping them silently would hide a real stated value."
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "what": "Row 2's $24.6 million blended pre-tax net expense is a real disclosed charge that I had to exclude for lack of any per-cause amount inside its quote.",
+   "why": "If a blended one-off charge is permitted to be carried under a single action name, this row flips from exclusion to a fact, so the boundary needs an owner ruling before this row is locked either way."
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "what": "Row 3's baseline rests on reading 'our expected range' as the company's own previously issued revenue guidance.",
+   "why": "The quote names an expectation but never shows its numeric range or its issuer explicitly, so the surprise routing depends on that reading and would change if the range were a non-company expectation."
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "what": "Row 4: whether \"Company-operated\" belongs in the driver name (company_operated_store_count) or in measurement_raw_spans alongside a bare store_count name.",
+   "why": "The choice changes the fact's identity and its series, the two blind leads split on it, and the source gives the qualifier only as a column header, so the placement rests on a rule reading rather than on stated evidence."
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "what": "Whether a rounding hedge such as \"approximately\" belongs in measurement_raw_spans (row 2).",
+   "why": "The never-drop sink says keep any uncaptured number modifier, but measurement tokens are part of fact identity, so keeping it can split one real series across quarters that word the same share differently; the rules do not settle which side wins."
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "what": "Whether the exact trailing boundary of a measurement qualifier span includes the following noun (\"constant currency\" vs \"constant currency basis\", row 4).",
+   "why": "Rule 8 asks for the maximal contiguous qualifier span copied verbatim, but it does not say whether a trailing prose noun like \"basis\" is part of the qualifier, and the two choices normalize to different identity tokens."
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "what": "Row 3's 'in line with our expectations' comparison is recorded but not encoded as a surprise fact.",
+   "why": "The compared operands sit on different periods (64 openings in the 12-week quarter versus a 350-360 full-fiscal-year target) and Rule 9.6 bars an actual-versus-expectation surprise stated before its target period has ended, so no home-matching surprise sibling can be built without inventing a quarterly expectation the source never states."
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "what": "Row 2's lane (action_event versus metric) for the 138 basis point non-cash LIFO charge is unresolved by the rules as written.",
+   "why": "Rule 2 lists 'one-off charge' under action_event while its own persistence test points at metric for a LIFO impact that a reader can re-read each quarter, and no bare-root default covers LIFO, so the choice rests on a boundary the rulebook does not settle."
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "what": "Whether 'approximately' belongs in measurement_raw_spans on row 3.",
+   "why": "Rule 8's literal never-drop sink keeps any number modifier not captured by name, period, unit, slice or basis, but 'approximately' is a hedge rather than a measurement flavour, and keeping it creates a measurement token that will not match later store-opening guidance facts."
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "what": "Sign convention for an adverse revenue impact attributed to an event driver (row 4).",
+   "why": "The signed-axis examples cover a loss (negative) and a charge (positive) but not a revenue hit stored on the causing event, so -320 versus +320 is not decidable from the rules alone."
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "what": "A one-sided growth bound ('less than 10 percent') on a driver whose own level is absolute (row 9).",
+   "why": "The change slot carries no shape hint, so a ceiling can only be expressed by using the level slots with a growth unit, which conflicts with the rule that growth on an absolute-level driver belongs in the change slot."
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "what": "Possible collision between the numberless revenue home sibling (row 2) and the valued revenue fact (row 1).",
+   "why": "Both cover company-wide revenue for the same reported quarter, and the rules require a numberless home for a numberless surprise while also forbidding one fact being stated twice."
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "what": "The measured variable behind 'TMC performance' (row 6).",
+   "why": "The located quote names no metric; revenue is read from the neighbouring sentences, so the name rests on surrounding context rather than the target's own words."
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "what": "Growth basis for the March 'double digits' step-up (row 10).",
+   "why": "The quote contains the word 'sequentially' (which the basis rule treats as in-document sequential evidence) while airline monthly figures of this kind are commonly year-ago comparisons, and the text does not resolve the conflict."
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "what": "Slice kind for 'International' revenue is recorded as unknown:international rather than a menu pick.",
+   "why": "The company menu carries geography:international, segment:international and segment:internationalsegment, and the located quote gives no selector, so any pick would manufacture an axis-grade confirmation and fork or wrongly merge the revenue series identity."
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "what": "Slice kind for the Best Buy Business revenue part is recorded as unknown:best buy business.",
+   "why": "The prose supports customer, segment and channel readings of the same named part and there is no menu entry for it, so the kind cannot be settled without guessing and downstream promotion of this value needs a governed decision."
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "what": "Rows 3 and 4 carry the slice as 'unknown:group occasions' rather than a named kind.",
+   "why": "The two parts named in the surrounding prose are build-your-own-Chipotle (reads as product/offering) and catering (reads as channel), so two kinds stay reasonable and the ladder forbids guessing; a later governed decision is needed before this value can be promoted to a kinded slice."
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "what": "Row 3 has no resolvable period; all period fields are null.",
+   "why": "The source says only 'Today', which is not a stated or clearly implied window, so the fact cannot be aligned to a quarter or year and may not join the same series as later restatements of that share."
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "what": "Row 4 states both sentinel_class 'long_term' and a time_type.",
+   "why": "The period rule says a stated horizon excludes every other period field; I read time_type as a meaning judgment rather than a period field, but if the validator counts it as a period field this fact would park."
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "what": "Sign of the $300 million refinery benefit (row 4).",
+   "why": "The signed-axis rule says a stated benefit is negative, yet the driver name itself carries 'benefit', so a literal reading yields a double negative; the two leads split on this exact point and a wrong sign would invert the stored series."
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "what": "Whether 'our refinery' belongs in the driver name or as the refinery segment slice (row 4).",
+   "why": "The refinery is the company's own reported segment (it is on the menu) but here it acts as the cause of an offset to fuel cost rather than the measured population, and the role test explicitly leaves an unclear role in the name."
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "what": "Home-sibling placement for the EPS surprise (rows 1 and 2).",
+   "why": "The surprise's required metric home is settled at row 1 in the same event; if a downstream consumer reads row 2 in isolation the surprise would appear ungrounded, so the two rows must be admitted together."
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "what": "Row 5 emits two facts from one located target.",
+   "why": "The task text permits more than one fact per target only for a sibling or basis split, yet the target's own words state two independent causes each with its own count of 14, and collapsing them would conflate distinct actions while abstaining would drop real announced facts."
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "what": "Guidance movement on row 2 is left unknown.",
+   "why": "The event elsewhere quotes an initial fiscal 2026 guide of $10.50 to $10.70 and says guidance was updated, but the prior-quarter guide is never stated, so a raised/lowered judgment cannot be made safely from the source."
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "what": "Duplicate Olive Garden segment tokens on the menu.",
+   "why": "segment:olivegarden and segment:olivegardensegment carry the same meaning under the same kind, and nothing in the quote or the rules selects one, so the reuse pick is not verifiable."
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "what": "No lawful period encoding for \"over the next 12 to 18 months\" on the conversion fact.",
+   "why": "It is a stated relative window with numbers, but the horizon classes are only short/medium/long/undefined and mapping 12 to 18 months onto one of them would be a guess."
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "what": "Baseline enum for \"above our expectations\" (row 2) and \"in line with our expectations\" (row 3).",
+   "why": "The company's own expectation is stated but no public company guide for U.S. quarterly comps or full-year adjusted operating margin is quoted in this event, so the own-target mapping to previous_guidance versus a consensus reading cannot be settled from the event alone."
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "what": "Which U.S. menu token to reuse for the row 2 slice.",
+   "why": "The supplied menu carries the same U.S. label four times across segment and entity_ownership kinds and two spellings, so a single correct reference token is not determinable and the fact identity could fork."
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "what": "Slice kind and value for \"China\" in row 5.",
+   "why": "No menu value shares China's exact meaning, and McDonald's China is both a geography and a developmental-licensee entity in which the company holds a stake, leaving geography:china and an entity_ownership coin both defensible."
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "what": "Row 3: whether the loyalty program is a customer slice or part of the driver name.",
+   "why": "Both readings are defensible under the slice role test, and a guessed kind would forge a false axis-grade identity; I kept it in the name and flag the fork."
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "what": "Row 4: the period for the Space NK store count is not stated inside the quote.",
+   "why": "The 'more than 80' footprint describes the business at acquisition while the event separately reports 86 Space NK stores at year-end, so the fiscal-2025 framing I applied is implied by the surrounding recap rather than stated."
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "what": "Row 6: the surprise's home metric sibling is not among the located rows.",
+   "why": "Rule 9 requires the home in the same event; it is present in the event text but in a sentence no row locates, so a downstream assembler must confirm the twin is written from that other location."
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "what": "Slice attribution for the $40M special expenses in row 3.",
+   "why": "The charge is stated inside consolidated reported G&A yet is caused by the Pizza Hut strategic options review, so the portion-versus-whole rule points to an empty slice while the own-segment rule points to segment:pizzahutglobaldivision; I recorded the segment slice but the evidence does not settle which population is being measured."
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "what": "Encoding of the percent-only Pizza Hut Q1 2026 guide in row 5.",
+   "why": "The design text says percent-only guidance stores its growth basis in level_unit and reserves change_value for the guide's own revision size, but a decline stated as 'down approximately 15%' is also readable as a change value; the two encodings produce different stored shapes and the source does not disambiguate."
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "what": "Whether 'core' is a measurement token or part of the driver name across rows 1, 2 and 5.",
+   "why": "'Core' is YUM's non-GAAP framing (excluding foreign currency and special items) defined earlier in the call rather than inside these quotes, so treating it as a measurement span keeps names comparable but relies on context outside the located quote."
+  }
+ ],
+ "rows_yielding_no_fact_count": 41,
+ "rows_yielding_no_fact": [
+  {
+   "source_id": "0000006201-26-000031",
+   "row_id": "0000006201-26-000031#006",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic risk-factor boilerplate: 'we may be a party to litigation in the normal course of business or otherwise, which could affect our financial position and liquidity' names no specific current matter, no state, change, guidance or action, so the gate drops it."
+   ]
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "row_id": "0000006201-26-000032#011",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic catch-all risk boilerplate about unknown or currently immaterial risks that 'could also materially adversely affect our business' \u2014 no driver state, change, action, or guidance is stated, so the fact gate fails."
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "row_id": "0000027904-26-000013#018",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic risk boilerplate: a hypothetical crash that 'could expose us to significant liability' states no driver state, change, guidance, surprise, or discrete action, and it names no specific, current, source-flagged adverse threat, so the gate returns no fact."
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "row_id": "0000027904-26-000020#025",
+   "outcome": "control",
+   "abstention_reasons": [
+    "This is a hypothetical risk-factor item inside the forward-looking statements list ('the possible effects of serious accidents'), i.e. generic risk boilerplate with no stated state, change, surprise, guidance or action, so the gate drops it."
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "row_id": "0000027904-26-000020#026",
+   "outcome": "exclusion",
+   "abstention_reasons": [
+    "The statement is a forward-looking expectation held by surveyed respondents about their own future travel spend: the outlook verb 'expect' forces the guidance lane, but guidance is defined as the company's own outlook and the attribution here is third-party respondents, so company_confirmed cannot lawfully be true and the lane cannot be resolved without guessing."
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "row_id": "0000027904-26-000022#031",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Boilerplate cross-reference stating no material changes to the risk factors already described in the Form 10-K; it reports no driver state, change, surprise, guidance or action, so the fact gate returns nothing."
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "row_id": "0000027904-26-000022#032",
+   "outcome": "exclusion",
+   "abstention_reasons": [
+    "The target states a change in how the company presents its non-GAAP reconciliations (which hedge settlement gains and losses are excluded from adjusted results, applied retrospectively to prior-period reconciliations). Its subject is a measurement/presentation construct rather than any driver's state, change, surprise, guidance or action, and no lawful driver name exists for it, so it is excluded rather than encoded."
+   ]
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "row_id": "0000063908-26-000032#034",
+   "outcome": "exclusion",
+   "abstention_reasons": [
+    "The target 'Net pre-tax gains' is a NETTED prior-year aggregate: a $71 million quarter gain and a separate $70 million full-year charge, each fused from several independent causes (property sale gains, transaction costs and non-cash impairment on the South Korea business sale, plus transaction costs on the Israel business acquisition) with no per-cause amount given; one name cannot lawfully cover two independent causes and the source supplies no split, so the item cannot be resolved without inventing a driver or a number."
+   ]
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "row_id": "0000063908-26-000032#036",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Safe-harbor boilerplate that only announces that the release contains forward-looking statements and that they speak as of the date hereof; it names no driver and states no level, change, outlook, expectation comparison or action, so it fails the fact gate."
+   ]
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "row_id": "0000092380-26-000044#043",
+   "outcome": "control",
+   "abstention_reasons": [
+    "This is an item in the cautionary forward-looking-statements factor list, naming fuel price changes, volatility and availability only as things that could affect plans and results; it is generic risk boilerplate with no stated state, change, guide, surprise or action, so the gate returns no fact."
+   ]
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "row_id": "0000764478-25-000057#049",
+   "outcome": "control",
+   "abstention_reasons": [
+    "The sentence only defines the reporting term \"constant currency\" as results adjusted to exclude foreign currency impacts; it reports no driver state, change, surprise, guidance or action, so it fails the Rule 1 gate as a definitional/boilerplate mention."
+   ]
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "row_id": "0000898173-26-000006#054",
+   "outcome": "control",
+   "abstention_reasons": [
+    "The quote is generic statutory safe-harbor boilerplate claiming Private Securities Litigation Reform Act protection for forward-looking statements; it states no driver state, change, surprise, guidance, or action, so the gate returns no fact."
+   ]
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "row_id": "0000940944-25-000038#058",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic litigation risk boilerplate: the sentence says litigation 'may adversely affect our business, financial condition and results of operations' without any stated driver state, change, size, action or outlook, which is exactly the boilerplate the fact gate drops."
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "row_id": "0000940944-26-000005#064",
+   "outcome": "exclusion",
+   "abstention_reasons": [
+    "The sentence only states a segment-reporting classification convention (where Chuy's sales and profits are presented), with no driver state, change, surprise, guidance, or action, so it fails the fact gate."
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "row_id": "0000940944-26-000005#065",
+   "outcome": "control",
+   "abstention_reasons": [
+    "This is generic risk boilerplate from the safe-harbor forward-looking-statements list naming litigation and adverse publicity as possible risks, with no stated state, change, or action, so it is dropped by the gate."
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "row_id": "0000940944-26-000009#070",
+   "outcome": "control",
+   "abstention_reasons": [
+    "The located text is one bullet in the forward-looking-statements risk list naming a category of possible future harm (climate change, adverse weather, natural disasters) with no stated state, change, size, action, or company-specific current threat, so it is generic risk boilerplate and fails the fact gate."
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "row_id": "0000940944-26-000009#071",
+   "outcome": "exclusion",
+   "abstention_reasons": [
+    "The target claim is that prior-year figures were recast for comparability after the company redefined segment profit to exclude pre-opening costs; this reports a measurement/presentation basis change, not any driver's state, change, surprise, guidance, or action, and an accounting construct is not itself a driver, so the row yields no lawful fact while the affected real metrics (segment profit margin, pre-opening costs) are stated on their own lines elsewhere."
+   ]
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "row_id": "0001041061-25-000109#074",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Standard 10-Q risk-factor boilerplate asserting no material change from the prior Form 10-K; it names no driver state, change, surprise, guidance or action, so it fails the fact gate and yields nothing."
+   ]
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "row_id": "0001041061-26-000003#081",
+   "outcome": "control",
+   "abstention_reasons": [
+    "The phrase is one entry in the safe-harbor forward-looking-statements risk list; it names a topic that could affect results with no stated level, direction, change, outlook or company action, so it is generic risk boilerplate and yields no fact."
+   ]
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "row_id": "0001041061-26-000084#087",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic risk-factor boilerplate: food- and beverage-borne illness and food safety issues 'have occurred and may occur within our system from time to time' names an undifferentiated hazard with no stated driver level, direction, period, size, guidance, expectation comparison, or discrete incident, and it is not a specific current source-flagged adverse threat, so the gate drops it."
+   ]
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "row_id": "0001058090-26-000007#092",
+   "outcome": "control",
+   "abstention_reasons": [
+    "This phrase is a generic risk-factor topic mention inside the standard forward-looking-statements risk list; it states no company-specific state, change, guide, or action and no current source-flagged adverse threat, so the gate drops it."
+   ]
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "row_id": "0001104659-25-102611#099",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic ordinary-course legal-proceedings boilerplate: it names no specific matter, no state, direction, magnitude, stage or outcome, so under the fact gate it is a bare topic mention and yields no record."
+   ]
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "row_id": "0001104659-25-105631#103",
+   "outcome": "control",
+   "abstention_reasons": [
+    "The sentence only cross-references risk-factor descriptions contained in other filings; it states no driver state, change, surprise, guidance or action of its own, so it is a bare pointer/boilerplate and yields no fact."
+   ]
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "row_id": "0001104659-25-118458#106",
+   "outcome": "exclusion",
+   "abstention_reasons": [
+    "The target meaning is the Mexico joint venture itself, and the quote only names it as an existing structural vehicle in the company-description Overview: no state, level, direction, magnitude, date, or discrete step is stated about it, so it is a bare topic mention under Rule 1.2; I note that the surrounding verb 'is expanding' could be read as an ongoing action, but the located target is the venture, not a stated expansion step."
+   ]
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "row_id": "0001104659-25-118458#108",
+   "outcome": "control",
+   "abstention_reasons": [
+    "A hypothetical caveat inside the forward-looking-statements risk list ('the possibility that we will not realize the anticipated benefits ... for any reason'), with no stated occurrence, value, direction, or company-flagged current adverse event \u2014 generic risk boilerplate under Rule 1.2 and the gate's boilerplate drop."
+   ]
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "row_id": "0001104659-26-017090#113",
+   "outcome": "exclusion",
+   "abstention_reasons": [
+    "The $24.6 million figure is a single net pre-tax total that fuses four independent causes named in the same sentence (asset impairment and lease termination, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); one name may cover only one cause, the causes must be split, and the quote states no per-cause amount, so the amount cannot be lawfully attached to any one driver and the fact is real but unresolvable."
+   ]
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "row_id": "0001104659-26-017090#117",
+   "outcome": "control",
+   "abstention_reasons": [
+    "This is one entry in the safe-harbor list of factors that may affect forward-looking statements; it names a hypothetical adverse condition category with no stated current state, change, size, period, or company action, which is exactly the generic risk boilerplate the gate drops."
+   ]
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "row_id": "0001104659-26-027061#122",
+   "outcome": "control",
+   "abstention_reasons": [
+    "The line is one bullet of the forward-looking-statements risk list naming macroeconomic conditions, inflation, rates and cost pressures as hypothetical future risks; it states no driver state, change, guidance or action, so it is generic risk boilerplate and yields no fact."
+   ]
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "row_id": "0001104659-26-032757#127",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic filing boilerplate stating no material changes to previously disclosed risk factors; it names no driver state, change, surprise, guidance or action, so the fact gate returns the single abstention."
+   ]
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "row_id": "0001171843-26-001288#131",
+   "outcome": "control",
+   "abstention_reasons": [
+    "The located quote is one undifferentiated entry in the safe-harbor forward-looking-statements risk list ('weather, including extreme temperatures and natural disasters'); it states no driver state, change, surprise, guidance or action for this company, so it is generic risk boilerplate dropped by the gate and by Rule 1.2."
+   ]
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "row_id": "AAL_2026-04-23T08.30#139",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Standard safe-harbor wording that risks and uncertainties could cause actual results to differ; it names no driver state, change, surprise, guidance or action, so it is generic boilerplate and yields no fact."
+   ]
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "row_id": "BBY_2026-03-03T08.00#147",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Standard forward-looking-statements safe-harbor language: it names no driver's state, change, surprise, guidance or action and is generic risk boilerplate, so the gate returns the one abstention."
+   ]
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "row_id": "BBY_2026-03-03T08.00#149",
+   "outcome": "control",
+   "abstention_reasons": [
+    "An expectation comparison with no identifiable company value: the revenue and units are framed 'from an industry perspective' with no number, no period-anchored company level, and no home metric fact anywhere in this event to ground it, so the ungrounded surprise abstains."
+   ]
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "row_id": "CMG_2026-02-03T16.30#154",
+   "outcome": "control",
+   "abstention_reasons": [
+    "An umbrella claim that 'the results' were in line with expectations and guidance names no identifiable metric, period or value, so it is an ungrounded expectation comparison with no possible home sibling and yields no lawful fact."
+   ]
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "row_id": "CMG_2026-02-03T16.30#156",
+   "outcome": "control",
+   "abstention_reasons": [
+    "This is standard forward-looking-statement safe-harbor language directing listeners to the 10-K/10-Q risk factors; it states no driver state, change, surprise, guidance or action and is exactly the generic risk boilerplate the gate drops."
+   ]
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "row_id": "DAL_2026-04-08T10.00#163",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Standard safe-harbor forward-looking-statements disclaimer naming no driver state, change, surprise, guide or action; it is generic risk boilerplate and is dropped by the gate."
+   ]
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "row_id": "DRI_2026-03-19T08.30#167",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic forward-looking-statement risk boilerplate saying actual results could differ from expectations; it names no driver state, change, surprise, guide or action, so the fact gate returns the one abstention."
+   ]
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "row_id": "MCD_2026-02-11T16.30#174",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Generic forward-looking-statements legal disclaimer pointing at the earnings release and 8-K; it states no driver state, change, surprise, guidance or action, so it fails the fact gate as boilerplate."
+   ]
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "row_id": "ULTA_2026-03-12T16.30#179",
+   "outcome": "control",
+   "abstention_reasons": [
+    "An ungrounded expectation claim: 'beat and raised... exceeded on all metrics' names no identifiable driver, value, period or comparison baseline, so it has no home sibling and cannot be lawfully resolved into a surprise."
+   ]
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "row_id": "ULTA_2026-03-12T16.30#181",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Standard safe-harbor legal boilerplate about not revising forward-looking statements; it states nothing about any driver's state, change, surprise, guidance or action."
+   ]
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "row_id": "YUM_2026-02-04T08.15#188",
+   "outcome": "control",
+   "abstention_reasons": [
+    "Administrative scheduling notice of the next earnings release date and call; it states nothing about a driver's state, change, surprise, guidance or action, so it fails the fact gate."
+   ]
+  }
+ ],
+ "lead_disagreement_count": 58,
+ "lead_disagreements": [
+  [
+   "0000006201-26-000031",
+   "sokc-000/b2"
+  ],
+  [
+   "0000006201-26-000032",
+   "sokc-001/b1"
+  ],
+  [
+   "0000006201-26-000032",
+   "sokc-001/b2"
+  ],
+  [
+   "0000027904-26-000013",
+   "sokc-002/b1"
+  ],
+  [
+   "0000027904-26-000013",
+   "sokc-002/b2"
+  ],
+  [
+   "0000027904-26-000020",
+   "sokc-003/b1"
+  ],
+  [
+   "0000027904-26-000020",
+   "sokc-003/b2"
+  ],
+  [
+   "0000027904-26-000022",
+   "sokc-004/b2"
+  ],
+  [
+   "0000063908-26-000032",
+   "sokc-005/b1"
+  ],
+  [
+   "0000063908-26-000032",
+   "sokc-005/b2"
+  ],
+  [
+   "0000092380-26-000044",
+   "sokc-006/b1"
+  ],
+  [
+   "0000092380-26-000044",
+   "sokc-006/b2"
+  ],
+  [
+   "0000764478-25-000057",
+   "sokc-007/b1"
+  ],
+  [
+   "0000764478-25-000057",
+   "sokc-007/b2"
+  ],
+  [
+   "0000898173-26-000006",
+   "sokc-008/b1"
+  ],
+  [
+   "0000898173-26-000006",
+   "sokc-008/b2"
+  ],
+  [
+   "0000940944-25-000038",
+   "sokc-009/b1"
+  ],
+  [
+   "0000940944-25-000038",
+   "sokc-009/b2"
+  ],
+  [
+   "0000940944-26-000005",
+   "sokc-010/b1"
+  ],
+  [
+   "0000940944-26-000005",
+   "sokc-010/b2"
+  ],
+  [
+   "0000940944-26-000009",
+   "sokc-011/b2"
+  ],
+  [
+   "0001041061-25-000109",
+   "sokc-012/b1"
+  ],
+  [
+   "0001041061-25-000109",
+   "sokc-012/b2"
+  ],
+  [
+   "0001041061-26-000003",
+   "sokc-013/b2"
+  ],
+  [
+   "0001041061-26-000084",
+   "sokc-014/b1"
+  ],
+  [
+   "0001041061-26-000084",
+   "sokc-014/b2"
+  ],
+  [
+   "0001058090-26-000007",
+   "sokc-015/b1"
+  ],
+  [
+   "0001058090-26-000007",
+   "sokc-015/b2"
+  ],
+  [
+   "0001104659-25-102611",
+   "sokc-016/b1"
+  ],
+  [
+   "0001104659-25-102611",
+   "sokc-016/b2"
+  ],
+  [
+   "0001104659-25-105631",
+   "sokc-017/b1"
+  ],
+  [
+   "0001104659-25-105631",
+   "sokc-017/b2"
+  ],
+  [
+   "0001104659-25-118458",
+   "sokc-018/b1"
+  ],
+  [
+   "0001104659-25-118458",
+   "sokc-018/b2"
+  ],
+  [
+   "0001104659-26-017090",
+   "sokc-019/b1"
+  ],
+  [
+   "0001104659-26-017090",
+   "sokc-019/b2"
+  ],
+  [
+   "0001104659-26-027061",
+   "sokc-020/b1"
+  ],
+  [
+   "0001104659-26-027061",
+   "sokc-020/b2"
+  ],
+  [
+   "0001104659-26-032757",
+   "sokc-021/b1"
+  ],
+  [
+   "0001104659-26-032757",
+   "sokc-021/b2"
+  ],
+  [
+   "0001171843-26-001288",
+   "sokc-022/b1"
+  ],
+  [
+   "AAL_2026-04-23T08.30",
+   "sokc-023/b1"
+  ],
+  [
+   "AAL_2026-04-23T08.30",
+   "sokc-023/b2"
+  ],
+  [
+   "BBY_2026-03-03T08.00",
+   "sokc-024/b1"
+  ],
+  [
+   "BBY_2026-03-03T08.00",
+   "sokc-024/b2"
+  ],
+  [
+   "CMG_2026-02-03T16.30",
+   "sokc-025/b1"
+  ],
+  [
+   "CMG_2026-02-03T16.30",
+   "sokc-025/b2"
+  ],
+  [
+   "DAL_2026-04-08T10.00",
+   "sokc-026/b1"
+  ],
+  [
+   "DAL_2026-04-08T10.00",
+   "sokc-026/b2"
+  ],
+  [
+   "DRI_2026-03-19T08.30",
+   "sokc-027/b1"
+  ],
+  [
+   "DRI_2026-03-19T08.30",
+   "sokc-027/b2"
+  ],
+  [
+   "MCD_2026-02-11T16.30",
+   "sokc-028/b1"
+  ],
+  [
+   "MCD_2026-02-11T16.30",
+   "sokc-028/b2"
+  ],
+  [
+   "ULTA_2026-03-12T16.30",
+   "sokc-029/b1"
+  ],
+  [
+   "ULTA_2026-03-12T16.30",
+   "sokc-029/b2"
+  ],
+  [
+   "YUM_2026-02-04T08.15",
+   "sokc-030/b1"
+  ],
+  [
+   "YUM_2026-02-04T08.15",
+   "sokc-030/b2"
+  ],
+  [
+   "bzNews_50877032",
+   "sokc-032/b1"
+  ]
+ ]
+}

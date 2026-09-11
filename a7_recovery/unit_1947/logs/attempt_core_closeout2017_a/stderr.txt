@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2017_final_source_key/closeout_2017.py", line 70, in <module>
+    kinds = collections.Counter(r.get("final_outcome") for r in rows)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/collections/__init__.py", line 599, in __init__
+    self.update(iterable, **kwds)
+  File "/usr/local/lib/python3.11/collections/__init__.py", line 690, in update
+    _count_elements(self, iterable)
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2017_final_source_key/closeout_2017.py", line 70, in <genexpr>
+    kinds = collections.Counter(r.get("final_outcome") for r in rows)
+                                ^^^^^
+AttributeError: 'str' object has no attribute 'get'

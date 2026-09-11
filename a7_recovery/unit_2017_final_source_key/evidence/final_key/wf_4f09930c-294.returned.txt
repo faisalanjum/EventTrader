@@ -1,0 +1,156 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "segment_profit_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["segment:longhornsteakhouse"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it is one: the row states a segment profit margin level of 19.3 percent against a prior-year 18.4 percent, a real readable metric state, so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_divestiture",
+              "driver_state": "occurred",
+              "level_low": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "instant",
+              "slice_parts": ["segment:olivegarden", "geography:canada"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it is one: a discrete, named transaction disposing of eight identified restaurants, so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic litigation risk boilerplate: the sentence says litigation 'may adversely affect our business, financial condition and results of operations' without any stated driver state, change, size, action or outlook, which is exactly the boilerplate the fact gate drops."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: the located sentence is conditional risk-factor boilerplate carrying no driver state, change, surprise, guidance or action, so it correctly yields no fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "debt_to_ebitdar_ratio",
+              "driver_state": "reported",
+              "level_low": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "x",
+              "period_start_date": "2025-05-25",
+              "period_end_date": "2025-05-25",
+              "time_type": "instant",
+              "measurement_raw_spans": ["adjusted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it is one: a dated, standing leverage level of 2.1 that can be re-read at later dates, so the proposal and my outcome agree."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "LongHorn Steakhouse",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two genuine ambiguities recorded: the menu carries both 'segment:longhornsteakhouse' and 'segment:longhornsteakhousesegment' for the same meaning (I reused the value matching the stated label exactly), and the stated 90 BP change is fully derivable from the two closed point values, so change_value stays null and the basis-point framing survives only in the quote."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "Olive Garden’s eight Canadian restaurants",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The located quote states only the agreement stage inside fourth quarter fiscal 2025 while the same event elsewhere states the sale closed on July 14, 2025, so the latest-stage rule gives 'occurred' against a period window that describes the agreement, and the menu again offers two equivalent Olive Garden segment values."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "adjusted debt to EBITDAR ratio",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-009/b1",
+      "agrees": false,
+      "why": "It matches my lanes, names, states, values and the row-3 abstention, but it stores the slice tokens 'segment:longhornsteakhousesegment' and 'segment:olivegardensegment' where I reused the exact-label menu values, and equal labels under different stored values are different slice identities, so the settlements are not the same."
+    },
+    {
+      "lead_id": "sokc-009/b2",
+      "agrees": false,
+      "why": "Same slice-token difference as the other lead, and additionally it dates the row-2 action to exact dates 2025-07-14 taken from a different sentence than the located quote, whereas I kept the fourth-quarter fiscal 2025 framing the located quote itself states."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The company menu holds two distinct values for each of the two brand segments used here ('segment:longhornsteakhouse' vs 'segment:longhornsteakhousesegment', 'segment:olivegarden' vs 'segment:olivegardensegment').",
+      "why": "Both are lawful same-meaning reuses under one clear kind, the rules forbid guessing and forbid merging existing identities, and the choice changes the stored fact identity, so the selection cannot be settled from this event alone."
+    },
+    {
+      "what": "Row 2's action stage and its period disagree inside one event: the located quote fixes the agreement in fourth quarter fiscal 2025, while the event states the sale closed on 2025-07-14, which falls in fiscal 2026.",
+      "why": "The latest-stage rule forces 'occurred' but the only window stated inside the located quote describes the agreement, so the stored period may label a stage earlier than the recorded state."
+    }
+  ]
+}
+```
