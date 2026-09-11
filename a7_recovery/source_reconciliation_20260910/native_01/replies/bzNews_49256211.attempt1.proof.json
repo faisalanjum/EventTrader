@@ -1,0 +1,67 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "bzNews_49256211",
+ "ordinal_one_based": 34,
+ "ordinal_receipt": 33,
+ "attempt_number": 1,
+ "run_id": "wf_aeffa090-40c",
+ "agent_id": "a4f0a41b7def9c2c3",
+ "raw_sha256": "46182b2682e5642c54b39ff274af5c18a66b66a1fca87ead1a3816ae0811c1ce",
+ "prompt_sha256": "de055cdfbb554e9b61b8bcd22c5229e3ecf3cccf254e4ec8104a600b7493141b",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 1,
+  "additions": 0,
+  "exclusions_considered": 2,
+  "open_issues": 1
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"This event supplies only a single one-line title as its entire text_parts content, and that title's sole fact is already the target of the one supplied (already-tested) proposal. After accou"
+ ],
+ "locator": {
+  "additions": {
+   "located": 0,
+   "not_located": [],
+   "total_with_quote": 0
+  },
+  "exclusions_considered": {
+   "located": 1,
+   "not_located": [
+    {
+     "index": 1,
+     "problem": "quote is unique in this part, so occurrence_in_part must be null",
+     "quote_head": "Chipotle Mexican Grill"
+    }
+   ],
+   "total_with_quote": 2
+  }
+ },
+ "receipt_attempts": 34,
+ "receipt_missing": 3,
+ "receipt_other_problems": [
+  "the run accepted 33 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 33,
+  "attempt": 1,
+  "source_id": "bzNews_49256211",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_aeffa090-40c.json",
+  "agent_id": "a4f0a41b7def9c2c3",
+  "raw_name": "bzNews_49256211.attempt1.complete.raw.json"
+ }
+}

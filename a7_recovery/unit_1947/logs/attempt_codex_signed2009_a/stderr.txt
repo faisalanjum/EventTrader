@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2009/check_signed_reuse.py", line 25, in <module>
+    import a6_launch_freeze as A6
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a6_launch_freeze.py", line 37, in <module>
+    import build_a5_exp5_kit as A5                                   # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_a5_exp5_kit.py", line 88, in <module>
+    raise ValueError(
+ValueError: an approved key was named at /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_join2009_a/candidate, but this run's binding pins no read-only approval for it at /tmp/a7_approved_key/a4_final_key_lock.json and /tmp/a7_approved_key/a4_final_key_lock_receipt.json

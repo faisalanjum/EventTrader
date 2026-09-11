@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "reported",
+        "level_low": {
+          "value": 1.1,
+          "scale_multiplier": 1000000000,
+          "unit_scale_evidence": "billion"
+        },
+        "level_shape_hint": "floor",
+        "level_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "slice_parts": ["customer:bestbuybusiness"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

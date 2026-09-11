@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "fuel_recapture_rate",
+        "driver_state": "unknown",
+        "level_low": {"value": 90, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "floor",
+        "level_unit": "percent",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "conditions": "if fuel is still at the level with capacity reductions",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

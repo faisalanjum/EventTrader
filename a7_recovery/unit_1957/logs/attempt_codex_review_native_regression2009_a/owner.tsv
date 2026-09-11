@@ -1,0 +1,9 @@
+attempt	codex_review_native_regression2009_a
+payload	../../unit_2006/run_regression_2006.py
+map	../unit_2009/map_regression_review_native_a.tsv
+command	run_1957.sh ../unit_2009/map_regression_review_native_a.tsv ../../unit_2006/run_regression_2006.py codex_review_native_regression2009_a 1800
+wrapper_pid	3955922
+payload_pid	3955927
+payload_pgid	3955922
+started_utc	2026-09-11T02:34:56Z
+state	finished exit 1

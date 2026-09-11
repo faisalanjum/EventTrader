@@ -1,0 +1,209 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "goodwill_and_intangible_asset_impairment",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": 171,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "in millions"
+       },
+       "level_high": {
+        "value": 171,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "in millions"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "comparable_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 7.6,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 7.6,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "slice_parts": [
+        "segment:domestic",
+        "product:computingandmobilephones"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "comparable_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 3.6,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 3.6,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "slice_parts": [
+        "segment:international",
+        "product:consumerelectronics"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "online_revenue_share",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 31.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 31.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "comparison_low": {
+        "value": 31.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_high": {
+        "value": 31.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "slice_parts": [
+        "segment:domestic"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "online_revenue_share",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 32.1,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 32.1,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "comparison_low": {
+        "value": 31.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_high": {
+        "value": 31.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "period_scope": "ytd",
+       "slice_parts": [
+        "segment:domestic"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "The sentence only defines the company's use of the term 'constant currency' as a non-GAAP presentation convention; it reports no driver state, change, surprise, guidance or action, so the du_worthy gate drops it as methodology boilerplate."
+     }
+    ],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

@@ -1,0 +1,46 @@
+  raw final_sign.attempt1.raw.json sha 7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d (151 chars)
+  run wf_TEST_signed_codex_signed2005_a | agent siged2005_a | model opus | effort high | lean-probe | tools 0 | runtime ['claude-opus-5']
+  OUTCOME: signed=True blocked=[]
+  why: SYNTHETIC-CLOSURE-FIXTURE-2000: a TEST signature over reproduced shapes. It establishes no source truth.
+  raw final_sign.attempt1.raw.json sha 7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d (151 chars)
+  run wf_TEST_signed_codex_signed2005_a | agent siged2005_a | model opus | effort high | lean-probe | tools 0 | runtime ['claude-opus-5']
+  OUTCOME: signed=True blocked=[]
+  why: SYNTHETIC-CLOSURE-FIXTURE-2000: a TEST signature over reproduced shapes. It establishes no source truth.
+a4_final_key_lock.json 7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84
+  signed=True blocked=[]  ledger 514 -> 515 of 6000
+  artifact:key_identity              refused
+  artifact:sidecar                   refused
+  artifact:validator_receipt         refused
+  artifact:provenance                refused
+  artifact:signer_prompt             refused
+  artifact:signer_launcher           refused
+  artifact:signer_manifest           refused
+  artifact:signer_raw                refused
+  artifact:signer_evidence           refused
+  artifact:signer_reply              refused
+  artifact:attempt1_record           refused
+  artifact:attempt1_launcher         refused
+  artifact:attempt1_raw              refused
+  artifact:attempt1_state            refused
+  artifact:attempt1_transcript       refused
+  signer:run_id                      refused
+  signer:agent_id                    refused
+  signer:raw_sha256                  refused
+  signer:transcript_sha256           refused
+  signer:state_sha256                refused
+  signer:parent_session_id           refused
+  signer:model                       refused
+  signer:effort                      refused
+  signer:agent_type                  refused
+  signer:prompt_sha256               refused
+  signer:script_sha256               refused
+  signer:signed                      refused
+  signer:blocked                     refused
+  block:counts                       refused
+  block:validator                    refused
+  block:call_accounting              refused
+  block:key                          refused
+  block:authority                    refused
+a4_final_key_lock_receipt.json fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab
+RESULT EVERY BOUND VALUE REFUSES WHEN MUTATED
+TEST SIGNED CANDIDATE 16 checks passed; zero model calls; output /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a

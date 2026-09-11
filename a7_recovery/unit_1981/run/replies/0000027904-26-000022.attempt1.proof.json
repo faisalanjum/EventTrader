@@ -1,0 +1,62 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000027904-26-000022",
+ "ordinal_one_based": 5,
+ "ordinal_receipt": 4,
+ "attempt_number": 1,
+ "run_id": "wf_08b695b7-540",
+ "agent_id": "a1bf2e46e502ac4de",
+ "raw_sha256": "1520ca0e06f0f872ff92f5a6f2c9916ba2fd33c5b280dea918967cff5e0d647d",
+ "prompt_sha256": "666ee371edf11c2e2c733086b8631a1dc879680e713a625229c2d99df3735c47",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 4,
+  "additions": 6,
+  "exclusions_considered": 7,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"Whether the Non-Operating Results table's explicit 'Favorable (Unfavorable)' column heading should make the favourable_unfavourable_direction tag applicable to ordinary YoY expense-variance ",
+  "{'what': \"Whether OD-11's growth-basis rule (crosswalk label 'sequential comparisons') should be tagged on ordinary year-over-year percentage-growth facts (the default basis throughout this filing) or"
+ ],
+ "locator": {
+  "additions": {
+   "located": 6,
+   "not_located": [],
+   "total_with_quote": 6
+  },
+  "exclusions_considered": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  }
+ },
+ "receipt_attempts": 6,
+ "receipt_missing": 31,
+ "receipt_other_problems": [
+  "the run accepted 5 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 4,
+  "attempt": 1,
+  "source_id": "0000027904-26-000022",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_08b695b7-540.json",
+  "agent_id": "a1bf2e46e502ac4de",
+  "raw_name": "0000027904-26-000022.attempt1.complete.raw.json"
+ }
+}

@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "store_count",
+        "driver_state": "increased",
+        "level_low": {"value": 6447, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 6447, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "period_end_date": "2025-12-31",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "slice_parts": ["geography:us"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

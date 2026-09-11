@@ -1,0 +1,151 @@
+{
+ "schema": "a4-final-key-lock/1511",
+ "state": "LOCKED",
+ "authority": {
+  "instruction": "archive_CODEX_2011.md",
+  "instruction_sha256": "c9e270c1dabc745af19b4ea48f1151e02deb21c577237e38067aa41c5af67b53"
+ },
+ "artifacts": {
+  "key_identity": "db5d0f4f897e0113c09295ef8adcaca649db7f97be5002431e8aa7d21ca6b049",
+  "sidecar": "5c4712b2aac7a3fbd313cf9403b5add840b4e27065d764666674608f954b8785",
+  "validator_receipt": "d4d18f9ee175abffb657fd02dfee32419c7b56833e090ffec838b70502aad680",
+  "provenance": "1fd437a961a7d317e709cc6e26b937eaac4e88e90ef03122fc0ec9aeceecddb7",
+  "signer_prompt": "8277d95e31fc3e13e386dfcb071a168eb1d676f003a88b295b76578d304ecad8",
+  "signer_launcher": "dc54a9ce1336bd946ade32eb86ae0116219d278fbaf4d6d7863eab682bd13e32",
+  "signer_manifest": "3b84451069e07e893b78fe5fcfebf8cdf8f521a3857ee1723efa660821354d3a",
+  "signer_raw": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "signer_evidence": "2e7a2447d03df36f5bccdfa80438b0d4660191edf06a5cd31cc116bce4fa9650",
+  "signer_reply": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "attempt1_record": "2e7a2447d03df36f5bccdfa80438b0d4660191edf06a5cd31cc116bce4fa9650",
+  "attempt1_launcher": "dc54a9ce1336bd946ade32eb86ae0116219d278fbaf4d6d7863eab682bd13e32",
+  "attempt1_raw": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "attempt1_state": "29330d09a4832b44952252922fda6c890d27f23827635c1c582b963898f86353",
+  "attempt1_transcript": "da4c2f3e65a9844ed778dfb19dc2b4d3e87b86cdacfe26b13f454e6eaa6e646b"
+ },
+ "key": {
+  "identity": "key_identity.json: the ordered exact raw component shards, the four bindings and the pinned loader",
+  "loader": {
+   "module": "build_kfields_final",
+   "entry": "signing_gate",
+   "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+  },
+  "materializer": {
+   "module": "build_kfields_final",
+   "entry": "materialize",
+   "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+  },
+  "bindings": {
+   "final_package": "c0b990579d36416faf3a0a58865e629b0b46a77f56bcd5afd2eaaaa272cc03d4",
+   "initial_source_package": "4ec8a90ebf39c1d46b4c9b938531df0fefd1183c4a95ed9149f3b26cccd6735c",
+   "hard_review_package": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "initial_source_receipt": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+   "initial_source_finalization": "ad0f11be0117e6d6c892596e6f5b4a64f7577eea1541163d46f857fb49a43add",
+   "hard_review_receipt": "cd428741f21588529dbe0dc6893daaf1fbfc30cc4c1e9eff761674188b3e64ba",
+   "hard_review_finalization": "155edfd613170cd913f4036f818cf2a3018795daabb0607adbeb0daef099899f",
+   "hard_review_retry_receipt": "7431bc9e03af25d79351188e0ea1260d669d7a5a8e3aedac33b24f649c5e2e3e",
+   "hard_review_retry_finalization": "f86bca0d7f554e10e6aff639485ff6650430ca1ff695af000a9fe5b00c8ed29d",
+   "event_receipt": "11ba42a2039d5d0f9063fdd2adb21197992db0e6de11bfc9c15898934a8b6553",
+   "event_finalization": "e7b613fd0cf292bcd1cf34dd4045c3e1711bfefab7a5e6948b71f92488e3b8b4",
+   "clarified_review_package": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083",
+   "clarified_review_receipt": "f997e750d66c6347c8c1859b1531f037dcc71f0131121fd3a73599dad7447335",
+   "clarified_review_finalization": "303598300ead5076a7ef5e207af99348793f756c9de84e10d621dbbe05c00149"
+  },
+  "events": 33,
+  "composed_events": 0
+ },
+ "counts": {
+  "events_accounted": 33,
+  "rows_accounted": 191,
+  "accepted_facts": 206,
+  "du_worthy_facts": 206,
+  "controls": 34,
+  "exclusions": 3,
+  "abstentions": 37,
+  "record_kind_conflicts": 4,
+  "duplicate_gold_facts": 0,
+  "open_issues": 0,
+  "phase1_ambiguities": 0,
+  "tag_floor": 5,
+  "distinct_rows_per_tag": {
+   "point_range_floor_ceiling": 134,
+   "losses_and_sign": 31,
+   "sequential_comparison": 46,
+   "measurement_wording": 56,
+   "favourable_unfavourable_direction": 17,
+   "expectation_routing": 17,
+   "slices_and_unknown_axes": 69,
+   "portion_versus_whole": 25,
+   "ambiguous_menus": 32,
+   "corrections_and_amendments": 5
+  },
+  "tags_below_floor": [],
+  "sequential_rows": 46
+ },
+ "validator": {
+  "problems": [],
+  "open_issues": 0,
+  "tags_below_floor": [],
+  "rows_accounted": 191,
+  "class_floor": 5
+ },
+ "signer": {
+  "signed": true,
+  "blocked": [],
+  "run_id": "wf_TEST_signature_codex_signed2009_c",
+  "agent_id": "siged2009_c",
+  "attempt": 1,
+  "state_sha256": "29330d09a4832b44952252922fda6c890d27f23827635c1c582b963898f86353",
+  "transcript_sha256": "da4c2f3e65a9844ed778dfb19dc2b4d3e87b86cdacfe26b13f454e6eaa6e646b",
+  "raw_sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "prompt_sha256": "8277d95e31fc3e13e386dfcb071a168eb1d676f003a88b295b76578d304ecad8",
+  "script_sha256": "dc54a9ce1336bd946ade32eb86ae0116219d278fbaf4d6d7863eab682bd13e32",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "model": "opus",
+  "effort": "high",
+  "agent_type": "lean-probe",
+  "runtime_model_ids": [
+   "claude-opus-5"
+  ],
+  "transport": {
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "transport": "Claude Code Workflow agent(), subscription",
+   "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "tool_calls": 0,
+  "parser": "build_kfields_final.read_signature"
+ },
+ "call_accounting": {
+  "ledger_before": 532,
+  "signer_calls": 1,
+  "retries": 0,
+  "ledger_after": 533,
+  "ceiling": 6000,
+  "retry_law": {
+   "owner": "build_kfields_final.RETRYABLE",
+   "retryable": [
+    "invalid_response"
+   ]
+  },
+  "lawful_attempts": [
+   1,
+   2
+  ],
+  "attempts": [
+   {
+    "attempt": 1,
+    "kind": "evidence",
+    "outcome": "signed",
+    "record_sha256": "2e7a2447d03df36f5bccdfa80438b0d4660191edf06a5cd31cc116bce4fa9650"
+   }
+  ]
+ }
+}

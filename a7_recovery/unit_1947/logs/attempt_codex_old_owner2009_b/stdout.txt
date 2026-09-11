@@ -1,0 +1,10 @@
+{
+ "old_owner_sha256": "7c5ac0ecac07b3f85f25cae9982f7921ee313405215bea42342a88def861c09e",
+ "successor_sha256": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+ "package_problems": [],
+ "readings_problems": [],
+ "counts": {
+  "valid": 62,
+  "invalid_response": 4
+ }
+}

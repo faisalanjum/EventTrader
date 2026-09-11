@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "restaurant_count",
+        "driver_state": "reported",
+        "level_low": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "slice_parts": ["channel:franchisedunits"],
+        "time_type": "instant",
+        "period_end_date": "2026-02-22",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

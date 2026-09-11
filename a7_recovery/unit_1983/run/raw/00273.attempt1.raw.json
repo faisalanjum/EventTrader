@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "unit_revenue",
+        "driver_state": "increased",
+        "change_value": {"value": 25, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "slice_parts": ["geography:london"],
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

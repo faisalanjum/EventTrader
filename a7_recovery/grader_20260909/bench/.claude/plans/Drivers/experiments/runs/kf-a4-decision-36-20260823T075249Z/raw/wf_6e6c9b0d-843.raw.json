@@ -1,0 +1,103 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "advertising_spending",
+              "driver_state": "announced",
+              "level_low": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 100, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 1 was proposed as a real item and settles as a single $100M action_event fact, confirming the proposal."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "bzNews_42014391",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "e_coli_illness_count",
+              "driver_state": "reported",
+              "level_low": {"value": 100, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "states_affected_count",
+              "driver_state": "reported",
+              "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Row 2 was proposed as a real item and settles as two distinct metric facts (illness count and states-affected count), confirming the real-item proposal with the two stated numeric bases split per rule."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The specific word 'advertising' comes from the article title, which directly governs this same $100M spending fact even though it is absent from this row's own body quote; the same figure also funds 'support franchisees' with no source-stated split, so it is kept as one bundled action_event fact."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an outbreak illness tally is a re-readable severity metric (chosen here, since Rule 2 lists 'count' as a metric type) or a fixed attribute of a one-off action_event incident is a genuine, unresolved boundary case."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether '14 states' merits its own independent count fact (chosen here as a distinct numeric base per the split rule) versus being mere descriptive scope of the illness-count fact is a genuine judgment call the source does not resolve."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/bzNews_42014391#189",
+      "agrees": true,
+      "why": "The independently settled fact (action_event, driver_name advertising_spending, state announced, point $100M m_usd, evidence 'million') matches this lead's settled fact on fact_type, driver_name, driver_state, and the numeric value/unit/shape."
+    },
+    {
+      "lead_id": "phase1/bzNews_42014391#190",
+      "agrees": false,
+      "why": "This lead recorded one action_event fact named e_coli_outbreak with state occurred and only the illness floor of 100; the independent settlement instead uses fact_type metric with state reported (per Rule 2's explicit listing of 'count' as a metric type) and also extracts a second, separate states_affected_count fact of 14 that this lead never captures."
+    }
+  ],
+  "open_issues": []
+}
+```

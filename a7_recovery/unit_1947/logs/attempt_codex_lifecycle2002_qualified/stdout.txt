@@ -1,0 +1,118 @@
+{
+ "test_only": true,
+ "model_calls": 0,
+ "cases": [
+  {
+   "case": "unstarted reviews cannot publish final work",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "a parseable but schema-invalid review remains invalid",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "review finalization credits successes and retries only the invalid one",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "an unstarted review child does not clear the obligation",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "a valid but unfinalized review child still blocks final publication",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "the review child is credited once, with every primary success unchanged",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "the final budget counts the actual invalid review attempt and child",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "final closeout preserves every valid primary and owes one invalid child",
+   "ok": true,
+   "detail": {
+    "scheduled": 33,
+    "valid": 32,
+    "invalid_response": 1,
+    "transport_no_answer": 0,
+    "unproved": 0,
+    "missing": 0
+   }
+  },
+  {
+   "case": "the actual child contains no successful primary",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "final child completes exactly the one remaining result",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "resume credits all results once and preserves every successful primary",
+   "ok": true,
+   "detail": {
+    "owed": [],
+    "retryable": [],
+    "problems": []
+   }
+  },
+  {
+   "case": "signer accounting includes final primary and invalid-only child",
+   "ok": true,
+   "detail": 516
+  },
+  {
+   "case": "the complete primary-plus-child key passes the existing signing gate",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "case": "semantic uncertainty is completed without a repeat call",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "schema-valid unresolved meaning still blocks signature",
+   "ok": true,
+   "detail": [
+    "105 open issues block the signature"
+   ]
+  },
+  {
+   "case": "wrong identity plus missing calls fail closed with complete accounting",
+   "ok": true,
+   "detail": {
+    "scheduled": 33,
+    "valid": 0,
+    "invalid_response": 0,
+    "transport_no_answer": 0,
+    "unproved": 1,
+    "missing": 32
+   }
+  },
+  {
+   "case": "the wrong-identity run cannot sign",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "the intact completed child remains a positive control",
+   "ok": true,
+   "detail": null
+  }
+ ],
+ "passed": 18,
+ "total": 18
+}

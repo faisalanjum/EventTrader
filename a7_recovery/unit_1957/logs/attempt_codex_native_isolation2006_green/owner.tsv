@@ -1,0 +1,9 @@
+attempt	codex_native_isolation2006_green
+payload	../../unit_2006/run_regression_2006.py
+map	../unit_2006/map_regression_ordinary_2006_d.tsv
+command	run_1957.sh ../unit_2006/map_regression_ordinary_2006_d.tsv ../../unit_2006/run_regression_2006.py codex_native_isolation2006_green 300
+wrapper_pid	3824329
+payload_pid	3824333
+payload_pgid	3824329
+started_utc	2026-09-11T01:09:56Z
+state	finished exit 0

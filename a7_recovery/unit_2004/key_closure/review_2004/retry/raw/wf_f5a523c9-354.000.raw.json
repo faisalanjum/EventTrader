@@ -1,0 +1,144 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 28.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 28.55, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sg_and_a_expense",
+              "driver_state": "increased",
+              "change_value": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["Excluding the impact of incentive compensation and SpaceNK"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "loyalty_program_active_members",
+              "driver_state": "increased",
+              "level_low": {"value": 46.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 46.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "change_value": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 80, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count",
+              "slice_parts": ["entity_ownership:spacenk", "geography:gb", "geography:ie"],
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "The phrase 'we beat and raised throughout the year. And we exceeded on all metrics' is a vague, generic self-congratulatory summary naming no specific driver, value, or period, so it does not resolve into a lawful fact."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "net_sales_surprise",
+              "driver_state": "beat",
+              "change_value": {"value": 85, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This sentence is the standard safe-harbor legal disclaimer about forward-looking statements, generic boilerplate rather than a fact about any driver's state, change, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven located quotes describe seven unrelated matters — a full-year FY2026 EPS guidance range, an adjusted quarterly SG&A growth rate, a full-year loyalty-membership count, a Space NK store count, a vague generic self-praise remark, a quarterly sales-vs-guidance beat, and a generic safe-harbor disclaimer — each with its own driver, value, and/or period, so they cannot be the same underlying fact."
+}
+```

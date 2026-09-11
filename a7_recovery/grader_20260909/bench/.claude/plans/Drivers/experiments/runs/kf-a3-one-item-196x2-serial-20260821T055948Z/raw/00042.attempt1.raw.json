@@ -1,0 +1,19 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "dividend_per_share",
+        "driver_state": "mixed",
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

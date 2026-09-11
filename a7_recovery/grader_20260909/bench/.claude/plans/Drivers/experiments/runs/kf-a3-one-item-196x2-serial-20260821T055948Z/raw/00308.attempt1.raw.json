@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "unit_revenue",
+        "driver_state": "introduced",
+        "value_text": "double-digit growth, a meaningful acceleration from mid-single-digit growth in the March quarter",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 2,
+        "slice_parts": ["product:passenger"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

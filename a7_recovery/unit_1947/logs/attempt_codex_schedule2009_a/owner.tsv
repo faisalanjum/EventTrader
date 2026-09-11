@@ -1,0 +1,7 @@
+attempt	codex_schedule2009_a
+payload	../../unit_1997/ledger/../../unit_2009/check_review_schedule.py
+map	../unit_1997/../unit_2009/map_integration_a.tsv
+wrapper_pid	3986558
+payload_pid	3986562
+started_utc	2026-09-11T02:54:05Z
+state	finished exit 0

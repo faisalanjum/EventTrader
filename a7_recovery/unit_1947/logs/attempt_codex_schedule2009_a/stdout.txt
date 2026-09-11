@@ -1,0 +1,17 @@
+{
+ "model_calls": 0,
+ "live_slots": 66,
+ "live_tasks": 33,
+ "checks": {
+  "historical default is unchanged": 1,
+  "canonical identity and order": 171,
+  "lookup has the exact same identities": 171,
+  "manifest and budget use the exact selected denominator": 100,
+  "primary and one invalid-only retry count each call once": 340,
+  "negative has its real positive control": 71,
+  "foreign malformed empty or duplicate slots refused": 71,
+  "unfamiliar task identities retain the same required behavior": 1,
+  "meaningful scheduling or accounting mutation killed": 2
+ },
+ "passed_assertions": 928
+}

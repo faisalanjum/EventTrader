@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "vendor_provided_labor_hours",
+        "driver_state": "increased",
+        "change_value": {"value": 20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "fiscal_year": 2026,
+        "half": 2,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

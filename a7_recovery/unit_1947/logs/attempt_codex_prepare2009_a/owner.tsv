@@ -1,0 +1,7 @@
+attempt	codex_prepare2009_a
+payload	../../unit_1997/ledger/../../unit_2009/check_preparation.py
+map	../unit_1997/../unit_2008/map_review_2008.tsv
+wrapper_pid	3919210
+payload_pid	3919214
+started_utc	2026-09-11T02:12:26Z
+state	finished exit 0

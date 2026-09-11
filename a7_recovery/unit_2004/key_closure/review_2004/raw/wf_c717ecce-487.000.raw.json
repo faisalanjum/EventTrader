@@ -1,0 +1,177 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "core_operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:tacobellglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "core_operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "strategic_options_review",
+              "driver_state": "occurred",
+              "level_low": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:pizzahutglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "general_and_administrative_expense",
+              "driver_state": "increased",
+              "level_low": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["x special"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "general_and_administrative_expense_surprise",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "measurement_raw_spans": ["x special"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "core_operating_profit_guidance",
+              "driver_state": "introduced",
+              "change_value": {"value": -15, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "company_confirmed": true,
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:pizzahutglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "store_closures",
+              "driver_state": "announced",
+              "level_low": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "half": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:us", "segment:pizzahutglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a housekeeping/scheduling notice about when Q1 earnings will be released, not a statement about a driver's state, change, guidance, or action, so it fails the Rule 1 fact gate as boilerplate call logistics."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven items cover clearly distinct topics and quotes with no shared underlying claim: Taco Bell and KFC divisional operating-profit growth are separate segment facts, the $40M special charge, the G&A-vs-guidance in-line surprise, the Pizza Hut Q1 profit guidance, the Pizza Hut store-closure plan, and the Q1 earnings-date notice are all independent statements about different drivers, periods, or (in the last case) not facts at all."
+}
+```

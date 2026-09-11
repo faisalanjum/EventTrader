@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "income_tax_expense",
+        "driver_state": "increased",
+        "level_low": {"value": -94, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_high": {"value": -94, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -175, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_high": {"value": -175, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

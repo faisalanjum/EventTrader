@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The item's quote ('Operating Profit (Loss) $ (2) $ 1 (572) (572) $ — $ (2) 82 82') states dollar values with a bare '$' marker only. The document's scale convention ('Tabular amounts are displayed in millions of U.S. dollars') that would justify a scale_multiplier of 1000000 appears only in the MD&A introduction, outside this quote's span. Per Rule 5.6, unit_scale_evidence must be the smallest span INSIDE the quote supporting the multiplier, and a bare '$' only suffices when multiplier is 1 (which would misstate the true magnitude here); since the actual scale marker sits in a header/intro outside the quote, this item must abstain rather than borrow external scale text or guess."
+    }
+  ],
+  "continuity_hints": []
+}
+```

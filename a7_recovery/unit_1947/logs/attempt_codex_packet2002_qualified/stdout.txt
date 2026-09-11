@@ -1,0 +1,116 @@
+{
+ "test_only": true,
+ "model_calls": 0,
+ "cases": [
+  {
+   "case": "positive before package changes",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "changed final manifest field refuses: bound",
+   "ok": true,
+   "detail": [
+    "the pinned bound is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: role_sha256",
+   "ok": true,
+   "detail": [
+    "the pinned role_sha256 is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: output_section_sha256",
+   "ok": true,
+   "detail": [
+    "the pinned output_section_sha256 is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: prefix_sha256",
+   "ok": true,
+   "detail": [
+    "the pinned prefix_sha256 is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: requested_key_role",
+   "ok": true,
+   "detail": [
+    "the pinned requested_key_role is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: counts",
+   "ok": true,
+   "detail": [
+    "the pinned counts is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: hard_review",
+   "ok": true,
+   "detail": [
+    "the pinned hard_review is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: budget",
+   "ok": true,
+   "detail": [
+    "the pinned budget is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: capacity",
+   "ok": true,
+   "detail": [
+    "the pinned capacity is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: call_order",
+   "ok": true,
+   "detail": [
+    "the pinned call_order is not the live one"
+   ]
+  },
+  {
+   "case": "changed final manifest field refuses: events",
+   "ok": true,
+   "detail": [
+    "0000006201-26-000031 is missing from the package",
+    "0000006201-26-000032 is missing from the package"
+   ]
+  },
+  {
+   "case": "changed review closeout refuses: receipt identity",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "changed review closeout refuses: completion",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "changed review closeout refuses: run problems",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "changed review closeout refuses: scheduled count",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "positive after all package changes",
+   "ok": true,
+   "detail": null
+  }
+ ],
+ "passed": 17,
+ "total": 17
+}

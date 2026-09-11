@@ -1,0 +1,41 @@
+```json
+{
+  "packet_id": "0000027904-26-000020#026",
+  "settled": {
+    "source_id": "0000027904-26-000020",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "unit_revenue",
+          "driver_state": "increased",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "slice_parts": ["product:main cabin"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000020#026/L1",
+      "exact_match": true,
+      "why": "Same driver_name (unit_revenue), driver_state (increased), fiscal_quarter 1, fiscal_year 2026, time_type duration, and slice_parts value 'product:main cabin' matching the source's exact wording."
+    },
+    {
+      "lane_id": "0000027904-26-000020#026/L2",
+      "exact_match": false,
+      "why": "Same driver_name, driver_state, fiscal period, and time_type, but its slice value 'product:maincabin' drops the space present in the source text 'main cabin', differing from the settled slice string."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether an off-menu coined slice value should preserve the source's natural spacing (product:main cabin) or be concatenated/snake-cased (product:maincabin or product:main_cabin).",
+      "why": "Rule 7's own worked example ('unknown:legacy brands') keeps a space, favoring verbatim source phrasing, but the existing menu tokens (e.g. product:passengerairtraffic) are always concatenated with no separators at all, so a lawful reader could argue either convention for a newly coined value."
+    }
+  ]
+}
+```

@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "CMG_2026-02-03T16.30#146",
+  "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sales",
+          "driver_state": "increased",
+          "level_low": {"value": 3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 3, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_unit": "m_usd",
+          "level_shape_hint": "point",
+          "change_value": {"value": 4.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "CMG_2026-02-03T16.30#146/L1",
+      "exact_match": true,
+      "why": "Matches on every field: sales/increased, level 3 (billion, point), m_usd, change 4.9 with '%' as the unit_scale_evidence, percent_yoy, Q4 FY2025, duration, and no comparison_baseline emitted."
+    },
+    {
+      "lane_id": "CMG_2026-02-03T16.30#146/L2",
+      "exact_match": false,
+      "why": "Differs in two ways: it sets change_value.unit_scale_evidence to null when the quote's bare '%' marker must be cited (Rule 5.6, multiplier=1 with a unit marker present is not the null case), and it adds comparison_baseline='prior_year' though the quote never states an explicit 'year over year' / 'from last year' comparison for this Q4 sales figure, which Rule 9.2 requires before populating that field on a metric."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline should be set to prior_year for this Q4 sales-growth figure.",
+      "why": "Earnings-call convention treats a bare quarterly 'grew X%' as year-over-year (and Rule 5a.4 defaults the change_unit to percent_yoy on that basis), but Rule 9.2 requires the metric's comparison_baseline specifically to be source-stated, and this exact quote ('sales grew 4.9% to reach $3 billion') never uses 'year over year' or 'from last year' the way other lines in the same call do (e.g., cost of sales '...from last year'). I settled on omitting comparison_baseline because the requirement is explicit-statement, not convention, but the two draft leads disagreeing on exactly this point shows it is a genuine borderline call."
+    }
+  ]
+}
+```

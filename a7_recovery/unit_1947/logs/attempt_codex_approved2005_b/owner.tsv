@@ -1,0 +1,7 @@
+attempt	codex_approved2005_b
+payload	../../unit_1997/ledger/../../unit_2005/check_approved_consumer_2005.py
+map	../unit_1997/../unit_2005/map_approved_TEST_2005.tsv
+wrapper_pid	3632235
+payload_pid	3632239
+started_utc	2026-09-10T23:11:42Z
+state	finished exit 0

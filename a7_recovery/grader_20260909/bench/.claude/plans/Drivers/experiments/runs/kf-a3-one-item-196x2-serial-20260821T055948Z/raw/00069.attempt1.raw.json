@@ -1,0 +1,40 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "accelerating_the_organization_restructuring_costs",
+        "driver_state": "reported",
+        "level_low": {"value": 74, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 74, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point",
+        "time_type": "duration",
+        "fiscal_year": 2024,
+        "fiscal_quarter": 4,
+        "period_start_date": "2024-10-01",
+        "period_end_date": "2024-12-31"
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "accelerating_the_organization_restructuring_costs",
+        "driver_state": "reported",
+        "level_low": {"value": 221, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 221, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_unit": "m_usd",
+        "level_shape_hint": "point",
+        "time_type": "duration",
+        "fiscal_year": 2024,
+        "period_start_date": "2024-01-01",
+        "period_end_date": "2024-12-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

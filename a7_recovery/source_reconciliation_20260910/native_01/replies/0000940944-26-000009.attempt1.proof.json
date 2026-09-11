@@ -1,0 +1,63 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000940944-26-000009",
+ "ordinal_one_based": 13,
+ "ordinal_receipt": 12,
+ "attempt_number": 1,
+ "run_id": "wf_0477ad8d-33b",
+ "agent_id": "aa6685e3a25d6ef36",
+ "raw_sha256": "68157a02aecf06e287af01d46c101f13afdd55f18c35054826429cca91b2e211",
+ "prompt_sha256": "555b5362b836ae20d9d08b351abb0823ceb6fee73496af220b9894ec5fb90854",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 5,
+  "additions": 7,
+  "exclusions_considered": 8,
+  "open_issues": 3
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"The company menu's geography token 'geography:canadalatinamericacaribbeanasiaandmiddleeast' omits 'Europe', while the source text ('We also have 77 international franchised restaurants in op",
+  "{'what': 'Whether the segment-profit-margin recast footnote (definitional change excluding pre-opening costs, prior-year figures recast for comparability) should carry the corrections_and_amendments t",
+  "{'what': \"No candidate in this event's text was identified that clearly required lawful_abstention_control treatment (a real candidate genuinely unresolvable from the supplied evidence) without forcin"
+ ],
+ "locator": {
+  "additions": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  },
+  "exclusions_considered": {
+   "located": 8,
+   "not_located": [],
+   "total_with_quote": 8
+  }
+ },
+ "receipt_attempts": 12,
+ "receipt_missing": 25,
+ "receipt_other_problems": [
+  "the run accepted 11 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 12,
+  "attempt": 1,
+  "source_id": "0000940944-26-000009",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_0477ad8d-33b.json",
+  "agent_id": "aa6685e3a25d6ef36",
+  "raw_name": "0000940944-26-000009.attempt1.complete.raw.json"
+ }
+}

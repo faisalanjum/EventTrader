@@ -1,0 +1,79 @@
+{
+ "kind": "SYNTHETIC ONLY: no source truth, real approval or model call",
+ "model_calls": 0,
+ "checks": [
+  {
+   "check": "canonical packet passes actual native proof",
+   "ok": true
+  },
+  {
+   "check": "test signature cannot assert source truth",
+   "ok": true
+  },
+  {
+   "check": "native mutation refuses: runId",
+   "ok": true
+  },
+  {
+   "check": "native positive restored: runId",
+   "ok": true
+  },
+  {
+   "check": "native mutation refuses: script",
+   "ok": true
+  },
+  {
+   "check": "native positive restored: script",
+   "ok": true
+  },
+  {
+   "check": "native mutation refuses: status",
+   "ok": true
+  },
+  {
+   "check": "native positive restored: status",
+   "ok": true
+  },
+  {
+   "check": "native mutation refuses: totalToolCalls",
+   "ok": true
+  },
+  {
+   "check": "native positive restored: totalToolCalls",
+   "ok": true
+  },
+  {
+   "check": "saved signature is reused, never relaunched",
+   "ok": true
+  },
+  {
+   "check": "harvest resume preserves every saved byte",
+   "ok": true
+  },
+  {
+   "check": "lock uses exact new candidate and old shared proof",
+   "ok": true
+  },
+  {
+   "check": "actual compact lock and receipt validate",
+   "ok": true
+  },
+  {
+   "check": "all existing bound-value mutations refuse",
+   "ok": true
+  },
+  {
+   "check": "one signer call is counted exactly once",
+   "ok": true
+  }
+ ],
+ "passed": 16,
+ "ordinary": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/ordinary_bound.json",
+ "candidate": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate",
+ "review_run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_codex_final2002_qualified",
+ "review_package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_pkg_codex_final2002_qualified",
+ "key_run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_codex_final2002_qualified",
+ "key_package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_pkg_codex_final2002_qualified",
+ "lock_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+ "receipt_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab"
+}

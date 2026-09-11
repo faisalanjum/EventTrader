@@ -1,0 +1,36 @@
+{
+ "kind": "REAL_SOURCE_FINAL_SIGN_CAPTURE",
+ "attempt": {
+  "task": "final_sign",
+  "ordinal": 36,
+  "attempt": 1,
+  "source_id": null,
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_cb99f107-27f.json",
+  "agent_id": "a02dae52248688d15",
+  "raw_name": "final_sign.attempt1.complete.raw.json"
+ },
+ "run_id": "wf_cb99f107-27f",
+ "agent_id": "a02dae52248688d15",
+ "sign_prompt_sha256": "400ac49197c15c0bd9e04d50f5de11c08540eeda718daaa440a3e264e1fcea66",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "state_exists": true,
+ "transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_cb99f107-27f/agent-a02dae52248688d15.jsonl",
+ "transcript_exists": true,
+ "chain_problems": [],
+ "raw_name": "final_sign.attempt1.complete.raw.json",
+ "raw_sha256": "c23b593a76a362a9372fdd1d8a0fbb7ea78d695dd0959b73d94938d3c4480e9e",
+ "raw_chars": 455,
+ "parse_reply": "ok",
+ "shape_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "signed_problems": [],
+ "receipt_problems": [],
+ "receipt_files": [
+  "receipt.attempt1.json",
+  "receipt.json"
+ ],
+ "verdict": "SIGNED"
+}

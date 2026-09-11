@@ -1,0 +1,63 @@
+{
+  "source_id": "bzNews_50877032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "bzNews_50877032",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "airport_concourse_expansion",
+              "driver_state": "announced",
+              "level_low": {
+                "value": 17,
+                "scale_multiplier": 1,
+                "unit_scale_evidence": null
+              },
+              "level_high": {
+                "value": 17,
+                "scale_multiplier": 1,
+                "unit_scale_evidence": null
+              },
+              "level_shape_hint": "point",
+              "level_unit": "count"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind of real_item is confirmed: the sentence states a discrete company-announced concourse project sized at 17 new gates, which is a real action fact rather than a bare mention or a control."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": [
+        "point_range_floor_ceiling"
+      ],
+      "reference_name": "17 new gates",
+      "du_worthy": true,
+      "gold_extra": {
+        "expectation_comparison_present": false
+      },
+      "ambiguity_note": "The gate count describes a facility that does not yet exist, so the lane was genuinely ambiguous between an announced action carrying its stated size and a forward company outlook, and I settled it as an action because this quote states a company action with no target period or outlook verb."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [],
+  "open_issues": [
+    {
+      "what": "Whether the 17-gate count should instead be settled as a forward guidance fact anchored to the 2027 groundbreaking.",
+      "why": "The only period wording for the project ('set to break ground in 2027') sits outside this row's own quote, and if that framing were admitted the fact would become an outlook that requires a target period, which would change the lane and could force an abstention."
+    },
+    {
+      "what": "Whether Miami International Airport is a geography slice for this fact.",
+      "why": "The location is named elsewhere in the body but not inside this row's quote, so no source-grounded slice can be coined here without reaching outside the located evidence."
+    }
+  ]
+}

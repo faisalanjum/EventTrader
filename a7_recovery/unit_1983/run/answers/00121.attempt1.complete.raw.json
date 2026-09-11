@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "same_restaurant_sales",
+        "driver_state": "increased",
+        "level_low": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["blended"],
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "period_end_date": "2026-02-22",
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

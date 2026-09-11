@@ -1,0 +1,7 @@
+attempt	core_bat2008_final
+payload	../../unit_2008/ledger/battery_2008.py
+map	../unit_2008/map_test_2008.tsv
+wrapper_pid	3865025
+payload_pid	3865029
+started_utc	2026-09-11T01:36:30Z
+state	finished exit 0

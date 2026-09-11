@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "unit_revenue",
+        "driver_state": "increased",
+        "comparison_baseline": "sequential_period",
+        "change_unit": "percent_sequential",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

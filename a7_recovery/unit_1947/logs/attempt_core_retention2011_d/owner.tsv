@@ -1,0 +1,7 @@
+attempt	core_retention2011_d
+payload	../../unit_2011_retention_review/battery_retention_2011.py
+map	../unit_2011_retention_review/map_retention_2011.tsv
+wrapper_pid	3935274
+payload_pid	3935278
+started_utc	2026-09-11T02:22:47Z
+state	finished exit 0

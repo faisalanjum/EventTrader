@@ -1,0 +1,131 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "earnings_per_share_guidance",
+              "driver_state": "raised",
+              "level_low": {"value": 10.57, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 10.67, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "measurement_raw_spans": ["adjusted diluted"],
+              "company_confirmed": true
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "segment_profit_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "change_value": {"value": -10, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["segment:olivegardensegment"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic forward-looking-statements risk boilerplate stating that actual results could differ from expectations, with no concrete driver state, change, or action described; it fails the Rule 1.2 boilerplate gate."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_closure",
+              "driver_state": "announced",
+              "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["segment:otheroperatingsegmentbahamabreezebrand"]
+            }
+          },
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_conversion",
+              "driver_state": "announced",
+              "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["segment:otheroperatingsegmentbahamabreezebrand"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five located items describe entirely distinct matters — overall company same-restaurant sales growth, a forward full-year adjusted EPS guidance range, Olive Garden's segment profit margin, a generic forward-looking-statements disclaimer, and the Bahama Breeze closure/conversion decision — so they cannot be one underlying fact."
+}
+```

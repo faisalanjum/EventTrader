@@ -1,0 +1,41 @@
+```json
+{
+  "packet_id": "ULTA_2026-03-12T16.30#178",
+  "settled": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "sga",
+          "driver_state": "introduced",
+          "value_text": "in line with to slightly below net sales growth, significantly lower than fiscal 2025",
+          "company_confirmed": true,
+          "time_type": "duration",
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#178/L1",
+      "exact_match": false,
+      "why": "Lane uses driver_name 'sga_expense' where the settled reply uses 'sga' (the quote only states the abbreviation 'SG&A', with no stated 'expense' qualifier); every other field (fact_type guidance, state introduced, company_confirmed true, time_type duration, fiscal_year 2026, numberless value_text) matches."
+    },
+    {
+      "lane_id": "ULTA_2026-03-12T16.30#178/L2",
+      "exact_match": true,
+      "why": "Same fact_type, driver_name 'sga', driver_state 'introduced', company_confirmed true, time_type duration, fiscal_year 2026, and value_text carries the same qualitative content (in line with/slightly below net sales growth, significantly lower than fiscal 2025), differing only in trivial capitalization/wording of that free-text normalization."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether driver_state should be 'introduced' or 'unknown' for this guide.",
+      "why": "Rule 4 says guidance movement is recorded only when the source states it and a bare guide defaults to 'unknown', yet this statement is contextually the company's first-ever full-year SG&A growth outlook for fiscal 2026 (no prior FY2026 guide exists to compare against), which is the natural case for 'introduced'. The quote itself contains no explicit word like 'introducing' or 'first time', so a stricter literal reading of Rule 4 could instead classify this as an unlabeled bare guide ('unknown')."
+    }
+  ]
+}
+```

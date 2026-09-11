@@ -1,0 +1,116 @@
+{
+ "origin": "a4_hard_review_clarified_wrapper_2008",
+ "old_primary_finalization_sha256": "155edfd613170cd913f4036f818cf2a3018795daabb0607adbeb0daef099899f",
+ "old_child_finalization_sha256": "f86bca0d7f554e10e6aff639485ff6650430ca1ff695af000a9fe5b00c8ed29d",
+ "old_prefix_group_sha256": "f71d90060a5f42ca922d7ab9144323d16b06f9d842a0884cc3d7896924b4470b",
+ "new_prefix_group_sha256": "12f49d92331c025741778b03e88b1532e924f25b9b1b6673d75c6d3b0ae307a7",
+ "old_prefix_item_sha256": "216caccb6edeb327e16a40b0cb97e835986846cd51a87f2520d351980f94ee99",
+ "new_prefix_item_sha256": "216caccb6edeb327e16a40b0cb97e835986846cd51a87f2520d351980f94ee99",
+ "retained_old_readings": 62,
+ "seats": [
+  {
+   "label": "sokc-013/b2",
+   "task_id": "sokc-013",
+   "blind": 2,
+   "kind": "group",
+   "members": [
+    "0001041061-26-000003#077",
+    "0001041061-26-000003#078",
+    "0001041061-26-000003#079",
+    "0001041061-26-000003#080",
+    "0001041061-26-000003#081"
+   ],
+   "source_id": "0001041061-26-000003",
+   "same_members_as_old": true,
+   "same_source_as_old": true,
+   "payload_unchanged": true,
+   "old_prompt_sha256": "e9cbcebcad46eb71b7b6603641dc3473058c06b9c9690d539601f5cf0ca9b5bb",
+   "new_prompt_sha256": "0bd68ee46b355bbbeb94c03d09fca53c178b579003fc2d23b7bede2563120cba",
+   "prompt_changed": true,
+   "old_raw": {
+    "attempt1_sha256": "77b6cdc8f783852bd837e236e2bfd9fe09c40de53a714cad7563dd21948a91e5",
+    "attempt2_sha256": "5bafebf05fcce6daf36cfbdc1ed5d74e57418cd0e6af72ab2d5cee7af618f9f1"
+   },
+   "why_saved_evidence_cannot_answer": "every saved reply for this seat was produced under prompt e9cbcebcad46; the changed task serves 0bd68ee46b35, and no saved reply exists under it"
+  },
+  {
+   "label": "sokc-020/b1",
+   "task_id": "sokc-020",
+   "blind": 1,
+   "kind": "group",
+   "members": [
+    "0001104659-26-027061#118",
+    "0001104659-26-027061#119",
+    "0001104659-26-027061#120",
+    "0001104659-26-027061#121",
+    "0001104659-26-027061#122"
+   ],
+   "source_id": "0001104659-26-027061",
+   "same_members_as_old": true,
+   "same_source_as_old": true,
+   "payload_unchanged": true,
+   "old_prompt_sha256": "92d956af78d7213361bc342c2b60f706079bcab3b02d208fa2fe77c17b9de216",
+   "new_prompt_sha256": "046edb355900acdb781d519c25d5daaf425c525792e402b26770ac181c3014b8",
+   "prompt_changed": true,
+   "old_raw": {
+    "attempt1_sha256": "06c55b72e1a85c4d8d211e46573b5ceb4c3eba9dce44559003e86e0e4824a202",
+    "attempt2_sha256": "7d075aaecb1a9163c54e44512ef78842bd9f48025e9b643575c213620d852e40"
+   },
+   "why_saved_evidence_cannot_answer": "every saved reply for this seat was produced under prompt 92d956af78d7; the changed task serves 046edb355900, and no saved reply exists under it"
+  },
+  {
+   "label": "sokc-026/b1",
+   "task_id": "sokc-026",
+   "blind": 1,
+   "kind": "group",
+   "members": [
+    "DAL_2026-04-08T10.00#157",
+    "DAL_2026-04-08T10.00#158",
+    "DAL_2026-04-08T10.00#159",
+    "DAL_2026-04-08T10.00#160",
+    "DAL_2026-04-08T10.00#161",
+    "DAL_2026-04-08T10.00#162",
+    "DAL_2026-04-08T10.00#163"
+   ],
+   "source_id": "DAL_2026-04-08T10.00",
+   "same_members_as_old": true,
+   "same_source_as_old": true,
+   "payload_unchanged": true,
+   "old_prompt_sha256": "5f34b9d2694b1e8ced762f506b96819b18b0db24316fed0cbf5a219b1727db3d",
+   "new_prompt_sha256": "44183fe6324df070e35f48c9115c19b9c6871c0bfe7d526339e6155d2849dd72",
+   "prompt_changed": true,
+   "old_raw": {
+    "attempt1_sha256": "6dcaa2a38b25a358933ada97507f63ce6c414a142fad35037d8a47afd01af891",
+    "attempt2_sha256": "e1c97a1a7113619e4d8ccf26a354fc1009487b5b0f3cd35d4244913c5767d9b6"
+   },
+   "why_saved_evidence_cannot_answer": "every saved reply for this seat was produced under prompt 5f34b9d2694b; the changed task serves 44183fe6324d, and no saved reply exists under it"
+  },
+  {
+   "label": "sokc-029/b2",
+   "task_id": "sokc-029",
+   "blind": 2,
+   "kind": "group",
+   "members": [
+    "ULTA_2026-03-12T16.30#175",
+    "ULTA_2026-03-12T16.30#176",
+    "ULTA_2026-03-12T16.30#177",
+    "ULTA_2026-03-12T16.30#178",
+    "ULTA_2026-03-12T16.30#179",
+    "ULTA_2026-03-12T16.30#180",
+    "ULTA_2026-03-12T16.30#181"
+   ],
+   "source_id": "ULTA_2026-03-12T16.30",
+   "same_members_as_old": true,
+   "same_source_as_old": true,
+   "payload_unchanged": true,
+   "old_prompt_sha256": "7f066e87332bdfa324d316fbda1ceba9f62ae48634beefb8170878c6cbdd1d17",
+   "new_prompt_sha256": "ac9bdb0ca9057d471216b44ecb23784471d61cc6455d0256b64f3668448ab56f",
+   "prompt_changed": true,
+   "old_raw": {
+    "attempt1_sha256": "9174b0d3e02ddd902c94d385aaf2129d71703d579b07b04c4b24cdcc1ce18e3a",
+    "attempt2_sha256": "a00d7e5d6fd06fa9f737e1e1cb2247ead85706a621e5d7b550d12425f9ca7dc4"
+   },
+   "why_saved_evidence_cannot_answer": "every saved reply for this seat was produced under prompt 7f066e87332b; the changed task serves ac9bdb0ca905, and no saved reply exists under it"
+  }
+ ]
+}

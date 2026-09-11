@@ -1,0 +1,30 @@
+{
+ "template": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_ordinary_final4.tsv",
+ "template_sha256": "b64af6f73e679817ad103db6f56573f55ac6b23799530b59953c9746f5457200",
+ "map": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/map_regression_ordinary_2006_join2009.tsv",
+ "map_sha256": "74c90fa6b32a4ca81ea4863bfb33b22a38438bd5e446ebe6a9ac62aaa8114d07",
+ "prior_authority": [
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/FinalDesign",
+   "source": "/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign",
+   "sha": "b966cdb6b23038f04e972f607a34e298e3bde1b317a17dc47b2ff6483d4993bd",
+   "mode": "ro"
+  }
+ ],
+ "current_authority": [
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/FinalDesign",
+   "source": "/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign",
+   "sha": "150583f417565f072119fe0c2c3dc1746ae22f2b8c4369c765997be17840d8dc",
+   "mode": "ro"
+  }
+ ],
+ "old": "ordinary_final4",
+ "group": "ordinary",
+ "changed": {
+  "a6_launch_freeze.py": "f0de3ab5f5ed7472007319b1bfd20e109e4dcd3cd6e8e9140649494c26b0bf4c",
+  "a7_g1_build.py": "4af1c4aba5394ef745f6182e3cd7a14f87e6cd8571f2c0539eefef5a1f5c5e7c",
+  "a7_g23_build.py": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "a7_prepared_run.py": "93d93fbb2a420dd74c4144e993f10e1d8f8a24751c2f687b7379379af1dc6357"
+ }
+}

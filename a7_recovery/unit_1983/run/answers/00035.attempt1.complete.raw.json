@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "b787_10_purchase_option",
+        "driver_state": "announced",
+        "level_high": {"value": 30, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "ceiling",
+        "level_unit": "count",
+        "period_start_date": "2026-01-12",
+        "period_end_date": "2026-01-12",
+        "time_type": "instant"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

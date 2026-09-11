@@ -1,0 +1,7 @@
+attempt	codex_reuse_lifecycle2006_a
+payload	../../unit_1997/ledger/../../unit_2006/check_reuse_lifecycle_2006.py
+map	../unit_1997/../unit_2006/map_lifecycle_TEST_2006_a.tsv
+wrapper_pid	3805753
+payload_pid	3805757
+started_utc	2026-09-11T00:59:31Z
+state	finished exit 0

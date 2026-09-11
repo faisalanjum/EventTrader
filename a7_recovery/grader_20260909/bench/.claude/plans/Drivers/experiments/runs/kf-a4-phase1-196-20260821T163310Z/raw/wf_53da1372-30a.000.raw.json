@@ -1,0 +1,48 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#120",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sga_expenses",
+          "driver_state": "increased",
+          "level_low": {"value": 26.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 26.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent",
+          "comparison_low": {"value": 24.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_high": {"value": 24.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "comparison_shape_hint": "point",
+          "comparison_baseline": "prior_year",
+          "time_type": "duration",
+          "fiscal_year": 2025,
+          "period_end_date": "2026-01-31"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#120/L1",
+      "exact_match": true,
+      "why": "L1's item matches the settled reply field-for-field, including level/comparison point objects, percent unit, prior_year baseline, duration time_type, fiscal_year 2025, and the explicit period_end_date 2026-01-31 tied to the stated fiscal-year-end."
+    },
+    {
+      "lane_id": "0001104659-26-027061#120/L2",
+      "exact_match": false,
+      "why": "L2 matches on every field except it omits period_end_date, even though the release explicitly states this full-year comparison's fiscal year ended January 31, 2026, so it under-populates the period resolution relative to the settled reply."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether to populate period_end_date (2026-01-31) alongside fiscal_year 2025, or to leave only fiscal_year and omit any exact date.",
+      "why": "The fiscal-year-end date sits in the release's table header/title, not inside this item's own quoted sentence; Rule 6 permits exact dates to coexist with fiscal framing and win resolution when stated, but a stricter reading could require the date to appear directly in the quote itself before adding it, leaving fiscal_year alone as the safer answer."
+    }
+  ]
+}
+```

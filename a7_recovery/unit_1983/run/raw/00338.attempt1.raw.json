@@ -1,0 +1,33 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "system_wide_sales",
+        "driver_state": "increased",
+        "level_high": {
+          "value": 140,
+          "scale_multiplier": 1000000000,
+          "unit_scale_evidence": "billion"
+        },
+        "level_shape_hint": "ceiling",
+        "level_unit": "m_usd",
+        "change_value": {
+          "value": 5.5,
+          "scale_multiplier": 1,
+          "unit_scale_evidence": "%"
+        },
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["constant currency"],
+        "time_type": "duration",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,50 @@
+{
+ "attempt": 1,
+ "captures": [
+  "seg01.pos000",
+  "seg01.pos001",
+  "seg01.pos002",
+  "seg01.pos003",
+  "seg01.pos004",
+  "seg01.pos005",
+  "seg01.pos006",
+  "seg01.pos007",
+  "seg01.pos008",
+  "seg01.pos009",
+  "seg01.pos010",
+  "seg01.pos011",
+  "seg01.pos012",
+  "seg01.pos013",
+  "seg01.pos014",
+  "seg01.pos015",
+  "seg01.pos016",
+  "seg01.pos017"
+ ],
+ "counts": {
+  "served": 18
+ },
+ "outcomes": {
+  "G2-000/G1a": "served",
+  "G2-000/G1b": "served",
+  "G2-001/G1a": "served",
+  "G2-001/G1b": "served",
+  "G2-002/G1a": "served",
+  "G2-002/G1b": "served",
+  "G2-003/G1a": "served",
+  "G2-003/G1b": "served",
+  "G2-004/G1a": "served",
+  "G2-004/G1b": "served",
+  "G2-005/G1a": "served",
+  "G2-005/G1b": "served",
+  "G2-006/G1a": "served",
+  "G2-006/G1b": "served",
+  "G2-007/G1a": "served",
+  "G2-007/G1b": "served",
+  "G2-008/G1a": "served",
+  "G2-008/G1b": "served"
+ },
+ "receipt_sha256": "1a2b643d7833400e74d4a9fd30c9096cf3c68186c85e7e822c1feea725425934",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 1,
+ "selected": 18
+}

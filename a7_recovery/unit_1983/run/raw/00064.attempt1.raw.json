@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The target text describes a non-GAAP reconciliation presentation methodology change (retroactively applying the new Monroe inventory settlement-gain/loss exclusion treatment to prior-period reconciliation tables shown in this filing). This is an accounting/presentation construct about how figures are displayed, not a real statement about a driver's state, change, surprise, guidance, or action (Rule 1); it does not describe any company operating condition, forward outlook, expectation comparison, or discrete event, so it fails the Rule 1 fact gate."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "total_operating_revenues",
+        "driver_state": "increased",
+        "level_low": {"value": 13.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 13.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "change_value": {"value": 1.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "change_unit": "m_usd",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 1
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

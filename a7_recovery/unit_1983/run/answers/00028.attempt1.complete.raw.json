@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "cost_per_available_seat_mile",
+        "driver_state": "in_line",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": true,
+        "time_type": "duration",
+        "fiscal_year": 2025
+      },
+      "per_x": "available_seat_mile"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

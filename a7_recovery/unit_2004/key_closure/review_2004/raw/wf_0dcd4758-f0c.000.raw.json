@@ -1,0 +1,133 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "period_end_date": "2025-11-01",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "slice_parts": ["geography:gb", "geography:ie", "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote only names an existing corporate structure (a joint venture in Mexico) with no stated value, direction, or discrete action tied to it, so it is a bare topic mention rather than a fact about a driver's state, change, or action (Rule 1.2)."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "interest_coverage_ratio",
+              "driver_state": "reported",
+              "level_low": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "x",
+              "slice_parts": ["unknown:us-gaap:BusinessAcquisitionAxis__spacenk"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a hypothetical forward-looking risk-factor statement ('the possibility that we will not realize the anticipated benefits...') with no actual reported event, value, or change stated, so it is generic risk boilerplate to be abstained under Rule 1.2."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "base_rate_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 0.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 1.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase_program",
+              "driver_state": "canceled",
+              "time_type": "instant",
+              "month": 10,
+              "fiscal_year": 2024,
+              "slice_parts": ["unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sofr_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 1.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 2.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven located items describe seven independent, unrelated pieces of the filing — a Space NK store count, a general mention of a Mexico joint venture, a Space NK facility covenant ratio, a generic acquisition-integration risk statement, and three separate credit/repurchase terms (base rate margin, SOFR margin, and the October 2024 buyback program revoking the March 2024 program) — none of which restate the same underlying driver, value, or event."
+}
+```

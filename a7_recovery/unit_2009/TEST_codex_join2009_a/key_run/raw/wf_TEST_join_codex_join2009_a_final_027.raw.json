@@ -1,0 +1,351 @@
+{
+ "source_id": "DRI_2026-03-19T08.30",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 3.3,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_high": {
+        "value": 3.3,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "change_value": {
+        "value": 5.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "same_restaurant_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 4.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 4.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed, and the quote in fact carries two separately re-readable facts — the consolidated sales level with its stated year-over-year change, and the same-restaurant sales growth rate named in the row's own label."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "per_x": "share",
+      "item": {
+       "driver_name": "earnings_per_share_guidance",
+       "driver_state": "raised",
+       "level_low": {
+        "value": 10.57,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 10.67,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "range",
+       "level_unit": "usd",
+       "comparison_baseline": "previous_guidance",
+       "company_confirmed": true,
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "measurement_raw_spans": [
+        "adjusted diluted"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: this is the company's own updated full-year fiscal 2026 outlook stated as a closed dollar range, a real guidance fact."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "segment_profit_margin",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": 23,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 23,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "change_value": {
+        "value": -10,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "basis points"
+       },
+       "change_unit": "basis_points",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "slice_parts": [
+        "segment:olivegarden"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: a stated margin level for one named company part plus a stated basis-point move against last year is a real metric fact."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking safe-harbor boilerplate: it names no driver, no state, change, outlook, expectation comparison or discrete action, so the gate drops it as generic risk language."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "The frozen proposed_record_kind negative_control is confirmed — the sentence is standard Private Securities Litigation Reform Act boilerplate and correctly yields no fact."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "strategic_alternatives_review",
+       "driver_state": "occurred",
+       "slice_parts": [
+        "segment:otheroperatingsegmentbahamabreezebrand"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_closure",
+       "driver_state": "announced",
+       "level_low": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "slice_parts": [
+        "segment:otheroperatingsegmentbahamabreezebrand"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_conversion",
+       "driver_state": "announced",
+       "level_low": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "slice_parts": [
+        "segment:otheroperatingsegmentbahamabreezebrand"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed, and the quote resolves into three distinct discrete actions rather than one: a completed strategic review, a decided permanent closure of 14 locations, and a decided conversion of the other 14."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison"
+   ],
+   "reference_name": "total sales",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": null
+  },
+  {
+   "row_index": 1,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison"
+   ],
+   "reference_name": "same-restaurant sales growth of 4.2%",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "A comp is only ever published as a rate, so I encoded 4.2% as the driver's own growth-rate level on the dated-period year-over-year default rather than as a change on an absolute sales level, and the source states no basis word either way."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "corrections_and_amendments"
+   ],
+   "reference_name": "adjusted diluted net earnings per share",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The event states only the INITIAL fiscal 2026 guide of $10.50 to $10.70 and the company's own claim that this midpoint is higher, not the immediately prior quarter's guide, so `raised` rests on that stated comparison rather than on a proven immediate predecessor."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "segment profit margin",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The menu carries two same-kind Olive Garden tokens (`segment:olivegarden` and `segment:olivegardensegment`) for what reads as one population, and I reused the plain one without near-snapping."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 0,
+   "hard_classes": [
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "the exploration of strategic alternatives for the Bahama Breeze brand",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Whether the completed review is a separate action from the closure and conversion decisions it produced is genuinely arguable; I kept it separate because it names a distinct cause with its own completed state."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "14 locations will permanently close",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The quote calls Bahama Breeze a brand while the only matching menu value is a segment token, so the reuse carries a kind judgment the prose does not itself confirm."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 2,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "the remaining 14 will be converted to other Darden brands",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "\"over the next 12 to 18 months\" is a stated but non-dateless relative window that no period field may lawfully carry, so this action is encoded periodless and its timing survives only in the quote."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-027/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-027/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

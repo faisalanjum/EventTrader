@@ -1,0 +1,28 @@
+{
+ "ok": true,
+ "read_only_files": 327,
+ "attempts": [
+  {
+   "attempt": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004",
+   "ledger": {
+    "scheduled": 66,
+    "valid": 52,
+    "invalid_response": 14,
+    "transport_no_answer": 0,
+    "unproved": 0,
+    "missing": 0
+   }
+  },
+  {
+   "attempt": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry",
+   "ledger": {
+    "scheduled": 14,
+    "valid": 10,
+    "invalid_response": 4,
+    "transport_no_answer": 0,
+    "unproved": 0,
+    "missing": 0
+   }
+  }
+ ]
+}

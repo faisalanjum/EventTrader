@@ -1,0 +1,70 @@
+{
+ "kind": "SYNTHETIC key handoff only; no real signature or A5/A6 freeze",
+ "model_calls": 0,
+ "passed": 11,
+ "checks": [
+  {
+   "check": "approval comes from frozen external pins",
+   "ok": true
+  },
+  {
+   "check": "exact sealed source inventory follows the full hash chain",
+   "ok": true
+  },
+  {
+   "check": "ordinary binding is the exact independently pinned settlement",
+   "ok": true
+  },
+  {
+   "check": "actual grader and current-key consumer agree without historical corrections",
+   "ok": true
+  },
+  {
+   "check": "runtime key keeps exact Decimal values",
+   "ok": true
+  },
+  {
+   "check": "sealed facts and observed reader facts reconcile",
+   "ok": true
+  },
+  {
+   "check": "denominator includes every original event/item/arm, not returned answers",
+   "ok": true
+  },
+  {
+   "check": "empty source events remain in the denominator",
+   "ok": true
+  },
+  {
+   "check": "unfamiliar supported plan is not replaced by historical totals",
+   "ok": true
+  },
+  {
+   "check": "coherent unapproved replacement refuses",
+   "ok": true
+  },
+  {
+   "check": "original approved positive still passes after tamper test",
+   "ok": true
+  }
+ ],
+ "required": {
+  "events": 36,
+  "packets": 191,
+  "accepted_gold": 206,
+  "answers": 382
+ },
+ "key_events": 33,
+ "decimal_values": 195,
+ "key_identity": {
+  "schema": "a7-current-key/approved",
+  "base_owner": "a7_g1_build.gold_by_event",
+  "approved_lock_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+  "approved_receipt_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+  "acted_rows": 0,
+  "accepted_rows": 206,
+  "events": 33,
+  "key_digest": "5cc5fe23939a727b448d254b3621d6f5b67d7c29b64549e6a739744f77e539fc"
+ },
+ "run_binding_sha256": "494dd7abeffba8484982faa1ef475dff032a95e11d690dca148ac5391cb686ec"
+}

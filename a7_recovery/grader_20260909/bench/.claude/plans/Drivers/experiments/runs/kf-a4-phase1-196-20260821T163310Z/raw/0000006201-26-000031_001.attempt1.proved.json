@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#001",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The located quote 'Net loss excluding net special items $ (267) $ (386) (30.8%)' contains no scale wording (e.g. 'million') inside it — the table's 'in millions, except share and per share amounts' header that would fix scale_multiplier sits outside this quote, in the table title elsewhere in the document. Rule 5.6 requires unit_scale_evidence to come from inside the quote and directs abstention when a table/text fact's scale marker sits in a header outside the quote rather than importing or assuming it, so no numeric net-loss (net_income) fact can be lawfully populated from this item."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#001/L1",
+      "exact_match": true,
+      "why": "L1 also returns zero facts and a single abstention grounded in Rule 5.6 — the 'in millions' scale marker sits in the table header outside the quote, so the value cannot be lawfully scaled — which matches the settled no-fact abstention exactly in reasoning and structure."
+    },
+    {
+      "lane_id": "0000006201-26-000031#001/L2",
+      "exact_match": true,
+      "why": "L2 likewise abstains with zero facts, citing the identical basis (no scale wording inside the quote; header outside it fixes the multiplier), matching the settled reply's structure and reasoning."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,284 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-26-017090#P000",
+      "decision": "exclude",
+      "why": "This target (the net gift-card reconciliation adjustment) has already been tested by a supplied proposal, so it is outside this fresh sample. This says nothing about whether its source fact is true, correctly located, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-017090#P001",
+      "decision": "exclude",
+      "why": "This target (The Cheesecake Factory brand comparable restaurant sales) has already been tested by a supplied proposal, so it is outside this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-017090#P002",
+      "decision": "exclude",
+      "why": "This target (adjusted diluted EPS vs. expectations narrative) has already been tested by a supplied proposal, so it is outside this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-017090#P003",
+      "decision": "exclude",
+      "why": "This target (total revenues actual value and YoY comparison) has already been tested by a supplied proposal, so it is outside this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-017090#P004",
+      "decision": "exclude",
+      "why": "This target (margins/adjusted diluted EPS vs. expectations narrative) has already been tested by a supplied proposal, so it is outside this fresh sample.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net income and diluted net income per share were $28.8 million and $0.60, respectively, in the fourth quarter of fiscal 2025.",
+        "raw_label_or_claim": "Net income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Distinct actual GAAP net income figure, not named by any proposal (proposals cover revenue, gift-card adjustment, and expectation narratives, not net income). A point-value stated fact under FINAL_DESIGN 7.1."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net income and diluted net income per share were $28.8 million and $0.60, respectively, in the fourth quarter of fiscal 2025.",
+        "raw_label_or_claim": "diluted net income per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Per-share form of net income is a separate fact from the total (NAME-13/rule 3); no proposal names this per-share value. Shares the sentence's contiguous span with the net-income row but carries a different source label."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Excluding the after-tax impact of these and certain other items, adjusted net income and adjusted diluted net income per share for the fourth quarter of fiscal 2025 were $48.3 million and $1.00, respectively.",
+        "raw_label_or_claim": "adjusted net income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "Plain reported adjusted net income value; distinct from P002/P004 which target the qualitative 'toward the higher end of expectations' narrative for adjusted diluted EPS/margins. This is the required ordinary/home fact, not the surprise statement (OD-21 sibling requirement). Carries the 'adjusted' measurement qualifier (NAME-14/FS-25)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Excluding the after-tax impact of these and certain other items, adjusted net income and adjusted diluted net income per share for the fourth quarter of fiscal 2025 were $48.3 million and $1.00, respectively.",
+        "raw_label_or_claim": "adjusted diluted net income per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "Per-share form of adjusted net income, a separate fact from the total (rule 3). Distinct from P002/P004's expectation-comparison narrative quote/target; this is the plain stated value, the required ordinary sibling fact."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The Company recorded a pre-tax net expense of $24.6 million related to impairment of assets and lease termination expenses, Fox Restaurant Concepts (\u201cFRC\u201d) acquisition-related items, gift card breakage and gift card inventory adjustments.",
+        "raw_label_or_claim": "pre-tax net expense of $24.6 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A distinct, itself-stated consolidated charge figure (not merely derivable restatement of components already in the reconciliation table); no proposal names it. A net expense/charge is positive per OD-12."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Fourth quarter fiscal 2025 includes $17.3 million of gift card breakage revenue as a result of a change in historical redemption patterns.",
+        "raw_label_or_claim": "gift card breakage revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Gross breakage-revenue component, a different stated value/scope than P000's net combined gift-card adjustment (-$9.396M); both the net figure and its gross components are independently source-stated, so this is a genuinely separate fact."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "partially offset by a non-recurring $7.9 million write-down of gift card inventory.",
+        "raw_label_or_claim": "non-recurring $7.9 million write-down of gift card inventory",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "The other gross component netted into P000's figure; a stated write-down (charge) is positive under OD-12. Distinct value/scope from the net adjustment and from the breakage-revenue row above."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "revenue for the quarter finished within our expected range.",
+        "raw_label_or_claim": "revenue for the quarter finished within our expected range",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      },
+      "why": "A different metric (revenue) than P002/P004's margins/adjusted-EPS narrative, and a different comparison type (guidance/expected-range, i.e. actual_vs_guidance) than P003's prior-year revenue comparison (a temporal metric change, not a surprise, per routing rules). No favorability wording + inside a closed range -> in_line."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+        "raw_label_or_claim": "North Italia operating information: Comparable restaurant sales vs. prior year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "portion_versus_whole", "sequential_comparison", "point_range_floor_ceiling"]
+      },
+      "why": "A different segment/population (North Italia, not the CAKE brand of P001) with its own comparable-sales figure; the first data value in this row corresponds to the 13-weeks-ended Dec 30, 2025 column per the table's established column order stated earlier in the same section. 'Comparable' sales are a qualified subset population (OD-17); 'vs. prior year' exercises the OD-11 growth-basis rule."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "we expect to open as many as 26 restaurants this year",
+        "raw_label_or_claim": "we expect to open as many as 26 restaurants this year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "First complete occurrence of the total FY2026 restaurant-opening guidance ceiling ('as many as 26'); not named by any proposal. A ceiling number shape."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+        "raw_label_or_claim": "six to seven Flower Child locations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"]
+      },
+      "why": "Brand-specific closed-range guidance, a qualified subset of the total-26 whole (OD-17). Flower Child is named as its own guidance line here, but the segment footnote groups Flower Child under the 'Other' financial-reporting segment, creating the kind-tension the T1-05/FS-15 ladder addresses (resolves toward an unknown:-style kind rather than an assumed segment match)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+        "raw_label_or_claim": "as many as eight FRC restaurants",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"]
+      },
+      "why": "FRC-specific ceiling guidance, a qualified subset of the total-26 whole; FRC is an established segment (per the segment table), so no menu-kind ambiguity here, unlike the Flower Child row."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Also on February 12, 2026, the Board approved a $0.03 increase in the quarterly dividend to $0.30 per share to be paid on March 17, 2026, to shareholders of record at the close of business on March 4, 2026.",
+        "raw_label_or_claim": "a $0.03 increase in the quarterly dividend to $0.30 per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A distinct, non-boilerplate capital-allocation action (dividend raise) not named by any proposal; point value with a stated change amount."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Loss on debt extinguishment - 0.0 % - 0.0 % (15,891 ) (0.4 )% - 0.0 %",
+        "raw_label_or_claim": "Loss on debt extinguishment",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "First-complete occurrence (income statement, before the later reconciliation-table restatement of the same figure) of a stated annual (52-week) loss, shown with accounting-notation parentheses -- a direct OD-12 sign example. Distinct period/value from all quarterly facts already selected or proposed."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-017090",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "adverse weather conditions and natural disasters in regions in which the Company\u2019s restaurants are located",
+        "raw_label_or_claim": "adverse weather conditions and natural disasters",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic Safe Harbor risk-factor boilerplate, directly mirroring the fact gate's own worked example ('weather may affect results' -> dropped). Fails DU-03/Rule 1; correct behavior is omission, not abstention."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "The Cheesecake Factory North Other restaurants Italia FRC Other Total Revenues $ 681,431 $ 88,174 $ 99,441 $ 92,512 $ 961,558",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "The segment-revenue table's column headers are word-interleaved in this extraction ('North Other restaurants Italia'), so a specific dollar figure cannot be tied to a specific segment label from the literal contiguous bytes without inferring table structure; excluded rather than guessed."
+    },
+    {
+      "quote": "As of December 30, 2025, the Company had total available liquidity of $582.2 million, including a cash balance of $215.7 million and $366.5 million of availability on its revolving credit facility with no outstanding balance.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, lawful candidate fact, but not selected -- the point/range/floor/ceiling shape is already amply represented by other selected rows; adding it would be padding rather than repairing a coverage gap."
+    },
+    {
+      "quote": "the Company\u2019s Board of Directors approved an increase of 5.0 million shares to the existing repurchase program raising the total authorization to 66 million shares, of which approximately 6.0 million shares remain available for repurchase following the increase.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, lawful candidate capital-allocation fact, not selected; the dividend-increase row already supplies one representative capital-allocation action and one more would be padding."
+    },
+    {
+      "quote": "with a strong pipeline in place we remain confident in our ability to achieve our development goal",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking confidence sentiment with no measurable claim; a plausible second negative_control, but the weather/natural-disasters boilerplate row already covers that record kind more cleanly (it matches the fact gate's own worked example) so this one was not also added."
+    },
+    {
+      "quote": "Uncertain tax positions taken in a tax return are recognized in the financial statements when it is more likely than not that the position will be sustained upon examination by tax authorities based on technical merits, taking into account available administrative remedies and litigation.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic GAAP-policy boilerplate describing how uncertain tax positions are recognized in general, not a company-specific fact; a further negative_control candidate not selected to avoid padding beyond one control example."
+    },
+    {
+      "quote": "Subsequent to quarter-end, the Company opened one Flower Child location and closed four restaurants, including two Cheesecake Factory restaurants, one Grand Lux Cafe, and one FRC location.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, distinct subsequent-event fact (tied to the SubsequentEventTypeAxis menu token) with its own menu-kind tension for 'Grand Lux Cafe'; not added to keep the fresh sample focused, since a comparable ambiguous-menu instance (Flower Child) is already selected."
+    },
+    {
+      "quote": "Loss on extinguishment of debt(4) - - 15,891 -",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Later restatement of the same annual debt-extinguishment loss already captured by the selected income-statement occurrence; under the first-complete-quote rule this later restatement is the same fact, not a fresh one."
+    },
+    {
+      "quote": "Uncertain tax positions(5) 1,306 - 2,023 -",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, specific reserve fact (distinct from the generic GAAP-policy boilerplate sentence above), but not selected -- kept the fresh sample focused on repairing the identified hard-class gaps rather than adding every further lawful fact."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No genuine corrections_and_amendments instance was found in this event's supplied text (no amendment/restated-value language distinguishable from an ordinary business change).",
+      "why": "The authority forbids inventing a rule or forcing a fact into a tag it doesn't exercise; reporting this as a per-event shortage rather than padding a row into this tag."
+    },
+    {
+      "what": "No genuine lawful_abstention_control candidate was identified in this event's text -- only a negative_control (generic risk boilerplate) was clearly supported.",
+      "why": "An abstention control requires a real candidate that cannot be lawfully resolved from the evidence; nothing in this text met that bar without forcing an unclear boundary into a manufactured case."
+    },
+    {
+      "what": "The ambiguous_menus classification on the Flower Child guidance row rests on inferring tension between the guidance sentence's brand-level breakdown and the segment footnote's grouping of Flower Child under 'Other' for financial reporting.",
+      "why": "The quoted T1-05/FS-15 ladder does not walk through this exact cross-passage scenario explicitly; this is my best-fit application of its wording rather than an owner-confirmed instance, flagged for review rather than silently asserted."
+    }
+  ],
+  "blocked": null
+}
+```

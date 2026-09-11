@@ -1,0 +1,40 @@
+{
+ "original_files": 62,
+ "bytes_unchanged": true,
+ "exact_nanosecond_mtimes_unchanged": true,
+ "private_fixtures_restored": true,
+ "negative_checks": [
+  {
+   "target": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_85692dcf-0e8.json",
+   "fault": "missing",
+   "refused": "missing private native TEST binding: /home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_85692dcf-0e8.json"
+  },
+  {
+   "target": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_85692dcf-0e8.json",
+   "fault": "read_only",
+   "refused": "mutation fixture must be a private writable copy"
+  },
+  {
+   "target": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_85692dcf-0e8.json",
+   "fault": "original_source",
+   "refused": "'/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_85692dcf-0e8.json' is not in the subpath of '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006' OR one path is relative and the other is absolute."
+  },
+  {
+   "target": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8",
+   "fault": "missing",
+   "refused": "missing private native TEST binding: /home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8"
+  },
+  {
+   "target": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8",
+   "fault": "read_only",
+   "refused": "mutation fixture must be a private writable copy"
+  },
+  {
+   "target": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8",
+   "fault": "original_source",
+   "refused": "'/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_85692dcf-0e8' is not in the subpath of '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006' OR one path is relative and the other is absolute."
+  }
+ ],
+ "focused": "49 passed in 1.02s; exit0",
+ "limitation": "The earlier ordinary_d timestamp snapshot passed through a JavaScript number and lost nanosecond precision. This focused repeat stores timestamps as exact strings and does not reuse that lossy claim."
+}

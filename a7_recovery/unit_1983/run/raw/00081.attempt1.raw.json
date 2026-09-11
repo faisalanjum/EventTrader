@@ -1,0 +1,30 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "increased",
+        "level_low": {"value": 44, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_high": {"value": 44, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_high": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "slice_parts": ["product:cargoandfreight"],
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31",
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

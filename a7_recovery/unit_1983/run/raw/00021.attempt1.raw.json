@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "full_time_equivalent_employees",
+        "driver_state": "increased",
+        "change_value": {"value": 3.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "time_type": "instant",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "period_end_date": "2026-03-31",
+        "slice_parts": ["product:mainline"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

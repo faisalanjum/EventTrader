@@ -1,0 +1,94 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:refinery"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["adjusted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote 'Atlantic 1,517 11 %' states a dollar figure (1,517) but its scale marker (the table's '(in millions)' header) sits outside this located quote, so unit_scale_evidence/scale_multiplier cannot be lawfully established and Rule 5.6 requires abstention."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic risk-factor boilerplate stating there were no material changes, not a real fact about a driver's state, change, surprise, guidance, or action, so it fails Rule 1's fact gate (Rule 1.2)."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This sentence describes a retroactive change to the company's non-GAAP reconciliation presentation methodology, not a fact about any driver's state, change, surprise, guidance, or action, so it fails Rule 1's fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five items describe unrelated subjects — the refinery segment's operating loss, adjusted total revenue's dollar growth, an Atlantic-region revenue table entry lacking an in-quote scale marker, a risk-factor no-material-changes boilerplate line, and a non-GAAP presentation-methodology footnote — so they are clearly distinct facts, not one."
+}
+```

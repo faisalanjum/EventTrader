@@ -1,0 +1,38 @@
+```json
+{
+  "packet_id": "0000898173-26-000006#053",
+  "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "share_repurchase_excise_tax",
+          "driver_state": "reported",
+          "level_low": {"value": 21.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": 21.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000898173-26-000006#053/L1",
+      "exact_match": true,
+      "why": "L1 uses driver_name share_repurchase_excise_tax with the same reported state, point-shaped $21.0M level, m_usd unit, fiscal_year 2025, and duration time_type — identical to the settled reply."
+    },
+    {
+      "lane_id": "0000898173-26-000006#053/L2",
+      "exact_match": false,
+      "why": "L2's name excise_tax_on_share_repurchases embeds the glue word 'on' (forbidden by Rule 3.10) and reverses word order (Rule 3.11 wants detail-then-metric, i.e. share_repurchase_excise_tax); all other fields match."
+    }
+  ],
+  "ambiguities": []
+}
+```

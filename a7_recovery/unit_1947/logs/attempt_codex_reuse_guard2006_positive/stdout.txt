@@ -1,0 +1,2 @@
+{"warm_seconds": 0.01287207193672657, "full_audits_per_warm_call": 0}
+warm audit is reused, both drift classes refuse, restored positives and cold proof pass

@@ -1,0 +1,482 @@
+{
+ "schema": "a4-final-key-candidate/1511",
+ "authoritative": true,
+ "identity": "the ORDERED exact raw component shards below, the four bindings and the pinned loader - as build_kfields_final.lock defines a key; no parsed Decimal fact is serialized anywhere; a composed event is a composition of its bound base and targeted replies, never one raw model reply",
+ "loader": {
+  "module": "build_kfields_final",
+  "entry": "signing_gate",
+  "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+ },
+ "materializer": {
+  "module": "build_kfields_final",
+  "entry": "materialize",
+  "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+ },
+ "bindings": {
+  "final_package": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_pkg_codex_lifecycle2002_qualified/source_only_key.manifest.json",
+   "sha256": "3131598d8c0f071114b699cbf237ffe6dc609c08c366f41cbe35db50180a534f",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_pkg_codex_lifecycle2002_qualified"
+  },
+  "initial_source_package": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997/source_only_key.manifest.json",
+   "sha256": "4ec8a90ebf39c1d46b4c9b938531df0fefd1183c4a95ed9149f3b26cccd6735c",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997"
+  },
+  "hard_review_package": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_pkg_codex_lifecycle2002_qualified/hard_review.manifest.json",
+   "sha256": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_pkg_codex_lifecycle2002_qualified"
+  },
+  "initial_source_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect/receipt.json",
+   "sha256": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect"
+  },
+  "initial_source_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect/finalization.json",
+   "sha256": "ad0f11be0117e6d6c892596e6f5b4a64f7577eea1541163d46f857fb49a43add",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect"
+  },
+  "hard_review_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified/receipt.json",
+   "sha256": "2db2d2d2bcbbd3c5bf3f74535c7d4acf45c90d9cd43fc351f4b5f3b861a944d3",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified"
+  },
+  "hard_review_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified/finalization.json",
+   "sha256": "a8c40767cd71afd2d1d9ef32c0268351708fea4dd86786caf68802cada8bf1df",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified"
+  },
+  "hard_review_retry_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified/retry/receipt.json",
+   "sha256": "2378ec2ec8b7c37f6f1fa726e50a000ba1d255a4300527fc73838b7404acfadb",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified/retry"
+  },
+  "hard_review_retry_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified/retry/finalization.json",
+   "sha256": "2ebdcf3323667a6156c5c7925a8620a0df989e40b3612c00793bd6026cd74db8",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified/retry"
+  },
+  "event_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified/receipt.json",
+   "sha256": "ea0104f72bf1ec04a02e669cd195b8721d1806762221c49d8f31a4ee14da7aab",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified"
+  },
+  "event_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified/finalization.json",
+   "sha256": "72e28d31cfd71e44614f3fe045fafac12e371f660e9538a890a4c106b23c290b",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified"
+  },
+  "event_retry_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified/retry/receipt.json",
+   "sha256": "5b74fd514873b9b76cc9b920cd4be5f824fa9387235e123756fcdd2d638cbe07",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified/retry"
+  },
+  "event_retry_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified/retry/finalization.json",
+   "sha256": "a6e1244b813d8231b3ed4d8d25481b5094bbd936b3ed645630e639d2d5664939",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified/retry"
+  }
+ },
+ "runs": [
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_review_codex_lifecycle2002_qualified/retry",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/retry_final_codex_lifecycle2002_qualified/retry"
+ ],
+ "counts": {
+  "events_accounted": 33,
+  "rows_accounted": 191,
+  "accepted_facts": 206,
+  "du_worthy_facts": 206,
+  "controls": 34,
+  "exclusions": 3,
+  "abstentions": 37,
+  "record_kind_conflicts": 4,
+  "duplicate_gold_facts": 0,
+  "open_issues": 0,
+  "phase1_ambiguities": 0,
+  "tag_floor": 5,
+  "distinct_rows_per_tag": {
+   "point_range_floor_ceiling": 134,
+   "losses_and_sign": 31,
+   "sequential_comparison": 46,
+   "measurement_wording": 56,
+   "favourable_unfavourable_direction": 17,
+   "expectation_routing": 17,
+   "slices_and_unknown_axes": 69,
+   "portion_versus_whole": 25,
+   "ambiguous_menus": 32,
+   "corrections_and_amendments": 5
+  },
+  "tags_below_floor": [],
+  "sequential_rows": 46
+ },
+ "key_shards": [
+  {
+   "source_id": "0000006201-26-000031",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "2a7201e9a8b67b8a9112c3b812da3f6775ec8dd4b984748d0a2ddbef8218d8d9"
+    }
+   ]
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "7d263ff2c77b1754794344886ff1c51d3b8e240f46ea38c739510f311d2e7a3c"
+    }
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "567c3bfc0f3ba07f74475270002d703117788305c294010b508a8d8419ac8702"
+    }
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "1298603215ce3e9a164afd22690f19db1f1917362fa5be095383cd5eefe32e2f"
+    }
+   ]
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "c149eb7ed743d29a3eb9c54442c381c5734ff63a23c4f1a97d853f85d7f485cb"
+    }
+   ]
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "e5771f5ac765c7a1ed6fb89940b8f74d31b3c92ebc810071c1b44325acae1cf7"
+    }
+   ]
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "24b3bf74334fe961011ab13ef8fc441aab78b1ccb77301467e30b941e36db071"
+    }
+   ]
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "7859ab01cc7b0526d14a3dd2eded931e8480c2d487f2d546c15da24df174c6f4"
+    }
+   ]
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "a6b28cb6808ff9e9ff9e24102bab2babe5b00a8ff4679acbaaaf1c1f7101c4fc"
+    }
+   ]
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "53f63cf235e33ab5918037d56e8cb8f355826f85f7c97d579a94fa5cfa3b9fbf"
+    }
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "9239b54b32096756ef316cb329111a198d5ecd187f0a30e45096df195d88eac9"
+    }
+   ]
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "93e774d9e8f0023eb827f5c655fdede13a870f583dc7e7c90c75e438617c0fd4"
+    }
+   ]
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "65ca91788c90355db9603603bc3e27c7af8428f436228cf047d32590a54f678a"
+    }
+   ]
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "93f8f7efd1f96624d546b702a3a4ca2aaf3b50dffe0edfc1249a7ccadf45fe75"
+    }
+   ]
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "a27b4072b5627e53413229c42441c753bd3ea1e56d15b2c94344a9853f679b2c"
+    }
+   ]
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "fc1539f7dc1dc3c3ee95fb6ef0af8dee602521267b978005247ed33a8986219a"
+    }
+   ]
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "63ecc34c0f5531496726332b8b281e33669541cbad1d6cf00b01669551abb0b4"
+    }
+   ]
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "1d52eb26f2563980bc4baec3d0ed514f21666674aeb5d8a4035bac82ec234f4a"
+    }
+   ]
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "d313ce9766ccb7e3807657d4a8a95189a678a52d42934f97c7a4cd33bc84173e"
+    }
+   ]
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "1da4acccf266df7195afa26218528ac9698f16700387ce827a03abcf5a9f7993"
+    }
+   ]
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "72288e27f89ce17b3583c7c47e363659df49e791cb2352c516f8640c2c6e4084"
+    }
+   ]
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "274c45691b0fcd23c82182bd235c8ec90958cfd1ba8546a1b83d2b57b32a7590"
+    }
+   ]
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "fa727aa012d2ad9409ca30d5a42fe854b3c7a5fa849a60b968d547ef3ea604b6"
+    }
+   ]
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "480b5cc7fd671f68e5572c000969ebd6103a036c641820cd950a07b531a00e7e"
+    }
+   ]
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "8260b2b86c24e258d1a4363e576178279b301d9f31b2e57ef5b260422a74b77a"
+    }
+   ]
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "d5bd6d02193938834f6fb7a2669aa97df6aa9c05cff0c7113749d478a5d18383"
+    }
+   ]
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "a6de89bf44e41d69c5104c4f753a75ffae58187f957b934601070257dc2609af"
+    }
+   ]
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "a36f503291fe4185ee85f3569ba7bbb42052503880c7a9969480ee55b31c74f6"
+    }
+   ]
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "62e694011edcc9a107eff998426b3eed2c47d22e6b6eebc0a1cc588acb3451e9"
+    }
+   ]
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "18c1f7171ab08e9be4ab565cfa2ad6d54b825eb28b506c57a3ddeab41d991d83"
+    }
+   ]
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "269fa675b5fb8036f8fa7ea04e6a73535eaecc39d364bc0af30b27f576ed91d5"
+    }
+   ]
+  },
+  {
+   "source_id": "bzNews_42014391",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "9fc974f9c3113b0b9ab71e8f7de508da894d8ce796ee351b3e7c42522455e4bd"
+    }
+   ]
+  },
+  {
+   "source_id": "bzNews_50877032",
+   "composed": false,
+   "components": [
+    {
+     "part": "whole",
+     "origin": "a4_final_v1",
+     "sha256": "8809ae147470e27a485f97729812d1a59cd7cbf8badf0a827e0f1889ab2886f3"
+    }
+   ]
+  }
+ ]
+}

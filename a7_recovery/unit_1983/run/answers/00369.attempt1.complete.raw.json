@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "strategic_options_review_costs",
+        "driver_state": "occurred",
+        "level_low": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "slice_parts": ["segment:pizzahutglobaldivision"],
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

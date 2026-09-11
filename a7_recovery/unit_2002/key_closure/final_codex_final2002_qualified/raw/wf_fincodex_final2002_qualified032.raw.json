@@ -1,0 +1,65 @@
+{
+ "source_id": "bzNews_50877032",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "bzNews_50877032",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "airport_concourse_expansion",
+       "driver_state": "announced",
+       "level_low": {
+        "value": 17,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 17,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind of real_item is confirmed: the sentence states a discrete company-announced concourse project sized at 17 new gates, which is a real action fact rather than a bare mention or a control."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "reference_name": "17 new gates",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The gate count describes a facility that does not yet exist, so the lane was genuinely ambiguous between an announced action carrying its stated size and a forward company outlook, and I settled it as an action because this quote states a company action with no target period or outlook verb."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-032/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-032/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

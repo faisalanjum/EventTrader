@@ -1,0 +1,62 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000898173-26-000006",
+ "ordinal_one_based": 10,
+ "ordinal_receipt": 9,
+ "attempt_number": 1,
+ "run_id": "wf_1682e326-a46",
+ "agent_id": "adfc1799b717cf907",
+ "raw_sha256": "a61f3f652b942d35a45a2fe6c0846ef797bf9737574496046bccb4043d6479ec",
+ "prompt_sha256": "7ca62eab5eb204f15bceb0c7a5ae1d10a64d55f530603503d68078eddc70e5ee",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 8,
+  "additions": 13,
+  "exclusions_considered": 8,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': 'Several tables in this exhibit (revenue disaggregation by customer, store-count roll-forward) state multiple period values per labelled row and rely on a column header appearing earlier in t",
+  "{'what': 'Whether `point_range_floor_ceiling` is meant to be applied to every row carrying a definite stated numeric level (counts, dollar totals, percentages), or reserved for rows that meaningfully "
+ ],
+ "locator": {
+  "additions": {
+   "located": 13,
+   "not_located": [],
+   "total_with_quote": 13
+  },
+  "exclusions_considered": {
+   "located": 8,
+   "not_located": [],
+   "total_with_quote": 8
+  }
+ },
+ "receipt_attempts": 13,
+ "receipt_missing": 24,
+ "receipt_other_problems": [
+  "the run accepted 12 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 9,
+  "attempt": 1,
+  "source_id": "0000898173-26-000006",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_1682e326-a46.json",
+  "agent_id": "adfc1799b717cf907",
+  "raw_name": "0000898173-26-000006.attempt1.complete.raw.json"
+ }
+}

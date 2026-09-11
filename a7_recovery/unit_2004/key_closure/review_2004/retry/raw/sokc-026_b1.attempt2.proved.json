@@ -1,0 +1,162 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share_surprise",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "level_low": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "slice_parts": ["product:productandserviceothermrobusiness"],
+              "level_low": {"value": 380, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 380, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "fuel_expense_guidance",
+              "driver_state": "unknown",
+              "slice_parts": ["segment:refinery"],
+              "level_low": {"value": -300, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -300, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "comparison_baseline": "sequential_period",
+              "level_unit": "percent_sequential",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "increased",
+              "comparison_baseline": "prior_year",
+              "change_value": {"value": 40, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is the standard forward-looking-statements safe-harbor disclaimer (generic legal risk boilerplate about factors that could cause results to differ), not a real statement about any specific driver's state, change, surprise, guidance, or action, so it fails the fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven quotes describe seven distinct underlying facts on independent metrics/topics (a reported EPS level, an EPS-vs-guidance in-line surprise, MRO third-party revenue growth, a forward refinery fuel-cost benefit estimate for Q2, sequential unit-revenue improvement across regions, year-over-year net-income growth, and a generic legal risk disclaimer that is not a fact at all), so they cannot be one underlying fact."
+}
+```

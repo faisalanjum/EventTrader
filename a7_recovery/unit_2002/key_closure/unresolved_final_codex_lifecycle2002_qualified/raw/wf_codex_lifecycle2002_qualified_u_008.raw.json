@@ -1,0 +1,408 @@
+{
+ "source_id": "0000898173-26-000006",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+       "driver_name": "earnings_per_share",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 2.97,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 2.97,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "comparison_low": {
+        "value": 2.71,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "comparison_high": {
+        "value": 2.71,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "Diluted"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "shares_outstanding",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": 856,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 856,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "comparison_low": {
+        "value": 881,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_high": {
+        "value": 881,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "Diluted"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one: the sentence carries a full-year diluted per-share level with its stated prior-year value, plus the stated diluted share count on which it was computed."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "selling_general_and_administrative_expenses",
+       "driver_state": "unknown",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "selling_general_and_administrative_expenses_surprise",
+       "driver_state": "missed",
+       "surprise_basis_hint": "actual",
+       "comparison_baseline": "previous_guidance",
+       "has_favorability_wording": false,
+       "polarity_proof": {
+        "polarity": "unfavorable",
+        "basis": "source_framing",
+        "evidence": "The source itself frames the overage as cost pressure from heightened inflation that the company is working to mitigate, so spending above its own expectation is adverse in this filing's framing.",
+        "sentence": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs."
+       },
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "team_member_health_care_costs",
+       "driver_state": "increased",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "casualty_claim_costs",
+       "driver_state": "increased",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one: an actual-versus-own-expectation comparison on SG&A (surprise plus its numberless home sibling) together with the two stated cost causes."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "store_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 6447,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 6447,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "period_start_date": "2025-12-31",
+       "period_end_date": "2025-12-31",
+       "fiscal_year": 2025,
+       "time_type": "instant",
+       "slice_parts": [
+        "geography:domestic"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one: a bare stated period-end store level for the company's domestic geography, with no direction stated inside this row's own quote."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "shareholders_equity",
+       "driver_state": "increased",
+       "level_low": {
+        "value": -763352,
+        "scale_multiplier": 1000,
+        "unit_scale_evidence": "In thousands"
+       },
+       "level_high": {
+        "value": -763352,
+        "scale_multiplier": 1000,
+        "unit_scale_evidence": "In thousands"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "period_start_date": "2025-12-31",
+       "period_end_date": "2025-12-31",
+       "fiscal_year": 2025,
+       "time_type": "instant"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one, but only for the line its raw label names: the deficit is the negative region of shareholders' equity, and the deficit narrowed against the prior-year column shown beside it."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic safe-harbor / forward-looking-statements legal boilerplate: it states no driver state, change, surprise, guidance, or action, so the gate yields no record."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed as a negative_control and confirmed as one: the sentence is pure statutory boilerplate and correctly yields no fact."
+  },
+  {
+   "row_index": 6,
+   "settled": {
+    "source_id": "0000898173-26-000006",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "stock_split",
+       "driver_state": "occurred",
+       "period_start_date": "2025-06-10",
+       "period_end_date": "2025-06-10",
+       "time_type": "instant"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one, though the fact carried is the completed forward stock split itself; the row's raw label points at the retroactive share-data adjustment clause, which is presentation wording and yields no separate driver."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "sequential_comparison"
+   ],
+   "reference_name": "Diluted earnings per common share",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The source states 'increased 10%' but that change is derivable from the two stated point values ($2.97 vs $2.71), so change_value was left null and the company's own rounded percentage survives only in the quote."
+  },
+  {
+   "row_index": 1,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "reference_name": "856 million shares",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "It is genuinely arguable whether the diluted share count is an independent driver or only the denominator context of the per-share fact; I split it because it is a standing level with its own stated prior-year value."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "expectation_routing"
+   ],
+   "reference_name": "SG&A expenses",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": "This row's own quote is numberless, so the required home sibling carries state 'unknown' even though a Q4 SG&A dollar level exists elsewhere in the event."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 1,
+   "hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "reference_name": "SG&A expenses again exceeded our expectations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": "Whether 'pressure from heightened inflation' counts as explicit favorability wording is genuinely unclear; I read it as framing rather than wording, so recorded has_favorability_wording false plus a source_framing polarity proof."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 2,
+   "hard_classes": [],
+   "reference_name": "team member health care",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The source names health care and casualty claims in one phrase, so treating them as two drivers rather than one blended cost driver is a judgment call."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 3,
+   "hard_classes": [],
+   "reference_name": "casualty claim costs",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Same split judgment as the health-care cost driver, and the direction is qualitative only ('heightened inflation') with no measurable basis stated."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "Ending domestic store count",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "'Domestic' in this filing covers U.S. and Puerto Rico stores, so it is not the same meaning as the menu's geography:us and I coined geography:domestic rather than near-snapping to the menu."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "reference_name": "Total shareholders’ deficit",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The prior-year column sitting beside the value fixes the direction (deficit narrowed = increased), but the filing states no comparison sentence, so comparison_baseline was left null."
+  },
+  {
+   "row_index": 6,
+   "fact_index": 0,
+   "hard_classes": [],
+   "reference_name": "15-for-1 forward stock split",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The '15-for-1' ratio was not stored in a numeric slot because it is a conversion ratio rather than a level of the driver, so it survives only in the quote."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-008/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-008/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": [
+  {
+   "what": "Row 4's located quote spans the entire condensed balance sheet while its raw label names a single line item.",
+   "why": "I settled only the labelled 'Total shareholders' deficit' line; every other balance-sheet line inside that same quote is left unsettled and could be located again by a different row, so the row's true scope is not safely decidable from what I was shown."
+  },
+  {
+   "what": "The 'domestic' slice for the store-count fact cannot be reconciled against the existing menu value geography:us.",
+   "why": "Domestic here covers U.S. plus Puerto Rico, so reusing geography:us would manufacture a menu-confirmed match the evidence does not support, while coining geography:domestic risks a second series for the same population."
+  },
+  {
+   "what": "Whether a source-stated percentage change that is also derivable from two stated point values should be stored in change_value.",
+   "why": "For the full-year per-share fact the stated 10% differs from the 9.6% implied by $2.97 versus $2.71, so the derivability rule and the source's own stated figure point to different records and the choice is not settled by evidence alone."
+  }
+ ]
+}

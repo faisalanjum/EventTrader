@@ -1,0 +1,74 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000940944-26-000005",
+ "ordinal_one_based": 12,
+ "ordinal_receipt": 11,
+ "attempt_number": 1,
+ "run_id": "wf_df06b2e0-f6c",
+ "agent_id": "a03026fd83ec8a013",
+ "raw_sha256": "212ead793ef0aa1a8a38a1672a7844079ec71546b7848ed1e527ba41cb676b10",
+ "prompt_sha256": "1c355a2a6a6ed4884d7986721291704240fbef3925fed050456fd09ccda28971",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 4,
+  "additions": 17,
+  "exclusions_considered": 13,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"The Financial Outlook bullet prints the adjusted-EPS guidance ceiling as '$10.674,' immediately followed by a comma, in the same glued-footnote-digit style the document uses elsewhere (e.g. ",
+  "{'what': \"Whether the CEO's qualitative claim of exceeding an undefined 'industry same-restaurant sales benchmark' belongs as lawful_abstention_control (an unresolvable but real surprise-like claim) o"
+ ],
+ "locator": {
+  "additions": {
+   "located": 16,
+   "not_located": [
+    {
+     "index": 9,
+     "problem": "quote does not occur in the named part (fabricated locator)",
+     "quote_head": "Sales and profits from Chuy\u2019s restaurants are included withi"
+    }
+   ],
+   "total_with_quote": 17
+  },
+  "exclusions_considered": {
+   "located": 12,
+   "not_located": [
+    {
+     "index": 1,
+     "problem": "quote is unique in this part, so occurrence_in_part must be null",
+     "quote_head": "Earnings from continuing operations $ 2.68 $ 2.74"
+    }
+   ],
+   "total_with_quote": 13
+  }
+ },
+ "receipt_attempts": 14,
+ "receipt_missing": 23,
+ "receipt_other_problems": [
+  "the run accepted 13 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 11,
+  "attempt": 1,
+  "source_id": "0000940944-26-000005",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_df06b2e0-f6c.json",
+  "agent_id": "a03026fd83ec8a013",
+  "raw_name": "0000940944-26-000005.attempt1.complete.raw.json"
+ }
+}

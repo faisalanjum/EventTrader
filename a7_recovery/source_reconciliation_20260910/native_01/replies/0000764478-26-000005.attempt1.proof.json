@@ -1,0 +1,61 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000764478-26-000005",
+ "ordinal_one_based": 9,
+ "ordinal_receipt": 8,
+ "attempt_number": 1,
+ "run_id": "wf_e3c84b25-48a",
+ "agent_id": "ae0e845d8e44fb1e4",
+ "raw_sha256": "9ad13d77213c47b5ad56c0ffc212a77648d8aaf420027b7d3531e195931f56f4",
+ "prompt_sha256": "34e2fbcb4902d3441d04029892ba5f1ec7aa7081a6b6e21920c9ccd747a17e9a",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 1,
+  "additions": 0,
+  "exclusions_considered": 2,
+  "open_issues": 1
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"This event's supplied text_parts contain only three lines of SEC filing header/metadata (form type, item-number list, and a description line restating the item numbers). No actual disclosed "
+ ],
+ "locator": {
+  "additions": {
+   "located": 0,
+   "not_located": [],
+   "total_with_quote": 0
+  },
+  "exclusions_considered": {
+   "located": 2,
+   "not_located": [],
+   "total_with_quote": 2
+  }
+ },
+ "receipt_attempts": 9,
+ "receipt_missing": 28,
+ "receipt_other_problems": [
+  "the run accepted 8 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 8,
+  "attempt": 1,
+  "source_id": "0000764478-26-000005",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e3c84b25-48a.json",
+  "agent_id": "ae0e845d8e44fb1e4",
+  "raw_name": "0000764478-26-000005.attempt1.complete.raw.json"
+ }
+}

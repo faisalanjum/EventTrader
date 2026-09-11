@@ -1,0 +1,84 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_42014391#P000",
+      "decision": "exclude",
+      "why": "This target (the $100M spending/revive-sales/support-franchisees claim) has already been tested by a supplied proposal; excluded from this fresh sample per instructions. This says nothing about whether the original selection is correct, located, or classified well.",
+      "row": null
+    },
+    {
+      "proposal_id": "bzNews_42014391#P001",
+      "decision": "exclude",
+      "why": "This target (the '100+ sickened in 14 states' claim) has already been tested by a supplied proposal; excluded from this fresh sample per instructions. This says nothing about whether the original selection is correct, located, or classified well.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "bzNews_42014391",
+        "part_ref": "title",
+        "occurrence_in_part": null,
+        "quote": "Company Is Boosting Advertising",
+        "raw_label_or_claim": "Boosting Advertising",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "A distinct company action (increasing advertising spend) stated only in the title and not covered by the tested $100M-spending/franchisee-support quote (P000), whose label stops at 'support franchisees.' This is a different subject/action from franchisee support, so it is a fresh fact under the split rule for a real scope difference, not a restatement of an already-tested fact. Numberless action fact, DU-05 numberless facts count; not generic boilerplate since it is a specific stated company action tied to this event."
+    },
+    {
+      "row": {
+        "source_id": "bzNews_42014391",
+        "part_ref": "body",
+        "occurrence_in_part": null,
+        "quote": "a severe E. Coli outbreak spooked diners away",
+        "raw_label_or_claim": "spooked diners away",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "A distinct state fact: the outbreak's effect of driving diners away (a consumer-traffic/demand impact), separate from the tested $100M-spending action fact (P000, an action) and the tested sickened-count fact (P001, a magnitude of illness). This is a current, specific, source-stated occurrence (not generic risk boilerplate), so it passes the DU-03 fact gate as a real, numberless state fact (DU-05)."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "McDonald's To Spend $100M To Move Past E. Coli Outbreak",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Same underlying $100M-spend fact already tested via proposal P000 (body), restated here with a different purpose framing ('move past outbreak' vs 'revive sales'); a partial/richer restatement of the same fact, not a fresh one."
+    },
+    {
+      "quote": "Supporting Franchisees",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Restates the franchisee-support component already inside proposal P000's tested quote/label ('...and support franchisees'); same fact, not fresh."
+    },
+    {
+      "quote": "in an effort to revive sales and support franchisees after a severe",
+      "part_ref": "teaser",
+      "occurrence_in_part": null,
+      "why": "Truncated restatement of the same sentence already fully present in body (tested via P000) with no additional distinguishable value; a partial statement of a fact already completed elsewhere, per the partial-then-richer-restatement rule."
+    },
+    {
+      "quote": "- Bloomberg News",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Source attribution only, not a fact about McDonald's business; fails the DU-03/Rule-1 fact gate as a non-fact."
+    },
+    {
+      "quote": "https://www.bloomberg.com/news/articles/2024-11-15/mcdonald-s-to-spend-100-million-to-move-past-e-coli-outbreak",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "A bare URL, not a factual claim; fails the fact gate, no business content to encode."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The title compresses the same $100M initiative into three clauses ('spend $100M to move past outbreak', 'boosting advertising and supporting franchisees', 'sickened count'), and the body states a fuller sentence covering spending/revive-sales/support-franchisees plus a clause on outbreak impact ('spooked diners away') that has no counterpart elsewhere. The authority does not explicitly state whether a headline-only action detail absent from the fuller body sentence ('boosting advertising') is a fresh distinct fact or merely editorial compression of the same $100M effort already tested.",
+      "why": "I resolved it by treating 'boosting advertising' as a genuine scope/action difference from 'support franchisees' (per the split-on-real-difference rule) since no proposal's tested label mentions advertising, but the authority gives no explicit rule for granularity of action-splitting inside one compressed headline clause, so this judgment call is flagged rather than asserted as settled."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "unknown",
+        "level_low": {"value": 28.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 28.55, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "range",
+        "level_unit": "usd",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "measurement_raw_spans": ["diluted"],
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

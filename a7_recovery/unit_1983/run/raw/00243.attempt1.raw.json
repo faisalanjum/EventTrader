@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "store_count",
+        "driver_state": "reported",
+        "level_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_unit": "count",
+        "level_shape_hint": "point",
+        "time_type": "instant",
+        "fiscal_year": 2025,
+        "period_end_date": "2026-01-31",
+        "slice_parts": ["geography:international"],
+        "measurement_raw_spans": ["Company-operated"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

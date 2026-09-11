@@ -1,0 +1,231 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "gallon",
+            "item": {
+              "driver_name": "fuel_cost_per_gallon",
+              "driver_state": "reported",
+              "level_low": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "per_x": "gallon",
+            "item": {
+              "driver_name": "fuel_cost_per_gallon_surprise",
+              "driver_state": "missed",
+              "level_low": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 2.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 2.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "unfavorable",
+                "basis": "metric_meaning",
+                "evidence": "A fuel cost per gallon that comes in above the company's own prior guidance raises expense for a fuel-dependent airline, which is unambiguously adverse with no mainstream counter-story.",
+                "sentence": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40"
+              },
+              "measurement_raw_spans": ["approximately"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "slice_parts": ["product:cargoandfreight"],
+              "level_low": {"value": 44, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 44, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "inflight_wifi_deployment",
+              "driver_state": "announced",
+              "level_low": {"value": 300, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "casm_x",
+              "driver_state": "increased",
+              "change_value": {"value": 2.3, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "casm_x_surprise",
+              "driver_state": "unknown",
+              "change_value": {"value": 2.3, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic cautionary/risk-factor boilerplate about fuel price changes, volatility, and availability in the forward-looking-statements section, not a stated fact about a driver's actual state, change, guidance, surprise, or action."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "increased",
+              "level_low": {"value": 227, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 227, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -149, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": -149, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven located items describe entirely distinct drivers — EPS-vs-guidance, fuel cost per gallon vs guidance, freight revenue, an inflight Wi-Fi rollout announcement, CASM-X growth vs guidance, generic fuel-risk boilerplate, and net income — each grounded in separate sentences/table lines with no shared single underlying claim, so they are independent facts rather than one fact."
+}
+```

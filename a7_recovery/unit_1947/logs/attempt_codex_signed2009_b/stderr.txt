@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2009/check_signed_reuse.py", line 71, in <module>
+    check('actual native proof accepts the explicit TEST signature',
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2009/check_signed_reuse.py", line 36, in check
+    assert ok, name
+           ^^
+AssertionError: actual native proof accepts the explicit TEST signature

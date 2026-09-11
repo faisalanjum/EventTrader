@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "fuel_expense",
+        "driver_state": "unknown",
+        "level_low": {"value": -300, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": -300, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "slice_parts": ["segment:refinery"],
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

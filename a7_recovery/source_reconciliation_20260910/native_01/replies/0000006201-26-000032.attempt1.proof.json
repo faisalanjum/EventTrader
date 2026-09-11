@@ -1,0 +1,70 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000006201-26-000032",
+ "ordinal_one_based": 2,
+ "ordinal_receipt": 1,
+ "run_id": "wf_2f836a4b-d29",
+ "agent_id": "a4efd56b309ce3d39",
+ "raw_sha256": "f5e54ff0df87e72ca4bd48577c27fbd1c3bc9e3661977c9185c85e64baadfe34",
+ "prompt_sha256": "3c345666385d40220fad7a1ad086e8fcdddb0613ca6ecc28d12da87b5e5c57bd",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  true,
+  "invalid schema"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [
+  "0000006201-26-000032: exclusion 5 quote is not a nonblank string"
+ ],
+ "counts": {
+  "verdicts": 6,
+  "additions": 9,
+  "exclusions_considered": 6,
+  "open_issues": 3
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"No favourable_unfavourable_direction, expectation_routing, ambiguous_menus, portion_versus_whole, or corrections_and_amendments candidates were identified in this event's supplied mdna/risk ",
+  "{'what': \"No lawful_abstention_control candidate was found in this event's supplied text.\", 'why': 'Every quantitative or qualitative candidate reviewed was either cleanly resolvable as a real_item or",
+  "{'what': \"Whether the value-level ambiguity in 'domestic and international demand for air travel' (kind=geography clear, but which specific geography member is meant is unresolved) should be treated u"
+ ],
+ "locator": {
+  "additions": {
+   "located": 9,
+   "not_located": [],
+   "total_with_quote": 9
+  },
+  "exclusions_considered": {
+   "located": 4,
+   "not_located": [
+    {
+     "index": 4,
+     "problem": "quote occurs 3x in this part \u2014 occurrence_in_part required",
+     "quote_head": "higher domestic and international demand for air travel"
+    }
+   ],
+   "total_with_quote": 5
+  }
+ },
+ "receipt_attempts": 2,
+ "receipt_missing": 34,
+ "receipt_other_problems": [
+  "the run accepted 2 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 1,
+  "attempt": 1,
+  "source_id": "0000006201-26-000032",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_2f836a4b-d29.json",
+  "agent_id": "a4efd56b309ce3d39",
+  "raw_name": "0000006201-26-000032.attempt1.complete.raw.json"
+ }
+}

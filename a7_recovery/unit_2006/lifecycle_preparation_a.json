@@ -1,0 +1,7 @@
+{
+ "source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/TEST_projects",
+ "source_sha256": "056322a28cf6c0c360fef07856ca1e55848a2ef0255c386c31fa1133b48545dc",
+ "private_copy": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/lifecycle_projects_a",
+ "map": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/map_lifecycle_TEST_2006_a.tsv",
+ "map_sha256": "b1e6ccafe892253aff2c1c3f00fcd9e1e42b4e96745651be1924f72526513a18"
+}

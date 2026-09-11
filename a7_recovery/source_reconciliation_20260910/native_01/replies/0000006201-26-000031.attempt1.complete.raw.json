@@ -1,0 +1,270 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "verdicts": [
+    {
+      "proposal_id": "0000006201-26-000031#P000",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (Q2 total revenue growth guidance); excluded from this fresh sample only, not a claim about the fact's truth, boundary or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P001",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (total non-GAAP net loss reconciliation value); excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P002",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (total unit revenue YoY growth value); excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P003",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (passenger revenue per ASM statistic); excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P004",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (winter-storm revenue impact); excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P005",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (numberless full-year profitability outlook); excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P006",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (total operating revenues table value); excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P007",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (Atlantic passenger unit revenue YoY value); excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000031#P008",
+      "decision": "exclude",
+      "why": "Already tested by a supplied proposal naming this exact target (GAAP net loss table value); excluded from this fresh sample only.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Loss per common share: Basic and diluted $ (0.58) $ (0.72)",
+        "raw_label_or_claim": "Loss per common share: Basic and diluted",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "Fresh target under NAME-13/Rule 3: GAAP diluted loss-per-share is a separate per-X fact from the already-tested total GAAP net loss dollar figure (P008), even though co-derived from the same underlying quarter."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Loss per share excluding net special items: Basic and diluted $ (0.40) $ (0.59)",
+        "raw_label_or_claim": "Loss per share excluding net special items: Basic and diluted",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"]
+      },
+      "why": "Fresh per-X target distinct from the already-tested total non-GAAP net loss dollar figure (P001); carries the 'excluding net special items' measurement qualifier (NAME-14/FS-25)."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "FY 2026E Adjusted earnings (loss) per diluted share3 ($0.40) to $1.10",
+        "raw_label_or_claim": "FY 2026E Adjusted earnings (loss) per diluted share3",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"]
+      },
+      "why": "No supplied proposal addresses full-year guidance; this is a closed, zero-crossing range (negative floor to positive ceiling) on an 'adjusted' measurement basis, not named or covered by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Second-quarter adjusted EPS3 expected to be between ($0.20) and $0.20.",
+        "raw_label_or_claim": "Second-quarter adjusted EPS3",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"]
+      },
+      "why": "Fresh target: Q2 adjusted-EPS guidance, a different period/scope than the FY range above and not named by any proposal; first complete occurrence used (table restates the same range later with different wording)."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+        "raw_label_or_claim": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh, source-stated floor-shape fact (open-ended lower bound only) not named by any proposal; first occurrence used (a later paraphrase uses 'more than' instead of 'greater than')."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Ended the quarter with total debt2 of $34.7 billion, the company\u2019s lowest total debt level since mid-20152",
+        "raw_label_or_claim": "total debt2 of $34.7 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh point-value balance-sheet fact not named by any proposal; first complete occurrence used per the partial-then-richer-restatement rule (a later paragraph and a table restate the same $34.7B value)."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total unit revenue was 7.6% higher year over year, improving sequentially each month in the quarter",
+        "raw_label_or_claim": "improving sequentially each month in the quarter",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "Fresh target distinct from P002 (which names only the YoY value): this is a numberless month-over-month sequential-improvement claim about the same metric, exercising OD-11's sequential-basis concept, not tested by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "American\u2019s domestic, Pacific and Atlantic entities delivered positive unit revenue growth year over year, with Atlantic passenger unit revenue up 16.7%.",
+        "raw_label_or_claim": "American\u2019s domestic, Pacific and Atlantic entities delivered positive unit revenue growth year over year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "Shares its quote with P007 but names a different target under a different label (a numberless composite positive-growth claim across three geography slices), which the rule allows since the labels differ."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Regional (4) 32,500 30,700 5.9 %",
+        "raw_label_or_claim": "Regional (4)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "Fresh headcount fact not named by any proposal. 'Regional' is a qualified subset population distinct from 'Total' (OD-17) and also matches the menu's product:regionalcarrier slice, so it exercises both the portion and slice rules."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating cost per ASM excluding net special items, fuel and profit sharing (cents) 15.29 14.54 5.2 %",
+        "raw_label_or_claim": "Operating cost per ASM excluding net special items, fuel and profit sharing (cents)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "Fresh actual (non-guidance) unit-cost fact not named by any proposal; carries a maximal multi-qualifier measurement token ('excluding net special items, fuel and profit sharing') per FS-25."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000031",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "we may be a party to litigation in the normal course of business or otherwise, which could affect our financial position and liquidity",
+        "raw_label_or_claim": "we may be a party to litigation in the normal course of business or otherwise",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical litigation-risk boilerplate from the forward-looking-statements run-on list; not source-flagged, current or specific, so it fails DU-03/Rule 1 and the correct reader behavior is omission -- a clean negative_control exemplar not named by any proposal."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Record first-quarter revenue of $13.9 billion",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same fact/value as the already-tested total operating revenue target (P006), only a rounded headline restatement; no real scope/period/measurement difference, so it is the same fact tested again, not a fresh one."
+    },
+    {
+      "quote": "First-quarter GAAP net loss of $382 million, or ($0.58) per diluted share",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "The total-loss portion duplicates P008; the per-share portion is a genuinely fresh per-X fact but is captured instead via the cleaner statement-of-operations quote (see addition), so this bullet is not separately added."
+    },
+    {
+      "quote": "Excluding net special items1, first-quarter net loss of $267 million, or ($0.40) per diluted share",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "The total-loss portion duplicates P001; the per-share portion is captured instead via the cleaner reconciliation-table quote (see addition), so this bullet is not separately added."
+    },
+    {
+      "quote": "the company finished the quarter with $10.8 billion in liquidity and more than $27 billion in unencumbered assets and first-lien borrowing capacity",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Additional lawful point/floor facts exist here, but point and floor number-shape coverage is already supplied by other selected rows in this event; representative sampling does not require every eligible line."
+    },
+    {
+      "quote": "Available seat miles (ASMs) Up 4.0% to 6.0%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Another guidance range fact; range/floor/ceiling and measurement-wording coverage from this event is already supplied by the selected EPS guidance rows, so this would be a redundant addition rather than a repair of a gap."
+    },
+    {
+      "quote": "CASM excluding net special items, fuel and profit sharing4 Up 2.0% to 4.0%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A guidance-side counterpart to the already-selected actual CASM-excluding measure; redundant for measurement_wording/range coverage from this single event."
+    },
+    {
+      "quote": "Other expense, net (93) (44) nm (1)",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Considered as a possible lawful_abstention_control: the source marks its percent-change as 'nm.' Rejected because the underlying level values are clearly stated and resolvable; only a derived comparison figure is flagged, which does not meet the bar for a genuine unresolved candidate fact."
+    },
+    {
+      "quote": "the midpoint of the full-year guidance is expected to be approximately flat to 2025",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A qualitative gloss entangled with the same guidance concept already captured by the selected FY adjusted-EPS range row; adding it separately would risk re-testing the same guidance fact under a shifted framing rather than supplying a genuinely different fact."
+    },
+    {
+      "quote": "the loss of key personnel whom we depend on to operate our business, or the inability to attract, develop and retain additional qualified personnel could adversely affect our business",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same negative_control category (generic risk boilerplate) as the litigation clause already added; one representative exemplar from this event is sufficient, further identical-category additions would be padding."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No ambiguous-menu (T1-05/FS-15 dual-kind) instance was found in this event.",
+      "why": "Every geography and product slice actually exercised in the text (domestic, Pacific, Atlantic, mainline, regional) maps cleanly to a single kind; this event supplies no fresh example for the ambiguous_menus tag, which must come from other events in the 36-event set."
+    },
+    {
+      "what": "No corrections/amendments (OD-14) instance was found in this event.",
+      "why": "The only adjustment-like language (the footnote describing components of the 2025 mainline operating special item) describes the makeup of a stated special charge, not a value correction or amendment with no business change; it does not meet OD-14's bar."
+    },
+    {
+      "what": "No expectation-routing or favourable/unfavourable-direction (surprise-vs-consensus) instance was found in this event.",
+      "why": "The release never mentions consensus, analyst estimates, or Street expectations -- only guidance and prior-year/sequential comparisons -- so this event cannot supply fresh coverage for those two tags."
+    },
+    {
+      "what": "No high-confidence lawful_abstention_control candidate was identified in this event.",
+      "why": "The one candidate considered (an 'nm' percent-change flag on a stated expense line) did not meet the bar for a genuinely unresolved candidate fact, so only one negative_control was added from this event; abstention-control coverage must rely on other events."
+    }
+  ],
+  "blocked": null
+}
+```

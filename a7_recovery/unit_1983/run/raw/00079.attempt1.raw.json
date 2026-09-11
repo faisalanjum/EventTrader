@@ -1,0 +1,51 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "fuel_cost_per_gallon",
+        "driver_state": "reported",
+        "level_low": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      },
+      "per_x": "gallon"
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "fuel_cost_per_gallon",
+        "driver_state": "missed",
+        "level_low": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": 2.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_high": {"value": 2.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_shape_hint": "point",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "unfavorable",
+          "basis": "metric_meaning",
+          "evidence": "Fuel cost per gallon is a cost input; a delivered value above the guided level increases expense and is adverse to profitability, with no mainstream counter-story",
+          "sentence": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40"
+        },
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      },
+      "per_x": "gallon"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

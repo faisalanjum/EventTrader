@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales",
+        "driver_state": "reported",
+        "slice_parts": ["unknown:group occasions"],
+        "level_high": {"value": 3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "ceiling",
+        "level_unit": "percent",
+        "time_type": "instant"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

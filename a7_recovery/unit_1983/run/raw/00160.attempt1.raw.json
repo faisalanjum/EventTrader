@@ -1,0 +1,19 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "digital_mix",
+        "driver_state": "reported",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

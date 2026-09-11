@@ -1,0 +1,284 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": -0.58, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": -0.58, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": -0.72, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": -0.72, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Basic and diluted"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real fact: a reported per-share loss with its prior-year value stated beside it, so the row carries a genuine metric state."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "earnings_per_share_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": -0.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 1.10, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["Adjusted", "diluted"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real fact: the company's own full-year 2026 adjusted per-share range is a forward outlook, i.e. guidance."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "jet_fuel_expense_guidance",
+              "driver_state": "unknown",
+              "change_value": {"value": 4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real fact: a company-stated forward full-year expense increase tied to higher jet fuel prices, carried on the guidance lane because it is part of the company's own 2026 outlook sentence."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_unit_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_unit_revenue",
+              "driver_state": "increased",
+              "level_unit": "percent_sequential",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as real facts: the row states one numeric year-over-year unit-revenue rise and a separate numberless sequential (month-by-month) improvement, which split into one fact per growth basis."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "passenger_revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 18.57, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 18.57, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 17.41, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_high": {"value": 17.41, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:domesticdestination"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            },
+            "per_x": "available_seat_mile"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real fact: the labeled domestic passenger unit-revenue level is stated with its prior-year value, on the domestic geography slice."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "full_time_equivalent_employees",
+              "driver_state": "increased",
+              "level_low": {"value": 32500, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 32500, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "comparison_low": {"value": 30700, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_high": {"value": 30700, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["unknown:regional"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a real fact: the labeled regional headcount level at period end is stated with its prior-year value, though the regional part's slice kind stays honestly unresolved."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic risk-factor boilerplate: a hypothetical that the company may be party to litigation in the normal course of business, with no stated driver state, change, guidance or action, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed negative_control and settled as a control: it is textbook generic risk boilerplate and correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "Loss per common share: Basic and diluted",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The loss narrowed from (0.72) to (0.58), so on the signed axis the state is increased even though the wording is all loss language."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "Adjusted earnings (loss) per diluted share",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The row states a bare guide with no raise/lower/reaffirm wording of its own, so the movement state is recorded as unknown rather than inferred from the separate flat-to-2025 sentence."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two live ambiguities: the clause reads as a forward outlook only from its enclosing sentence (guidance vs metric change), and the floor sense of \"greater than\" cannot be carried on change_value, so it survives only in the quote."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "point_range_floor_ceiling"],
+      "reference_name": "Total unit revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "A prior-year and a sequential framing are co-stated in one sentence, so this numeric fact keeps prior_year as the single primary baseline and the sequential framing rides the split sibling fact."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["sequential_comparison"],
+      "reference_name": "improving sequentially each month in the quarter",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The sequential improvement is month-over-month while the only resolvable period is the quarter, so the basis unit is percent_sequential on a quarter period and no baseline enum is stored."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "Passenger revenue per ASM (cents)",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated 6.6% is derivable from the two closed point values, so change_value is left null and the growth basis is not asserted."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "Full-time equivalent employees at end of period",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The footnoted \"Regional\" population is only wholly-owned regional subsidiaries, which is narrower than the menu's product:regionalcarrier and plausible as segment or entity_ownership, so the part is coined unknown:regional rather than guessed."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [],
+  "open_issues": [
+    {
+      "what": "Rows 5 and 6 quote a whole table block (revenue passenger miles, available seat miles, load factor, passenger revenue, yield for Domestic; Mainline headcount) while the row's own label names one item.",
+      "why": "I settled only the labeled item to avoid emitting the same fact twice if sibling rows own those lines; if a row is meant to own its entire quoted block, the remaining lines are unsettled facts."
+    },
+    {
+      "what": "Row 3's \"greater than\" cannot be represented on the change slot.",
+      "why": "Shape hints exist only for level and comparison groups, so a floor-shaped change is stored as a plain change value and the floor sense survives only in the quote."
+    },
+    {
+      "what": "Row 6's regional slice kind is unresolved (unknown:regional).",
+      "why": "The menu's product:regionalcarrier covers a broader population than the footnoted wholly-owned regional subsidiaries, and segment vs entity_ownership both remain reasonable, so any kind choice would be a guess."
+    }
+  ]
+}
+```

@@ -1,0 +1,7 @@
+attempt	codex_lifecycle2002_qualified
+payload	../../unit_1997/ledger/../../unit_2002/ledger/check_lifecycle_2002.py
+map	../unit_1997/../unit_2002/map_lifecycle_2002.tsv
+wrapper_pid	3511345
+payload_pid	3511350
+started_utc	2026-09-10T21:37:38Z
+state	finished exit 0

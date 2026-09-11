@@ -1,0 +1,45 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#004",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "winter_storms",
+          "driver_state": "occurred",
+          "level_low": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_high": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "measurement_raw_spans": ["estimated"],
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#004/L1",
+      "exact_match": false,
+      "why": "L1 stores -320 million as change_value/change_unit, but this is the stated magnitude of a discrete one-off event with no prior baseline to compare against, so it belongs in level_low/level_high (with a point shape and level_unit), not change_value."
+    },
+    {
+      "lane_id": "0000006201-26-000031#004/L2",
+      "exact_match": true,
+      "why": "L2 matches exactly: action_event/winter_storms/occurred, level_low=level_high={-320, 1e6, 'million'}, level_shape_hint point, level_unit m_usd, measurement_raw_spans ['estimated'], fiscal_quarter 1, fiscal_year 2026, time_type duration."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the $320 million winter-storm figure belongs in level_low/level_high (magnitude of the one-off event) or change_value (a stated delta).",
+      "why": "The rules define change_value as source-stated deltas typically tied to a metric's movement versus a prior baseline; here there is no such comparison stated — the number simply sizes the discrete incident's revenue effect — so level fields are the better fit, but the rules do not spell out this level-vs-change distinction explicitly for action_event facts."
+    }
+  ]
+}
+```

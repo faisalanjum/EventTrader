@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "credit_facility_interest_rate_margin",
+        "driver_state": "reported",
+        "level_low": {"value": 1.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 2.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent",
+        "slice_parts": [
+          "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+          "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate"
+        ]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

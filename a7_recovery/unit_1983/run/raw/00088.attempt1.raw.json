@@ -1,0 +1,29 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_income",
+        "driver_state": "increased",
+        "level_low": {"value": 227, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_high": {"value": 227, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -149, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_high": {"value": -149, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

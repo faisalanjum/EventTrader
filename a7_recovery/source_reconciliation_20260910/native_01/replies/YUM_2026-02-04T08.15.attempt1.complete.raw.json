@@ -1,0 +1,232 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "verdicts": [
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P000",
+      "decision": "exclude",
+      "why": "Already tested target; excluded from this fresh sample per task rules, not a claim about correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P001",
+      "decision": "exclude",
+      "why": "Already tested target; excluded from this fresh sample per task rules, not a claim about correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P002",
+      "decision": "exclude",
+      "why": "Already tested target; excluded from this fresh sample per task rules, not a claim about correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P003",
+      "decision": "exclude",
+      "why": "Already tested target; excluded from this fresh sample per task rules, not a claim about correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P004",
+      "decision": "exclude",
+      "why": "Already tested target; excluded from this fresh sample per task rules, not a claim about correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "YUM_2026-02-04T08.15#P005",
+      "decision": "exclude",
+      "why": "Already tested target; excluded from this fresh sample per task rules, not a claim about correctness or location.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Taco Bell again gained market share, outperforming the QSR industry with exceptional 7% same-store sales growth",
+        "raw_label_or_claim": "7% same-store sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "Fresh, source-stated FY2025 Taco Bell same-store-sales growth point value; no proposal names this target. Segment-scoped (Taco Bell) exercises the slice/kind test; bare annual-period growth exercises OD-11's default-to-YoY rule."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "KFC delivered record-breaking unit development while hitting an incredible milestone in opening its 30,000th international restaurant.",
+        "raw_label_or_claim": "30,000th international restaurant",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "Fresh cumulative-count milestone fact, KFC/international-scoped; no proposal names it. Point number shape; segment/geography population qualifier exercises the slice rule."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+        "raw_label_or_claim": "Taco Bell",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "Taco Bell-scoped divisional core operating profit growth (10%, FY, point shape, default-YoY basis, segment slice). Distinct scope from the co-stated KFC value below; the two rows share this one contiguous quote because grammar forces it, but the labels ('Taco Bell' vs 'KFC') distinguish two different segment facts per the owner's split rule."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+        "raw_label_or_claim": "KFC",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "KFC-scoped sibling of the Taco Bell fact above; same identical-value figure but a different segment scope, so it is a separate fact under the owner's real-scope-difference rule, not a duplicate."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "digital mix approaching 60% and digital sales growing 20% year over year",
+        "raw_label_or_claim": "digital mix approaching 60%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "FY2025 digital-mix percentage fact (hedge wording 'approaching' exercises the number-shape rule); distinct measurement from the co-stated digital-sales-growth fact below, so split into its own row."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "digital mix approaching 60% and digital sales growing 20% year over year",
+        "raw_label_or_claim": "digital sales growing 20% year over year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "FY2025 digital-sales YoY growth fact, explicit 'year over year' wording exercises OD-11; different measurement from the digital-mix fact sharing the same forced quote."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review",
+        "raw_label_or_claim": "40 million of special expenses",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A stated special-expense charge (Q4), which OD-12 classifies as a positive value (charge/provision is positive); point shape. No proposal names this figure."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "for the year x special gna was in line with our guidance up five percent year over year at 1.15 billion dollars",
+        "raw_label_or_claim": "x special gna was in line with our guidance",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "expectation_routing", "favourable_unfavourable_direction", "sequential_comparison", "point_range_floor_ceiling"]
+      },
+      "why": "FY 'X Special' G&A figure ($1.15B, +5% YoY) explicitly compared to the company's own prior guidance and stated as 'in line' — exercises NAME-14/FS-25 measurement token, OD-21 actual-vs-guidance routing, the in_line surprise-state rule, OD-11 YoY basis, and the point number shape, all in one indivisible clause."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Excluding the Pizza Hut division, Core Operating Profit grew 10%.",
+        "raw_label_or_claim": "Excluding the Pizza Hut division",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "FY core operating profit growth for the consolidated business minus one named division — a qualified (non-consolidated) population under OD-17, distinct in scope from the per-segment 10% figures above and from the whole-company 7% figure; bare annual growth exercises OD-11's YoY default."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+        "raw_label_or_claim": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling", "portion_versus_whole", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "Forward guidance for a named quarter/division stating a decline ('down' — a signed direction under OD-12), a qualified Pizza-Hut/Q1 population (OD-17), and a sub-annual bare-growth figure defaulting to YoY under OD-11. No proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "In the first half, in the US, we expect approximately 250 targeted closures of underperforming units tied to the Hut Forward program, which will result in a decline in global Pizza Hut units in the first half.",
+        "raw_label_or_claim": "approximately 250 targeted closures of underperforming units",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole", "slices_and_unknown_axes"]
+      },
+      "why": "A specific, source-stated forward action (store closures) scoped to the US portion of the global Pizza Hut estate in H1 — a qualified population under OD-17 and a segment/geography slice; point count value. Not covered by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We would like to make you aware that our first quarter earnings will be released on April 29th with a conference call on the same day.",
+        "raw_label_or_claim": "our first quarter earnings will be released on April 29th",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A bare administrative/scheduling mention carrying no driver state, change, surprise, guidance, or action content — fails the DU-03/Rule-1 fact gate, so the correct reader behavior is omission (negative control), not abstention."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Please note that during today's call, system sales and operating profit growth will exclude the impact of foreign currency.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Generic call-mechanics/measurement-methodology disclaimer, not a stated fact about a specific driver; a clearer negative-control candidate (the earnings-date announcement) was selected instead so as not to add two overlapping controls from the same event."
+    },
+    {
+      "quote": "we expect to hold our net leverage at approximately four times moving forward.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real, lawfully resolvable point fact, but it exercises no hard class beyond point/range shape, which the sample already covers extensively; left out to keep the sample representative rather than exhaustive."
+    },
+    {
+      "quote": "Our net leverage ended the year at approximately four times.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real point fact (FY-end leverage level); not selected for the same budget reason as the forward-leverage statement immediately following it."
+    },
+    {
+      "quote": "When combining dividends and share buybacks, we returned approximately $1.35 billion to shareholders in 2025.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real point fact (capital return), lawful but redundant with hard-class coverage already achieved by selected rows; omitted to avoid padding the representative sample."
+    },
+    {
+      "quote": "Taco Bell US delivered 25.7% restaurant-level margins, a 50 basis point expansion year over year on 4% same-store sales growth at company-operated restaurants.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A rich, lawful, multi-tag-eligible fact (point margin, YoY bps expansion, company-operated-restaurant portion), but the representative budget for this event was already filled with comparable diversity; noted here as a fact that was considered but not selected."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The sentence 'Our fourth quarter results reflect the comparison against an extra week in 2024 for business units that report on a period calendar basis.' is not clearly settled as real_item (a fiscal-calendar business fact — the menu even carries a matching unknown:yum:FiscalPeriodAdjustmentsAxis__a53rdweekimpact machine axis) or negative_control (a procedural reporting-calendar disclaimer).",
+      "why": "The owner rulings and fact gate do not give an exact test for classifying a call-wide fiscal-period-adjustment disclaimer versus a stated business fact; per Rule 3 this fuzzy boundary is left as an unresolved exhibit rather than guessed into either kind, and no row was added for it."
+    },
+    {
+      "what": "This event's prepared remarks and Q&A supply no genuine candidate for the ambiguous_menus tag (no prose part is plausible under two or more menu slice kinds) and no candidate for the corrections_and_amendments tag (no amendment/restatement/correction language appears).",
+      "why": "Per the representative, not-exhaustive scope, a shortage in a single event is a lawful result and is not padded; these two tags are expected to be met from other events in the 36-event set."
+    }
+  ],
+  "blocked": null
+}
+```

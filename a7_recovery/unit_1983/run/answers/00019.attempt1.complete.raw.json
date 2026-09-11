@@ -1,0 +1,28 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "pretax_income",
+        "driver_state": "increased",
+        "level_low": {"value": -327, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_high": {"value": -327, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -530, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_high": {"value": -530, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "measurement_raw_spans": ["excluding net special items"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

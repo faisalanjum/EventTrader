@@ -1,0 +1,28 @@
+{
+ "label": "sokc-000/b1",
+ "artifact": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/raw/sokc-000_b1.attempt1.proved.json",
+ "gated_traceback_tail": [
+  "    K.RT.write_new(path, text)",
+  "  File \"/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/owner/a4_review_composite.py\", line 59, in _existing",
+  "    raise ValueError('completed evidence is missing or differs: %s' % path)",
+  "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/raw/sokc-000_b1.attempt1.proved.json"
+ ],
+ "gated_artifact_recreated_by_the_owner": false,
+ "gated_outcome": "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/raw/sokc-000_b1.attempt1.proved.json",
+ "gated_files_differing_after_restore": [],
+ "ungated_traceback_tail": [
+  "    K.RT.write_new(os.path.join(out_dir, FINALIZATION_NAME),",
+  "  File \"/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/raw_transport.py\", line 1555, in write_new",
+  "    raise ValueError(\"%s already exists; a published plan is never \"",
+  "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/finalization.json already exists; a published plan is never overwritten"
+ ],
+ "ungated_artifact_recreated_by_the_owner": true,
+ "ungated_recreated_bytes_equal_original": true,
+ "ungated_outcome": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/finalization.json already exists; a published plan is never overwritten",
+ "ungated_files_differing_after_restore": [],
+ "positive_control_after": {
+  "valid": 62,
+  "invalid_response": 4
+ },
+ "run_unchanged_at_end": true
+}

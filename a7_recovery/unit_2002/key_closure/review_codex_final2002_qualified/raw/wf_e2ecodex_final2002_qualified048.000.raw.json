@@ -1,0 +1,312 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "operating_margin",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "adjusted"
+       ]
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "operating_margin_surprise",
+       "driver_state": "beat",
+       "level_low": {
+        "value": 5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": true,
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "adjusted"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "gross_profit_margin",
+       "driver_state": "unknown",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "gross_profit_margin_surprise",
+       "driver_state": "beat",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": true,
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sga_expense_rate",
+       "driver_state": "unknown",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "sga_expense_rate_surprise",
+       "driver_state": "beat",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": true,
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "comparable_sales",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": -0.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": -0.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "comparable_sales_surprise",
+       "driver_state": "in_line",
+       "level_low": {
+        "value": -0.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": -0.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": false,
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 1.1,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "floor",
+       "level_unit": "m_usd",
+       "fiscal_year": 2026,
+       "time_type": "duration",
+       "slice_parts": [
+        "unknown:best buy business"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 1.2,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_high": {
+        "value": 1.2,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "change_value": {
+        "value": 0.5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration",
+       "slice_parts": [
+        "unknown:international"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 6,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Standard forward-looking-statement safe-harbour and generic risk language; it names no driver, no state, no change, no guidance value and no action, so the gate drops it as boilerplate."
+     }
+    ],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 7,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "revenue_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 41.2,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_high": {
+        "value": 42.1,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "range",
+       "level_unit": "m_usd",
+       "company_confirmed": true,
+       "fiscal_year": 2027,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 8,
+   "settled": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "A real-sounding below-expectations claim that cannot be lawfully resolved: it names no company metric value or period-bearing home fact, and 'expectations ... from an industry perspective' is neither analyst consensus nor the company's own prior guide, so no surprise baseline can be stated without guessing."
+     }
+    ],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

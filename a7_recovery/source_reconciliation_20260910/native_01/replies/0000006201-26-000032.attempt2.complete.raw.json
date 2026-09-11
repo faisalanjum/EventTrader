@@ -1,0 +1,174 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "verdicts": [
+    {
+      "proposal_id": "0000006201-26-000032#P000",
+      "decision": "exclude",
+      "why": "This target (pre-tax loss GAAP figures) has already been tested under a prior draft; it is out of scope for this fresh sample by the task's independence rule. No claim is made about whether its location or classification was correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P001",
+      "decision": "exclude",
+      "why": "This target (total CASM) has already been tested under a prior draft; it is out of scope for this fresh sample. No claim is made about whether its location or classification was correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P002",
+      "decision": "exclude",
+      "why": "This target (total operating revenues) has already been tested under a prior draft; it is out of scope for this fresh sample. No claim is made about whether its location or classification was correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P003",
+      "decision": "exclude",
+      "why": "This target (financing-intent statement) has already been tested under a prior draft; it is out of scope for this fresh sample. No claim is made about whether its location or classification was correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P004",
+      "decision": "exclude",
+      "why": "This target (covenant compliance statement) has already been tested under a prior draft; it is out of scope for this fresh sample. No claim is made about whether its location or classification was correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P005",
+      "decision": "exclude",
+      "why": "This target (net loss, sharing a quote with P000 but naming a different label) has already been tested under a prior draft; it is out of scope for this fresh sample. No claim is made about whether its location or classification was correct.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": 1,
+        "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 9.0% increase in cargo ton miles and a 3.6% increase in cargo yield.",
+        "raw_label_or_claim": "Cargo revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A real, source-stated point fact (cargo revenue) with a bare YoY percent change on a dated quarterly period, defaulting to the year-over-year growth basis (OD-11). Not named by any proposal. This exact sentence recurs verbatim later under 'AAG's Results of Operations'; per the first-complete-quote/fuse rule the first occurrence (in the Revenue paragraph) is bound, so occurrence_in_part=1."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "passenger revenue per available seat mile (PRASM) increasing 6.5% compared to the first quarter of 2025",
+        "raw_label_or_claim": "passenger revenue per available seat mile (PRASM)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "PRASM is a stated per-available-seat-mile denominator (NAME-13): a genuinely different Driver identity from total passenger revenue, so it is a fresh fact distinct from any total-revenue proposal. Bare YoY percent change on a quarterly period exercises the OD-11 growth-basis default. Unique occurrence of this exact phrase in mdna."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+        "raw_label_or_claim": "CASM excluding net special items, fuel and profit sharing",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      },
+      "why": "A distinct measurement-adjusted version of CASM (excluding net special items, fuel, and profit sharing) with its own point values (15.29 vs 14.54), different from the plain CASM figure already tested by a proposal. The 'excluding' qualifier belongs in fact_scope.measurement (NAME-14/FS-25/OD-9), and the bare YoY percent exercises OD-11. Unique occurrence in mdna."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In the first quarter of 2026, we recorded an income tax benefit of $94 million.",
+        "raw_label_or_claim": "income tax benefit of $94 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "A real, source-stated point fact (AAG-level income tax benefit) not named by any proposal. A 'benefit' is a signed-negative value under OD-12 (benefit/credit/release = negative), so it exercises the sign rule. Unique occurrence in mdna (American's own $64 million benefit is a separate entity-scoped figure, considered separately below)."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Excluding the effects of pre-tax net special items, pre-tax loss was $327 million and $530 million in the first quarters of 2026 and 2025, respectively.",
+        "raw_label_or_claim": "Excluding the effects of pre-tax net special items, pre-tax loss",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"]
+      },
+      "why": "A measurement-adjusted (non-GAAP, excluding net special items) pre-tax loss figure with its own values ($327M/$530M), genuinely different from the GAAP pre-tax loss figure already tested by a proposal (different measurement per NAME-14/FS-25/OD-9). A loss is signed-negative under OD-12. Unique occurrence in mdna."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Market prices for aircraft fuel have fluctuated substantially over the first quarter of 2026 and prices continue to be highly volatile, with market spot prices ranging from a low of approximately $1.86 per gallon to a high of approximately $4.75 per gallon during the first quarter of 2026.",
+        "raw_label_or_claim": "market spot prices ranging from a low of approximately $1.86 per gallon to a high of approximately $4.75 per gallon during the first quarter of 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A real, specific, source-stated closed range (explicit low and high bounds) exercising the FINAL_DESIGN §7.1 number-shape rule; not named by any proposal. Unique occurrence in mdna."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": 1,
+        "quote": "a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025",
+        "raw_label_or_claim": "mainline full-time equivalent employees",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "sequential_comparison"]
+      },
+      "why": "'Mainline' full-time equivalent employees is a stated population qualifier distinct from the consolidated total FTE count reported elsewhere in the same table (OD-17 portion-vs-whole), and is not the bare consolidated whole. The bare percent increase on a dated quarterly period defaults to YoY (OD-11). This exact clause recurs verbatim in American's parallel paragraph; per the fuse/first-complete-quote rule the first occurrence (under AAG's Results of Operations) is bound, occurrence_in_part=1."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "Additional risks and uncertainties not currently known to us, or that we currently deem to be immaterial, could also materially adversely affect our business, financial condition or future results.",
+        "raw_label_or_claim": "Additional risks and uncertainties not currently known to us",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical risk boilerplate naming no specific current source-flagged adverse threat; fails the DU-03/Rule-1 fact gate, so correct reader behavior is omission (negative_control), not abstention. Unique occurrence in the risk part."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "In the first quarter of 2026, American recorded an income tax benefit of $64 million.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A distinct entity-scoped (American, not AAG) variant of the income-tax-benefit fact already added for AAG. Adding both would over-sample one fact family in a single event; the representative-not-exhaustive rule bars adding a row merely because another lawful fact exists once coverage is already represented."
+    },
+    {
+      "quote": "Other operating revenue increased $232 million, or 23.9%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with our loyalty program.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "The loyalty-program clause is narrative attribution for the 'other operating revenue' total and carries no separately stated quantified value of its own; treating it as an independent slice row would not repair any declared coverage gap for this event, so it is left unselected rather than added merely because it is a lawful mention."
+    },
+    {
+      "quote": "repaid in full $629 million of the outstanding principal amount of the senior short-term term loan facility;",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "One of seven bulleted financing-transaction facts in the Liquidity section. Sampling further from this single list would over-represent one paragraph relative to a balanced representative selection; no declared coverage gap requires it."
+    },
+    {
+      "quote": "Worldwide macroeconomic, political and military events, including war, terrorist activity, and conflict in the Middle East (particularly if it intensifies or is prolonged) and in Ukraine, have contributed, and are likely to continue to contribute, to oil and natural gas price volatility.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A second generic macro-risk boilerplate passage of the same negative_control kind already represented by the risk-section exclusion; adding it would duplicate the same lawful control class in one event rather than repair a coverage gap."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether AAG (parent) and American (wholly-owned subsidiary co-registrant) count as the same 'scope' for the within-event fuse-before-collision rule, or as distinct scopes requiring separate rows even when the stated values are identical.",
+      "why": "Rule 4 speaks of 'the same full series, period, scope, measurement, state' but the quoted authority never states whether the reporting entity (AAG vs American) is itself a scope axis. I treated identical-value AAG/American restatements as one fused fact (first occurrence kept) and differing-value AAG/American figures (e.g. the two income-tax-benefit amounts) as separate facts by virtue of their differing values, but this is my own judgment call, not one the quoted text settles."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,98 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "segment_profit_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["segment:longhornsteakhousesegment"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_divestiture",
+              "driver_state": "occurred",
+              "level_low": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "instant",
+              "slice_parts": ["segment:olivegardensegment", "geography:canada"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic litigation risk boilerplate (\"litigation ... may adversely affect our business, financial condition and results of operations\") stating no specific driver state, change, or event — it matches the rule's own boilerplate example and fails the fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "debt_to_ebitdar_ratio",
+              "driver_state": "reported",
+              "level_low": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "x",
+              "period_start_date": "2025-05-25",
+              "period_end_date": "2025-05-25",
+              "time_type": "instant",
+              "measurement_raw_spans": ["adjusted"],
+              "slice_parts": []
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The four items describe unrelated matters — LongHorn Steakhouse's segment profit margin change, a discrete divestiture of Olive Garden's eight Canadian restaurants to Recipe Unlimited, generic litigation risk boilerplate that yields no fact at all, and the whole-company adjusted debt-to-EBITDAR ratio — so they are distinct facts (one of which is not a fact), never one underlying fact."
+}
+```

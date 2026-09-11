@@ -1,0 +1,13 @@
+{
+ "kind": "LIVE",
+ "model_alias": "opus",
+ "runtime_model_id": "claude-opus-5",
+ "workflow_row_model": "claude-opus-5[1m]",
+ "effort": "high",
+ "agentType": "lean-probe",
+ "disallowedTools": [
+  "Read"
+ ],
+ "max_output_tokens": "128000",
+ "transport": "Claude Code Workflow agent(), subscription"
+}

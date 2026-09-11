@@ -1,0 +1,18 @@
+{
+ "ordinal": 24,
+ "attempt": 1,
+ "source_id": "0001171843-26-001288",
+ "run_id": "wf_95d2b09a-b07",
+ "agent_id": "a2b427e151939ad92",
+ "transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_95d2b09a-b07/agent-a2b427e151939ad92.jsonl",
+ "transcript_exists": true,
+ "transcript_sha256": "61ac85a74f810e2387d10329749f0242cdb9d4bb80b59b1cb14515b76756850a",
+ "answer_chars": 13382,
+ "answer_sha256": "41e4982be3f4ccb591987b201b904ebc5324db680c164fa99cfa554bd9130173",
+ "raw": "saved",
+ "raw_name": "0001171843-26-001288.attempt1.complete.raw.json",
+ "raw_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/real_source_review/replies/0001171843-26-001288.attempt1.complete.raw.json",
+ "raw_sha256": "41e4982be3f4ccb591987b201b904ebc5324db680c164fa99cfa554bd9130173",
+ "json_valid": false,
+ "json_error": "Expecting value: line 1 column 1 (char 0)"
+}

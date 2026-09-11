@@ -1,0 +1,62 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "MCD_2026-02-11T16.30",
+ "ordinal_one_based": 30,
+ "ordinal_receipt": 29,
+ "attempt_number": 1,
+ "run_id": "wf_70cac65e-c8e",
+ "agent_id": "a144160a61077c891",
+ "raw_sha256": "84c7eb30a45adb4141974463a9686e3f52a14713786e8ec72e8df3c8aaea314e",
+ "prompt_sha256": "d324e168c39943583b9e412d86c0a7d2facf1c6097e750435c152ce05ab3762d",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 11,
+  "additions": 9,
+  "exclusions_considered": 6,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"Whether 'above our expectations' / 'in line with our expectations' phrasing -- with no explicit numeric consensus or named guidance value stated alongside it -- is sufficient on its own to l",
+  "{'what': 'Whether non-financial promotional/operational statistics (e.g., merchandise units sold, campaign market/restaurant reach) qualify as real driver facts under the DU-03 gate, or are out-of-sco"
+ ],
+ "locator": {
+  "additions": {
+   "located": 9,
+   "not_located": [],
+   "total_with_quote": 9
+  },
+  "exclusions_considered": {
+   "located": 6,
+   "not_located": [],
+   "total_with_quote": 6
+  }
+ },
+ "receipt_attempts": 31,
+ "receipt_missing": 6,
+ "receipt_other_problems": [
+  "the run accepted 30 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 29,
+  "attempt": 1,
+  "source_id": "MCD_2026-02-11T16.30",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_70cac65e-c8e.json",
+  "agent_id": "a144160a61077c891",
+  "raw_name": "MCD_2026-02-11T16.30.attempt1.complete.raw.json"
+ }
+}

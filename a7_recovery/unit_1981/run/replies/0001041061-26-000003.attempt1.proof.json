@@ -1,0 +1,64 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0001041061-26-000003",
+ "ordinal_one_based": 15,
+ "ordinal_receipt": 14,
+ "attempt_number": 1,
+ "run_id": "wf_de9d7068-8a1",
+ "agent_id": "af9964cf3b43e1143",
+ "raw_sha256": "330cec1fedccaef08031daa88ad2a13c7878cc333a8196a1523632131d9cabf7",
+ "prompt_sha256": "26b779342f4220064117ff0f7b56381d63802e019eeeb53265ccdabd6a835ed3",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 5,
+  "additions": 10,
+  "exclusions_considered": 8,
+  "open_issues": 4
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"No expectation_routing (actual-vs-consensus, guidance-vs-consensus, or guidance-vs-prior-guidance) fact was found anywhere in this event's text.\", 'why': \"The release contains no 'consensus,",
+  "{'what': 'No fresh ambiguous_menus exemplar (T1-05/FS-15 rung-2 dual-kind case) was found in this event.', 'why': \"The company menu lists both 'geography:us' and 'segment:us,' but every in-document us",
+  "{'what': 'No fresh corrections_and_amendments (OD-14) exemplar was found beyond the already-tested rounding/presentation-basis note (proposal P004).', 'why': 'That note describes a change in numeric r",
+  "{'what': \"The 'digital mix nearly 60%' item was classified as lawful_abstention_control rather than real_item or negative_control.\", 'why': \"The quoted authority (FINAL_DESIGN section 7.1 number shape"
+ ],
+ "locator": {
+  "additions": {
+   "located": 10,
+   "not_located": [],
+   "total_with_quote": 10
+  },
+  "exclusions_considered": {
+   "located": 8,
+   "not_located": [],
+   "total_with_quote": 8
+  }
+ },
+ "receipt_attempts": 17,
+ "receipt_missing": 20,
+ "receipt_other_problems": [
+  "the run accepted 16 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 14,
+  "attempt": 1,
+  "source_id": "0001041061-26-000003",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_de9d7068-8a1.json",
+  "agent_id": "af9964cf3b43e1143",
+  "raw_name": "0001041061-26-000003.attempt1.complete.raw.json"
+ }
+}

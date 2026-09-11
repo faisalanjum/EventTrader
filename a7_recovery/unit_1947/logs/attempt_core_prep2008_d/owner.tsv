@@ -1,0 +1,7 @@
+attempt	core_prep2008_d
+payload	../../unit_2008/ledger/prepare_2008.py
+map	../unit_2008/map_review_2008.tsv
+wrapper_pid	3836177
+payload_pid	3836181
+started_utc	2026-09-11T01:17:24Z
+state	finished exit 0

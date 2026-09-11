@@ -1,0 +1,28 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "store_count",
+        "driver_state": "reported",
+        "level_low": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "period_start_date": "2025-11-01",
+        "period_end_date": "2025-11-01",
+        "slice_parts": [
+          "geography:gb",
+          "geography:ie",
+          "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"
+        ]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

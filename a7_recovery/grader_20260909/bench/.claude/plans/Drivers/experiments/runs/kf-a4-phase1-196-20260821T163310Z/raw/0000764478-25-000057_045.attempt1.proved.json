@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "0000764478-25-000057#045",
+  "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "decreased",
+          "fiscal_quarter": 3,
+          "fiscal_year": 2026,
+          "period_end_date": "2025-11-01",
+          "time_type": "duration",
+          "measurement_raw_spans": ["Diluted"]
+        },
+        "per_x": "share"
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000764478-25-000057#045/L1",
+      "exact_match": false,
+      "why": "L1 matches driver_name (earnings_per_share), driver_state (decreased), per_x (share), fiscal_quarter/year, time_type and measurement_raw_spans, but omits period_end_date; the settled reply adds 2025-11-01 because the same MD&A section's 'Three Months Ended' table ties fiscal Q3 2026 unambiguously to that exact date, which Rule 6 allows to coexist with fiscal framing."
+    },
+    {
+      "lane_id": "0000764478-25-000057#045/L2",
+      "exact_match": true,
+      "why": "L2's item (driver_name, driver_state, fiscal_quarter, fiscal_year, period_end_date=2025-11-01, time_type, measurement_raw_spans) and per_x match the settled reply field-for-field."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether to emit period_end_date (2025-11-01) for this fact.",
+      "why": "The quoted sentence itself only says 'third quarter of fiscal 2026' with no date; the exact date comes from the adjacent 'Selected consolidated financial data' table in the same document. Rule 6 permits exact dates to coexist with fiscal framing when the source states them, and this document unambiguously ties Q3 FY2026 to November 1, 2025, so the date was included — but a stricter reading limited to the quoted sentence alone would omit it, as L1 did."
+    }
+  ]
+}
+```

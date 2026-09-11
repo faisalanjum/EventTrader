@@ -1,0 +1,240 @@
+{
+ "a4_lock_receipt_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+ "a4_lock_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+ "activated": false,
+ "arm_of_lane": {
+  "L1": {
+   "arm": "P1",
+   "effort": "high",
+   "role": "sonnet_run1",
+   "tier": "sonnet"
+  },
+  "L2": {
+   "arm": "P2",
+   "effort": "high",
+   "role": "sonnet_run2",
+   "tier": "sonnet"
+  }
+ },
+ "armed_grader_calls": 0,
+ "budget": {
+  "a3_measured_baseline": 382,
+  "completed_actual": 515,
+  "global_abort_ceiling": 6000,
+  "planned_producer_primary": 0,
+  "producer_primary_after": 515,
+  "provenance": [
+   {
+    "calls": 515,
+    "finalization_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+    "receipt_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+    "run_dir": "wf_TEST_signed_codex_signed2005_a",
+    "stage": "a4_final_key"
+   }
+  ],
+  "retry_rule": "only a model-invalid/invalid-JSON reply earns the one canonical attempt-2 subset; a valid sibling, a refusal and an integrity failure never do, and attempt 2 can never create attempt 3",
+  "rule": "every future actual call, including each retry and each grader sublaunch, is checked against the global ceiling before it is armed",
+  "under_ceiling": true
+ },
+ "code": {
+  "a1_reader": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+  "a6_launch_freeze": "f0de3ab5f5ed7472007319b1bfd20e109e4dcd3cd6e8e9140649494c26b0bf4c",
+  "a7_g1_build": "4af1c4aba5394ef745f6182e3cd7a14f87e6cd8571f2c0539eefef5a1f5c5e7c",
+  "a7_g1_complete_v2": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+  "a7_g23_build": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "a7_prepared_run": "93d93fbb2a420dd74c4144e993f10e1d8f8a24751c2f687b7379379af1dc6357",
+  "audit_worker_access": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "matcher": "bf6f0c922ef1f443fa16b01c4d80d87b445895d48b7da5fa772964de21304497",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "contract_suffix": null,
+ "corrected_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+ "database_writes": 0,
+ "executed": {
+  "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+  "run_files": 799
+ },
+ "finalizations": {
+  "primary": "2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f"
+ },
+ "initial_key_manifest": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997/source_only_key.manifest.json",
+ "initial_key_manifest_sha256": "4ec8a90ebf39c1d46b4c9b938531df0fefd1183c4a95ed9149f3b26cccd6735c",
+ "launcher_prefix": "kfields_a1_",
+ "launchers": [
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000006201-26-000031.attempt1.js",
+   "sha256": "5b17afc41b5a3faee7cc5a5bdbc2d7009f73d33b1a9f331152ddc8bd39ec7c10"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000006201-26-000032.attempt1.js",
+   "sha256": "8f2bfb3debe370f4dc42aa8cdf63cc2de1733b5450a6f542583cf0e828c87e8e"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000027904-26-000013.attempt1.js",
+   "sha256": "c8bfb87adaf828d307b6c3b990fef70a1ad032d2403182528cb821f1e9217d6b"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000027904-26-000020.attempt1.js",
+   "sha256": "012e49264820d2ec13376449b6f2af1079055600bb541665ebcad95619ffab35"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000027904-26-000022.attempt1.js",
+   "sha256": "2b9ebc40ddcfa13e27fcfdcc5a409cf3c709de01e32574b2be2a8ebac7ca72fc"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000063908-26-000032.attempt1.js",
+   "sha256": "1b5c7daf4d4c40080880e5860586bb26fb3c5b62fee2686905155337fc15cfa5"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000092380-26-000044.attempt1.js",
+   "sha256": "5fcac15d9d40474224f886ceccb53218c2e20b724900d89d0b478dab53cc8773"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000764478-25-000057.attempt1.js",
+   "sha256": "fe81a66e2648c4e27b1d25a3f759e64ab58a899a5ff22073091b8eb99f996316"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000898173-26-000006.attempt1.js",
+   "sha256": "d4742ef1c2e2a691f362fb1c8b6ea76dd231ce4b2edae6db3cb3d1260cefc758"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000940944-25-000038.attempt1.js",
+   "sha256": "680294767d9a094c75e67a6e5aacff148b566354cc3f60b68290779dff315742"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000940944-26-000005.attempt1.js",
+   "sha256": "7da8f27d5ea0f1fc8a62648e1982f99546f29f10879c7a5ec272602b46821b10"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0000940944-26-000009.attempt1.js",
+   "sha256": "d5420dfe8f0e201c3c4c73bd32f2ea5c2e67460271b3e09efcfbe5c776b8a219"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001041061-25-000109.attempt1.js",
+   "sha256": "d193ac23018fc640ff31be9c125c61938b424543b319b8386b80000ceb870276"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001041061-26-000003.attempt1.js",
+   "sha256": "dcc137012c5ae943dede836aa449c9dcf11ffe0540ad8c3d026786e76af5c5ec"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001041061-26-000084.attempt1.js",
+   "sha256": "12c1b5db6010268826c7e748d46f6bdc2f5a7910faebbc0105af8da504aa400d"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001058090-26-000007.attempt1.js",
+   "sha256": "08b839cc01b561bb6574c03496869dc2c52adb7ac19c7d71025186f4bb7b6141"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001104659-25-102611.attempt1.js",
+   "sha256": "ffb9117ea70144acbe509cec6d0add7f2278a016ea877ad5a9f0dc098ca5c174"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001104659-25-105631.attempt1.js",
+   "sha256": "64767966f1de1abe726b21639141ae8529327c0e182a2fd34ba509d3d5957c17"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001104659-25-118458.attempt1.js",
+   "sha256": "d8f3264518f6dd5ab3580218f99510cecd0b2bac768d39016912ad65b83bdc3d"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001104659-26-017090.attempt1.js",
+   "sha256": "de6312721d5da635fbf117c494e32417cdb1eda3bf124f564258d3759bf60489"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001104659-26-027061.attempt1.js",
+   "sha256": "9fc6dbd7130c758250859061c6cf9dc924b2f5a7e4bb28bbba98544d1c29aa58"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001104659-26-032757.attempt1.js",
+   "sha256": "5cf2c8e5097fb76a67707463f08262d17a989cc938e376040a4aa4b5beba2373"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_0001171843-26-001288.attempt1.js",
+   "sha256": "423e4889f28fbd58c0c6b6db13908a03fde2b6ceeeb3438133424fca38c93424"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_AAL_2026-04-23T08.30.attempt1.js",
+   "sha256": "8c284f657bdcd3f275c7c21f3b48d1a317f6c89ba9c42e390c1390a308c56dfc"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_BBY_2026-03-03T08.00.attempt1.js",
+   "sha256": "fb84456d88a801770b16e67c655333900f5ce4a78dcce1fcfc7d217bacaa2c15"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_CMG_2026-02-03T16.30.attempt1.js",
+   "sha256": "15c3dc5717eeb2481368c99d73af2a0efa9c23930a78d87c007c2bffc7dd5162"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_DAL_2026-04-08T10.00.attempt1.js",
+   "sha256": "bb6a880ee3e28483e1786d53320f87003cc1f1c303646a8f2178a976958f614f"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_DRI_2026-03-19T08.30.attempt1.js",
+   "sha256": "14b57bf940ee2fb3ad62bdad8d399659ebbe6c4d6e63f5a9dc6eb2add6e5d170"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_MCD_2026-02-11T16.30.attempt1.js",
+   "sha256": "4bb098b05c43f5683086862c4db9eddc367a6c44bf542d23eae030246b52a32a"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_ULTA_2026-03-12T16.30.attempt1.js",
+   "sha256": "ea53940b6e4c6b702a460184f5af42ee1e027b7c1ddf1a7c1b7031f1b006de21"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_YUM_2026-02-04T08.15.attempt1.js",
+   "sha256": "9af8165fa500209ed87a3fa963a6999e10cc48971c26344eaddb7022cb2dcf06"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_bzNews_42014391.attempt1.js",
+   "sha256": "ad36b27cdb3475887a6f3e414e3e3ee2bb20cf5b4ab0d2da212476268549376c"
+  },
+  {
+   "attempt": 1,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983/launch/kfields_a1_bzNews_50877032.attempt1.js",
+   "sha256": "06a7c241fb93dd6862e64c03e0ca8d45f91299c987ee53c09f5a1d1b51f9e93a"
+  }
+ ],
+ "receipt_sha256": "8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e",
+ "reused_calls": 382,
+ "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+ "schema": "a6-exp5-saved-evaluation/1",
+ "source_manifest": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/launch_kfields_drafts.manifest.json",
+ "source_manifest_sha256": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce"
+}

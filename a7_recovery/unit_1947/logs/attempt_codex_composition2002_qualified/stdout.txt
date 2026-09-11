@@ -1,0 +1,514 @@
+{
+ "test_only": true,
+ "owners": {
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/owner/a4_source_closure.py": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1997/owner/a4_source_key.py": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py": "7c5ac0ecac07b3f85f25cae9982f7921ee313405215bea42342a88def861c09e",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d"
+ },
+ "tasks": 33,
+ "rows": 191,
+ "results": [
+  {
+   "source_id": "0000006201-26-000031",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "bzNews_42014391",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  },
+  {
+   "source_id": "bzNews_50877032",
+   "keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads"
+   ],
+   "exact_own_leads": true,
+   "canonical_scope": true,
+   "prompt_problems": [],
+   "launcher_contains_own_lead": true
+  }
+ ],
+ "globals_restored": true,
+ "initial_prompts_unchanged": true,
+ "owners_unchanged": true,
+ "model_calls": 0
+}
+{
+ "test_only": true,
+ "closure_owner_sha256": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+ "real_F_signing_gate_used": true,
+ "positive_controls_pass": true,
+ "results": [
+  {
+   "supplied_run_problems": [],
+   "ok": true,
+   "stops": [],
+   "reading_problems": []
+  },
+  {
+   "supplied_run_problems": [
+    "TEST-only duplicate workflow: run-level proof error"
+   ],
+   "ok": false,
+   "stops": [
+    "the hard review reports: TEST-only duplicate workflow: run-level proof error"
+   ],
+   "reading_problems": [
+    "the hard review reports: TEST-only duplicate workflow: run-level proof error"
+   ]
+  },
+  {
+   "supplied_run_problems": [],
+   "ok": true,
+   "stops": [],
+   "reading_problems": []
+  }
+ ],
+ "required_error_blocks": true,
+ "source_truth_or_real_signature": false
+}

@@ -1,0 +1,394 @@
+{
+ "method": "AST imports traced transitively from all live top-level harness tests to the four final overlays; actual qualified report populations. Dynamic loaded dependencies are separately exercised by the full TEST lifecycle and native regression.",
+ "changed_owners": {
+  "a7_prepared_run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_warm/a7_prepared_run.py",
+  "a7_g23_build": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3/a7_g23_build.py",
+  "a6_launch_freeze": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3/a6_launch_freeze.py",
+  "a7_g1_build": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3/a7_g1_build.py"
+ },
+ "functions_and_failure_gates_from_live_code": {
+  "a7_prepared_run.py": [
+   {
+    "name": "current_era",
+    "line": 279,
+    "raises": [
+     {
+      "line": 295,
+      "expression": "raise ValueError('the saved-answer evaluation freeze has changed')",
+      "changed_or_new": true
+     }
+    ]
+   },
+   {
+    "name": "reuse",
+    "line": 301,
+    "raises": [
+     {
+      "line": 309,
+      "expression": "raise RuntimeError(\"the saved evaluation needs this harness's G1 owner\")",
+      "changed_or_new": true
+     },
+     {
+      "line": 312,
+      "expression": "raise ValueError('saved evaluation requires an external freeze hash')",
+      "changed_or_new": true
+     },
+     {
+      "line": 317,
+      "expression": "raise ValueError('the saved evaluation does not match its external freeze')",
+      "changed_or_new": true
+     },
+     {
+      "line": 320,
+      "expression": "raise ValueError('the saved evaluation no longer rederives from its evidence')",
+      "changed_or_new": true
+     }
+    ]
+   },
+   {
+    "name": "refresh",
+    "line": 331,
+    "raises": []
+   },
+   {
+    "name": "cli_run",
+    "line": 338,
+    "raises": [
+     {
+      "line": 357,
+      "expression": "raise ValueError('%s: name the prepared run with --run <dir>. A7 binds evidence to ONE run and has no default.' % SCHEMA)",
+      "changed_or_new": false
+     },
+     {
+      "line": 361,
+      "expression": "raise ValueError('%s: name the accepted A6 freeze hash with --expect-freeze <sha>. The CURRENT route will not launch an unpinned run (Codex SEQ 1517).' % SCHEMA)",
+      "changed_or_new": false
+     }
+    ]
+   }
+  ],
+  "a7_g23_build.py": [
+   {
+    "name": "load_verified_inputs",
+    "line": 1204,
+    "raises": [
+     {
+      "line": 1219,
+      "expression": "raise ValueError('the producer identity names no source manifest, so no input set can be bound to it')",
+      "changed_or_new": false
+     },
+     {
+      "line": 1224,
+      "expression": "raise ValueError('input manifest hashes %s, but this producer run used %s' % (got, expect_manifest_sha256))",
+      "changed_or_new": false
+     }
+    ]
+   }
+  ],
+  "a6_launch_freeze.py": [
+   {
+    "name": "reuse_freeze",
+    "line": 504,
+    "raises": [
+     {
+      "line": 515,
+      "expression": "raise ValueError('saved evaluation is not the independently bound A3 run')",
+      "changed_or_new": true
+     },
+     {
+      "line": 520,
+      "expression": "raise ValueError('the initial source package is not bound by the signed key')",
+      "changed_or_new": true
+     },
+     {
+      "line": 526,
+      "expression": "raise ValueError('the source key was not made from this original plan')",
+      "changed_or_new": true
+     },
+     {
+      "line": 528,
+      "expression": "raise ValueError('the source key and original run use different inventories')",
+      "changed_or_new": true
+     },
+     {
+      "line": 531,
+      "expression": "raise ValueError('the original A3 evidence does not hold: %s' % evidence['problems'][:2])",
+      "changed_or_new": true
+     },
+     {
+      "line": 536,
+      "expression": "raise ValueError('saved evaluation needs preserved, finalized original evidence')",
+      "changed_or_new": true
+     },
+     {
+      "line": 551,
+      "expression": "raise ValueError('the original observed calls are not the source-key baseline')",
+      "changed_or_new": true
+     },
+     {
+      "line": 554,
+      "expression": "raise ValueError('the signed key baseline lost its original calls')",
+      "changed_or_new": true
+     },
+     {
+      "line": 544,
+      "expression": "raise ValueError('the original raw binding does not hold: %s' % bad[:2])",
+      "changed_or_new": true
+     }
+    ]
+   }
+  ],
+  "a7_g1_build.py": [
+   {
+    "name": "_required",
+    "line": 53,
+    "raises": []
+   },
+   {
+    "name": "run_of",
+    "line": 162,
+    "raises": [
+     {
+      "line": 174,
+      "expression": "raise ValueError('a supplied prepared-run identity is required, not %r; build one with a7_prepared_run.load(run_dir)' % (run if not isinstance(run, dict) else sorted(run)[:3],))",
+      "changed_or_new": false
+     },
+     {
+      "line": 214,
+      "expression": "raise ValueError('%s no longer measures the supplied identity; %s changed since it was captured, so nothing may be read from it' % (run['run_dir'], ', '.join(moved) or 'its contents'))",
+      "changed_or_new": false
+     },
+     {
+      "line": 202,
+      "expression": "raise ValueError('%s no longer measures the supplied identity; its digest/file count %s is not the traced %s, so nothing may be read from it' % (run['run_dir'], list(got), list(entry['expected'])))",
+      "changed_or_new": false
+     }
+    ]
+   },
+   {
+    "name": "materialize",
+    "line": 391,
+    "raises": [
+     {
+      "line": 412,
+      "expression": "raise ValueError('%s measures %s, not the supplied executed identity %s; nothing is read from it' % (primary, list(_cold), [_ex['run_digest'], _ex['run_files']]))",
+      "changed_or_new": false
+     },
+     {
+      "line": 569,
+      "expression": "raise ValueError('%s changed during materialization: its digest/file count %s is not the cold baseline %s; nothing is cached or returned' % (primary, list(_last), list(_cold)))",
+      "changed_or_new": false
+     }
+    ]
+   }
+  ]
+ },
+ "affected_modules": {
+  "test_a6_launch_freeze_1409": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_g1_precall_freeze_1525": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a6_final_lock_1515": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_interrupted_capture": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_postrun_identity_1521": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_publication": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_trace_1471": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a6_locked_rows_1476": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_identity_relations": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_runstates_1470": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_source_correction_1487": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_score_boundaries": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_corrections_1454": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_input_binding": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_current_1473": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a6_fixture_isolation_1768": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_current_postrun": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_closeout_integrity_1482": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_g23_lifecycle_1464": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_g1_cached_resume_1781": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a7_raw_binding_1483": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ],
+  "test_a6_fixture_isolation_after_1768": [
+   "a6_launch_freeze",
+   "a7_g1_build",
+   "a7_g23_build",
+   "a7_prepared_run"
+  ]
+ },
+ "affected_count": 22,
+ "qualified_modules": [
+  "test_a1_invalid_response",
+  "test_a1_no_tools",
+  "test_a1_prompt_contract",
+  "test_a1_serial_transport",
+  "test_a5_contract_1401",
+  "test_a5_corrected_inventory_1514",
+  "test_a5_exp5_kit_1400",
+  "test_a5_final_lock_1513",
+  "test_a5_gate_1469",
+  "test_a5_launch_gate_1403",
+  "test_a5_route_1406",
+  "test_a6_final_lock_1515",
+  "test_a6_fixture_isolation_1768",
+  "test_a6_fixture_isolation_after_1768",
+  "test_a6_launch_freeze_1409",
+  "test_a6_locked_rows_1476",
+  "test_a7_cached_rows_1413",
+  "test_a7_closeout_integrity_1482",
+  "test_a7_corrections_1454",
+  "test_a7_current_1473",
+  "test_a7_current_postrun",
+  "test_a7_g1_precall_freeze_1525",
+  "test_a7_g23_lifecycle_1464",
+  "test_a7_identity_relations",
+  "test_a7_input_binding",
+  "test_a7_interrupted_capture",
+  "test_a7_postrun_identity_1521",
+  "test_a7_publication",
+  "test_a7_raw_binding_1483",
+  "test_a7_runstates_1470",
+  "test_a7_score_boundaries",
+  "test_a7_source_correction_1487",
+  "test_a7_trace_1471",
+  "test_g1_cached_resume_1781",
+  "test_g1_declared_input_1792",
+  "test_harness_guards"
+ ],
+ "qualified_count": 36,
+ "uncovered": [],
+ "unaffected_modules": [
+  "test_a1_invalid_response",
+  "test_a1_no_tools",
+  "test_a1_prompt_contract",
+  "test_a1_serial_transport",
+  "test_a5_contract_1401",
+  "test_a5_corrected_inventory_1514",
+  "test_a5_exp5_kit_1400",
+  "test_a5_final_lock_1513",
+  "test_a5_gate_1469",
+  "test_a5_launch_gate_1403",
+  "test_a5_route_1406",
+  "test_a7_cached_rows_1413",
+  "test_g1_declared_input_1792",
+  "test_harness_guards",
+  "test_inventory_reconciliation"
+ ],
+ "old_inventory_test_reaches_changed": false,
+ "gate_disposition": {
+  "new A6 reuse_freeze refusals": "check_reuse_boundaries_2006.py plus complete unmocked lifecycle; 35 external-binding mutations; existing native and receipt owner regression",
+  "PR current_era": "warm guard positive, both drift negatives and killed guard-removal mutation",
+  "PR reuse": "foreign callable owner direct negative; missing/foreign pin, every freeze block and changed value tests; full cold rederivation",
+  "PR refresh and cli_run": "both CLI forms, missing/foreign pin, historical current path preserved, identity tamper, complete saved lifecycle",
+  "G required, run_of and materialize": "whole original population, source events with no items, both arms and union, unchanged warm trace, exact accounting and full regressions",
+  "G23 load_verified_inputs": "all 36 real source contexts; each descriptor field mutated; two full no-write route stages and completed G2/G3",
+  "unchanged raises": "retained owner-level and full affected regressions; not represented as new semantic proof"
+ },
+ "remaining_limits": [
+  "Core independent review pending",
+  "Real independently signed key and real judgments do not yet exist",
+  "TEST execution is not a factual model score",
+  "Historical source-correction skips have separate current-path proof, as WORK_LOG records"
+ ]
+}

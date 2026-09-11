@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0000006201-26-000031#008",
+  "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The fixed quote 'Net loss $ (382) $ (473) (19.2)' states the digits 382, 473 and 19.2, which per Rule 5.4 would require populated numeric value objects with a resolved scale_multiplier. But the only scale wording that fixes the multiplier for the two dollar figures ('In millions, except share and per share amounts') sits in the statement's table header far above this row, outside the fixed quote span I was given, and my instructions forbid extending or repairing that location. Rule 5.6 states unit_scale_evidence must be the smallest span from INSIDE the quote and explicitly directs abstention when a TEXT fact's scale marker sits in a header or footnote outside the quote; no multiplier=1 escape applies because the true reported values are in millions, not bare units. Separately, the third number (19.2) is only identifiable as a percent-change figure (vs. a third dollar column) via that same external header ('Percent ... Increase (Decrease)'), so even its unit type cannot be lawfully fixed from the quote alone. With neither the level values nor the change value resolvable from inside the quote, this real fact (net loss) cannot be lawfully resolved into a stored fact, so it must abstain under Rule 1.4."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000006201-26-000031#008/L1",
+      "exact_match": true,
+      "why": "L1 reaches the identical verdict (empty facts, single abstention, empty continuity_hints) on the identical ground: the 'in millions' scale marker lives in the table header outside the fixed quote, so Rule 5.6 forces abstention rather than guessing or extending the quote."
+    },
+    {
+      "lane_id": "0000006201-26-000031#008/L2",
+      "exact_match": true,
+      "why": "L2 reaches the same empty-facts/single-abstention/empty-continuity_hints shape and cites the same Rule 5.6 clause (header/footnote scale marker outside the quote forces abstention, no multiplier=1 substitute available), matching the settled reasoning."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the trailing parenthetical number (19.2) in the quote could independently ground a percent_yoy change fact, since percent-family slots need no scale marker (multiplier is always 1).",
+      "why": "Even though percent values don't need a scale marker, identifying that this specific number IS a percent (rather than a third dollar figure) depends on the table's 'Percent ... Increase (Decrease)' column header, which sits outside this fixed quote just like the millions marker — so this candidate fact is equally unresolvable from the quote alone, and both blind drafts left it unaddressed rather than flagging it."
+    }
+  ]
+}
+```

@@ -1,0 +1,113 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_profit_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase",
+              "driver_state": "occurred",
+              "level_low": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales_guidance",
+              "driver_state": "introduced",
+              "level_low": {"value": 2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "fiscal_year": 2025,
+              "slice_parts": ["geography:international"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic macroeconomic risk-factor boilerplate from the forward-looking-statements safe-harbor list (a hedge about possible future inflation/rate/cost pressures), not a real stated fact about a driver's actual state, change, guidance, surprise, or action."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five items describe unrelated matters with different fact types and drivers: item 1 is a metric on Q4 gross-profit margin vs the prior-year quarter, item 2 is a completed share-repurchase action_event, item 3 is fiscal-2026 comparable-sales guidance, item 4 is an instant store-count metric sliced by geography, and item 5 is non-factual generic macroeconomic risk boilerplate that yields no fact at all, so they cannot be the same underlying fact."
+}
+```

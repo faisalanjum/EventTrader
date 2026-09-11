@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "change_value": {"value": 0.09, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "change_unit": "usd",
+        "fiscal_year": 2024,
+        "time_type": "duration",
+        "measurement_raw_spans": ["53rd week"]
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

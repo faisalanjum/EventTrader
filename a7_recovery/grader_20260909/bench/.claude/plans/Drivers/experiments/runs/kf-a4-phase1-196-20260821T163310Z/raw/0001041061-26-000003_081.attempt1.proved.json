@@ -1,0 +1,18 @@
+```json
+{
+  "packet_id": "0001041061-26-000003#081",
+  "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [],
+    "abstentions": [
+      {"reason": "The quote describes a change in financial-statement presentation/rounding convention (rounding to the nearest whole million), not a driver's state, change, surprise, guidance, or action; it is a reporting-methodology disclosure, not a real fact under Rule 1."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {"lane_id": "0001041061-26-000003#081/L1", "exact_match": true, "why": "L1 abstains with the same substantive reason: a presentation/rounding methodology change is not a driver state/change/surprise/guidance/action fact, matching the settled reply."},
+    {"lane_id": "0001041061-26-000003#081/L2", "exact_match": true, "why": "L2 also abstains with the same substantive reason (rounding/accounting presentation convention, not a business fact), matching the settled reply."}
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,49 @@
+```json
+{
+  "packet_id": "0000940944-26-000005#067",
+  "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "total_sales",
+          "driver_state": "unknown",
+          "level_low": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 9.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "measurement_raw_spans": ["including approximately 2% growth related to the 53rd week"],
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000005#067/L1",
+      "exact_match": false,
+      "why": "L1 matches on driver_name, driver_state, level shape/unit, fiscal_year, time_type, company_confirmed, and correctly places the 53rd-week detail in measurement_raw_spans, but it sets unit_scale_evidence to null on both level slots where the settled answer cites the '%' marker inside the quote (a bare unit marker is required at multiplier 1, per the $850,000 precedent in Rule 5.6)."
+    },
+    {
+      "lane_id": "0000940944-26-000005#067/L2",
+      "exact_match": false,
+      "why": "L2 matches on driver_name, driver_state, level values/shape/unit, unit_scale_evidence ('%'), fiscal_year, time_type, and company_confirmed, but it wrongly files the 53rd-week detail under the guidance-only 'conditions' field (a condition clause) instead of 'measurement_raw_spans' (Rule 8's catch-all for a number modifier not captured elsewhere), and it omits measurement_raw_spans entirely even though it is not the empty-default case here."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether a bare '%' sign inside the quote must be cited as unit_scale_evidence when scale_multiplier is mandatorily 1 for a percent-family unit.",
+      "why": "Rule 5.6's worked examples ($1.3 billion, $850,000, 14 stores) only cover currency symbols and scale words; it never directly addresses whether the percent sign itself counts as the 'bare unit marker' that must be cited (like $) or is instead absorbed into the level_unit enum and needs no separate citation (like the count noun 'stores', which is null). I resolved it by analogy to the $850,000 case, but the rule text does not name '%' explicitly."
+    },
+    {
+      "what": "Whether 'including approximately 2% growth related to the 53rd week' is a measurement modifier (Rule 8) or a guidance 'conditions' clause (Rule 11.2).",
+      "why": "It is not an if/contingent clause, it is a compositional breakdown of the 9.5% figure, so I placed it in measurement_raw_spans as an uncaptured number modifier; but 'conditions' has no other worked example in the rules to contrast against, so the boundary between a normalization modifier and a condition is not fully pinned down by the text."
+    }
+  ]
+}
+```

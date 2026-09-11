@@ -1,0 +1,64 @@
+{
+ "kind": "TEST key, original paid answers, actual no-write route; no real grade",
+ "passed": 12,
+ "checks": [
+  {
+   "check": "source cards are rebuilt and validated by the existing reference owner",
+   "ok": true
+  },
+  {
+   "check": "complete G1 question freeze has no missing identity or accounting",
+   "ok": true
+  },
+  {
+   "check": "only the derived two blind readings per nonempty batch are planned",
+   "ok": true
+  },
+  {
+   "check": "each question occurs in exactly one event batch",
+   "ok": true
+  },
+  {
+   "check": "G1 rebuild is byte-identical",
+   "ok": true
+  },
+  {
+   "check": "source context retains the original manifest identity",
+   "ok": true
+  },
+  {
+   "check": "all original source contexts revalidate from their actual bytes",
+   "ok": true
+  },
+  {
+   "check": "both original arms and their union reach the existing matcher",
+   "ok": true
+  },
+  {
+   "check": "every event and leg reaches the real public no-write route once",
+   "ok": true
+  },
+  {
+   "check": "final meaning/extras grading remains refused until real identity judgments exist",
+   "ok": true
+  },
+  {
+   "check": "the source-key role does not alter the Sonnet grader role",
+   "ok": true
+  },
+  {
+   "check": "every original answer byte remains unchanged",
+   "ok": true
+  }
+ ],
+ "model_calls": 0,
+ "evaluation_sha256": "b4c7b9d6353666fdb5dcdadc72239be07a8ea325cd12d5dc453d63fd29e62ed2",
+ "grader_questions": 537,
+ "grader_batches": 99,
+ "derived_grader_calls": 198,
+ "route_calls": 99,
+ "original": {
+  "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+  "run_files": 799
+ }
+}

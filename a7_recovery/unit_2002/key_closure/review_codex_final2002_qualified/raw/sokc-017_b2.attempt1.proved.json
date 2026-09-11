@@ -1,0 +1,240 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 83.5,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 83.5,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": 71.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_high": {
+        "value": 71.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "slice_parts": [
+        "segment:northitalia"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "debt_extinguishment_loss",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 15.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 15.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 366,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 366,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 216,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 216,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:thecheesecakefactory"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 46,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 46,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:northitalia"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 42,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 42,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:flowerchild"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 55,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 55,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:otherfoxrestaurantconceptsllc"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Pure cross-reference boilerplate pointing to risk factors in other filings; it states no driver state, change, surprise, guidance or action, so the gate yields no DriverUpdate."
+     }
+    ],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "revolving_credit_facility",
+       "driver_state": "occurred",
+       "period_start_date": "2022-10-06",
+       "period_end_date": "2022-10-06",
+       "time_type": "instant"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

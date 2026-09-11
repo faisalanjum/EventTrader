@@ -1,0 +1,364 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "reported",
+              "level_low": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration",
+              "measurement_raw_spans": ["adjusted"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "net_income_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 1.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 1.00, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration",
+              "measurement_raw_spans": ["adjusted diluted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the quote states two distinct reported values (an adjusted net income level and an adjusted diluted per-share level), so the row settles as real facts, not a control."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The $24.6 million is a NET roll-up spanning four independent causes (impairment of assets and lease termination expenses, FRC acquisition-related items, gift card breakage, and gift card inventory adjustments); one name may carry only one cause, the quote quantifies no individual component, and the measured quantity is therefore an accounting aggregate rather than a single driver, so the value cannot be lawfully assigned and the item is parked rather than guessed."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "This row was frozen as a real_item but settles as an EXCLUSION, and that disagreement is stated plainly: the recorded expense is real, yet its single stated number is a net aggregate across four independent causes that no one-cause driver name may lawfully carry, so it is named as an exclusion rather than passed silently."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "unknown",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "revenue_surprise",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the quote is a delivered actual measured against the company's own stated expected range, which is a grounded numberless surprise plus its required numberless metric home sibling."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_low": {"value": 1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration",
+              "slice_parts": ["segment:northitalia"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_low": {"value": 2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["segment:northitalia"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the row states measured comparable-sales levels for the company's North Italia segment, settled as the two current-period facts (the 13-week and 52-week windows ended December 30, 2025) each carrying its co-stated prior-year figure as the comparison baseline."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_high": {"value": 26, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "ceiling",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_high": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "ceiling",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true,
+              "slice_parts": ["segment:thecheesecakefactory"]
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true,
+              "slice_parts": ["segment:northitalia"]
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true,
+              "slice_parts": ["segment:flowerchild"]
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "ceiling",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true,
+              "slice_parts": ["segment:otherfoxrestaurantconceptsllc"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the sentence is company-stated forward outlook and states five separately-bounded opening guides (one whole-company total plus four segment-sliced components), each a real guidance fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic forward-looking risk-factor listing inside the Safe Harbor statement naming weather and natural disasters as things that may affect results; it states no current condition, level, change, or event, so it is exactly the boilerplate the gate drops."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "The frozen proposed_record_kind negative_control is confirmed: the row is generic risk boilerplate and correctly yields no fact, and the separate 'weather-related impacts' remark elsewhere in the release is a different span that this row does not carry."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "adjusted net income",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "adjusted diluted net income per share",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source says 'net income per share' rather than 'earnings per share', so the coined name spells out the source's own per-share phrase and is offered as a lawful synonym of the standard earnings-per-share driver."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing"],
+      "reference_name": "revenue for the quarter",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The home sibling is kept numberless to match its numberless surprise, even though a revenue level is stated elsewhere in the event outside this row's quote."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "revenue for the quarter finished within our expected range",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'our expected range' is the company's own prior guide rather than Street consensus, so the baseline is recorded as previous_guidance and the wordless 'within' yields in_line without any favorability wording."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "Comparable restaurant sales vs. prior year",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The four bare numbers carry no column labels inside the quote, so the mapping of (4)% to the 13 weeks ended December 30, 2025 and of 1% to the year-ago column is read from the table headers elsewhere in the same part."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "Comparable restaurant sales vs. prior year",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The 52-week columns are likewise identified only from headers outside the quote, and the year-ago 2% figure is recorded as this fact's prior-year comparison rather than as a separate fact of its own."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "as many as 26 new restaurants",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'now expects' hints at a revision but states no direction, so the guidance movement stays unknown rather than being read as raised or reaffirmed."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "as many as six The Cheesecake Factory restaurants",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 5,
+      "fact_index": 2,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "six to seven North Italia locations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 5,
+      "fact_index": 3,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "six to seven Flower Child locations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 5,
+      "fact_index": 4,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "as many as eight FRC restaurants",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'FRC' could name either the Other Fox Restaurant Concepts reporting segment or all Fox brands, and it is read as the Other FRC segment only because Flower Child is enumerated separately in the same sentence."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [],
+  "open_issues": [
+    {
+      "what": "Row 2's $24.6 million pre-tax net expense is parked with no fact.",
+      "why": "The single stated number is a net roll-up across four independent causes and no component is separately quantified inside the quote, so no one-cause driver name can lawfully carry the value; splitting it would require importing amounts from the tables outside the row, which would be a guess about which components the net comprises."
+    },
+    {
+      "what": "Row 4's period assignment depends on table headers that lie outside the row's own quote.",
+      "why": "The quote is a bare four-number table line; the 13-week versus 52-week and current-versus-prior-year mapping is read from headers elsewhere in the same part, so a reviewer who restricts evidence to the quote alone could not reproduce the periods."
+    },
+    {
+      "what": "Row 4's prior-year columns are encoded as comparison baselines rather than as their own prior-period facts.",
+      "why": "The rules allow a source-stated prior-year comparison on the home fact, but they do not settle whether a prior-year table column is additionally a standalone fact for that earlier period; both readings are defensible and the choice was recorded rather than resolved."
+    },
+    {
+      "what": "Row 5's 'FRC' slice was reused from the menu as segment:otherfoxrestaurantconceptsllc.",
+      "why": "The document defines Other FRC as all FRC brands except Flower Child, and the guidance sentence lists Flower Child separately, but the bare token 'FRC' is not itself disambiguated in the quote, so the reuse rests on that inference."
+    }
+  ]
+}
+```

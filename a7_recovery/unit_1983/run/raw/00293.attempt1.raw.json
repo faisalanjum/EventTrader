@@ -1,0 +1,27 @@
+```json
+{
+ "source_id": "BBY_2026-03-03T08.00",
+ "facts": [
+  {
+   "fact_type": "metric",
+   "item": {
+    "driver_name": "revenue",
+    "driver_state": "increased",
+    "level_low": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+    "level_high": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+    "level_shape_hint": "point",
+    "level_unit": "m_usd",
+    "change_value": {"value": 0.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+    "change_unit": "percent_yoy",
+    "comparison_baseline": "prior_year",
+    "slice_parts": ["geography:international"],
+    "time_type": "duration",
+    "fiscal_quarter": 4,
+    "fiscal_year": 2026
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}
+```

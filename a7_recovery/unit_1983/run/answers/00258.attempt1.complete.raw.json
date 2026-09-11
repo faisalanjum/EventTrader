@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "lifo_charge",
+        "driver_state": "reported",
+        "level_low": {"value": 138, "scale_multiplier": 1, "unit_scale_evidence": "basis point"},
+        "level_high": {"value": 138, "scale_multiplier": 1, "unit_scale_evidence": "basis point"},
+        "level_shape_hint": "point",
+        "level_unit": "basis_points",
+        "measurement_raw_spans": ["non-cash"],
+        "time_type": "duration",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "period_end_date": "2026-02-14"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

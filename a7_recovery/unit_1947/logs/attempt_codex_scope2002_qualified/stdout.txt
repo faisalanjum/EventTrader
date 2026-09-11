@@ -1,0 +1,113 @@
+{
+ "test_only": true,
+ "cases": [
+  {
+   "case": "positive before failures",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "mutation/removing finalizer scope loses accepted answers",
+   "ok": true,
+   "detail": 0
+  },
+  {
+   "case": "mutation/removing resume reader loses completed answers",
+   "ok": true,
+   "detail": 0
+  },
+  {
+   "case": "failure/missing reading prevents final publication",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "failure/invalid_response reading prevents final publication",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "failure/unproved reading prevents final publication",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "failure/waiting reading prevents final publication",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "failure/run-level error blocks despite all valid rows",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "positive/exact final package signs",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "case": "failure/the initial package cannot approve a final key",
+   "ok": true,
+   "detail": [
+    "the pinned bound is not the live one",
+    "the pinned injection_control_sha256 is not the live one",
+    "the pinned role_sha256 is not the live one",
+    "the pinned output_section_sha256 is not the live one",
+    "the pinned prefix_sha256 is not the live one",
+    "the pinned payload_keys is not the live one",
+    "the pinned counts is not the live one",
+    "the pinned hard_review is not the live one",
+    "the pinned budget is not the live one",
+    "the pinned capacity is not the live one",
+    "0000006201-26-000031 is not the live event",
+    "0000006201-26-000032 is not the live event",
+    "0000027904-26-000013 is not the live event",
+    "0000027904-26-000020 is not the live event",
+    "0000027904-26-000022 is not the live event",
+    "0000063908-26-000032 is not the live event",
+    "0000092380-26-000044 is not the live event",
+    "0000764478-25-000057 is not the live event",
+    "0000898173-26-000006 is not the live event",
+    "0000940944-25-000038 is not the live event",
+    "0000940944-26-000005 is not the live event",
+    "0000940944-26-000009 is not the live event",
+    "0001041061-25-000109 is not the live event",
+    "0001041061-26-000003 is not the live event",
+    "0001041061-26-000084 is not the live event",
+    "0001058090-26-000007 is not the live event",
+    "0001104659-25-102611 is not the live event",
+    "0001104659-25-105631 is not the live event",
+    "0001104659-25-118458 is not the live event",
+    "0001104659-26-017090 is not the live event",
+    "0001104659-26-027061 is not the live event",
+    "0001104659-26-032757 is not the live event",
+    "0001171843-26-001288 is not the live event",
+    "AAL_2026-04-23T08.30 is not the live event",
+    "BBY_2026-03-03T08.00 is not the live event",
+    "CMG_2026-02-03T16.30 is not the live event",
+    "DAL_2026-04-08T10.00 is not the live event",
+    "DRI_2026-03-19T08.30 is not the live event",
+    "MCD_2026-02-11T16.30 is not the live event",
+    "ULTA_2026-03-12T16.30 is not the live event",
+    "YUM_2026-02-04T08.15 is not the live event",
+    "bzNews_42014391 is not the live event",
+    "bzNews_50877032 is not the live event",
+    "the shipped prefix is not the live one"
+   ]
+  },
+  {
+   "case": "scope restores after an exception",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "case": "positive after failures",
+   "ok": true,
+   "detail": null
+  }
+ ],
+ "passed": 12,
+ "total": 12,
+ "model_calls": 0
+}

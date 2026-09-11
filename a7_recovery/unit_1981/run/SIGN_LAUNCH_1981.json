@@ -1,0 +1,96 @@
+{
+ "attempt": 1,
+ "capture": {
+  "command": "A7_SIGN_RUN=<run_id> A7_SIGN_AGENT=<agent_id> A7_SIGN_ATTEMPT=1 bash unit_1947/ledger/run_real_1947.sh ../unit_1981/map_sign_1981.tsv ../../unit_1981/ledger/capture_sign_1981.py capsign1981_a1 300",
+  "judgment": "the saved full proof; never the display fields or the shell exit alone",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/<run_id>.json",
+  "writes": [
+   "run/replies/final_sign.attempt1.complete.raw.json (raw first)",
+   "run/receipt.attempt1.json",
+   "run/receipt.json when terminal",
+   "run/replies/final_sign.attempt1.proof.json"
+  ]
+ },
+ "collector": {
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1981/ledger/sign_support_1975.py",
+  "sha256": "44a1eb8b5283043438c90822b02258f5e9271a8012fe8154e3700035cef1dbe7"
+ },
+ "launch": {
+  "argument": "scriptPath",
+  "env": {
+   "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json",
+   "A7_REVIEW_OUT": "/tmp/a7_real_package_1947",
+   "A7_SOURCE_CONTEXT": "/tmp/a7_source_context/.claude/plans/Drivers/experiments",
+   "A7_SOURCE_PROJECTS": "/home/faisal/.claude/projects",
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"
+  },
+  "precondition": "every frozen byte re-verified; the scratch copy byte-identical to run/final_sign.script.js; no final_sign attempt, receipt.attempt*.json, receipt.json or inventory_lock.json in unit_1981/run; no official workflow state of any status carries this script or prompt",
+  "tool": "Workflow (native, in-session)",
+  "value": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/real_review_scripts/final_sign_1981.script.js"
+ },
+ "lock": {
+  "command": "bash unit_1947/ledger/run_real_1947.sh ../unit_1981/map_sign_1981.tsv ../../unit_1981/ledger/lock_sign_1981.py locksign1981_a 300",
+  "condition": "only after a capture whose proof reads SIGNED",
+  "path": "BIR.lock(run/replies, run/receipt.json, run, issuer_path=<served issuer>) -> run/inventory_lock.json; then approved_source_problems re-derives it in the A3 run (Codex)"
+ },
+ "ordinal": 36,
+ "parent_session": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "previous_versions": {
+  "1": {
+   "outcome": "FAILED_HISTORY_PRESERVED (STOP_EVIDENCE)",
+   "prompt_sha256": "bf8d9150122a1ed9c39f01b1ea341527a2135fead15e2ef7b6b101a3f5c08f4d",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1975/run",
+   "script_sha256": "740d15aa41de83d05603dbc8d8461d1610b96ac17a5181f2fe8458f215a5437e"
+  },
+  "2": {
+   "outcome": "DECLINED_HISTORY_PRESERVED (NOT_SIGNED)",
+   "prompt_sha256": "8a72748ecf654b8d869372f241aa4ad0733f1da338e787234cf70713a7bcaf00",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1979/run",
+   "script_sha256": "5c64eb1e07b19901b38b3e63a5dcfc7492ad6bf6c23a286699cd4acb54ade589"
+  }
+ },
+ "raw_name": "final_sign.attempt1.complete.raw.json",
+ "receipt_layout": {
+  "agent_id": "<agent_id>",
+  "attempt": 1,
+  "ordinal": 36,
+  "raw_name": "final_sign.attempt1.complete.raw.json",
+  "source_id": null,
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/<run_id>.json",
+  "task": "final_sign"
+ },
+ "rule": "one further fresh blind in-session Workflow agent; one call; one invalid-format retry only under BIR._retry_lawful; never a semantic repair",
+ "schema": "unit_1981-sign-launch-v1",
+ "script": {
+  "agent_type": "lean-probe",
+  "bytes": 456438,
+  "capacity_problem": null,
+  "disallowed_tools": [
+   "Read"
+  ],
+  "effort": "high",
+  "model": "claude-sonnet-5",
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1981/run/final_sign.script.js",
+  "prompt_bytes": 431006,
+  "prompt_sha256": "400ac49197c15c0bd9e04d50f5de11c08540eeda718daaa440a3e264e1fcea66",
+  "renderer": "build_inventory_review.event_script",
+  "scratch_copy": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/real_review_scripts/final_sign_1981.script.js",
+  "sha256": "d286b38d6e8dd1353c8ec57b0f03594b4c483a1b6057d9afae4fd6ee4a31f927",
+  "transport_limit": 524288
+ },
+ "source_id": null,
+ "status": "PREPARED, NOT EXECUTED; no call is authorized by this preparation; a new exact call needs Codex's separate written authorization after byte review",
+ "task": "final_sign",
+ "versions_record": {
+  "calls": {
+   "history_reset": false,
+   "made_unique_overall": 39,
+   "made_unique_overall_note": "37 event attempts (36 accepted finals, one invalid primary and its retry) + 1 failed signature (v1) + 1 declined signature (v2)",
+   "new_now": 0,
+   "prospective_total_if_one_new_sign_runs": 40
+  },
+  "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1981/run/SIGN_VERSIONS_1981.json",
+  "refusals": 2,
+  "sha256": "87d011670e61a82c52da2db8eda5342efac42b68ccd8752ea87fe9cafd21b52b"
+ }
+}

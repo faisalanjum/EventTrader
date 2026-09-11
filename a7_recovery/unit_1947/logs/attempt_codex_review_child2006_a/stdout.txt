@@ -1,0 +1,829 @@
+{
+ "kind": "independent complete review-attempt proof, not truth approval",
+ "model_calls": 0,
+ "effective": {
+  "valid": 62,
+  "invalid_response": 4
+ },
+ "problems": [],
+ "all_52_valid_primary_texts_preserved": true,
+ "final_ready": false,
+ "final_refusal": "final source-key phase is not ready: ['sokc-013/b2 is invalid_response', 'sokc-020/b1 is invalid_response', 'sokc-026/b1 is invalid_response', 'sokc-029/b2 is invalid_response']",
+ "attempts": [
+  {
+   "attempt": 1,
+   "receipt_sha256": "cd428741f21588529dbe0dc6893daaf1fbfc30cc4c1e9eff761674188b3e64ba",
+   "finalization_sha256": "155edfd613170cd913f4036f818cf2a3018795daabb0607adbeb0daef099899f",
+   "raw_tree": {
+    "files": 132,
+    "sha256": "f396121a8f42383cc8ea30661efff77bf49e49dfa60b54b0e68b38abf195cc62"
+   },
+   "counts": {
+    "valid": 52,
+    "invalid_response": 14
+   },
+   "budget": {
+    "ledger_before": 415,
+    "this_attempt": 66,
+    "spent_so_far": 66,
+    "ledger_after": 481,
+    "frozen_primaries": 66,
+    "worst_case_total": 132,
+    "global_ceiling": 4382,
+    "within_ceiling": true
+   }
+  },
+  {
+   "attempt": 2,
+   "receipt_sha256": "7431bc9e03af25d79351188e0ea1260d669d7a5a8e3aedac33b24f649c5e2e3e",
+   "finalization_sha256": "f86bca0d7f554e10e6aff639485ff6650430ca1ff695af000a9fe5b00c8ed29d",
+   "raw_tree": {
+    "files": 28,
+    "sha256": "f7a11fe55c455f2737ab801d9b6cd907cd2dddc0ad338461351cf00c8ce24740"
+   },
+   "counts": {
+    "valid": 10,
+    "invalid_response": 4
+   },
+   "budget": {
+    "ledger_before": 415,
+    "this_attempt": 14,
+    "spent_so_far": 80,
+    "ledger_after": 495,
+    "frozen_primaries": 66,
+    "worst_case_total": 132,
+    "global_ceiling": 4382,
+    "within_ceiling": true
+   }
+  }
+ ],
+ "rows": [
+  {
+   "label": "sokc-000/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "dacf890fd75885568e16a40352f9d8053e29cb471cdadbfc2711d8868e2c8131",
+   "script_sha256": "dbaa83792461e0907a305a41ee63051f007fd8834937643f02dbf72b0cb01c33",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-000/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "7b1ad6e0061ccdf8202ebd5e2e494cc85e00b6f577761134d62f2c734c902e68",
+   "script_sha256": "b8068439d9afad041f4cb57596a7e51965f62a66a75f79ff260f603c263f4f76",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-001/b1",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "d5e30925dfc48fe14665174d05b6cb34e230f5498f9e68a06b89c4f34e9ed5fb",
+   "script_sha256": "82045462dcf2fb998e49b1fb931351b08da67d613e87ac2665d6d3fb0b23ba8d",
+   "parser_problems": [
+    "0000006201-26-000032#007: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000006201-26-000032#008: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000006201-26-000032#009: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000006201-26-000032#010: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000006201-26-000032#011: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-001/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "d9e820be0637e5bf09ccab1bb630daf3242c783c6b166fd76043c61fa535d89d",
+   "script_sha256": "47f2b349a0f500ba87c8265f63391c1e6a7ddba0b0b40363ae43ad4d48d0d385",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-002/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "3d65225a4befa1ff79745209d2ec9df4ec2bba993933b9f9e9c123295a8c58c4",
+   "script_sha256": "ceb1da65d92142fd64da0c10ad6dd89363b43af12ab7f016dbcf2a8e445d4562",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-002/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "f7790be29ff9eef192b293d12a1e20d87d8d47ec6d99ca4cee8568a20584126a",
+   "script_sha256": "13e7c16b8b641a6ca1ed5fd8f68b6529fe1b1c2e82e0244874a074c889c63a6b",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-003/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "311c645ad56cd4dad4663b7f677d1e83fa736edfacc4424d8777e601718fd8fd",
+   "script_sha256": "5615d9254edca7916632f58710591ffdaf85f59091808f9b9835f5cc30319ee0",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-003/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "95cd7a499efeb206a27fbb4c00dda92f7f69e93590da2878e62b3cf0696e70db",
+   "script_sha256": "926988a6452b9e8a381a26b28a7866d07b058a863345c0b653e71ae9b5c9fef8",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-004/b1",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "d2974ad91ebe168062a3cb5f5232ff6c295d05078cfd75989a2a46dff0f18f71",
+   "script_sha256": "31bd0335f4511ebaaff94ae84bf746af6d21fc03d57097706279727fe1f71446",
+   "parser_problems": [
+    "0000027904-26-000022#028: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000027904-26-000022#029: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000027904-26-000022#030: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000027904-26-000022#031: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000027904-26-000022#032: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-004/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "c5d2bffbf29e86855b8c5c0118fd9fd0e744246619c9936da20dffcd119e3872",
+   "script_sha256": "7351cb2ddb8e071c1139b01d90049b4c0a50502c1ff361c60c2a8360a4428ed3",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-005/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "cbe8343bcde4e96c71ab46ef9597f72ccc9db9b5a156cfbe177abb9e8055084d",
+   "script_sha256": "81bc2d6f0d951350f7aaee4ca796f335d568d10f5666b107124fe7541e994df4",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-005/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "ba72fe95fe2fa25ebcc7f18e3ed80dc2bc5341107aff81e4877066d6ba3c602e",
+   "script_sha256": "e99677b440430ffbf2dd2c7d2d33a414b78aab7279d43145d1684df2dba157c1",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-006/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "0a3d10f48de53a19da3bf91f79164b42730228af5db126c733162ca892707da0",
+   "script_sha256": "7528dffa4df756b166a5957f20b59d2328ccb542e68b4fe983f04322914b179a",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-006/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "65816ca3f069a1cadd51566acbd6b9879a78a86fefd7dd3fb1531e6c97f213bf",
+   "script_sha256": "ebdec1ecb2244697f340257ad7ff914264c3fc1f07f95786f801fbb5a9e193c1",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-007/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "0a7ac956986c2034c70b75e6ba8c4454ead841bc49ca6556dd655349dc0e217f",
+   "script_sha256": "92ac9e1475c94fb4eb66d739b730a5be1593da31755c3707b26e7a9c4235ce27",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-007/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "e6718a8ecead7399cfdcf9b62fb825b740f741bd316ca1d9b773957e64c7b362",
+   "script_sha256": "cec8267e17702a942b917f0215c9dbaec6eead397d6d1b1eaf277edaf52487f4",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-008/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "5294b80c34eaafadad951fc613316181088a03b6ca7d9095cd40a95225e15d09",
+   "script_sha256": "945f14d8312423f77065ae52e43601370c2f042612a00f094f0943d057c93083",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-008/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "1e150fce6627878fc9c2a984ed825b51b1baf5af228c0d791bba69dd86047732",
+   "script_sha256": "373c0c8d5daa53ac0462a859bace54554392693dee9e57f47fffaeb8dbc713f2",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-009/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "efcae779c49aefda159c3baa2645e631c648d54e620daf2d723a36ae5a4c9f2a",
+   "script_sha256": "7660a3228049692e19c511ed447de8b90a2474d7dfef395ceaf33882683b218a",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-009/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "0c3f5f8237d8cb65f6fb367181e5006354d8fd1d17aeb12baa0930a4204463df",
+   "script_sha256": "3f91ee32847d302ef966b92240f2c03bd2c7054e3245174fac5ebb763965edfd",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-010/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "4e04d1ec9b2a584769ed55aa9a575ec3680fccd4c5824ef41fcbbe3d9f6b1d5e",
+   "script_sha256": "92244d7e93162aec30fb261a050382b6569433bde94b632c1d2f0743b9a8b591",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-010/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "0a9250750018f7322ad7bb32b445c0f7936867af1dfb7f36cf2c9b770174066d",
+   "script_sha256": "1c5956eb68ab41d9ceb42d1e1383aa6372f9a996fe8503e6c803a2efe24a5c09",
+   "parser_problems": [
+    "0000940944-26-000005#060: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "0000940944-26-000005#061: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item', 'per_x'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "0000940944-26-000005#062: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "0000940944-26-000005#063: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "0000940944-26-000005#064: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['reason'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "0000940944-26-000005#065: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['reason'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-011/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "af5feeb12dad6f4f31455b934b6aeff0825eaa6c8e110abc00524180294e07a1",
+   "script_sha256": "3b6368132eedcb8bec20b44a8608808064bbc934a610a712ec829a067183cecf",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-011/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "a938611cf90fb618a01253c6f03bb27ff7bc68542bfe9d72d8cd14b0e305950d",
+   "script_sha256": "55ac4dd4fbe1cac9fe5f57b86d9807fc38150e11f37ecaca0c6017f91888c537",
+   "parser_problems": [
+    "0000940944-26-000009#066: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000940944-26-000009#067: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000940944-26-000009#068: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000940944-26-000009#069: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000940944-26-000009#070: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0000940944-26-000009#071: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-012/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "80cce2f95d44011ccfc73902b0ba396127499113fd485b4cd9ea6cc7edec3ac8",
+   "script_sha256": "10517d26a3a007de8a9fe2e6f155ef1dabb9fa23c26d55e92fe21344bcc58574",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-012/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "4d306d34d20b119682b738e56308d0a9fc0735aecf260a981b8e76e9e14c91f7",
+   "script_sha256": "769dd0608867fd5ee8bbf34dd8d3a4e0406d231f20eac68dd27bae330c5af9da",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-013/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "899d7bb8acae4df02bc9fb13f634eb206fad7c1f090f76fa3c86b37aae249b7e",
+   "script_sha256": "2b9665fc2ca2eb929a179ed5705526f7fb974aca9f07be4e39d56e016c225bc2",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-013/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "77b6cdc8f783852bd837e236e2bfd9fe09c40de53a714cad7563dd21948a91e5",
+   "script_sha256": "372c4174a8e4521ffce147d1a6f0e5df6334b77df463cfe02c39a907cc18ff6e",
+   "parser_problems": [
+    "0001041061-26-000003#077: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#078: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#079: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#080: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#081: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-014/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "6826885063eeaba9255f287de283b4c18c75090c98f00a4a92226161dc1b15a4",
+   "script_sha256": "2d16dedbee981506d2c8159b9b1b4d7de2be3f8ad46be45138ca664c98c018f9",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-014/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "c0ac5d9c8e17392022927ecba0edf2b7961e3f972f8cc10fc060e968892e1b46",
+   "script_sha256": "2acd2af99336ad6ee464112e9c2e3e58d3a088006747458ed80c73fc5db93cb2",
+   "parser_problems": [
+    "0001041061-26-000084#082: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001041061-26-000084#083: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001041061-26-000084#084: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001041061-26-000084#085: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001041061-26-000084#086: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001041061-26-000084#087: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-015/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "31528c60dbef1c3115e5d7c12b4af9fd06442656eb836d20c913a28c4dec9463",
+   "script_sha256": "da87b1490071416a218411b92193d53003d5a01acb7ea9d46532da738c5a72f0",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-015/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "ad4a2d841cfcc4b6313401f598faf4188909ee76524e7bcea26ebcb002a654ab",
+   "script_sha256": "c0052f87f40d70d0d6051b06ebe320e910b82d246ea89fd6688a6c55e6c52f2c",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-016/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "f4c554205357b9da58bcdd60f88e5a8a4d0a810ed3b3d181d6e808e3d3b9bd66",
+   "script_sha256": "88e3b2d84b8da47ee982c7c6c39f91891b6eff7e3f8f27291f46897b1d81b6a6",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-016/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "5a660787d364842d2c2e7139cba96dcc6ccd076ab5a80ae266b626a386f5edd3",
+   "script_sha256": "5d545038c2ed2961d97eaa6482622ff2059c9d6b0ed61b4cecb8aa65911efe85",
+   "parser_problems": [
+    "0001104659-25-102611#094: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-102611#095: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-102611#096: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-102611#097: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-102611#098: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-102611#099: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-017/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "5fc489e73e5fc0a320e9af8fdfac6850c27842a4c920c93252d37b8d62612da7",
+   "script_sha256": "4a0e5a897910e1542c087a69bb9da823d0fbabc2632a7469c01493857b616d4c",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-017/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "6cf5a8d23bcdd4e9f3bce2c423e55700e57c5652d5c68b79ef5e1e532288453f",
+   "script_sha256": "b37c17702cfeff4f179d6989b5ed1c0fc9dd7a38a4910e2757b7a7f9b1222259",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-018/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "8b334639242eda49aa40542278b20e5345ae6b0dd553b0f93605338668058331",
+   "script_sha256": "3265c315840e92590d44e148011ae89db8e925a44398742c5c49a86fe8cc67c1",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-018/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "12f74f23d7ab5dc275f2f2f9b4a7f251bea66231978060af1e4a94165fd3991c",
+   "script_sha256": "10048f046bbe3f7d2be26e37993ddc480e18b4fde2b843ddf9d6e9f09adda0ba",
+   "parser_problems": [
+    "0001104659-25-118458#105: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-118458#106: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-118458#107: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-118458#108: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-118458#109: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-118458#110: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-25-118458#111: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-019/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "bfea9de43027e015a302c8900f67e55cb74a89cb012c89afcb3d3b7c7e8da36c",
+   "script_sha256": "5de8532dc2dc34b6b0eb63ec45a36fb5cbb6e84b25deaf209471cec241ad23b2",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-019/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "c52390b2e584fe38eb74b33d1a99a42d4c0851ff46b8aa6194adaf8069822700",
+   "script_sha256": "b9eef0a4fce57644f428053c1785b9b325095894ed7fd6751088489424b9d211",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-020/b1",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "06c55b72e1a85c4d8d211e46573b5ceb4c3eba9dce44559003e86e0e4824a202",
+   "script_sha256": "ce1adfb9f8ea5a0332161975baabfc97b1b5062cfacc7d5c66bd6b92c1c516ae",
+   "parser_problems": [
+    "0001104659-26-027061#118: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#119: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#120: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#121: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#122: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-020/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "ad7a7dbbaeb1aa109a92bb8c4e4563a084e6594381cd22da94069bdbeffaed6f",
+   "script_sha256": "8cde65df47ce6b07a97e55fcbeafd3f2d2c45b602d3ef6ab97bcdc78e6c4fa5f",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-021/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "0ee315e6b9e6cf2767fa4129a75b3961c5c09fe063d67c119ae8fbed10ca8a98",
+   "script_sha256": "0082f381fbfa8b63cdf00f881a717807faac10895126be91ec9c68ae827aaef8",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-021/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "99158edca71d63dab1eecd75887177121938facdc913a1d543b0c86d811ebade",
+   "script_sha256": "bb44f9f9a39829b9544a1afa74c7f0a4b2b386bf11061d217a19f9a0efeb981c",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-022/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "963bf522f496fd42c3d2f93c06a4dd87f39db26ec3bd05b0671a190bc09e227e",
+   "script_sha256": "c84fb2eb7ef1e4cd07fde2a7dc38337f07db42af1d53668a41cc2641ed86c811",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-022/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "6fdb1c81fff31529cf89fd669b670cad3e1830ba34041816c3afd66a10bdb192",
+   "script_sha256": "7d45aa9c2a4b629a5397e79650c76a29f32417fa738a5bff38adcefcd67b8606",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-023/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "a0980d267011ffb6700e8f981b845de8fae6b5d1e6ed3ab22fd68697afd53867",
+   "script_sha256": "ae3a4436a651e11d87efd8e4638ce5960d9fe04ee4c50bd5139422f9b8819ca1",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-023/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "ff254e7c74414d70210c1b3d8ac28dbd3e56f8efeb561b1378fc948fe9f58263",
+   "script_sha256": "4028da74fe0f55a6edc19e0b65293d8f3fa8e00e4818aca39653e6de155ac4f2",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-024/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "9c5579549d175779f33b588cdccebd543358b6b9afea954b1644ae36a7ac950c",
+   "script_sha256": "a2fed0ce2ab9df202a7f0bb308c4e1393c8ebbd929781f903a3e65b5f952f2f0",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-024/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "9a320548ae0501631fc425cac1a272c2dd2d78f3df99fc1e4c1c6c2548606722",
+   "script_sha256": "c05ecf7f1647fac689b89fc3afdde0623de7a1e551829104fa7c242fbcb226e3",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-025/b1",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "3decee24ee715c02fbfd9134541067b1c95842b1ebff0bc70d68e2725b8a4126",
+   "script_sha256": "3d330d729043fcbd099088b603468cbf3932143ac3dcec0e7c778ae373571242",
+   "parser_problems": [
+    "CMG_2026-02-03T16.30#150: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "CMG_2026-02-03T16.30#151: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "CMG_2026-02-03T16.30#152: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "CMG_2026-02-03T16.30#153: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "CMG_2026-02-03T16.30#154: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "CMG_2026-02-03T16.30#155: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "CMG_2026-02-03T16.30#156: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-025/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "dd2b9635517b4cb6e58409aa8f22d846caee9934ebd7b5fbfd434375af4c481b",
+   "script_sha256": "d3ebfa99d9f2014b55421cf48ea9a4b5a3451f33dd781eb684db19ed752d7122",
+   "parser_problems": [
+    "CMG_2026-02-03T16.30#150: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "CMG_2026-02-03T16.30#151: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "CMG_2026-02-03T16.30#152: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "CMG_2026-02-03T16.30#153: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "CMG_2026-02-03T16.30#154: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['reason'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "CMG_2026-02-03T16.30#155: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "CMG_2026-02-03T16.30#156: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['reason'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-026/b1",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "6dcaa2a38b25a358933ada97507f63ce6c414a142fad35037d8a47afd01af891",
+   "script_sha256": "4c65162d15c0e696ad7c32019e49af93d8d073de0c62f4b64c9e4f9cd8845d22",
+   "parser_problems": [
+    "DAL_2026-04-08T10.00#157: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item', 'per_x'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "DAL_2026-04-08T10.00#158: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item', 'per_x'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "DAL_2026-04-08T10.00#159: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "DAL_2026-04-08T10.00#160: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "DAL_2026-04-08T10.00#161: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "DAL_2026-04-08T10.00#162: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])",
+    "DAL_2026-04-08T10.00#163: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['reason'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-026/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "52122d844676e6e336fd9f834b5af810bb60d0c2cdbabb3f8629af3ded2c9d2b",
+   "script_sha256": "99140603bd83b672cd3b8906af306445ee2d23e0e915d3d3aacefb9b2d5fd73f",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-027/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "236895f5f2b96c51d91f195a735fb52d2b3ee5bc3f730e81058b49f32b5b0912",
+   "script_sha256": "7fb2ae8da13b73fc897477fbfff68aa63f09d5e2ad01d806b4065ec1d6eeec2d",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-027/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "8ac17ff0d6a6d8b445e289199456e32bffa9fd77b2d7c3aee4244c6857ea9f49",
+   "script_sha256": "f3e4f416065ddcd8e706c6d1718cd7f2c3f9e280b164c5d62666c3eea1e2a6ce",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-028/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "f3e735338b44306e8c977920d58de92d93c1e388a2dbd1fe39d4f7de1df978d9",
+   "script_sha256": "5da7da99e5d3bb774d88e9ec49c93d706b22a53d8457da86134d5fcade260c78",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-028/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "c2b2379353effb9a2f76b12e3401b2bd5abcb46c56e76b9144a48551b4f9d7e3",
+   "script_sha256": "729d007dbfcb2f53be64e987972831f12cc910991fc0666da9975029dd8f2be2",
+   "parser_problems": [
+    "MCD_2026-02-11T16.30#169: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "MCD_2026-02-11T16.30#170: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "MCD_2026-02-11T16.30#171: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "MCD_2026-02-11T16.30#172: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "MCD_2026-02-11T16.30#173: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "MCD_2026-02-11T16.30#174: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-029/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "c3c61c4a366e16859ea1738733b66976671deb696250d415e681297ec59161ad",
+   "script_sha256": "60ff5fa79cd126cf7b144960459b51617a366e037f900cea0a17bfb060a3061e",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-029/b2",
+   "attempt": 1,
+   "state": "invalid_response",
+   "raw_sha256": "9174b0d3e02ddd902c94d385aaf2129d71703d579b07b04c4b24cdcc1ce18e3a",
+   "script_sha256": "8766a4d5275d0e0d5af5789094784415bfbe3dc124b0b6102c944d6e63b8a647",
+   "parser_problems": [
+    "ULTA_2026-03-12T16.30#175: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#176: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#177: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#178: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#179: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#180: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#181: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-030/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "dd8804402f76c0dfc70c7170b2268c1d6985c6dfe6cd9c0939d6c883f356af03",
+   "script_sha256": "17f5661457b2cc4e5c21b7d1a32c39b46c18ede840f036f006fc4409a29f5e2f",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-030/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "05ae628e86253425e45d2b0373261e67a4fddcb321681701cd9f894d16f2236a",
+   "script_sha256": "bba04362563890eab7e7eea2b34f0ac15ae42ecf381f3f1c8d918e60c16d525c",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-031/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "a8fb0568817a41e47f8fad384c03e091d85385be7c003f870f927307edf8fd53",
+   "script_sha256": "0168a1510ef8080adb85833e6cd5eaff6b14780411fc745d7d4e0c748be5257a",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-031/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "a8fb0568817a41e47f8fad384c03e091d85385be7c003f870f927307edf8fd53",
+   "script_sha256": "bd56a8cf32092ca33980b000bf1fc2593b6c259141cd875f17c8e3c8ec3034aa",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-032/b1",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "fe33310a427622a26cd092bb16a08b73c1e70800ac308e2bf7f10fd074d2990b",
+   "script_sha256": "91b801ffb925a02f5f1efdf7eb58979739f43b4cbb9470b5b0def6dd37c70540",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-032/b2",
+   "attempt": 1,
+   "state": "valid",
+   "raw_sha256": "2162ab32a32dfc1b314382551ae2932e1e9a837d6aaa83d6edc6ecaa71bf70f3",
+   "script_sha256": "d6934cf07d96f234d6da5af2b304e8ea34d87a83e1e4eace656977497a7b345d",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-001/b1",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "824fa11eb26265fef5d4c28c5f3c84ae3fdca281acd75b0589881e6b958bedea",
+   "script_sha256": "b0a697df788f88edb0cd8f17de5d06f75b0a198005c825d1863bc2eb33125de0",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-004/b1",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "d341825c528f7e5b073c703a767d065c1cfe637ee9927a90cb65acad0908ac2e",
+   "script_sha256": "c5653500cc14028a6a8a0a60b7ebc16b1c7ed6d093983c1a65497be9bc6e340c",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-010/b2",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "ef991ce5286ae6c6154e506415d2615578b147302f287b6238cb3ab6e626ba72",
+   "script_sha256": "30d7c81320898b7fbcc0ce52d4f2656310051d159db77397cc742e6b54553778",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-011/b2",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "c2dbf42fdb55bd9821dc35e03f34d81d4057c324c4df8536b464a12c75c08b57",
+   "script_sha256": "99c650c593eedcbb329eeca9afac95e450368f48a6ad5c30d9fcbd8bd73842a3",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-013/b2",
+   "attempt": 2,
+   "state": "invalid_response",
+   "raw_sha256": "5bafebf05fcce6daf36cfbdc1ed5d74e57418cd0e6af72ab2d5cee7af618f9f1",
+   "script_sha256": "25002b9fae815d243fc13c523030443d093acbdfbcbba5c9c041dc5c883e83b0",
+   "parser_problems": [
+    "0001041061-26-000003#077: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#078: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#079: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#080: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])",
+    "0001041061-26-000003#081: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-014/b2",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "b9b950c9aec1e1603f7bc134f5cdb98e775b5e5e236efb75d30b8d2d00d25fdc",
+   "script_sha256": "e48f0b96aaf7e90750eeb3349d6b734e633803433c8c07732bd92a5b4ae6ff41",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-016/b2",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "55f4d1ca877889b7036029074bba4500bf5e63850712d7e08e4520eac9a900d7",
+   "script_sha256": "9414b7a484b5e1c854a245ea1cbac9a65b89c1e4762673fd4dec90ffcd485f10",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-018/b2",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "bdceab3be27180e8c19956956737acca67f32864079d19dc413e4ecb0e7648aa",
+   "script_sha256": "4cde5d4661b2d318225dd68cd493d92580e5c2f132756f1d29a9d672daca230e",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-020/b1",
+   "attempt": 2,
+   "state": "invalid_response",
+   "raw_sha256": "7d075aaecb1a9163c54e44512ef78842bd9f48025e9b643575c213620d852e40",
+   "script_sha256": "046d13a9a98d182800f132ed4197d682f22d2b776bcdef563f93d1f6a339732f",
+   "parser_problems": [
+    "0001104659-26-027061#118: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#119: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#120: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#121: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "0001104659-26-027061#122: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-025/b1",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "d2d9b38a9a8ee925785aaf49a4c995665e761bf69d7fcfc7525bdd0b2ca2b86a",
+   "script_sha256": "ab17f0438bfba2337200bb6f4e6373b0ed75b2e1789029e07706f8b0e4fc82fe",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-025/b2",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "ad88f7cbc7c4e912237c97b6a8554e13a29ebe85d3563426873bde736a2f802d",
+   "script_sha256": "035dd3d3724d0cba03e431a2816ccabd1b354b8f27b298a6a6230097fec64dca",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-026/b1",
+   "attempt": 2,
+   "state": "invalid_response",
+   "raw_sha256": "e1c97a1a7113619e4d8ccf26a354fc1009487b5b0f3cd35d4244913c5767d9b6",
+   "script_sha256": "81e5bf522d5415117f2fbccf0b39ac1845be9e734910675173dc9d4c22a326e6",
+   "parser_problems": [
+    "DAL_2026-04-08T10.00#157: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "DAL_2026-04-08T10.00#158: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "DAL_2026-04-08T10.00#159: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "DAL_2026-04-08T10.00#160: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "DAL_2026-04-08T10.00#161: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "DAL_2026-04-08T10.00#162: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "DAL_2026-04-08T10.00#163: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  },
+  {
+   "label": "sokc-028/b2",
+   "attempt": 2,
+   "state": "valid",
+   "raw_sha256": "90634b0741841181c0708194af312791504bb0bde1dca70fdabaaeafb6ea3acb",
+   "script_sha256": "970e44cd59f368b85ea492a0dae85721caa6162100d913c45171bcef064380dc",
+   "parser_problems": []
+  },
+  {
+   "label": "sokc-029/b2",
+   "attempt": 2,
+   "state": "invalid_response",
+   "raw_sha256": "a00d7e5d6fd06fa9f737e1e1cb2247ead85706a621e5d7b550d12425f9ca7dc4",
+   "script_sha256": "279c2998a4b4a1e21607b7e7b6a79f8b1574a8c4b6d3ed598ead397502576480",
+   "parser_problems": [
+    "ULTA_2026-03-12T16.30#175: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#176: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#177: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#178: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#179: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#180: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])",
+    "ULTA_2026-03-12T16.30#181: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+   ]
+  }
+ ]
+}

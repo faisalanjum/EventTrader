@@ -1,0 +1,62 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000027904-26-000020",
+ "ordinal_one_based": 4,
+ "ordinal_receipt": 3,
+ "attempt_number": 1,
+ "run_id": "wf_f0e49a2d-fde",
+ "agent_id": "a95a88913a8e06bab",
+ "raw_sha256": "dfd5e79405c74bc2b82f2b09abc89e0a53da349b89576382b7d871da448fcf65",
+ "prompt_sha256": "c6e95ee52a256ba6b1b81225f124dc0190d665bebd6693fd2363a7757538c706",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 4,
+  "additions": 12,
+  "exclusions_considered": 17,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"Several 2Q26 guidance figures ('Total Revenue YoY (%) Up low-teens', 'Operating Margin 6% - 8%', 'Earnings Per Share $1.00 - $1.50') appear as flattened inline text where an original tabular",
+  "{'what': 'Whether a company-reported, third-party customer-sentiment survey statistic (the 85% corporate-travel-spend figure) falls within the DU-03 fact gate at all, versus being out-of-scope context"
+ ],
+ "locator": {
+  "additions": {
+   "located": 12,
+   "not_located": [],
+   "total_with_quote": 12
+  },
+  "exclusions_considered": {
+   "located": 17,
+   "not_located": [],
+   "total_with_quote": 17
+  }
+ },
+ "receipt_attempts": 5,
+ "receipt_missing": 32,
+ "receipt_other_problems": [
+  "the run accepted 4 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 3,
+  "attempt": 1,
+  "source_id": "0000027904-26-000020",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_f0e49a2d-fde.json",
+  "agent_id": "a95a88913a8e06bab",
+  "raw_name": "0000027904-26-000020.attempt1.complete.raw.json"
+ }
+}

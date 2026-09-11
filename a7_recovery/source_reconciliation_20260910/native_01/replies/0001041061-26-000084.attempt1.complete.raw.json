@@ -1,0 +1,226 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "verdicts": [
+    {
+      "proposal_id": "0001041061-26-000084#P000",
+      "decision": "exclude",
+      "why": "This target (ASU 2025-06 disclosure) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P001",
+      "decision": "exclude",
+      "why": "This target (gross unit openings 4,567 units) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P002",
+      "decision": "exclude",
+      "why": "This target (KFC Division 33,897 units) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P003",
+      "decision": "exclude",
+      "why": "This target (one-point same-store-sales headwind) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P004",
+      "decision": "exclude",
+      "why": "This target (53rd week EPS impact of ~$0.09) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P005",
+      "decision": "exclude",
+      "why": "This target (net leverage ratio ~4.0x EBITDA) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P006",
+      "decision": "exclude",
+      "why": "This target (Pizza Hut strategic options review announcement) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P007",
+      "decision": "exclude",
+      "why": "This target (1,939 net new units) has already been tested by a supplied proposal, even though it shares its source sentence with P001's different target; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000084#P008",
+      "decision": "exclude",
+      "why": "This target (90% of KFC units outside U.S.) has already been tested by a supplied proposal, even though it shares its source sentence with P002's different target; it is outside this fresh sample regardless of its own correctness.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In February 2026, our Board of Directors declared a quarterly dividend of $0.75 per share of Common Stock, a 6% increase from the quarterly dividend of $0.71 per share of Common Stock paid in 2025.",
+        "raw_label_or_claim": "a quarterly dividend of $0.75 per share of Common Stock, a 6% increase from the quarterly dividend of $0.71 per share of Common Stock paid in 2025",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A source-stated per-share dividend point value with an explicit stated YoY percent increase from the prior-year quarterly dividend; exercises the number-shape point rule and OD-11's growth-basis rule. No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "This quarterly dividend will be distributed March 6, 2026, to shareholders of record at the close of business on February 20, 2026, and will total approximately $210 million.",
+        "raw_label_or_claim": "will total approximately $210 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "The total-dollar aggregate dividend cost, co-stated with but a distinct fact from the per-share dividend value (NAME-13/Rule 3: total and per-X form are separate rows sharing no boundary). No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In May 2024, our Board of Directors authorized share repurchases of up to $2.0 billion (excluding applicable transaction fees and excise taxes) of our outstanding Common Stock through December 31, 2026.",
+        "raw_label_or_claim": "authorized share repurchases of up to $2.0 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A ceiling-shaped stated authorization amount (high only, per §7.1 number-shape rule). No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The resulting net Operating Loss of $11 million for the year ended December 31, 2023 has been reflected as a Special Item.",
+        "raw_label_or_claim": "net Operating Loss of $11 million for the year ended December 31, 2023",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "A stated net loss that must be encoded negative per OD-12, a point-shape numeric fact. No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Foreign currency translation favorably impacted Divisional Operating Profit in our KFC Division by $12 million for the year ended December 31, 2025.",
+        "raw_label_or_claim": "favorably impacted Divisional Operating Profit in our KFC Division by $12 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction"]
+      },
+      "why": "Explicit source-stated favorability wording (\"favorably impacted\") on a point dollar value, exercising the surprise-state favorable/unfavorable rule. No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In 2025, the increase in Company sales, excluding the impacts of foreign currency translation and lapping the 53rd week in 2024, was driven by the KFC U.K. and Ireland restaurant acquisition (see Note 3) in the second quarter of 2024 and Company same-store sales growth of 5%.",
+        "raw_label_or_claim": "Company same-store sales growth of 5%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording", "slices_and_unknown_axes"]
+      },
+      "why": "A segment-specific (KFC Division) same-store-sales growth point value, stated on a dated period (default YoY basis under OD-11) and explicitly qualified ex-FX/ex-53rd-week (a measurement token under FS-25/OD-9). Distinct from the identical value stated for the Taco Bell segment elsewhere in the filing (different scope/segment). No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Other Income Tax impacts recorded as Special in the year ended December 31, 2023 included $41 million of expense associated with a correction in the timing of capital loss utilization related to refranchising gains previously recorded as Special Items to tax years with a lower statutory tax rate.",
+        "raw_label_or_claim": "$41 million of expense associated with a correction in the timing of capital loss utilization",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "corrections_and_amendments"]
+      },
+      "why": "Explicit source-stated correction wording (\"a correction in the timing of...\") on a point-value expense (charge, positive per OD-12), directly exercising the OD-14 correction rule. No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The Company owned 79% of the Habit Burger & Grill units in the U.S. as of the end of 2025.",
+        "raw_label_or_claim": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"]
+      },
+      "why": "A segment/geography-qualified (Habit Burger Division, U.S.) company-owned percentage, a qualified population distinct from the consolidated whole (OD-17) and tied to a menu segment (segment:habitdivision). No supplied proposal names this target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "should future Habit Burger & Grill actual results continue to underperform relative to expectations as was the case in the year ended December 31, 2025, some or all of this goodwill may be impaired in future years.",
+        "raw_label_or_claim": "actual results continue to underperform relative to expectations",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["favourable_unfavourable_direction"]
+      },
+      "why": "Source-stated 'underperform relative to expectations' wording exercises the favorable/unfavorable direction rule, but the 'expectations' referenced are internal goodwill-testing planning assumptions, not a consensus/guidance/prior-period baseline; no valid polarity proof basis (source_framing or metric_meaning) is available from the supplied evidence, so the lawful reader behavior is abstention (unknown), not a guessed favorability."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "Food or beverage-borne illnesses (that can be caused by food-borne pathogens such as E. coli, Listeria, Salmonella, Cyclospora and Trichinosis) and food safety issues (such as food tampering and contamination including with respect to allergens or adulteration) have occurred and may occur within our system from time to time.",
+        "raw_label_or_claim": "have occurred and may occur within our system from time to time",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical, non-current risk boilerplate (no specific current source-flagged adverse threat); fails DU-11 at_risk STRICT and DU-03/Rule 1, so correct behavior is omission, not abstention."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000084",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "Our business and/or growth prospects could be adversely impacted by various catastrophic or other unforeseen events (which may be beyond our control), including health epidemics or pandemics, natural disasters, geopolitical events, military conflict, terrorism, political, financial or social instability, boycotts, social or civil unrest, workplace violence, or other events that lead to avoidance of public places or restrictions on public gatherings, particularly if located in regions where we have significant operations.",
+        "raw_label_or_claim": "could be adversely impacted by various catastrophic or other unforeseen events",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic hypothetical boilerplate covering an open-ended list of unforeseen event categories, not a specific current source-flagged adverse threat; fails DU-11/DU-03, correct behavior is omission."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "In 2025, the increase in Company sales, excluding the impacts of lapping the 53 rd week, was driven by acquisitions, company same-store sales growth of 5%, and unit growth.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same hard-class pattern (segment same-store-sales growth, ex-53rd-week measurement) already selected via the KFC Division occurrence for this event; adding the Taco Bell instance would not supply new event, hard-class, or control coverage within a representative (not exhaustive) sample."
+    },
+    {
+      "quote": "In 2025, our system restaurants generated digital sales approaching both $40 billion and 60% of overall system sales.",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "Genuinely unclear whether the dollar figure and the percentage constitute one fused fact (digital sales as a portion of system sales, OD-17) or two split facts (absolute value vs. share, akin to NAME-13's total-vs-ratio boundary); the authority does not settle this split/fuse call, so it is not selected rather than guessed. See open_issues."
+    },
+    {
+      "quote": "The IRS asserts an underpayment of tax of approximately $2.1 billion plus $418 million in penalties for fiscal year 2014.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real, specific litigation fact, but it does not exercise any of the ten required hard-class rules; representative selection does not require enumerating every eligible real fact absent a coverage gap to repair."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The menu lists both 'segment:otheroutsidetheu_s_andchina' and 'geography:otheroutsidetheu_s_andchina' (a same-label-under-two-kinds case matching the T1-05 rung-2 ambiguous-menu scenario), but none of the supplied text_parts (business/mdna/risk) contain a prose disclosure that actually exercises this axis pair with a stated company part.",
+      "why": "Per ruling 6, a menu is candidate context only; an unused menu entry does not make the event incomplete and a slice/ambiguous-menu tag applies only when an actual source item exercises the exact rule. No genuine ambiguous_menus item could be selected from this event's supplied text without inventing one."
+    },
+    {
+      "what": "Whether 'digital sales approaching both $40 billion and 60% of overall system sales' is one fused portion-versus-whole fact or two split facts (absolute value vs. share-of-whole) under NAME-13/the within-event fuse-before-collision rule.",
+      "why": "The quoted authority settles total-vs-per-X denominator splits and slice-vs-consolidated fusion, but does not explicitly address an absolute value stated together with its own share-of-whole percentage in one sentence; resolving this would require inventing a new sub-rule, which is out of scope for this turn."
+    }
+  ],
+  "blocked": null
+}
+```

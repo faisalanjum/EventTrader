@@ -1,0 +1,323 @@
+{
+ "source_id": "0001041061-26-000084",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "dividend_per_share",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 0.75,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 0.75,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "comparison_low": {
+        "value": 0.71,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "comparison_high": {
+        "value": 0.71,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      },
+      "per_x": "share"
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: the quote states a declared quarterly per-share dividend level of $0.75 against the stated prior level of $0.71, a real metric state and change."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "operating_profit",
+       "driver_state": "reported",
+       "level_low": {
+        "value": -11,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": -11,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "fiscal_year": 2023,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "Special Item"
+       ],
+       "slice_parts": [
+        "geography:ru"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: a stated operating result of negative $11 million for a named annual window, signed negative because it is a loss."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "same_store_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "fiscal_year": 2025,
+       "time_type": "duration",
+       "slice_parts": [
+        "segment:kfcglobaldivision",
+        "entity_ownership:companyownedstores"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: the quote states a measured 5% company same-store sales growth for the year, a real metric with a stated value."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "capital_loss_utilization_timing_correction",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": 41,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 41,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "fiscal_year": 2023,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "Special"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: a completed, sized one-off tax charge of $41 million arising from a stated timing correction, which is a discrete happening rather than a standing level."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "company_owned_unit_percentage",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 79,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 79,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "fiscal_year": 2025,
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:thehabitburgergrillglobaldivision",
+        "geography:us"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: a stated ownership-mix level of 79% at a named point in time, re-readable between events."
+  },
+  {
+   "row_index": 6,
+   "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic risk-factor boilerplate: the sentence lists hazard types and says such issues 'have occurred and may occur within our system from time to time', with no specific, current, source-flagged incident, no value, and no state, change, guidance or action, so the gate yields no DriverUpdate."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed negative_control and confirmed as a control: the row is undated, unspecific risk boilerplate and correctly yields no fact."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison"
+   ],
+   "reference_name": "a quarterly dividend of $0.75 per share of Common Stock",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The quote states only the February 2026 declaration month, so the dividend's target quarter (recorded as Q1 2026) is derived rather than stated, and the stated 6% step is left out of change_value because it is derivable from the two stated point values."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "net Operating Loss of $11 million",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The Russia attribution comes from the surrounding footnote rather than the quoted sentence, and the menu offers both geography:ru and segment:kfcrussia for that population, so the geography reading was chosen and the alternative recorded."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "measurement_wording",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "Company same-store sales growth of 5%",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The 'excluding the impacts of foreign currency translation and lapping the 53rd week in 2024' span grammatically qualifies the Company sales increase, not the 5% figure, so no measurement span was attached to this fact."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording",
+    "corrections_and_amendments"
+   ],
+   "reference_name": "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The item sits between lanes — a one-off charge (action) versus a component of the standing income-tax expense (metric) — and was settled as a discrete non-persistent charge."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "ambiguous_menus"
+   ],
+   "reference_name": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Two live ambiguities: the company-owned population could sit in the name (population qualifier) or as the menu slice entity_ownership:companyownedstores, and the Habit brand appears under two same-kind menu values (segment:habitdivision and segment:thehabitburgergrillglobaldivision)."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-014/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-014/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": [
+  {
+   "what": "Row 1: the dividend's target period is not stated in the quoted sentence.",
+   "why": "Only 'In February 2026' appears; the quarter recorded (Q1 2026) is inferred from the declaration month, so the series key could be wrong if the intended window is a different quarter."
+  },
+  {
+   "what": "Row 2: the Russia attribution and slice kind rest on the surrounding footnote, not the quoted sentence.",
+   "why": "The quote alone names no population; the menu carries both geography:ru and segment:kfcrussia for the same business, so the chosen part cannot be settled beyond doubt from the quote."
+  },
+  {
+   "what": "Row 5: duplicate same-kind menu values for the Habit brand, and an unresolved name-versus-slice split for the company-owned population.",
+   "why": "segment:habitdivision and segment:thehabitburgergrillglobaldivision denote the same division, and the ownership qualifier is defensible either in the driver name or as entity_ownership:companyownedstores, so identity could fork."
+  }
+ ]
+}

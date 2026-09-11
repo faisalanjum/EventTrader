@@ -1,0 +1,7 @@
+attempt	codex_reuse_boundaries2006_a
+payload	../../unit_1997/ledger/../../unit_2006/check_reuse_boundaries_2006.py
+map	../unit_1997/../unit_2006/map_warm_TEST_2006.tsv
+wrapper_pid	3849874
+payload_pid	3849878
+started_utc	2026-09-11T01:27:24Z
+state	finished exit 1

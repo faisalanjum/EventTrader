@@ -1,0 +1,12 @@
+```json
+{
+ "source_id": "0001104659-26-017090",
+ "facts": [],
+ "abstentions": [
+  {
+   "reason": "The quoted 'pre-tax net expense of $24.6 million' is a company-computed sum bundling several independent causes (impairment of assets and lease termination expenses, FRC acquisition-related items, and gift card breakage/inventory adjustments) into one aggregate figure. Rule 3.2 requires splitting independent causes into separate facts, but this quote provides only the combined total with no lawful basis to attribute the $24.6 million to any single one of the listed causes; each underlying cause has its own distinct value reported under its own line item elsewhere in the document, so treating this aggregate sentence as a fact would either misattribute the value to one cause or restate the same underlying facts a second time (barred by Rule 1.5)."
+  }
+ ],
+ "continuity_hints": []
+}
+```

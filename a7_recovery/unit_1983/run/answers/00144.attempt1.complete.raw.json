@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "minority_investment_divestiture",
+        "driver_state": "occurred",
+        "level_low": {"value": 104, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 104, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "measurement_raw_spans": ["pre-tax"],
+        "slice_parts": ["entity_ownership:devyani"],
+        "fiscal_quarter": 1,
+        "fiscal_year": 2024,
+        "period_end_date": "2024-03-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

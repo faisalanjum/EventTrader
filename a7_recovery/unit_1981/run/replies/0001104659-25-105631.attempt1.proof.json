@@ -1,0 +1,61 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0001104659-25-105631",
+ "ordinal_one_based": 19,
+ "ordinal_receipt": 18,
+ "attempt_number": 1,
+ "run_id": "wf_8e54d788-ca8",
+ "agent_id": "a706443b81e626942",
+ "raw_sha256": "b7f67d6315b0c6349d26d557b2db006b03cfdf7b9b520884ff3eb15360088445",
+ "prompt_sha256": "14600e160e3ad4c331caae3b7cdb6ff2b6c2bb764ab113a6608e14d76bb5da9d",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 4,
+  "additions": 6,
+  "exclusions_considered": 6,
+  "open_issues": 1
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': 'The tag `sequential_comparison` is labelled narrowly but its owning rule text (OD-11) governs the full growth-basis determination including the dated-period YoY default, not only sequential-"
+ ],
+ "locator": {
+  "additions": {
+   "located": 6,
+   "not_located": [],
+   "total_with_quote": 6
+  },
+  "exclusions_considered": {
+   "located": 6,
+   "not_located": [],
+   "total_with_quote": 6
+  }
+ },
+ "receipt_attempts": 18,
+ "receipt_missing": 19,
+ "receipt_other_problems": [
+  "the run accepted 17 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 18,
+  "attempt": 1,
+  "source_id": "0001104659-25-105631",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8e54d788-ca8.json",
+  "agent_id": "a706443b81e626942",
+  "raw_name": "0001104659-25-105631.attempt1.complete.raw.json"
+ }
+}

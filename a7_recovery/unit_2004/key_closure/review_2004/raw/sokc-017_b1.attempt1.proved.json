@@ -1,0 +1,119 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 83.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 83.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 71.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": 71.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:northitalia"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "debt_extinguishment",
+              "driver_state": "occurred",
+              "level_low": {"value": -15.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -15.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2025,
+              "slice_parts": []
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "reported",
+              "level_low": {"value": 366, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 366, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "period_start_date": "2025-11-03",
+              "period_end_date": "2025-11-03",
+              "slice_parts": []
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a pure cross-reference/incorporation-by-reference to risk-factor sections in other filings, not a statement about a driver's state, change, surprise, guidance, or action — generic boilerplate."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "revolving_credit_facility",
+              "driver_state": "occurred",
+              "time_type": "instant",
+              "period_start_date": "2022-10-06",
+              "period_end_date": "2022-10-06",
+              "slice_parts": []
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five located items describe five unrelated matters — North Italia segment sales growth, a one-off debt-extinguishment loss, the company's total restaurant count, a boilerplate risk-factors cross-reference, and a 2022 credit-facility amendment — each with its own subject, value/no-value shape, and timing, so they cannot represent one underlying fact."
+}
+```

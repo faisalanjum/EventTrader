@@ -1,0 +1,7 @@
+attempt	codex_review_child2006_a
+payload	../../unit_1997/ledger/../../unit_2006/verify_reviews_after_retry_2006.py
+map	../unit_1997/../unit_2006/map_review_retry_live_2006.tsv
+wrapper_pid	3771646
+payload_pid	3771650
+started_utc	2026-09-11T00:38:13Z
+state	finished exit 0

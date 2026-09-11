@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sga",
+        "driver_state": "increased",
+        "level_low": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "measurement_raw_spans": ["Excluding the impact of incentive compensation and SpaceNK"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

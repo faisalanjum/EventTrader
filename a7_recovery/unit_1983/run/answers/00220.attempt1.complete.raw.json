@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "share_repurchase_program",
+        "driver_state": "canceled",
+        "slice_parts": ["unknown:us-gaap:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"],
+        "time_type": "instant",
+        "month": 10,
+        "fiscal_year": 2024
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

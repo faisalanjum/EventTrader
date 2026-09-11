@@ -1,0 +1,41 @@
+```json
+{
+  "packet_id": "0000940944-26-000009#071",
+  "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restaurant_expenses",
+          "driver_state": "unchanged",
+          "time_type": "duration",
+          "period_scope": "ytd",
+          "period_end_date": "2026-02-22",
+          "fiscal_year": 2026
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000009#071/L1",
+      "exact_match": true,
+      "why": "L1 matches field-for-field: metric/restaurant_expenses/unchanged, duration, period_scope ytd, period_end_date 2026-02-22, fiscal_year 2026, with no level_unit or fiscal_quarter added."
+    },
+    {
+      "lane_id": "0000940944-26-000009#071/L2",
+      "exact_match": false,
+      "why": "L2 adds level_unit=percent even though no numeric level/comparison slot is populated (the quote states only 'remained flat', no numbers, so Rule 5a.1 does not require a unit), and adds fiscal_quarter=3 for what is a nine-month YTD window, which Rule 6 explicitly forbids ('YTD/TTM windows keep their exact dates, never collapsed to a quarter')."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether period_start_date should be populated for this YTD (nine-month) fact.",
+      "why": "The exact fiscal-year start date is not stated next to this bullet; it can only be inferred indirectly from the unrelated statement elsewhere in the filing that fiscal 2025 ended May 25, 2025 (implying FY2026 starts May 26, 2025). Neither draft supplied it, and it is safer to leave it null than to derive a date from a separate, indirect fact."
+    }
+  ]
+}
+```

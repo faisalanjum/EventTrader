@@ -1,0 +1,376 @@
+{
+ "source_id": "0001104659-25-105631",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 83.5,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 83.5,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": 71.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_high": {
+        "value": 71.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "slice_parts": [
+        "segment:northitalia"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: the row states a dated, sliced sales level with an explicit prior-year comparison, so the proposal and my outcome agree."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "debt_extinguishment_loss",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 15.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 15.9,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: a stated, dated, quantified charge line is a real driver fact, so the proposal and my outcome agree."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 366,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 366,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 216,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 216,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:thecheesecakefactory"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 46,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 46,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:northitalia"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 42,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 42,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:flowerchild"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 55,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 55,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:otherfoxrestaurantconceptsllc"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as real facts: the row carries a whole-company unit count plus four brand-level counts, each a distinct re-readable level, so the proposal and my outcome agree."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Pure cross-reference boilerplate pointing to risk factors in other filings; it states no driver state, change, surprise, guidance or action, so the gate yields no DriverUpdate."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed negative_control and settled as a control: the sentence only incorporates risk-factor disclosure by reference and carries no real driver fact, so the proposal and my outcome agree."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0001104659-25-105631",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "revolving_credit_facility",
+       "driver_state": "occurred",
+       "period_start_date": "2022-10-06",
+       "period_end_date": "2022-10-06",
+       "time_type": "instant"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed real_item and settled as a real fact: entering into the dated amended and restated loan agreement is a discrete completed transaction, not a bare mention, so the proposal and my outcome agree."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "North Italia sales",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The stated 16.1% growth is fully derivable from the two stated closed points, so I left change_value null and stored the prior-year comparison instead, which is a judgment call on the derivable-change rule."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "reference_name": "loss on early debt extinguishment",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Two genuine ambiguities recorded: the item is a one-off charge tied to a transaction (action_event reading) yet is a re-readable income-statement line (metric reading, which I took), and the signed axis can read it as a positive charge (+15.9, my choice) or a negative loss."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "reference_name": "366 restaurants",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The word \"currently\" states no date, so the instant level carries all period fields null rather than a guessed as-of date."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "216 locations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Same undated \"currently\" instant as the total, so period fields stay null."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 2,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "46 locations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Same undated \"currently\" instant as the total, so period fields stay null."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 3,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "42 locations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Same undated \"currently\" instant as the total, so period fields stay null."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 4,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "55 locations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "\"additional brands within our FRC portfolio\" plausibly matches more than one segment-kind menu value (otherfoxrestaurantconceptsllc vs sixotherfoxrestaurantconceptsllc vs allothersegments); I reused the plain Other FRC value because the kind is unambiguously segment and the meaning matches, but the pick is the recorded ambiguity."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 0,
+   "hard_classes": [],
+   "reference_name": "Fourth Amended and Restated Loan Agreement",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The latest stage is arguable between \"occurred\" (the 2022 signing is complete, my choice) and \"continued\" (the facility remains in force at the filing date)."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-017/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-017/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

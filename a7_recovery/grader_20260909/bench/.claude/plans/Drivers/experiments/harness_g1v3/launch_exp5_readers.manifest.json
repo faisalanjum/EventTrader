@@ -1,0 +1,414 @@
+{
+ "arms": [
+  {
+   "active": true,
+   "arm": "P1",
+   "effort": "high",
+   "role": "sonnet_run1",
+   "scope": "all_36",
+   "tier": "sonnet"
+  },
+  {
+   "active": true,
+   "arm": "P2",
+   "effort": "high",
+   "role": "sonnet_run2",
+   "scope": "all_36",
+   "tier": "sonnet"
+  },
+  {
+   "active": true,
+   "arm": "P3",
+   "effort": "high",
+   "role": "haiku_run1",
+   "scope": "all_36",
+   "tier": "haiku"
+  },
+  {
+   "active": true,
+   "arm": "P4",
+   "effort": "high",
+   "role": "haiku_run2",
+   "scope": "all_36",
+   "tier": "haiku"
+  },
+  {
+   "active": true,
+   "arm": "P5",
+   "effort": "high",
+   "role": "opus_ref",
+   "scope": "h32_subsample_12",
+   "tier": "opus"
+  }
+ ],
+ "conditional_cheap_fallback": {
+  "enabled": false,
+  "why": "disabled unless its official trigger fires AND Fable/owner separately approve \u2014 never enabled by preparing this plan"
+ },
+ "door": "reader",
+ "events": [
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000031.json",
+   "input_sha256": "43c5fdedfbb3822d7b5d800c0ad18437bcb37e379d4e3cb2e11ad9594ac79af5",
+   "prompt_sha256": "e1ee066672bed474b79a8374365ade3228aff5b7f50e60d8d52e5c20ccf44646",
+   "source_id": "0000006201-26-000031",
+   "ticker": "AAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000032.json",
+   "input_sha256": "d3419e9d12c51d4fd1409fb90a00482e711a1392ffe393e87a77d907b00e1031",
+   "prompt_sha256": "2c5fa824f86ac29067e3ef795161c5fc47369ffef2c017b2d697c4b0afc2c2a6",
+   "source_id": "0000006201-26-000032",
+   "ticker": "AAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000013.json",
+   "input_sha256": "03e28d879ba51a59b2be2bf1f750e52db10377b43e7393cb8178c7937944708d",
+   "prompt_sha256": "013bc3643bc2361adfd76748b9e5992d55ce3b4af7b4d1cfd6b32725ac50565a",
+   "source_id": "0000027904-26-000013",
+   "ticker": "DAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000020.json",
+   "input_sha256": "bf821a3a0180d4ee2b42fef5200da85fc325c55c349cd71d900af33baf2079e4",
+   "prompt_sha256": "decaf8b5f628b98a7043a4d80944f397e74e4d642dc0168c5fa61435fc7d60aa",
+   "source_id": "0000027904-26-000020",
+   "ticker": "DAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000022.json",
+   "input_sha256": "b00c4251483fa1b0fd89130022b123980249c5c798091bfbbd6f7a0e7afb29e7",
+   "prompt_sha256": "f10d29056afc27c63fb62f42690a2f525b8ffbe087dc010fea2ee85757513027",
+   "source_id": "0000027904-26-000022",
+   "ticker": "DAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000063908-26-000032.json",
+   "input_sha256": "cd2d7660e31042c45a7a6f2ea90d75ff546a224331cb1a9ef8423ae869eab6f6",
+   "prompt_sha256": "253b48467f964e4e1494d570442b2e441840f0cbbe33f4726f696a2d973e8b59",
+   "source_id": "0000063908-26-000032",
+   "ticker": "MCD"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000092380-26-000044.json",
+   "input_sha256": "97085fd9139810967c3bf155d921c166ccc47190a35313a558b744e68a15bff3",
+   "prompt_sha256": "98486808ca51e61c3b2100df599e4c8b3d560365e13dfdbd25260f6f2a3b107c",
+   "source_id": "0000092380-26-000044",
+   "ticker": "LUV"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000764478-25-000057.json",
+   "input_sha256": "63c16c3603f98a2b9f095d4fb6e18ab8e3c0691a208dde749f1c236a49d8525f",
+   "prompt_sha256": "64d6d507761963600303dc1f7156dd83037992aca429d415d6c65cd822c28fe4",
+   "source_id": "0000764478-25-000057",
+   "ticker": "BBY"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000764478-26-000005.json",
+   "input_sha256": "4c11045b3124146f30ee9cf50876a864628e1c958b91076a5da5a7410e5b5a19",
+   "prompt_sha256": "f9e7ef6d72303495d269c090981a1e263a8ea63eed446598f38b36e02b253c04",
+   "source_id": "0000764478-26-000005",
+   "ticker": "BBY"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000898173-26-000006.json",
+   "input_sha256": "2bfa6415283eb67a43d72661bcffe50414e82ac1d284ff544073f87ec6e53bd7",
+   "prompt_sha256": "7bd554d6970cdc4531cb653517374700b1377cf359723ad421e60adf3bbe9022",
+   "source_id": "0000898173-26-000006",
+   "ticker": "ORLY"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-25-000038.json",
+   "input_sha256": "3adc88b55af128ffec2e68ae08752923a1b9fe95f4b1b7179f26e8b742d9e4ad",
+   "prompt_sha256": "950db5b56d26e52767dfa0123d42d6edab6051e15d698127ce9f7d1ad58363f0",
+   "source_id": "0000940944-25-000038",
+   "ticker": "DRI"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-26-000005.json",
+   "input_sha256": "c023ae44c895a602d8bc7e1218b7eb2e54d253154a4793116d38cd343786d3e7",
+   "prompt_sha256": "bafabe44d7fbdca7826a8f1fd8e2a6f4c2007108aa1dde1e47654a4cb632a8d7",
+   "source_id": "0000940944-26-000005",
+   "ticker": "DRI"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-26-000009.json",
+   "input_sha256": "2ec8c45061ef2ce17e0d903d3ec9a8043e602cf10be2133f65fd387ebf0e8cc6",
+   "prompt_sha256": "e5252937eb8ec83c3d73ad4acdfd173917026e4b5b57e90ea3c608ff39a6c9f2",
+   "source_id": "0000940944-26-000009",
+   "ticker": "DRI"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-25-000109.json",
+   "input_sha256": "fd73532e42f82a2787f86ec11f9777d2ac57c835fa04cc85571b0bc89db91f8b",
+   "prompt_sha256": "cd04c3e975743107d32b09a921111dd86cbc405b4c04bc942f253d409254df2b",
+   "source_id": "0001041061-25-000109",
+   "ticker": "YUM"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-26-000003.json",
+   "input_sha256": "e798a6fe730da70551a96f364066f589628e8b2534aa2222de6de2ae676c3000",
+   "prompt_sha256": "4c6730f1a162746c576d823eb7533ea0192ce80b4f62619d0652d5820860b5c8",
+   "source_id": "0001041061-26-000003",
+   "ticker": "YUM"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-26-000084.json",
+   "input_sha256": "10bd696ff8a19c7b3fa83d0e474dccb44bd6326b4c3a2ce1b1383c3678f42f40",
+   "prompt_sha256": "8b95a45e2e9b4b044f5fd09ae46b3a6b4f58c827c79129485229d1cc168c748b",
+   "source_id": "0001041061-26-000084",
+   "ticker": "YUM"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001058090-26-000007.json",
+   "input_sha256": "e30f1e059c2e96bea1a5a517dac9aead35d1d335e1c184caab24ed4f3ee249db",
+   "prompt_sha256": "1098cdde21fc96319646c6124d7be85cec95bd51615c208b672286ead166b1d7",
+   "source_id": "0001058090-26-000007",
+   "ticker": "CMG"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-102611.json",
+   "input_sha256": "2e5e141b4c0a53a939cdb057676f70990071ee299784bba9e548b7de39fd6aab",
+   "prompt_sha256": "5691df690b3c59122abbf931ce66d8fba44e8a9b935191320c973a74718df61e",
+   "source_id": "0001104659-25-102611",
+   "ticker": "AZO"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-105631.json",
+   "input_sha256": "cc12af33fd346dcbfd56f3167bf79ca642057ac2d8c340181bce591666675482",
+   "prompt_sha256": "6c2b7a88ed57784c4a85217ca556639e2df1a74f158370dd6e1167bd795652f1",
+   "source_id": "0001104659-25-105631",
+   "ticker": "CAKE"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-118458.json",
+   "input_sha256": "04b098a12812a829ffbcd5c5a278b5c9c222ee9cf81b1a4ffa9cb553624c110b",
+   "prompt_sha256": "19baaa0a5233f4b34d3baea35e108d97b9b972b6484b42885872033bf9f521b3",
+   "source_id": "0001104659-25-118458",
+   "ticker": "ULTA"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-017090.json",
+   "input_sha256": "40d2babcdafd8b3b58b767656bad9a706d34250f07138ca5203e6355fac45e79",
+   "prompt_sha256": "b616b80dcc0c069b30e7c5d08ff18a265a7dfd2de86c34c85bbc1a3422c27490",
+   "source_id": "0001104659-26-017090",
+   "ticker": "CAKE"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-027061.json",
+   "input_sha256": "9621a03f10e98e72c47d9b24553df47cacf13d943e771afbf386c231dc9fd628",
+   "prompt_sha256": "bc8f1036488fa7de6eae25f16dfbb49ae244379148487481ea64bbad50c28a38",
+   "source_id": "0001104659-26-027061",
+   "ticker": "ULTA"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-032757.json",
+   "input_sha256": "8c62714b71800cabf77158d30b30f174f142e9b508b08052388a648f47d33f87",
+   "prompt_sha256": "0310ee80d7bcd75a8ab7660489426c01a9025d6e2f657b7a39703638a82b1f80",
+   "source_id": "0001104659-26-032757",
+   "ticker": "AZO"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001171843-26-001288.json",
+   "input_sha256": "6954ee19dff1bb0bbc26425539c32bccd0a8bfc61bdce530607e4c62fe69aca8",
+   "prompt_sha256": "b5597b1be4429029fac27cdf34f00d231c106c0b34c48c364085a15a8fbb7b16",
+   "source_id": "0001171843-26-001288",
+   "ticker": "AZO"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/AAL_2026-04-23T08.30.json",
+   "input_sha256": "3e071a611d043c8b9588736d3bb9d16884d2b51e6db17bc54f0c1854757bb7d8",
+   "prompt_sha256": "331c4164864158815dff31936c99b36dfe34a87ea7ee02689dabb1ff17917474",
+   "source_id": "AAL_2026-04-23T08.30",
+   "ticker": "AAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/BBY_2026-03-03T08.00.json",
+   "input_sha256": "02470e26765aa9a3a68358d87af6fa4bf2f8bcc6cd9d0795029be1d202ee439d",
+   "prompt_sha256": "81c91fd35e94f4bf8d7904271766e31702b0cca1fdc109169833431c1b03ab8b",
+   "source_id": "BBY_2026-03-03T08.00",
+   "ticker": "BBY"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/CMG_2026-02-03T16.30.json",
+   "input_sha256": "6079fe9cfc7cabea4ef5fc36d471f55022d7b25f21a7f6878cf58f4b5e33b705",
+   "prompt_sha256": "43dc1bf255b77fa281809f7a84282882c9f79af0933c46f538d66847abb7762c",
+   "source_id": "CMG_2026-02-03T16.30",
+   "ticker": "CMG"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/DAL_2026-04-08T10.00.json",
+   "input_sha256": "6d71edec78ef0271817646b47b93193ef2c86fc41908c4b155362ae472864fb5",
+   "prompt_sha256": "42f730cd8cd6bec0764b2b05604ea2e23487783d1f7717ba5a5c1009df0370a9",
+   "source_id": "DAL_2026-04-08T10.00",
+   "ticker": "DAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/DRI_2026-03-19T08.30.json",
+   "input_sha256": "d564b2f08e71196a7d90041d9cb351b3c0bfa82cac91d99fd413a0c98b874d17",
+   "prompt_sha256": "1dcb4d9e3a6f16be1f63f9f011f36e67ce5dd95fd6903a96803cd21cb631bfd4",
+   "source_id": "DRI_2026-03-19T08.30",
+   "ticker": "DRI"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/MCD_2026-02-11T16.30.json",
+   "input_sha256": "db101e6221d3b43d9e1cb33a27bc5924d039632666fcacded309823b92e10fcf",
+   "prompt_sha256": "5f01a488dd60acef2875480b80535ed764ac76c5c25d46339413f73580dba219",
+   "source_id": "MCD_2026-02-11T16.30",
+   "ticker": "MCD"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/ULTA_2026-03-12T16.30.json",
+   "input_sha256": "f3f13f61b444dde44de238b36110d2681941df80207eccce65116faf3e92825a",
+   "prompt_sha256": "352923a5ce840f1504fa9907846e5c04aceb8d439b49fab43568ae9e3ce07a19",
+   "source_id": "ULTA_2026-03-12T16.30",
+   "ticker": "ULTA"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/YUM_2026-02-04T08.15.json",
+   "input_sha256": "60e70e7e667c480511d8c5f3eed748af27fcd628486b3f38fc30e058dda5e7e7",
+   "prompt_sha256": "4202c9ea108eb1cbda19a6cfc14024145da9aa1b319d42d40eb6db47a7f24c2b",
+   "source_id": "YUM_2026-02-04T08.15",
+   "ticker": "YUM"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_42014391.json",
+   "input_sha256": "f51c6b723d933a960deb1f2f52fe7ba6cda82c967bb06d5a392a4dc69fdd92d3",
+   "prompt_sha256": "846632e314fd9b78b5d3632522e6b30fecc2f07521da5e08a3df4a0372cefbd0",
+   "source_id": "bzNews_42014391",
+   "ticker": "MCD"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_49256211.json",
+   "input_sha256": "55540c168d53e871c6895fd4ead4de8bb213889dd9764319ed747542cfd8eafc",
+   "prompt_sha256": "37145b581c4889d743e782c0b0f0fe51cfd23dcd06586878e86e064fe1c69a9f",
+   "source_id": "bzNews_49256211",
+   "ticker": "CMG"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_50877032.json",
+   "input_sha256": "c4d99d2547d10814459fd7612773622554fea9f61868f47d55323433b5712ca9",
+   "prompt_sha256": "8c843d9cd23c6281500dd03c8ccc9325ff70017e8fc2c16ef2389e41e92b20f5",
+   "source_id": "bzNews_50877032",
+   "ticker": "AAL"
+  },
+  {
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_51962983.json",
+   "input_sha256": "3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca",
+   "prompt_sha256": "3d4fad5204499dbd4e8c4dfc301ccc003041909dd5aa81372b8c6ffffd1cadcc",
+   "source_id": "bzNews_51962983",
+   "ticker": "BBY"
+  }
+ ],
+ "grading": {
+  "exact_count": null,
+  "formula_owner": "WorkOrder EXP-5 grading formula",
+  "hard_cap_owner": "WorkOrder EXP-5 grading cap",
+  "why": "grading volume depends on the unmatched facts actually produced, so an exact number here would be invented"
+ },
+ "identities": {
+  "core_foundation": {
+   "path": ".claude/plans/Drivers/FinalDesign/FINAL_DESIGN.md",
+   "sha256": "4218d73abe6b98ef2ecd325aef8b5e49985101b122e457b39784dee677f32a0b"
+  },
+  "core_route": {
+   "path": "driver/core/driver_write_cli.py",
+   "sha256": "2f716b3640cfd13b0a85278231331e7450973b748cc424c6e49f4684618646cf"
+  },
+  "launcher_generated": {
+   "path": ".claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.js",
+   "sha256": "0713ea41677bb1c5126dcd88714a66d3663a2578516688732acf9098ebf7b105"
+  },
+  "launcher_template": {
+   "path": ".claude/plans/Drivers/experiments/harness/launch_exp5_readers.workflow.template.js",
+   "sha256": "e923782b3bf283f30a6990342625c72fb1c61bdad5bd2eb182c7732cc455ed03"
+  },
+  "matcher": {
+   "path": "driver/core/fact_match.py",
+   "sha256": "bf6f0c922ef1f443fa16b01c4d80d87b445895d48b7da5fa772964de21304497"
+  },
+  "reply_transport": {
+   "path": ".claude/plans/Drivers/experiments/harness/raw_transport.py",
+   "sha256": "8cca087c384aa4dd300ebc48f23da6ccb77baff9abf48f9eb22b29af606a1db1"
+  },
+  "scorer": {
+   "path": ".claude/plans/Drivers/experiments/harness/scorers/score_exp5.py",
+   "sha256": "2901f1a615e988af30eba07d18e70bb5ad0473b52de6c537847f1bf3912b3a90"
+  },
+  "staged_v2_contract": {
+   "path": ".claude/plans/Drivers/FinalDesign/ChannelContractV2.md",
+   "sha256": "d8c3af40455376a03c2803f61aae1be92f545a7980880c9a77c4a3c017b3173b"
+  },
+  "step2_builder": {
+   "path": ".claude/plans/Drivers/experiments/harness/build_exp5_contract.py",
+   "sha256": "cb151cf6f72fb0be0882b9767a26fa6ec0a1b4901811081c7199cf91b5a1ff87"
+  },
+  "step2_checker": {
+   "path": ".claude/plans/Drivers/experiments/harness/kf_lint.py",
+   "sha256": "48d9d19c2c647ceb893fc55e29af3e1fb2150eb7930214fa94f0814c2e1bae77"
+  },
+  "step2_contract_manifest": {
+   "path": ".claude/plans/Drivers/experiments/harness/exp5_prompt_contract.manifest.json",
+   "sha256": "1cf043f9d202766399b2b4bde6d23cf3a50faa91e429f156e509d8f025be6264"
+  },
+  "step2_instruction_producer": {
+   "path": ".claude/plans/Drivers/experiments/harness/exp5_prompt_producer.md",
+   "sha256": "060d7c492d8a8717b75d31e54a52b3bf9c91fb95d54afe1df2cd5e0d8b8792cc"
+  },
+  "tests": {
+   "path": ".claude/plans/Drivers/experiments/harness/test_harness_guards.py",
+   "sha256": "efe54ee1e316a1499af8f216485991723ea5d924e63737bd9a6d7cfca7cb5fd9"
+  },
+  "workorder": {
+   "path": ".claude/plans/Drivers/FinalDesign/FableExperimentWorkOrder.md",
+   "sha256": "e224cf14a1d60141c840fabfb73c18c8ee8e4361cedaf6d3cf27bcd3fee72410"
+  }
+ },
+ "kfields_lock": {
+  "runner_rule": "the EXP-5 runner REFUSES TO START until the real reviewed K-fields lock hash is supplied here",
+  "sha256": null
+ },
+ "made_calls": 0,
+ "model_resolution": {
+  "pinned": "ROLES ONLY",
+  "rule": "exact runtime model IDs are resolved and written immediately before a future approved run (WorkOrder); an alias is NEVER frozen as the final ID"
+ },
+ "n_events": 36,
+ "od11_contingency": {
+  "enabled": false,
+  "id": "OD-11 ULTA -> LUV replacement",
+  "may_be_proposed_only_if": "later drafting finds FEWER than the official number of sequential-basis facts",
+  "substitution_engine": null,
+  "then_requires": "a new versioned record and review"
+ },
+ "opus_ref_subsample": {
+  "n": 12,
+  "rule": "h32-seeded deterministic shuffle (WorkOrder:172); key_lint.h32 is the owner and is imported, not restated",
+  "seed": "exp5_opus_ref_subsample_v1",
+  "source_ids": [
+   "0000006201-26-000031",
+   "0000027904-26-000013",
+   "0000027904-26-000020",
+   "0000027904-26-000022",
+   "0000764478-26-000005",
+   "0001041061-26-000003",
+   "0001041061-26-000084",
+   "0001058090-26-000007",
+   "0001104659-26-017090",
+   "0001104659-26-027061",
+   "0001104659-26-032757",
+   "MCD_2026-02-11T16.30"
+  ]
+ },
+ "output": {
+  "dir": ".claude/plans/Drivers/experiments/harness/runs",
+  "no_overwrite": "an existing run directory is NEVER overwritten; a second run writes a NEW directory or refuses"
+ },
+ "plan": "EXP-5 reader arms (separate approval; NOT GO #1)",
+ "planned_producer_calls": 156,
+ "separation": "separate approval and separate manifest from launch_kfields_drafts.manifest.json; neither plan may launch the other",
+ "unions": "same-tier only",
+ "withdrawn": [
+  "P6 local-Qwen"
+ ]
+}

@@ -1,0 +1,249 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 10.8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 10.8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "unknown",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "revenue_surprise",
+              "driver_state": "beat",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": -40, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": -40, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["Excluding net special items", "adjusted", "diluted"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "winter_storm_revenue",
+              "driver_state": "reported",
+              "level_low": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 25, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 25, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:london"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 11, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 11, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["channel:tmc"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "fuel_recapture_rate_guidance",
+              "driver_state": "unknown",
+              "value_text": "recapture rate in the 90s",
+              "conditions": "if fuel is still at the level with capacity reductions",
+              "company_confirmed": true,
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 8,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is the standard safe-harbor forward-looking-statements disclaimer ('numerous risks and uncertainties could cause actual results to differ from those projected') with no company-specific state, change, guidance, surprise, or action — generic boilerplate that Rule 1.2 requires abstaining on."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 9,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_high": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent_sequential",
+              "comparison_baseline": "sequential_period",
+              "slice_parts": ["product:otherrevenue"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 10,
+      "settled": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "level_unit": "percent_sequential",
+              "comparison_baseline": "sequential_period",
+              "slice_parts": ["geography:domesticdestination"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The ten located items describe ten materially different underlying facts (aggregate revenue growth, an expectations-beat, adjusted loss per share, a winter-storm revenue hit, London unit-revenue growth, TMC-channel revenue growth, a conditional Q4 fuel-recapture guide, generic safe-harbor boilerplate, other-revenue sequential growth, and domestic unit-revenue sequential progression), each tied to a distinct metric, slice, or comparison basis, so they cannot be one fact."
+}
+```

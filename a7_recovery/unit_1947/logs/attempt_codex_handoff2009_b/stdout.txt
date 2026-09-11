@@ -1,0 +1,5 @@
+PASS the new signed TEST key enters the actual saved-answer grading path
+PASS full36 events,191 packets,382 original answers with zero new producer calls
+PASS the signed533 baseline includes rather than re-adds the382 saved calls
+PASS all original answer bytes unchanged
+COMPLETE 4 checks; zero AI calls /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_handoff2009_b

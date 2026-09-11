@@ -1,0 +1,44 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "operating_expenses_per_available_seat_mile",
+        "driver_state": "increased",
+        "change_value": {"value": 2.3, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+        "change_unit": "percent_yoy",
+        "measurement_raw_spans": ["CASM-X"],
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      },
+      "per_x": "available_seat_mile"
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "operating_expenses_per_available_seat_mile",
+        "driver_state": "beat",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "favorable",
+          "basis": "metric_meaning",
+          "evidence": "CASM-X is a unit-cost efficiency metric; landing below the guided level means costs grew less than expected, an uncontroversially favorable outcome for cost efficiency",
+          "sentence": "First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance"
+        },
+        "measurement_raw_spans": ["CASM-X"],
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      },
+      "per_x": "available_seat_mile"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,122 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "goodwill_and_intangible_asset_impairment",
+              "driver_state": "occurred",
+              "level_low": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["product:computingandmobilephones"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["product:consumerelectronics"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 31.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 31.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 31.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 31.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["channel:online"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This sentence only defines the methodology term 'constant currency' (results adjusted to exclude foreign-currency impacts); it states no driver's state, change, surprise, guidance, or action, so it fails the Rule 1 fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five located items describe unrelated matters — a goodwill/intangible-asset impairment charge, two different product-category comparable-sales growth figures from two different segments (Domestic computing/mobile vs International consumer electronics), an online-revenue-as-share-of-segment-revenue ratio, and a non-substantive definition of the term 'constant currency' — so they are distinct facts, not one underlying fact."
+}
+```

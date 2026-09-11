@@ -1,0 +1,9 @@
+attempt	codex_reuse2006_ordinary_d
+payload	../../unit_2006/run_regression_2006.py
+map	../unit_2006/map_regression_ordinary_2006_d.tsv
+command	run_1957.sh ../unit_2006/map_regression_ordinary_2006_d.tsv ../../unit_2006/run_regression_2006.py codex_reuse2006_ordinary_d 1800
+wrapper_pid	3795202
+payload_pid	3795206
+payload_pgid	3795202
+started_utc	2026-09-11T00:53:44Z
+state	finished exit 0

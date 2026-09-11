@@ -1,0 +1,17 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "average_unit_volume",
+        "driver_state": "decreased",
+        "slice_parts": ["geography:cn"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

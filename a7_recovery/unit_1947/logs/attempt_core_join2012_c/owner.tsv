@@ -1,0 +1,7 @@
+attempt	core_join2012_c
+payload	../../unit_2012_final_join_review/battery_join_2012.py
+map	../unit_2012_final_join_review/map_join_2012.tsv
+wrapper_pid	3956295
+payload_pid	3956299
+started_utc	2026-09-11T02:34:59Z
+state	finished exit 0

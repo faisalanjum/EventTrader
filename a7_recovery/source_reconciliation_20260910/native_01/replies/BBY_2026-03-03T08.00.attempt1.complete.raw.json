@@ -1,0 +1,242 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "verdicts": [
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P000",
+      "decision": "exclude",
+      "why": "Already tested per task instructions; excluded from this fresh sample regardless of the correctness of the original proposal.",
+      "row": null
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P001",
+      "decision": "exclude",
+      "why": "Already tested per task instructions; excluded from this fresh sample regardless of the correctness of the original proposal.",
+      "row": null
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P002",
+      "decision": "exclude",
+      "why": "Already tested per task instructions; excluded from this fresh sample regardless of the correctness of the original proposal.",
+      "row": null
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P003",
+      "decision": "exclude",
+      "why": "Already tested per task instructions; excluded from this fresh sample regardless of the correctness of the original proposal.",
+      "row": null
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P004",
+      "decision": "exclude",
+      "why": "Already tested per task instructions; excluded from this fresh sample regardless of the correctness of the original proposal.",
+      "row": null
+    },
+    {
+      "proposal_id": "BBY_2026-03-03T08.00#P005",
+      "decision": "exclude",
+      "why": "Already tested per task instructions; excluded from this fresh sample regardless of the correctness of the original proposal.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Enterprise revenue of $13.8 billion decreased 1% versus last year.",
+        "raw_label_or_claim": "Enterprise revenue of $13.8 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh Q4 actual enterprise revenue level ($13.8B, point shape) with its explicit YoY comparison; not named by any supplied proposal (which cover EPS, ad collections, computing comps, gross profit guide, labor growth, and domestic-segment revenue specifically)."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our adjusted operating income rate increased 10 basis points compared to last year.",
+        "raw_label_or_claim": "adjusted operating income rate increased 10 basis points",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "sequential_comparison"]
+      },
+      "why": "Fresh Q4 actual adjusted operating income rate change fact (bps unit, YoY basis); distinct series and period from any supplied proposal; a temporal (prior-year) comparison per the routing rule, not a surprise."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Despite the softer sales, our adjusted operating income rate of 5% was better than planned and included slightly favorable rates for both gross profit and SG&A.",
+        "raw_label_or_claim": "was better than planned",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "Fresh actual-vs-plan (guidance) surprise fact for the adjusted operating income rate, distinct from the YoY change fact above and from any supplied proposal; carries explicit favorability wording."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "our adjusted diluted earnings per share increased 1% to $2.61.",
+        "raw_label_or_claim": "adjusted diluted earnings per share increased 1% to $2.61",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"]
+      },
+      "why": "Fresh Q4 ACTUAL adjusted diluted EPS with its YoY change, a different fact from the supplied FY27 guidance-EPS proposal (P000); this is the richer, complete occurrence versus Cori Berry's earlier partial mention of the same figure."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our Q4 comparable sales were down 0.8% versus last year within our guidance range for the quarter.",
+        "raw_label_or_claim": "down 0.8%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "portion_versus_whole"]
+      },
+      "why": "Fresh enterprise (whole-company) comparable-sales actual, distinct scope from the domestic-segment-specific comp-sales figure in supplied proposal P005."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our Q4 comparable sales were down 0.8% versus last year within our guidance range for the quarter.",
+        "raw_label_or_claim": "within our guidance range",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "The actual-vs-guidance comparison co-stated in the same sentence is a genuinely different target per ISS-16/OD-21 (metric home fact plus a separate surprise fact); no favorability wording and the value sits inside the closed guided range, so code would set in_line -- a distinct exemplar from the beat-style surprise above."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our Best Buy business team generated more than $1.1 billion in revenue in fiscal 26",
+        "raw_label_or_claim": "Best Buy business team generated more than $1.1 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      },
+      "why": "Fresh floor-shaped fact (\"more than\" = low bound only) for a named qualified sub-population (Best Buy Business), not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "International revenue of $1.2 billion increased 0.5% versus last year.",
+        "raw_label_or_claim": "International revenue of $1.2 billion increased 0.5%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["ambiguous_menus", "slices_and_unknown_axes", "sequential_comparison"]
+      },
+      "why": "Fresh actual revenue fact for a label (\"International\") that appears under two menu kinds (geography:international and segment:international/internationalsegment) and whose own framing here does not select one -- a menu-ambiguous case under T1-05 rung 2; not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Some of the statements we will make today are considered forward-looking within the meaning of the Private Securities Litigation Reform Act of 1995. These statements may address the financial condition, business initiatives, growth plans, investments, and expected performance of the company and are subject to risks and uncertainties that could cause actual results to differ materially from such forward-looking statements.",
+        "raw_label_or_claim": "subject to risks and uncertainties that could cause actual results to differ materially",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, boilerplate forward-looking-statements disclaimer with no specific, source-flagged fact -- fails DU-03/Rule 1; correct reader behavior is omission, a negative control."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Revenue in the range of $41.2 to $42.1 billion",
+        "raw_label_or_claim": "Revenue in the range of $41.2 to $42.1 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh closed-range guidance shape (both bounds present, low<high) for FY27 revenue; not the same fact as any supplied proposal, and gives a genuine closed-range exemplar distinct from the point and floor examples above."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "So for the year, product margin rates are going to be assumed to be pretty flat year over year.",
+        "raw_label_or_claim": "product margin rates are going to be assumed to be pretty flat year over year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "Fresh, numberless FY27 guidance fact for a distinct series (product margin rate) from the gross-profit-rate guidance in supplied proposal P003; explicit YoY framing exercises the growth-basis rule."
+    },
+    {
+      "row": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "both both revenue and units were below expectations in Q4 from an industry perspective.",
+        "raw_label_or_claim": "revenue and units were below expectations in Q4 from an industry perspective",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "Uses surprise-style wording (\"below expectations\") but the stated anchor is generic industry expectations, not consensus/prior-guidance/prior-year/sequential -- none of the OD-21 comparison_baseline values fit, so a lawful reader cannot resolve it into a formal surprise fact; correct behavior is abstention from surprise-encoding rather than guessing consensus or omitting the claim entirely."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "we delivered an adjusted operating income rate of 5% and adjusted earnings per share of $2.61, both of which are slightly up to last year.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Partial earlier restatement of facts completed later with quantified comparisons (captured in added rows for AOIR and EPS); per the partial-then-richer-restatement rule, the later complete occurrence is kept, not this one."
+    },
+    {
+      "quote": "Our domestic gross profit rate of 20.9% was flat to last year.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A lawful additional fact exists but is not needed to repair any declared event, control, or hard-class coverage gap; representative sampling, not a census."
+    },
+    {
+      "quote": "which was partially offset by a comparable sales decline of 1.3%.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Distinct metric (comparable sales) from the added International-revenue row; not selected for representative-sampling reasons, not because it is unreal."
+    },
+    {
+      "quote": "During fiscal 26, total capital expenditures of $704 million were essentially flat to fiscal 25.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Lawful fact, excluded for representative-sampling reasons; not required to reach any declared coverage target."
+    },
+    {
+      "quote": "we are increasing our quarterly dividend to 96 cents per share, which is a 1% increase.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Lawful fact, excluded for representative-sampling reasons; does not repair any declared coverage gap."
+    },
+    {
+      "quote": "we will be discussing both GAAP and non-GAAP financial measures, a reconciliation of these non-GAAP financial measures to the most directly comparable GAAP financial measures, and an explanation of why these non-GAAP financial measures are useful can be found in this morning's earnings release",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Administrative disclosure-mechanics notice, not a business fact and not the DU-03 generic-risk-boilerplate genre; omitted rather than selected as a control."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No net-loss / negative-earnings statement exercising OD-12 (losses_and_sign) was found anywhere in this event's text.",
+      "why": "This is a profitable-quarter earnings call with no stated loss, charge, or benefit language; reporting the absence rather than inventing an example."
+    },
+    {
+      "what": "No amendment/correction statement exercising OD-14 (corrections_and_amendments) was found anywhere in this event's text.",
+      "why": "The call contains no restatement or correction language; reporting the absence rather than inventing an example."
+    },
+    {
+      "what": "Whether 'Best Buy business' (a narrative sub-business, not a formal XBRL segment/geography axis value) is properly an OD-17 portion-versus-whole population or an FS-05..24 slice/unknown-axis token.",
+      "why": "The quoted authority's OD-17 examples (current, funded, fee_earning, network, systemwide, GMV) and the FS-05..24 axis-kind ladder do not explicitly cover a narrative company-defined business arm like this; classified here as portion_versus_whole by analogy to 'systemwide/GMV' curated-subset language, but this is a judgment call, not a rule the authority settles explicitly."
+    }
+  ],
+  "blocked": null
+}
+```

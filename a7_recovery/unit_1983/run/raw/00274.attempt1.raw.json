@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "increased",
+        "change_value": {"value": 11, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "slice_parts": ["channel:tmc"],
+        "time_type": "duration",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

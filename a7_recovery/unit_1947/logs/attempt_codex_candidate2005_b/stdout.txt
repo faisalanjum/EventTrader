@@ -1,0 +1,136 @@
+{
+ "kind": "SYNTHETIC ONLY; no real key signature or approval",
+ "model_calls": 0,
+ "checks": [
+  {
+   "check": "primary: candidate re-derives exactly",
+   "ok": true
+  },
+  {
+   "check": "primary: every actual run bound once, no fake history",
+   "ok": true
+  },
+  {
+   "check": "primary: actual calls counted once",
+   "ok": true
+  },
+  {
+   "check": "primary: full live row population",
+   "ok": true
+  },
+  {
+   "check": "primary: every artifact binding is exact",
+   "ok": true
+  },
+  {
+   "check": "primary: all initial/review/final receipts and closeouts included",
+   "ok": true
+  },
+  {
+   "check": "primary: existing signer parser/launcher, one primary call",
+   "ok": true
+  },
+  {
+   "check": "primary: actual grader materializer agrees",
+   "ok": true
+  },
+  {
+   "check": "primary: scope restores the historical binding owner",
+   "ok": true
+  },
+  {
+   "check": "primary: wrong offered run refuses",
+   "ok": true
+  },
+  {
+   "check": "primary: refusal restores the historical binding owner",
+   "ok": true
+  },
+  {
+   "check": "primary: absent required review refuses",
+   "ok": true
+  },
+  {
+   "check": "primary: failed precondition changes no binding owner",
+   "ok": true
+  },
+  {
+   "check": "child: candidate re-derives exactly",
+   "ok": true
+  },
+  {
+   "check": "child: every actual run bound once, no fake history",
+   "ok": true
+  },
+  {
+   "check": "child: actual calls counted once",
+   "ok": true
+  },
+  {
+   "check": "child: full live row population",
+   "ok": true
+  },
+  {
+   "check": "child: every artifact binding is exact",
+   "ok": true
+  },
+  {
+   "check": "child: all initial/review/final receipts and closeouts included",
+   "ok": true
+  },
+  {
+   "check": "child: existing signer parser/launcher, one primary call",
+   "ok": true
+  },
+  {
+   "check": "child: actual grader materializer agrees",
+   "ok": true
+  },
+  {
+   "check": "child: scope restores the historical binding owner",
+   "ok": true
+  },
+  {
+   "check": "child: wrong offered run refuses",
+   "ok": true
+  },
+  {
+   "check": "child: refusal restores the historical binding owner",
+   "ok": true
+  },
+  {
+   "check": "child: absent required review refuses",
+   "ok": true
+  },
+  {
+   "check": "child: failed precondition changes no binding owner",
+   "ok": true
+  },
+  {
+   "check": "legacy: exact original binding order, hr=False",
+   "ok": true
+  },
+  {
+   "check": "legacy: mandatory evidence hash retained, hr=False",
+   "ok": true
+  },
+  {
+   "check": "legacy: missing phase still refuses, hr=False",
+   "ok": true
+  },
+  {
+   "check": "legacy: exact original binding order, hr=True",
+   "ok": true
+  },
+  {
+   "check": "legacy: mandatory evidence hash retained, hr=True",
+   "ok": true
+  },
+  {
+   "check": "legacy: missing phase still refuses, hr=True",
+   "ok": true
+  }
+ ],
+ "passed": 32,
+ "test_output": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b"
+}

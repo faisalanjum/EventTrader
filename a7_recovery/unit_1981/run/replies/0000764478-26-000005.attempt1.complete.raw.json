@@ -1,0 +1,35 @@
+```json
+{
+  "source_id": "0000764478-26-000005",
+  "verdicts": [
+    {
+      "proposal_id": "0000764478-26-000005#P000",
+      "decision": "exclude",
+      "why": "This target (the Item 2.02/9.01 items-filed disclosure) has already been tested by a supplied proposal; it is excluded from this fresh sample for that reason only, not because it is false, mislocated, or misclassified.",
+      "row": null
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "FORM: 8-K",
+      "part_ref": "form",
+      "occurrence_in_part": null,
+      "why": "Pure filing-type metadata (form label), not a source-stated fact about a driver's state/change/surprise/guidance/action. It carries no business content and fails the fact gate outright (not even a bare mention of a substantive claim), so it is not selected as real_item, lawful_abstention_control, or negative_control."
+    },
+    {
+      "quote": "DESC: Form 8-K - Current report - Item 2.02 Item 9.01",
+      "part_ref": "description",
+      "occurrence_in_part": null,
+      "why": "Restates the same items-filed fact (Item 2.02 / Item 9.01) already named by the supplied proposal on the 'items' part. Under the owner's first-complete-quote/no-duplicate rule this is the same fact repeated, not a fresh target, and it is also itself pure filing-header metadata rather than a disclosed business fact."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event's supplied text_parts contain only three lines of SEC filing header/metadata (form type, item-number list, and a description line restating the item numbers). No actual disclosed content (e.g., earnings figures, guidance, segment results, restructuring detail, corrections) is present in the supplied event text, even though the item list flags 'Results of Operations and Financial Condition.' The underlying exhibit/press-release text that would normally carry such facts was not supplied.",
+      "why": "The authority requires selecting fresh real_item / lawful_abstention_control / negative_control rows bound to an exact contiguous quote from this event's named parts, and forbids inventing or widening beyond supplied evidence. With no substantive body text supplied, this event can lawfully supply zero fresh rows beyond the already-tested item-list target. This is reported as a coverage shortage per the instruction that a reported shortage is a lawful result, not padded or invented."
+    }
+  ],
+  "blocked": null
+}
+```

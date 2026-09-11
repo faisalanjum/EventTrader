@@ -1,0 +1,30 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "level_low": {"value": 2.97, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 2.97, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": 2.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_high": {"value": 2.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "period_start_date": "2025-01-01",
+        "period_end_date": "2025-12-31",
+        "measurement_raw_spans": ["Diluted"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

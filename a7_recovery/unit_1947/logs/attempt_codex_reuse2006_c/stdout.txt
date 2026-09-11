@@ -1,0 +1,103 @@
+{
+ "kind": "TEST signed key with actual unchanged A3 evidence; no real approval",
+ "model_calls": 0,
+ "passed": 17,
+ "checks": [
+  {
+   "check": "original run and era remain explicit",
+   "ok": true
+  },
+  {
+   "check": "original manifest is not relabelled as an A5 manifest",
+   "ok": true
+  },
+  {
+   "check": "all original calls are present, with zero new producer calls",
+   "ok": true
+  },
+  {
+   "check": "original answers are already in the independently signed baseline",
+   "ok": true
+  },
+  {
+   "check": "a missing external evaluation pin refuses",
+   "ok": true
+  },
+  {
+   "check": "a foreign external evaluation pin refuses",
+   "ok": true
+  },
+  {
+   "check": "the old new-run entry still refuses the old A3 directory",
+   "ok": true
+  },
+  {
+   "check": "cold consumer revalidates the explicit evaluation",
+   "ok": true
+  },
+  {
+   "check": "full source denominator includes every no-item event",
+   "ok": true
+  },
+  {
+   "check": "every scheduled item and reply is represented",
+   "ok": true
+  },
+  {
+   "check": "materialization does not count the original calls twice",
+   "ok": true
+  },
+  {
+   "check": "the complete materializer reports no accounting or identity problem",
+   "ok": true
+  },
+  {
+   "check": "both arms are present",
+   "ok": true
+  },
+  {
+   "check": "a warm consumer reuses the proved trace",
+   "ok": true
+  },
+  {
+   "check": "an altered evaluation identity refuses",
+   "ok": true
+  },
+  {
+   "check": "the restored positive still works",
+   "ok": true
+  },
+  {
+   "check": "every original run byte is unchanged",
+   "ok": true
+  }
+ ],
+ "evaluation_sha256": "18b6fc48d714efc0f395d00588002fce36e93b2cd6916a9d776ccd81df3905fb",
+ "identity": {
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+  "contract_suffix": null,
+  "source_manifest_sha256": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+  "receipt_sha256": "8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e",
+  "a4_lock_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+  "a4_lock_receipt_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+  "corrected_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "finalizations": {
+   "primary": "2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f"
+  },
+  "executed": {
+   "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+   "run_files": 799
+  },
+  "schema": "a7_prepared_run/1",
+  "evaluation_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse2006_c",
+  "a6_freeze_sha256": "18b6fc48d714efc0f395d00588002fce36e93b2cd6916a9d776ccd81df3905fb",
+  "scheduled_calls": 382
+ },
+ "required": {
+  "events": 36,
+  "packets": 191,
+  "accepted_gold": 206,
+  "answers": 382
+ },
+ "problems": []
+}

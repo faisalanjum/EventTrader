@@ -1,0 +1,165 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "system_wide_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 140, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 140, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 5.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["constant currency"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comp_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:u_s_market"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "comp_sales_surprise",
+              "driver_state": "beat",
+              "slice_parts": ["segment:u_s_market"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "consensus",
+              "has_favorability_wording": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "operating_margin_surprise",
+              "driver_state": "in_line",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "consensus",
+              "has_favorability_wording": false
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 750, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 750, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["segment:usmarketandinternationaloperatedmarkets"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 1000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 1000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:china"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic forward-looking-statements legal disclaimer applying the earnings release/8-K safe-harbor language to the call, not a substantive statement about any driver's state, change, guidance, or action, so it fails Rule 1's fact gate as boilerplate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six located items describe six unrelated matters — total system-wide sales growth, U.S. comparable-sales performance versus expectations, full-year adjusted operating margin versus expectations, a U.S./IOM restaurant-opening sub-target, a China restaurant-opening sub-target, and a generic forward-looking-statements disclaimer — each with its own distinct subject, metric, slice, or non-fact status, so they cannot be the same underlying fact."
+}
+```

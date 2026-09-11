@@ -1,0 +1,7 @@
+attempt	codex_composition2002_qualified
+payload	../../unit_1997/ledger/../../unit_2002/ledger/check_composition_2002.py
+map	../unit_1997/../unit_2002/map_lifecycle_2002.tsv
+wrapper_pid	3513509
+payload_pid	3513513
+started_utc	2026-09-10T21:38:45Z
+state	finished exit 0

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2006/check_reuse_warm_2006.py", line 43, in <module>
+    assert audit.call_count == 0, 'a warmed source card repeats the entire original workflow audit'
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: a warmed source card repeats the entire original workflow audit

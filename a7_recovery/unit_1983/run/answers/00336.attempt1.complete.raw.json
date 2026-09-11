@@ -1,0 +1,33 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "restaurant_closures",
+        "driver_state": "announced",
+        "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "slice_parts": ["segment:otheroperatingsegmentbahamabreezebrand"]
+      }
+    },
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "restaurant_conversions",
+        "driver_state": "announced",
+        "level_low": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 14, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "slice_parts": ["segment:otheroperatingsegmentbahamabreezebrand"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

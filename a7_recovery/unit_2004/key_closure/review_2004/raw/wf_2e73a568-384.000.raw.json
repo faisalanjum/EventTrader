@@ -1,0 +1,159 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 2.97, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.97, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 2.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 2.71, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Diluted"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sga_expenses",
+              "driver_state": "unknown",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "sga_expenses_surprise",
+              "driver_state": "missed",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "consensus",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "unfavorable",
+                "basis": "source_framing",
+                "evidence": "The sentence frames SG&A exceeding expectations as driven by unwanted cost pressure (inflation in health care and casualty claims), a negative outcome for an expense line, so higher-than-expected cost is unfavorable.",
+                "sentence": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs."
+              },
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 6447, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6447, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:us"],
+              "period_end_date": "2025-12-31",
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "stockholders_equity",
+              "driver_state": "increased",
+              "level_low": {"value": -763352, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "level_high": {"value": -763352, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1370961, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "comparison_high": {"value": -1370961, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "period_end_date": "2025-12-31",
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic Private Securities Litigation Reform Act safe-harbor boilerplate about forward-looking statements, not a real fact about any driver's state, change, surprise, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0000898173-26-000006",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "stock_split",
+              "driver_state": "occurred",
+              "period_end_date": "2025-06-10",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six items describe six unrelated underlying facts: full-year diluted EPS growth, a Q4 SG&A cost surprise versus expectations, the domestic ending store count, the total shareholders' deficit balance, generic safe-harbor legal boilerplate (no fact), and the completed 15-for-1 stock split — none share the same driver, period, or claim."
+}
+```

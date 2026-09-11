@@ -1,0 +1,224 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-25-118458#P000",
+      "decision": "exclude",
+      "why": "This proposal's target (13-week Interest expense/income, net comparison) has already been tested. It is excluded from this fresh sample by rule, regardless of whether its source fact, boundary, or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-118458#P001",
+      "decision": "exclude",
+      "why": "This proposal's target (39-week Gross profit as a percentage of net sales) has already been tested. It is excluded from this fresh sample by rule, regardless of whether its source fact, boundary, or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-118458#P002",
+      "decision": "exclude",
+      "why": "This proposal's target (Loan Agreement minimum fixed charge coverage ratio of 1.0) has already been tested. It is excluded from this fresh sample by rule, regardless of whether its source fact, boundary, or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-118458#P003",
+      "decision": "exclude",
+      "why": "This proposal's target (one reportable segment) has already been tested. It is excluded from this fresh sample by rule, regardless of whether its source fact, boundary, or classification is correct.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Net sales increased $327.5 million, or 12.9%, to $2.9 billion for the 13 weeks ended November 1, 2025, compared to $2.5 billion for the 13 weeks ended November 2, 2024.",
+        "raw_label_or_claim": "Net sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh: no proposal names the 13-week Net sales change. Point value with a YoY-quarter comparison ($327.5M/12.9% increase) exercises FINAL_DESIGN 7.1 number-shape (point) and OD-11 growth-basis determination (same 13-week quarter prior year -> YoY default)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The comparable sales increase of 6.3% was driven by a 3.8% increase in average ticket and a 2.4% increase in transactions.",
+        "raw_label_or_claim": "a 3.8% increase in average ticket",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh: no proposal names average ticket. Distinct metric from comparable sales/transactions co-stated in the same sentence (NAME-13/rule-3 smallest-complete-span logic); a stated point percentage requiring YoY growth-basis determination (OD-11)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Interest income, net was $0.8 million for the 39 weeks ended November 1, 2025, compared to interest income, net of $13.1 million for the 39 weeks ended November 2, 2024.",
+        "raw_label_or_claim": "Interest income, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "Fresh: the tested proposal (P000) covers only the 13-week interest expense/income figure; the 39-week figure is a different period scope, a real difference under the fuse-before-collision/period rule, so it is a separate row. Interest expense vs interest income across periods exercises the signed-axis logic (OD-12 family: charge/benefit sign convention)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+        "raw_label_or_claim": "84 stores in the U.K. and Ireland operated by Space NK",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      },
+      "why": "Fresh, no proposal touches this. The reported '1,500' store count is a qualified population that explicitly excludes the Space NK subsidiary footprint -- a textbook OD-17 portion-vs-whole population qualifier, carrying its own point value (84)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Ulta Beauty is expanding our presence internationally through a joint venture in Mexico",
+        "raw_label_or_claim": "a joint venture in Mexico",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "Fresh, specific, non-hypothetical state fact about a named geographic operating structure (Mexico joint venture), distinct from the Space NK/UK-Ireland fact used elsewhere in this set. Exercises the geography slice-kind coin path (FS-05..24) since 'Mexico' is not on this event's geography menu."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+        "raw_label_or_claim": "interest coverage ratio not less than 4.0 to 1.0",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh: a distinct Space NK Facility Agreement covenant, not the Loan Agreement covenant used by P002. 'Not less than' states a floor shape (FINAL_DESIGN 7.1)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "a leverage ratio not to exceed 2.0 to 1.0 for any relevant period",
+        "raw_label_or_claim": "a leverage ratio not to exceed 2.0 to 1.0",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh, distinct metric (leverage ratio) from the interest-coverage floor above, co-stated in the same sentence but a different covenant/scope. 'Not to exceed' states a ceiling shape."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Merchandise inventories, net were $2.7 billion at November 1, 2025 compared to $2.4 billion at November 2, 2024, representing an increase of $378.5 million or 16.0%.",
+        "raw_label_or_claim": "Merchandise inventories, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh, a balance-sheet-population metric untouched by any proposal. Point level with a stated YoY percentage change exercises both the number-shape rule and OD-11 growth-basis default (YoY, dated comparable period)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "the possibility that we will not realize the anticipated benefits of the acquisition of Space NK for any reason, including due to challenges with integration and/or achieving anticipated acquisition synergies",
+        "raw_label_or_claim": "the possibility that we will not realize the anticipated benefits of the acquisition of Space NK",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A hypothetical, forward-looking-statement safe-harbor bullet with no current, source-flagged, specific adverse fact -- generic risk boilerplate failing DU-03/Rule 1, correct behavior is omission, not abstention."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+        "raw_label_or_claim": "a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A real candidate (the currently applicable interest-rate margin on Loan Agreement borrowings) whose exact value cannot be lawfully resolved from this text: it forks between two rate bases at the Company's unstated election and depends on borrowing availability not disclosed here. Correct behavior is abstention, not a guessed single number, while still exercising the number-shape (range) rule."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-118458",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company\u2019s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+        "raw_label_or_claim": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "corrections_and_amendments"]
+      },
+      "why": "Fresh, untouched by any proposal. A new share-repurchase authorization (ceiling: up to $3.0 billion) that explicitly revokes/supersedes the prior program's unused authorization -- the same 'latest wins as current view, prior kept as history' amendment pattern named by OD-14."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Equity net loss of affiliate\n\n\u200b \n\n\u200b \n\n\u200b \n\n\u200b \n\n\u2014 \n\n\u200b \n\n\u200b \n\n2,210 \n\n\u200b \n\n\u200b \n\n\u2014 \n\nNet income",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real value likely exists (equity net loss of affiliate, 39 weeks ended Nov 2, 2024), but it sits only inside a heavily fragmented, zero-width-space-laden table; excluded due to high risk of a non-verbatim quote, not because the fact is doubted."
+    },
+    {
+      "quote": "In March 2024, the Board of Directors authorized a share repurchase program (the March 2024 Share Repurchase Program) pursuant to which the Company could repurchase up to $2.0 billion of the Company\u2019s common stock. The March 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the earlier share repurchase program.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same amendment/revocation pattern as the selected October 2024 program row; a real, distinct instance (different dates/amounts) but not selected, to avoid duplicative representative coverage of the same class within this one event."
+    },
+    {
+      "quote": "\u25cf $158 million for new brand launches; \u25cf $106 million for the acquisition of Space NK; and \u25cf $80 million for the addition of 63 net new Ulta Beauty stores opened since November 2, 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, fresh point-value facts (inventory increase components) but not selected; adequate point/range coverage already supplied by other rows in this set, and this is a representative sample, not a census."
+    },
+    {
+      "quote": "The Loan Agreement matures on March 13, 2029, provides maximum revolving loans equal to the lesser of $1.0 billion or a percentage of eligible owned inventory and eligible owned receivables (which borrowing base may, at the election of the Company and satisfaction of certain conditions, include a percentage of qualified cash), and contains a $50.0 million subfacility for letters of credit.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real ceiling-shaped facts (revolver cap, LC subfacility) additional to P002's covenant, but not selected; ceiling-shape coverage is already supplied by the Space NK Facility Agreement and leverage-ratio rows in this set."
+    },
+    {
+      "quote": "Comparable sales\n\n\u200b \n\n\u200b \n\n6.3%",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "The bare comparable-sales percentage sits inside the same fragmented, zero-width-space results table as other excluded table cells; the cleaner narrative restatement (average ticket) was selected instead, and re-extracting the table cell risked an inexact quote."
+    },
+    {
+      "quote": "There have been no material changes from the risk factors previously disclosed in our Annual Report on Form 10-K for the year ended February 1, 2025.",
+      "part_ref": "risk",
+      "occurrence_in_part": null,
+      "why": "Procedural boilerplate statement, same negative_control class as the selected Space NK-integration risk bullet; not added as a second example given the representative, not exhaustive, sampling scope."
+    },
+    {
+      "quote": "we had cash and cash equivalents of $204.9 million, $703.2 million, and $177.8 million, respectively",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real, fresh point values, but excluded as redundant additional point-shape coverage beyond what this event's selection already supplies; kept out to avoid padding the sample."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event's clean prose supplies no unambiguous instance of measurement_wording (adjusted/diluted/constant-currency wording), favourable_unfavourable_direction (a stated beat/miss vs. an expectation), expectation_routing (guidance vs. consensus), or a clear ambiguous_menus (two-or-more-plausible-kinds) case.",
+      "why": "The quoted authority requires representative coverage of these classes across all 36 events, not within any one event, so I did not force a tag onto a fact that does not genuinely exercise the named rule; other events must supply these."
+    },
+    {
+      "what": "Whether 'Amendment No. 4 to the Second Amended and Restated Loan Agreement' (a credit-facility amendment title) exercises the corrections_and_amendments tag the way the October 2024 share-repurchase-program revocation clearly does.",
+      "why": "OD-14/current-view correction rules, as quoted, are framed around Driver value/guidance corrections and amendments, not contract-amendment titles for a credit facility; the authority does not settle this boundary, so I left the Loan Agreement amendment untagged rather than guess."
+    },
+    {
+      "what": "Several real facts (e.g., equity net loss of affiliate, the bare comparable-sales table percentage) exist only inside heavily fragmented, zero-width-space-laden table text.",
+      "why": "I could not produce a quote I am fully confident is byte-identical to the source's literal characters for these cells, so I excluded them from `additions` rather than risk an inexact locator; this is a reporting/tooling limitation, not a judgment that the facts are false."
+    }
+  ],
+  "blocked": null
+}
+```

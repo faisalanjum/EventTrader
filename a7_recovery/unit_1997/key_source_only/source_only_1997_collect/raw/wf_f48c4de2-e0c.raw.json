@@ -1,0 +1,267 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "period_start_date": "2025-11-01",
+              "period_end_date": "2025-11-01",
+              "time_type": "instant",
+              "slice_parts": ["geography:gb", "geography:ie", "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a fact: the footnote states a re-readable store count (84) for a named owned sub-population at an exact date, which is a real metric level, not a bare mention."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "joint_venture",
+              "driver_state": "continued",
+              "slice_parts": ["geography:mexico"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a fact: the company states an in-force joint venture through which it is currently expanding, which is an ongoing discrete corporate arrangement rather than a topic mention, though it is stated as background prose."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "interest_coverage_ratio_covenant",
+              "driver_state": "reported",
+              "level_low": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "x",
+              "time_type": "instant",
+              "slice_parts": ["unknown:us-gaap:BusinessAcquisitionAxis__spacenk"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a fact: a stated, in-force covenant floor of 4.0 to 1.0 is a standing condition with a re-readable level, not boilerplate."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic forward-looking cautionary bullet about the possibility of not realizing anticipated Space NK acquisition benefits: it states no current, source-flagged specific adverse threat and no actual state, change, guide, or completed action, so the gate drops it as risk boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed negative_control and confirmed as a control: the row is safe-harbour risk language listing a hypothetical possibility, so it correctly yields no fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "credit_facility_base_rate_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 0.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 1.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a fact: the base-rate borrowing margin of 0.5% to 1.0% is a stated, standing rate level readable again over time."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase_program",
+              "driver_state": "announced",
+              "level_high": {"value": 3.0, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "m_usd",
+              "month": 10,
+              "fiscal_year": 2024,
+              "time_type": "instant",
+              "slice_parts": ["unknown:srt:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram"]
+            }
+          },
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase_program",
+              "driver_state": "canceled",
+              "month": 10,
+              "fiscal_year": 2024,
+              "time_type": "instant",
+              "slice_parts": ["unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a fact: the row's anchor (the revocation of the March 2024 program's unused authority) is a completed voluntary withdrawal, and the same quote independently states the new $3.0 billion October 2024 authorization, so the row yields two distinct action facts."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "credit_facility_term_sofr_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 1.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 2.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed real_item and settled as a fact: the Term SOFR borrowing margin of 1.5% to 2.0% is a stated, standing rate level and is a different pricing option from the base-rate margin in row 5."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Space NK's slice kind is genuinely unclear (owned subsidiary could read as entity_ownership or segment), so I reused the menu's unknown-kind Space NK token rather than guessing a kind, alongside the two geography menu values."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["slices_and_unknown_axes"],
+      "reference_name": "a joint venture in Mexico",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The statement is descriptive overview prose with no dated action, so whether it is an ongoing action fact (continued) or a bare structural mention is arguable; I recorded it as continued because the company states it is currently expanding through the venture."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two ambiguities recorded rather than resolved by guessing: the required covenant floor is a different driver from an actual coverage ratio (hence the covenant qualifier in the name), and the state could read as persists (standing requirement) or reported (bare stated value); the row's own quote also does not name Space NK, whose attribution comes from the surrounding paragraph."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "No period is stated for the margin, so all period fields are null on a metric that does not require one; the same sentence also carries an unlocated credit spread adjustment and unused line fee."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "the Company may repurchase up to $3.0 billion of the Company’s common stock",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The program identity is carried by an unknown-kind menu token because a repurchase program is not a business population, yet the served menu offers per-program values and nothing else keeps the October and March programs distinct."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 1,
+      "hard_classes": ["slices_and_unknown_axes", "ambiguous_menus", "corrections_and_amendments"],
+      "reference_name": "revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the revocation is a separate completed action on the March 2024 program or merely a clause of the single October authorization is genuinely arguable; I recorded it separately because it changes a different program's state to canceled, and the revoked unused amount is not stated so no value is carried."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "No period is stated for the margin, so all period fields are null on a metric that does not require one."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [5, 7],
+      "members_are_one_fact": false,
+      "reason": "The shared sentence states two alternative pricing options at the Company's election — a base-rate margin of 0.5% to 1.0% and a Term SOFR margin of 1.5% to 2.0% — which are different reference rates with different stated ranges, so they are distinct drivers rather than one fact."
+    }
+  ],
+  "lead_reconciliation": [],
+  "open_issues": [
+    {
+      "what": "The sentence shared by rows 5 and 7 also states a credit spread adjustment of 0.10% and an unused line fee of 0.25% to 0.375% per annum, and no located row anchors either.",
+      "why": "Both are real, distinct standing rate facts, but attaching them to a row whose raw label names a different item would attribute an unlocated fact to that row; they are therefore reported here rather than emitted."
+    },
+    {
+      "what": "Space NK's slice kind cannot be settled: the menu offers only the unknown-kind token unknown:us-gaap:BusinessAcquisitionAxis__spacenk, while the prose supports entity_ownership (wholly owned subsidiary) or a geography/segment reading.",
+      "why": "A guessed kind would be byte-identical in the stored token to an axis-confirmed one, manufacturing a false confirmation; the honest unknown token was reused instead, which leaves the identity of rows 1 and 3 provisional."
+    },
+    {
+      "what": "Share-repurchase program identity relies on menu tokens (unknown:srt:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram / __march2024sharerepurchaseprogram) that are program labels, not business populations.",
+      "why": "The slice law says accounting labels are not slices, yet the served menu carries these values and nothing else distinguishes the October authorization from the revoked March program on the same driver name and period; the conflict needs an owner ruling before row 6 is locked."
+    },
+    {
+      "what": "Row 3's quote does not itself name the borrower; the Space NK attribution and the absence of any covenant period were read from the surrounding Facility Agreement paragraph.",
+      "why": "The slice therefore rests on event context outside the located quote, so it should be confirmed before the fact is treated as fully grounded."
+    }
+  ]
+}
+```

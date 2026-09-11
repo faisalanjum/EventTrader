@@ -1,0 +1,274 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "verdicts": [
+    {
+      "proposal_id": "0000092380-26-000044#P000",
+      "decision": "exclude",
+      "why": "Already-tested target (the full-year adjusted EPS guidance of $4.00 non-update disclosure); excluded from this fresh sample per task rules — not a judgment on its correctness, boundary or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000092380-26-000044#P001",
+      "decision": "exclude",
+      "why": "Already-tested target (66 Boeing 737-8 aircraft deliveries planned in 2026); excluded from this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000092380-26-000044#P002",
+      "decision": "exclude",
+      "why": "Already-tested target (Q1 2026 operating expenses +4.0% YoY to $6.9 billion); excluded from this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000092380-26-000044#P003",
+      "decision": "exclude",
+      "why": "Already-tested target (the income statement's PROVISION (BENEFIT) FOR INCOME TAXES line, $58M vs $(43)M); excluded from this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000092380-26-000044#P004",
+      "decision": "exclude",
+      "why": "Already-tested target (the same 2026 aircraft-retirement disclosure named by P001 under a different label — 'retire approximately 60 aircraft in 2026'); excluded from this fresh sample.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net income of $227 million",
+        "raw_label_or_claim": "Net income of $227 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh, source-stated total net-income figure for Q1 2026, distinct from any tested proposal (P003 tests the tax line, not net income). Point-shape number."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "$0.45 diluted earnings per share",
+        "raw_label_or_claim": "$0.45 diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Per-share EPS figure is a distinct fact from total net income under NAME-13/rule 3; own smallest complete contiguous span, not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "$0.45 EPS, in line with guidance",
+        "raw_label_or_claim": "$0.45 EPS, in line with guidance",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "Headline states an actual-vs-guidance surprise on EPS with an explicit favourability word ('in line'); grounded numberless-comparison surprise (no baseline number restated here), fresh target not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating margin of 4.6%, an improvement of 8.1 points year-over-year",
+        "raw_label_or_claim": "an improvement of 8.1 points year-over-year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "First complete occurrence (headline) of the GAAP operating-margin level plus its points-based YoY comparison; a points unit exercises the OD-11 'points/bps wins' rule. Fresh, not proposal-named."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating margin of 4.6%, an improvement of 8.1 points and 6.6 points adjusted1, both year-over-year",
+        "raw_label_or_claim": "6.6 points adjusted1",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      },
+      "why": "Adjusted-measurement version of the operating-margin improvement only appears complete here (1Q Highlights); a real measurement difference from R4 requires its own row per the split law and NAME-14/FS-25; grammar forces the shared quote span, distinct label distinguishes it."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+        "raw_label_or_claim": "fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "Actual fuel cost per gallon vs. the company's own prior guidance; 'above' for a cost item requires the OD-13 polarity judgment (unfavourable). Fresh target, not proposal-named."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40, which increased fuel expense by $164 million and represented an approximate $0.22 headwind to EPS",
+        "raw_label_or_claim": "an approximate $0.22 headwind to EPS",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction"]
+      },
+      "why": "Per-share EPS impact is a distinct fact from the per-gallon fuel-cost fact (R6) and from the total-dollar expense impact under the total-vs-per-X split rule; 'headwind' is explicit unfavourable-direction wording."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Freight 44 41 7.3",
+        "raw_label_or_claim": "Freight",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Income-statement product-type line matching the menu's 'product:cargoandfreight' slice; a real, source-stated slice fact with point values and a stated YoY percent change. Fresh, not proposal-named."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Managed business revenue delivered its strongest March and quarterly performances in Company history, increasing 25% and 16%, respectively, year-over-year",
+        "raw_label_or_claim": "16%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "sequential_comparison"]
+      },
+      "why": "Managed business revenue is a named qualified sub-population of total revenue (OD-17 portion-vs-whole); the quarterly figure (16%, matched by source order/'respectively' to the quarterly clause) is the fact selected; grammar forces sharing the sentence with the March figure, distinguished by label/position."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "at least 300 aircraft planned by year\u2011end 2026",
+        "raw_label_or_claim": "at least 300 aircraft planned by year\u2011end 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Explicit floor-shape number ('at least 300') tied to a Starlink fleet-rollout commitment; fresh target, not proposal-named."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "First quarter 2026 RASM increased 11.2 percent year-over-year, above prior guidance",
+        "raw_label_or_claim": "First quarter 2026 RASM increased 11.2 percent year-over-year, above prior guidance",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "Actual YoY unit-revenue growth stated as beating prior guidance; RASM is a mainstream higher-is-better metric (favourable). Fresh, not proposal-named."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance",
+        "raw_label_or_claim": "First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "Actual YoY unit-cost growth beating prior guidance; CASM-X is a cost metric where 'below' is favourable — a deliberate polarity contrast with the RASM row (R11), never assume higher=better (OD-13). Fresh, not proposal-named."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "the impact of fuel price changes, fuel price 6 volatility, and fuel availability on the Company's business plans and results of operations",
+        "raw_label_or_claim": "the impact of fuel price changes, fuel price 6 volatility, and fuel availability on the Company's business plans and results of operations",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical forward-looking-statements boilerplate risk factor (fuel price/volatility/availability), matching the DU-03/Rule-1 gate for omission (not a specific, current, source-flagged adverse threat under DU-11). Clean negative control."
+    },
+    {
+      "row": {
+        "source_id": "0000092380-26-000044",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "NET INCOME (LOSS) $ 227 $ (149) n.m.",
+        "raw_label_or_claim": "$ (149)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "Income-statement comparative figure showing a prior-period net loss in parenthetical accounting notation — a direct OD-12 sign-signal exercise (negative loss value, never a positive loss magnitude). Fresh target, not proposal-named."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Managed business revenue delivered its strongest March and quarterly performances in Company history, increasing 25% and 16%, respectively, year-over-year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "The March-record component (25%) is a distinct monthly-period value co-stated with the selected quarterly (16%) row; not separately selected to keep the representative sample proportionate — no coverage gap requires it."
+    },
+    {
+      "quote": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40, which increased fuel expense by $164 million and represented an approximate $0.22 headwind to EPS",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "The total-dollar fuel-expense impact ($164 million) is a third fact co-stated in the same sentence as the selected per-gallon (R6) and per-share (R7) facts; a third split was judged unnecessary beyond the two already selected from this disclosure."
+    },
+    {
+      "quote": "updating the Company's full-year adjusted EPS guidance of $4.00 would not be productive at this time. Achieving this outcome would require lower fuel prices and/or stronger revenue performance to offset higher fuel expense.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "This conditions clause belongs to the same full-year guidance disclosure already named by proposal P000 (already tested); guidance `conditions` must stay bound to the same guidance fact, so it is not a fresh target."
+    },
+    {
+      "quote": "an adjusted net margin1 expected to be the highest among large U.S. airlines",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A peer-comparison claim; the comparison_baseline rule (vs peers -> null) already resolves it without ambiguity, so it does not add hard-class coverage beyond ordinary state/guidance facts and was left out to keep the sample lean."
+    },
+    {
+      "quote": "Other 614 576 6.6",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A second product-type slice line (matching menu 'product:otherrevenue') parallel to the selected Freight row (R8); redundant for slices_and_unknown_axes coverage from a single event."
+    },
+    {
+      "quote": "Repurchased $1.25 billion in shares and distributed $93 million in dividends during first quarter 2026",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, plain capital-return fact; not selected because it fills no hard-class gap left open by the rows already chosen and would be padding beyond representative scope for this event."
+    },
+    {
+      "quote": "Entered into a $500 million aircraft-secured term loan agreement used to pay down final portion of the Company's Payroll Support Program loan",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real financing fact; not selected — no hard-class not already covered by the chosen rows, and adding it would exceed representative-not-exhaustive scope for this single event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the headline's 'in line with guidance' surprise wording (R3) attaches to EPS alone, to net income alone, or jointly to both, is not stated in the source.",
+      "why": "The headline bundles '$227 million net income and $0.45 EPS' under one shared surprise clause without disambiguating which metric(s) the guidance comparison covers. I bound the surprise row to EPS as the more natural fit (the release's own guidance figures are stated per-share), but the authority does not settle this choice."
+    },
+    {
+      "what": "No genuine T1-05/FS-15 ambiguous-menu (two-or-more-plausible-kind) instance was found in this event.",
+      "why": "Every disclosed company part in this event (Passenger/Freight/Other, Managed business revenue) has a single plausible menu kind on its face; reporting the shortage rather than inventing a case."
+    },
+    {
+      "what": "No genuine lawful_abstention_control candidate was found in this event.",
+      "why": "Fuzzy-looking cases examined (the peer-comparison net-margin claim; the 'up from approximately 20% in 2025' undated-basis figure) are each already resolved by an existing owner rule (comparison_baseline->null for peers; period_scope enum includes `undefined`), so none qualified as a rule-unresolved abstention case. Only one clean negative_control (generic fuel-price risk boilerplate, R13) was found in this event."
+    },
+    {
+      "what": "The negative-control quote (R13) contains what looks like a PDF-extraction artifact — a stray '6' folded mid-sentence: 'fuel price 6 volatility'.",
+      "why": "Copied verbatim per the exact-quote requirement rather than corrected; flagging in case this reflects a known extraction defect in the supplied event text rather than genuine source wording."
+    },
+    {
+      "what": "No corrections/amendments-class disclosure (OD-14/current-view correction wording) was found in this event.",
+      "why": "The text contains no restatement, amendment, or correction-of-a-prior-value language; reporting the shortage rather than inventing one."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,7 @@
+attempt	codex_handoff2009_a
+payload	../../unit_1997/ledger/../../unit_2009/check_saved_handoff.py
+map	../unit_1997/../unit_2009/map_approved_reuse_a.tsv
+wrapper_pid	3948712
+payload_pid	3948716
+started_utc	2026-09-11T02:31:36Z
+state	finished exit 1

@@ -1,0 +1,125 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "3e3eacd5baafdad1e74eb8851d39722a35b020da581c43e8ed89bdc15abd16bb",
+ "invocation_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G2_run/invocation.seg01.json",
+ "invocation_sha256": "2d6974f1534676cd08953c53336647a74cc14b4330a0dd6b14a2e581b8a15be9",
+ "parent": null,
+ "reservation_sha256": "fae7ce7dc5712a2bdbab3909ddd92db3317e32c2336db40e040b4e40225d9d09",
+ "root_sha256": "cea1f28cdf4e4d8d835cee5698a7c7909288bb4337924715c7f3ca4a7c8c1a9f",
+ "rows": [
+  {
+   "batch_id": "G2-000",
+   "lane_id": "G2-000/G1a",
+   "ordinal": 0,
+   "prompt_sha256": "fa6cda80e09682bdd48067dd1971e13c56cd1d79048fbec264434cc0dd329d8a"
+  },
+  {
+   "batch_id": "G2-000",
+   "lane_id": "G2-000/G1b",
+   "ordinal": 1,
+   "prompt_sha256": "fa6cda80e09682bdd48067dd1971e13c56cd1d79048fbec264434cc0dd329d8a"
+  },
+  {
+   "batch_id": "G2-001",
+   "lane_id": "G2-001/G1a",
+   "ordinal": 2,
+   "prompt_sha256": "0bfaaefec01977d40bd00ce3a3fb6cadd497f3ec88c0492692ba36afd3c9e8c5"
+  },
+  {
+   "batch_id": "G2-001",
+   "lane_id": "G2-001/G1b",
+   "ordinal": 3,
+   "prompt_sha256": "0bfaaefec01977d40bd00ce3a3fb6cadd497f3ec88c0492692ba36afd3c9e8c5"
+  },
+  {
+   "batch_id": "G2-002",
+   "lane_id": "G2-002/G1a",
+   "ordinal": 4,
+   "prompt_sha256": "792f8dfbb2cbb47bd1d844c516b68537d5fd9145695787a8a6757d401b2a3a74"
+  },
+  {
+   "batch_id": "G2-002",
+   "lane_id": "G2-002/G1b",
+   "ordinal": 5,
+   "prompt_sha256": "792f8dfbb2cbb47bd1d844c516b68537d5fd9145695787a8a6757d401b2a3a74"
+  },
+  {
+   "batch_id": "G2-003",
+   "lane_id": "G2-003/G1a",
+   "ordinal": 6,
+   "prompt_sha256": "16d85f0d7322a9f0d4ff61588f7bd7db330ebf20bb71b6c787642db16f67fdea"
+  },
+  {
+   "batch_id": "G2-003",
+   "lane_id": "G2-003/G1b",
+   "ordinal": 7,
+   "prompt_sha256": "16d85f0d7322a9f0d4ff61588f7bd7db330ebf20bb71b6c787642db16f67fdea"
+  },
+  {
+   "batch_id": "G2-004",
+   "lane_id": "G2-004/G1a",
+   "ordinal": 8,
+   "prompt_sha256": "56dde284ae0889ff6575949ff801e0ac3a4e92c4c5d96cbec5d4e4f6bd74dc06"
+  },
+  {
+   "batch_id": "G2-004",
+   "lane_id": "G2-004/G1b",
+   "ordinal": 9,
+   "prompt_sha256": "56dde284ae0889ff6575949ff801e0ac3a4e92c4c5d96cbec5d4e4f6bd74dc06"
+  },
+  {
+   "batch_id": "G2-005",
+   "lane_id": "G2-005/G1a",
+   "ordinal": 10,
+   "prompt_sha256": "be3f3abacac5e1de50e7ccf743d65a482291ef7a3035e50bb9adb93d90c03c42"
+  },
+  {
+   "batch_id": "G2-005",
+   "lane_id": "G2-005/G1b",
+   "ordinal": 11,
+   "prompt_sha256": "be3f3abacac5e1de50e7ccf743d65a482291ef7a3035e50bb9adb93d90c03c42"
+  },
+  {
+   "batch_id": "G2-006",
+   "lane_id": "G2-006/G1a",
+   "ordinal": 12,
+   "prompt_sha256": "3d8243ed6bb1023706171a732afece5dfea294dd81d17cd8ae4c1e371f8b8c69"
+  },
+  {
+   "batch_id": "G2-006",
+   "lane_id": "G2-006/G1b",
+   "ordinal": 13,
+   "prompt_sha256": "3d8243ed6bb1023706171a732afece5dfea294dd81d17cd8ae4c1e371f8b8c69"
+  },
+  {
+   "batch_id": "G2-007",
+   "lane_id": "G2-007/G1a",
+   "ordinal": 14,
+   "prompt_sha256": "43f3a014272fc80a806502c954ef2c2b02aff8ec7738536923f06ec108d7f53a"
+  },
+  {
+   "batch_id": "G2-007",
+   "lane_id": "G2-007/G1b",
+   "ordinal": 15,
+   "prompt_sha256": "43f3a014272fc80a806502c954ef2c2b02aff8ec7738536923f06ec108d7f53a"
+  },
+  {
+   "batch_id": "G2-008",
+   "lane_id": "G2-008/G1a",
+   "ordinal": 16,
+   "prompt_sha256": "eb83dee3de7f114ef958296f2eae072ca5731d451fa57170e52bf2ba2c7c3c1b"
+  },
+  {
+   "batch_id": "G2-008",
+   "lane_id": "G2-008/G1b",
+   "ordinal": 17,
+   "prompt_sha256": "eb83dee3de7f114ef958296f2eae072ca5731d451fa57170e52bf2ba2c7c3c1b"
+  }
+ ],
+ "run_id": "G2_run",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G2_run/grade_batch.seg01.js",
+ "script_sha256": "faa1d861cd9bb5dbf1d9a51c40fc9169074651941015d2ffdeb303e3c7630cde",
+ "segment": 1,
+ "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G2_run/state.seg01.json"
+}

@@ -1,0 +1,281 @@
+{
+ "source_id": "0001171843-26-001288",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "same_store_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 3.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 3.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2,
+       "slice_parts": [
+        "geography:us"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as real_item and settled as a real item: the quote states a measurable same-store-sales level with an explicit direction, so the frozen kind and my outcome agree."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "lifo_charge",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 138,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "basis point"
+       },
+       "level_high": {
+        "value": 138,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "basis point"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "basis_points",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2,
+       "measurement_raw_spans": [
+        "non-cash"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as real_item and settled as a real item: the quote states a sized, non-boilerplate charge that drove a margin outcome, so the frozen kind and my outcome agree."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "net_new_store_openings",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "net_new_store_openings_surprise",
+       "driver_state": "in_line",
+       "level_low": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2,
+       "surprise_basis_hint": "actual",
+       "comparison_baseline": "previous_guidance",
+       "has_favorability_wording": true
+      }
+     },
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "store_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 350,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 360,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "range",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "company_confirmed": true
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as real_item and settled as a real item: the sentence carries a delivered store-opening count, an explicit in-line comparison against the company's own expectation, and a numeric full-year opening target, so the frozen kind and my outcome agree."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Bare topic mention inside the forward-looking-statements risk list: weather is named as a generic uncertainty with no stated state, change, size, direction, period or action, which the gate drops as risk boilerplate."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed as negative_control and settled as a control: the span is a generic risk-factor listing and yields no fact, so the frozen kind and my outcome agree (the separate winter-storm disruption sentence elsewhere in the event is a different span and is not this row)."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "slices_and_unknown_axes",
+    "portion_versus_whole"
+   ],
+   "reference_name": "Domestic Same Store Sales",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "\"Domestic\" is reused as the menu token geography:us on a meaning judgment (US-only stores) rather than an axis-confirmed match, and the growth basis is taken as year-over-year from the comparable-store framing rather than stated words."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "reference_name": "non-cash LIFO charge",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The 138 basis points can be read either as the charge's own level (chosen here) or as a change slot on gross margin, and the co-stated \"decrease in gross margin\" is a real but unquantified statement whose sized home sentence lies outside this row's quote, so it is not emitted as a second record here."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "reference_name": "64 net new stores",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": null
+  },
+  {
+   "row_index": 3,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "reference_name": "in line with our expectations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": "The stated expectation is a full-fiscal-year range while the delivered value is the quarter's count, so the surprise is pegged to the ended quarter and carries its home's value with the baseline present but no comparison numbers."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 2,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "corrections_and_amendments"
+   ],
+   "reference_name": "open approximately 350-360 stores for the full fiscal year",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The guide is stated on a gross-openings basis (\"open approximately 350-360 stores\") while the actual is stated net, so it is named as a distinct driver, and no movement wording is present so the state stays unknown rather than reaffirmed."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-022/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-022/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": [
+  {
+   "what": "Row 3: the period basis of the store-opening expectation comparison.",
+   "why": "The actual (64) is quarterly and the stated expectation (350-360) is full-fiscal-year; I pegged the surprise to the ended quarter with null comparison numbers, but if the intended reading pegs it to fiscal 2026, that period has not ended and the rule would require abstaining on the surprise instead."
+  },
+  {
+   "what": "Row 3: gross versus net store openings naming.",
+   "why": "The guide says \"open approximately 350-360 stores\" with no \"net\" while the actual says \"64 net new stores\", so the surprise's previous_guidance baseline does not point at an identically named guidance driver, and a merge decision cannot be made safely from this event alone."
+  },
+  {
+   "what": "Row 1: slice reuse of the menu token geography:us for \"Domestic\".",
+   "why": "The match is a meaning judgment about AutoZone's domestic (US) store population, not an axis-confirmed pick, and a wrong reuse would silently fork or fake-confirm the slice identity."
+  },
+  {
+   "what": "Row 2: the unquantified \"decrease in gross margin\" clause.",
+   "why": "It is a real qualitative statement inside this row's quote, but its sized version (52.5%, down 137 basis points) sits in a different, unlocated span, so emitting it here risks restating one fact as two records while omitting it risks losing it entirely."
+  }
+ ]
+}

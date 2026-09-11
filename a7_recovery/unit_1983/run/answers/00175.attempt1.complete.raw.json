@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [],
+  "abstentions": [
+    {"reason": "Generic risk-factor boilerplate about food safety/food-borne illness possibly occurring 'from time to time' — no specific driver state, change, or discrete event is stated; this is a hedge/topic mention, not a real fact under Rule 1.2."}
+  ],
+  "continuity_hints": []
+}
+```

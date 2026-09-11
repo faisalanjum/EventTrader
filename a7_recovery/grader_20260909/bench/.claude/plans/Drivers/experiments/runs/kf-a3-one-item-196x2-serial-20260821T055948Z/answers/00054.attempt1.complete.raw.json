@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "per_x": "gallon",
+      "item": {
+        "driver_name": "fuel_price_per_gallon",
+        "driver_state": "unknown",
+        "level_low": {"value": 4.30, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 4.30, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "measurement_raw_spans": ["all-in"],
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is a generic definitional/methodology footnote explaining what the 'legal proceedings' non-GAAP adjustment category means in general (a template description of the adjustment type used in the reconciliation tables) — it states no specific value, direction, magnitude, or occurrence for this period; it is boilerplate definition text, not a reportable driver fact."
+    }
+  ],
+  "continuity_hints": []
+}
+```

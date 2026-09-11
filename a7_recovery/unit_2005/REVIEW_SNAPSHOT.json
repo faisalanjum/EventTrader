@@ -1,0 +1,552 @@
+{
+ "kind": "A7 source-only key HANDOFF CODE; TEST evidence only, no factual key approval",
+ "model_calls": 0,
+ "prior_snapshot_sha256": "eda7b57c192452e365579022f07a4eb3beabddf7402f7b3ddc6a0b5a60a8c947",
+ "prior_pins_rechecked": 1639,
+ "prior_pin_drift": [],
+ "functions_from_live_owners": {
+  "a4_source_candidate.py": [
+   {
+    "name": "candidate_scope",
+    "line": 24
+   }
+  ],
+  "build_final_key_candidate.py": [
+   {
+    "name": "_ordinary_bound",
+    "line": 33
+   },
+   {
+    "name": "dumps",
+    "line": 40
+   },
+   {
+    "name": "compose_ordinary",
+    "line": 49
+   },
+   {
+    "name": "compose",
+    "line": 73
+   },
+   {
+    "name": "map_problems",
+    "line": 93
+   },
+   {
+    "name": "composition_map",
+    "line": 120
+   },
+   {
+    "name": "signer_head",
+    "line": 127
+   },
+   {
+    "name": "signer_shards",
+    "line": 133
+   },
+   {
+    "name": "ordinary_bindings",
+    "line": 162
+   },
+   {
+    "name": "build",
+    "line": 175
+   },
+   {
+    "name": "verify",
+    "line": 267
+   }
+  ]
+ },
+ "tests": [
+  {
+   "attempt": "codex_candidate2005_b",
+   "exit": 0,
+   "stdout_sha256": "6f6132026bbcef6bcf7e9f5c4618b7946e94e7dc08b21f596be906cb55528a4e"
+  },
+  {
+   "attempt": "codex_signed2005_a",
+   "exit": 0,
+   "stdout_sha256": "f1d8954006cb71c8eb9171067ff7b77e8b3051a9669be9aff1dfceaa5bbd31a5"
+  },
+  {
+   "attempt": "codex_approved2005_b",
+   "exit": 0,
+   "stdout_sha256": "d7292bb6b8bb908a271c85af3ec0747f7fb1c51640c3c27b99387876bd3023ad"
+  },
+  {
+   "attempt": "codex_scope2005_a",
+   "exit": 0,
+   "stdout_sha256": "c5a2783e60f5c66d37d19d2abd7e56d469735a4db670194b0e9dbcd42cb8dc02"
+  }
+ ],
+ "files": [
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_approved2005_b/exit",
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+   "bytes": 2
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_approved2005_b/owner.tsv",
+   "sha256": "f5f14c80ebfc8186c81f9c27ecd01714b778041a59768bf676e94749f4dcf743",
+   "bytes": 260
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_approved2005_b/stderr.txt",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_approved2005_b/stdout.txt",
+   "sha256": "d7292bb6b8bb908a271c85af3ec0747f7fb1c51640c3c27b99387876bd3023ad",
+   "bytes": 122
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_candidate2005_b/exit",
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+   "bytes": 2
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_candidate2005_b/owner.tsv",
+   "sha256": "935035d8e29f1507b0116aed98f4df16233958155687308b7356e22db90b1b12",
+   "bytes": 249
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_candidate2005_b/stderr.txt",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_candidate2005_b/stdout.txt",
+   "sha256": "6f6132026bbcef6bcf7e9f5c4618b7946e94e7dc08b21f596be906cb55528a4e",
+   "bytes": 2915
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_scope2005_a/exit",
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+   "bytes": 2
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_scope2005_a/owner.tsv",
+   "sha256": "0772cab3019339287a029657fb82d17f0fcab7ab62050f70f6dcf8925eb0ca3a",
+   "bytes": 250
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_scope2005_a/stderr.txt",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_scope2005_a/stdout.txt",
+   "sha256": "c5a2783e60f5c66d37d19d2abd7e56d469735a4db670194b0e9dbcd42cb8dc02",
+   "bytes": 6026
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_signed2005_a/exit",
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+   "bytes": 2
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_signed2005_a/owner.tsv",
+   "sha256": "395c95c371390b9a2672fe828767446b100a03b6cc9ba6077b07fbb02955105f",
+   "bytes": 253
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_signed2005_a/stderr.txt",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/attempt_codex_signed2005_a/stdout.txt",
+   "sha256": "f1d8954006cb71c8eb9171067ff7b77e8b3051a9669be9aff1dfceaa5bbd31a5",
+   "bytes": 2721
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1955/lock_owners/build_final_key_candidate.py",
+   "sha256": "f37d309b878505db7b585efc796911b0223581a20f366a0c6cc5c02669a2caa0",
+   "bytes": 20365
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1955/lock_owners/build_final_key_lock.py",
+   "sha256": "e95864edd0c0176934ed5b215ea76e1cb631babc1db3b5287520e5a87a42e8e8",
+   "bytes": 17887
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1955/lock_owners/harvest_final_sign.py",
+   "sha256": "ca05a4d642d8e6f1398353ca9340919bb2725c3a790a16fd459fc195b7bc355c",
+   "bytes": 7635
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1955/lock_owners/signer_proof.py",
+   "sha256": "f4b25eeecc1d2bfc071fa2aed83da341c7740030b7e0b10374d241a987047f9b",
+   "bytes": 27255
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/REVIEW_SNAPSHOT.json",
+   "sha256": "eda7b57c192452e365579022f07a4eb3beabddf7402f7b3ddc6a0b5a60a8c947",
+   "bytes": 508578
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/TEST_projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_TEST_signed_codex_signed2005_a/agent-siged2005_a.jsonl",
+   "sha256": "301f9ebb7f53c9ea87ac35bc97f2159c53dd5167086f1bbad4dd993217c4d37c",
+   "bytes": 437606
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/TEST_projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_TEST_signed_codex_signed2005_a.json",
+   "sha256": "0d5b32412ea306f18710fb6d9a43c00c99cfcd525769ca178b3a73b70536f9f4",
+   "bytes": 434931
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/README.md",
+   "sha256": "79c32082100ec697ece08c5264716810b0943c4d8ca232df421e507af2c757fe",
+   "bytes": 7113
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/TEST_RESULT.json",
+   "sha256": "871f32cbf07570e610332acb1e28ecc74d27eda2a2586476844724c7e45663bd",
+   "bytes": 1817
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/a4_final_key_lock.json",
+   "sha256": "12b2b5be3c5961d00707993a42121e78b0cc5b42cd6db4cc2fc58408de8af5d6",
+   "bytes": 5557
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/a4_final_key_lock_receipt.json",
+   "sha256": "cb4c824847221a28dc68188dc6dfa6fba1913591fb0b2931af3ef381e0c6a9e2",
+   "bytes": 1605
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/key_identity.json",
+   "sha256": "befed5f121e75031b981ecb1265e2cb254ecc37a3e08869a4366aa5609ddc68c",
+   "bytes": 14700
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/provenance.json",
+   "sha256": "4fad5fa81453919dc8cfd4d3ee718b009fa460fd067e30dec43d0cbee54192df",
+   "bytes": 13163
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/sidecar.json",
+   "sha256": "5c4712b2aac7a3fbd313cf9403b5add840b4e27065d764666674608f954b8785",
+   "bytes": 177252
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/final_sign.attempt1.evidence.json",
+   "sha256": "e25c4ac7c54895911316f7e49cfeb761e6c1bde45f9acd428a5888ff68bf4e33",
+   "bytes": 1491
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/final_sign.attempt1.js",
+   "sha256": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/final_sign.attempt1.raw.json",
+   "sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+   "bytes": 151
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/final_sign.attempt1.reply.json",
+   "sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+   "bytes": 151
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/final_sign.attempt2.js",
+   "sha256": "4393e87cbdb4c93f5248ec4d95ea981f1e8f6de909c5d255de6f4890d9d10514",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/scripts/TEST_native_script.js",
+   "sha256": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/signer.manifest.json",
+   "sha256": "a8eb585889ac7d736bd3657444ad9636eee6ce24c826ce59e4872c2121170533",
+   "bytes": 7046
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/signer/signer_prompt.txt",
+   "sha256": "25480e61c10965abe0cfdeafd57fa411b08e3688bc448f1926d2b2bba2d0ea89",
+   "bytes": 343726
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_approved2005_b/coherently_changed_TEST_offer/validator_receipt.json",
+   "sha256": "d4d18f9ee175abffb657fd02dfee32419c7b56833e090ffec838b70502aad680",
+   "bytes": 1683
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/key_identity.json",
+   "sha256": "a89f66e17c792b1e2311269cb70ca91afb86c47cbf94dbada809d1eb9b2a5e04",
+   "bytes": 17495
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/provenance.json",
+   "sha256": "f00a5a87343b3a0f83fceb2fd2ebce53384bbf79deeeebd793bae00d291cd217",
+   "bytes": 15958
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/sidecar.json",
+   "sha256": "5c4712b2aac7a3fbd313cf9403b5add840b4e27065d764666674608f954b8785",
+   "bytes": 177252
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/signer/final_sign.attempt1.js",
+   "sha256": "447a1b7b296d6c0b3438038df194c011b1563c0bfb5d4478cd142a26b9ee1c19",
+   "bytes": 378520
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/signer/final_sign.attempt2.js",
+   "sha256": "c4e3e071ab317a5c086638c584103d56ac5a60d0d54fd8b46013af4e2c6b7457",
+   "bytes": 378520
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/signer/signer.manifest.json",
+   "sha256": "670c13c2a22d76435c2b6cd17c23ec80fc7361f0812537e847623f81abf4d10e",
+   "bytes": 7046
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/signer/signer_prompt.txt",
+   "sha256": "068780d5e86526ab89c2836c680d20ee0826367341711c8ac35defa827214527",
+   "bytes": 344120
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child/validator_receipt.json",
+   "sha256": "d4d18f9ee175abffb657fd02dfee32419c7b56833e090ffec838b70502aad680",
+   "bytes": 1683
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/child_bound.json",
+   "sha256": "2afe70c33fa9125a2d030b0be3a317503beb50544bab9c33ddd03604e717f814",
+   "bytes": 504
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/legacy/events/finalization.json",
+   "sha256": "a7317b7a7e64aa8fc92aea8744fe1531ed07a8fc708d5840fd78c176c3508bc7",
+   "bytes": 18
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/legacy/evidence/finalization.json",
+   "sha256": "958c7d9b0f5eef3e4f4bd178c9053eea319a7331f61bf8eb439aa9792d1de336",
+   "bytes": 20
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/legacy/hr/finalization.json",
+   "sha256": "1d177e9caaae039c51127a13242d26f2c0b9673d448c825edef65e883aecf54f",
+   "bytes": 14
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/legacy/package/final.manifest.json",
+   "sha256": "74368784a70ff351da0562c1714eeb9912369afecf74c05c0f9f372a9c68db32",
+   "bytes": 19
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/key_identity.json",
+   "sha256": "befed5f121e75031b981ecb1265e2cb254ecc37a3e08869a4366aa5609ddc68c",
+   "bytes": 14700
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/provenance.json",
+   "sha256": "4fad5fa81453919dc8cfd4d3ee718b009fa460fd067e30dec43d0cbee54192df",
+   "bytes": 13163
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/sidecar.json",
+   "sha256": "5c4712b2aac7a3fbd313cf9403b5add840b4e27065d764666674608f954b8785",
+   "bytes": 177252
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/signer/final_sign.attempt1.js",
+   "sha256": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/signer/final_sign.attempt2.js",
+   "sha256": "4393e87cbdb4c93f5248ec4d95ea981f1e8f6de909c5d255de6f4890d9d10514",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/signer/signer.manifest.json",
+   "sha256": "a8eb585889ac7d736bd3657444ad9636eee6ce24c826ce59e4872c2121170533",
+   "bytes": 7046
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/signer/signer_prompt.txt",
+   "sha256": "25480e61c10965abe0cfdeafd57fa411b08e3688bc448f1926d2b2bba2d0ea89",
+   "bytes": 343726
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary/validator_receipt.json",
+   "sha256": "d4d18f9ee175abffb657fd02dfee32419c7b56833e090ffec838b70502aad680",
+   "bytes": 1683
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_candidate2005_b/primary_bound.json",
+   "sha256": "e8e4841354df4c654ae31a6fac417903dc3a914925592260b4bd443fad013cb6",
+   "bytes": 484
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_scope2005_a/TEST_RESULT.json",
+   "sha256": "86dfe9d41b24786f89e42156f0cb1511aee4f05f150527281b6f34c51bef3809",
+   "bytes": 8257
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_scope2005_a/ordinary_bound.json",
+   "sha256": "e8e4841354df4c654ae31a6fac417903dc3a914925592260b4bd443fad013cb6",
+   "bytes": 484
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_scope2005_a/wrong_events.json",
+   "sha256": "bd8df666e28d4d09d7dbcab48f01e88e0865d205bfd5e995609a383d8c17fa64",
+   "bytes": 401
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_scope2005_a/wrong_evidence.json",
+   "sha256": "9ef966222eb9d219e34d382de8714dae08e00ea544c675bef71fec8e5948f123",
+   "bytes": 549
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_scope2005_a/wrong_hr.json",
+   "sha256": "cef32fcb311c50d22035b342ead2e8a6bafb827cd2d1a51bbca5517fd375018e",
+   "bytes": 578
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_scope2005_a/wrong_hr_package.json",
+   "sha256": "9eac4c1742da8fc85b48233fa5339b444065f07eff6415ff3fc72a2bca4ad081",
+   "bytes": 586
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_scope2005_a/wrong_package.json",
+   "sha256": "175d3bf2e6bb32199209d699324aae4894218396e12f7de9568d44b94677a75f",
+   "bytes": 398
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/TEST_RESULT.json",
+   "sha256": "27fa81fa88bb5d05b11711f824d60dcbd840a5966c46ae2d6b87bca267108d53",
+   "bytes": 2586
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/a4_final_key_lock.json",
+   "sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+   "bytes": 5557
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/a4_final_key_lock_receipt.json",
+   "sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+   "bytes": 1605
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/key_identity.json",
+   "sha256": "befed5f121e75031b981ecb1265e2cb254ecc37a3e08869a4366aa5609ddc68c",
+   "bytes": 14700
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/provenance.json",
+   "sha256": "4fad5fa81453919dc8cfd4d3ee718b009fa460fd067e30dec43d0cbee54192df",
+   "bytes": 13163
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/sidecar.json",
+   "sha256": "5c4712b2aac7a3fbd313cf9403b5add840b4e27065d764666674608f954b8785",
+   "bytes": 177252
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/final_sign.attempt1.evidence.json",
+   "sha256": "e25c4ac7c54895911316f7e49cfeb761e6c1bde45f9acd428a5888ff68bf4e33",
+   "bytes": 1491
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/final_sign.attempt1.js",
+   "sha256": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/final_sign.attempt1.raw.json",
+   "sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+   "bytes": 151
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/final_sign.attempt1.reply.json",
+   "sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+   "bytes": 151
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/final_sign.attempt2.js",
+   "sha256": "4393e87cbdb4c93f5248ec4d95ea981f1e8f6de909c5d255de6f4890d9d10514",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/scripts/TEST_native_script.js",
+   "sha256": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+   "bytes": 378106
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/signer.manifest.json",
+   "sha256": "a8eb585889ac7d736bd3657444ad9636eee6ce24c826ce59e4872c2121170533",
+   "bytes": 7046
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/signer/signer_prompt.txt",
+   "sha256": "25480e61c10965abe0cfdeafd57fa411b08e3688bc448f1926d2b2bba2d0ea89",
+   "bytes": 343726
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/candidate/validator_receipt.json",
+   "sha256": "d4d18f9ee175abffb657fd02dfee32419c7b56833e090ffec838b70502aad680",
+   "bytes": 1683
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/TEST_codex_signed2005_a/ordinary_bound.json",
+   "sha256": "e8e4841354df4c654ae31a6fac417903dc3a914925592260b4bd443fad013cb6",
+   "bytes": 484
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/check_approved_consumer_2005.py",
+   "sha256": "7045349f21aa8a607d28d3e1afab5a159442883def81fe9e4cc6aaadaee94e1a",
+   "bytes": 5474
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/check_candidate_2005.py",
+   "sha256": "ada8bf51a3dcaef710cdaa42be3031bb5a06089ed747d65a925814cc83aeeb9e",
+   "bytes": 6621
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/check_scope_failures_2005.py",
+   "sha256": "57fadf478d4fe6e0923ad0bbd7ce9ba936faf318a2f16fc920b024d69e5ad10d",
+   "bytes": 4936
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/check_signed_candidate_2005.py",
+   "sha256": "8d93c68ca525a7b38c16f7a2c1bf6b57d161fc73ed58fa0e4fe4609d2cb401ad",
+   "bytes": 6928
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/map_approved_TEST_2005.tsv",
+   "sha256": "494dd7abeffba8484982faa1ef475dff032a95e11d690dca148ac5391cb686ec",
+   "bytes": 43914
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/a4_source_candidate.py",
+   "sha256": "b35ca5c8e82058236f0418468cf1409207524b06183560b5aec79817fe8a06e3",
+   "bytes": 2958
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py",
+   "sha256": "64932cd2b71b9e89a1c06c3c8ebc4ef3f97ab386df4c9325f954c703f1810bd4",
+   "bytes": 20577
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/snapshot_2005.py",
+   "sha256": "a13ca3cbb1a4848986a760199bd94b4c648ff7f007376d4bdac1f986cbbae93b",
+   "bytes": 2915
+  }
+ ],
+ "file_count": 92,
+ "limits": [
+  "Core independent review pending",
+  "Real key meaning/signature unapproved",
+  "A5/A6 saved-answer evaluation packet not created by these tests",
+  "No actual A7 grading result or production certification"
+ ]
+}

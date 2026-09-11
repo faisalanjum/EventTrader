@@ -1,0 +1,32 @@
+```json
+{
+  "source_id": "0000764478-26-000005",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000764478-26-000005",
+        "facts": [],
+        "abstentions": [
+          {
+            "reason": "This item is the 8-K item-type heading itself ('Item 2.02: Results of Operations and Financial Condition' plus the Item 9.01 exhibits label) — a filing-category / boilerplate label describing what kind of report this is, not a real statement about any driver's state, change, surprise, guidance, or action. Rule 1 step 2 requires abstention; no lawful fact can be built from a bare item-type tag."
+          }
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and it settles as exactly that: the row is only the 8-K item-type heading text, which carries no real driver fact, so the control classification is confirmed."
+    }
+  ],
+  "review": [],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000764478-26-000005#049",
+      "agrees": true,
+      "why": "The lead also reaches empty facts with a single abstention reasoning that this is the boilerplate 8-K item-heading label, matching this settlement's outcome and rationale exactly."
+    }
+  ],
+  "open_issues": []
+}
+```

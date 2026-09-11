@@ -1,0 +1,62 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "DRI_2026-03-19T08.30",
+ "ordinal_one_based": 29,
+ "ordinal_receipt": 28,
+ "attempt_number": 1,
+ "run_id": "wf_443dcbca-c27",
+ "agent_id": "a55892fa4669b68bd",
+ "raw_sha256": "4d169e06bd038921663614d4b6c8b130deb9f3445d57507acdbd94be29c65218",
+ "prompt_sha256": "7aad476cf95eb54a9ef313f7513077ab284acc0a5d7558a644f7248216423790",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 7,
+  "additions": 7,
+  "exclusions_considered": 7,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"This event's text supplies no fresh (not already covered by a supplied proposal) real candidate for four hard classes: losses_and_sign (no stated loss/charge/benefit/credit language appears ",
+  "{'what': \"The transcript contains several apparent speech-to-text errors that fall inside quoted spans used above or considered as candidates, e.g. 'same-russian sales growth' (for 'same-restaurant'),"
+ ],
+ "locator": {
+  "additions": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  },
+  "exclusions_considered": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  }
+ },
+ "receipt_attempts": 30,
+ "receipt_missing": 7,
+ "receipt_other_problems": [
+  "the run accepted 29 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 28,
+  "attempt": 1,
+  "source_id": "DRI_2026-03-19T08.30",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_443dcbca-c27.json",
+  "agent_id": "a55892fa4669b68bd",
+  "raw_name": "DRI_2026-03-19T08.30.attempt1.complete.raw.json"
+ }
+}

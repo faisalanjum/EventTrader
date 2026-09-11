@@ -1,0 +1,102 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "effective_tax_rate_guidance",
+          "driver_state": "unknown",
+          "level_low": {"value": 24, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 26, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "range",
+          "level_unit": "percent",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "conditions": "though it may vary based on discrete items",
+          "company_confirmed": true,
+          "measurement_raw_spans": ["underlying"]
+        }
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restaurant_openings",
+          "driver_state": "increased",
+          "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "change_value": {"value": 38, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "slice_parts": ["geography:canada"],
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sales_mix",
+          "driver_state": "reported",
+          "level_high": {"value": 3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "ceiling",
+          "level_unit": "percent",
+          "slice_parts": ["product:groupoccasions"]
+        }
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "sales_mix_guidance",
+          "driver_state": "unknown",
+          "value_text": "double-digit percentage of sales",
+          "sentinel_class": "long_term",
+          "company_confirmed": true,
+          "slice_parts": ["product:groupoccasions"]
+        }
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "reason": "The statement 'results ... were in line with expectations and guidance for the full year' is a broad, ungrounded summary that names no specific metric, value, or period-bound quantity to anchor a surprise fact, and it has no identifiable home fact in the same event, so it must abstain per the surprise-grounding rule."
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "legal_contingencies",
+          "driver_state": "decreased",
+          "change_value": {"value": -4, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+          "change_unit": "m_usd",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025,
+          "time_type": "duration"
+        }
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "reason": "This sentence is a standard forward-looking-statement legal disclaimer pointing to risk factors in the 10-K/10-Qs, a generic boilerplate topic mention with no stated driver state, change, or action, so it fails the fact gate."
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven items describe entirely distinct, unrelated disclosures (a tax-rate guidance range, Canada restaurant openings growth, a current sales-mix metric, a long-term sales-mix outlook, a generic in-line disclaimer, a legal-contingency reduction, and a boilerplate risk-factor reference), each tied to different quotes, drivers, and evidentiary bases, so they cannot be one underlying fact."
+}
+```

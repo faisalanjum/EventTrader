@@ -1,0 +1,234 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-26-032757#P000",
+      "decision": "exclude",
+      "why": "Already-tested target (gross profit % of sales, twenty-four-week period) supplied as a proposal; excluded from this fresh sample per task rules. No claim is made about whether it is true, correctly bounded, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P001",
+      "decision": "exclude",
+      "why": "Already-tested target (tariff-policy disclosure) supplied as a proposal; excluded from this fresh sample per task rules. No claim is made about whether it is true, correctly bounded, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P002",
+      "decision": "exclude",
+      "why": "Already-tested target (trailing-four-quarter effective tax rate) supplied as a proposal; excluded from this fresh sample per task rules. No claim is made about whether it is true, correctly bounded, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P003",
+      "decision": "exclude",
+      "why": "Already-tested target (domestic commercial sales, twelve-week period) supplied as a proposal; excluded from this fresh sample per task rules. No claim is made about whether it is true, correctly bounded, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P004",
+      "decision": "exclude",
+      "why": "Already-tested target (seasonality boilerplate) supplied as a proposal; excluded from this fresh sample per task rules. No claim is made about whether it is true, correctly bounded, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-032757#P005",
+      "decision": "exclude",
+      "why": "Already-tested target (weather-impact boilerplate) supplied as a proposal; excluded from this fresh sample per task rules. No claim is made about whether it is true, correctly bounded, or correctly classified.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Operating profit decreased 1.2% to $698.5 million.",
+        "raw_label_or_claim": "Operating profit",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A stated, non-boilerplate point-value metric fact (quarter operating profit) with a stated percent decrease versus the comparable prior-year period; not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The second quarter operating profit comparison was negatively impacted by $59.0 million due to an unfavorable non-cash LIFO charge in the current quarter.",
+        "raw_label_or_claim": "unfavorable non-cash LIFO charge",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A specific stated, non-derivable dollar charge with an explicit unfavorable sign signal (OD-12 charge/context example), distinct from the operating-profit level fact itself; not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Net income decreased 3.9% to $468.9 million",
+        "raw_label_or_claim": "Net income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Total-dollar quarter net income fact with a stated percent decrease vs. the comparable prior-year period; smallest complete contiguous span of the compound sentence isolating the total (non-per-share) Driver; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "diluted earnings per share decreased 2.3% to $27.63 for the quarter.",
+        "raw_label_or_claim": "diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Per-share form of the quarter earnings fact (NAME-13: a stated per-X denominator is a separate Driver/row from its total form); smallest complete contiguous span isolating the per-share half of the compound sentence; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "During the second quarter of fiscal 2026, failure and maintenance related categories represented the largest portion of our sales mix at approximately 85% of total sales, whereas they represented approximately 86% of total sales in the comparable prior year period.",
+        "raw_label_or_claim": "failure and maintenance related categories",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "A product-category slice fact (menu entries product:failure / product:maintenanceitems) stated as a percent of total sales with a stated prior-year comparison; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "at February 14, 2026, operated 6,709 stores in the U.S.",
+        "raw_label_or_claim": "6,709 stores in the U.S.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "A stated point-value operating fact tied to a geography slice (menu entry geography:us); not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "an increase in total company same store sales of 3.3% on a constant currency basis",
+        "raw_label_or_claim": "total company same store sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A quarter same-store-sales growth fact carrying an explicit measurement qualifier ('constant currency', NAME-14/FS-25) not present in any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "For the trailing four quarters ended February 14, 2026, our adjusted after-tax return on invested capital (\u201cROIC\u201d), which is a non-GAAP measure, was 37.6% as compared to 45.5% for the comparable prior year period.",
+        "raw_label_or_claim": "adjusted after-tax return on invested capital",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A named non-GAAP/adjusted metric with a stated point value and explicit prior-year comparison; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Gross profit, as a percentage of sales, was 52.5% for the twelve weeks ended February 14, 2026, compared to 53.9% for the comparable prior year period.",
+        "raw_label_or_claim": "Gross profit, as a percentage of sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "The twelve-week (quarter) gross-margin percentage fact is a different period scope than proposal P000's twenty-four-week target (different numbers, different stated period), a real difference under the split/fusion rule, and is not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-032757",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "As of the date of this filing, there have been no material changes in our risk factors from those disclosed in Part I, Item 1A, of our Annual Report on Form 10-K for the fiscal year ended August 30, 2025.",
+        "raw_label_or_claim": "no material changes in our risk factors",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Bare, generic 'no change' statement carrying no specific current source-flagged adverse threat and no other real fact; fails DU-03/Rule 1, correct reader behavior is omission -- a negative control, not named by any proposal."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Net income for the twenty-four weeks ended February 14, 2026, decreased by $53.2 million from the comparable prior year period to $999.7 million due to the factors set forth above, and diluted earnings per share decreased by 3.5% to $58.68 from $60.83.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Genuinely distinct period-scope (half-year) analog of the selected quarter net income/EPS rows; excluded for representativeness -- not needed to repair any declared coverage gap."
+    },
+    {
+      "quote": "The decrease in gross margin was driven by a 138 basis point unfavorable non-cash LIFO charge.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same underlying LIFO-charge cause as the selected $59.0 million operating-profit LIFO row, expressed on a different metric/unit (gross margin bps); excluded for representativeness since a losses_and_sign exemplar was already selected."
+    },
+    {
+      "quote": "913 stores in Mexico and 152 stores in Brazil.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Additional geography-slice store counts from the same sentence family as the selected U.S. store-count row; excluded for representativeness."
+    },
+    {
+      "quote": "Except for the $102.4 million increase in commercial paper, there have been no material changes to our contractual obligations as described in our Annual Report on Form 10-K for the year ended August 30, 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real quantifiable fact, but not needed to repair any declared event, control, or hard-class coverage; excluded for representativeness."
+    },
+    {
+      "quote": "we held $285.5 million of cash and cash equivalents, as well as $2.2 billion in undrawn capacity on our Revolving Credit Agreement.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real point-value liquidity fact; excluded for representativeness -- point/range coverage already well represented in this event."
+    },
+    {
+      "quote": "We had an accounts payable to inventory ratio of 110.9% at February 14, 2026, and 118.2% at February 15, 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Real point/sequential fact; excluded for representativeness -- redundant with existing point/sequential rows."
+    },
+    {
+      "quote": "Our adjusted debt to earnings before interest, taxes, depreciation, amortization, rent and share-based compensation expense (\u201cEBITDAR\u201d) ratio, which is a non-GAAP measure, was 2.5:1 as of February 14, 2026 and February 15, 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Flat/unchanged ratio across both periods; low incremental value versus the already-selected adjusted-ROIC measurement_wording exemplar; excluded for representativeness."
+    },
+    {
+      "quote": "product demand, due to changes in fuel prices, miles driven or otherwise; energy prices; weather, including extreme temperatures and natural disasters; competition; credit market conditions;",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Generic forward-looking risk boilerplate list, redundant with the Item 1A risk-factor negative control already selected; excluded to avoid duplicating the same negative-control class."
+    },
+    {
+      "quote": "On February 20, 2026, the U.S. Supreme Court invalidated tariffs imposed under the International Emergency Economic Powers Act.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Considered as a possible separate fact from proposal P001's target, but judged part of the same already-tested tariff-policy disclosure (one cohesive paragraph/topic); excluded to avoid retesting the same fact under a shifted boundary."
+    },
+    {
+      "quote": "an increase in total company same store sales of 4.0% on a constant currency basis",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Twenty-four-week analog of the selected twelve-week constant-currency same-store-sales row; excluded for representativeness."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event contains no facts exercising favourable_unfavourable_direction, expectation_routing, ambiguous_menus, or corrections_and_amendments (no guidance, no consensus/expectation comparisons, no dual-kind-ambiguous menu labels, no restated/amended prior figures appear anywhere in the supplied text).",
+      "why": "The authority does not require every event to supply every hard class, and rule 6 states an unused menu entry does not make an event incomplete; flagged here only so the final cross-event reconciliation can confirm these four tags are met from other events."
+    }
+  ],
+  "blocked": null
+}
+```

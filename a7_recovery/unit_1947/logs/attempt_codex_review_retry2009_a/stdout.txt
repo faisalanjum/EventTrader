@@ -1,0 +1,19 @@
+PASS positive before changed historical population
+PASS changed historical population refuses
+PASS positive restored after changed historical population
+PASS positive before unexhausted historical retry
+PASS unexhausted historical retry refuses
+PASS positive restored after unexhausted historical retry
+PASS positive before unchanged prompt after exhausted retry
+PASS unchanged prompt after exhausted retry refuses
+PASS positive restored after unchanged prompt after exhausted retry
+PASS only four unsatisfied slots prepare
+PASS one invalid result remains counted and gets exactly one child
+PASS child excludes every successful primary
+PASS waiting child blocks the key phase
+PASS the native child completes with no third attempt
+PASS all66 review obligations served and all62 original successes unchanged
+PASS failed and successful primary raw evidence is unchanged
+PASS both new attempts are bound and all500 historical/TEST calls count once
+PASS final key still receives exactly two leads for each of33 sources
+COMPLETE 18 checks; zero AI calls

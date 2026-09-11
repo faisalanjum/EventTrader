@@ -1,0 +1,18 @@
+{
+ "ordinal": 36,
+ "attempt": 1,
+ "source_id": "bzNews_51962983",
+ "run_id": "wf_32d65318-09c",
+ "agent_id": "a0bd127130914ad21",
+ "transcript": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_32d65318-09c/agent-a0bd127130914ad21.jsonl",
+ "transcript_exists": true,
+ "transcript_sha256": "38f1e0b8c3eae1eda4d4a8f298602862481daa977eb520ca8aa3280928ae05e7",
+ "answer_chars": 2488,
+ "answer_sha256": "a12efc9dd6d40dba7731e343cc5599cd07cb52ae3a6d0e8e91019aa7a30ca457",
+ "raw": "saved",
+ "raw_name": "bzNews_51962983.attempt1.complete.raw.json",
+ "raw_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/real_source_review/replies/bzNews_51962983.attempt1.complete.raw.json",
+ "raw_sha256": "a12efc9dd6d40dba7731e343cc5599cd07cb52ae3a6d0e8e91019aa7a30ca457",
+ "json_valid": false,
+ "json_error": "Expecting value: line 1 column 1 (char 0)"
+}

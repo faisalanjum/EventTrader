@@ -1,0 +1,324 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "system_wide_sales",
+       "driver_state": "increased",
+       "level_high": {
+        "value": 140,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "ceiling",
+       "level_unit": "m_usd",
+       "change_value": {
+        "value": 5.5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "measurement_raw_spans": [
+        "constant currency"
+       ],
+       "fiscal_year": 2025,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "comparable_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "comparable_sales_surprise",
+       "driver_state": "beat",
+       "level_low": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": false,
+       "polarity_proof": {
+        "polarity": "favorable",
+        "basis": "metric_meaning",
+        "evidence": "Higher comparable-sales growth for a restaurant operator has no mainstream counter-story; more comparable sales is the favorable direction, and the same sentence attributes it to positive check and guest counts.",
+        "sentence": "In the U.S., comp sales for the quarter were up 6.8%, which was above our expectations and was driven by positive check and guest count growth."
+       },
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "average_check",
+       "driver_state": "increased",
+       "level_unit": "percent_yoy",
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "guest_counts",
+       "driver_state": "increased",
+       "level_unit": "percent_yoy",
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "operating_margin",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "measurement_raw_spans": [
+        "adjusted"
+       ],
+       "fiscal_year": 2025,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "operating_margin_surprise",
+       "driver_state": "in_line",
+       "level_low": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": false,
+       "measurement_raw_spans": [
+        "adjusted"
+       ],
+       "fiscal_year": 2025,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 2600,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 2600,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 750,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 750,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "slice_parts": [
+        "segment:usmarketandinternationaloperatedmarkets"
+       ],
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 1800,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "floor",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "slice_parts": [
+        "segment:internationaldevelopmentallicensedmarketsandcorporate"
+       ],
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 1000,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 1000,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "slice_parts": [
+        "geography:china"
+       ],
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 6,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Standard forward-looking-statements disclaimer: it states no driver level, change, outlook, expectation comparison or discrete action, so the gate yields no fact."
+     }
+    ],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

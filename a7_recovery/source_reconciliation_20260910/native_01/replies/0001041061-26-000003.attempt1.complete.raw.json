@@ -1,0 +1,228 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "verdicts": [
+    {
+      "proposal_id": "0001041061-26-000003#P000",
+      "decision": "exclude",
+      "why": "Names a target already tested (KFC Q4 company-owned restaurant margin, 12.7% up 40bps YoY); already tested and therefore outside this fresh sample. No claim is made about whether it is true, correctly bounded, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000003#P001",
+      "decision": "exclude",
+      "why": "Names a target already tested (53rd-week impact on company-owned restaurant margins, 40bps Q4 / 10bps FY); already tested and therefore outside this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000003#P002",
+      "decision": "exclude",
+      "why": "Names a target already tested (KFC-division FX impact on operating profit, $10M Q4 / $12M FY); already tested and therefore outside this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000003#P003",
+      "decision": "exclude",
+      "why": "Names a target already tested (consolidated Fourth-quarter GAAP operating profit growth of 12%); already tested and therefore outside this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-26-000003#P004",
+      "decision": "exclude",
+      "why": "Names a target already tested (the Q1-2025 rounding/presentation-basis change note); already tested and therefore outside this fresh sample.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The Company's Board of Directors approved a dividend of $0.75 per share of common stock, an increase of 6%.",
+        "raw_label_or_claim": "a dividend of $0.75 per share of common stock, an increase of 6%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A real, source-stated corporate action (dividend increase to a point value $0.75) not named by any proposal. The stated '6%' cannot be the standard YoY comparison (the dividends table shows $0.71 vs $0.67 a year ago = ~12% vs the prior year's $0.71 base, while 0.75/0.71≈6%), so the reader must use in-document evidence to resolve this as the immediately-prior (sequential) comparison per OD-11, exercising the sequential vs YoY basis determination genuinely, not by default."
+      },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Foreign currency translation favorably impacted divisional operating profit by $11 million.",
+        "raw_label_or_claim": "Foreign currency translation favorably impacted divisional operating profit by $11 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "point_range_floor_ceiling"]
+      },
+      "why": "A distinct fresh fact: the consolidated worldwide FX impact for Q4 ($11M), a different scope and value from the KFC-division-specific FX fact already named by proposal P002. Explicit 'favorably' wording exercises the surprise-state/OD-13 favorability rule; the stated $11M is a point value."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "KFC Division opened 1,132 gross new restaurants during the quarter and 2,986 gross new restaurants across 105 countries for the year.",
+        "raw_label_or_claim": "KFC Division opened 1,132 gross new restaurants during the quarter and 2,986 gross new restaurants across 105 countries for the year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "Real segment-specific development fact (KFC Division, matching the company's segment menu entry) with stated point values (1,132 / 2,986), not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Habit Burger & Grill Division GAAP Operating Profit (Loss) $ (13) $ 2 $ (13) $ \u2014",
+        "raw_label_or_claim": "Habit Burger & Grill Division GAAP Operating Profit (Loss) $ (13)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "A segment (Habit Burger & Grill Division) swinging to a GAAP operating loss of $13 million from a $2M profit a year ago, presented with parenthetical loss notation, exercising OD-12 sign handling on a segment slice; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was $1.73.",
+        "raw_label_or_claim": "EPS excluding Special Items was $1.73",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "A different metric (EPS, a level value) and different measurement version (excluding Special Items) than the operating-profit-growth fact named by P003; the measurement qualifier belongs in fact_scope.measurement per NAME-14/FS-25, and the $1.73 is a point value."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "commenced a review of strategic options for the Pizza Hut brand",
+        "raw_label_or_claim": "commenced a review of strategic options for the Pizza Hut brand",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "A real, non-boilerplate, source-stated corporate action tied to the Pizza Hut segment. The CFO's quote is the first complete occurrence of this fact in source order (the later Notes-section restatement adds cost figures for a separate expense fact, not needed to complete this bare action fact)."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "an acquisition of 128 Taco Bell U.S. restaurants from a franchisee for approximately $670 million",
+        "raw_label_or_claim": "an acquisition of 128 Taco Bell U.S. restaurants from a franchisee for approximately $670 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "A real acquisition fact tied to the Taco Bell segment/U.S. geography with stated point values (128 restaurants, ~$670M); the CFO's earlier bare mention of 'a sizeable Taco Bell store acquisition' is incomplete (no figures), so this fuller Notes-section quote is the first COMPLETE occurrence for the valued fact."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Robust digital system sales exceeding $11 billion with digital mix nearly 60%.",
+        "raw_label_or_claim": "digital system sales exceeding $11 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "point_range_floor_ceiling"]
+      },
+      "why": "'Digital system sales' is a qualified subset population distinct from total system sales (OD-17 portion pattern), stated with a floor shape ('exceeding $11 billion')."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Robust digital system sales exceeding $11 billion with digital mix nearly 60%.",
+        "raw_label_or_claim": "digital mix nearly 60%",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A different target sharing the same quote (digital mix percentage, not the dollar figure). 'Nearly 60%' is an approximation that does not cleanly fit the point/closed-range/floor/ceiling/numberless taxonomy of FINAL_DESIGN section 7.1 for a non-guidance metric fact (value_text is guidance-only), and the authority does not resolve how to encode a bare qualitative approximator here. Correct reader behavior is abstention rather than guessing a point or ceiling value."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-26-000003",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "adverse effects of severe weather and climate change",
+        "raw_label_or_claim": "adverse effects of severe weather and climate change",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical risk-factor boilerplate from the forward-looking-statements list, matching the fact gate's own worked example ('weather may affect results'). Fails DU-03/Rule 1; correct reader behavior is omission, not abstention."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Foreign currency translation favorably impacted operating profit by $1 million for the quarter and had a negligible impact for the year.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Pizza Hut-specific FX-favourability fact; the consolidated $11M FX fact already exercises favourable_unfavourable_direction and point-shape for this event, so adding this would pad rather than repair coverage."
+    },
+    {
+      "quote": "Taco Bell Division opened 228 gross new restaurants during the quarter and 376 gross new restaurants across 27 countries for the year.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same fact-type (segment unit openings) as the selected KFC row; redundant for representative sampling, not selected to avoid padding."
+    },
+    {
+      "quote": "5% Unit Growth",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Long-term growth-algorithm target restated from a prior year (first announced 2022); unclear whether this is a fresh fact or a reaffirmed/duplicate restatement of an earlier event's guidance, and the authority does not settle that here. Left out rather than guessing a reaffirm/introduce classification."
+    },
+    {
+      "quote": "our significant exposure to the Chinese market",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same negative_control lane (generic boilerplate risk-factor list) as the selected weather item; a second example from the same list would pad rather than add fresh coverage."
+    },
+    {
+      "quote": "Tax Expense - U.S. OBBBA in the year ended December 31, 2025, reflects the tax expense recorded upon the Juy 4, 2025 enactment of H.R.1, commonly known as the One Big Beautiful Bill Act (\"OBBBA\") in the United States.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "losses_and_sign and point-shape already exercised by the Habit Burger & Grill loss row; not added to avoid padding this event's sample with additional tax-note detail."
+    },
+    {
+      "quote": "During the quarter and year ended December 31, 2025, we incurred charges of approximately $32 million and $36 million, respectively, primarily in third-party advising costs associated with this strategic options review",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real charge fact, but losses_and_sign/point-shape coverage for this event is already carried by the Habit Burger & Grill loss row; not selected to avoid padding."
+    },
+    {
+      "quote": "The number is 646/844-6383 in the U.S., 833/950-0062 in Canada and +1/646-844-6383 for international callers, conference ID 936175.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Purely administrative/logistical detail (conference-call dial-in numbers); carries no state/change/surprise/guidance/action fact about any Driver, so it fails the DU-03 gate outright as a non-fact rather than even qualifying as risk boilerplate. Omitted."
+    },
+    {
+      "quote": "China 27% +9 +6 United States 13% (2) (3)",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "KFC-markets country-percentage table; lacks a clean contiguous prose span with an unambiguous raw_label boundary, and slice coverage for this event is already reached via the KFC unit-openings row. Not selected."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No expectation_routing (actual-vs-consensus, guidance-vs-consensus, or guidance-vs-prior-guidance) fact was found anywhere in this event's text.",
+      "why": "The release contains no 'consensus,' 'Street,' analyst-estimate, or forward-guidance-vs-expectation language at all; this is a reporting fact about this source, not a rule gap, so this event supplies no fresh expectation_routing item."
+    },
+    {
+      "what": "No fresh ambiguous_menus exemplar (T1-05/FS-15 rung-2 dual-kind case) was found in this event.",
+      "why": "The company menu lists both 'geography:us' and 'segment:us,' but every in-document use of 'U.S.' (e.g., 'Taco Bell U.S. system sales') has framing that plainly selects a single kind (geography, contrasted with 'International'); the rung-2 trigger requires the quote's own framing to leave the kind genuinely unresolved, which this text does not present. Not invented."
+    },
+    {
+      "what": "No fresh corrections_and_amendments (OD-14) exemplar was found beyond the already-tested rounding/presentation-basis note (proposal P004).",
+      "why": "That note describes a change in numeric rounding convention for future filings, not a fact-value amendment/typo-fix of a specific prior driver value; whether a presentation-convention change even qualifies under OD-14 is not settled by the quoted authority, so no substitute was invented and no fresh row is offered for this tag from this event."
+    },
+    {
+      "what": "The 'digital mix nearly 60%' item was classified as lawful_abstention_control rather than real_item or negative_control.",
+      "why": "The quoted authority (FINAL_DESIGN section 7.1 number shapes, plus the guidance-only restriction on value_text) does not state how an imprecise qualitative approximator ('nearly X%') on a non-guidance metric should be encoded; this is recorded as a fuzzy boundary per the fact-gate's own instruction rather than guessed into a shape."
+    }
+  ],
+  "blocked": null
+}
+```

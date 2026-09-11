@@ -1,0 +1,254 @@
+{
+ "kind": "callable closure path over CLEARLY LABELLED SYNTHETIC results; no model call, no real source truth, no real signature",
+ "closure_owner_sha256": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+ "review": {
+  "owed": 66,
+  "valid": 66,
+  "run_problems": [],
+  "outcomes": {
+   "valid": 66
+  }
+ },
+ "leads_per_event": {
+  "2": 33
+ },
+ "final_request": {
+  "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_pkg_codex_final2002_qualified",
+  "problems": [],
+  "invocations": 33,
+  "prompt_sha256_sample": {
+   "0000006201-26-000031": "63679486fceafc8be04e2348b38822a7c36f015d7eb89338ca877725ae7085b0",
+   "0000006201-26-000032": "7ca5e602c76a99161580681f707c945a8edfe376fe757825d946d430be350a42"
+  },
+  "every_prompt_carries_its_own_leads": true
+ },
+ "final_key": {
+  "ledger": {
+   "scheduled": 33,
+   "valid": 33,
+   "invalid_response": 0,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "missing": 0
+  },
+  "phase_complete": true,
+  "shards": 33,
+  "counts": {
+   "events_accounted": 33,
+   "rows_accounted": 191,
+   "accepted_facts": 206,
+   "du_worthy_facts": 206,
+   "controls": 34,
+   "exclusions": 3,
+   "abstentions": 37,
+   "record_kind_conflicts": 4,
+   "duplicate_gold_facts": 0,
+   "open_issues": 0,
+   "phase1_ambiguities": 0,
+   "tag_floor": 5,
+   "distinct_rows_per_tag": {
+    "point_range_floor_ceiling": 134,
+    "losses_and_sign": 31,
+    "sequential_comparison": 46,
+    "measurement_wording": 56,
+    "favourable_unfavourable_direction": 17,
+    "expectation_routing": 17,
+    "slices_and_unknown_axes": 69,
+    "portion_versus_whole": 25,
+    "ambiguous_menus": 32,
+    "corrections_and_amendments": 5
+   },
+   "tags_below_floor": [],
+   "sequential_rows": 46
+  },
+  "materializer_problems": [],
+  "initial_raw_reused_verbatim": 0
+ },
+ "resume": {
+  "served": 33,
+  "owed": 0,
+  "never_repeat": 33,
+  "problems": []
+ },
+ "gate": {
+  "ok": true,
+  "stops": [],
+  "counts": {
+   "events_accounted": 33,
+   "rows_accounted": 191,
+   "accepted_facts": 206,
+   "du_worthy_facts": 206,
+   "controls": 34,
+   "exclusions": 3,
+   "abstentions": 37,
+   "record_kind_conflicts": 4,
+   "duplicate_gold_facts": 0,
+   "open_issues": 0,
+   "phase1_ambiguities": 0,
+   "tag_floor": 5,
+   "distinct_rows_per_tag": {
+    "point_range_floor_ceiling": 134,
+    "losses_and_sign": 31,
+    "sequential_comparison": 46,
+    "measurement_wording": 56,
+    "favourable_unfavourable_direction": 17,
+    "expectation_routing": 17,
+    "slices_and_unknown_axes": 69,
+    "portion_versus_whole": 25,
+    "ambiguous_menus": 32,
+    "corrections_and_amendments": 5
+   },
+   "tags_below_floor": [],
+   "sequential_rows": 46
+  },
+  "owed_blind_readings": 66,
+  "run_problems": []
+ },
+ "lock": {
+  "state": "LOCKED",
+  "schema": "a4-detailed-key-lock-v1",
+  "package_manifest_sha256": "f94c0ac3ac819f242008331205f25090ab73764dfaa9b1669ee392d6a9f29cc0",
+  "key_shards": 33,
+  "event_receipt_sha256": "b7d660781a5562ef639b08260900328b01e370e038562ddd16aabb59cf6e4bad",
+  "event_finalization_sha256": "0f8e0a0d531fc63db9dc4fb3b40d50e546ca28ac262dbad1d74c3ce39239885f",
+  "signer_raw_sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "counts": {
+   "events_accounted": 33,
+   "rows_accounted": 191,
+   "accepted_facts": 206,
+   "du_worthy_facts": 206,
+   "controls": 34,
+   "exclusions": 3,
+   "abstentions": 37,
+   "record_kind_conflicts": 4,
+   "duplicate_gold_facts": 0,
+   "open_issues": 0,
+   "phase1_ambiguities": 0,
+   "tag_floor": 5,
+   "distinct_rows_per_tag": {
+    "point_range_floor_ceiling": 134,
+    "losses_and_sign": 31,
+    "sequential_comparison": 46,
+    "measurement_wording": 56,
+    "favourable_unfavourable_direction": 17,
+    "expectation_routing": 17,
+    "slices_and_unknown_axes": 69,
+    "portion_versus_whole": 25,
+    "ambiguous_menus": 32,
+    "corrections_and_amendments": 5
+   },
+   "tags_below_floor": [],
+   "sequential_rows": 46
+  },
+  "signature": {
+   "signed": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a TEST signature over reproduced shapes. It establishes no source truth."
+  },
+  "THIS_IS_A_TEST_SIGNATURE": "the signature above was written by a fixture, not by a signer call. It establishes no source truth and locks no real key."
+ },
+ "signer": {
+  "ok": true,
+  "problems": [],
+  "signer_bytes": 375440,
+  "invocations": 1,
+  "signer_finalization": {
+   "scheduled": 1,
+   "valid": 1,
+   "invalid_response": 0,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "missing": 0
+  },
+  "lock": "locked",
+  "lock_error": null
+ },
+ "read_only": {
+  "initial_receipt_unchanged": true
+ },
+ "real_states_preserved": true,
+ "steps": [
+  {
+   "step": "review/publish",
+   "ok": true,
+   "detail": "invocations=66"
+  },
+  {
+   "step": "review/every owed reading is valid",
+   "ok": true,
+   "detail": "valid=66/66 problems=[]"
+  },
+  {
+   "step": "review/the completed reading ledger is saved before final preparation",
+   "ok": true,
+   "detail": "{\"scheduled\": 66, \"valid\": 66, \"invalid_response\": 0, \"transport_no_answer\": 0, \"unproved\": 0, \"missing\": 0}"
+  },
+  {
+   "step": "final/the request package rebuilds from the live owners",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "step": "final/one request per event, in order",
+   "ok": true,
+   "detail": "invocations=33"
+  },
+  {
+   "step": "final/every decoded prompt carries exactly its own proved leads",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "step": "final/the manifest names the actual lead population and closure owner",
+   "ok": true,
+   "detail": "leads=66 closure_owner_bound=True"
+  },
+  {
+   "step": "final/the manifest identifies the role and output card actually sent",
+   "ok": true,
+   "detail": "role=c88ed26f11526433af05ffb576a3dec7276808e5a01b57784380b2486c3ed8e7 output=374856e7c0cd9153e67f1f31b7b20fb1244ef24cab37a782f78f78fb3a45a4d4"
+  },
+  {
+   "step": "final/the budget includes the actual completed prior stages",
+   "ok": true,
+   "detail": "declared=481 actual=481"
+  },
+  {
+   "step": "final/every reply proves and parses",
+   "ok": true,
+   "detail": "proof=[] parse=[] shards=33"
+  },
+  {
+   "step": "final/the key materializes with the initial settlements reused",
+   "ok": true,
+   "detail": "materializer=[] rows=191"
+  },
+  {
+   "step": "final/the closeout credits every valid answer and schedules no retry",
+   "ok": true,
+   "detail": "{\"scheduled\": 33, \"valid\": 33, \"invalid_response\": 0, \"transport_no_answer\": 0, \"unproved\": 0, \"missing\": 0}"
+  },
+  {
+   "step": "final/resume reuses every success and owes no repeated call",
+   "ok": true,
+   "detail": "served=33 owed=0 problems=[]"
+  },
+  {
+   "step": "signing/the gate is clean once every reading and shard is served",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "step": "signing/the signer prepares once the gate is clean",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "step": "signing/a TEST signature locks the prepared key",
+   "ok": true,
+   "detail": "LOCKED"
+  }
+ ],
+ "passed": 16,
+ "total": 16,
+ "ok": true
+}

@@ -1,0 +1,176 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "core_operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:tacobellglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "core_operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "strategic_review_costs",
+              "driver_state": "reported",
+              "level_low": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 40, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["segment:pizzahutglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "g_and_a",
+              "driver_state": "increased",
+              "change_value": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "level_low": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.15, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "measurement_raw_spans": ["x special"]
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "g_and_a_surprise",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "measurement_raw_spans": ["x special"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "core_operating_profit_guidance",
+              "driver_state": "introduced",
+              "change_value": {"value": -15, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["segment:pizzahutglobaldivision"],
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "store_closures",
+              "driver_state": "announced",
+              "level_low": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "half": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["segment:pizzahutglobaldivision", "geography:us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "YUM_2026-02-04T08.15",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is an administrative scheduling announcement (next quarter's earnings-release date and call), not a statement about a driver's state, change, surprise, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven items are independent facts about entirely different subjects and periods — Taco Bell's and KFC's FY2025 divisional operating-profit growth (two separate segment slices), a Q4 Pizza-Hut-linked special charge, a full-year G&A actual-vs-guidance surprise with its metric home, a Q1 2026 Pizza Hut profit guide, a planned H1 2026 store-closure count, and a purely administrative earnings-date announcement, so none of them restate one underlying driver/value/period."
+}
+```

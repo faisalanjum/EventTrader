@@ -1,0 +1,55 @@
+{
+ "composite_under_review": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+ "candidate_builder": "b35ca5c8e82058236f0418468cf1409207524b06183560b5aec79817fe8a06e3",
+ "before_final_adjudication": 499,
+ "negatives": {
+  "foreign preserved review at the final phase": "ValueError: the final phase names a different preserved review",
+  "foreign preserved review at the candidate": "ValueError: the candidate names a different preserved review",
+  "a different candidate owner is loaded": "ValueError: a different source-key candidate binding is loaded",
+  "the new review stage is unfinished": "ValueError: the review attempt is not finalized: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2012_final_jo",
+  "a new review result no longer proves": "ValueError: completed evidence is missing or differs: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2012_fin",
+  "the new stage receipt is gone": "FileNotFoundError: [Errno 2] No such file or directory: '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2012_final_j"
+ },
+ "clone_positive_is_path_bound": "ACCEPTED",
+ "ledger_before_with_new_stage": 499,
+ "ledger_before_without_new_stage": 495,
+ "stage_record_without_injection": {
+  "stages_key_present": false,
+  "package_problems": [
+   "the pinned counts is not the live one",
+   "the pinned hard_review is not the live one"
+  ]
+ },
+ "package_problems_without_the_injection": [
+  "the pinned counts is not the live one",
+  "the pinned hard_review is not the live one"
+ ],
+ "originals_unchanged_by_this_review": true,
+ "counts": {
+  "total": 13,
+  "passed": 13
+ },
+ "failed": [],
+ "cases": [
+  "P1 all sixty-six review obligations are valid in the merge",
+  "P2 both review stages are bound into the real key manifest",
+  "P3 two independent leads per source, none omitted or foreign",
+  "P4 the real resume owes nothing and the materializer is whole",
+  "P5 the existing signing gate accepts the completed TEST key",
+  "P6 every actual stage binds exactly once, no invented history",
+  "P7 no artifact is bound twice",
+  "P8 the saved-answer consumer keeps the original source-key binding",
+  "P9 every bound artifact still hashes to its recorded bytes",
+  "N1 every foreign, unfinished or invalid input refuses",
+  "L1 the new stage is actually counted in the key's own ledger",
+  "L2 removing the stages injection makes the REAL key package refuse",
+  "Z1 the completed originals were only read, never written"
+ ],
+ "clone_only": true,
+ "files_this_battery_rewrote": [
+  "TEST_join_clone/review/finalization.json",
+  "TEST_join_clone/review/raw/sokc-013_b2.attempt1.proved.json",
+  "TEST_join_clone/review/receipt.json"
+ ],
+ "ok": true
+}

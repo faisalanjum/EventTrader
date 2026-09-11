@@ -1,0 +1,258 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "verdicts": [
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P000",
+      "decision": "exclude",
+      "why": "This target (Q4 sales +4.9% to $3B) has already been tested by a supplied proposal; it is outside this fresh sample by task rule, not a claim about its truth or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P001",
+      "decision": "exclude",
+      "why": "This target (Q4 marketing costs 3.5% of sales, +50bps YoY) has already been tested by a supplied proposal; it is outside this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P002",
+      "decision": "exclude",
+      "why": "This target (full-year comp guidance ~flat) has already been tested by a supplied proposal; it is outside this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P003",
+      "decision": "exclude",
+      "why": "This target (350 restaurants with full equipment package today) has already been tested by a supplied proposal; it is outside this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P004",
+      "decision": "exclude",
+      "why": "This target (national search for next CMO) has already been tested by a supplied proposal; it is outside this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P005",
+      "decision": "exclude",
+      "why": "This target (Q4 comp decline of 2.5%) has already been tested by a supplied proposal (same quote as P000, different label); it is outside this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "CMG_2026-02-03T16.30#P006",
+      "decision": "exclude",
+      "why": "This target (anticipate ~2,000 restaurants with equipment by year end) has already been tested by a supplied proposal (same quote as P003, different label); it is outside this fresh sample by task rule.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "For the year, revenue grew 5.4% year over year, which included a 1.7% decline in comparable sales.",
+        "raw_label_or_claim": "revenue grew 5.4% year over year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "Full-year (FY2025) total revenue growth vs. prior year, a different period and different metric from the Q4 sales/comp figures named by proposals P000/P005; annual period triggers OD-11's annual pin (percent_sequential invalid on annual -> percent_yoy)."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "For the year, revenue grew 5.4% year over year, which included a 1.7% decline in comparable sales.",
+        "raw_label_or_claim": "a 1.7% decline in comparable sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "Full-year comparable-sales decline is a distinct metric from full-year revenue growth even though grammar shares one sentence; also distinct period from the Q4 comp decline named by P005. Exercises OD-11 annual-pin YoY basis."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Adjusted diluted earnings per share grew 4.5% year over year to $1.17.",
+        "raw_label_or_claim": "Adjusted diluted earnings per share grew 4.5% year over year to $1.17",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "sequential_comparison", "point_range_floor_ceiling"]
+      },
+      "why": "FY2025 adjusted diluted EPS point value with YoY growth; not named by any proposal. Exercises NAME-14/FS-25 measurement (adjusted, diluted), OD-11 annual-pin YoY basis, and a point-shaped level number."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Adjusted diluted earnings per share was 25 cents, consistent with last year.",
+        "raw_label_or_claim": "Adjusted diluted earnings per share was 25 cents, consistent with last year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "sequential_comparison"]
+      },
+      "why": "Q4 adjusted diluted EPS, a different period/value from the FY EPS row above and not named by any proposal; carries a measurement qualifier and a flat YoY temporal comparison."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Restaurant level margin was 23.4%, down 140 basis points year over year.",
+        "raw_label_or_claim": "Restaurant level margin was 23.4%, down 140 basis points year over year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "point_range_floor_ceiling"]
+      },
+      "why": "Q4 restaurant-level margin point value with YoY change; not named by any proposal (proposals cover sales/comp/marketing/equipment/CMO only)."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items.",
+        "raw_label_or_claim": "underlying effective tax rate will be in the 24% to 26% range",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "FY2026 tax-rate guidance stated as a closed range (low<high, both present) with an explicit 'underlying' measurement qualifier; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "This included 21 openings in Canada, an increase of 38% year-over-year for that country.",
+        "raw_label_or_claim": "21 openings in Canada, an increase of 38% year-over-year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "sequential_comparison"]
+      },
+      "why": "A geography-scoped (Canada) restaurant-opening count with its own stated YoY growth rate; a real country-level slice, source-grounded in prose, distinct from the whole-company restaurant totals; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+        "raw_label_or_claim": "these two group occasions represent less than 3% of combined sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "point_range_floor_ceiling"]
+      },
+      "why": "Current stated share of a qualified sub-population (group occasions) versus total company sales, a ceiling-shaped number (<3%); OD-17 portion-qualifier population, not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+        "raw_label_or_claim": "could be double-digit percentage of sales longer term",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["portion_versus_whole", "point_range_floor_ceiling"]
+      },
+      "why": "A real, distinct (future/longer-term, not current) candidate about the same portion population, hedged with 'could be' and an undefined horizon; not lawfully resolvable to a concrete guided value or bounded shape from this evidence, so the correct behavior is abstention rather than a guessed real fact or a dismissed boilerplate."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "The results we issued this afternoon were in line with expectations and guidance for the full year.",
+        "raw_label_or_claim": "in line with expectations and guidance for the full year",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      },
+      "why": "A stated favorability/comparison claim ('in line with expectations and guidance') with no identifiable metric named in the quote -- the protocol's own example of an ungrounded surprise-type statement that is parked rather than encoded as a real surprise fact or dismissed as boilerplate. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "G&A for the quarter was $160 million on a GAAP basis or $162 million on a non-GAAP basis. excluding a $4 million reduction in legal contingencies and around $2 million related to retention equity awards granted to key executives in August of 2024.",
+        "raw_label_or_claim": "a $4 million reduction in legal contingencies",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "measurement_wording"]
+      },
+      "why": "A stated credit/reversal-type item (a reduction in a liability/expense) analogous to OD-12's 'provision release' worked example (benefit/reversal = negative sign), disclosed inside a GAAP-vs-non-GAAP reconciliation (a measurement qualifier). Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Please see the risk factors contained in our annual report on Form 10-K and in our Forms 10-Qs for a discussion of risks that may cause our actual results to vary from these forward-looking statements.",
+        "raw_label_or_claim": "risk factors contained in our annual report on Form 10-K and in our Forms 10-Qs",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Classic generic forward-looking-statements/risk-factor safe-harbor boilerplate naming no specific current adverse threat; fails DU-03/Rule 1 and the DU-11 at_risk strict test, so correct reader behavior is omission, not abstention. Not named by any proposal."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "We opened a record 334 new company-owned restaurants and 11 international partner-operated restaurants.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real, fresh, unproposed fact (FY company-owned/partner-operated restaurant counts), but the same base 334-count is restated more richly later in the same remarks (with the Canada sub-detail already selected as its own row); adding this too would pad the sample without covering a new hard class or repairing declared coverage, so it was left out."
+    },
+    {
+      "quote": "we grew our active members to over 21 million",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real floor-shaped loyalty-membership fact, but the event already has adequate point_range_floor_ceiling coverage from other selected rows; added inclusion would be padding rather than replacing/repairing a gap."
+    },
+    {
+      "quote": "about 30% of sales are realized through our rewards platform",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real point-shaped rewards-program fact from the same loyalty narrative block as the membership stat above; excluded for the same padding-avoidance reason."
+    },
+    {
+      "quote": "only about 20% of transactions are through our rewards program compared to nearly 90% of our app transactions",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A possible channel-slice candidate (in-restaurant vs. app), but whether 'in-restaurant'/'app' cleanly resolve to a recognized channel kind is uncertain, and the event already has a clean, unambiguous slices_and_unknown_axes example (Canada geography); left out rather than force an uncertain classification."
+    },
+    {
+      "quote": "we recently celebrated the 20th anniversary of Chipotle's IPO in 2006.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Company-history/anniversary trivia carrying no driver state/change/surprise/guidance/action; would be a negative_control, but the event already has one clean negative_control (the risk-factors boilerplate) and adding another would be padding."
+    },
+    {
+      "quote": "During the fourth quarter, we purchased $742 million of our stock at an average price of $34.14, bringing our full year 2025 total to a record $2.4 billion at an average price of $42.54.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, fresh, point-shaped share-repurchase facts (quarter and full-year), but the event already has sufficient real_item and point_range_floor_ceiling coverage; excluded to avoid padding rather than replacing/repairing declared coverage."
+    },
+    {
+      "quote": "During the quarter, the board authorized an additional $1.8 billion to our share purchase authorization. And at the end of the quarter, we had $1.7 billion remaining.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Real, fresh corporate-action/authorization facts, excluded for the same padding-avoidance reason as the buyback figures above."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Scope of the 'sequential_comparison' tag: whether it covers only sequential/quarter-over-quarter growth-basis facts, or (as the owner crosswalk's mapping 'sequential comparisons -> OD-11' suggests) any growth-basis determination under OD-11 including plain year-over-year and the annual pin.",
+      "why": "Several added rows (FY revenue growth, FY comp decline, Q4 EPS 'consistent with last year', Q4 margin YoY, Canada YoY) are explicit YoY/flat comparisons rather than sequential (QoQ) comparisons; I tagged them sequential_comparison on the reading that OD-11 governs all growth-basis resolution including the annual pin, but the owner text does not explicitly settle whether the tag name is meant to be read that broadly."
+    },
+    {
+      "what": "Scope of the 'point_range_floor_ceiling' tag: whether it should be applied to any quantified level fact with an inherent shape, or reserved for facts that specifically exercise range/floor/ceiling boundary logic (as opposed to a plain single point).",
+      "why": "I applied the tag selectively (ranges, floors/ceilings, and a few salient point values) rather than to every numeric level mention in the event, to avoid trivializing the tag; the owner text defines all four shapes as always self-describing but does not state a selection threshold for benchmark tagging purposes."
+    },
+    {
+      "what": "Classification boundary between lawful_abstention_control and negative_control for hedged, partially-resolvable forward statements such as 'could be double-digit percentage of sales longer term.'",
+      "why": "This statement has a resolvable period_scope enum value (long_term) and an informative floor ('double-digit'), yet is hedged with 'could be' and lacks a firm figure; I classified it as abstention per the instruction that a genuinely fuzzy other-lane boundary is an abstention exhibit, but the quoted rules do not give an explicit test for this exact hedge pattern."
+    },
+    {
+      "what": "Whether OD-12's loss/charge/benefit sign rule is intended to reach a non-GAAP reconciling item like a '$4 million reduction in legal contingencies,' as opposed to only primary driver-level loss/charge/benefit facts.",
+      "why": "OD-12's worked examples (net loss, impairment charge, provision release) are all primary metric facts; I extended the rule by analogy to this reconciling-item reduction, but the owner text does not explicitly confirm reconciliation-line items are in scope."
+    }
+  ],
+  "blocked": null
+}
+```

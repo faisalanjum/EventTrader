@@ -1,0 +1,206 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "verdicts": [
+    {
+      "proposal_id": "0000006201-26-000032#P000",
+      "decision": "exclude",
+      "why": "This target (Pre-tax loss, this quote/location) has already been tested by a supplied proposal; it is outside this fresh sample by definition, regardless of its underlying correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P001",
+      "decision": "exclude",
+      "why": "This target (total operating cost per available seat mile / CASM, this quote/location) has already been tested by a supplied proposal; it is outside this fresh sample by definition.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P002",
+      "decision": "exclude",
+      "why": "This target (total operating revenues, this quote/location) has already been tested by a supplied proposal; it is outside this fresh sample by definition.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P003",
+      "decision": "exclude",
+      "why": "This target (financing future aircraft deliveries with long-term debt, this quote/location) has already been tested by a supplied proposal; it is outside this fresh sample by definition.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P004",
+      "decision": "exclude",
+      "why": "This target (compliance with covenants, this quote/location) has already been tested by a supplied proposal; it is outside this fresh sample by definition.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000006201-26-000032#P005",
+      "decision": "exclude",
+      "why": "This target (net loss, sharing the P000 quote but naming a different target) has already been tested by a supplied proposal; it is outside this fresh sample by definition.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Passenger revenue was $12.5 billion in the first quarter of 2026, an increase of $1.1 billion, or 9.7%, from the first quarter of 2025.",
+        "raw_label_or_claim": "Passenger revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "A real, source-stated product-line total (passenger revenue) distinct in series/scope from the already-tested total-operating-revenues target; states a point dollar level plus a YoY percent change (OD-11 growth-basis) and matches the menu's product:passenger slice."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": 1,
+        "quote": "Cargo revenue increased $25 million, or 12.9%, in the first quarter of 2026 from the first quarter of 2025, primarily due to a 9.0% increase in cargo ton miles and a 3.6% increase in cargo yield.",
+        "raw_label_or_claim": "Cargo revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "A real, source-stated product-line fact (cargo revenue), a different series from any tested proposal; identical wording recurs once later in the mdna part, so the first complete occurrence is used per the fuse/first-quote rule. Matches menu product:cargoandfreight and states a YoY percent change."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": 1,
+        "quote": "Other operating revenue increased $232 million, or 23.9%, in the first quarter of 2026 from the first quarter of 2025, driven primarily by higher revenue associated with our loyalty program.",
+        "raw_label_or_claim": "Other operating revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "A real, source-stated product-line fact (other operating revenue), distinct series from any tested proposal, matching menu product:otherrevenue; this exact sentence recurs once later, so the first occurrence is used. States a dollar level plus a YoY percent change."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Our total revenue per available seat mile (TRASM) was 19.32 cents in the first quarter of 2026, a 7.6% increase as compared to 17.95 cents in the first quarter of 2025.",
+        "raw_label_or_claim": "total revenue per available seat mile (TRASM)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "TRASM is a per-ASM metric, a different Driver identity from both the tested total-operating-revenues (a total-dollar fact) and the tested CASM (a cost-per-ASM fact) under the total-vs-per-X rule; states a point cents value with a YoY percent change."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Operating loss (41) (270) (229) (85.0)",
+        "raw_label_or_claim": "Operating loss",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Operating loss is a distinct metric series from the tested pre-tax loss and net loss targets; a stated negative (loss) point value in both periods with a period-over-period percent change, exercising the OD-12 signed-loss rule."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2)",
+        "raw_label_or_claim": "Pre-tax loss excluding net special items",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "losses_and_sign", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A different measurement version (excluding net special items) of pre-tax loss than the tested GAAP pre-tax loss target, so it is a separate fact under NAME-14/FS-25; states a signed loss point value in both periods with a percent change. This exact string (with the trailing change columns) is unique in the part; a shorter reconciliation-table restatement without those columns exists elsewhere but is not this exact span."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "In the first quarter of 2026, we recorded an income tax benefit of $94 million.",
+        "raw_label_or_claim": "income tax benefit of $94 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A real, distinct fact (AAG's income tax benefit) not named by any proposal; a benefit/credit is negative under OD-12, and it is a stated point dollar value."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "There have been no material changes in our risk factors as previously disclosed in Part I, Item 1A in our 2025 Form 10-K.",
+        "raw_label_or_claim": "no material changes in our risk factors",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A bare pointer statement carrying no stated fact about the driver (no specific state/change/surprise/guidance/action); it fails the DU-03/Rule-1 fact gate, so the correct reader behavior is omission -- a negative control."
+    },
+    {
+      "row": {
+        "source_id": "0000006201-26-000032",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "There have been no material changes in our off-balance sheet arrangements as discussed in our 2025 Form 10-K.",
+        "raw_label_or_claim": "no material changes in our off-balance sheet arrangements",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A generic 'no material change' pointer statement carrying no real fact; fails the DU-03/Rule-1 fact gate, so the correct reader behavior is omission -- a negative control, distinct location/topic from the risk-section negative control above."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Salaries, wages and benefits increased $452 million, or 10.7%, in the first quarter of 2026 from the first quarter of 2025, primarily due to annual contractual wage rate increases and a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": 1,
+      "why": "A genuine real fact, but redundant representative coverage: point/range and sequential-comparison hard classes are already exercised by other selected rows for this event; adding it would be padding rather than filling a coverage gap."
+    },
+    {
+      "quote": "Mainline operating special items, net 14 70 (56) (80.6)",
+      "part_ref": "mdna",
+      "occurrence_in_part": 1,
+      "why": "This exact numeric string recurs byte-identically in both the AAG and American operating-expense tables (same values for both registrants); combined with an unclear portion-vs-whole vs. slice tag boundary for 'mainline' here, this was excluded rather than risk a mislocated or misclassified row."
+    },
+    {
+      "quote": "repaid in full $629 million of the outstanding principal amount of the senior short-term term loan facility",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A genuine real fact (debt repayment) but excluded as representative padding -- the point/range hard class it would exercise is already covered by other selected rows for this event."
+    },
+    {
+      "quote": "with passenger revenue per available seat mile (PRASM) increasing 6.5% compared to the first quarter of 2025",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A genuine per-X fact (PRASM), but excluded to avoid over-selecting near-adjacent per-X facts for a single event when TRASM already demonstrates the total-vs-per-X distinction; kept as an unselected but lawful candidate."
+    },
+    {
+      "quote": "higher domestic and international demand for air travel",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Kind (geography) is clear but the specific value ('international') is not resolvable to one of the menu's specific geography entries (atlantic/latin america/pacific); this is a member-value ambiguity within an already-clear kind, which the quoted T1-05 kind-ladder does not squarely address (it governs kind ambiguity, not value ambiguity). Excluded rather than force a classification the authority does not settle; recorded as an open issue instead."
+    },
+    {
+      "quote": null,
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "The menu's many us-gaap/srt XBRL axis entries (debt instruments, fair value hierarchy, defined-benefit plans, related-party, litigation case, subsequent event, etc.) have no corresponding narrative text in the supplied event parts (only 'mdna' and 'risk' were supplied, not the financial-statement notes where such axes would ordinarily be discussed in prose). No candidate quote exists to bind these to, so none were selected; per the owner rulings an unused menu entry needs no matching text fact and does not make the event incomplete."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No favourable_unfavourable_direction, expectation_routing, ambiguous_menus, portion_versus_whole, or corrections_and_amendments candidates were identified in this event's supplied mdna/risk text.",
+      "why": "The supplied text contains no consensus/guidance comparison language, no genuine two-kind menu ambiguity, no clean population-qualifier-vs-whole-company distinction independent of an ordinary product slice, and no disclosure of a correction to a previously reported fact. Reporting this as a shortage for this event rather than inventing or stretching a candidate into one of these tags."
+    },
+    {
+      "what": "No lawful_abstention_control candidate was found in this event's supplied text.",
+      "why": "Every quantitative or qualitative candidate reviewed was either cleanly resolvable as a real_item or was generic/boilerplate (negative_control); none presented a real candidate that the rules leave genuinely unresolved. Reporting the gap rather than fabricating an abstention case."
+    },
+    {
+      "what": "Whether the value-level ambiguity in 'domestic and international demand for air travel' (kind=geography clear, but which specific geography member is meant is unresolved) should be treated under the T1-05 ladder at all.",
+      "why": "T1-05/FS-15 as quoted addresses ambiguity between KINDS (e.g., segment vs. geography) and menu label reuse across kinds; it does not explicitly state what happens when the kind is clear but the specific member value among several plausible menu values is not stated. The authority does not settle this, so no row was built on it."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,210 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "verdicts": [
+    {
+      "proposal_id": "0001171843-26-001288#P000",
+      "decision": "exclude",
+      "why": "Already-tested target (comparability footnote on the extra trailing week in the year-ago trailing-4-quarters window); outside this fresh sample by task rule. No claim about its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P001",
+      "decision": "exclude",
+      "why": "Already-tested target (operating profit decrease to $698.5 million); outside this fresh sample by task rule. No claim about its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P002",
+      "decision": "exclude",
+      "why": "Already-tested target (net inventory net-of-payables table figures); outside this fresh sample by task rule. No claim about its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P003",
+      "decision": "exclude",
+      "why": "Already-tested target (international constant-currency sales versus expectations narrative); outside this fresh sample by task rule. No claim about its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001171843-26-001288#P004",
+      "decision": "exclude",
+      "why": "Already-tested target (net inventory per-store definition and comparison values); outside this fresh sample by task rule. No claim about its correctness or classification.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "net sales of $4.3 billion for its second quarter (12 weeks) ended February 14, 2026, an increase of 8.1% from the second quarter of fiscal 2025 (12 weeks)",
+        "raw_label_or_claim": "net sales of $4.3 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Headline consolidated net-sales point value with an explicit prior-year-quarter growth percentage; not named by any proposal. Point shape exercises FINAL_DESIGN 7.1; the explicit 'from the second quarter of fiscal 2025' framing exercises OD-11's YoY growth-basis determination."
+    },
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "diluted earnings per share were $27.63 compared to last year at $28.29.",
+        "raw_label_or_claim": "diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "Fresh per-share fact (distinct Driver identity from the net-sales/net-income totals, NAME-13) not named by any proposal. 'diluted' is a stated measurement qualifier (NAME-14/FS-25 worked example); the dollar values are point shapes."
+    },
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Domestic Same Store Sales Increase 3.4%",
+        "raw_label_or_claim": "Domestic Same Store Sales Increase 3.4%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "sequential_comparison", "portion_versus_whole"]
+      },
+      "why": "Headline geography-sliced (US domestic) same-store-sales growth figure; distinct fact from the total-company figure and from the narrative international-expectations statement already tested. Exercises the geography slice kind (FS-05..24), the YoY growth-basis default via 'Increase' on a dated period (OD-11), and the same-store (stores-open->=1-year) population qualifier distinct from the whole-company population (OD-17)."
+    },
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The decrease in gross margin was driven by a 138 basis point non-cash LIFO charge.",
+        "raw_label_or_claim": "138 basis point non-cash LIFO charge",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "Fresh fact naming the specific driver (LIFO charge) behind the margin decline, with a different bps figure (138) than the margin-decline bps (137) reported nearby, so it is a distinct fact under the split rule, not a restatement. A 'charge' is a positive-sign signal under OD-12; 138 bps is a point value; 'non-cash' is a number modifier not captured by name/period/unit/slice, landing in measurement per FS-25's safety sink."
+    },
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "For the quarter, gross profit, as a percentage of sales, was 52.5%, a decrease of 137 basis points versus the prior year.",
+        "raw_label_or_claim": "gross profit, as a percentage of sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh margin-percentage fact with an explicit prior-year comparison basis, distinct from the LIFO-charge cause fact above (different value, different meaning). Point value plus explicit 'versus the prior year' YoY basis exercise 7.1 and OD-11 respectively."
+    },
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+        "raw_label_or_claim": "in line with our expectations to open approximately 350-360 stores for the full fiscal year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction"]
+      },
+      "why": "Fresh forward store-count guidance stated as a closed range (350-360, floor/ceiling both present -> range shape) with explicit favorability wording ('in line with our expectations'), directly exercising the surprise-state in_line rule. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "we believe our market share continues to grow as we outpace our competition in both Mexico and Brazil.",
+        "raw_label_or_claim": "market share continues to grow",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "Numberless qualitative fact (DU-05: numberless facts count) naming two distinct geography slices (Mexico, Brazil) for market-share growth, adjacent to but non-overlapping with the already-tested international-expectations clause in the same sentence (different sub-clause, different quote span, different label)."
+    },
+    {
+      "row": {
+        "source_id": "0001171843-26-001288",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "weather, including extreme temperatures and natural disasters",
+        "raw_label_or_claim": "weather, including extreme temperatures and natural disasters",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical, non-source-flagged risk-factor boilerplate from the forward-looking-statements safe-harbor paragraph; fails DU-03/Rule 1 (not a specific current adverse threat), so correct reader behavior is omission -> negative_control, not a hard-class-bearing row."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Net income for the quarter was $468.9 million compared to $487.9 million in the same period last year",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant headline point-value fact alongside the selected net-sales and diluted-EPS rows; adds no new hard-class coverage in this event; kept out to keep the representative sample lean."
+    },
+    {
+      "quote": "AutoZone repurchased 85 thousand shares of its common stock at an average price per share of $3,666, for a total investment of $310.8 million",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Another point-value fact; point_range_floor_ceiling is already well represented in this event; omitted to avoid padding."
+    },
+    {
+      "quote": "Total Company Same Store Sales Increase 3.3%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Whole-company (unsliced) restatement of the same same-store-sales metric family already represented by the selected Domestic-slice row; adds no new hard-class value."
+    },
+    {
+      "quote": "both DIY and Commercial sales continued to perform well this past quarter in spite of winter storms causing disruptions the last week of January and the first week of February",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Vague qualitative performance claim; a channel-kind slice reading is not clearly grounded (no channel axis evidenced on this event's menu or unambiguous framing) -- too borderline to lock a hard-class tag confidently, so left out rather than guessed."
+    },
+    {
+      "quote": "AutoZone opened 43 new stores in the U.S., 18 in Mexico and three in Brazil for a total of 64 net new stores",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Granular per-country store-count breakdown; geography-slice coverage for Mexico/Brazil is already supplied by the selected market-share row, so this is incremental rather than gap-filling."
+    },
+    {
+      "quote": "the Company had $1.4 billion remaining under its current share repurchase authorization",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Another point-value fact redundant with already-selected point-shape rows; omitted for representativeness."
+    },
+    {
+      "quote": "The Company\u2019s inventory increased 13.1% over the same period last year, driven primarily by growth initiatives and inflation.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Additional YoY percentage fact; sequential_comparison coverage in this event is already satisfied by the net-sales, domestic-SSS, and gross-margin rows; omitted to avoid padding."
+    },
+    {
+      "quote": "AutoZone will host a conference call this morning, Tuesday, March 3, 2026, beginning at 10:00 a.m. (ET) to discuss its second quarter results.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Pure logistics/administrative content -- carries no driver state/change/surprise/guidance/action; fails the fact gate outright, not even boilerplate risk language."
+    },
+    {
+      "quote": "competition; credit market conditions; cash flows; access to financing on favorable terms",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same generic-risk-boilerplate category as the selected negative control ('weather, including extreme temperatures and natural disasters'); not adding further individual negative controls from the same list to avoid duplicate controls for one exclusion reason."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the store-opening 'in line with our expectations to open approximately 350-360 stores for the full fiscal year' fact should also carry expectation_routing.",
+      "why": "It compares a quarterly actual (64 stores) against an annual target (350-360) for a different period span, which does not cleanly fit any of the three OD-21 surprise routings (actual_vs_consensus, actual_vs_guidance, guidance_vs_consensus); the authority does not resolve this specific period-mismatch case, so the tag was left off rather than guessed."
+    },
+    {
+      "what": "No corrections_and_amendments candidate found in this event's text.",
+      "why": "The release contains no restatement, amendment, or raised/lowered/reaffirmed/withdrawn guidance-movement wording; reporting the shortage rather than inventing one."
+    },
+    {
+      "what": "No ambiguous_menus candidate grounded in this event's own prose.",
+      "why": "Menu entries like 'geography:brazilandallothercountries' have no matching text statement in this 8-K (they likely originate from a different filing type); per the menu-is-not-a-checklist rule, no fact was manufactured to match them."
+    },
+    {
+      "what": "No lawful_abstention_control candidate identified in this event beyond the proposals already tested.",
+      "why": "The release's numeric tables resolve cleanly against their own headers and the narrative passages examined are either clearly resolvable facts or clearly generic boilerplate; none presented a genuine real-but-unresolvable case, so none was added."
+    }
+  ],
+  "blocked": null
+}
+```

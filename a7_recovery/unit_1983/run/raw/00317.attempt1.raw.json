@@ -1,0 +1,42 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "reported",
+        "level_low": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_high": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      },
+      "per_x": "share"
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "in_line",
+        "level_low": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_high": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

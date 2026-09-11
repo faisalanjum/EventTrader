@@ -1,0 +1,225 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "effective_tax_rate_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 24, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 26, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true,
+              "measurement_raw_spans": ["underlying"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the company states its own forward fiscal-2026 tax-rate range, a closed numeric guidance fact, so the frozen kind stands."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_openings",
+              "driver_state": "increased",
+              "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "change_value": {"value": 38, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["geography:canada"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: a stated count of openings plus a stated year-over-year increase for a named own geography, so the frozen kind stands."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_high": {"value": 3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "slice_parts": ["unknown:group occasions"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the current share of combined sales carried by the two group occasions is a readable standing level stated as an open ceiling, so the frozen kind stands."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "sales_mix_guidance",
+              "driver_state": "unknown",
+              "value_text": "double-digit percentage of sales",
+              "sentinel_class": "long_term",
+              "company_confirmed": true,
+              "slice_parts": ["unknown:group occasions"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: the company's own longer-term outlook for the same sales-mix driver, numberless because 'double-digit percentage' is a vague quantity, so the frozen kind stands."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Ungrounded expectation comparison: 'in line with expectations and guidance' names no identifiable metric, value, period or home fact in this quote, so no surprise fact can be grounded and no home sibling exists."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a lawful abstention control and it behaves as one: the comparison is real but has no identifiable metric to attach to, so it correctly yields exactly one abstention and no fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "legal_contingencies",
+              "driver_state": "decreased",
+              "change_value": {"value": -4, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it is one: a stated $4 million release of legal contingencies in the quarter, signed negative as a benefit/release, so the frozen kind stands."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic forward-looking-statement boilerplate pointing readers to Form 10-K/10-Q risk factors; it states no driver state, change, surprise, guidance or action, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and it behaves as one: pure risk-factor boilerplate with no driver content, correctly yielding no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "underlying effective tax rate",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "I read 'though it may vary based on discrete items' as a variability caveat rather than a Rule 11 conditions clause, so conditions is left null."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "21 openings in Canada",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu offers only the broad geography:nonus, whose meaning is not Canada, so I coined geography:canada rather than reuse a wider value."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "less than 3% of combined sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Group occasions' is plausibly a product or a channel and 'Today' states no resolvable window, so I encoded the slice as unknown: and left every period field null."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "could be double-digit percentage of sales longer term",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Could be' sits between a company outlook and an aspiration; I settled it as guidance on the explicit 'longer term' horizon and kept it numberless because 'double-digit' is a vague quantity."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["losses_and_sign"],
+      "reference_name": "$4 million reduction in legal contingencies",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "I settled this as a decrease in the standing legal_contingencies metric (bare-root litigation default) recognised over the quarter, rather than as a discrete action event at an instant."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [3, 4],
+      "members_are_one_fact": false,
+      "reason": "One sentence carries two distinct facts on different lanes — a present measured share of combined sales (metric, ceiling at 3%) and a separate forward longer-term aspiration for that same share (guidance, numberless) — so they are not one underlying fact."
+    }
+  ],
+  "lead_reconciliation": [],
+  "open_issues": [
+    {
+      "what": "Row 3 is settled with every period field null because the quote anchors only to 'Today'.",
+      "why": "A share-of-sales metric normally carries the reported window; if the pipeline requires a real period for a metric of this kind, this fact would have to park instead, and the quote alone cannot supply one."
+    },
+    {
+      "what": "Row 4's lane rests on reading 'could be ... longer term' as the company's own outlook.",
+      "why": "If a possibility statement is not treated as guidance, the row yields no fact at all, and nothing inside the quote settles the difference between an outlook and an aspiration."
+    }
+  ]
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The targeted clause ('all share and per share data in current and comparable periods have been adjusted to reflect the split') is a data-presentation/restatement disclosure note explaining how historical share and per-share figures were recast for the already-completed stock split — it states no driver state, change, surprise, guidance, or action of its own; it is methodology boilerplate, not a fact."
+    }
+  ],
+  "continuity_hints": []
+}
+```

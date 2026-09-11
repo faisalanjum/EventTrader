@@ -1,0 +1,319 @@
+{
+ "source_id": "0000940944-26-000009",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "discontinued_operations_earnings",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": -3.8,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "level_high": {
+        "value": -3.8,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": -0.3,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "comparison_high": {
+        "value": -0.3,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "net of tax"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposal of real_item holds: the located claim states a quantified, signed loss from discontinued operations with its prior-year counterpart, so it settles as one real metric fact."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+       "driver_name": "continuing_operations_earnings_per_share",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": 2.68,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 2.68,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "comparison_low": {
+        "value": 2.74,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "comparison_high": {
+        "value": 2.74,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "Diluted"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposal of real_item holds: a stated per-share level with its prior-year value is a real metric fact, and the stated (2.2)% change was withheld only because it is derivable from the two closed levels."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 402.0,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "level_high": {
+        "value": 402.0,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": 385.3,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "comparison_high": {
+        "value": 385.3,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "millions"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "slice_parts": [
+        "segment:finediningsegment"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposal of real_item holds: the located Fine Dining sales figure with its prior-year value is a real segment-sliced metric fact."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 87,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 87,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "period_start_date": "2026-02-22",
+       "period_end_date": "2026-02-22",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "time_type": "instant",
+       "slice_parts": [
+        "channel:franchisedunits",
+        "geography:united states"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposal of real_item holds: a stated count of franchised restaurants is a real countable metric level, not a bare mention."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic risk-factor boilerplate naming climate change, adverse weather and natural disasters as possible impacts; it states no driver state, change, surprise, guidance or action, so the gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "The frozen proposal of negative_control holds: this is a bulleted generic risk listing with no company-specific current threat, and it correctly yields no fact."
+  },
+  {
+   "row_index": 6,
+   "settled": {
+    "source_id": "0000940944-26-000009",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "segment_profit_recast",
+       "driver_state": "occurred",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposal of real_item holds, but only as a discrete completed company decision (the segment-profit measure was changed and prior-year figures recast), not as any business metric level."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "portion_versus_whole"
+   ],
+   "reference_name": "Losses from discontinued operations, net of tax",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Whether a metric's prior-year figure belongs in the comparison slots or only in the quote is not fully settled by the rules; I stored it as a source-stated prior_year point."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "portion_versus_whole"
+   ],
+   "reference_name": "Earnings from continuing operations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": null
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "Fine Dining",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": null
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole"
+   ],
+   "reference_name": "87 franchised restaurants",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The United States geography part and the February 22, 2026 instant are both inherited from the immediately preceding sentence rather than stated inside the located claim, so a whole-company, undated reading is also defensible."
+  },
+  {
+   "row_index": 6,
+   "fact_index": 0,
+   "hard_classes": [
+    "corrections_and_amendments"
+   ],
+   "reference_name": "we changed our reporting of segment profit to exclude pre-opening costs",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The lane is genuinely close: a reporting-definition change is a discrete decision (action_event, as settled) but could be read as a standing accounting policy or as a non-driver accounting construct that yields nothing."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-011/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-011/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

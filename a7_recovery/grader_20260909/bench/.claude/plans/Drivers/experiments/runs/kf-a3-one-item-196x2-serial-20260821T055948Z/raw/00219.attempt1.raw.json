@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted reconciliation line 'Gift card adjustment, net(3)' is a single net figure that bundles two independent causes disclosed in the source (footnote 3): a gift card breakage revenue recognition change (+$17.3M) and a non-recurring gift card inventory write-down (-$7.9M), netting to the shown (9,396). Rule 3.2 requires independent causes to be split into separate facts, but this located item/quote presents only the merged net figure with no lawful single-cause name, and this task authorizes interpreting only this one target (extra facts allowed only for TWINS/basis-split, not general cause-splitting). Cannot lawfully resolve a single driver name for this bundled reconciling figure, so abstaining per Rule 1.4."
+    }
+  ],
+  "continuity_hints": []
+}
+```

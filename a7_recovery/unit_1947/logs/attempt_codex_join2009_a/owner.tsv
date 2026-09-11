@@ -1,0 +1,7 @@
+attempt	codex_join2009_a
+payload	../../unit_1997/ledger/../../unit_2009/check_integration.py
+map	../unit_1997/../unit_2009/map_integration_a.tsv
+wrapper_pid	3927968
+payload_pid	3927972
+started_utc	2026-09-11T02:18:23Z
+state	finished exit 0

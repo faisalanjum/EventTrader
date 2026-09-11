@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "comparable_store_sales",
+        "driver_state": "increased",
+        "level_low": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent_yoy",
+        "comparison_low": {"value": 2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_high": {"value": 2.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

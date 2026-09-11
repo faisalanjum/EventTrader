@@ -1,0 +1,10 @@
+the existing G1 owner publishes the saved-answer candidate PASS
+complete TEST G1 evidence passes its actual public lifecycle PASS
+G2 and G3 freeze from that completed G1 and original source inputs PASS
+both later grading kinds have real derived TEST obligations PASS
+G2 passes raw capture, native proof, completion and read-back PASS
+G3 passes raw capture, native proof, completion and read-back PASS
+the official scorer consumes all original arms and union PASS
+both public routing stages keep all99 event-arm routes, with writes disabled PASS
+original producer bytes and its full denominator are unchanged PASS
+Complete saved-answer TEST lifecycle passed; score arithmetic remains independently audited.

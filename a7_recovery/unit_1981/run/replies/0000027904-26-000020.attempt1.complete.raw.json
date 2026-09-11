@@ -1,0 +1,292 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "verdicts": [
+    {
+      "proposal_id": "0000027904-26-000020#P000",
+      "decision": "exclude",
+      "why": "This target has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000020#P001",
+      "decision": "exclude",
+      "why": "This target has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000020#P002",
+      "decision": "exclude",
+      "why": "This target has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000020#P003",
+      "decision": "exclude",
+      "why": "This target has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Expect June quarter pre-tax profit of around $1 billion, on a more than $2 billion increase in fuel expense at the forward curve",
+        "raw_label_or_claim": "June quarter pre-tax profit of around $1 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "expectation_routing"]
+      },
+      "why": "A source-stated forward guidance figure (approximate point value) for June-quarter pre-tax profit, not named by any supplied proposal; distinct fact from the co-stated fuel-expense guidance in the same sentence."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Expect June quarter pre-tax profit of around $1 billion, on a more than $2 billion increase in fuel expense at the forward curve",
+        "raw_label_or_claim": "more than $2 billion increase in fuel expense",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "expectation_routing"]
+      },
+      "why": "A separately named guidance figure (floor shape: 'more than $2 billion') sharing the same sentence as the pre-tax-profit guidance but a distinct measurement (fuel expense change); each fact keeps its own label though the smallest lawful contiguous span for both is this one sentence."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Pre-tax loss of $214 million with a pre-tax margin of (1.4) percent",
+        "raw_label_or_claim": "Pre-tax loss of $214 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "A GAAP point-shaped loss fact (negative sign per OD-12), not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Loss per share of ($0.44)",
+        "raw_label_or_claim": "Loss per share of ($0.44)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "A distinct per-share loss fact (NAME-13: per-share is a different Driver from the total pre-tax loss); negative-sign point shape, not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating Margin 6% - 8%",
+        "raw_label_or_claim": "Operating Margin 6% - 8%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "expectation_routing"]
+      },
+      "why": "A closed-range 2Q26 guidance figure (both bounds stated), not named by any supplied proposal; provides a range-shape example distinct from the floor/point examples selected."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Earnings per share of $0.64",
+        "raw_label_or_claim": "Earnings per share of $0.64",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "The Non-GAAP (adjusted) home EPS fact required as the ordinary sibling of the in-line-vs-guidance surprise fact selected below (OD-21/ISS-16: a surprise requires its home fact); measurement token 'Non-GAAP' governs this figure per its section heading."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Delta delivered record March quarter revenue, with an operating margin of 4.6 percent and earnings of $0.64 per share, within our initial guidance range even with a sharp run up in March fuel prices.",
+        "raw_label_or_claim": "earnings of $0.64 per share, within our initial guidance range",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "A stated actual-vs-guidance comparison ('within our initial guidance range') explicitly yielding in_line; this is the complete, richer restatement of the vaguer opening headline ('earnings in line with initial guidance'), selected per the partial-then-richer rule; pairs with the EPS home fact above."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "March quarter total revenue increased 9.4 percent over the same period last year to a record $14.2 billion, led by premium, corporate, and loyalty.",
+        "raw_label_or_claim": "total revenue increased 9.4 percent over the same period last year to a record $14.2 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "The complete quote carrying both the total-revenue level ($14.2B, adjusted) and its stated YoY growth (9.4%, percent_yoy); selected over the earlier bare 'Operating revenue of $14.2 billion' bullet, which lacks the growth value, per the partial-then-richer rule. Serves as the home fact for the expectation-routing surprise below."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total revenue of $14.2 billion was a March quarter record and nearly 10 percent higher than last year, growing several points above our initial outlook, on broad demand strength across corporate and leisure",
+        "raw_label_or_claim": "growing several points above our initial outlook",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "A grounded numberless favorable comparison of actual revenue against the company's own prior guidance ('our initial outlook'); this quote is the complete occurrence (it names the guidance baseline explicitly, unlike the vaguer opening headline) and pairs with the total-revenue home fact above per OD-21's surprise-plus-home-fact requirement."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "MRO revenue increased by more than $200 million year-over-year, reflecting significant growth and strong execution by the Delta TechOps team.",
+        "raw_label_or_claim": "MRO revenue increased by more than $200 million year-over-year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "A floor-shaped YoY dollar-growth fact tied to a named product slice (MRO business), matching the company's own menu entry (product:productandserviceothermrobusiness); not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "the possible effects of serious accidents involving our aircraft or aircraft of our airline partners",
+        "raw_label_or_claim": "serious accidents involving our aircraft or aircraft of our airline partners",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical Forward-Looking-Statements risk boilerplate with no current source-flagged adverse threat; fails DU-11/DU-03, correct reader behavior is omission."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000020",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Recent corporate survey results indicate 85 percent of respondents expect their corporate travel spend will increase or stay the same in the June quarter.",
+        "raw_label_or_claim": "85 percent of respondents expect their corporate travel spend will increase or stay the same",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A specific, non-boilerplate, quantified statement, but it reports third-party customer-survey sentiment rather than any stated state/change/surprise/guidance/action of Delta's own driver; whether this crosses the DU-03 fact gate at all is a genuinely fuzzy boundary the quoted rules leave unresolved, so per ruling 3 it is recorded as an abstention control rather than guessed into real_item or negative_control."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Operating revenue of $14.2 billion",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same fact (adjusted March-quarter total revenue level) as the richer restatement selected in additions; this earlier, bare occurrence is missing the stated YoY growth value and is superseded by the complete later quote under the partial-then-richer rule."
+    },
+    {
+      "quote": "Delivered March quarter earnings in line with initial guidance on broad demand strength driving better-than-expected revenue performance",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Earlier, vaguer statement of the same two expectation-routing facts (EPS-vs-guidance in_line; revenue-vs-guidance beat) that are located at their richer, guidance-baseline-naming restatements later in the release (selected in additions)."
+    },
+    {
+      "quote": "Guidance assumes fuel at the forward curve as of April 2, 2026, and includes a refinery benefit of approximately $300 million.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A lawful, real, distinct guidance fact, but omitted from this event's fresh contribution to stay within the representative per-event budget; its hard classes (point_range_floor_ceiling, expectation_routing) are already covered by other selected rows."
+    },
+    {
+      "quote": "The refinery is expected to provide a $300 million benefit to the June quarter at current prices.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same fact as the refinery-benefit guidance statement immediately above (same value, period, and scope); duplicate restatement, not a fresh target."
+    },
+    {
+      "quote": "In February, we celebrated $1.3 billion in profit\u2011sharing payouts, similar to last year and more than the rest of the industry combined.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, lawful fact but omitted to stay within the representative per-event budget; does not repair any declared hard-class or control shortfall."
+    },
+    {
+      "quote": "Continuing to strengthen investment-grade balance sheet, with adjusted net debt below 2019 levels",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real fact, but its comparison anchor (2019) is not a temporal prior baseline and it adds no new hard-class coverage beyond items already selected; omitted for budget restraint."
+    },
+    {
+      "quote": "We delivered earnings that were more than 40 percent higher than last year, even with a significant increase in fuel costs and operational disruptions across the industry",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant point/floor-plus-YoY pattern already represented by other selected rows; omitted for budget restraint."
+    },
+    {
+      "quote": "Earnings Per Share $1.00 - $1.50",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant range-shape-plus-guidance pattern already represented by the selected Operating Margin range row; omitted for budget restraint."
+    },
+    {
+      "quote": "Adjusted total unit revenue (TRASM) grew 8.2 percent over prior year, with a 1.6 point contribution from robust MRO growth.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant sequential-comparison-plus-measurement pattern already represented by other selected rows; omitted for budget restraint."
+    },
+    {
+      "quote": "Delta\u2019s diversified revenue base represented 62 percent of total revenue and grew mid-teens over prior year.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real fact, redundant growth pattern; omitted for budget restraint."
+    },
+    {
+      "quote": "Premium revenue grew 14 percent compared to the March quarter of 2025.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant slice-plus-YoY pattern already represented by the selected MRO row; omitted for budget restraint."
+    },
+    {
+      "quote": "Loyalty and related revenue increased 13 percent, primarily driven by continued double-digit growth in card spend and an expanding cardholder base.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant slice-plus-YoY pattern already represented by the selected MRO row; omitted for budget restraint."
+    },
+    {
+      "quote": "Cargo revenue increased 9 percent.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant slice-plus-YoY pattern; omitted for budget restraint."
+    },
+    {
+      "quote": "Domestic unit revenue grew 6 percent year-over-year with strength across all cabins.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant slice-plus-YoY pattern; omitted for budget restraint."
+    },
+    {
+      "quote": "American Express remuneration of over $2 billion grew 10 percent over prior year.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant floor-plus-YoY pattern already represented by other selected rows; omitted for budget restraint."
+    },
+    {
+      "quote": "Adjusted fuel price of $2.62 per gallon increased 7 percent year-over-year with a refinery benefit of 6\u00a2 per gallon",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Redundant point-plus-sequential-plus-measurement pattern already represented by other selected rows; omitted for budget restraint."
+    },
+    {
+      "quote": "unfavorable economic or political conditions in the markets in which we operate or volatility in currency exchange rates",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A second candidate negative control (generic boilerplate); one negative control already selected for this event, so this is not added."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Several 2Q26 guidance figures ('Total Revenue YoY (%) Up low-teens', 'Operating Margin 6% - 8%', 'Earnings Per Share $1.00 - $1.50') appear as flattened inline text where an original tabular row/column layout has apparently been collapsed into running prose with no punctuation between fields.",
+      "why": "The authority does not state how to treat locator contiguity/occurrence-counting for table-derived text that has lost its original row/column structure in the supplied source text; I treated each flattened segment as its own lawful contiguous span, but this formatting-fidelity question is not settled by the quoted rules."
+    },
+    {
+      "what": "Whether a company-reported, third-party customer-sentiment survey statistic (the 85% corporate-travel-spend figure) falls within the DU-03 fact gate at all, versus being out-of-scope context never subject to a record-kind decision.",
+      "why": "The quoted DU-03/Rule-1 wording addresses bare mentions and generic risk boilerplate, but does not explicitly address a specific, non-boilerplate, non-risk statistic that describes third-party expectations rather than the company's own driver state; I resolved this as a lawful_abstention_control per ruling 3's fuzzy-boundary instruction, but the authority does not itself settle this case."
+    }
+  ],
+  "blocked": null
+}
+```

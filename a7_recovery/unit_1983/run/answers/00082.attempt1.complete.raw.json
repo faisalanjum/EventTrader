@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "starlink_wifi_deployment",
+        "driver_state": "announced",
+        "level_low": {"value": 300, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "floor",
+        "level_unit": "count",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "instant"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "vendor_concentration",
+        "driver_state": "reported",
+        "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+        "level_high": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

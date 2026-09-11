@@ -1,0 +1,2235 @@
+{
+ "base_commit": "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc",
+ "counts": {
+  "events_covered": 33,
+  "proposed_lawful_abstention_controls": 4,
+  "proposed_negative_controls": 31,
+  "proposed_real_items": 156,
+  "records": 191,
+  "source_events": 36
+ },
+ "note": "Every record_kind and hard-class tag is a PROPOSAL for the independent key owner. Hard classes are hidden, non-exclusive benchmark coverage tags, never a production field. This file proves source binding and accounting only, never meaning.",
+ "records": [
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Loss per common share: Basic and diluted $ (0.58) $ (0.72)",
+   "raw_label_or_claim": "Loss per common share: Basic and diluted",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "FY 2026E Adjusted earnings (loss) per diluted share3 ($0.40) to $1.10",
+   "raw_label_or_claim": "FY 2026E Adjusted earnings (loss) per diluted share3",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+   "raw_label_or_claim": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "sequential_comparison"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Total unit revenue was 7.6% higher year over year, improving sequentially each month in the quarter",
+   "raw_label_or_claim": "improving sequentially each month in the quarter",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Domestic (1) Revenue passenger miles (millions) 39,167 37,693 3.9 % Available seat miles (ASM) (millions) 48,414 46,669 3.7 % Passenger load factor (percent) 80.9 80.8 0.1 pts Passenger revenue (dollars in millions) 8,990 8,127 10.6 % Yield (cents) 22.95 21.56 6.5 % Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "raw_label_or_claim": "Passenger revenue per ASM (cents)",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Full-time equivalent employees at end of period: Mainline 106,400 102,400 3.9 % Regional (4) 32,500 30,700 5.9 %",
+   "raw_label_or_claim": "Regional (4)",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "we may be a party to litigation in the normal course of business or otherwise, which could affect our financial position and liquidity",
+   "raw_label_or_claim": "we may be a party to litigation in the normal course of business or otherwise",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Our 2026 first quarter CASM excluding net special items, fuel and profit sharing was 15.29 cents, an increase of 5.2% from 14.54 cents in the first quarter of 2025, which was primarily driven by higher costs for salaries, wages and benefits and other operating expenses.",
+   "raw_label_or_claim": "CASM excluding net special items, fuel and profit sharing",
+   "source_id": "0000006201-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7)",
+   "raw_label_or_claim": "Income tax benefit",
+   "source_id": "0000006201-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(In millions, except percentage changes) Passenger revenue $ 12,495 $ 11,391 $ 1,104 9.7 Cargo revenue 214 189 25 12.9 Other operating revenue 1,203 971 232 23.9 Total operating revenues 13,912 12,551 1,361 10.8 Aircraft fuel and related taxes 2,928 2,587 341 13.2 Salaries, wages and benefits 4,674 4,222 452 10.7 Total operating expenses 13,953 12,821 1,132 8.8 Operating loss (41) (270) (229) (85.0) Pre-tax loss (476) (648) (172) (26.6) Income tax benefit (94) (175) (81) (46.7) Net loss (382) (473) (91) (19.2) Pre-tax loss \u2013 GAAP $ (476) $ (648) $ (172) (26.6) Adjusted for: pre-tax net special items (1) \n\n149 118 31 25.0 Pre-tax loss excluding net special items $ (327) $ (530) $ (203) (38.2)",
+   "raw_label_or_claim": "Pre-tax loss excluding net special items",
+   "source_id": "0000006201-26-000032"
+  },
+  {
+   "occurrence_in_part": 1,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025",
+   "raw_label_or_claim": "mainline full-time equivalent employees",
+   "source_id": "0000006201-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "Additional risks and uncertainties not currently known to us, or that we currently deem to be immaterial, could also materially adversely affect our business, financial condition or future results.",
+   "raw_label_or_claim": "Additional risks and uncertainties not currently known to us",
+   "source_id": "0000006201-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "operating income, adjusted (a non-GAAP financial measure) was $5.8 billion, a decrease of $212 million compared to 2024.",
+   "raw_label_or_claim": "operating income, adjusted",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(in millions) 2025 2024 Interest expense, net $ (679) $ (747) $ 68 Gain/(loss) on investments, net 1,212 (319) 1,531 Loss on extinguishment of debt (26) (39) 13",
+   "raw_label_or_claim": "Loss on extinguishment of debt",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.",
+   "raw_label_or_claim": "in line with our long-term target of low-single digit growth",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+   "raw_label_or_claim": "annual effective tax rate to be between 23% and 25% for 2026",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "business",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "we currently own an approximately 19% equity stake in Grupo Aerom\u00e9xico, S.A.B. de C.V., the parent company of Aerom\u00e9xico.",
+   "raw_label_or_claim": "19% equity stake in Grupo Aerom\u00e9xico",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "with an option to purchase up to an additional 30 of the same aircraft",
+   "raw_label_or_claim": "option to purchase up to an additional 30 of the same aircraft",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "An aircraft crash or other serious accident involving our aircraft or those of our airline partners could expose us to significant liability.",
+   "raw_label_or_claim": "could expose us to significant liability",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Pre-tax loss of $214 million with a pre-tax margin of (1.4) percent",
+   "raw_label_or_claim": "Pre-tax loss of $214 million",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Operating Margin 6% - 8%",
+   "raw_label_or_claim": "Operating Margin 6% - 8%",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Earnings per share of $0.64",
+   "raw_label_or_claim": "Earnings per share of $0.64",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Delta delivered record March quarter revenue, with an operating margin of 4.6 percent and earnings of $0.64 per share, within our initial guidance range even with a sharp run up in March fuel prices.",
+   "raw_label_or_claim": "earnings of $0.64 per share, within our initial guidance range",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "March quarter total revenue increased 9.4 percent over the same period last year to a record $14.2 billion, led by premium, corporate, and loyalty.",
+   "raw_label_or_claim": "total revenue increased 9.4 percent over the same period last year to a record $14.2 billion",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Total revenue of $14.2 billion was a March quarter record and nearly 10 percent higher than last year, growing several points above our initial outlook, on broad demand strength across corporate and leisure",
+   "raw_label_or_claim": "growing several points above our initial outlook",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "the possible effects of serious accidents involving our aircraft or aircraft of our airline partners",
+   "raw_label_or_claim": "serious accidents involving our aircraft or aircraft of our airline partners",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Recent corporate survey results indicate 85 percent of respondents expect their corporate travel spend will increase or stay the same in the June quarter.",
+   "raw_label_or_claim": "85 percent of respondents expect their corporate travel spend will increase or stay the same",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "sequential_comparison",
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 \u2014 Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities \u2014 \u2014 \u2014 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760)",
+   "raw_label_or_claim": "Adjusted net debt",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The refinery generated an operating loss of $39 million in the March 2026 quarter compared to a loss of $1 million in the March 2025 quarter.",
+   "raw_label_or_claim": "refinery generated an operating loss",
+   "source_id": "0000027904-26-000022"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Total revenue, adjusted (a non-GAAP financial measure, which excludes revenue related to refinery sales to third parties) increased in the March 2026 quarter by $1.2 billion, or 9.4%, compared to the March 2025 quarter.",
+   "raw_label_or_claim": "Total revenue, adjusted",
+   "source_id": "0000027904-26-000022"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Atlantic 1,517 11 %",
+   "raw_label_or_claim": "Atlantic",
+   "source_id": "0000027904-26-000022"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "There have been no material changes from the risk factors described in our Form 10-K.",
+   "raw_label_or_claim": "no material changes from the risk factors",
+   "source_id": "0000027904-26-000022"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "corrections_and_amendments",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Beginning with the quarter ended March 31, 2026, settlement gains and losses related to Monroe's inventory that remains on-hand at period end are excluded from our adjusted results. These settlement gains and losses will be reflected in adjusted results during the period the inventory is sold. This change was made to match the timing of expense and revenue recognition and we have similarly adjusted the presentation of reconciliations for prior periods included here.",
+   "raw_label_or_claim": "we have similarly adjusted the presentation of reconciliations for prior periods included here",
+   "source_id": "0000027904-26-000022"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.",
+   "raw_label_or_claim": "pre-tax charges of $80 million",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Net pre-tax gains of $71 million, or $0.07 per share, for the quarter and net pre-tax charges of $70 million, or $0.08 per share, for the year, which primarily consisted of property sale gains, transaction costs and non-cash impairment charges associated with the sale of McDonald's business in South Korea and transaction costs associated with the acquisition of McDonald's business in Israel",
+   "raw_label_or_claim": "Net pre-tax gains",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "U.S. increased 6.8%",
+   "raw_label_or_claim": "U.S.",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "This release contains certain forward-looking statements, which reflect management's expectations regarding future events and operating performance and speak only as of the date hereof.",
+   "raw_label_or_claim": "forward-looking statements",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Approximately 95% of McDonald\u2019s restaurants worldwide are owned and operated by independent local business owners.",
+   "raw_label_or_claim": "Approximately 95% of McDonald\u2019s restaurants worldwide are owned and operated by independent local business owners.",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "$0.45 EPS, in line with guidance",
+   "raw_label_or_claim": "$0.45 EPS, in line with guidance",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+   "raw_label_or_claim": "fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(in millions, except per share amounts) (unaudited) Three months ended March 31, 2026 2025 Percent Change OPERATING REVENUES: Passenger $ 6,591 $ 5,811 13.4 Freight 44 41 7.3",
+   "raw_label_or_claim": "Freight",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Announced planned deployment of Starlink ultra\u2011fast Wi\u2011Fi across the fleet, with initial aircraft expected to enter service in summer 2026 and at least 300 aircraft planned by year\u2011end 2026",
+   "raw_label_or_claim": "Announced planned deployment of Starlink ultra\u2011fast Wi\u2011Fi across the fleet, with initial aircraft expected to enter service in summer 2026 and at least 300 aircraft planned by year\u2011end 2026",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance",
+   "raw_label_or_claim": "First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "the impact of fuel price changes, fuel price 6 volatility, and fuel availability on the Company's business plans and results of operations",
+   "raw_label_or_claim": "the impact of fuel price changes, fuel price 6 volatility, and fuel availability on the Company's business plans and results of operations",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(in millions, except per share amounts) (unaudited) Three months ended March 31, 2026 2025 Percent Change OPERATING REVENUES: Passenger $ 6,591 $ 5,811 13.4 Freight 44 41 7.3 Other 614 576 6.6 Total operating revenues 7,249 6,428 12.8 OPERATING EXPENSES: Salaries, wages, and benefits 3,297 3,102 6.3 Aircraft fuel and related taxes 1,356 1,249 8.6 Maintenance materials and repairs 259 292 (11.3) Landing fees and airport rentals 572 522 9.6 Depreciation and amortization 398 396 0.5 Other operating expenses 1,037 1,090 (4.9) Total operating expenses 6,919 6,651 4.0 OPERATING INCOME (LOSS) 330 (223) n.m. NON-OPERATING EXPENSES (INCOME): Interest expense 54 46 17.4 Capitalized interest (12) (11) 9.1 Interest income (23) (84) (72.6) Other (gains) losses, net 26 18 44.4 Total non-operating expenses (income) 45 (31) n.m. INCOME (LOSS) BEFORE INCOME TAXES 285 (192) n.m. PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m. NET INCOME (LOSS) $ 227 $ (149) n.m.",
+   "raw_label_or_claim": "NET INCOME (LOSS)",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "($ in millions, except per share amounts): \n\nThree Months Ended Nine Months Ended November 1, 2025 November 2, 2024 November 1, 2025 November 2, 2024 Revenue $ 9,672 $ 9,445 $ 27,877 $ 27,580 Revenue % change 2.4 % (3.2) % 1.1 % (4.3) % Comparable sales % change 2.7 % (2.9) % 1.2 % (3.7) % Gross profit $ 2,248 $ 2,217 $ 6,491 $ 6,467 \n\nGross profit as a % of revenue (1) \n\n23.2 % 23.5 % 23.3 % 23.4 % Selling, general and administrative expense (\"SG&A\") $ 1,884 $ 1,871 $ 5,434 $ 5,418 \n\nSG&A as a % of revenue (1) \n\n19.5 % 19.8 % 19.5 % 19.6 % Restructuring charges $ (5) $ (4) $ 218 $ 4 Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+   "raw_label_or_claim": "Goodwill and intangible asset impairments",
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "point_range_floor_ceiling",
+    "ambiguous_menus"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Computing and Mobile Phones: The 7.6% comparable sales growth was driven primarily by computing and mobile phones.",
+   "raw_label_or_claim": "The 7.6% comparable sales growth",
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "point_range_floor_ceiling",
+    "ambiguous_menus"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Consumer Electronics: The 3.6% comparable sales growth was driven primarily by digital imaging.",
+   "raw_label_or_claim": "The 3.6% comparable sales growth",
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Online revenue as a % of total segment revenue 31.8 % 31.4 % 32.1 % 31.2 %",
+   "raw_label_or_claim": "Online revenue as a % of total segment revenue",
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "negative_control",
+   "quote": "We also may use the term \u201cconstant currency,\u201d which represents results adjusted to exclude foreign currency impacts.",
+   "raw_label_or_claim": "constant currency",
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Diluted earnings per common share for the year ended December 31, 2025, increased 10% to $2.97 on 856 million shares versus $2.71 on 881 million shares for the same period one year ago.",
+   "raw_label_or_claim": "Diluted earnings per common share",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "favourable_unfavourable_direction",
+    "expectation_routing"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs.",
+   "raw_label_or_claim": "SG&A expenses again exceeded our expectations",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Ending domestic store count \u200b 6,447",
+   "raw_label_or_claim": "Ending domestic store count",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(In thousands, except share data) \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b December 31, 2025 \u200b December 31, 2024 \u200b \u200b \u200b \u200b (Unaudited) \u200b \u200b \u200b (Note) Assets \u200b \u200b \u200b \u200b \u200b \u200b Current assets: \u200b \u200b \u200b \u200b \u200b \u200b Cash and cash equivalents \u200b $ 193,793 \u200b $ 130,245 Accounts receivable, net \u200b 389,793 \u200b \u200b 356,839 Amounts receivable from suppliers \u200b 159,900 \u200b \u200b 139,091 Inventory \u200b 5,731,385 \u200b \u200b 5,095,804 Other current assets \u200b 269,406 \u200b \u200b 117,916 Total current assets \u200b 6,744,277 \u200b \u200b 5,839,895 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Property and equipment, at cost \u200b 10,222,249 \u200b \u200b 9,192,254 Less: accumulated depreciation and amortization \u200b 3,964,824 \u200b \u200b 3,587,098 Net property and equipment \u200b 6,257,425 \u200b \u200b 5,605,156 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Operating lease, right-of-use assets \u200b 2,391,150 \u200b \u200b 2,324,638 Goodwill \u200b 948,208 \u200b \u200b 930,161 Other assets, net \u200b 197,193 \u200b \u200b 193,891 Total assets \u200b $ 16,538,253 \u200b $ 14,893,741 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Liabilities and shareholders\u2019 deficit \u200b \u200b \u200b \u200b \u200b \u200b Current liabilities: \u200b \u200b \u200b \u200b \u200b \u200b Accounts payable \u200b $ 7,103,684 \u200b $ 6,524,811 Self-insurance reserves \u200b 297,304 \u200b \u200b 149,387 Accrued payroll \u200b 119,603 \u200b \u200b 107,495 Accrued benefits and withholdings \u200b 240,072 \u200b \u200b 199,593 Income taxes payable \u200b 13,957 \u200b \u200b 6,274 Current portion of operating lease liabilities \u200b 439,907 \u200b \u200b 419,213 Other current liabilities \u200b 561,294 \u200b \u200b 876,732 Total current liabilities \u200b 8,775,821 \u200b \u200b 8,283,505 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Long-term debt \u200b 6,016,904 \u200b \u200b 5,520,932 Operating lease liabilities, less current portion \u200b 2,034,688 \u200b \u200b 1,980,705 Deferred income taxes \u200b 211,210 \u200b \u200b 247,599 Other liabilities \u200b 262,982 \u200b \u200b 231,961 \u200b \u200b \u200b \u200b \u200b \u200b \u200b Shareholders\u2019 equity (deficit): \u200b \u200b \u200b \u200b \u200b \u200b Common stock, $0.01 par value: \u200b \u200b \u200b \u200b \u200b \u200b Authorized shares \u2013 1,250,000,000 \u200b \u200b \u200b \u200b \u200b Issued and outstanding shares \u2013 \u200b \u200b \u200b \u200b \u200b \u200b 841,909,238 as of December 31, 2025, and \u200b \u200b \u200b \u200b \u200b \u200b 862,232,760 as of December 31, 2024 \u200b \u200b 8,419 \u200b \u200b 8,622 Additional paid-in capital \u200b 1,530,292 \u200b \u200b 1,454,518 Retained deficit \u200b (2,328,817) \u200b \u200b (2,791,288) Accumulated other comprehensive income (loss) \u200b \u200b 26,754 \u200b \u200b (42,813) Total shareholders\u2019 deficit \u200b (763,352)",
+   "raw_label_or_claim": "Total shareholders\u2019 deficit",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "The Company claims the protection of the safe-harbor for forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995.",
+   "raw_label_or_claim": "safe-harbor for forward-looking statements",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "corrections_and_amendments",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The Company completed a 15-for-1 forward stock split on June 10, 2025, and accordingly all share and per share data in current and comparable periods have been adjusted to reflect the split.",
+   "raw_label_or_claim": "all share and per share data in current and comparable periods have been adjusted to reflect the split",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "LongHorn Steakhouse 19.3% 18.4% 90 BP",
+   "raw_label_or_claim": "LongHorn Steakhouse",
+   "source_id": "0000940944-25-000038"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "business",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "During the fourth quarter of fiscal 2025, we entered into an agreement with Recipe Unlimited, Canada\u2019s largest full-service restaurant company, pursuant to which Recipe Unlimited will acquire Olive Garden\u2019s eight Canadian restaurants.",
+   "raw_label_or_claim": "Olive Garden\u2019s eight Canadian restaurants",
+   "source_id": "0000940944-25-000038"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "Litigation, including allegations of illegal, unfair or inconsistent employment practices, may adversely affect our business, financial condition and results of operations.",
+   "raw_label_or_claim": "may adversely affect our business, financial condition and results of operations",
+   "source_id": "0000940944-25-000038"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "As of May 25, 2025, our adjusted debt to EBITDAR ratio was 2.1.",
+   "raw_label_or_claim": "adjusted debt to EBITDAR ratio",
+   "source_id": "0000940944-25-000038"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "a blended same-restaurant sales1 increase of 4.2%",
+   "raw_label_or_claim": "blended same-restaurant sales1",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "adjusted diluted net earnings per share from continuing operations were $2.95, an increase of 5.4%4",
+   "raw_label_or_claim": "adjusted diluted net earnings per share from continuing operations",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "in millions, except per share amounts Earnings Before Income Tax Income Tax Expense Net Earnings Diluted Net Earnings Per Share Earnings Before Income Tax Income Tax Expense Net Earnings Diluted Net Earnings Per Share Reported Earnings from Continuing Operations $ 356.8 $ 46.2 $ 310.6 $ 2.68 $ 372.7 $ 49.0 $ 323.7 $ 2.74 % Change vs Prior Year (2.2)% Total Adjustments: $ 31.3 $ 0.7 $ 30.6 $ 0.27 $ 8.4 $ 1.9 $ 6.5 $ 0.06 Closed restaurant and other strategic review costs2 6.6 1.6 5.0 0.05 \u2014 \u2014 \u2014 \u2014 General and administrative expenses 5.8 1.4 4.4 0.04 \u2014 \u2014 \u2014 \u2014 Depreciation and amortization 0.8 0.2 0.6 0.01 \u2014 \u2014 \u2014 \u2014 Impairment due to restaurant closures3 24.7 6.2 18.5 0.16",
+   "raw_label_or_claim": "Impairment due to restaurant closures3",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Reconciliation of Fiscal 2026 Reported to Adjusted Earnings Outlook 2026 Reported diluted net earnings per share from continuing operations $10.40 to $10.50 Chuy's transaction and integration related costs 0.06 0.06 Closed restaurant and other strategic review costs2 0.15 0.15 Impairment due to restaurant closures3 0.16 0.16 Gain on Olive Garden Canada sale (0.26) (0.26)",
+   "raw_label_or_claim": "Gain on Olive Garden Canada sale",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Sales and profits from Chuy's restaurants are included within the Other Business segment from the date of acquisition forward.",
+   "raw_label_or_claim": "included within the Other Business segment",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "litigation, unfavorable publicity or failure to respond effectively to adverse publicity",
+   "raw_label_or_claim": "litigation, unfavorable publicity or failure to respond effectively to adverse publicity",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg February 22, 2026 February 23, 2025 % Chg Sales $ 3,345.3 $ 3,158.0 5.9% $ 9,492.1 $ 8,805.0 7.8% Costs and expenses: Food and beverage \n\n1,026.7 953.6 7.7 2,919.5 2,673.1 9.2 Restaurant labor \n\n1,046.9 995.0 5.2 3,035.0 2,811.1 8.0 Restaurant expenses \n\n528.7 501.0 5.5 1,541.2 1,426.9 8.0 Marketing expenses \n\n39.4 35.4 11.3 137.2 128.9 6.4 Pre-opening costs 8.8 6.1 44.3 22.8 16.1 41.6 General and administrative expenses \n\n121.5 116.7 4.1 375.4 387.2 (3.0) Depreciation and amortization \n\n141.8 131.9 7.5 414.8 381.1 8.8 Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM (19.8) 1.1 NM Total costs and expenses $ 2,938.9 $ 2,739.8 7.3 $ 8,426.1 $ 7,825.5 7.7 Operating income 406.4 418.2 (2.8) 1,066.0 979.5 8.8 Interest, net 49.6 45.5 9.0 143.0 128.8 11.0 Earnings before income taxes 356.8 372.7 (4.3) $ 923.0 $ 850.7 8.5 Income tax expense (1) 46.2 49.0 (5.7) 117.1 103.7 12.9 Earnings from continuing operations $ 310.6 $ 323.7 (4.0) $ 805.9 $ 747.0 7.9 Losses from discontinued operations, net of tax (3.8) (0.3) NM",
+   "raw_label_or_claim": "Losses from discontinued operations, net of tax",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Diluted net earnings per share: \n\nEarnings from continuing operations \n\n$ 2.68 $ 2.74 (2.2)%",
+   "raw_label_or_claim": "Earnings from continuing operations",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(in millions) February 22, 2026 February 23, 2025 % Chg SRS (1) \n\nFebruary 22, 2026 February 23, 2025 % Chg SRS (1) \n\nOlive Garden $ 1,393.0 $ 1,330.3 4.7 % 3.2 % $ 4,056.8 $ 3,831.9 5.9 % 4.5 % LongHorn Steakhouse $ 854.2 $ 768.1 11.2 % 7.2 % $ 2,406.5 $ 2,191.7 9.8 % 6.3 % Fine Dining $ 402.0 $ 385.3 4.3 %",
+   "raw_label_or_claim": "Fine Dining",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We own and operate all of our restaurants in the United States, except for five restaurants we manage through joint venture or other contractual agreements and 87 franchised restaurants.",
+   "raw_label_or_claim": "87 franchised restaurants",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "Impacts of climate change, adverse weather conditions and natural disasters;",
+   "raw_label_or_claim": "Impacts of climate change, adverse weather conditions and natural disasters",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "corrections_and_amendments",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "During the fourth quarter of 2025, we changed our reporting of segment profit to exclude pre-opening costs in order to better align with our internal reporting and provide a better representation of restaurant-level operating costs. Fiscal 2025 figures were recast for comparability.",
+   "raw_label_or_claim": "Fiscal 2025 figures were recast for comparability",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "During the quarter ended March 31, 2024, we sold our approximate 5% minority investment in Devyani International Limited (\"Devyani\"), a franchise entity that operates KFC and Pizza Hut restaurants in India, for pre-tax proceeds of $104 million.",
+   "raw_label_or_claim": "sold our approximate 5% minority investment in Devyani International Limited (\"Devyani\")",
+   "source_id": "0001041061-25-000109"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Changes in the fair value of our ownership interest in Devyani prior to the date of sale resulted in pre-tax investment losses of $20 million in the year to date ended September 30, 2024.",
+   "raw_label_or_claim": "pre-tax investment losses of $20 million",
+   "source_id": "0001041061-25-000109"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "There have been no material changes from the risk factors disclosed in Part I, Item 1A \u201cRisk Factors\u201d in our Annual Report on Form 10-K for the year ended December 31, 2024.",
+   "raw_label_or_claim": "no material changes from the risk factors disclosed in Part I, Item 1A \u201cRisk Factors\u201d in our Annual Report on Form 10-K for the year ended December 31, 2024",
+   "source_id": "0001041061-25-000109"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "As a result, 283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January.",
+   "raw_label_or_claim": "283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January",
+   "source_id": "0001041061-25-000109"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Tax (Benefit) - Tax audit in the quarter and year to date ended September 30, 2025, reflects the benefit associated with the reversal of a reserve due to a favorable audit resolution. Such reserve was established in prior years and was originally recorded as a Special Item.",
+   "raw_label_or_claim": "benefit associated with the reversal of a reserve due to a favorable audit resolution",
+   "source_id": "0001041061-25-000109"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Fourth-quarter GAAP EPS was $1.91, and EPS excluding Special Items was $1.73.",
+   "raw_label_or_claim": "EPS excluding Special Items was $1.73",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "an acquisition of 128 Taco Bell U.S. restaurants from a franchisee for approximately $670 million",
+   "raw_label_or_claim": "an acquisition of 128 Taco Bell U.S. restaurants from a franchisee for approximately $670 million",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Robust digital system sales exceeding $11 billion with digital mix nearly 60%.",
+   "raw_label_or_claim": "digital system sales exceeding $11 billion",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Robust digital system sales exceeding $11 billion with digital mix nearly 60%.",
+   "raw_label_or_claim": "digital mix nearly 60%",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "adverse effects of severe weather and climate change",
+   "raw_label_or_claim": "adverse effects of severe weather and climate change",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "In February 2026, our Board of Directors declared a quarterly dividend of $0.75 per share of Common Stock, a 6% increase from the quarterly dividend of $0.71 per share of Common Stock paid in 2025.",
+   "raw_label_or_claim": "a quarterly dividend of $0.75 per share of Common Stock, a 6% increase from the quarterly dividend of $0.71 per share of Common Stock paid in 2025",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The resulting net Operating Loss of $11 million for the year ended December 31, 2023 has been reflected as a Special Item.",
+   "raw_label_or_claim": "net Operating Loss of $11 million for the year ended December 31, 2023",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "In 2025, the increase in Company sales, excluding the impacts of foreign currency translation and lapping the 53rd week in 2024, was driven by the KFC U.K. and Ireland restaurant acquisition (see Note 3) in the second quarter of 2024 and Company same-store sales growth of 5%.",
+   "raw_label_or_claim": "Company same-store sales growth of 5%",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "corrections_and_amendments"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Other Income Tax impacts recorded as Special in the year ended December 31, 2023 included $41 million of expense associated with a correction in the timing of capital loss utilization related to refranchising gains previously recorded as Special Items to tax years with a lower statutory tax rate.",
+   "raw_label_or_claim": "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The Company owned 79% of the Habit Burger & Grill units in the U.S. as of the end of 2025.",
+   "raw_label_or_claim": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "Food or beverage-borne illnesses (that can be caused by food-borne pathogens such as E. coli, Listeria, Salmonella, Cyclospora and Trichinosis) and food safety issues (such as food tampering and contamination including with respect to allergens or adulteration) have occurred and may occur within our system from time to time.",
+   "raw_label_or_claim": "have occurred and may occur within our system from time to time",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Adjusted diluted earnings per share1 remained flat at $0.25",
+   "raw_label_or_claim": "Adjusted diluted earnings per share",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Restaurant level operating margin1 was 23.4%, a decrease from 24.8%",
+   "raw_label_or_claim": "Restaurant level operating margin",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "(in thousands, except per share amounts) (unaudited) Three months ended Year ended December 31, 2025 December 31, 2025 2025 2024 2025 2024 Net income $ 330,932 $ 331,764 $ 1,535,761 $ 1,534,110 Non-GAAP adjustments: Impairment and exit costs: Restaurant asset impairment(1) 2,466 2,634 2,466 2,634 Gain on restaurant lease termination(2) (1,518) - (1,518) -",
+   "raw_label_or_claim": "Gain on restaurant lease termination",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "350 to 370 new restaurant openings",
+   "raw_label_or_claim": "350 to 370 new restaurant openings",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "risks of food safety incidents and food-borne illnesses",
+   "raw_label_or_claim": "risks of food safety incidents and food-borne illnesses",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "real_item",
+   "quote": "Chipotlanes continue to perform well and are helping enhance guest access and convenience, as well as increase new restaurant sales, margins and returns.",
+   "raw_label_or_claim": "Chipotlanes continue to perform well",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+   "raw_label_or_claim": "$64.0 million charge in the current year versus $40.0 million benefit in the prior year",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "business",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "one individual vendor provided 13 percent of our total purchases",
+   "raw_label_or_claim": "one individual vendor provided 13 percent of our total purchases",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "During fiscal 2025, failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales.",
+   "raw_label_or_claim": "failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+   "raw_label_or_claim": "Domestic commercial sales increased $329.5 million, or 6.7%",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+   "raw_label_or_claim": "represents 31.7% of our total Domestic sales",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "We are involved in lawsuits, regulatory investigations, governmental and other legal proceedings arising out of the ordinary course of business.",
+   "raw_label_or_claim": "involved in lawsuits, regulatory investigations, governmental and other legal proceedings arising out of the ordinary course of business",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "North Italia sales increased 16.1% to $83.5 million for the third quarter of fiscal 2025, compared to $71.9 million for the third quarter of fiscal 2024.",
+   "raw_label_or_claim": "North Italia sales",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We recorded a $15.9 million loss on early debt extinguishment in the first quarter of fiscal 2025.",
+   "raw_label_or_claim": "loss on early debt extinguishment",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We currently own and operate 366 restaurants throughout the United States and Canada under brands including The Cheesecake Factory \u00ae (216 locations), North Italia \u00ae (46 locations), Flower Child \u00ae (42 locations) and additional brands within our FRC portfolio (55 locations).",
+   "raw_label_or_claim": "366 restaurants",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "A description of the risk factors associated with our business is contained in Part I, Item 1A, \u201cRisk Factors,\u201d of our Annual Report on Form 10-K for the fiscal year ended December 31, 2024 (\u201cAnnual Report\u201d) and Part II, \u201cPart II, Item 1A, Risk Factors\u201d in our Quarterly Report on Form 10-Q for the quarterly period ended April 1, 2025.",
+   "raw_label_or_claim": "Risk Factors",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "corrections_and_amendments"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "On October 6, 2022, we entered into a Fourth Amended and Restated Loan Agreement (the \u201cLoan Agreement\u201d and the revolving credit facility provided thereunder, the \u201cRevolver Facility\u201d). The Loan Agreement amends and restates in its entirety our prior credit agreement.",
+   "raw_label_or_claim": "The Loan Agreement amends and restates in its entirety our prior credit agreement",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+   "raw_label_or_claim": "84 stores in the U.K. and Ireland operated by Space NK",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Ulta Beauty is expanding our presence internationally through a joint venture in Mexico",
+   "raw_label_or_claim": "a joint venture in Mexico",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "a requirement to maintain an interest coverage ratio not less than 4.0 to 1.0",
+   "raw_label_or_claim": "interest coverage ratio not less than 4.0 to 1.0",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "the possibility that we will not realize the anticipated benefits of the acquisition of Space NK for any reason, including due to challenges with integration and/or achieving anticipated acquisition synergies",
+   "raw_label_or_claim": "the possibility that we will not realize the anticipated benefits of the acquisition of Space NK",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+   "raw_label_or_claim": "a base rate plus a margin of 0.5% to 1.0%",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "corrections_and_amendments"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company\u2019s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.",
+   "raw_label_or_claim": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "borrowings bear interest, at the Company\u2019s election, at either a base rate plus a margin of 0.5% to 1.0% or the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%, and a credit spread adjustment of 0.10%, with such margins based on the Company\u2019s borrowing availability, and the unused line fee is 0.25% to 0.375% per annum.",
+   "raw_label_or_claim": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Excluding the after-tax impact of these and certain other items, adjusted net income and adjusted diluted net income per share for the fourth quarter of fiscal 2025 were $48.3 million and $1.00, respectively.",
+   "raw_label_or_claim": "adjusted net income",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The Company recorded a pre-tax net expense of $24.6 million related to impairment of assets and lease termination expenses, Fox Restaurant Concepts (\u201cFRC\u201d) acquisition-related items, gift card breakage and gift card inventory adjustments.",
+   "raw_label_or_claim": "pre-tax net expense of $24.6 million",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "favourable_unfavourable_direction",
+    "expectation_routing"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "revenue for the quarter finished within our expected range.",
+   "raw_label_or_claim": "revenue for the quarter finished within our expected range",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "North Italia operating information: Comparable restaurant sales vs. prior year (4 )% 1 % (2 )% 2 %",
+   "raw_label_or_claim": "North Italia operating information: Comparable restaurant sales vs. prior year",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.",
+   "raw_label_or_claim": "six to seven Flower Child locations",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "adverse weather conditions and natural disasters in regions in which the Company\u2019s restaurants are located",
+   "raw_label_or_claim": "adverse weather conditions and natural disasters",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "As a percentage of net sales, gross profit decreased to 38.1% compared to 38.2%, primarily due to unfavorable channel mix, deleverage of store fixed expenses, and deleverage of other revenue, mostly offset by lower inventory shrink and supply chain efficiencies.",
+   "raw_label_or_claim": "gross profit decreased to 38.1% compared to 38.2%",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "During fiscal 2025, the Company repurchased 2.0 million shares of its common stock at a cost of $890.5 million, excluding excise taxes.",
+   "raw_label_or_claim": "repurchased 2.0 million shares",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%",
+   "raw_label_or_claim": "Comparable sales growth",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The following table presents the number of stores owned at the end of fiscal 2025: \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b United States \u200b International (Company-operated) Number of stores \u200b 1,505 \u200b 86",
+   "raw_label_or_claim": "International (Company-operated)",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "macroeconomic conditions, including inflation and elevated interest rates, as well as prior and/or future labor, transportation, and shipping cost pressures (including future uncertain impacts);",
+   "raw_label_or_claim": "macroeconomic conditions, including inflation and elevated interest rates",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The second quarter operating profit comparison was negatively impacted by $59.0 million due to an unfavorable non-cash LIFO charge in the current quarter.",
+   "raw_label_or_claim": "unfavorable non-cash LIFO charge",
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "During the second quarter of fiscal 2026, failure and maintenance related categories represented the largest portion of our sales mix at approximately 85% of total sales, whereas they represented approximately 86% of total sales in the comparable prior year period.",
+   "raw_label_or_claim": "failure and maintenance related categories",
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "at February 14, 2026, operated 6,709 stores in the U.S.",
+   "raw_label_or_claim": "6,709 stores in the U.S.",
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "mdna",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "an increase in total company same store sales of 3.3% on a constant currency basis",
+   "raw_label_or_claim": "total company same store sales",
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "risk",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "As of the date of this filing, there have been no material changes in our risk factors from those disclosed in Part I, Item 1A, of our Annual Report on Form 10-K for the fiscal year ended August 30, 2025.",
+   "raw_label_or_claim": "no material changes in our risk factors",
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Domestic Same Store Sales Increase 3.4%",
+   "raw_label_or_claim": "Domestic Same Store Sales Increase 3.4%",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "The decrease in gross margin was driven by a 138 basis point non-cash LIFO charge.",
+   "raw_label_or_claim": "138 basis point non-cash LIFO charge",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We were also pleased to have opened 64 net new stores globally in the quarter, in line with our expectations to open approximately 350-360 stores for the full fiscal year.",
+   "raw_label_or_claim": "in line with our expectations to open approximately 350-360 stores for the full fiscal year",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "exhibit_99_1",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "weather, including extreme temperatures and natural disasters",
+   "raw_label_or_claim": "weather, including extreme temperatures and natural disasters",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Total revenue grew 10.8% year-over-year, reflecting strong demand for our product and the continued returns of our multi-year commercial initiatives.",
+   "raw_label_or_claim": "Total revenue grew 10.8% year-over-year",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Revenue performance in the quarter exceeded our initial expectations.",
+   "raw_label_or_claim": "exceeded our initial expectations",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Excluding net special items, American reported a first quarter adjusted loss per diluted share of 40 cents.",
+   "raw_label_or_claim": "adjusted loss per diluted share of 40 cents",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "a $320 million revenue impact from winter storms",
+   "raw_label_or_claim": "$320 million revenue impact from winter storms",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Atlantic unit revenue was up 16.7% year over year, with London up 25%.",
+   "raw_label_or_claim": "London up 25%",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "qa",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American.",
+   "raw_label_or_claim": "TMC performance is up 11%",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "qa",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+   "raw_label_or_claim": "recapture rate would be in the 90s",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "numerous risks and uncertainties could cause actual results to differ from those projected",
+   "raw_label_or_claim": "numerous risks and uncertainties could cause actual results to differ from those projected",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "qa",
+   "proposed_hard_classes": [
+    "sequential_comparison",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "on the other revenue or the marketing component of it we did see an increase that's pretty meaningful year over year quarter over quarter just versus the fourth quarter was up you know something less than 10 percent",
+   "raw_label_or_claim": "just versus the fourth quarter was up you know something less than 10 percent",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "qa",
+   "proposed_hard_classes": [
+    "sequential_comparison"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Unit revenue of 7% in the quarter, and we saw it increase sequentially up into March for double digits.",
+   "raw_label_or_claim": "we saw it increase sequentially up into March for double digits",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction",
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Despite the softer sales, our adjusted operating income rate of 5% was better than planned and included slightly favorable rates for both gross profit and SG&A.",
+   "raw_label_or_claim": "was better than planned",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Our Q4 comparable sales were down 0.8% versus last year within our guidance range for the quarter.",
+   "raw_label_or_claim": "down 0.8%",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Our Q4 comparable sales were down 0.8% versus last year within our guidance range for the quarter.",
+   "raw_label_or_claim": "within our guidance range",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Our Best Buy business team generated more than $1.1 billion in revenue in fiscal 26",
+   "raw_label_or_claim": "Best Buy business team generated more than $1.1 billion",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "ambiguous_menus",
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "International revenue of $1.2 billion increased 0.5% versus last year.",
+   "raw_label_or_claim": "International revenue of $1.2 billion increased 0.5%",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "Some of the statements we will make today are considered forward-looking within the meaning of the Private Securities Litigation Reform Act of 1995. These statements may address the financial condition, business initiatives, growth plans, investments, and expected performance of the company and are subject to risks and uncertainties that could cause actual results to differ materially from such forward-looking statements.",
+   "raw_label_or_claim": "subject to risks and uncertainties that could cause actual results to differ materially",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Revenue in the range of $41.2 to $42.1 billion",
+   "raw_label_or_claim": "Revenue in the range of $41.2 to $42.1 billion",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "qa",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "lawful_abstention_control",
+   "quote": "both both revenue and units were below expectations in Q4 from an industry perspective.",
+   "raw_label_or_claim": "revenue and units were below expectations in Q4 from an industry perspective",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "For fiscal 2026, we estimate our underlying effective tax rate will be in the 24% to 26% range, though it may vary based on discrete items.",
+   "raw_label_or_claim": "underlying effective tax rate will be in the 24% to 26% range",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "This included 21 openings in Canada, an increase of 38% year-over-year for that country.",
+   "raw_label_or_claim": "21 openings in Canada, an increase of 38% year-over-year",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+   "raw_label_or_claim": "these two group occasions represent less than 3% of combined sales",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.",
+   "raw_label_or_claim": "could be double-digit percentage of sales longer term",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "favourable_unfavourable_direction",
+    "expectation_routing"
+   ],
+   "proposed_record_kind": "lawful_abstention_control",
+   "quote": "The results we issued this afternoon were in line with expectations and guidance for the full year.",
+   "raw_label_or_claim": "in line with expectations and guidance for the full year",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "G&A for the quarter was $160 million on a GAAP basis or $162 million on a non-GAAP basis. excluding a $4 million reduction in legal contingencies and around $2 million related to retention equity awards granted to key executives in August of 2024.",
+   "raw_label_or_claim": "a $4 million reduction in legal contingencies",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "Please see the risk factors contained in our annual report on Form 10-K and in our Forms 10-Qs for a discussion of risks that may cause our actual results to vary from these forward-looking statements.",
+   "raw_label_or_claim": "risk factors contained in our annual report on Form 10-K and in our Forms 10-Qs",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "earnings of 64 cents per share",
+   "raw_label_or_claim": "earnings of 64 cents per share",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "earnings per share of 64 cents within our initial guidance range",
+   "raw_label_or_claim": "within our initial guidance range",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million on execution by the Delta Tech Ops team.",
+   "raw_label_or_claim": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "This includes an estimated $300 million benefit from our refinery.",
+   "raw_label_or_claim": "an estimated $300 million benefit from our refinery",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "sequential_comparison"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "unit revenue growth was healthy across the board with sequential improvement from the fourth quarter in all regions",
+   "raw_label_or_claim": "sequential improvement from the fourth quarter in all regions",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "lawful_abstention_control",
+   "quote": "We delivered earnings that were 40% higher than last year",
+   "raw_label_or_claim": "earnings that were 40% higher than last year",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "All forward-looking statements involve risks and uncertainties that could cause actual results to differ materially from the forward-looking statements. Some of the factors that may cause such differences are described in Delta's SEC filings.",
+   "raw_label_or_claim": "forward-looking statements involve risks and uncertainties that could cause actual results to differ materially",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We generated $3.3 billion of total sales, 5.9% higher than last year, driven by same-restaurant sales growth of 4.2%.",
+   "raw_label_or_claim": "same-restaurant sales growth of 4.2%",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "raw_label_or_claim": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Olive Garden delivered a strong segment profit margin of 23% for the quarter, which was only 10 basis points below last year.",
+   "raw_label_or_claim": "Olive Garden delivered a strong segment profit margin of 23%",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "These statements are subject to risks and uncertainties that could cause actual results to differ materially from our expectations and projections.",
+   "raw_label_or_claim": "risks and uncertainties that could cause actual results to differ materially from our expectations and projections",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "slices_and_unknown_axes",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months.",
+   "raw_label_or_claim": "14 locations will permanently close and the remaining 14 will be converted to other Darden brands",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "system-wide sales of nearly $140 billion, up 5.5% in constant currency for the full year",
+   "raw_label_or_claim": "system-wide sales of nearly $140 billion, up 5.5% in constant currency",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "favourable_unfavourable_direction",
+    "expectation_routing"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "comp sales for the quarter were up 6.8%, which was above our expectations and was driven by positive check and guest count growth.",
+   "raw_label_or_claim": "comp sales for the quarter were up 6.8%, which was above our expectations",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "favourable_unfavourable_direction",
+    "expectation_routing"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Our total adjusted operating margin for the full year was 46.9% in line with our expectations and reflecting the strength of our business model and the resilience of our system.",
+   "raw_label_or_claim": "total adjusted operating margin for the full year was 46.9% in line with our expectations",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "ambiguous_menus"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments.",
+   "raw_label_or_claim": "about 750 of these in our U.S. and IOM segments",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+   "raw_label_or_claim": "about 1,000 in China",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "the forward-looking statements on our earnings release and 8-K filing also apply to our comments on the call today.",
+   "raw_label_or_claim": "the forward-looking statements on our earnings release and 8-K filing also apply to our comments on the call today.",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+   "raw_label_or_claim": "diluted EPS will be between $28.05 and $28.55 per share",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.",
+   "raw_label_or_claim": "Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "portion_versus_whole",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We grew our loyalty program by 5% to a record 46.7 million active members",
+   "raw_label_or_claim": "46.7 million active members",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+   "raw_label_or_claim": "more than 80 stores in the UK and Ireland",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "qa",
+   "proposed_hard_classes": [
+    "favourable_unfavourable_direction",
+    "expectation_routing"
+   ],
+   "proposed_record_kind": "lawful_abstention_control",
+   "quote": "And we beat and raised throughout the year. And we exceeded on all metrics.",
+   "raw_label_or_claim": "beat and raised",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "qa",
+   "proposed_hard_classes": [
+    "expectation_routing",
+    "favourable_unfavourable_direction",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "we over delivered sales above the high end of our guidance by about 85 million",
+   "raw_label_or_claim": "sales above the high end of our guidance by about 85 million",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "The company undertakes no obligation to revise any forward-looking statements.",
+   "raw_label_or_claim": "undertakes no obligation to revise any forward-looking statements",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+   "raw_label_or_claim": "Taco Bell",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "Both Taco Bell and KFC delivered 10% divisional core operating profit growth",
+   "raw_label_or_claim": "KFC",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review",
+   "raw_label_or_claim": "40 million of special expenses",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "measurement_wording",
+    "expectation_routing",
+    "favourable_unfavourable_direction",
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "for the year x special gna was in line with our guidance up five percent year over year at 1.15 billion dollars",
+   "raw_label_or_claim": "x special gna was in line with our guidance",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "losses_and_sign",
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.",
+   "raw_label_or_claim": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "In the first half, in the US, we expect approximately 250 targeted closures of underperforming units tied to the Hut Forward program, which will result in a decline in global Pizza Hut units in the first half.",
+   "raw_label_or_claim": "approximately 250 targeted closures of underperforming units",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "prepared_remarks",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "negative_control",
+   "quote": "We would like to make you aware that our first quarter earnings will be released on April 29th with a conference call on the same day.",
+   "raw_label_or_claim": "our first quarter earnings will be released on April 29th",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "body",
+   "proposed_hard_classes": [],
+   "proposed_record_kind": "real_item",
+   "quote": "a severe E. Coli outbreak spooked diners away",
+   "raw_label_or_claim": "spooked diners away",
+   "source_id": "bzNews_42014391"
+  },
+  {
+   "occurrence_in_part": null,
+   "part_ref": "body",
+   "proposed_hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "proposed_record_kind": "real_item",
+   "quote": "In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates.",
+   "raw_label_or_claim": "boast 17 new gates",
+   "source_id": "bzNews_50877032"
+  }
+ ],
+ "schema": "one-item-benchmark-inventory-v5",
+ "source_manifest": {
+  "combined_sha256": "3794d26d7ba47ac33a3b402d536e31c5c3b6c278cc2c0b0c471561dcbbb28883",
+  "file_sha256": "e083cd6a72ff2a79e51b99935c79978ef16c9042e507e21ae47ab4ca3d12b386",
+  "n": 36,
+  "path": "keys/K-fields/draft_inputs.hashes.json"
+ }
+}

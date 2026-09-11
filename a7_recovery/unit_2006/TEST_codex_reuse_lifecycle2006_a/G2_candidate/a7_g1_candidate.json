@@ -1,0 +1,1009 @@
+{
+ "batch_rows": [
+  {
+   "batch_id": "G2-000",
+   "items": 10,
+   "produced_idxs": [],
+   "prompt_bytes": 940326,
+   "prompt_path": "prompts/G2-000.prompt.txt",
+   "prompt_sha256": "fa6cda80e09682bdd48067dd1971e13c56cd1d79048fbec264434cc0dd329d8a",
+   "question_ids": [
+    "M341ed3bdf05f28cf",
+    "Md5b6d93a0e42868a",
+    "Medaf936df04cd393",
+    "M6d9dd25a44c4125e",
+    "M02dd1d33369df31b",
+    "Mf8dc0510a0ba179c",
+    "M61f1a43573a6836b",
+    "Mb18c07ecdfc63be7",
+    "M4ca257814a3d2655",
+    "M66e7557e3b1064dd"
+   ],
+   "source_ids": [
+    "0000006201-26-000032",
+    "0000940944-25-000038",
+    "0000940944-26-000005",
+    "0000940944-26-000009",
+    "0001041061-26-000003",
+    "0001041061-26-000084",
+    "0001058090-26-000007",
+    "0001104659-25-102611",
+    "0001104659-25-105631",
+    "0001104659-25-118458"
+   ]
+  },
+  {
+   "batch_id": "G2-001",
+   "items": 10,
+   "produced_idxs": [],
+   "prompt_bytes": 747743,
+   "prompt_path": "prompts/G2-001.prompt.txt",
+   "prompt_sha256": "0bfaaefec01977d40bd00ce3a3fb6cadd497f3ec88c0492692ba36afd3c9e8c5",
+   "question_ids": [
+    "M1aa19982f56a2a96",
+    "Mf8e5b413ab229c35",
+    "Me35ea17f29972c9f",
+    "M48176346f1082ca4",
+    "M5f733feacaa92ecd",
+    "Mb236c73870d6c697",
+    "M89349f9d421cb374",
+    "M2dd38ea8166761eb",
+    "M990e3e1bcb642c43",
+    "M2b7798d8fc5750d8"
+   ],
+   "source_ids": [
+    "0001104659-26-027061",
+    "0001104659-26-032757",
+    "AAL_2026-04-23T08.30",
+    "CMG_2026-02-03T16.30",
+    "DAL_2026-04-08T10.00",
+    "DRI_2026-03-19T08.30",
+    "ULTA_2026-03-12T16.30",
+    "YUM_2026-02-04T08.15",
+    "0000027904-26-000013",
+    "0000063908-26-000032"
+   ]
+  },
+  {
+   "batch_id": "G2-002",
+   "items": 10,
+   "produced_idxs": [],
+   "prompt_bytes": 950344,
+   "prompt_path": "prompts/G2-002.prompt.txt",
+   "prompt_sha256": "792f8dfbb2cbb47bd1d844c516b68537d5fd9145695787a8a6757d401b2a3a74",
+   "question_ids": [
+    "M53a1b3ba077cabd8",
+    "M61beee43a203dd9f",
+    "Me83d11be2c9b62d4",
+    "M0c5dd9bbeece43b0",
+    "M38757d908e703ecf",
+    "M7ff400be016d0141",
+    "M95c73e1ef95ea6d0",
+    "M94c0b5e28cf36305",
+    "Mbac41d421484913f",
+    "M2e58ae4e8cfd6435"
+   ],
+   "source_ids": [
+    "0000940944-25-000038",
+    "0000940944-26-000009",
+    "0001041061-25-000109",
+    "0001041061-26-000003",
+    "0001041061-26-000084",
+    "0001058090-26-000007",
+    "0001104659-25-102611",
+    "0001104659-25-105631",
+    "0001104659-25-118458",
+    "0001104659-26-017090"
+   ]
+  },
+  {
+   "batch_id": "G2-003",
+   "items": 10,
+   "produced_idxs": [],
+   "prompt_bytes": 855007,
+   "prompt_path": "prompts/G2-003.prompt.txt",
+   "prompt_sha256": "16d85f0d7322a9f0d4ff61588f7bd7db330ebf20bb71b6c787642db16f67fdea",
+   "question_ids": [
+    "M6b93c6940b2be9e0",
+    "M9421addcc8b5eec2",
+    "M56692399adb07bf0",
+    "Md768fb6f95e3f53d",
+    "M9a51df2bd16d7344",
+    "Mf1c41a01fa7b1847",
+    "M86be1a27f32dbaf2",
+    "M0a947a920597910f",
+    "M4ee9337472e91555",
+    "M78a5c6360c93a561"
+   ],
+   "source_ids": [
+    "0001104659-26-032757",
+    "AAL_2026-04-23T08.30",
+    "CMG_2026-02-03T16.30",
+    "DRI_2026-03-19T08.30",
+    "ULTA_2026-03-12T16.30",
+    "0000006201-26-000032",
+    "0000027904-26-000013",
+    "0000063908-26-000032",
+    "0000940944-25-000038",
+    "0000940944-26-000005"
+   ]
+  },
+  {
+   "batch_id": "G2-004",
+   "items": 10,
+   "produced_idxs": [],
+   "prompt_bytes": 799583,
+   "prompt_path": "prompts/G2-004.prompt.txt",
+   "prompt_sha256": "56dde284ae0889ff6575949ff801e0ac3a4e92c4c5d96cbec5d4e4f6bd74dc06",
+   "question_ids": [
+    "Mbbbad21e2ccc2af7",
+    "M66b3dbb8cf7ee946",
+    "M31b20a4a0b7e5203",
+    "M25a3c0332278688d",
+    "Mb0773afb058b29b3",
+    "M0fa273105b8bcf8a",
+    "M645d780bfaa2241b",
+    "Me207402490735067",
+    "M17b3e0300b7968b8",
+    "M4e5b3f2256646925"
+   ],
+   "source_ids": [
+    "0000940944-26-000009",
+    "0001041061-25-000109",
+    "0001041061-26-000003",
+    "0001041061-26-000084",
+    "0001058090-26-000007",
+    "0001104659-25-102611",
+    "0001104659-25-105631",
+    "0001104659-25-118458",
+    "0001104659-26-017090",
+    "0001104659-26-027061"
+   ]
+  },
+  {
+   "batch_id": "G2-005",
+   "items": 10,
+   "produced_idxs": [],
+   "prompt_bytes": 663134,
+   "prompt_path": "prompts/G2-005.prompt.txt",
+   "prompt_sha256": "be3f3abacac5e1de50e7ccf743d65a482291ef7a3035e50bb9adb93d90c03c42",
+   "question_ids": [
+    "M6b218cbff4a78d0f",
+    "Mf3f2ee3a17e5b2ec",
+    "M53a13722243e356b",
+    "M02b07af753a517ef",
+    "M8b2fe3859356aeb6",
+    "Mfd30cdb6d130e25f",
+    "Mf2eec24a8d847ee5",
+    "M5bfe5bdf236475e6",
+    "M7d108e2b58d24396",
+    "M97687ce178b7517e"
+   ],
+   "source_ids": [
+    "0001104659-26-032757",
+    "AAL_2026-04-23T08.30",
+    "CMG_2026-02-03T16.30",
+    "DAL_2026-04-08T10.00",
+    "DRI_2026-03-19T08.30",
+    "ULTA_2026-03-12T16.30",
+    "YUM_2026-02-04T08.15",
+    "0000006201-26-000032",
+    "0001041061-26-000003",
+    "0001058090-26-000007"
+   ]
+  },
+  {
+   "batch_id": "G2-006",
+   "items": 10,
+   "produced_idxs": [],
+   "prompt_bytes": 831663,
+   "prompt_path": "prompts/G2-006.prompt.txt",
+   "prompt_sha256": "3d8243ed6bb1023706171a732afece5dfea294dd81d17cd8ae4c1e371f8b8c69",
+   "question_ids": [
+    "Mc6db7ce4856175dd",
+    "M7c7c1ecb69bbe2c9",
+    "Mfe6f9cd55ddfdb17",
+    "M7c307bdc6b2d6c9e",
+    "M30d5d757ba3409a4",
+    "M3c01992f2e58d996",
+    "M961a664de76b0d2d",
+    "M42b29840407e0051",
+    "M1e4b6cd09563f250",
+    "M2ac7b1e953ef240c"
+   ],
+   "source_ids": [
+    "0001104659-25-118458",
+    "0001104659-26-032757",
+    "CMG_2026-02-03T16.30",
+    "0000027904-26-000013",
+    "0001041061-26-000003",
+    "0001058090-26-000007",
+    "0001104659-25-102611",
+    "ULTA_2026-03-12T16.30",
+    "0000006201-26-000032",
+    "0000940944-26-000009"
+   ]
+  },
+  {
+   "batch_id": "G2-007",
+   "items": 8,
+   "produced_idxs": [],
+   "prompt_bytes": 718574,
+   "prompt_path": "prompts/G2-007.prompt.txt",
+   "prompt_sha256": "43f3a014272fc80a806502c954ef2c2b02aff8ec7738536923f06ec108d7f53a",
+   "question_ids": [
+    "M2badc2f344015152",
+    "M2ad3c19c55a33b22",
+    "Me2e627d647dd21b3",
+    "M9258ee14b9f5a560",
+    "M5e086dfe139e25f5",
+    "Mfea65de589d06fec",
+    "Md7afcf9136edc80f",
+    "M50fdb46d8b099f2f"
+   ],
+   "source_ids": [
+    "0001041061-26-000003",
+    "0001058090-26-000007",
+    "0001104659-25-102611",
+    "0001104659-25-118458",
+    "0001104659-26-032757",
+    "CMG_2026-02-03T16.30",
+    "ULTA_2026-03-12T16.30",
+    "0000027904-26-000013"
+   ]
+  },
+  {
+   "batch_id": "G2-008",
+   "items": 3,
+   "produced_idxs": [],
+   "prompt_bytes": 188378,
+   "prompt_path": "prompts/G2-008.prompt.txt",
+   "prompt_sha256": "eb83dee3de7f114ef958296f2eae072ca5731d451fa57170e52bf2ba2c7c3c1b",
+   "question_ids": [
+    "Mbc20137b9967b569",
+    "M1190a2305161d201",
+    "M48efaae88c62473a"
+   ],
+   "source_ids": [
+    "0001104659-26-032757",
+    "CMG_2026-02-03T16.30",
+    "0001104659-25-118458"
+   ]
+  }
+ ],
+ "batching": {
+  "batches": 9,
+  "max_items_per_call": 10
+ },
+ "g1_identity": {
+  "candidate_sha256": "9119f2bafda4f0b7a329d8ca246a8be2b5f07708e11c6c97c50d4671fe33dc87",
+  "git_head": "2dc0ad39f30dba4756078573f5e80038465939cc",
+  "git_tree": "a45f8d0c2802e0d482ddefc5d330a4774d25a787",
+  "prompt_tree_sha256": "7cdf2e8f947db107520067730021b128ac7cc0f6e5a400bf4f501a4b20cb95ed",
+  "root_sha256": "f0cf7125b6c91acf5a0769af803a00fc10414e41cdb1a1349aed4a75045f1e63",
+  "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+  "run_file_count": 405,
+  "run_tree_sha256": "5dff7ec040f8df869de8d197c635128cdda372ffb3901fbc26fc0e451aab50be"
+ },
+ "key_identity": {
+  "accepted_rows": 206,
+  "acted_rows": 0,
+  "approved_lock_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+  "approved_receipt_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+  "base_owner": "a7_g1_build.gold_by_event",
+  "events": 33,
+  "key_digest": "5cc5fe23939a727b448d254b3621d6f5b67d7c29b64549e6a739744f77e539fc",
+  "schema": "a7-current-key/approved"
+ },
+ "launchers": {
+  "count": 18,
+  "lanes_per_batch": 2,
+  "owner_sha256": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "rows": [
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-000",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-000/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "fa6cda80e09682bdd48067dd1971e13c56cd1d79048fbec264434cc0dd329d8a",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-000",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-000/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "fa6cda80e09682bdd48067dd1971e13c56cd1d79048fbec264434cc0dd329d8a",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-001",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-001/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "0bfaaefec01977d40bd00ce3a3fb6cadd497f3ec88c0492692ba36afd3c9e8c5",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-001",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-001/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "0bfaaefec01977d40bd00ce3a3fb6cadd497f3ec88c0492692ba36afd3c9e8c5",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-002",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-002/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "792f8dfbb2cbb47bd1d844c516b68537d5fd9145695787a8a6757d401b2a3a74",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-002",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-002/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "792f8dfbb2cbb47bd1d844c516b68537d5fd9145695787a8a6757d401b2a3a74",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-003",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-003/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "16d85f0d7322a9f0d4ff61588f7bd7db330ebf20bb71b6c787642db16f67fdea",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-003",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-003/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "16d85f0d7322a9f0d4ff61588f7bd7db330ebf20bb71b6c787642db16f67fdea",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-004",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-004/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "56dde284ae0889ff6575949ff801e0ac3a4e92c4c5d96cbec5d4e4f6bd74dc06",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-004",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-004/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "56dde284ae0889ff6575949ff801e0ac3a4e92c4c5d96cbec5d4e4f6bd74dc06",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-005",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-005/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "be3f3abacac5e1de50e7ccf743d65a482291ef7a3035e50bb9adb93d90c03c42",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-005",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-005/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "be3f3abacac5e1de50e7ccf743d65a482291ef7a3035e50bb9adb93d90c03c42",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-006",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-006/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "3d8243ed6bb1023706171a732afece5dfea294dd81d17cd8ae4c1e371f8b8c69",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-006",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-006/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "3d8243ed6bb1023706171a732afece5dfea294dd81d17cd8ae4c1e371f8b8c69",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-007",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-007/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "43f3a014272fc80a806502c954ef2c2b02aff8ec7738536923f06ec108d7f53a",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-007",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-007/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "43f3a014272fc80a806502c954ef2c2b02aff8ec7738536923f06ec108d7f53a",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-008",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-008/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "eb83dee3de7f114ef958296f2eae072ca5731d451fa57170e52bf2ba2c7c3c1b",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G2-008",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G2-008/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "eb83dee3de7f114ef958296f2eae072ca5731d451fa57170e52bf2ba2c7c3c1b",
+    "runtime_model_id": "claude-sonnet-5"
+   }
+  ]
+ },
+ "made_calls": 0,
+ "population": {
+  "P1|0000006201-26-000032": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "P1|0000940944-25-000038": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P1|0000940944-26-000005": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P1|0000940944-26-000009": [
+   [
+    1,
+    2
+   ]
+  ],
+  "P1|0001041061-26-000003": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|0001041061-26-000084": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|0001058090-26-000007": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "P1|0001104659-25-102611": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P1|0001104659-25-105631": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P1|0001104659-25-118458": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    2
+   ]
+  ],
+  "P1|0001104659-26-027061": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P1|0001104659-26-032757": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|AAL_2026-04-23T08.30": [
+   [
+    5,
+    5
+   ]
+  ],
+  "P1|CMG_2026-02-03T16.30": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "P1|DAL_2026-04-08T10.00": [
+   [
+    2,
+    3
+   ]
+  ],
+  "P1|DRI_2026-03-19T08.30": [
+   [
+    1,
+    0
+   ]
+  ],
+  "P1|ULTA_2026-03-12T16.30": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|YUM_2026-02-04T08.15": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P2|0000027904-26-000013": [
+   [
+    1,
+    1
+   ],
+   [
+    7,
+    5
+   ]
+  ],
+  "P2|0000063908-26-000032": [
+   [
+    5,
+    1
+   ]
+  ],
+  "P2|0000940944-25-000038": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0000940944-26-000009": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|0001041061-25-000109": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0001041061-26-000003": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|0001041061-26-000084": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|0001058090-26-000007": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0001104659-25-102611": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0001104659-25-105631": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P2|0001104659-25-118458": [
+   [
+    5,
+    3
+   ]
+  ],
+  "P2|0001104659-26-017090": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P2|0001104659-26-032757": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|AAL_2026-04-23T08.30": [
+   [
+    5,
+    4
+   ]
+  ],
+  "P2|CMG_2026-02-03T16.30": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "P2|DRI_2026-03-19T08.30": [
+   [
+    1,
+    0
+   ]
+  ],
+  "P2|ULTA_2026-03-12T16.30": [
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "UNION|0000006201-26-000032": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "UNION|0000027904-26-000013": [
+   [
+    1,
+    6
+   ],
+   [
+    7,
+    7
+   ]
+  ],
+  "UNION|0000063908-26-000032": [
+   [
+    5,
+    3
+   ]
+  ],
+  "UNION|0000940944-25-000038": [
+   [
+    1,
+    1
+   ]
+  ],
+  "UNION|0000940944-26-000005": [
+   [
+    1,
+    1
+   ]
+  ],
+  "UNION|0000940944-26-000009": [
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    7
+   ]
+  ],
+  "UNION|0001041061-25-000109": [
+   [
+    1,
+    6
+   ]
+  ],
+  "UNION|0001041061-26-000003": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "UNION|0001041061-26-000084": [
+   [
+    2,
+    2
+   ]
+  ],
+  "UNION|0001058090-26-000007": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "UNION|0001104659-25-102611": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    6
+   ]
+  ],
+  "UNION|0001104659-25-105631": [
+   [
+    0,
+    0
+   ]
+  ],
+  "UNION|0001104659-25-118458": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    5,
+    8
+   ]
+  ],
+  "UNION|0001104659-26-017090": [
+   [
+    0,
+    6
+   ]
+  ],
+  "UNION|0001104659-26-027061": [
+   [
+    0,
+    0
+   ]
+  ],
+  "UNION|0001104659-26-032757": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "UNION|AAL_2026-04-23T08.30": [
+   [
+    5,
+    2
+   ]
+  ],
+  "UNION|CMG_2026-02-03T16.30": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    2
+   ]
+  ],
+  "UNION|DAL_2026-04-08T10.00": [
+   [
+    2,
+    0
+   ]
+  ],
+  "UNION|DRI_2026-03-19T08.30": [
+   [
+    1,
+    0
+   ]
+  ],
+  "UNION|ULTA_2026-03-12T16.30": [
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    5
+   ]
+  ],
+  "UNION|YUM_2026-02-04T08.15": [
+   [
+    0,
+    0
+   ]
+  ]
+ },
+ "population_counts": {
+  "batches": 9,
+  "largest_batch": 10,
+  "questions": 81
+ },
+ "producer_identity": {
+  "a4_lock_receipt_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+  "a4_lock_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+  "a6_freeze_sha256": "b4c7b9d6353666fdb5dcdadc72239be07a8ea325cd12d5dc453d63fd29e62ed2",
+  "contract_suffix": null,
+  "corrected_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "evaluation_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_pipeline2006_c",
+  "executed": {
+   "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+   "run_files": 799
+  },
+  "finalizations": {
+   "primary": "2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f"
+  },
+  "receipt_sha256": "8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+  "scheduled_calls": 382,
+  "schema": "a7_prepared_run/1",
+  "source_manifest_sha256": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce"
+ },
+ "questions": 81,
+ "rules_block_sha256": "17e700d162188c464d8279de06c06632923a42dc3b8ea9f3647a69fefbdf48ac",
+ "schema": "a7_g23_candidate/1",
+ "task_kind": "G2"
+}

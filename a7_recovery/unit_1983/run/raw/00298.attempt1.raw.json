@@ -1,0 +1,59 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "unknown",
+        "slice_parts": ["product:tv"],
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "missed",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "consensus",
+        "has_favorability_wording": true,
+        "slice_parts": ["product:tv"],
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "unit_sales",
+        "driver_state": "unknown",
+        "slice_parts": ["product:tv"],
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "unit_sales",
+        "driver_state": "missed",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "consensus",
+        "has_favorability_wording": true,
+        "slice_parts": ["product:tv"],
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

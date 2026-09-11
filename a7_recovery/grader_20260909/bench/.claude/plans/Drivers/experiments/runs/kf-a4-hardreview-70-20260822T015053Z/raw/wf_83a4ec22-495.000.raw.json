@@ -1,0 +1,64 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "pretax_income",
+              "driver_state": "increased",
+              "level_low": {"value": -476, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -476, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": -648, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -648, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "increased",
+              "level_low": {"value": -382, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -382, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": -473, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -473, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The quote states two distinct income-statement lines with different reported values — pre-tax loss ($476M vs $648M, mapped to the pretax_income metric per Rule 3.9's whole-phrase requirement) and net loss ($382M vs $473M, mapped to net_income) — each a separately re-readable standing figure, so they are two independent facts rather than one underlying fact."
+}
+```

@@ -1,0 +1,185 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "effective_tax_rate_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 24,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 26,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "range",
+       "level_unit": "percent",
+       "fiscal_year": 2026,
+       "time_type": "duration",
+       "company_confirmed": true,
+       "measurement_raw_spans": [
+        "underlying"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_openings",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 21,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 21,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "change_value": {
+        "value": 38,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "time_type": "duration",
+       "slice_parts": [
+        "geography:canada"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales_mix",
+       "driver_state": "reported",
+       "level_high": {
+        "value": 3,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "ceiling",
+       "level_unit": "percent",
+       "time_type": "duration",
+       "slice_parts": [
+        "unknown:group occasions"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "sales_mix_guidance",
+       "driver_state": "unknown",
+       "value_text": "double-digit percentage of sales",
+       "sentinel_class": "long_term",
+       "company_confirmed": true,
+       "slice_parts": [
+        "unknown:group occasions"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Ungrounded expectation comparison: 'in line with expectations and guidance' names no identifiable metric, value, period or home fact in this quote, so no surprise fact can be grounded and no home sibling exists."
+     }
+    ],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 6,
+   "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "legal_contingencies",
+       "driver_state": "decreased",
+       "change_value": {
+        "value": -4,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "change_unit": "m_usd",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 7,
+   "settled": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking-statement boilerplate pointing readers to Form 10-K/10-Q risk factors; it states no driver state, change, surprise, guidance or action, so the gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

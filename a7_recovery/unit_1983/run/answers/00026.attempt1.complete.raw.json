@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "debt_extinguishment",
+        "driver_state": "increased",
+        "level_low": {"value": -26, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_high": {"value": -26, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_high": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

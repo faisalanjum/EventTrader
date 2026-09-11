@@ -1,0 +1,62 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0001041061-26-000084",
+ "ordinal_one_based": 16,
+ "ordinal_receipt": 15,
+ "attempt_number": 1,
+ "run_id": "wf_ad8a3b9d-903",
+ "agent_id": "aabf9494b5bf4bb3c",
+ "raw_sha256": "19b9708279d8d4b6fd270b65d1a6e68ebb6f6b861e95dad3a291d19cf5638a38",
+ "prompt_sha256": "4ba111b74470e082a7b55ab69c59482d790379631ae7dd635c7c349ba3fca480",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 9,
+  "additions": 11,
+  "exclusions_considered": 3,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"The menu lists both 'segment:otheroutsidetheu_s_andchina' and 'geography:otheroutsidetheu_s_andchina' (a same-label-under-two-kinds case matching the T1-05 rung-2 ambiguous-menu scenario), b",
+  "{'what': \"Whether 'digital sales approaching both $40 billion and 60% of overall system sales' is one fused portion-versus-whole fact or two split facts (absolute value vs. share-of-whole) under NAME-"
+ ],
+ "locator": {
+  "additions": {
+   "located": 11,
+   "not_located": [],
+   "total_with_quote": 11
+  },
+  "exclusions_considered": {
+   "located": 3,
+   "not_located": [],
+   "total_with_quote": 3
+  }
+ },
+ "receipt_attempts": 16,
+ "receipt_missing": 21,
+ "receipt_other_problems": [
+  "the run accepted 15 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 15,
+  "attempt": 1,
+  "source_id": "0001041061-26-000084",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ad8a3b9d-903.json",
+  "agent_id": "aabf9494b5bf4bb3c",
+  "raw_name": "0001041061-26-000084.attempt1.complete.raw.json"
+ }
+}

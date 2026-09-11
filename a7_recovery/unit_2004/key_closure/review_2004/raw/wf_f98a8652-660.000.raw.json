@@ -1,0 +1,212 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "pretax_income",
+              "driver_state": "reported",
+              "level_low": {"value": -214, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -214, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "operating_margin_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "earnings_per_share_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 14.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 14.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 9.4, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "revenue_surprise",
+              "driver_state": "beat",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic forward-looking risk-factor boilerplate about the possible effects of accidents, not a stated fact about a specific driver's state, change, surprise, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 8,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a third-party survey statistic about unnamed respondents' expectations for their own future travel spend, not a stated fact about Delta's own metric, guidance, or action, so it cannot be lawfully mapped to a driver without guessing attribution."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 9,
+      "settled": {
+        "source_id": "0000027904-26-000020",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_debt",
+              "driver_state": "decreased",
+              "level_low": {"value": 13540, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 13540, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": -760, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "sequential_period",
+              "time_type": "instant",
+              "period_end_date": "2026-03-31",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["Adjusted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The nine items describe nine distinct, unrelated facts — a GAAP pre-tax loss, forward operating-margin guidance, an adjusted EPS result, an EPS-vs-prior-guidance surprise, adjusted revenue growth vs prior year, a revenue-vs-outlook surprise, generic accident risk boilerplate, a third-party corporate-travel survey statistic, and an adjusted net-debt balance — so they cannot be one underlying fact."
+}
+```

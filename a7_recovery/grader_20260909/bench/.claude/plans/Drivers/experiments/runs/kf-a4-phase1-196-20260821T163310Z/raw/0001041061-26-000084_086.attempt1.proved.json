@@ -1,0 +1,42 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#086",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "increased",
+          "change_value": {
+            "value": 0.09,
+            "scale_multiplier": 1,
+            "unit_scale_evidence": "$"
+          },
+          "change_unit": "usd",
+          "measurement_raw_spans": ["53rd week"],
+          "fiscal_year": 2024,
+          "time_type": "duration"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000084#086/L1",
+      "exact_match": true,
+      "why": "L1's fact_type, per_x=share, driver_name=earnings_per_share, driver_state=increased, change_value {0.09,1,\"$\"}, change_unit=usd, measurement_raw_spans=[\"53rd week\"], fiscal_year=2024 and time_type=duration match the settled reply exactly (key order differs but content is identical)."
+    },
+    {
+      "lane_id": "0001041061-26-000084#086/L2",
+      "exact_match": true,
+      "why": "L2 is byte-for-byte the same fields as L1 (fact_type, item contents, per_x) just reordered, and matches the settled reply exactly."
+    }
+  ],
+  "ambiguities": []
+}
+```

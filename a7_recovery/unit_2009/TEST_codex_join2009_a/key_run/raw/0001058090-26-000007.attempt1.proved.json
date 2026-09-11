@@ -1,0 +1,280 @@
+{
+ "source_id": "0001058090-26-000007",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "earnings_per_share",
+       "driver_state": "unchanged",
+       "level_low": {
+        "value": 0.25,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 0.25,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "Adjusted diluted"
+       ]
+      },
+      "per_x": "share"
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the row states an explicit flat per-share level with a stated value, so it settles as one real metric fact."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restaurant_level_operating_margin",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": 23.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 23.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "comparison_low": {
+        "value": 24.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_high": {
+        "value": 24.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: a stated margin level with a stated prior-period level and an explicit direction settles as one real metric fact."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_lease_termination",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": -1518,
+        "scale_multiplier": 1000,
+        "unit_scale_evidence": "in thousands"
+       },
+       "level_high": {
+        "value": -1518,
+        "scale_multiplier": 1000,
+        "unit_scale_evidence": "in thousands"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the labelled item is a completed lease-termination transaction carrying a stated signed amount, so it settles as one real fact."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 350,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 370,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "range",
+       "level_unit": "count",
+       "fiscal_year": 2026,
+       "time_type": "duration",
+       "company_confirmed": true
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: management's own stated 2026 opening range is a forward outlook and settles as one real guidance fact."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking risk-factor boilerplate listing food safety and food-borne illness risks: no stated state, change, surprise, guidance or action about a driver, and no specific current source-flagged adverse threat, so the gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "The frozen proposed_record_kind negative_control is confirmed: the row is generic risk boilerplate and correctly yields no fact."
+  },
+  {
+   "row_index": 6,
+   "settled": {
+    "source_id": "0001058090-26-000007",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "chipotlane",
+       "driver_state": "persists",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the numberless qualitative statement that Chipotlanes continue to perform well is a real ongoing condition and counts as a fact."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "reference_name": "Adjusted diluted earnings per share",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The quote states flatness without naming its baseline; the prior-year anchor comes from the surrounding 'Fourth quarter highlights, year over year' framing, so the recorded prior_year baseline rests on that framing rather than on the quoted words."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole"
+   ],
+   "reference_name": "Restaurant level operating margin",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "'Restaurant level' can be read either as a population/scope qualifier that stays in the name or as a non-GAAP measurement token; I kept it in the name because it identifies a distinct measured population rather than a measurement version."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign"
+   ],
+   "reference_name": "Gain on restaurant lease termination",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The item is readable either as a one-off transaction (action_event, chosen here) or as a recurring reconciliation line level (metric), and the identical amount appears in both the three-month and full-year columns so the period attribution to the quarter is a judgment."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "reference_name": "new restaurant openings",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The source states the guide without saying whether it is newly introduced or a revision of a prior guide, so the movement is recorded as unknown rather than introduced."
+  },
+  {
+   "row_index": 6,
+   "fact_index": 0,
+   "hard_classes": [
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "Chipotlanes",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Chipotlane sits on the name-versus-slice boundary and, if treated as a slice, its kind is plausible under both channel and product with no menu entry to select one, so I kept it in the name and left the slice empty rather than guess a kind."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-015/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-015/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

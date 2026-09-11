@@ -1,0 +1,210 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "verdicts": [
+    {
+      "proposal_id": "0001058090-26-000007#P000",
+      "decision": "exclude",
+      "why": "This proposal's target (full-year comparable restaurant sales guidance) has already been tested. It is excluded from this fresh sample only; this says nothing about whether the underlying fact is true, correctly bounded, or correctly classified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001058090-26-000007#P001",
+      "decision": "exclude",
+      "why": "This proposal's target (full-year operating margin) has already been tested. It is excluded from this fresh sample only; no claim is made about the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001058090-26-000007#P002",
+      "decision": "exclude",
+      "why": "This proposal's target (Q4 digital sales percentage) has already been tested. It is excluded from this fresh sample only; no claim is made about the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001058090-26-000007#P003",
+      "decision": "exclude",
+      "why": "This proposal's target (the legal-proceedings non-GAAP footnote definition) has already been tested. It is excluded from this fresh sample only; no claim is made about the correctness of its location or classification.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "FULL YEAR TOTAL REVENUE INCREASED 5.4% TO $11.9 BILLION",
+        "raw_label_or_claim": "FULL YEAR TOTAL REVENUE",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh target, not named by any proposal: full-year total revenue point value with a stated YoY growth percentage on an annual period, exercising the FINAL_DESIGN 7.1 point-shape rule and OD-11's annual pin (annual period -> percent_yoy)."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Diluted earnings per share was $1.14, a 2.7% increase from $1.11",
+        "raw_label_or_claim": "Diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh per-share fact distinct from the total-revenue row above; pairs with it to exercise NAME-13/rule 3 (total-dollar metric vs its per-share form are separate Drivers/rows), plus the same annual-pin OD-11 growth-basis test."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Adjusted diluted earnings per share1 remained flat at $0.25",
+        "raw_label_or_claim": "Adjusted diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "Fresh Q4 fact carrying two measurement qualifiers (adjusted, diluted) per NAME-14/FS-25, a period and measurement basis distinct from anything a proposal names."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Restaurant level operating margin1 was 23.4%, a decrease from 24.8%",
+        "raw_label_or_claim": "Restaurant level operating margin",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      },
+      "why": "Fresh Q4 fact naming a qualified sub-population metric (restaurant-level, i.e. excluding G&A/D&A) distinct from the whole-company operating margin already tested by a proposal; exercises OD-17's qualified-Driver-stays-qualified rule."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Delivery service revenue 14,300 0.5 15,322 0.5",
+        "raw_label_or_claim": "Delivery service revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "Fresh product-slice line item (matches menu entry product:deliveryservice) stated as a specific dollar figure for Q4 2025 vs Q4 2024; no proposal names it."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Gain on restaurant lease termination(2) (1,518) - (1,518) -",
+        "raw_label_or_claim": "Gain on restaurant lease termination",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "Fresh, specific, real corporate fact (a lease-termination gain shown in parentheses) directly exercising OD-12's counter-intuitive sign convention that a benefit/gain is stored negative."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "350 to 370 new restaurant openings",
+        "raw_label_or_claim": "350 to 370 new restaurant openings",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh FY2026 guidance stated as a genuine closed range (low 350, high 370), distinct from any proposal; exercises the FINAL_DESIGN 7.1 closed-range shape."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable restaurant sales decreased 2.5%",
+        "raw_label_or_claim": "Comparable restaurant sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh Q4 actual result (comp sales is itself a period-over-period growth metric per the release's own Definitions section), distinct in period and fact-type from the FY2026 comp-sales guidance already tested by a proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "risks of food safety incidents and food-borne illnesses",
+        "raw_label_or_claim": "risks of food safety incidents and food-borne illnesses",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical forward-looking risk-factor boilerplate with no specific current source-flagged threat; fails DU-03/Rule 1, correct behavior is omission, distinct from the already-tested legal-proceedings non-GAAP footnote."
+    },
+    {
+      "row": {
+        "source_id": "0001058090-26-000007",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Chipotlanes continue to perform well and are helping enhance guest access and convenience, as well as increase new restaurant sales, margins and returns.",
+        "raw_label_or_claim": "Chipotlanes continue to perform well",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A real, specific (non-risk) claim naming a directional business effect but with no stated magnitude, state, or clean fact-gate resolution between a DU-05 numberless real fact and generic promotional narrative; the locked fact gate does not settle this boundary, so it is recorded as an abstention/ambiguity exhibit rather than guessed into real_item or negative_control."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Total revenue increased 4.9% to $3.0 billion",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same total-revenue Driver as the freshly selected FY total-revenue row, differing only by period; representative sampling does not require both, so not added merely because another lawful fact exists."
+    },
+    {
+      "quote": "Legal proceedings(5) (4,387) 4,387 (4,387) 21,437",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Too closely tied to the already-tested legal-proceedings footnote target (same non-GAAP adjustment line); risks being the same fact re-tested under a shifted quote/boundary, so excluded rather than risked."
+    },
+    {
+      "quote": "Digital sales represented 36.7% of total food and beverage revenue.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same digital-sales Driver family as the already-tested Q4 digital-sales proposal, differing only by period; not selected to avoid oversampling this metric in a representative, non-exhaustive inventory."
+    },
+    {
+      "quote": "An estimated underlying effective full year tax rate between 24% and 26% before discrete items",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A valid closed-range guidance fact, but point_range_floor_ceiling coverage for this event is already satisfied by the restaurant-openings guidance row; not added merely because another lawful fact exists."
+    },
+    {
+      "quote": "Around 80% of company-owned restaurants will have a Chipotlane",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A plausible portion-versus-whole candidate, but that hard class is already covered for this event by the restaurant-level-operating-margin row; the approximate '80%' framing adds interpretive complexity without a needed coverage gain."
+    },
+    {
+      "quote": "Corporate asset impairment and other corporate (gains)/costs(3) - (7,392) (1,484) (7,392)",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A second losses_and_sign candidate; not selected because that tag is already satisfied for this event by the restaurant-lease-termination gain row, and this line's blended gains/costs label adds ambiguity not needed for this representative slot."
+    },
+    {
+      "quote": "General and administrative expenses for the fourth quarter of 2025 were $160.3 million, compared to $191.2 million in the fourth quarter of 2024.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A real, lawfully encodable fact, but adds no hard-class coverage beyond what is already selected for this event; representative sampling does not require every eligible line."
+    },
+    {
+      "quote": "we opened a record number of restaurants globally and grew Q4 and full year revenue,",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A numberless CEO-quote claim about restaurant-count growth; the same underlying growth Driver is already represented by the freshly selected restaurant-openings guidance row, so not added for this representative sample."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event's text contains no explicit analyst/consensus comparison language, no stated restatement or amendment, and no case where a stated company part is plausible under two or more slice kinds.",
+      "why": "As a result this event contributes zero fresh rows toward the favourable_unfavourable_direction, expectation_routing, corrections_and_amendments, and ambiguous_menus hard-class tags; per the authority those totals must be reconciled across all 36 events, not manufactured here."
+    }
+  ],
+  "blocked": null
+}
+```

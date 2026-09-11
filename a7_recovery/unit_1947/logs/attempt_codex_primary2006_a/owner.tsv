@@ -1,0 +1,7 @@
+attempt	codex_primary2006_a
+payload	../../unit_1997/ledger/../../unit_2006/verify_primary_reviews_2006.py
+map	../unit_1997/../unit_2004/map_review_live_2005.tsv
+wrapper_pid	3693473
+payload_pid	3693477
+started_utc	2026-09-10T23:57:05Z
+state	finished exit 0

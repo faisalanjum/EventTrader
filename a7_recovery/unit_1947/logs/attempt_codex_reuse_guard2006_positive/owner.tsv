@@ -1,0 +1,7 @@
+attempt	codex_reuse_guard2006_positive
+payload	../../unit_1997/ledger/../../unit_2006/check_reuse_warm_2006.py
+map	../unit_1997/../unit_2006/map_warm_TEST_2006.tsv
+wrapper_pid	3765716
+payload_pid	3765724
+started_utc	2026-09-11T00:36:03Z
+state	finished exit 0

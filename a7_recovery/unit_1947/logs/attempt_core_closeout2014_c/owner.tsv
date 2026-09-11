@@ -1,0 +1,7 @@
+attempt	core_closeout2014_c
+payload	../../unit_2014_closeout_review/battery_closeout_2014.py
+map	../unit_2009/map_signed_reuse_a.tsv
+wrapper_pid	4007035
+payload_pid	4007039
+started_utc	2026-09-11T03:08:38Z
+state	finished exit 0

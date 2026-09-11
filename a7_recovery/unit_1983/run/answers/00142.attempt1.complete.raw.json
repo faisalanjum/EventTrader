@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The target claim describes recasting prior-period (fiscal 2025) segment-profit figures to match a reporting-definition change — a presentational/accounting-construct note about how comparative data was prepared, not a real statement of a driver's state, change, surprise, guidance, or action; per Rule 3.8 accounting constructs are not drivers, so no fact is warranted."
+    }
+  ],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,238 @@
+{
+ "door": "a4_source_only_key_1997",
+ "phase": "events",
+ "attempt": 1,
+ "run_id": "source_only_1997_collect",
+ "receipt_sha256": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+ "manifest_sha256": "4ec8a90ebf39c1d46b4c9b938531df0fefd1183c4a95ed9149f3b26cccd6735c",
+ "bound": {
+  "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "build_kfields_hard_review.py": "7c5ac0ecac07b3f85f25cae9982f7921ee313405215bea42342a88def861c09e",
+  "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+  "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+  "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+  "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+  "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+  "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+  "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+  "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801"
+ },
+ "harvested_raw": [
+  "wf_52422499-a72.raw.json",
+  "wf_86efef91-dc3.raw.json",
+  "wf_4d8c6609-0de.raw.json",
+  "wf_a9ec6966-6cd.raw.json",
+  "wf_5f6d4974-3bf.raw.json",
+  "wf_37cb272b-f7d.raw.json",
+  "wf_fa16d324-f42.raw.json",
+  "wf_4e4f7619-d59.raw.json",
+  "wf_8d51e088-490.raw.json",
+  "wf_5a4456dc-ebd.raw.json",
+  "wf_edb6e1f8-060.raw.json",
+  "wf_ec9e916e-c0e.raw.json",
+  "wf_bdc6d73d-2a7.raw.json",
+  "wf_6cbfa137-529.raw.json",
+  "wf_6006dc87-308.raw.json",
+  "wf_97e55293-f32.raw.json",
+  "wf_45a2c41f-d01.raw.json",
+  "wf_a23758cb-28a.raw.json",
+  "wf_f48c4de2-e0c.raw.json",
+  "wf_90b07d5d-a14.raw.json",
+  "wf_d49240b8-711.raw.json",
+  "wf_e8c4096e-a7e.raw.json",
+  "wf_dd7e180f-34f.raw.json",
+  "wf_617a02d7-f98.raw.json",
+  "wf_8cd3b669-0c7.raw.json",
+  "wf_bd2efbc5-0bb.raw.json",
+  "wf_1f808e0c-903.raw.json",
+  "wf_b3fe7b00-404.raw.json",
+  "wf_c50c35d3-3e6.raw.json",
+  "wf_e2637c3b-7ec.raw.json",
+  "wf_239f5f9b-350.raw.json",
+  "wf_249cf37d-f4c.raw.json",
+  "wf_5bc9d731-202.raw.json"
+ ],
+ "phase_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "0000006201-26-000031",
+   "valid",
+   ""
+  ],
+  [
+   "0000006201-26-000032",
+   "valid",
+   ""
+  ],
+  [
+   "0000027904-26-000013",
+   "valid",
+   ""
+  ],
+  [
+   "0000027904-26-000020",
+   "valid",
+   ""
+  ],
+  [
+   "0000027904-26-000022",
+   "valid",
+   ""
+  ],
+  [
+   "0000063908-26-000032",
+   "valid",
+   ""
+  ],
+  [
+   "0000092380-26-000044",
+   "valid",
+   ""
+  ],
+  [
+   "0000764478-25-000057",
+   "valid",
+   ""
+  ],
+  [
+   "0000898173-26-000006",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-25-000038",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-26-000005",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-26-000009",
+   "valid",
+   ""
+  ],
+  [
+   "0001041061-25-000109",
+   "valid",
+   ""
+  ],
+  [
+   "0001041061-26-000003",
+   "valid",
+   ""
+  ],
+  [
+   "0001041061-26-000084",
+   "valid",
+   ""
+  ],
+  [
+   "0001058090-26-000007",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-25-102611",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-25-105631",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-25-118458",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-26-017090",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-26-027061",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-26-032757",
+   "valid",
+   ""
+  ],
+  [
+   "0001171843-26-001288",
+   "valid",
+   ""
+  ],
+  [
+   "AAL_2026-04-23T08.30",
+   "valid",
+   ""
+  ],
+  [
+   "BBY_2026-03-03T08.00",
+   "valid",
+   ""
+  ],
+  [
+   "CMG_2026-02-03T16.30",
+   "valid",
+   ""
+  ],
+  [
+   "DAL_2026-04-08T10.00",
+   "valid",
+   ""
+  ],
+  [
+   "DRI_2026-03-19T08.30",
+   "valid",
+   ""
+  ],
+  [
+   "MCD_2026-02-11T16.30",
+   "valid",
+   ""
+  ],
+  [
+   "ULTA_2026-03-12T16.30",
+   "valid",
+   ""
+  ],
+  [
+   "YUM_2026-02-04T08.15",
+   "valid",
+   ""
+  ],
+  [
+   "bzNews_42014391",
+   "valid",
+   ""
+  ],
+  [
+   "bzNews_50877032",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 33,
+  "valid": 33,
+  "invalid_response": 0,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "retry": []
+}

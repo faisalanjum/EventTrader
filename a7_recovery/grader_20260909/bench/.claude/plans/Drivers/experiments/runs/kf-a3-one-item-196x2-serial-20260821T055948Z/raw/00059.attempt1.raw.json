@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The located quote 'Gain/(loss) on investments, net (550) (40) (510)' states numeric values but carries no unit or scale marker inside it (no '$', no 'million(s)'); the table's '(in millions)' scale marker sits in the header, outside this quote. Per Rule 5.6, scale_multiplier cannot be set to 1 (the true multiplier is not 1) and no in-quote evidence supports any other multiplier, so this numeric fact cannot be lawfully resolved and must be abstained rather than guessed."
+    }
+  ],
+  "continuity_hints": []
+}
+```

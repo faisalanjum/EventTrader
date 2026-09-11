@@ -1,0 +1,23 @@
+```json
+{
+ "source_id": "0000063908-26-000032",
+ "facts": [
+  {
+   "fact_type": "metric",
+   "item": {
+    "driver_name": "comparable_sales",
+    "driver_state": "increased",
+    "level_low": {"value": 5.7, "scale_multiplier": 1, "unit_scale_evidence": null},
+    "level_high": {"value": 5.7, "scale_multiplier": 1, "unit_scale_evidence": null},
+    "level_shape_hint": "point",
+    "level_unit": "percent_yoy",
+    "time_type": "duration",
+    "fiscal_quarter": 4,
+    "fiscal_year": 2025
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}
+```

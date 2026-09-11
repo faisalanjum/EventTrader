@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted 'Net pre-tax gains' figure ($71 million for the quarter, offset against $70 million net charges for the year) is a single aggregated non-GAAP reconciliation line that bundles three independent causes (property sale gains, transaction costs, and non-cash impairment charges) tied to two unrelated corporate actions (the sale of the South Korea business and the acquisition of the Israel business). Rule 3.2 requires splitting independent causes into separate facts, but the source gives only the combined net dollar amount with no per-cause breakdown, so no single driver can lawfully be assigned the stated value without misattribution."
+    }
+  ],
+  "continuity_hints": []
+}
+```

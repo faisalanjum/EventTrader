@@ -1,0 +1,185 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "operating_margin_surprise",
+              "driver_state": "beat",
+              "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "comparable_sales_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "reported",
+              "level_low": {"value": 1.1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["customer:best_buy_business"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 0.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["geography:international"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This sentence is the standard Safe-Harbor / forward-looking-statements legal disclaimer boilerplate, not a real statement about any specific driver's state, change, surprise, guidance, or action, so Rule 1.2 requires abstention."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "revenue_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 41.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 42.1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "range",
+              "level_unit": "m_usd",
+              "fiscal_year": 2027,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 8,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The phrase 'from an industry perspective' leaves it genuinely ambiguous whether the below-expectations revenue and units describe Best Buy's own TV product results or external industry-wide data, and no company driver value can be lawfully resolved from it, so Rule 1.4 requires abstention."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The eight located items describe eight distinct underlying facts (an operating-margin surprise, a comparable-sales metric plus its matching guidance-range surprise twin, a Best Buy Business revenue metric, an international revenue metric, unusable legal boilerplate, a fiscal-27 revenue guidance range, and an ambiguous TV/industry remark), spanning different drivers, values, slices and periods, so they cannot be one fact."
+}
+```

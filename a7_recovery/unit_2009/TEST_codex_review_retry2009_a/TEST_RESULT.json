@@ -1,0 +1,26 @@
+{
+ "kind": "TEST ONLY: copied synthetic answers; zero model calls",
+ "checks": [
+  "positive before changed historical population",
+  "changed historical population refuses",
+  "positive restored after changed historical population",
+  "positive before unexhausted historical retry",
+  "unexhausted historical retry refuses",
+  "positive restored after unexhausted historical retry",
+  "positive before unchanged prompt after exhausted retry",
+  "unchanged prompt after exhausted retry refuses",
+  "positive restored after unchanged prompt after exhausted retry",
+  "only four unsatisfied slots prepare",
+  "one invalid result remains counted and gets exactly one child",
+  "child excludes every successful primary",
+  "waiting child blocks the key phase",
+  "the native child completes with no third attempt",
+  "all66 review obligations served and all62 original successes unchanged",
+  "failed and successful primary raw evidence is unchanged",
+  "both new attempts are bound and all500 historical/TEST calls count once",
+  "final key still receives exactly two leads for each of33 sources"
+ ],
+ "passed": 18,
+ "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_review_retry2009_a/run",
+ "package": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_review_retry2009_a/package"
+}

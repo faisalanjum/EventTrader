@@ -1,0 +1,260 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "verdicts": [
+    {
+      "proposal_id": "0000063908-26-000032#P000",
+      "decision": "exclude",
+      "why": "This target (Q4 diluted EPS $3.03) has already been tested; it is excluded from this fresh sample regardless of whether its location or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P001",
+      "decision": "exclude",
+      "why": "This target (Q4 global comparable sales 5.7%) has already been tested; it is excluded from this fresh sample regardless of whether its location or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P002",
+      "decision": "exclude",
+      "why": "This target (2024 restructuring pre-tax charges $74M/$221M) has already been tested; it is excluded from this fresh sample regardless of whether its location or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P003",
+      "decision": "exclude",
+      "why": "This target (FY global Systemwide sales to >$139B) has already been tested; it is excluded from this fresh sample regardless of whether its location or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P004",
+      "decision": "exclude",
+      "why": "This target (90-day active loyalty users) has already been tested; it is excluded from this fresh sample regardless of whether its location or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P005",
+      "decision": "exclude",
+      "why": "This target (FY2025 net pre-tax charges $229M) has already been tested; it is excluded from this fresh sample regardless of whether its location or classification is correct.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000063908-26-000032#P006",
+      "decision": "exclude",
+      "why": "This target (FY International Operated Markets comparable sales +3.2%) has already been tested; it is excluded from this fresh sample regardless of whether its location or classification is correct.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.",
+        "raw_label_or_claim": "pre-tax charges of $80 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "Fresh Q4 2025 restructuring-charge amount, a different period from the already-tested FY2025 total ($229M) and from the already-tested 2024 restructuring figures; a distinct point-shaped, positively-signed charge fact under OD-12."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net pre-tax gains of $71 million, or $0.07 per share, for the quarter and net pre-tax charges of $70 million, or $0.08 per share, for the year, which primarily consisted of property sale gains, transaction costs and non-cash impairment charges associated with the sale of McDonald's business in South Korea and transaction costs associated with the acquisition of McDonald's business in Israel",
+        "raw_label_or_claim": "Net pre-tax gains",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "Fresh 2024-quarter fact, distinct from any tested restructuring-charge target: a GAIN (South Korea sale), which is the negative-signed counterpart under OD-12 that no tested proposal demonstrates."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net pre-tax gains of $71 million, or $0.07 per share, for the quarter and net pre-tax charges of $70 million, or $0.08 per share, for the year, which primarily consisted of property sale gains, transaction costs and non-cash impairment charges associated with the sale of McDonald's business in South Korea and transaction costs associated with the acquisition of McDonald's business in Israel",
+        "raw_label_or_claim": "net pre-tax charges",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "Same sentence, different target and period (FY2024 net charge $70M tied to the Israel acquisition/South Korea sale), a fact distinct in scope and cause from the tested Accelerating-the-Organization restructuring charges; shares the quote with the sibling gains row but is told apart by its own label."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Excluding the current year charges described above of $0.09 per share, diluted earnings per share was $3.12, an increase of 10% (7% in constant currencies) when also excluding prior year charges.",
+        "raw_label_or_claim": "diluted earnings per share was $3.12",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"]
+      },
+      "why": "Non-GAAP (charges-excluded) Q4 diluted EPS is a measurement-distinct fact from the tested GAAP $3.03 figure (NAME-14/FS-25); fresh target, fills the measurement_wording gap left open by the tested proposals."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Diluted earnings per share was $11.95, an increase of 5% (4% in constant currencies).",
+        "raw_label_or_claim": "Diluted earnings per share was $11.95",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      },
+      "why": "Full-year GAAP diluted EPS is a different period from the tested Q4 EPS figure ($3.03), a lawful split under the period-difference rule; also exercises OD-11's annual pin (annual period always percent_yoy) and carries an explicit constant-currency measurement token."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "U.S. increased 6.8%",
+        "raw_label_or_claim": "U.S.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "Fresh segment/period target (U.S. Q4 comparable sales), a different segment and menu match (segment:usmarket/u_s_market) from the only tested slice item (FY International Operated Markets); fills a segment-diversity gap."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The Company declared a 5% increase in its quarterly cash dividend to $1.86 per share.",
+        "raw_label_or_claim": "quarterly cash dividend",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A capital-allocation action fact (dividend declaration) untouched by any tested proposal; the 5% increase is stated against the immediately-prior quarterly rate, exercising OD-11's sequential (not YoY) basis clause -- a distinct sub-rule from the YoY items already tested."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "This release contains certain forward-looking statements, which reflect management's expectations regarding future events and operating performance and speak only as of the date hereof.",
+        "raw_label_or_claim": "forward-looking statements",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Canonical generic forward-looking-statements boilerplate; a bare, non-fact disclaimer that fails DU-03/Rule 1. No proposal or other candidate in this event supplies a control, so this fills that gap."
+    },
+    {
+      "row": {
+        "source_id": "0000063908-26-000032",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Approximately 95% of McDonald\u2019s restaurants worldwide are owned and operated by independent local business owners.",
+        "raw_label_or_claim": "Approximately 95% of McDonald\u2019s restaurants worldwide are owned and operated by independent local business owners.",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Evergreen company-description boilerplate (recurs unchanged across filings, not a quarter-specific stated change/state/surprise/guidance/action); a second, distinct negative_control example."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Global comparable sales increased 3.1%:",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Fresh (FY total, different period from the tested Q4 total) but not selected; comparable-sales coverage for this event is already representatively filled by the tested Q4 total and the newly added U.S. Q4 segment row."
+    },
+    {
+      "quote": "International Operated Markets increased 5.2%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Fresh Q4 segment figure but not selected; slices_and_unknown_axes is already represented by the newly added U.S. Q4 row plus the tested FY International Operated Markets proposal; adding more segment permutations would pad the sample."
+    },
+    {
+      "quote": "International Developmental Licensed Markets increased 4.6%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Fresh FY segment figure; not selected for the same reason -- avoiding redundant segment-permutation padding."
+    },
+    {
+      "quote": "U.S. increased 2.1%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Fresh FY U.S. segment figure; not selected -- the Q4 U.S. row already gives a representative U.S.-segment example."
+    },
+    {
+      "quote": "Systemwide sales increased 11% (8% in constant currencies).",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Fresh Q4 systemwide-sales figure, a different period from the tested FY figure; not selected because portion_versus_whole coverage is already adequate from the tested FY Systemwide-sales and loyalty-user proposals."
+    },
+    {
+      "quote": "Across 70 loyalty markets, Systemwide sales to loyalty members for the full year increased 20% to nearly $37 billion, with 90-day active loyalty users up 19% to nearly 210 million as of year-end",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "The dollar-value loyalty-member sales figure is a fresh, distinct metric from the tested 90-day-active-user count, but not selected -- portion_versus_whole is already adequately represented without it."
+    },
+    {
+      "quote": "Excluding these current year charges, as well as prior year pre-tax net charges of $3 million, consolidated operating income increased 13% (9% in constant currencies).**",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "A small prior-year ($3M) adjustment fact; fresh but too granular for a representative sample given losses_and_sign is already covered by three added rows."
+    },
+    {
+      "quote": "Consolidated revenues increased 10% (6% in constant currencies).",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Fresh Q4 headline revenue-growth figure; not selected -- does not fill any declared hard-class or control gap beyond what is already covered."
+    },
+    {
+      "quote": "By listening to customers and taking action, we have improved traffic and strengthened our value & affordability scores.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "CEO promotional narrative with no specific stated numeric fact; considered as a possible negative_control but not selected -- two clearer boilerplate controls were already chosen, avoiding over-sampling controls."
+    },
+    {
+      "quote": "McDonald\u2019s is the world\u2019s leading global foodservice retailer with over 45,000 locations in over 100 countries.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Company-description boilerplate; redundant with the franchise-ownership negative_control already selected from the same 'ABOUT McDONALD'S' paragraph."
+    },
+    {
+      "quote": "Comparable sales and comparable guest counts are compared to the same period in the prior year and represent sales and transactions, respectively, at all restaurants, whether owned and operated by the Company or by franchisees, in operation at least thirteen months including those temporarily closed.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Recurring methodology-definition boilerplate; a candidate negative_control but redundant with the two controls already selected."
+    },
+    {
+      "quote": "The Company's revenues consist of sales by Company-owned and operated restaurants and fees from franchised restaurants operated by conventional franchisees, developmental licensees and affiliates.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Bare mention of the channel categories (conventional franchisees, developmental licensees, affiliates) with no quarter-specific numeric fact attached; a candidate negative_control but not selected -- redundant with the controls already chosen, and per ruling 6 an unused channel-menu mention needs no matching row."
+    },
+    {
+      "quote": "TOTAL SHAREHOLDERS' EQUITY (DEFICIT) (1,791) (3,797)",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Raw balance-sheet stock figure; whether a period-end balance (as opposed to a P&L/guidance flow) falls inside the driver fact-gate's scope at all is not settled by the supplied authority, so it was not classified as real_item, lawful_abstention_control, or negative_control -- see open_issues."
+    },
+    {
+      "quote": "Weighted average shares outstanding-diluted 714.2 719.7 (5.5) (1) %",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Raw income-statement share-count line with a parenthetical decrease and no narrative framing; the same fact-gate-scope ambiguity as the balance-sheet line above -- left unclassified, see open_issues."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No lawful_abstention_control candidate was found in this event's text.",
+      "why": "Every numeric or narrative disclosure examined here (signs, attributions, measurement tokens, per-share/total forms) is cleanly resolvable under the quoted rules; nothing presents the genuine unresolved ambiguity (unclear polarity, unclear attribution, uncertain per-X expansion, etc.) that would require abstention rather than a real_item or omission. Reporting this as a shortage rather than inventing a forced abstention example."
+    },
+    {
+      "what": "This event supplies no fresh coverage for favourable_unfavourable_direction, expectation_routing, ambiguous_menus, or corrections_and_amendments.",
+      "why": "The text contains no consensus/Street-estimate comparison, no forward guidance, no genuinely ambiguous dual-kind slice usage in context (the menu's dual-kind labels for U.S./International Operated/IDL&Corporate are resolved by clear segment-table framing here, so T1-05 rung 2 is not actually exercised), and no restatement/correction language. These tags must be filled from other events in the 36-event set."
+    },
+    {
+      "what": "Scope of the fact gate over raw balance-sheet and cash-flow 'stock' line items (e.g., shareholders' equity/deficit, share-count changes) is not settled by the supplied authority.",
+      "why": "The quoted rules describe the gate and hard classes in terms of P&L/guidance 'Driver' facts (state/change/surprise/guidance/action); they do not say whether an unnarrated balance-sheet or cash-flow table entry counts as a real candidate at all. Left unclassified rather than guessed into real_item or negative_control, per the instruction that a genuinely fuzzy boundary is never guessed."
+    }
+  ],
+  "blocked": null
+}
+```

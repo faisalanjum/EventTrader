@@ -1,0 +1,7 @@
+attempt	codex_signed2005_a
+payload	../../unit_1997/ledger/../../unit_2005/check_signed_candidate_2005.py
+map	../unit_1997/../unit_2002/map_lifecycle_2002.tsv
+wrapper_pid	3626346
+payload_pid	3626350
+started_utc	2026-09-10T23:07:26Z
+state	finished exit 0

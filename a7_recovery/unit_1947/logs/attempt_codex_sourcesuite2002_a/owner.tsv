@@ -1,0 +1,7 @@
+attempt	codex_sourcesuite2002_a
+payload	../../unit_1997/ledger/../../codex_review_1989/run_source_suite_1997.py
+map	../unit_1997/../unit_2002/map_lifecycle_2002.tsv
+wrapper_pid	3507958
+payload_pid	3507963
+started_utc	2026-09-10T21:35:37Z
+state	finished exit 0

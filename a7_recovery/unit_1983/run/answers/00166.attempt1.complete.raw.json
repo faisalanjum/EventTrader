@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001041061-26-000084",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "market_exit",
+        "driver_state": "occurred",
+        "level_low": {"value": -11, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": -11, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "fiscal_year": 2023,
+        "time_type": "duration",
+        "slice_parts": ["segment:kfcrussia"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

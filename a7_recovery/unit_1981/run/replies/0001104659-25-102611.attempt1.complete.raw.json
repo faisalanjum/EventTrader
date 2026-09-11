@@ -1,0 +1,224 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-25-102611#P000",
+      "decision": "exclude",
+      "why": "This proposal's target (the amended Revolving Credit Agreement November 15, 2028 termination date) has already been tested; it is out of scope for this fresh sample regardless of its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P001",
+      "decision": "exclude",
+      "why": "This proposal's target (fourth-quarter week counts for 2025/2024/2023) has already been tested; it is out of scope for this fresh sample regardless of its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P002",
+      "decision": "exclude",
+      "why": "This proposal's target (Q4 FY2025 share of annual sales/net income) has already been tested; it is out of scope for this fresh sample regardless of its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P003",
+      "decision": "exclude",
+      "why": "This proposal's target (the June 19, 2024 $1.5B buyback authorization increase to $39.2B) has already been tested; it is out of scope for this fresh sample regardless of its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P004",
+      "decision": "exclude",
+      "why": "This proposal's target (the NLRB decisions mention) has already been tested; it is out of scope for this fresh sample regardless of its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-102611#P005",
+      "decision": "exclude",
+      "why": "This proposal's target (6,098 domestic stores with a commercial sales program) has already been tested; it is out of scope for this fresh sample regardless of its correctness or classification.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Operating profit decreased 4.7% to $3.6 billion",
+        "raw_label_or_claim": "Operating profit decreased 4.7% to $3.6 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A source-stated total operating-profit level with a YoY percent decline; not named by any proposal. Point value + YoY basis exercise FINAL_DESIGN 7.1 number-shape and OD-11 growth-basis rules."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "net income decreased 6.2% to $2.5 billion",
+        "raw_label_or_claim": "net income decreased 6.2% to $2.5 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A source-stated total net-income level with a YoY percent decline, using the first complete occurrence (Executive Summary); not named by any proposal and distinct from operating profit/diluted EPS (NAME-13 keeps totals and per-share forms separate)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "diluted earnings per share decreased 3.1% to $144.87 from $149.55 in fiscal 2024",
+        "raw_label_or_claim": "diluted earnings per share decreased 3.1% to $144.87 from $149.55 in fiscal 2024",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"]
+      },
+      "why": "Per-share (NAME-13) counterpart to net income, kept as its own row/quote. Used the richer later occurrence which adds the prior-year comparison value ($149.55), per the partial-then-richer-restatement rule. 'Diluted' is a measurement qualifier under NAME-14/FS-25."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The decrease in gross margin was driven by 55 basis points ($64.0 million charge in the current year versus $40.0 million benefit in the prior year) from non-cash LIFO impact.",
+        "raw_label_or_claim": "$64.0 million charge in the current year versus $40.0 million benefit in the prior year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A directly source-stated signed pair (a positive charge vs. a negative benefit) that squarely exercises OD-12's charge/benefit sign convention; not named by any proposal and distinct in scope from the Executive Summary's separate $104.0 million operating-profit LIFO impact figure."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "business",
+        "occurrence_in_part": null,
+        "quote": "one class of similar products accounted for approximately 14 percent of our total revenues",
+        "raw_label_or_claim": "one class of similar products accounted for approximately 14 percent of our total revenues",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "A real, specific product-concentration fact matching the menu's product:oneclassofsimilarproducts slice value; exercises FS-05..24 product-kind slicing. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "business",
+        "occurrence_in_part": null,
+        "quote": "one individual vendor provided 13 percent of our total purchases",
+        "raw_label_or_claim": "one individual vendor provided 13 percent of our total purchases",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "A real vendor-concentration fact matching the menu's unknown:azo:VendorsAxis__oneindividualvendor token, exercising the unknown-axis fallback under FS-05..24. Distinct population (purchases, not revenue) from the product-concentration row; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "During fiscal 2025, failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales.",
+        "raw_label_or_claim": "failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "portion_versus_whole", "point_range_floor_ceiling"]
+      },
+      "why": "A source-stated fused two-product-slice share of total sales (matches menu product:failure and product:maintenanceitems), directly stated as a portion of the whole sales mix. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Domestic commercial sales increased $329.5 million, or 6.7%, compared to fiscal 2024 domestic commercial sales.",
+        "raw_label_or_claim": "Domestic commercial sales increased $329.5 million, or 6.7%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "Richer restatement (adds the dollar change) of the commercial-channel YoY growth fact; used per the partial-then-richer-restatement rule over the bare-percent Executive Summary mention. 'Commercial' is a channel-kind slice population. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .",
+        "raw_label_or_claim": "represents 31.7% of our total Domestic sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "slices_and_unknown_axes"]
+      },
+      "why": "A distinct share-of-total-domestic-sales fact only stated once, in the Executive Summary; kept as its own row (different measurement from the dollar/percent growth fact above) with the full sentence retained so the label sits inside the quote. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "We are involved in lawsuits, regulatory investigations, governmental and other legal proceedings arising out of the ordinary course of business.",
+        "raw_label_or_claim": "involved in lawsuits, regulatory investigations, governmental and other legal proceedings arising out of the ordinary course of business",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Paradigm generic litigation-risk boilerplate (the gate's own 'litigation could harm us' example) with no specific current adverse threat stated; correct reader behavior is omission, not abstention. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-102611",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "On October 8, 2025, the Board voted to authorize the repurchase of an additional $1.5 billion of our common stock in connection with our ongoing share repurchase program.",
+        "raw_label_or_claim": "authorize the repurchase of an additional $1.5 billion of our common stock",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A separate, later, and differently-sized buyback authorization event (October 2025, bringing cumulative authorization to $40.7B) distinct from the already-tested June 2024 increase (to $39.2B). Not named by any proposal and not the same fact under a shifted label."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Operating profit comparison was also negatively impacted by an unfavorable net non-cash LIFO impact of $104.0 million.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real, lawful candidate (operating-profit-scope LIFO impact) but overlapping in substance with the selected richer gross-margin charge/benefit breakdown; not added to avoid padding the representative sample with a second LIFO-impact row."
+    },
+    {
+      "quote": "Since the inception of the repurchase program in 1998, the Board has authorized $40.7 billion in share repurchases.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real cumulative-total fact closely tied to the selected October 2025 incremental-authorization row; not added separately to avoid padding."
+    },
+    {
+      "quote": "operated 6,627 stores in the United States (\u201cU.S.\u201d), 883 stores in Mexico and 147 stores in Brazil",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "Lawful geography-slice candidates (matching menu geography:us/mx/br) exist here, but were not selected for this representative sample since slice coverage is already supplied by the product/vendor/channel rows above; adding all three would be padding rather than repairing a declared gap."
+    },
+    {
+      "quote": "we employed approximately 130,000 AutoZoners",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "A real, numberless-adjacent headcount fact, but not selected because it adds no fresh hard-class coverage beyond what is already represented and the sample is meant to be representative, not exhaustive."
+    },
+    {
+      "quote": "amendments to those reports filed or furnished pursuant to Section 13(a) or 15(d) of the Securities and Exchange Act of 1934",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "Generic SEC-filing-mechanics boilerplate about amendments in general, not a specific corrections/amendments fact about this company's own driver state; fails the fact gate as boilerplate, so not added as a real_item, and adding it as a negative_control was judged redundant with the litigation boilerplate control already selected."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event (a 10-K annual report) contains no analyst-consensus or forward-guidance commentary, so it supplies no fresh candidate for the favourable_unfavourable_direction or expectation_routing hard classes.",
+      "why": "The owner rulings require these tags to occur on at least five distinct rows across all 36 events, but do not require every event to supply an example; reporting the absence here rather than inventing a strained candidate is the lawful result per the no-padding instruction."
+    },
+    {
+      "what": "No text passage in this event was found where a stated company part is genuinely plausible under two or more menu slice kinds (the T1-05/FS-15 ambiguous-menu ladder rungs 2 or 4), so no fresh ambiguous_menus candidate is offered from this event.",
+      "why": "Forcing a row onto this tag from a passage that is not actually kind-ambiguous would misclassify a clear fact as an ambiguity exhibit; reporting the shortage is preferred over inventing one."
+    },
+    {
+      "what": "The only clear corrections/amendments-type disclosure in this event (the Revolving Credit Agreement's amended termination date) is already named by proposal P000 under a different quote/boundary, so no fresh corrections_and_amendments candidate is offered from this event.",
+      "why": "Per instructions, a fact already tested by a supplied proposal may not be re-selected under a different label, boundary, or quote, and no other genuine amendment/correction passage was found in this event's text."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "segment_profit_margin",
+        "driver_state": "increased",
+        "level_low": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "comparison_low": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_high": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:longhornsteakhousesegment"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

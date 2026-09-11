@@ -1,0 +1,223 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 3.3,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_high": {
+        "value": 3.3,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "change_value": {
+        "value": 5.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "same_restaurant_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 4.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 4.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "per_x": "share",
+      "item": {
+       "driver_name": "earnings_per_share_guidance",
+       "driver_state": "raised",
+       "level_low": {
+        "value": 10.57,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 10.67,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "range",
+       "level_unit": "usd",
+       "comparison_baseline": "previous_guidance",
+       "company_confirmed": true,
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "measurement_raw_spans": [
+        "adjusted diluted"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "segment_profit_margin",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": 23,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 23,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "change_value": {
+        "value": -10,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "basis points"
+       },
+       "change_unit": "basis_points",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "slice_parts": [
+        "segment:olivegarden"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking safe-harbor boilerplate: it names no driver, no state, change, outlook, expectation comparison or discrete action, so the gate drops it as generic risk language."
+     }
+    ],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "DRI_2026-03-19T08.30",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "strategic_alternatives_review",
+       "driver_state": "occurred",
+       "slice_parts": [
+        "segment:otheroperatingsegmentbahamabreezebrand"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_closure",
+       "driver_state": "announced",
+       "level_low": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "slice_parts": [
+        "segment:otheroperatingsegmentbahamabreezebrand"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_conversion",
+       "driver_state": "announced",
+       "level_low": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 14,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "slice_parts": [
+        "segment:otheroperatingsegmentbahamabreezebrand"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

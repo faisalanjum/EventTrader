@@ -1,0 +1,202 @@
+{
+ "kind": "TEST ONLY; no model calls or source-truth approval",
+ "model_calls": 0,
+ "checks": [
+  {
+   "check": "positive full binding inventory",
+   "ok": true
+  },
+  {
+   "check": "wrong ordinary identity refuses: package",
+   "ok": true
+  },
+  {
+   "check": "positive restored after identity mutation: package",
+   "ok": true
+  },
+  {
+   "check": "wrong ordinary identity refuses: evidence",
+   "ok": true
+  },
+  {
+   "check": "positive restored after identity mutation: evidence",
+   "ok": true
+  },
+  {
+   "check": "wrong ordinary identity refuses: hr",
+   "ok": true
+  },
+  {
+   "check": "positive restored after identity mutation: hr",
+   "ok": true
+  },
+  {
+   "check": "wrong ordinary identity refuses: events",
+   "ok": true
+  },
+  {
+   "check": "positive restored after identity mutation: events",
+   "ok": true
+  },
+  {
+   "check": "wrong ordinary identity refuses: hr_package",
+   "ok": true
+  },
+  {
+   "check": "positive restored after identity mutation: hr_package",
+   "ok": true
+  },
+  {
+   "check": "missing ordinary binding refuses",
+   "ok": true
+  },
+  {
+   "check": "positive restored after absent ordinary binding",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: final_package",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: final_package",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: initial_source_package",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: initial_source_package",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: hard_review_package",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: hard_review_package",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: initial_source_receipt",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: initial_source_receipt",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: initial_source_finalization",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: initial_source_finalization",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: hard_review_receipt",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: hard_review_receipt",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: hard_review_finalization",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: hard_review_finalization",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: event_receipt",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: event_receipt",
+   "ok": true
+  },
+  {
+   "check": "missing required artifact refuses: event_finalization",
+   "ok": true
+  },
+  {
+   "check": "positive restored after missing artifact: event_finalization",
+   "ok": true
+  },
+  {
+   "check": "caller failure is propagated",
+   "ok": true
+  },
+  {
+   "check": "all borrowed owners and role fields restore after caller failure",
+   "ok": true
+  },
+  {
+   "check": "source binding owner restores after every case",
+   "ok": true
+  },
+  {
+   "check": "final positive after complete failure inventory",
+   "ok": true
+  },
+  {
+   "check": "new binding owner survives complete existing scope/package regressions",
+   "ok": true
+  }
+ ],
+ "passed": 36,
+ "required_binding_inventory": {
+  "final_package": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_pkg_codex_final2002_qualified/source_only_key.manifest.json",
+   "sha256": "f94c0ac3ac819f242008331205f25090ab73764dfaa9b1669ee392d6a9f29cc0",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_pkg_codex_final2002_qualified"
+  },
+  "initial_source_package": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997/source_only_key.manifest.json",
+   "sha256": "4ec8a90ebf39c1d46b4c9b938531df0fefd1183c4a95ed9149f3b26cccd6735c",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997"
+  },
+  "hard_review_package": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_pkg_codex_final2002_qualified/hard_review.manifest.json",
+   "sha256": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_pkg_codex_final2002_qualified"
+  },
+  "initial_source_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect/receipt.json",
+   "sha256": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect"
+  },
+  "initial_source_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect/finalization.json",
+   "sha256": "ad0f11be0117e6d6c892596e6f5b4a64f7577eea1541163d46f857fb49a43add",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect"
+  },
+  "hard_review_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_codex_final2002_qualified/receipt.json",
+   "sha256": "40ad77f88b57c7e7632819bc0c8b151a1d596ff2de9350145c75e6de6a060bad",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_codex_final2002_qualified"
+  },
+  "hard_review_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_codex_final2002_qualified/finalization.json",
+   "sha256": "25f5bfcf0676ac037498e16979e3bb48a1fa1d0947f2d0b5b03dcfe889433c32",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_codex_final2002_qualified"
+  },
+  "event_receipt": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_codex_final2002_qualified/receipt.json",
+   "sha256": "b7d660781a5562ef639b08260900328b01e370e038562ddd16aabb59cf6e4bad",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_codex_final2002_qualified"
+  },
+  "event_finalization": {
+   "path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_codex_final2002_qualified/finalization.json",
+   "sha256": "0f8e0a0d531fc63db9dc4fb3b40d50e546ca28ac262dbad1d74c3ce39239885f",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/final_codex_final2002_qualified"
+  }
+ },
+ "unchanged_regression_suites": [
+  "check_final_scope_2002.py",
+  "check_packet_2002.py"
+ ]
+}

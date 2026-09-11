@@ -1,0 +1,30 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "sga_expenses",
+        "driver_state": "missed",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "period_start_date": "2025-10-01",
+        "period_end_date": "2025-12-31",
+        "time_type": "duration",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "consensus",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "unfavorable",
+          "basis": "source_framing",
+          "evidence": "The source attributes the overage to adverse cost pressure (heightened inflation in team member health care and casualty claim costs), framing SG&A coming in above expectations as a negative cost outcome, not a positive one.",
+          "sentence": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs."
+        }
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

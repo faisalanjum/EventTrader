@@ -1,0 +1,35 @@
+```json
+{
+  "source_id": "0001104659-25-102611",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_sales",
+        "driver_state": "increased",
+        "change_value": {"value": 329.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "change_unit": "m_usd",
+        "slice_parts": ["geography:us", "customer:commercial"],
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "comparison_baseline": "prior_year"
+      }
+    },
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_sales",
+        "driver_state": "increased",
+        "change_value": {"value": 6.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "slice_parts": ["geography:us", "customer:commercial"],
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "comparison_baseline": "prior_year"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

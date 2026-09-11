@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "unchanged",
+        "level_low": {"value": 0.25, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 0.25, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "measurement_raw_spans": ["Adjusted diluted"]
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,49 @@
+{
+ "kind": "TEST accounting and conservative decision independently recomputed",
+ "model_calls": 0,
+ "stages": [
+  {
+   "kind": "G1",
+   "questions": 537,
+   "test_calls": 198,
+   "every_question_reviewed_twice": true
+  },
+  {
+   "kind": "G2",
+   "questions": 81,
+   "test_calls": 18,
+   "every_question_reviewed_twice": true
+  },
+  {
+   "kind": "G3",
+   "questions": 302,
+   "test_calls": 62,
+   "every_question_reviewed_twice": true
+  }
+ ],
+ "scores": [
+  {
+   "leg": "P1",
+   "matched": 24,
+   "gold": 206,
+   "unresolved_extras": 82,
+   "original_responses": 191
+  },
+  {
+   "leg": "P2",
+   "matched": 24,
+   "gold": 206,
+   "unresolved_extras": 88,
+   "original_responses": 191
+  },
+  {
+   "leg": "UNION",
+   "matched": 33,
+   "gold": 206,
+   "unresolved_extras": 132,
+   "original_responses": 0
+  }
+ ],
+ "decision": "INCONCLUSIVE because TEST G3 judgments are null",
+ "limits": "Not a real model score. Other unchanged scoring rules retain their qualified regression proof; this audit checks the newly connected population, raw judgment coverage, response accounting and final gate."
+}

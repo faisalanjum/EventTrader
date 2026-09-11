@@ -1,0 +1,1 @@
+FAIL actual native proof accepts the explicit TEST signature

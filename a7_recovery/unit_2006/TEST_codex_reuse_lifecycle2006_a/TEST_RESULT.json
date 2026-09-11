@@ -1,0 +1,2753 @@
+{
+ "kind": "TEST judgments only; no real AI score",
+ "model_calls": 0,
+ "passed": 9,
+ "checks": [
+  {
+   "check": "the existing G1 owner publishes the saved-answer candidate",
+   "ok": true
+  },
+  {
+   "check": "complete TEST G1 evidence passes its actual public lifecycle",
+   "ok": true
+  },
+  {
+   "check": "G2 and G3 freeze from that completed G1 and original source inputs",
+   "ok": true
+  },
+  {
+   "check": "both later grading kinds have real derived TEST obligations",
+   "ok": true
+  },
+  {
+   "check": "G2 passes raw capture, native proof, completion and read-back",
+   "ok": true
+  },
+  {
+   "check": "G3 passes raw capture, native proof, completion and read-back",
+   "ok": true
+  },
+  {
+   "check": "the official scorer consumes all original arms and union",
+   "ok": true
+  },
+  {
+   "check": "both public routing stages keep all99 event-arm routes, with writes disabled",
+   "ok": true
+  },
+  {
+   "check": "original producer bytes and its full denominator are unchanged",
+   "ok": true
+  }
+ ],
+ "producer": {
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+  "contract_suffix": null,
+  "source_manifest_sha256": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+  "receipt_sha256": "8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e",
+  "a4_lock_sha256": "7f316a62bcba1566e794f58ac29f91714403fae05810452495a867cb21d20e84",
+  "a4_lock_receipt_sha256": "fb80f1211ba1409a22e5cbb89402717efecdeb843f53363224dfc08e8e576aab",
+  "corrected_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "finalizations": {
+   "primary": "2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f"
+  },
+  "executed": {
+   "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+   "run_files": 799
+  },
+  "schema": "a7_prepared_run/1",
+  "evaluation_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_pipeline2006_c",
+  "a6_freeze_sha256": "b4c7b9d6353666fdb5dcdadc72239be07a8ea325cd12d5dc453d63fd29e62ed2",
+  "scheduled_calls": 382
+ },
+ "g1": {
+  "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G1_candidate",
+  "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G1_run",
+  "pins": {
+   "root_sha256": "f0cf7125b6c91acf5a0769af803a00fc10414e41cdb1a1349aed4a75045f1e63",
+   "run_tree_sha256": "5dff7ec040f8df869de8d197c635128cdda372ffb3901fbc26fc0e451aab50be",
+   "run_file_count": 405,
+   "candidate_sha256": "9119f2bafda4f0b7a329d8ca246a8be2b5f07708e11c6c97c50d4671fe33dc87",
+   "prompt_tree_sha256": "7cdf2e8f947db107520067730021b128ac7cc0f6e5a400bf4f501a4b20cb95ed",
+   "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+   "git_head": "2dc0ad39f30dba4756078573f5e80038465939cc",
+   "git_tree": "a45f8d0c2802e0d482ddefc5d330a4774d25a787"
+  }
+ },
+ "completions": {
+  "G2": {
+   "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G2_candidate",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G2_run",
+   "root_sha256": "cea1f28cdf4e4d8d835cee5698a7c7909288bb4337924715c7f3ca4a7c8c1a9f",
+   "completion_sha256": "ae2dc2ab53c02e6b526b333716c9c3514e3817179f944ca79d555e695a8a5182"
+  },
+  "G3": {
+   "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G3_candidate",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_lifecycle2006_a/G3_run",
+   "root_sha256": "58c4e0bd49685528e7b12fcb07001414c5d3dbf58d64aeb31877ab2951ef85f4",
+   "completion_sha256": "d1c05cd720596bb5ad48513c32b5957aed3860accb5605814a1f16ef54281b51"
+  }
+ },
+ "g2_pairs": {
+  "P1|0000006201-26-000032": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "P1|0000940944-25-000038": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P1|0000940944-26-000005": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P1|0000940944-26-000009": [
+   [
+    1,
+    2
+   ]
+  ],
+  "P1|0001041061-26-000003": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|0001041061-26-000084": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|0001058090-26-000007": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "P1|0001104659-25-102611": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P1|0001104659-25-105631": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P1|0001104659-25-118458": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    2
+   ]
+  ],
+  "P1|0001104659-26-027061": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P1|0001104659-26-032757": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|AAL_2026-04-23T08.30": [
+   [
+    5,
+    5
+   ]
+  ],
+  "P1|CMG_2026-02-03T16.30": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "P1|DAL_2026-04-08T10.00": [
+   [
+    2,
+    3
+   ]
+  ],
+  "P1|DRI_2026-03-19T08.30": [
+   [
+    1,
+    0
+   ]
+  ],
+  "P1|ULTA_2026-03-12T16.30": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P1|YUM_2026-02-04T08.15": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P2|0000027904-26-000013": [
+   [
+    1,
+    1
+   ],
+   [
+    7,
+    5
+   ]
+  ],
+  "P2|0000063908-26-000032": [
+   [
+    5,
+    1
+   ]
+  ],
+  "P2|0000940944-25-000038": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0000940944-26-000009": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|0001041061-25-000109": [
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0001041061-26-000003": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|0001041061-26-000084": [
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|0001058090-26-000007": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0001104659-25-102611": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "P2|0001104659-25-105631": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P2|0001104659-25-118458": [
+   [
+    5,
+    3
+   ]
+  ],
+  "P2|0001104659-26-017090": [
+   [
+    0,
+    0
+   ]
+  ],
+  "P2|0001104659-26-032757": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "P2|AAL_2026-04-23T08.30": [
+   [
+    5,
+    4
+   ]
+  ],
+  "P2|CMG_2026-02-03T16.30": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    4
+   ]
+  ],
+  "P2|DRI_2026-03-19T08.30": [
+   [
+    1,
+    0
+   ]
+  ],
+  "P2|ULTA_2026-03-12T16.30": [
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "UNION|0000006201-26-000032": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "UNION|0000027904-26-000013": [
+   [
+    1,
+    6
+   ],
+   [
+    7,
+    7
+   ]
+  ],
+  "UNION|0000063908-26-000032": [
+   [
+    5,
+    3
+   ]
+  ],
+  "UNION|0000940944-25-000038": [
+   [
+    1,
+    1
+   ]
+  ],
+  "UNION|0000940944-26-000005": [
+   [
+    1,
+    1
+   ]
+  ],
+  "UNION|0000940944-26-000009": [
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    7
+   ]
+  ],
+  "UNION|0001041061-25-000109": [
+   [
+    1,
+    6
+   ]
+  ],
+  "UNION|0001041061-26-000003": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "UNION|0001041061-26-000084": [
+   [
+    2,
+    2
+   ]
+  ],
+  "UNION|0001058090-26-000007": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "UNION|0001104659-25-102611": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    6
+   ]
+  ],
+  "UNION|0001104659-25-105631": [
+   [
+    0,
+    0
+   ]
+  ],
+  "UNION|0001104659-25-118458": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    5,
+    8
+   ]
+  ],
+  "UNION|0001104659-26-017090": [
+   [
+    0,
+    6
+   ]
+  ],
+  "UNION|0001104659-26-027061": [
+   [
+    0,
+    0
+   ]
+  ],
+  "UNION|0001104659-26-032757": [
+   [
+    0,
+    0
+   ],
+   [
+    2,
+    2
+   ]
+  ],
+  "UNION|AAL_2026-04-23T08.30": [
+   [
+    5,
+    2
+   ]
+  ],
+  "UNION|CMG_2026-02-03T16.30": [
+   [
+    1,
+    1
+   ],
+   [
+    4,
+    2
+   ]
+  ],
+  "UNION|DAL_2026-04-08T10.00": [
+   [
+    2,
+    0
+   ]
+  ],
+  "UNION|DRI_2026-03-19T08.30": [
+   [
+    1,
+    0
+   ]
+  ],
+  "UNION|ULTA_2026-03-12T16.30": [
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    5
+   ]
+  ],
+  "UNION|YUM_2026-02-04T08.15": [
+   [
+    0,
+    0
+   ]
+  ]
+ },
+ "g3_idxs": {
+  "P1|0000006201-26-000031": [
+   2,
+   3,
+   4,
+   5
+  ],
+  "P1|0000006201-26-000032": [
+   1,
+   2
+  ],
+  "P1|0000027904-26-000013": [
+   0,
+   1,
+   3,
+   4,
+   5
+  ],
+  "P1|0000027904-26-000020": [
+   0,
+   1,
+   5,
+   8
+  ],
+  "P1|0000027904-26-000022": [
+   0,
+   1,
+   2
+  ],
+  "P1|0000063908-26-000032": [
+   0,
+   1
+  ],
+  "P1|0000092380-26-000044": [
+   4,
+   5,
+   8
+  ],
+  "P1|0000764478-25-000057": [
+   1,
+   2
+  ],
+  "P1|0000898173-26-000006": [
+   2,
+   3
+  ],
+  "P1|0000940944-25-000038": [
+   0,
+   2
+  ],
+  "P1|0000940944-26-000005": [
+   2,
+   3
+  ],
+  "P1|0000940944-26-000009": [
+   4
+  ],
+  "P1|0001041061-25-000109": [
+   1,
+   2,
+   3
+  ],
+  "P1|0001041061-26-000003": [
+   1,
+   3
+  ],
+  "P1|0001041061-26-000084": [
+   0,
+   1,
+   3,
+   4
+  ],
+  "P1|0001058090-26-000007": [
+   2,
+   3,
+   4
+  ],
+  "P1|0001104659-25-102611": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "P1|0001104659-25-105631": [
+   2
+  ],
+  "P1|0001104659-25-118458": [
+   1,
+   3,
+   4
+  ],
+  "P1|0001104659-26-017090": [
+   7
+  ],
+  "P1|0001104659-26-027061": [
+   1,
+   2,
+   3
+  ],
+  "P1|0001104659-26-032757": [
+   1,
+   3
+  ],
+  "P1|0001171843-26-001288": [
+   2
+  ],
+  "P1|AAL_2026-04-23T08.30": [
+   3,
+   4,
+   7
+  ],
+  "P1|CMG_2026-02-03T16.30": [
+   0
+  ],
+  "P1|DAL_2026-04-08T10.00": [
+   4,
+   6
+  ],
+  "P1|DRI_2026-03-19T08.30": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "P1|MCD_2026-02-11T16.30": [
+   0,
+   5,
+   6
+  ],
+  "P1|ULTA_2026-03-12T16.30": [
+   0,
+   1,
+   3
+  ],
+  "P1|YUM_2026-02-04T08.15": [
+   1,
+   2,
+   5,
+   6
+  ],
+  "P1|bzNews_42014391": [
+   0
+  ],
+  "P1|bzNews_50877032": [
+   0
+  ],
+  "P2|0000006201-26-000031": [
+   2,
+   4,
+   5
+  ],
+  "P2|0000006201-26-000032": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "P2|0000027904-26-000013": [
+   0,
+   4,
+   6
+  ],
+  "P2|0000027904-26-000020": [
+   0,
+   1,
+   8,
+   9
+  ],
+  "P2|0000027904-26-000022": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "P2|0000063908-26-000032": [
+   0
+  ],
+  "P2|0000092380-26-000044": [
+   4,
+   5,
+   8
+  ],
+  "P2|0000764478-25-000057": [
+   0,
+   2,
+   3,
+   4
+  ],
+  "P2|0000898173-26-000006": [
+   0,
+   3,
+   4
+  ],
+  "P2|0000940944-25-000038": [
+   0,
+   2
+  ],
+  "P2|0000940944-26-000005": [
+   2,
+   3
+  ],
+  "P2|0000940944-26-000009": [
+   0,
+   1,
+   3
+  ],
+  "P2|0001041061-25-000109": [
+   0,
+   2,
+   3
+  ],
+  "P2|0001041061-26-000003": [
+   3
+  ],
+  "P2|0001041061-26-000084": [
+   0,
+   1,
+   3,
+   4
+  ],
+  "P2|0001058090-26-000007": [
+   2,
+   3
+  ],
+  "P2|0001104659-25-102611": [
+   2,
+   3,
+   4,
+   5
+  ],
+  "P2|0001104659-25-105631": [
+   2,
+   3
+  ],
+  "P2|0001104659-25-118458": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "P2|0001104659-26-017090": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "P2|0001104659-26-027061": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "P2|0001104659-26-032757": [
+   1
+  ],
+  "P2|0001171843-26-001288": [
+   2
+  ],
+  "P2|AAL_2026-04-23T08.30": [
+   2,
+   3,
+   5,
+   6,
+   7
+  ],
+  "P2|CMG_2026-02-03T16.30": [
+   0
+  ],
+  "P2|DAL_2026-04-08T10.00": [
+   3,
+   4,
+   6
+  ],
+  "P2|DRI_2026-03-19T08.30": [
+   1,
+   2
+  ],
+  "P2|MCD_2026-02-11T16.30": [
+   0,
+   5,
+   6
+  ],
+  "P2|ULTA_2026-03-12T16.30": [
+   0,
+   1
+  ],
+  "P2|YUM_2026-02-04T08.15": [
+   1,
+   2,
+   6
+  ],
+  "P2|bzNews_42014391": [
+   0
+  ],
+  "P2|bzNews_50877032": [
+   0
+  ],
+  "UNION|0000006201-26-000031": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   6
+  ],
+  "UNION|0000006201-26-000032": [
+   1,
+   2,
+   4,
+   5,
+   6,
+   7
+  ],
+  "UNION|0000027904-26-000013": [
+   0,
+   1,
+   3,
+   4,
+   5,
+   8
+  ],
+  "UNION|0000027904-26-000020": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "UNION|0000027904-26-000022": [
+   0,
+   2
+  ],
+  "UNION|0000063908-26-000032": [
+   0,
+   1,
+   2
+  ],
+  "UNION|0000092380-26-000044": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "UNION|0000764478-25-000057": [
+   1,
+   2,
+   5,
+   7,
+   8,
+   9
+  ],
+  "UNION|0000898173-26-000006": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "UNION|0000940944-25-000038": [
+   0,
+   2,
+   3
+  ],
+  "UNION|0000940944-26-000005": [
+   2,
+   3,
+   5,
+   6
+  ],
+  "UNION|0000940944-26-000009": [
+   4,
+   5,
+   6,
+   8
+  ],
+  "UNION|0001041061-25-000109": [
+   1,
+   2,
+   3,
+   5,
+   7,
+   8
+  ],
+  "UNION|0001041061-26-000003": [
+   1,
+   3
+  ],
+  "UNION|0001041061-26-000084": [
+   0,
+   1,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "UNION|0001058090-26-000007": [
+   2,
+   3,
+   4,
+   5
+  ],
+  "UNION|0001104659-25-102611": [
+   1,
+   2,
+   5,
+   8
+  ],
+  "UNION|0001104659-25-105631": [
+   2,
+   4
+  ],
+  "UNION|0001104659-25-118458": [
+   1,
+   3,
+   4,
+   5,
+   6,
+   7,
+   9
+  ],
+  "UNION|0001104659-26-017090": [
+   5,
+   7,
+   8,
+   9,
+   10
+  ],
+  "UNION|0001104659-26-027061": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "UNION|0001104659-26-032757": [
+   1,
+   3,
+   4
+  ],
+  "UNION|0001171843-26-001288": [
+   2,
+   4
+  ],
+  "UNION|AAL_2026-04-23T08.30": [
+   0,
+   1,
+   5,
+   7
+  ],
+  "UNION|CMG_2026-02-03T16.30": [
+   0
+  ],
+  "UNION|DAL_2026-04-08T10.00": [
+   1,
+   3,
+   4,
+   5
+  ],
+  "UNION|DRI_2026-03-19T08.30": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "UNION|MCD_2026-02-11T16.30": [
+   1,
+   2
+  ],
+  "UNION|ULTA_2026-03-12T16.30": [
+   0,
+   1,
+   3
+  ],
+  "UNION|YUM_2026-02-04T08.15": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "UNION|bzNews_42014391": [
+   0
+  ],
+  "UNION|bzNews_50877032": [
+   0,
+   1
+  ]
+ },
+ "decisions": {
+  "P1": null,
+  "P2": null
+ },
+ "scores": {
+  "P1": {
+   "route_codes": {
+    "rejected:CONFLICTING_DRIVER_NAME": 44,
+    "abstention:diagnostic": 36,
+    "extras:extras_verdict_missing": 82,
+    "park:F9": 3,
+    "wrong_lane:missing_gold_twin": 19,
+    "abstained_on_gold:READER_ABSTAINED": 7,
+    "park:PERIOD_UNRESOLVED": 19,
+    "rejected:UNIT": 2
+   },
+   "recall": 0.1165,
+   "wrong_lane": 19,
+   "name_spelling_differences": 0,
+   "error_table_by_rule": {
+    "OD-9": 0,
+    "OD-11": 0,
+    "OD-12": 0,
+    "OD-13": 0,
+    "OD-14": 0,
+    "OD-21": 3,
+    "ISS-16": 19,
+    "shapes": 0,
+    "slices": 0,
+    "other": 190
+   },
+   "value_shape_acc": 1.0,
+   "state_acc": 1.0,
+   "other_meaning_acc": 1.0,
+   "would_park": 0.1611,
+   "gold_n": 206,
+   "matched": 24,
+   "ambiguous_rows": [
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000063908-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000063908-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000940944-25-000038",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000940944-25-000038",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000003",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001041061-26-000003",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-25-105631",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-26-032757",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-26-032757",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001171843-26-001288",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "CMG_2026-02-03T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "bzNews_42014391",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "bzNews_50877032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    }
+   ],
+   "ambiguities_unresolved": 0,
+   "verdicts_missing": 0,
+   "confirmed_wrong_accepted": 0,
+   "safety_result": "PASS",
+   "extras": {
+    "duplicate": 0,
+    "key_miss": 0,
+    "unsupported": 0
+   },
+   "duplicate_violations": 0,
+   "open_identity_findings": 0,
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "reliability": {
+    "applicable": true,
+    "rate": 0.0,
+    "upper95": 0.015706806282722512,
+    "over_bar": false,
+    "bar": 0.02,
+    "total": 191,
+    "invalid": 0
+   },
+   "required_grading_unfinished": true,
+   "error_table": {
+    "rejected:CONFLICTING_DRIVER_NAME": 44,
+    "abstention:diagnostic": 36,
+    "extras:extras_verdict_missing": 82,
+    "park:F9": 3,
+    "wrong_lane:missing_gold_twin": 19,
+    "abstained_on_gold:READER_ABSTAINED": 7,
+    "park:PERIOD_UNRESOLVED": 19,
+    "rejected:UNIT": 2
+   },
+   "PASS": false
+  },
+  "P2": {
+   "route_codes": {
+    "rejected:CONFLICTING_DRIVER_NAME": 48,
+    "rejected:UNIT": 3,
+    "abstention:diagnostic": 36,
+    "extras:extras_verdict_missing": 88,
+    "wrong_lane:missing_gold_twin": 19,
+    "abstained_on_gold:READER_ABSTAINED": 6,
+    "park:PERIOD_UNRESOLVED": 13
+   },
+   "recall": 0.1165,
+   "wrong_lane": 19,
+   "name_spelling_differences": 0,
+   "error_table_by_rule": {
+    "OD-9": 0,
+    "OD-11": 0,
+    "OD-12": 0,
+    "OD-13": 0,
+    "OD-14": 0,
+    "OD-21": 0,
+    "ISS-16": 19,
+    "shapes": 0,
+    "slices": 0,
+    "other": 194
+   },
+   "value_shape_acc": 1.0,
+   "state_acc": 1.0,
+   "other_meaning_acc": 1.0,
+   "would_park": 0.1044,
+   "gold_n": 206,
+   "matched": 24,
+   "ambiguous_rows": [
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 9
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000063908-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000940944-25-000038",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000940944-25-000038",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000003",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-25-105631",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-25-105631",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-26-032757",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001171843-26-001288",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "CMG_2026-02-03T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "bzNews_42014391",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "bzNews_50877032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    }
+   ],
+   "ambiguities_unresolved": 0,
+   "verdicts_missing": 0,
+   "confirmed_wrong_accepted": 0,
+   "safety_result": "PASS",
+   "extras": {
+    "duplicate": 0,
+    "key_miss": 0,
+    "unsupported": 0
+   },
+   "duplicate_violations": 0,
+   "open_identity_findings": 0,
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "reliability": {
+    "applicable": true,
+    "rate": 0.0,
+    "upper95": 0.015706806282722512,
+    "over_bar": false,
+    "bar": 0.02,
+    "total": 191,
+    "invalid": 0
+   },
+   "required_grading_unfinished": true,
+   "error_table": {
+    "rejected:CONFLICTING_DRIVER_NAME": 48,
+    "rejected:UNIT": 3,
+    "abstention:diagnostic": 36,
+    "extras:extras_verdict_missing": 88,
+    "wrong_lane:missing_gold_twin": 19,
+    "abstained_on_gold:READER_ABSTAINED": 6,
+    "park:PERIOD_UNRESOLVED": 13
+   },
+   "PASS": false
+  },
+  "UNION": {
+   "route_codes": {
+    "rejected:UNIT": 4,
+    "extras:extras_verdict_missing": 132,
+    "park:F9": 3,
+    "wrong_lane:missing_gold_twin": 19,
+    "park:FUSION_AMBIGUOUS": 6,
+    "park:PERIOD_UNRESOLVED": 28,
+    "rejected:CONFLICTING_DRIVER_NAME": 2,
+    "rejected:VALUE_TEXT": 2,
+    "park:UNFUSED_PAIR": 2
+   },
+   "recall": 0.1602,
+   "wrong_lane": 19,
+   "name_spelling_differences": 0,
+   "error_table_by_rule": {
+    "OD-9": 0,
+    "OD-11": 0,
+    "OD-12": 0,
+    "OD-13": 0,
+    "OD-14": 2,
+    "OD-21": 3,
+    "ISS-16": 19,
+    "shapes": 0,
+    "slices": 0,
+    "other": 174
+   },
+   "value_shape_acc": 1.0,
+   "state_acc": 1.0,
+   "other_meaning_acc": 1.0,
+   "would_park": 0.1848,
+   "gold_n": 206,
+   "matched": 33,
+   "ambiguous_rows": [
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000006201-26-000031",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0000006201-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000027904-26-000013",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000027904-26-000020",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000027904-26-000022",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000063908-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000063908-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000063908-26-000032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000092380-26-000044",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0000764478-25-000057",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 9
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000898173-26-000006",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0000940944-25-000038",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0000940944-25-000038",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000940944-25-000038",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000940944-26-000005",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0000940944-26-000009",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0001041061-25-000109",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0001041061-26-000003",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001041061-26-000003",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0001041061-26-000084",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001058090-26-000007",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-25-102611",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0001104659-25-105631",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-25-105631",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0001104659-25-118458",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 9
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 8
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 9
+    },
+    {
+     "sid": "0001104659-26-017090",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 10
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "0001104659-26-027061",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "0001104659-26-032757",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "0001104659-26-032757",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "0001104659-26-032757",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "0001171843-26-001288",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "0001171843-26-001288",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "AAL_2026-04-23T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "CMG_2026-02-03T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "DAL_2026-04-08T10.00",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "DRI_2026-03-19T08.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "MCD_2026-02-11T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "ULTA_2026-03-12T16.30",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 2
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 3
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 4
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 5
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 6
+    },
+    {
+     "sid": "YUM_2026-02-04T08.15",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 7
+    },
+    {
+     "sid": "bzNews_42014391",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "bzNews_50877032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 0
+    },
+    {
+     "sid": "bzNews_50877032",
+     "reason": "extras_verdict_missing",
+     "produced_idx": 1
+    }
+   ],
+   "ambiguities_unresolved": 0,
+   "verdicts_missing": 0,
+   "confirmed_wrong_accepted": 0,
+   "safety_result": "PASS",
+   "extras": {
+    "duplicate": 0,
+    "key_miss": 0,
+    "unsupported": 0
+   },
+   "duplicate_violations": 0,
+   "open_identity_findings": 0,
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "reliability": {
+    "applicable": false,
+    "rate": null,
+    "upper95": null,
+    "over_bar": null,
+    "why": "no responses observed \u2014 Step 3 makes no model call"
+   },
+   "required_grading_unfinished": true,
+   "error_table": {
+    "rejected:UNIT": 4,
+    "extras:extras_verdict_missing": 132,
+    "park:F9": 3,
+    "wrong_lane:missing_gold_twin": 19,
+    "park:FUSION_AMBIGUOUS": 6,
+    "park:PERIOD_UNRESOLVED": 28,
+    "rejected:CONFLICTING_DRIVER_NAME": 2,
+    "rejected:VALUE_TEXT": 2,
+    "park:UNFUSED_PAIR": 2
+   },
+   "PASS": false
+  }
+ },
+ "route_calls": 198,
+ "original": {
+  "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+  "run_files": 799
+ }
+}

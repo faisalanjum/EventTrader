@@ -1,0 +1,69 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000006201-26-000031",
+ "ordinal_one_based": 1,
+ "ordinal_receipt": 0,
+ "run_id": "wf_b5890dc2-781",
+ "agent_id": "a9dce3dc893074b40",
+ "raw_sha256": "625140d6eb637e029b885f356f3cb68a12ffb8c7ce1e8fded272e36b2471030b",
+ "prompt_sha256": "04b30974b028f330a4573b6790d688e2f9932e1176135e96e75cd622e83bfecc",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 9,
+  "additions": 11,
+  "exclusions_considered": 9,
+  "open_issues": 4
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': 'No ambiguous-menu (T1-05/FS-15 dual-kind) instance was found in this event.', 'why': 'Every geography and product slice actually exercised in the text (domestic, Pacific, Atlantic, mainline,",
+  "{'what': 'No corrections/amendments (OD-14) instance was found in this event.', 'why': \"The only adjustment-like language (the footnote describing components of the 2025 mainline operating special ite",
+  "{'what': 'No expectation-routing or favourable/unfavourable-direction (surprise-vs-consensus) instance was found in this event.', 'why': 'The release never mentions consensus, analyst estimates, or St",
+  "{'what': 'No high-confidence lawful_abstention_control candidate was identified in this event.', 'why': \"The one candidate considered (an 'nm' percent-change flag on a stated expense line) did not mee"
+ ],
+ "locator": {
+  "additions": {
+   "located": 11,
+   "not_located": [],
+   "total_with_quote": 11
+  },
+  "exclusions_considered": {
+   "located": 8,
+   "not_located": [
+    {
+     "index": 3,
+     "problem": "quote does not occur in the named part (fabricated locator)",
+     "quote_head": "the company finished the quarter with $10.8 billion in liqui"
+    }
+   ],
+   "total_with_quote": 9
+  }
+ },
+ "receipt_attempts": 1,
+ "receipt_missing": 35,
+ "receipt_other_problems": [
+  "the run accepted 1 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 0,
+  "attempt": 1,
+  "source_id": "0000006201-26-000031",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b5890dc2-781.json",
+  "agent_id": "a9dce3dc893074b40",
+  "raw_name": "0000006201-26-000031.attempt1.complete.raw.json"
+ }
+}

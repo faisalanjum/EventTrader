@@ -1,0 +1,135 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "lifo_impact",
+              "driver_state": "increased",
+              "level_low": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "level_unit": "m_usd",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "measurement_raw_spans": ["non-cash"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "vendor_purchase_concentration",
+              "driver_state": "reported",
+              "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_high": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["product:failure", "product:maintenanceitems"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "increased",
+              "change_value": {"value": 329.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["geography:us", "channel:commercial"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_low": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["geography:us", "channel:commercial"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic litigation/regulatory-proceedings boilerplate with no specific driver, amount, or development stated — fails the Rule 1.2 gate as boilerplate risk disclosure."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six items describe unrelated, independent facts — a non-cash LIFO gross-margin impact, single-vendor purchase concentration, product-category sales mix, the dollar amount of commercial-sales growth, the commercial channel's percentage share of domestic sales, and generic litigation boilerplate — each with distinct drivers, values, and (for the last) no qualifying fact at all, so they cannot be one underlying fact."
+}
+```

@@ -1,0 +1,4 @@
+WARNING: build_guidance_period_id: no fields matched, falling through to gp_UNDEF
+WARNING: build_guidance_period_id: no fields matched, falling through to gp_UNDEF
+WARNING: build_guidance_period_id: no fields matched, falling through to gp_UNDEF
+WARNING: build_guidance_period_id: no fields matched, falling through to gp_UNDEF

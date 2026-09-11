@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sga_expenses",
+        "driver_state": "increased",
+        "level_unit": "percent",
+        "level_shape_hint": "point",
+        "level_low": {"value": 26.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 26.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_shape_hint": "point",
+        "comparison_low": {"value": 24.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_high": {"value": 24.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "period_end_date": "2026-01-31"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

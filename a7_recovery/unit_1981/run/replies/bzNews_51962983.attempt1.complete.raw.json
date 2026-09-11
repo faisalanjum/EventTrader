@@ -1,0 +1,35 @@
+```json
+{
+  "source_id": "bzNews_51962983",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_51962983#P000",
+      "decision": "exclude",
+      "why": "This proposal names the sole disclosure in this event (the full title, 'Best Buy Appoints Jason Bonfig As CEO, Effective At End Of Q3') and has already been tested. It is excluded from this fresh sample for that reason only; this is not a claim that the underlying fact is false, mislocated, or misclassified.",
+      "row": null
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Best Buy Appoints Jason Bonfig As CEO",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "This is not a severable fact from the full title: the appointee/role and the effective-timing clause form one CEO-succession disclosure that cannot lawfully be split apart (no distinct series/period/scope/measurement/state difference between the two halves). The whole disclosure is already named, in full, by the tested proposal's quote and label, so no fresh sub-target remains here."
+    },
+    {
+      "quote": "Effective At End Of Q3",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "The timing clause is a modifier of the single appointment fact above, not an independent fact (no separate series/period/scope/measurement/state of its own). Splitting it out would be the same fact tested again under a shifted boundary, which the task rules forbid."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event's entire supplied text is one short title sentence, and that sentence's full span is already the exact target of the one supplied (already-tested) proposal. After excluding that proposal per instructions, no genuinely fresh, distinct-fact target remains anywhere in this event's text for the 'additions' sample.",
+      "why": "The task requires selecting only targets no supplied proposal already names and forbids padding with re-labelled or re-bounded versions of an already-tested fact, and also forbids adding a row merely because another lawful fact exists. With only a single sentence of source text whose only extractable fact is already claimed by the tested proposal, this event lawfully contributes zero fresh rows to the ~150-item cross-event total; reporting that shortage here rather than inventing or re-slicing the same fact is the lawful result required by the representative-sampling and duplicate-fact rules."
+    }
+  ],
+  "blocked": null
+}
+```

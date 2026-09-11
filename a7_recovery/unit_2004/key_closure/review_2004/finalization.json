@@ -1,0 +1,497 @@
+{
+ "door": "a4_hard_review_double_blind",
+ "attempt": 1,
+ "run_id": "review_2004",
+ "receipt_sha256": "cd428741f21588529dbe0dc6893daaf1fbfc30cc4c1e9eff761674188b3e64ba",
+ "manifest_sha256": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+ "derived_from": {
+  "key_owner_sha256": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+  "hard_review_owner_sha256": "7c5ac0ecac07b3f85f25cae9982f7921ee313405215bea42342a88def861c09e",
+  "final_owner_sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "source_key_owner_sha256": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "closure_owner_sha256": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "frozen_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "source_key_manifest_sha256": "2385728c6324764d66027bff643edcb144cadab1d1af5665d6694d06f5ac1782",
+  "contract_package_sha256": "62a5c49ae71f323eff275e98ca60efaae18ca16ca6c15f447c10c9d5d8976154",
+  "initial_collection": {
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect",
+   "receipt_sha256": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+   "finalization_sha256": "ad0f11be0117e6d6c892596e6f5b4a64f7577eea1541163d46f857fb49a43add",
+   "raw_tree": {
+    "files": 66,
+    "sha256": "2ca71af94945827108d1f4636718fc391342ec8a0f87e3e3e701ad2e7ebc85c9"
+   }
+  },
+  "affected_events": [
+   "0000006201-26-000031",
+   "0000006201-26-000032",
+   "0000027904-26-000013",
+   "0000027904-26-000020",
+   "0000027904-26-000022",
+   "0000063908-26-000032",
+   "0000092380-26-000044",
+   "0000764478-25-000057",
+   "0000898173-26-000006",
+   "0000940944-25-000038",
+   "0000940944-26-000005",
+   "0000940944-26-000009",
+   "0001041061-25-000109",
+   "0001041061-26-000003",
+   "0001041061-26-000084",
+   "0001058090-26-000007",
+   "0001104659-25-102611",
+   "0001104659-25-105631",
+   "0001104659-25-118458",
+   "0001104659-26-017090",
+   "0001104659-26-027061",
+   "0001104659-26-032757",
+   "0001171843-26-001288",
+   "AAL_2026-04-23T08.30",
+   "BBY_2026-03-03T08.00",
+   "CMG_2026-02-03T16.30",
+   "DAL_2026-04-08T10.00",
+   "DRI_2026-03-19T08.30",
+   "MCD_2026-02-11T16.30",
+   "ULTA_2026-03-12T16.30",
+   "YUM_2026-02-04T08.15",
+   "bzNews_42014391",
+   "bzNews_50877032"
+  ]
+ },
+ "harvested_raw": [
+  "wf_e4b6aa7c-e2f.000.raw.json",
+  "wf_aeb9c825-47a.000.raw.json",
+  "wf_5c9ab664-40a.000.raw.json",
+  "wf_e65f5852-897.000.raw.json",
+  "wf_f539af43-2ad.000.raw.json",
+  "wf_89b11233-831.000.raw.json",
+  "wf_f98a8652-660.000.raw.json",
+  "wf_a1631b67-875.000.raw.json",
+  "wf_f97dd4c0-914.000.raw.json",
+  "wf_84a85b8e-9ae.000.raw.json",
+  "wf_fba4e734-7d3.000.raw.json",
+  "wf_2cf2ee9c-62e.000.raw.json",
+  "wf_b99a4091-3b2.000.raw.json",
+  "wf_54e48275-999.000.raw.json",
+  "wf_068f0238-876.000.raw.json",
+  "wf_0a523108-1e6.000.raw.json",
+  "wf_2e73a568-384.000.raw.json",
+  "wf_c8827f25-163.000.raw.json",
+  "wf_e8919d20-406.000.raw.json",
+  "wf_f7ed4fc9-40e.000.raw.json",
+  "wf_5a97f47b-3d5.000.raw.json",
+  "wf_a2c82924-5bb.000.raw.json",
+  "wf_7830155d-156.000.raw.json",
+  "wf_efb65e47-cdf.000.raw.json",
+  "wf_75237f86-502.000.raw.json",
+  "wf_1d7fc971-f54.000.raw.json",
+  "wf_a7e24526-d22.000.raw.json",
+  "wf_8444710e-91e.000.raw.json",
+  "wf_95e3b375-113.000.raw.json",
+  "wf_f35dbab1-355.000.raw.json",
+  "wf_db826b96-cdc.000.raw.json",
+  "wf_eeac249f-2b9.000.raw.json",
+  "wf_3256a117-9d6.000.raw.json",
+  "wf_02f39e72-858.000.raw.json",
+  "wf_1943ed3a-f57.000.raw.json",
+  "wf_613ea2c9-153.000.raw.json",
+  "wf_4cdc96df-b2f.000.raw.json",
+  "wf_0dcd4758-f0c.000.raw.json",
+  "wf_7fefb259-ec5.000.raw.json",
+  "wf_4657025c-07d.000.raw.json",
+  "wf_d14ae6cc-e0a.000.raw.json",
+  "wf_c512f2cf-9be.000.raw.json",
+  "wf_7be4ce58-325.000.raw.json",
+  "wf_e19736c0-aa1.000.raw.json",
+  "wf_28926caf-760.000.raw.json",
+  "wf_fb25b50e-c1f.000.raw.json",
+  "wf_828a8d59-726.000.raw.json",
+  "wf_e051d037-16d.000.raw.json",
+  "wf_3576b999-282.000.raw.json",
+  "wf_82aa05bd-b01.000.raw.json",
+  "wf_ae6a921c-d7e.000.raw.json",
+  "wf_0b80d9b0-75f.000.raw.json",
+  "wf_9bd21f87-7fb.000.raw.json",
+  "wf_8d7c3e44-aa9.000.raw.json",
+  "wf_df0ff6af-a52.000.raw.json",
+  "wf_737b422d-2fc.000.raw.json",
+  "wf_922aa7df-55b.000.raw.json",
+  "wf_351c06b1-cb8.000.raw.json",
+  "wf_e2ea1a0e-a05.000.raw.json",
+  "wf_fdee357d-819.000.raw.json",
+  "wf_c717ecce-487.000.raw.json",
+  "wf_c4d8a05b-d2c.000.raw.json",
+  "wf_d052e0b9-7bb.000.raw.json",
+  "wf_de2ef3a3-f0c.000.raw.json",
+  "wf_d0eb9d92-3cf.000.raw.json",
+  "wf_097af5b7-335.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "sokc-000/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-000/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-001/b1",
+   "invalid_response",
+   "0000006201-26-000032#007: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-001/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-002/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-002/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-003/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-003/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-004/b1",
+   "invalid_response",
+   "0000027904-26-000022#028: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-004/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-005/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-005/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-006/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-006/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-007/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-007/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-008/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-008/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-009/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-009/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-010/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-010/b2",
+   "invalid_response",
+   "0000940944-26-000005#060: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+  ],
+  [
+   "sokc-011/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-011/b2",
+   "invalid_response",
+   "0000940944-26-000009#066: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-012/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-012/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-013/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-013/b2",
+   "invalid_response",
+   "0001041061-26-000003#077: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['continuity_hints', 'source_id'])"
+  ],
+  [
+   "sokc-014/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-014/b2",
+   "invalid_response",
+   "0001041061-26-000084#082: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-015/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-015/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-016/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-016/b2",
+   "invalid_response",
+   "0001104659-25-102611#094: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-017/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-017/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-018/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-018/b2",
+   "invalid_response",
+   "0001104659-25-118458#105: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-019/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-019/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-020/b1",
+   "invalid_response",
+   "0001104659-26-027061#118: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-020/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-021/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-021/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-022/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-022/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-023/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-023/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-024/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-024/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-025/b1",
+   "invalid_response",
+   "CMG_2026-02-03T16.30#150: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-025/b2",
+   "invalid_response",
+   "CMG_2026-02-03T16.30#150: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+  ],
+  [
+   "sokc-026/b1",
+   "invalid_response",
+   "DAL_2026-04-08T10.00#157: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra ['fact_type', 'item', 'per_x'], missing ['abstentions', 'continuity_hints', 'facts', 'source_id'])"
+  ],
+  [
+   "sokc-026/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-027/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-027/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-028/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-028/b2",
+   "invalid_response",
+   "MCD_2026-02-11T16.30#169: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-029/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-029/b2",
+   "invalid_response",
+   "ULTA_2026-03-12T16.30#175: the reply: keys must be EXACTLY ['source_id', 'facts', 'abstentions', 'continuity_hints'] (extra [], missing ['source_id'])"
+  ],
+  [
+   "sokc-030/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-030/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-031/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-031/b2",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-032/b1",
+   "valid",
+   ""
+  ],
+  [
+   "sokc-032/b2",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 66,
+  "valid": 52,
+  "invalid_response": 14,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "budget": {
+  "ledger_before": 415,
+  "this_attempt": 66,
+  "spent_so_far": 66,
+  "ledger_after": 481,
+  "frozen_primaries": 66,
+  "worst_case_total": 132,
+  "global_ceiling": 4382,
+  "within_ceiling": true
+ },
+ "retry": [
+  "sokc-001/b1",
+  "sokc-004/b1",
+  "sokc-010/b2",
+  "sokc-011/b2",
+  "sokc-013/b2",
+  "sokc-014/b2",
+  "sokc-016/b2",
+  "sokc-018/b2",
+  "sokc-020/b1",
+  "sokc-025/b1",
+  "sokc-025/b2",
+  "sokc-026/b1",
+  "sokc-028/b2",
+  "sokc-029/b2"
+ ]
+}

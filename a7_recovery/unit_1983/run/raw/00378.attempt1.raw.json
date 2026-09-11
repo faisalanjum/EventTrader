@@ -1,0 +1,16 @@
+```json
+{
+  "source_id": "bzNews_42014391",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "customer_traffic",
+        "driver_state": "decreased"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

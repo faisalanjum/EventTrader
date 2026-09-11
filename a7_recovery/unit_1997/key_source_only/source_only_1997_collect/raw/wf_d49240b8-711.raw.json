@@ -1,0 +1,182 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: the quote states a directional, source-stated level change in gross profit as a percentage of net sales with an explicit prior-year comparison, so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase",
+              "driver_state": "occurred",
+              "level_low": {"value": 890.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 890.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["excluding excise taxes"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: a completed, dated repurchase transaction with a stated cost is a discrete action that happened, so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: it is the company's own forward outlook for a named metric over a stated target year, so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "company_operated_store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "fiscal_year": 2025,
+              "slice_parts": ["geography:international"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: the located International column carries a re-readable standing level (86 stores owned at period end), so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic forward-looking risk-factor boilerplate: it lists macroeconomic conditions, inflation, interest rates and cost pressures as things that could affect future results, with no stated state, direction, size, action or outlook for any driver, so the gate drops it as a bare topic mention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and it correctly yields none: the sentence is an item in the safe-harbour risk list with no driver state, change or action, so the proposal and my outcome agree."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "gross profit decreased to 38.1% compared to 38.2%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote's causal clauses (unfavorable channel mix, deleverage of store fixed expenses, lower inventory shrink, supply chain efficiencies) are mechanism attributions on this same gross-margin fact and were not split into separate driver facts, since no located row was shown for them."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "repurchased 2.0 million shares of its common stock at a cost of $890.5 million",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The row states two co-stated magnitudes in different units (2.0 million shares and $890.5 million of cost) and only one can occupy the single level slot, so the dollar cost is stored and the share count remains in the quote."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "reference_name": "Comparable sales growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The target period and the company attribution come from the table's own 'Fiscal 2026 Outlook / the Company anticipates' framing rather than the located line itself, and with no movement wording anywhere the state stays unknown rather than introduced."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole", "ambiguous_menus"],
+      "reference_name": "International (Company-operated)",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'(Company-operated)' is plausibly a channel or entity_ownership slice part as well as a population qualifier, so it was kept in the name per the portions rule while only 'International' was coined off-menu as geography, and the co-located United States column (1,505) was left to its own located row."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [],
+  "open_issues": [
+    {
+      "what": "Row 2: which of the two co-stated magnitudes belongs in the single level slot (2.0 million shares versus $890.5 million of cost).",
+      "why": "The rules give no selection rule for two different-unit magnitudes on one action fact, so whichever is not chosen survives only inside the quote and is unrecoverable from the structured slots."
+    },
+    {
+      "what": "Row 4: whether '(Company-operated)' is a population qualifier inside the driver name or a channel / entity_ownership slice part.",
+      "why": "Both encodings are defensible under the portions rule and the slice-kind ladder, and they produce different fact identities, so the choice cannot be settled from this event's evidence alone."
+    },
+    {
+      "what": "Row 1: whether the mechanism clauses inside the quote (channel mix, store fixed-expense deleverage, inventory shrink, supply-chain efficiencies) are their own located items.",
+      "why": "They are real qualitative driver statements that the gate would admit, but no row was located on them, so emitting them here risks duplicating items that belong to rows not shown to me."
+    }
+  ]
+}
+```

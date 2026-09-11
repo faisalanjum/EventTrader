@@ -1,0 +1,18 @@
+{
+ "schema": "a4-source-only-review-findings/1",
+ "what_this_is": "Hash-bound REVIEW QUESTIONS about a source-only key reply, recorded as data. Each one names the exact bytes it was read from. Nothing here is a semantic correction, a grade, or an answer: a finding says only that a reviewer should look, and the independent blind readers never see this file.",
+ "who_may_add_one": "Codex or Core, from a source-key prompt and its own raw reply only. Never from an evaluated draft, a grade, an answer-derived key or an output-informed note.",
+ "how_the_owner_uses_it": "a4_source_closure.findings() re-measures every recorded hash against the run on disk and REFUSES a finding whose bytes moved. A finding's event joins the same independent review route as any event whose own reply left something unresolved. There is no source-id rule, no word rule and no classification of any note in the code.",
+ "findings": [
+  {
+   "finding_id": "sof-000",
+   "source_id": "bzNews_42014391",
+   "raised_by": "Codex SEQ 2001 item 4",
+   "raw_sha256": "5ab4256c936a7d18f831f029803cad08a3ed8844fe86afba72034d8459fa3a72",
+   "script_sha256": "3b1cc0114f37cbae098fcdc2ab9f92d3196b9a410e702dae1b9b1e35775766f8",
+   "prompt_sha256": "2375c597eaf268e90cb9863c4e95f940673ef1d6b0fb49e7dfb7f2c6d631c3e0",
+   "question": "The row's named target is `spooked diners away` inside the quote `a severe E. Coli outbreak spooked diners away`. The reply emits only e_coli_outbreak / action_event and returns open_issues []. An empty open-issues list therefore does not settle whether the NAMED TARGET or an adjacent cause was interpreted, so this event owes the same independent reading as any other.",
+   "not_a_correction": "No meaning is decided here and no fact is added, removed or relabelled. The reply's own ambiguity note is preserved as it stands and is not classified by this file or by any code."
+  }
+ ]
+}

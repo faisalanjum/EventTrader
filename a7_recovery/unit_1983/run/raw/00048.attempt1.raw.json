@@ -1,0 +1,42 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "unknown",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 1,
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31",
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "beat",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "favorable",
+          "basis": "metric_meaning",
+          "evidence": "Revenue coming in above the company's own initial outlook is a straightforward positive result for a growth metric like revenue; higher revenue has no mainstream counter-story making it unfavorable.",
+          "sentence": "Total revenue of $14.2 billion was a March quarter record and nearly 10 percent higher than last year, growing several points above our initial outlook, on broad demand strength across corporate and leisure"
+        },
+        "fiscal_year": 2026,
+        "fiscal_quarter": 1,
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31",
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

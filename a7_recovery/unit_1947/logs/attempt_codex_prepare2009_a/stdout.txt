@@ -1,0 +1,32 @@
+{
+ "model_calls": 0,
+ "passed": 23,
+ "checks": [
+  "historical native proof retains62 valid and4 invalid",
+  "independent old closeout calculation",
+  "only the four independently derived missing slots",
+  "495 earlier calls counted once",
+  "same source/members/payload: sokc-013",
+  "changed instruction only for the unsatisfied slot: sokc-013",
+  "same source/members/payload: sokc-020",
+  "changed instruction only for the unsatisfied slot: sokc-020",
+  "same source/members/payload: sokc-026",
+  "changed instruction only for the unsatisfied slot: sokc-026",
+  "same source/members/payload: sokc-029",
+  "changed instruction only for the unsatisfied slot: sokc-029",
+  "unchanged item instructions",
+  "four primary calls with only the existing single retry",
+  "no previous answer in request: sokc-013/b2",
+  "no previous answer in request: sokc-020/b1",
+  "no previous answer in request: sokc-026/b1",
+  "no previous answer in request: sokc-029/b2",
+  "actual package and prepare path passes",
+  "actual receipt schedules exactly four",
+  "four emitted callable scripts",
+  "unfinalized new reviews refuse before key preparation",
+  "all temporary owners restored, also after refusal"
+ ],
+ "package": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_prepare2009_a/package",
+ "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_prepare2009_a/run",
+ "manifest_sha256": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+}

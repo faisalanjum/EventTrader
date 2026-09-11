@@ -1,0 +1,93 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_store_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "slice_parts": ["geography:us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "lifo_charge",
+              "driver_state": "occurred",
+              "level_low": {"value": 138, "scale_multiplier": 1, "unit_scale_evidence": "basis point"},
+              "level_high": {"value": 138, "scale_multiplier": 1, "unit_scale_evidence": "basis point"},
+              "level_shape_hint": "point",
+              "level_unit": "basis_points",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "measurement_raw_spans": ["non-cash"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "store_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 360, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001171843-26-001288",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic risk-factor mention inside the safe-harbor forward-looking-statements boilerplate list (weather as one of many undifferentiated risk topics), not a real non-boilerplate statement about a driver's state, change, surprise, guidance, or action, so it fails Rule 1's fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The four located quotes describe four unrelated matters — a domestic same-store-sales growth rate, a one-off non-cash LIFO gross-margin charge, a full-fiscal-year store-opening target, and a generic weather risk-factor mention — each with its own subject, value, and role, so they cannot be one underlying fact."
+}
+```

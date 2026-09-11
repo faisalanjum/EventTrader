@@ -1,0 +1,38 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sga_expenses",
+        "driver_state": "unknown",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "sga_expenses",
+        "driver_state": "missed",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "consensus",
+        "has_favorability_wording": false,
+        "polarity_proof": {
+          "polarity": "unfavorable",
+          "basis": "source_framing",
+          "evidence": "The clause is introduced by 'however' contrasting the prior positive cost-management statement, and the overage is attributed to adverse 'pressure from heightened inflation' in health care and casualty claim costs \u2014 a cost line coming in above expectations is framed as an unwelcome pressure, not a favorable outcome.",
+          "sentence": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs."
+        }
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

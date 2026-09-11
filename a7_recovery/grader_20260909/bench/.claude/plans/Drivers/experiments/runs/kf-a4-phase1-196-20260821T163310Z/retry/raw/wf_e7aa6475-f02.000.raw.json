@@ -1,0 +1,33 @@
+```json
+{
+  "packet_id": "0001104659-25-118458#107",
+  "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote states a loan-agreement covenant term — a contractual minimum fixed charge coverage ratio the Company must maintain only conditionally, when availability under the facility falls below a specified threshold. It is not a report of the Company's own actual/current fixed charge coverage ratio, not a stated change, not a surprise versus an expectation, not the Company's own forward guidance, and not a discrete action that occurred; it is a structural/contractual provision of the Loan Agreement (like the interest-rate margin or unused-line-fee terms elsewhere in the same filing), so it fails Rule 1's fact gate rather than yielding a driver-state fact."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-25-118458#107/L1",
+      "exact_match": false,
+      "why": "L1 emits a metric fact (fixed_charge_coverage_ratio, state reported, level_low 1.0, floor, unit x) but this mischaracterizes a covenant compliance threshold — a conditional contractual requirement triggered only when availability falls below a threshold — as if it were the Company's own observed/reported ratio value, which the source never states."
+    },
+    {
+      "lane_id": "0001104659-25-118458#107/L2",
+      "exact_match": true,
+      "why": "L2 abstains for the same reason: the item is a loan-agreement covenant requirement, not a real driver state/change/surprise/guidance/action, so it fails Rule 1's gate — matching the settled abstention."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether a debt-covenant minimum ratio requirement (conditional on a borrowing-availability trigger) can ever qualify as a 'metric' under Rule 2's broad 'any standing variable readable again over time... rate... ratio' language, versus being excluded as a structural/contractual loan-agreement provision (like an interest-rate margin range or unused-line fee) that never describes an actual company-observed state.",
+      "why": "The literal metric definition is broad enough to admit a covenant ratio number, but the value 1.0 here is a required floor the Company must not breach, not any reported/achieved level of the Company's actual fixed charge coverage ratio, and the surrounding credit-facility paragraph treats similar conditional terms (margin ranges, fee ranges) as contract mechanics rather than drivers — the boundary between 'a re-readable rate' and 'boilerplate contract mechanics' is not explicitly drawn by the rules."
+    }
+  ]
+}
+```

@@ -1,0 +1,142 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "reported",
+              "level_low": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration",
+              "measurement_raw_spans": ["adjusted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quoted $24.6 million pre-tax net expense bundles several independent causes (asset impairment/lease termination, FRC acquisition-related items, gift card breakage, and gift card inventory adjustment) into one aggregate figure with no per-cause dollar value stated inside this quote, so no single driver name can be lawfully assigned and the causes cannot be split without values that lie outside the located quote."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "revenue_surprise",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:northitalia"],
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_restaurant_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:northitalia"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "slice_parts": ["segment:flowerchild"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0001104659-26-017090",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic Safe-Harbor forward-looking-statement risk-factor boilerplate listing a hypothetical future adverse condition, not a stated fact about an actual, current driver state, change, guidance, or action, so it fails the boilerplate exclusion gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six items describe entirely distinct, unrelated pieces of disclosure — adjusted net income, an unrelated aggregate pre-tax charge, an in-line revenue-versus-expected-range surprise, North Italia's comparable sales trend, Flower Child unit-opening guidance, and generic weather/disaster risk boilerplate — each with its own driver, period, and evidentiary quote, so they cannot be one underlying fact."
+}
+```

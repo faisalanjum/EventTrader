@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "core_operating_profit",
+        "driver_state": "unknown",
+        "change_value": {
+          "value": -15,
+          "scale_multiplier": 1,
+          "unit_scale_evidence": "%"
+        },
+        "change_unit": "percent_yoy",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "slice_parts": ["segment:pizzahutglobaldivision"],
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,113 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase",
+              "driver_state": "occurred",
+              "level_low": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales_guidance",
+              "driver_state": "introduced",
+              "level_low": {"value": 2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "company_operated_store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2025,
+              "time_type": "instant",
+              "slice_parts": ["geography:international"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic forward-looking-statement risk-factor boilerplate listing macroeconomic conditions as a hypothetical future risk, not a stated fact about the company's own driver state, change, guidance, or action, so it fails Rule 1's boilerplate gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five items ground five unrelated concepts \u2014 Q4 gross-margin decline vs. prior year, a fiscal-2025 share repurchase, FY2026 comparable-sales guidance, the international company-operated store count, and generic macroeconomic risk-factor boilerplate \u2014 each tied to a distinct quote and topic, so they are separate facts (one is not even a fact at all) rather than one underlying fact."
+}
+```

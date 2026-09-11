@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2006/mutate_reuse_warm_2006.py", line 4, in <module>
+    runpy.run_path(str(Path(__file__).with_name('check_reuse_warm_2006.py')),
+  File "<frozen runpy>", line 291, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2006/check_reuse_warm_2006.py", line 56, in <module>
+    raise AssertionError('warm drift was accepted: ' + attr)
+AssertionError: warm drift was accepted: _sha

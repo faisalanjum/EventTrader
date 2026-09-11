@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "store_count",
+        "driver_state": "reported",
+        "level_low": {"value": 80, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "floor",
+        "level_unit": "count",
+        "fiscal_year": 2025,
+        "time_type": "instant",
+        "slice_parts": ["unknown:us-gaap:BusinessAcquisitionAxis__spacenk"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

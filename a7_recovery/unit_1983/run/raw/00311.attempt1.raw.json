@@ -1,0 +1,21 @@
+```json
+{
+ "source_id": "CMG_2026-02-03T16.30",
+ "facts": [
+  {
+   "fact_type": "metric",
+   "item": {
+    "driver_name": "legal_contingencies",
+    "driver_state": "decreased",
+    "change_value": {"value": -4, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+    "change_unit": "m_usd",
+    "fiscal_quarter": 4,
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}
+```

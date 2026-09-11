@@ -1,0 +1,353 @@
+{
+ "attempts": [
+  {
+   "agent_id": "a9dce3dc893074b40",
+   "attempt": 1,
+   "ordinal": 0,
+   "raw_name": "0000006201-26-000031.attempt1.complete.raw.json",
+   "source_id": "0000006201-26-000031",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b5890dc2-781.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a4efd56b309ce3d39",
+   "attempt": 1,
+   "ordinal": 1,
+   "raw_name": "0000006201-26-000032.attempt1.complete.raw.json",
+   "source_id": "0000006201-26-000032",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_2f836a4b-d29.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "ab337b287280e43e1",
+   "attempt": 2,
+   "ordinal": 1,
+   "raw_name": "0000006201-26-000032.attempt2.complete.raw.json",
+   "source_id": "0000006201-26-000032",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_0698a0bc-18a.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a4f18fc3aac4318c6",
+   "attempt": 1,
+   "ordinal": 2,
+   "raw_name": "0000027904-26-000013.attempt1.complete.raw.json",
+   "source_id": "0000027904-26-000013",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b2470e36-b84.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a95a88913a8e06bab",
+   "attempt": 1,
+   "ordinal": 3,
+   "raw_name": "0000027904-26-000020.attempt1.complete.raw.json",
+   "source_id": "0000027904-26-000020",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_f0e49a2d-fde.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a1bf2e46e502ac4de",
+   "attempt": 1,
+   "ordinal": 4,
+   "raw_name": "0000027904-26-000022.attempt1.complete.raw.json",
+   "source_id": "0000027904-26-000022",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_08b695b7-540.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a96e22398c62afbf7",
+   "attempt": 1,
+   "ordinal": 5,
+   "raw_name": "0000063908-26-000032.attempt1.complete.raw.json",
+   "source_id": "0000063908-26-000032",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ac037b30-37c.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "ac9ed8b0172a65f86",
+   "attempt": 1,
+   "ordinal": 6,
+   "raw_name": "0000092380-26-000044.attempt1.complete.raw.json",
+   "source_id": "0000092380-26-000044",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8f5a3c40-211.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a98fc156aac894027",
+   "attempt": 1,
+   "ordinal": 7,
+   "raw_name": "0000764478-25-000057.attempt1.complete.raw.json",
+   "source_id": "0000764478-25-000057",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b3dde60c-672.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "ae0e845d8e44fb1e4",
+   "attempt": 1,
+   "ordinal": 8,
+   "raw_name": "0000764478-26-000005.attempt1.complete.raw.json",
+   "source_id": "0000764478-26-000005",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e3c84b25-48a.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "adfc1799b717cf907",
+   "attempt": 1,
+   "ordinal": 9,
+   "raw_name": "0000898173-26-000006.attempt1.complete.raw.json",
+   "source_id": "0000898173-26-000006",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_1682e326-a46.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a88da7870d1b3e3de",
+   "attempt": 1,
+   "ordinal": 10,
+   "raw_name": "0000940944-25-000038.attempt1.complete.raw.json",
+   "source_id": "0000940944-25-000038",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_70fa3b6d-4bf.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a03026fd83ec8a013",
+   "attempt": 1,
+   "ordinal": 11,
+   "raw_name": "0000940944-26-000005.attempt1.complete.raw.json",
+   "source_id": "0000940944-26-000005",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_df06b2e0-f6c.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "aa6685e3a25d6ef36",
+   "attempt": 1,
+   "ordinal": 12,
+   "raw_name": "0000940944-26-000009.attempt1.complete.raw.json",
+   "source_id": "0000940944-26-000009",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_0477ad8d-33b.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "aab4978f75defc267",
+   "attempt": 1,
+   "ordinal": 13,
+   "raw_name": "0001041061-25-000109.attempt1.complete.raw.json",
+   "source_id": "0001041061-25-000109",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c8c0617e-4a3.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "af9964cf3b43e1143",
+   "attempt": 1,
+   "ordinal": 14,
+   "raw_name": "0001041061-26-000003.attempt1.complete.raw.json",
+   "source_id": "0001041061-26-000003",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_de9d7068-8a1.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "aabf9494b5bf4bb3c",
+   "attempt": 1,
+   "ordinal": 15,
+   "raw_name": "0001041061-26-000084.attempt1.complete.raw.json",
+   "source_id": "0001041061-26-000084",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ad8a3b9d-903.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a559072eaebdd3807",
+   "attempt": 1,
+   "ordinal": 16,
+   "raw_name": "0001058090-26-000007.attempt1.complete.raw.json",
+   "source_id": "0001058090-26-000007",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_5b8b0184-2f7.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a09d60436444e26e8",
+   "attempt": 1,
+   "ordinal": 17,
+   "raw_name": "0001104659-25-102611.attempt1.complete.raw.json",
+   "source_id": "0001104659-25-102611",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_9f8e14e3-314.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a706443b81e626942",
+   "attempt": 1,
+   "ordinal": 18,
+   "raw_name": "0001104659-25-105631.attempt1.complete.raw.json",
+   "source_id": "0001104659-25-105631",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8e54d788-ca8.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "adccdefa3f0937d26",
+   "attempt": 1,
+   "ordinal": 19,
+   "raw_name": "0001104659-25-118458.attempt1.complete.raw.json",
+   "source_id": "0001104659-25-118458",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c681ef8d-66e.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a7e32a64a54e80b3c",
+   "attempt": 1,
+   "ordinal": 20,
+   "raw_name": "0001104659-26-017090.attempt1.complete.raw.json",
+   "source_id": "0001104659-26-017090",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_08f6e278-e59.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a5662fb2a77075635",
+   "attempt": 1,
+   "ordinal": 21,
+   "raw_name": "0001104659-26-027061.attempt1.complete.raw.json",
+   "source_id": "0001104659-26-027061",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_5ed59342-fd9.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "af0cc26037b373456",
+   "attempt": 1,
+   "ordinal": 22,
+   "raw_name": "0001104659-26-032757.attempt1.complete.raw.json",
+   "source_id": "0001104659-26-032757",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_37cee7e1-c98.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a2b427e151939ad92",
+   "attempt": 1,
+   "ordinal": 23,
+   "raw_name": "0001171843-26-001288.attempt1.complete.raw.json",
+   "source_id": "0001171843-26-001288",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_95d2b09a-b07.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "aa6742542d3ff39c6",
+   "attempt": 1,
+   "ordinal": 24,
+   "raw_name": "AAL_2026-04-23T08.30.attempt1.complete.raw.json",
+   "source_id": "AAL_2026-04-23T08.30",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_88f3c738-a38.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a96144275c95f7bf0",
+   "attempt": 1,
+   "ordinal": 25,
+   "raw_name": "BBY_2026-03-03T08.00.attempt1.complete.raw.json",
+   "source_id": "BBY_2026-03-03T08.00",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_654e115c-4c8.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "aa66b7c06f617a2a4",
+   "attempt": 1,
+   "ordinal": 26,
+   "raw_name": "CMG_2026-02-03T16.30.attempt1.complete.raw.json",
+   "source_id": "CMG_2026-02-03T16.30",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ce5ffd5e-262.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a4ad59b433abda758",
+   "attempt": 1,
+   "ordinal": 27,
+   "raw_name": "DAL_2026-04-08T10.00.attempt1.complete.raw.json",
+   "source_id": "DAL_2026-04-08T10.00",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_e3d8cfc7-988.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a55892fa4669b68bd",
+   "attempt": 1,
+   "ordinal": 28,
+   "raw_name": "DRI_2026-03-19T08.30.attempt1.complete.raw.json",
+   "source_id": "DRI_2026-03-19T08.30",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_443dcbca-c27.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a144160a61077c891",
+   "attempt": 1,
+   "ordinal": 29,
+   "raw_name": "MCD_2026-02-11T16.30.attempt1.complete.raw.json",
+   "source_id": "MCD_2026-02-11T16.30",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_70cac65e-c8e.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "af979bd21d6f500be",
+   "attempt": 1,
+   "ordinal": 30,
+   "raw_name": "ULTA_2026-03-12T16.30.attempt1.complete.raw.json",
+   "source_id": "ULTA_2026-03-12T16.30",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_02337e89-9f7.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "ae119097ed5f0c98e",
+   "attempt": 1,
+   "ordinal": 31,
+   "raw_name": "YUM_2026-02-04T08.15.attempt1.complete.raw.json",
+   "source_id": "YUM_2026-02-04T08.15",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c1d790b4-d26.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a883c3e05103cc6d8",
+   "attempt": 1,
+   "ordinal": 32,
+   "raw_name": "bzNews_42014391.attempt1.complete.raw.json",
+   "source_id": "bzNews_42014391",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_9023535b-99b.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a4f0a41b7def9c2c3",
+   "attempt": 1,
+   "ordinal": 33,
+   "raw_name": "bzNews_49256211.attempt1.complete.raw.json",
+   "source_id": "bzNews_49256211",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_aeffa090-40c.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a102a6a5b25d68921",
+   "attempt": 1,
+   "ordinal": 34,
+   "raw_name": "bzNews_50877032.attempt1.complete.raw.json",
+   "source_id": "bzNews_50877032",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c705a834-e37.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a0bd127130914ad21",
+   "attempt": 1,
+   "ordinal": 35,
+   "raw_name": "bzNews_51962983.attempt1.complete.raw.json",
+   "source_id": "bzNews_51962983",
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_32d65318-09c.json",
+   "task": "event"
+  },
+  {
+   "agent_id": "a02dae52248688d15",
+   "attempt": 1,
+   "ordinal": 36,
+   "raw_name": "final_sign.attempt1.complete.raw.json",
+   "source_id": null,
+   "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_cb99f107-27f.json",
+   "task": "final_sign"
+  }
+ ],
+ "base_commit": "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc",
+ "base_tree": "74b231655193c14daccd877915daa051b078b330",
+ "max_output_tokens": "128000",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "subscription_proof": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/logs/real_source_review/subscription.json",
+ "transport": "subscription"
+}

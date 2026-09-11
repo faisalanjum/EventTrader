@@ -1,0 +1,7 @@
+attempt	core_oldproof2008_a
+payload	../../unit_2008/ledger/prove_old_2008.py
+map	../unit_2006/map_review_retry_live_2006.tsv
+wrapper_pid	3834080
+payload_pid	3834084
+started_utc	2026-09-11T01:16:16Z
+state	finished exit 0

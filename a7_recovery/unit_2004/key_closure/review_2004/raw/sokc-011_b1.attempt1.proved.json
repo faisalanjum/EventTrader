@@ -1,0 +1,143 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "discontinued_operations",
+              "driver_state": "decreased",
+              "level_low": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["net of tax"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "continuing_operations_earnings_per_share",
+              "driver_state": "decreased",
+              "level_low": {"value": 2.68, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.68, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": 2.74, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 2.74, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["Diluted"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "level_unit": "m_usd",
+              "slice_parts": ["segment:finediningsegment"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "reported",
+              "level_low": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["channel:franchisedunits"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic forward-looking-statements risk-factor bullet (climate change, adverse weather, natural disasters) listing a category of possible future harm with no company-specific state, change, or action — it is boilerplate risk language excluded by Rule 1.2."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The statement describes an internal accounting/reporting-methodology change (excluding pre-opening costs from segment profit) with prior-year figures recast for comparability — an accounting construct, not a business driver in its own right, so it yields no separate fact beyond the segment profit margin metric already reported elsewhere."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six located items describe six unrelated things — a discontinued-operations loss line, diluted continuing-operations EPS, Fine Dining segment sales, a franchised-restaurant count, a generic climate/weather risk-factor bullet, and a segment-profit reporting-methodology recast note — so they cannot be one underlying fact."
+}
+```

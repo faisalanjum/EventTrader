@@ -1,0 +1,314 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-26-027061#P000",
+      "decision": "exclude",
+      "why": "This target (Q4 comparable-sales detail: 5.8% / 4.2% ticket / 1.6% transactions) has already been tested; it is excluded from this fresh sample by rule, not because the underlying fact is false, mislocated, or misclassified.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P001",
+      "decision": "exclude",
+      "why": "This target (Interest expense (income), net line) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P002",
+      "decision": "exclude",
+      "why": "This target (FY diluted EPS +1.2% to $25.64) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P003",
+      "decision": "exclude",
+      "why": "This target (Q4 net sales +11.8% to $3.9B) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P004",
+      "decision": "exclude",
+      "why": "This target (FY2026 diluted EPS guidance $28.05-$28.55) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P005",
+      "decision": "exclude",
+      "why": "This target (FY2026 diluted EPS growth guidance 9.4%-11.4%) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P006",
+      "decision": "exclude",
+      "why": "This target (FY SG&A % of net sales 26.6% vs 24.9%) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P007",
+      "decision": "exclude",
+      "why": "This target (FY2026 net sales growth guidance 6.0%-7.0%) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P008",
+      "decision": "exclude",
+      "why": "This target (CEO 'better-than-planned financial performance' quote) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P009",
+      "decision": "exclude",
+      "why": "This target ($3.0B share repurchase program announced Oct 2024, $1.8B remaining) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-26-027061#P010",
+      "decision": "exclude",
+      "why": "This target (generic 'unable to compete effectively' risk boilerplate) has already been tested; excluded from this fresh sample by rule only.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Net sales increased 9.7% to $12.4 billion, primarily due to increased comparable sales, the acquisition of Space NK, and sales from new stores.",
+        "raw_label_or_claim": "Net sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "Fresh fact: full fiscal-year net sales level and YoY growth, distinct period from the tested Q4 net-sales proposal (P003). Explicit annual 'Full Year ... Compared to Full Year ...' framing exercises OD-11's annual-period YoY default."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable sales increased 5.4%, driven by a 3.3% increase in average ticket and a 2.0% increase in transactions.",
+        "raw_label_or_claim": "Comparable sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "Fresh fact: full fiscal-year comparable-sales growth with its ticket/transaction drivers, distinct from the tested Q4 comparable-sales proposal (P000). Same annual-period YoY basis rationale as the net-sales row."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "As a percentage of net sales, gross profit decreased to 38.1% compared to 38.2%, primarily due to unfavorable channel mix, deleverage of store fixed expenses, and deleverage of other revenue, mostly offset by lower inventory shrink and supply chain efficiencies.",
+        "raw_label_or_claim": "gross profit decreased to 38.1% compared to 38.2%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh fact: Q4 gross-margin ratio (percentage-of-net-sales metric with its own stated prior-year comparison and narrative causes), a different unit/Driver from any dollar figure and untouched by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Selling, general and administrative (SG&A) expenses increased 23.0% to $1.0 billion.",
+        "raw_label_or_claim": "SG&A",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh fact: Q4 SG&A dollar level and growth; the only tested SG&A proposal (P006) is the FY percentage-of-sales figure, a different period and different unit."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating income was $1.5 billion, or 12.4% of net sales.",
+        "raw_label_or_claim": "Operating income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh fact: FY operating income level and margin; no proposal names operating income at all."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Cash and cash equivalents at the end of fiscal 2025 were $424.2 million.",
+        "raw_label_or_claim": "Cash and cash equivalents",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh balance-sheet fact untouched by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Returned $890.5 million of capital to shareholders through planned share repurchases for the fiscal year",
+        "raw_label_or_claim": "Returned $890.5 million of capital to shareholders through planned share repurchases",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh fact distinct from P009 (which is about the $3.0B authorization's remaining headroom, not the actual capital returned)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "During fiscal 2025, the Company repurchased 2.0 million shares of its common stock at a cost of $890.5 million, excluding excise taxes.",
+        "raw_label_or_claim": "repurchased 2.0 million shares",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh fact: share-count of repurchases, a different unit/Driver from the dollar-capital-returned row and from P009's authorization-headroom fact."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Merchandise inventories, net at the end of fiscal 2025 increased 10.8% to $2.2 billion.",
+        "raw_label_or_claim": "Merchandise inventories, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh balance-sheet fact untouched by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable sales growth \u200b \u200b 2.5% to 3.5%",
+        "raw_label_or_claim": "Comparable sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh FY2026 guidance fact, a distinct metric from the tested net-sales-growth (P007) and EPS guidance (P004/P005) targets. Closed range shape tests §7.1; annual-period guidance growth tests OD-11's annual-pin YoY default."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating income growth \u200b \u200b 6% to 9%",
+        "raw_label_or_claim": "Operating income growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh FY2026 guidance fact, untouched by any proposal; closed range shape and annual-period growth basis same rationale as the comparable-sales-growth guidance row."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Capital expenditures \u200b \u200b $400 million to $450 million",
+        "raw_label_or_claim": "Capital expenditures",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh FY2026 guidance fact, a closed dollar range untouched by any proposal, testing the §7.1 number-shape rule."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The following table presents the number of stores owned at the end of fiscal 2025: \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b United States \u200b International (Company-operated) Number of stores \u200b 1,505 \u200b 86",
+        "raw_label_or_claim": "International (Company-operated)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole"]
+      },
+      "why": "Fresh fact untouched by any proposal. The explicit 'Company-operated' qualifier excludes the franchise (Middle East) and joint-venture stores mentioned elsewhere in the release, a genuine OD-17 population-qualifier case."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "macroeconomic conditions, including inflation and elevated interest rates, as well as prior and/or future labor, transportation, and shipping cost pressures (including future uncertain impacts);",
+        "raw_label_or_claim": "macroeconomic conditions, including inflation and elevated interest rates",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, hypothetical forward-looking risk-factor boilerplate distinct from the risk bullet tested in P010; fails DU-03/Rule 1, correct reader behavior is omission -> negative control."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-26-027061",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "epidemics, pandemics or natural disasters, which could negatively impact sales;",
+        "raw_label_or_claim": "epidemics, pandemics or natural disasters",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic hypothetical risk-factor boilerplate, distinct wording/topic from P010's tested bullet; fails DU-03/Rule 1 -> negative control."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Cosmetics \u200b 38% \u200b 39%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real product-category slice data (matches product:cosmetics menu token) but representative sampling for this event is already diverse; binding it cleanly to its period would require extending across a repeated 'Fiscal Year Ended' header that also occurs at Exhibit 2, adding complexity not needed to repair any declared coverage gap."
+    },
+    {
+      "quote": "The following table presents store activities during fiscal 2025: \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b United States \u200b International (Company-operated) Opened \u200b 63 \u200b 4",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real store-activity fact, but redundant with the store-count (Company-operated) row already selected for portion_versus_whole coverage; omitted to avoid padding the sample."
+    },
+    {
+      "quote": "Ulta Beauty is also expanding its presence internationally through its subsidiary, Space NK, a luxury beauty retailer operating in the U.K. and Ireland, its joint venture in Mexico, and its franchise in the Middle East.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic recurring 'About the company' boilerplate description with no stated dated fact about a state/change/action for this event; fails DU-03/Rule 1 as a bare mention, not selected."
+    },
+    {
+      "quote": "I am proud of how our team is embracing and executing our Ulta Beauty Unleashed strategy. Looking ahead, we are well positioned for sustainable, profitable growth in 2026 and beyond and are excited to build on our successes to extend our position as the unmatched beauty and wellness destination for all guests across all ages and life stages.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic executive forward-looking puffery, no specific quantifiable fact; fails the fact gate as boilerplate, not selected."
+    },
+    {
+      "quote": "During fiscal 2025, the Company invested $434.8 million in capital expenditures to support new stores, relocations, and remodels, investments in information technology systems, and supply chain optimization.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real fact, but the FY2026 capex guidance range row already provides fresher, more distinctive (range-shaped) capex coverage; adding this would be a lawful-but-unneeded extra fact, not repairing any declared gap."
+    },
+    {
+      "quote": "Gross profit increased 11.2% to $1.5 billion.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real fact, but the Q4 gross-margin-ratio sentence (selected) carries the more information-dense, decision-relevant narrative for the same underlying disclosure; the plain dollar-growth clause was left out to avoid an unneeded near-duplicate row."
+    },
+    {
+      "quote": "Operating income was $476.9 million, or 12.2% of net sales.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real fact, but the FY operating-income row was selected instead to diversify period coverage already present in this event's sample; adding both Q4 and FY versions was judged as exceeding the representative (not exhaustive) scope."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Several selected rows (#10-13 in additions) reproduce '\u200b' separator markers exactly as they appear in the supplied event text.",
+      "why": "The authority does not state whether these markers are the filing's true characters or an artifact of upstream text extraction; they were reproduced verbatim on the assumption that the supplied JSON string already encodes the exact source characters, but this could not be independently confirmed from the evidence given."
+    },
+    {
+      "what": "Whether a co-stated total-dollar metric and its 'percentage of net sales' ratio form (e.g., gross profit dollars vs. gross margin %) must be split into separate rows the same way the total-vs-per-X rule requires for total vs per-share values.",
+      "why": "The quoted NAME-13/total-vs-per-X authority explicitly covers per-share/per-barrel style denominators, not percentage-of-sales ratios; this event's rows were split as a reasoned judgment call, not a directly settled rule, and should be confirmed at adjudication."
+    },
+    {
+      "what": "How liberally the sequential_comparison tag should be applied to routine YoY percentage-change statements that lack the word 'year-over-year' but sit under an explicit '<Period> Compared to <Prior Period>' section header.",
+      "why": "OD-11 settles the growth-basis determination itself, but the quoted authority does not specify how many ordinary YoY facts in one event should carry the hidden benchmark tag versus being left untagged; this event's tagging was applied selectively and conservatively rather than to every qualifying growth figure."
+    }
+  ],
+  "blocked": null
+}
+```

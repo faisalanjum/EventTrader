@@ -1,0 +1,61 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "bzNews_51962983",
+ "ordinal_one_based": 36,
+ "ordinal_receipt": 35,
+ "attempt_number": 1,
+ "run_id": "wf_32d65318-09c",
+ "agent_id": "a0bd127130914ad21",
+ "raw_sha256": "a12efc9dd6d40dba7731e343cc5599cd07cb52ae3a6d0e8e91019aa7a30ca457",
+ "prompt_sha256": "da50a62815e52793ca6e4f09cb7d3d76bb5ce62778fb20b043c61491c1aec02d",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 1,
+  "additions": 0,
+  "exclusions_considered": 2,
+  "open_issues": 1
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"This event's entire supplied text is one short title sentence, and that sentence's full span is already the exact target of the one supplied (already-tested) proposal. After excluding that p"
+ ],
+ "locator": {
+  "additions": {
+   "located": 0,
+   "not_located": [],
+   "total_with_quote": 0
+  },
+  "exclusions_considered": {
+   "located": 2,
+   "not_located": [],
+   "total_with_quote": 2
+  }
+ },
+ "receipt_attempts": 35,
+ "receipt_missing": 2,
+ "receipt_other_problems": [
+  "the run accepted 34 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 35,
+  "attempt": 1,
+  "source_id": "bzNews_51962983",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_32d65318-09c.json",
+  "agent_id": "a0bd127130914ad21",
+  "raw_name": "bzNews_51962983.attempt1.complete.raw.json"
+ }
+}

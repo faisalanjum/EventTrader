@@ -1,0 +1,18 @@
+```json
+{
+  "packet_id": "0000764478-26-000005#049",
+  "settled": {
+    "source_id": "0000764478-26-000005",
+    "facts": [],
+    "abstentions": [
+      {"reason": "This is an 8-K item-type heading ('Item 2.02: Results of Operations and Financial Condition') — a filing-category label, not a real statement about a driver's state, change, surprise, guidance, or action; it fails Rule 1 gate step 2 as a bare topic/boilerplate mention."}
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {"lane_id": "0000764478-26-000005#049/L1", "exact_match": true, "why": "Same lawful branch (empty facts, single abstention, empty continuity_hints) with the same substantive reasoning that this is a boilerplate 8-K item-category label, not a factual driver statement."},
+    {"lane_id": "0000764478-26-000005#049/L2", "exact_match": true, "why": "Same lawful branch (empty facts, single abstention, empty continuity_hints) with the same substantive reasoning that this is a boilerplate 8-K item-category label, not a factual driver statement."}
+  ],
+  "ambiguities": []
+}
+```

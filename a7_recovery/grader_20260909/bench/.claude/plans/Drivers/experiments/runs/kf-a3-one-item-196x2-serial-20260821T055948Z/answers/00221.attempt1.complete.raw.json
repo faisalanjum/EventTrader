@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "comparable_restaurant_sales",
+        "driver_state": "decreased",
+        "change_value": {"value": -2.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "slice_parts": ["segment:thecheesecakefactory"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

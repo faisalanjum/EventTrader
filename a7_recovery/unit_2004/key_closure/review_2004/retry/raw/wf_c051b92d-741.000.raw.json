@@ -1,0 +1,107 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 1.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 1.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["excluding Special Items"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "franchise_restaurant_acquisition",
+              "driver_state": "occurred",
+              "level_low": {"value": 670, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 670, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "slice_parts": ["segment:tacobellglobaldivision", "geography:us"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "system_sales",
+              "driver_state": "reported",
+              "level_low": {"value": 11, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "slice_parts": ["channel:digital"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "digital_mix",
+              "driver_state": "reported",
+              "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic forward-looking risk-factor list entry (severe weather and climate change among many other boilerplate risk items) with no stated driver state, change, guidance, or discrete action — it fails Rule 1.2's gate for bare topic/boilerplate risk mentions."}
+        ]
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five located items describe unrelated matters — a reported non-GAAP EPS figure, a discrete Taco Bell franchise-restaurant acquisition, a digital system-sales dollar level, a digital sales-mix percentage, and generic risk-factor boilerplate that is not a fact at all — so they cannot be settled as one underlying fact."
+}
+```

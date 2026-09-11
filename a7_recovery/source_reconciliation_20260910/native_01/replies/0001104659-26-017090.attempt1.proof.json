@@ -1,0 +1,63 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0001104659-26-017090",
+ "ordinal_one_based": 21,
+ "ordinal_receipt": 20,
+ "attempt_number": 1,
+ "run_id": "wf_08f6e278-e59",
+ "agent_id": "a7e32a64a54e80b3c",
+ "raw_sha256": "a9fdf94e9c279492a8362238bf7dd45250876242a689aa0a7ec1cec70e0c7a77",
+ "prompt_sha256": "8f93fb8b4330ca606b3cc1dd263c4cdb0c34c0b89d1eb15858781e8e5ff70562",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 5,
+  "additions": 15,
+  "exclusions_considered": 8,
+  "open_issues": 3
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"No genuine corrections_and_amendments instance was found in this event's supplied text (no amendment/restated-value language distinguishable from an ordinary business change).\", 'why': \"The ",
+  "{'what': \"No genuine lawful_abstention_control candidate was identified in this event's text -- only a negative_control (generic risk boilerplate) was clearly supported.\", 'why': 'An abstention contro",
+  "{'what': \"The ambiguous_menus classification on the Flower Child guidance row rests on inferring tension between the guidance sentence's brand-level breakdown and the segment footnote's grouping of Fl"
+ ],
+ "locator": {
+  "additions": {
+   "located": 15,
+   "not_located": [],
+   "total_with_quote": 15
+  },
+  "exclusions_considered": {
+   "located": 8,
+   "not_located": [],
+   "total_with_quote": 8
+  }
+ },
+ "receipt_attempts": 23,
+ "receipt_missing": 14,
+ "receipt_other_problems": [
+  "the run accepted 22 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 20,
+  "attempt": 1,
+  "source_id": "0001104659-26-017090",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_08f6e278-e59.json",
+  "agent_id": "a7e32a64a54e80b3c",
+  "raw_name": "0001104659-26-017090.attempt1.complete.raw.json"
+ }
+}

@@ -1,0 +1,7 @@
+attempt	codex_final2002_qualified
+payload	../../unit_1997/ledger/../../unit_2002/ledger/endtoend_2002.py
+map	../unit_1997/../unit_2002/map_lifecycle_2002.tsv
+wrapper_pid	3511093
+payload_pid	3511097
+started_utc	2026-09-10T21:37:36Z
+state	finished exit 0

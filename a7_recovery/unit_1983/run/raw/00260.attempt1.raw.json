@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001171843-26-001288",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "store_openings",
+        "driver_state": "reaffirmed",
+        "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 360, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "range",
+        "level_unit": "count",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

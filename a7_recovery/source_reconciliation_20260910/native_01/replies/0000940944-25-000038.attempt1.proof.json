@@ -1,0 +1,63 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000940944-25-000038",
+ "ordinal_one_based": 11,
+ "ordinal_receipt": 10,
+ "attempt_number": 1,
+ "run_id": "wf_70fa3b6d-4bf",
+ "agent_id": "a88da7870d1b3e3de",
+ "raw_sha256": "c4802944338b17d8b88e2eaadad8054498535a5f04dee60f6d1a62abd3bd14ee",
+ "prompt_sha256": "f4468f722378a0a3a60b6d58705c7aa432e8f932b0c2efa7266e5007d7aea78d",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 6,
+  "additions": 6,
+  "exclusions_considered": 4,
+  "open_issues": 3
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"This event's text contains no analyst-consensus, Street-estimate, or guidance-vs-consensus wording, so no fresh actual_vs_consensus/guidance_vs_consensus surprise fact is available here for ",
+  "{'what': \"No genuine two-or-more-plausible-kind slice/axis ambiguity (the T1-05/FS-15 ladder rung 2 or 4 case) was found among this event's stated facts.\", 'why': 'Owner ruling 6 forbids manufacturing",
+  "{'what': \"No genuine lawful_abstention_control candidate (e.g., an unclear per-X expansion, unresolved favorability polarity, or a conflicting sign case left open by the rules) was found in this event"
+ ],
+ "locator": {
+  "additions": {
+   "located": 6,
+   "not_located": [],
+   "total_with_quote": 6
+  },
+  "exclusions_considered": {
+   "located": 4,
+   "not_located": [],
+   "total_with_quote": 4
+  }
+ },
+ "receipt_attempts": 11,
+ "receipt_missing": 26,
+ "receipt_other_problems": [
+  "the run accepted 10 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 10,
+  "attempt": 1,
+  "source_id": "0000940944-25-000038",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_70fa3b6d-4bf.json",
+  "agent_id": "a88da7870d1b3e3de",
+  "raw_name": "0000940944-25-000038.attempt1.complete.raw.json"
+ }
+}

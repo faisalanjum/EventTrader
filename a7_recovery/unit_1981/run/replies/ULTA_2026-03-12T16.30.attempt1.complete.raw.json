@@ -1,0 +1,276 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "verdicts": [
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P000",
+      "decision": "exclude",
+      "why": "Names an already-tested target (full-year gross margin +30bps to 39.1%); excluded from this fresh sample by task rule. No claim is made about the correctness or location of the underlying fact.",
+      "row": null
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P001",
+      "decision": "exclude",
+      "why": "Names an already-tested target (full-year operating income $1.5B/12.4% of sales); excluded from this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P002",
+      "decision": "exclude",
+      "why": "Names an already-tested target (inventory shrink reduction narrative); excluded from this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P003",
+      "decision": "exclude",
+      "why": "Names an already-tested target (FY26 SG&A growth pace guidance); excluded from this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P004",
+      "decision": "exclude",
+      "why": "Names an already-tested target (generic forward-looking-statements risk boilerplate); excluded from this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P005",
+      "decision": "exclude",
+      "why": "Names an already-tested target (full-year diluted EPS $25.64, +1.2%); excluded from this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P006",
+      "decision": "exclude",
+      "why": "Names an already-tested target (EPS above previously provided guidance surprise); excluded from this fresh sample by task rule.",
+      "row": null
+    },
+    {
+      "proposal_id": "ULTA_2026-03-12T16.30#P007",
+      "decision": "exclude",
+      "why": "Names an already-tested target (quarter makeup category share of sales); excluded from this fresh sample by task rule.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "net sales increased 9.7% or $1.1 billion to $12.4 billion",
+        "raw_label_or_claim": "net sales increased 9.7% or $1.1 billion to $12.4 billion",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh full-year net sales point fact (distinct metric from the tested operating-income and EPS proposals). Stated as a single value (point shape) with a bare growth percentage on an annual period, which exercises the FINAL_DESIGN 7.1 number-shape rule and the OD-11 annual-pin growth-basis default to percent_yoy."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "For the year, we anticipate net sales will increase between 6% to 7%, with comp sales growth between 2.5% and 3.5%.",
+        "raw_label_or_claim": "net sales will increase between 6% to 7%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "FY2026 net sales guidance stated as a genuine closed range (floor 6%, ceiling 7%); not named by any proposal. Distinct label from the co-stated comp-sales figure in the same sentence, kept as its own row per the rule that distinct facts sharing one forced quote stay separate."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "For the year, we anticipate net sales will increase between 6% to 7%, with comp sales growth between 2.5% and 3.5%.",
+        "raw_label_or_claim": "comp sales growth between 2.5% and 3.5%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "FY2026 comparable-sales guidance, a separate metric/Driver from net sales stated in the same sentence; a genuine closed range (floor 2.5%, ceiling 3.5%). Fresh target, no proposal names it."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we anticipate diluted EPS will be between $28.05 and $28.55 per share, representing growth between 9.4% and 11.4% respectively",
+        "raw_label_or_claim": "diluted EPS will be between $28.05 and $28.55 per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "FY2026 forward diluted-EPS guidance range (a different state/period from the tested FY25 actual-EPS-vs-guidance proposal). Closed range shape plus an embedded annual growth percentage, exercising both the number-shape rule and the OD-11 annual-pin basis rule."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We expect operating profit will increase between six and 9%, resulting in operating margin being flat to up 20 basis points",
+        "raw_label_or_claim": "operating profit will increase between six and 9%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "FY2026 operating-profit growth guidance, a genuine closed range, distinct from the tested FY25 actual operating-income proposal. Bare annual growth percentage exercises the OD-11 basis rule."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.",
+        "raw_label_or_claim": "Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "sequential_comparison"]
+      },
+      "why": "Adjusted (ex incentive comp, ex SpaceNK) SG&A growth for the quarter -- a measurement-qualifier fact (NAME-14/FS-25) distinct from the tested guidance-framing proposal, plus a bare growth percentage on a sub-annual dated period exercising the OD-11 basis-default rule."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "As a percentage of sales, SG&A increased 230 basis points to 25.7%.",
+        "raw_label_or_claim": "SG&A increased 230 basis points to 25.7%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison", "point_range_floor_ceiling"]
+      },
+      "why": "SG&A-as-percent-of-sales bps change, a distinct measurement (ratio-points) from the tested dollar-based SG&A guidance proposal. Exercises the OD-11 points/bps-wins-over-sequential-wording override, plus a stated point level (25.7%)."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We grew our loyalty program by 5% to a record 46.7 million active members",
+        "raw_label_or_claim": "46.7 million active members",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "point_range_floor_ceiling"]
+      },
+      "why": "Loyalty membership stated as an 'active members' population qualifier (an OD-17 portion-of-whole qualifier distinct from total enrolled members) with a stated point value; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "a luxury beauty retailer operating more than 80 stores in the UK and Ireland",
+        "raw_label_or_claim": "more than 80 stores in the UK and Ireland",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "Space NK store count is a floor-only number shape ('more than 80'), tied to menu-recognized geography slices geography:gb and geography:ie; fresh, no proposal touches this fact."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "the opening of nine stores in Mexico via our joint venture partner, Grupo AXO",
+        "raw_label_or_claim": "nine stores in Mexico",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "A store-count point fact tied to a geography value (Mexico) absent from the frozen company menu -- exercises the off-menu/prose-clear-kind coin rung of the slice ladder (FS-05..24), distinct from the on-menu GB/Ireland example above."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "The haircare category delivered its best comp performance this year with comp growth for the quarter in the high single digit range",
+        "raw_label_or_claim": "haircare category",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "Product-category (haircare) comp performance, mapping to the menu's product:haircareproductsandstylingtools slice; distinct product slice from the tested makeup-category proposal."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "We beat and raised throughout the year. And we exceeded on all metrics.",
+        "raw_label_or_claim": "beat and raised",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      },
+      "why": "A generic favorability claim ('beat and raised...exceeded on all metrics') with no identifiable single metric or stated comparison basis -- the protocol's 'UNGROUNDED beat (no identifiable metric) is parked' case. Correct reader behavior is abstention, not a guessed surprise. Distinct from the tested, metric-specific EPS-vs-guidance proposal."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "we over delivered sales above the high end of our guidance by about 85 million",
+        "raw_label_or_claim": "sales above the high end of our guidance by about 85 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling"]
+      },
+      "why": "A grounded, metric-identified surprise (quarter net sales beat the high end of guidance by ~$85M) with explicit favorable framing -- a genuine actual_vs_guidance surprise (OD-21) distinct from the tested EPS-vs-guidance proposal, and complements the ungrounded abstention example above with a real, resolvable case of the same tags."
+    },
+    {
+      "row": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "The company undertakes no obligation to revise any forward-looking statements.",
+        "raw_label_or_claim": "undertakes no obligation to revise any forward-looking statements",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic legal/procedural boilerplate carrying no real fact about a Driver (fails DU-03/Rule 1); correct reader behavior is omission. A different quote from the tested forward-looking-risk proposal, giving a fresh negative-control exhibit."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "we expect net sales will be between 13.1 and $13.2 billion",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Same underlying FY2026 net-sales-guidance fact as the selected 'increase between 6% to 7%' range (same series/period/scope), just restated in absolute dollars; the within-event fuse/first-complete-quote rule keeps this as one fact, already represented by the selected row, not a second row."
+    },
+    {
+      "quote": "We expect capital expenditures for the year will be between 400 and $450 million",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A lawful additional closed-range guidance fact, but point_range_floor_ceiling coverage for this event is already achieved by other selected rows; representative sampling does not require enumerating every stated range in one event."
+    },
+    {
+      "quote": "Excluding the impact of incentive compensation and Space NK, SG&A growth for the year was about 13%.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Same measurement-adjusted-SG&A-growth fact family as the selected quarter-period row, differing only by period; one representative exemplar of this tag/fact family was selected rather than both periods."
+    },
+    {
+      "quote": "Comparable sales for the period increased 5.8% driven by a 4.2% increase in average ticket and a 1.6% increase in transactions.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Average-ticket and transactions are separate lawful sub-metrics co-stated in one sentence; not selected as additional rows -- representative sampling does not require enumerating every stated sub-metric."
+    },
+    {
+      "quote": "our expectation for the beauty category growth is in line with the average historical growth rate with expected growth in the 2% to 4% range",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "An industry/macro-level growth expectation (beauty category overall), not a stated fact about the company's own Driver; the authority does not settle whether an unattributed industry-level forecast qualifies for the fact gate, so it was left out rather than forced into a record kind (see open_issues)."
+    },
+    {
+      "quote": "We also opened two new and relocated one Space NK store.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Additional store-count fact considered; not selected because store-count/slice coverage for this event is already represented by the Space NK UK/Ireland and Mexico rows."
+    },
+    {
+      "quote": "They typically impact about 10% to 15% of the overall assortment.",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "A stated range (pricing impact on assortment) considered but not selected; point/range/floor/ceiling coverage for this event is already achieved by other selected rows."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether an unattributed, company-stated expectation about industry-wide category growth (e.g. 'beauty category growth ... 2% to 4% range') counts as a real Driver fact under the DU-03/Rule-1 gate, versus out-of-scope market commentary.",
+      "why": "The fact gate and owner rulings define the gate around facts about 'the driver' (the company's own state/change/surprise/guidance/action); they do not address a forward view stated about the broader industry/market rather than the company itself. Resolving this by invention would risk widening or narrowing the gate beyond what the authority states, so it is left as an open point rather than decided here."
+    }
+  ],
+  "blocked": null
+}
+```

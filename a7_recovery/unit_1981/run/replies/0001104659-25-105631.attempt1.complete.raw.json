@@ -1,0 +1,150 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "verdicts": [
+    {
+      "proposal_id": "0001104659-25-105631#P000",
+      "decision": "exclude",
+      "why": "This target (off-premise channel ~21% share, nine-months period) has already been tested by a supplied proposal; it is excluded from this fresh sample for that reason only, not as a judgment on its correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-105631#P001",
+      "decision": "exclude",
+      "why": "This target (Cheesecake Factory Restaurants average sales per operating week, Q3) has already been tested by a supplied proposal; it is excluded from this fresh sample for that reason only, not as a judgment on its correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-105631#P002",
+      "decision": "exclude",
+      "why": "This target (Revolver Facility commitment-increase feature) has already been tested by a supplied proposal; it is excluded from this fresh sample for that reason only, not as a judgment on its correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001104659-25-105631#P003",
+      "decision": "exclude",
+      "why": "This target (Flower Child sales, nine-months period) has already been tested by a supplied proposal; it is excluded from this fresh sample for that reason only, not as a judgment on its correctness or location.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Revenues increased 4.8% to $907.2 million for the fiscal quarter ended September 30, 2025 compared to $865.5 million for the comparable prior year period, primarily due to additional revenue related to new restaurant openings and an increase in comparable restaurant sales.",
+        "raw_label_or_claim": "Revenues",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Total-company revenue actual with a bare YoY growth percentage on a dated period (OD-11 dated-period default) and a stated point comparison to the prior-year period; distinct fact from any supplied proposal (none names consolidated revenue)."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "North Italia sales increased 16.1% to $83.5 million for the third quarter of fiscal 2025, compared to $71.9 million for the third quarter of fiscal 2024.",
+        "raw_label_or_claim": "North Italia sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "Segment-specific (North Italia, a menu segment value) sales point fact with a stated YoY growth basis; a different segment and different metric target than any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "We recorded a $15.9 million loss on early debt extinguishment in the first quarter of fiscal 2025.",
+        "raw_label_or_claim": "loss on early debt extinguishment",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A source-stated point loss figure requiring OD-12 sign handling (loss is negative, though stated as a positive noun magnitude); target not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "We anticipate approximately $190 million to $200 million in capital expenditures to support this level of unit development, as well as required maintenance on our restaurants.",
+        "raw_label_or_claim": "capital expenditures",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A forward-looking closed-range guidance figure (low=190, high=200) for capital expenditures; distinct target and metric from any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "We currently own and operate 366 restaurants throughout the United States and Canada under brands including The Cheesecake Factory ® (216 locations), North Italia ® (46 locations), Flower Child ® (42 locations) and additional brands within our FRC portfolio (55 locations).",
+        "raw_label_or_claim": "366 restaurants",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      },
+      "why": "States the true consolidated (whole-company, no-slice) restaurant count in the same sentence that also carries per-brand subset counts, directly exercising OD-17's consolidated-population-vs-qualified-subset distinction; not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001104659-25-105631",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "A description of the risk factors associated with our business is contained in Part I, Item 1A, \u201cRisk Factors,\u201d of our Annual Report on Form 10-K for the fiscal year ended December 31, 2024 (\u201cAnnual Report\u201d) and Part II, \u201cPart II, Item 1A, Risk Factors\u201d in our Quarterly Report on Form 10-Q for the quarterly period ended April 1, 2025.",
+        "raw_label_or_claim": "Risk Factors",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "This entire risk-factors item is a bare incorporation-by-reference to other filings with no specific, current, source-flagged adverse threat stated in this event's own text; generic boilerplate that fails DU-03/Rule 1, so the correct reader behavior is omission, not abstention. Serves as a lawful negative_control candidate."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during both the third quarter of fiscal 2025 and fiscal 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same off-premise-channel share fact as a supplied proposal, differing only by period (quarter vs nine-months); a lawful distinct-period fact exists but was not selected for this representative sample."
+    },
+    {
+      "quote": "Flower Child sales increased 31.4% to $48.1 million for the third quarter of fiscal 2025, compared to $36.6 million for the third quarter of fiscal 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same Flower Child sales series as a supplied proposal, differing only by period (quarter vs nine-months); not selected, representative sample does not require every period variant."
+    },
+    {
+      "quote": "Average sales per restaurant operating week decreased 1.5% to $139,601 in the third quarter of fiscal 2025 from $141,771 in the third quarter of fiscal 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same per-X (per operating week) metric family as a supplied proposal, for a different segment (North Italia); redundant with the North Italia sales row already selected for segment coverage, so not added."
+    },
+    {
+      "quote": "Following is a reconciliation from net income to EBITDA and adjusted EBITDA measures (in thousands):",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Considered as a measurement_wording (adjusted vs unadjusted) candidate, but the actual EBITDA/adjusted-EBITDA numeric values sit in a table whose source text is broken up by zero-width-space artifacts, preventing a clean smallest-complete exact contiguous quote; not selected."
+    },
+    {
+      "quote": "Under authorization by our Board to repurchase up to 61.0 million shares of our common stock, we have cumulatively repurchased 59.7 million shares at a total cost of $1,972.4 million, excluding excise tax, through September 30, 2025.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A lawful ceiling-shape (\"up to 61.0 million shares\") real fact; not selected because the representative sample for this event already covers the point/range/floor/ceiling class with other rows."
+    },
+    {
+      "quote": "Our effective income tax rate was 10.1% and 5.8% for the third quarter of fiscal 2025 and 2024, respectively.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real point-value comparison fact; not selected, as it does not add fresh hard-class coverage beyond what the selected rows already exercise for this event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The tag `sequential_comparison` is labelled narrowly but its owning rule text (OD-11) governs the full growth-basis determination including the dated-period YoY default, not only sequential-vs-YoY selection proper.",
+      "why": "I applied the tag to plain YoY-default growth statements (e.g. consolidated revenue +4.8%) on the reading that the owner crosswalk names OD-11 as the controlling rule for 'sequential comparisons' generally; the authority does not explicitly confirm whether YoY-default cases should count toward this tag's five-distinct-row quota, so this scope judgment is flagged rather than assumed settled."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0001104659-26-017090",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "net_income",
+        "driver_state": "reported",
+        "level_low": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 48.3, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "measurement_raw_spans": ["adjusted"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

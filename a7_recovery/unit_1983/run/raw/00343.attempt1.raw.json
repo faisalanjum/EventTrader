@@ -1,0 +1,40 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "operating_margin",
+        "driver_state": "reported",
+        "level_low": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "measurement_raw_spans": ["adjusted"],
+        "fiscal_year": 2025,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "operating_margin",
+        "driver_state": "in_line",
+        "level_low": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "measurement_raw_spans": ["adjusted"],
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

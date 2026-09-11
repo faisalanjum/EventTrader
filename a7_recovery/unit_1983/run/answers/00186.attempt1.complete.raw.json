@@ -1,0 +1,16 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "chipotlane",
+        "driver_state": "persists"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,270 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "verdicts": [
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P000",
+      "decision": "exclude",
+      "why": "Already-tested target (CASMX Q2 guidance 2%-4% YoY); outside this fresh sample regardless of its own correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P001",
+      "decision": "exclude",
+      "why": "Already-tested target (domestic unit revenue Q2 guidance >10%); outside this fresh sample regardless of its own correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P002",
+      "decision": "exclude",
+      "why": "Already-tested target (total debt below $35B since mid-2015); outside this fresh sample regardless of its own correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "AAL_2026-04-23T08.30#P003",
+      "decision": "exclude",
+      "why": "Already-tested target (Latin America break-even RASM); outside this fresh sample regardless of its own correctness or location.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Total revenue grew 10.8% year-over-year, reflecting strong demand for our product and the continued returns of our multi-year commercial initiatives.",
+        "raw_label_or_claim": "Total revenue grew 10.8% year-over-year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Stated Q1 actual total-revenue growth, a point value on an explicit YoY basis; serves as the required metric home fact for the paired numberless surprise below (ISS-16)."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Revenue performance in the quarter exceeded our initial expectations.",
+        "raw_label_or_claim": "exceeded our initial expectations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "Grounded numberless actual-vs-own-expectation surprise (own-target phrasing -> previous_guidance, OD-21); 'exceeded' is source-favourable and revenue has no mainstream counter-story; paired with the revenue-growth metric fact above."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Excluding net special items, American reported a first quarter adjusted loss per diluted share of 40 cents.",
+        "raw_label_or_claim": "adjusted loss per diluted share of 40 cents",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"]
+      },
+      "why": "Q1 actual EPS, a point value; 'loss' must store negative (OD-12); 'adjusted'/'diluted' are measurement tokens in the quote (NAME-14/FS-25)."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "With this second quarter guidance, we expect to deliver adjusted earnings per diluted share of between a loss of 20 cents and a profit of 20 cents.",
+        "raw_label_or_claim": "adjusted earnings per diluted share of between a loss of 20 cents and a profit of 20 cents",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"]
+      },
+      "why": "Q2 EPS guidance, a closed zero-crossing range (-0.20 to +0.20), matching the OD-12 zero-crossing worked pattern; 'adjusted'/'diluted' measurement tokens present."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "despite jet fuel prices increasing fuel expense by over $4 billion year over year",
+        "raw_label_or_claim": "fuel expense by over $4 billion year over year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "Full-year fuel-expense increase stated as a floor ('over $4 billion'); an expense increase is a positive-signed charge under OD-12. First complete occurrence in source order (later restatements in Q&A/closing describe the same fact)."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "a $320 million revenue impact from winter storms",
+        "raw_label_or_claim": "$320 million revenue impact from winter storms",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "A specific, current, source-stated adverse revenue hit (point value); sign is set by context (a storm 'impact' reduces revenue), the context-signal branch of OD-12."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our unit cost, excluding net special items, fuel, and profit sharing, was up 5.2% year-over-year.",
+        "raw_label_or_claim": "unit cost, excluding net special items, fuel, and profit sharing, was up 5.2% year-over-year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"]
+      },
+      "why": "Q1 actual unit-cost growth (point value, explicit YoY basis) carrying explicit measurement qualifiers ('excluding net special items, fuel, and profit sharing') distinct from the already-tested Q2 CASMX guidance."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Atlantic unit revenue was up 16.7% year over year, with London up 25%.",
+        "raw_label_or_claim": "London up 25%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "London is a specific market within the Atlantic entity, not itself a menu token: a source-grounded off-menu geography coin, kind clear from prose (FS ladder rung 3), distinct from the whole-Atlantic figure in the same sentence."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "produced record Advantage enrollments in the first quarter. up 25% year over year, led by customers in New York, Chicago, and Los Angeles.",
+        "raw_label_or_claim": "record Advantage enrollments in the first quarter. up 25% year over year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "Loyalty-program enrollment growth (point value, explicit YoY) directly matches the menu's product:loyaltyprogram token -- a menu-reuse case (FS ladder rung 1), distinct from the off-menu London example above."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American.",
+        "raw_label_or_claim": "TMC performance is up 11%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "portion_versus_whole"]
+      },
+      "why": "Travel-management-company channel revenue growth: a point value with no basis word stated, so it exercises OD-11's bare-growth YoY default; TMC is an off-menu, prose-clear channel-kind slice and a qualified subset of total corporate revenue (OD-17), not the consolidated whole."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "we would expect that to grow through the balance of the year 75 to 85 percent in q3",
+        "raw_label_or_claim": "75 to 85 percent in q3",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Q3 fuel-recapture-rate guidance stated as a clean closed range; contrasts with the unresolvable Q4 figure below."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "qa",
+        "occurrence_in_part": null,
+        "quote": "and then ultimately in q4 if fuel is still at the level with capacity reductions i think our recapture rate would be in the 90s",
+        "raw_label_or_claim": "recapture rate would be in the 90s",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A real, source-stated Q4 recapture-rate projection, but 'in the 90s' cannot be lawfully resolved to a specific point/floor/range shape, and it is additionally conditional ('if fuel is still at the level with capacity reductions'); correct behavior is abstention, not a guessed shape."
+    },
+    {
+      "row": {
+        "source_id": "AAL_2026-04-23T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "numerous risks and uncertainties could cause actual results to differ from those projected",
+        "raw_label_or_claim": "numerous risks and uncertainties could cause actual results to differ from those projected",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Standard forward-looking-statement risk disclaimer: generic, non-specific, non-current boilerplate that fails the DU-03/Rule-1 fact gate; correct behavior is omission, not abstention."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "ending the quarter with total debt of $34.7 billion, a reduction of $1.8 billion in the quarter",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Same total-debt series/period already named by tested proposal P002 ('below $35 billion since mid-2015'); a shifted quote/boundary on the same fact is not a fresh target."
+    },
+    {
+      "quote": "which pressured CASAmex by approximately two points",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Same unit-cost series/period as the selected 'unit cost... up 5.2% year-over-year' addition; a within-event collision on one driver, not a second fact."
+    },
+    {
+      "quote": "we expect domestic year over year performance to accelerate in the second quarter",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Incomplete qualitative precursor to the same domestic-unit-revenue Q2 guidance already named by tested proposal P001 ('more than 10%'); not a fresh target under the partial-then-richer-restatement rule."
+    },
+    {
+      "quote": "The airline as a whole, regionals, mainline, we're in good shape and ready for the summer.",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Vague positive sentiment with no stated metric, state, or specific claim; fails the DU-03/Rule-1 fact gate as a bare mention; this event's negative-control slot is already filled by the risk-disclaimer row."
+    },
+    {
+      "quote": "continued momentum in managed corporate revenue, which increased 13% year over year",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Genuine fresh fact, but representative-scope trim: its point-value/sequential-comparison tag profile is already covered by selected rows and it repairs no declared coverage gap."
+    },
+    {
+      "quote": "our pre-tax margin improved approximately two points year over year",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Genuine fresh fact (points-unit override case under OD-11), but representative-scope trim given the same tag profile is already covered elsewhere in this event's selection."
+    },
+    {
+      "quote": "we now expect total capital expenditures to be approximately $4 billion",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Genuine fresh point-value fact, but representative-scope trim; adds no new hard-class coverage beyond rows already selected."
+    },
+    {
+      "quote": "spend on our co-branded cards increased 9% year-over-year",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Genuine fresh fact, but representative-scope trim; same point/sequential tag profile as several selected rows."
+    },
+    {
+      "quote": "a $400 million increase in fuel expense versus the forward curve in January",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Genuine fresh point-value/sign fact, but representative-scope trim; profile already covered by the selected $320M storm-impact and $4B fuel-expense rows."
+    },
+    {
+      "quote": "our unmanaged business small and medium enterprises are advantage business product is up 28% per year",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Genuine fresh portion-vs-whole candidate, but representative-scope trim; the selected TMC row already exercises portion_versus_whole and slices_and_unknown_axes for this event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event supplies no clear ambiguous_menus (T1-05 ladder rung 2/4) instance.",
+      "why": "No passage presents a stated company part whose kind is genuinely torn between two or more plausible menu/prose readings; reporting the shortfall rather than manufacturing one."
+    },
+    {
+      "what": "This event supplies no corrections_and_amendments (OD-14) instance.",
+      "why": "The one revision found (aircraft-delivery guidance lowered from 55 to 49) is a business-driven guidance change with business-change wording, not a typo/value-fix correction, so it does not exercise OD-14."
+    },
+    {
+      "what": "Classifying 'recapture rate would be in the 90s' as lawful_abstention_control rather than real_item.",
+      "why": "This is my own judgment that the informal decade-range phrasing plus conditional framing leaves the number-shape unresolvable; the owner rulings give no worked example matching this exact informal wording, so flagging for reviewer confirmation."
+    },
+    {
+      "what": "Channel-kind and portion classification of the TMC row (slices_and_unknown_axes + portion_versus_whole).",
+      "why": "TMC is not a menu-listed axis; classifying it as an off-menu 'channel' slice and as a qualified subset of total corporate revenue is my own reading of FS-05..24 and OD-17, not an explicitly worked example in the quoted rule text."
+    }
+  ],
+  "blocked": null
+}
+```

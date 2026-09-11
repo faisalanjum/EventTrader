@@ -1,0 +1,63 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "BBY_2026-03-03T08.00",
+ "ordinal_one_based": 26,
+ "ordinal_receipt": 25,
+ "attempt_number": 1,
+ "run_id": "wf_654e115c-4c8",
+ "agent_id": "a96144275c95f7bf0",
+ "raw_sha256": "a078bf43e308bf93e1af34ce5af6840ef522e64d9026e8a7df75ee22585adcbb",
+ "prompt_sha256": "5a2e53f1c0a7286f60ccda597ebae5374ee19a6a7da2bb6bf10b4db6cc187967",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 6,
+  "additions": 12,
+  "exclusions_considered": 6,
+  "open_issues": 3
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"No net-loss / negative-earnings statement exercising OD-12 (losses_and_sign) was found anywhere in this event's text.\", 'why': 'This is a profitable-quarter earnings call with no stated loss",
+  "{'what': \"No amendment/correction statement exercising OD-14 (corrections_and_amendments) was found anywhere in this event's text.\", 'why': 'The call contains no restatement or correction language; re",
+  "{'what': \"Whether 'Best Buy business' (a narrative sub-business, not a formal XBRL segment/geography axis value) is properly an OD-17 portion-versus-whole population or an FS-05..24 slice/unknown-axis"
+ ],
+ "locator": {
+  "additions": {
+   "located": 12,
+   "not_located": [],
+   "total_with_quote": 12
+  },
+  "exclusions_considered": {
+   "located": 6,
+   "not_located": [],
+   "total_with_quote": 6
+  }
+ },
+ "receipt_attempts": 27,
+ "receipt_missing": 10,
+ "receipt_other_problems": [
+  "the run accepted 26 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 25,
+  "attempt": 1,
+  "source_id": "BBY_2026-03-03T08.00",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_654e115c-4c8.json",
+  "agent_id": "a96144275c95f7bf0",
+  "raw_name": "BBY_2026-03-03T08.00.attempt1.complete.raw.json"
+ }
+}

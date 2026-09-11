@@ -1,0 +1,285 @@
+{
+ "source_id": "0001041061-25-000109",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "minority_investment_sale",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": 104,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 104,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "time_type": "duration",
+       "fiscal_year": 2024,
+       "fiscal_quarter": 1,
+       "measurement_raw_spans": [
+        "pre-tax"
+       ],
+       "slice_parts": [
+        "entity_ownership:devyani"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real item and settled as one: the quote states a completed disposal of an owned minority stake with stated pre-tax proceeds, which is a discrete action_event, not a bare mention."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "investment_income",
+       "driver_state": "reported",
+       "level_low": {
+        "value": -20,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": -20,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "time_type": "duration",
+       "period_start_date": "2024-01-01",
+       "period_end_date": "2024-09-30",
+       "period_scope": "ytd",
+       "fiscal_year": 2024,
+       "measurement_raw_spans": [
+        "pre-tax"
+       ],
+       "slice_parts": [
+        "entity_ownership:devyani"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real item and settled as one: a stated, dated, signed investment result on an owned stake is a readable standing variable, so it lands as a metric rather than a bare topic mention."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Boilerplate risk-factor incorporation statement asserting no material change to previously disclosed risk factors; it names no driver state, change, surprise, guidance or action, so the gate yields no DriverUpdate."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed as a negative control and confirmed as one: the sentence is generic no-change risk-factor boilerplate and carries no real driver fact."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_closure",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": 283,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 283,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "month": 1,
+       "slice_parts": [
+        "segment:kfcturkey"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_closure",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": 254,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 254,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "month": 1,
+       "slice_parts": [
+        "segment:phturkey"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real item and settled as one, but it carries TWO facts rather than one: the quote states two separately measured closure counts for two different company parts, so each is emitted on its own slice."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0001041061-25-000109",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "tax_audit",
+       "driver_state": "resolved",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 3
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real item and settled as one, but numberless: the quote reports a completed favorable audit resolution and the reversal of a prior reserve, while the benefit amount sits outside the quote and so is not encoded."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "minority investment in Devyani International Limited",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The stated \"approximate 5%\" stake size is treated as a descriptor of the disposed holding rather than a second standalone ownership-percentage fact, and the transaction value is encoded as the stated pre-tax proceeds."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "pre-tax investment losses",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The source states only the year-to-date end date, so the window start (2024-01-01) is derived from the document's own statement that the fiscal year ends December 31, and the loss is signed negative per the signed-axis rule."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "283 KFC",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The part \"KFC ... restaurants in Turkey\" is plausibly a brand/product-plus-geography pair or the existing menu segment value, and I reused the menu token segment:kfcturkey rather than coining a new kind."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "254 Pizza Hut restaurants in Turkey",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Same kind ambiguity as the KFC sibling: the Pizza Hut Turkey population is carried by the existing menu token segment:phturkey instead of a coined product-plus-geography pair."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 0,
+   "hard_classes": [
+    "losses_and_sign"
+   ],
+   "reference_name": "Tax (Benefit) - Tax audit",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The quote frames the same benefit as both \"the quarter\" and \"year to date\" ended September 30, 2025, and I recorded the quarter window because the quote states the event occurred in that quarter; no amount appears inside the quote, so the fact stays numberless."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-012/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-012/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": [
+  {
+   "what": "Row 4 slice-kind identity: whether the Turkey closures reuse the menu values segment:kfcturkey / segment:phturkey or should be coined as product plus geography parts.",
+   "why": "Stored slice values are first-write immutable and the two encodings are different identities, so a wrong pick here forks the series permanently and cannot be repaired at read time."
+  },
+  {
+   "what": "Row 2 year-to-date window start date (2024-01-01) is derived, not stated in the quote.",
+   "why": "The rules require an exact duration window to be all-or-nothing, and dropping the dates would leave a bare fiscal_year that describes a full year rather than the nine-month window the source actually states."
+  }
+ ]
+}

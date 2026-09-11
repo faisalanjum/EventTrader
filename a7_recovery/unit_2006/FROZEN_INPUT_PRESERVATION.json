@@ -1,0 +1,17 @@
+{
+ "frozen_snapshots": [
+  {
+   "unit": "unit_2002",
+   "manifest_sha256": "eda7b57c192452e365579022f07a4eb3beabddf7402f7b3ddc6a0b5a60a8c947",
+   "files": 1639,
+   "drift": []
+  },
+  {
+   "unit": "unit_2005",
+   "manifest_sha256": "5c1436f6d521dda506244bd94033da456692a42f3f4bff25c504a131d788d2a8",
+   "files": 92,
+   "drift": []
+  }
+ ],
+ "source_TEST_store_unchanged": true
+}

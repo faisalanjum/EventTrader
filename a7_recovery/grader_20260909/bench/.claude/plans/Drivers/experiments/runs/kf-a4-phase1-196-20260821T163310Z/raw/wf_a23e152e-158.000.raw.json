@@ -1,0 +1,46 @@
+```json
+{
+  "packet_id": "0000940944-26-000005#064",
+  "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "item": {
+          "driver_name": "continuing_operations_earnings_per_share",
+          "driver_state": "unknown",
+          "level_low": {"value": 10.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 10.50, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "range",
+          "level_unit": "usd",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "measurement_raw_spans": ["Reported diluted"],
+          "company_confirmed": true
+        },
+        "per_x": "share"
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-26-000005#064/L1",
+      "exact_match": true,
+      "why": "L1's driver_name (continuing_operations_earnings_per_share), value objects, level_shape_hint, level_unit, fiscal_year, time_type, measurement_raw_spans (['Reported diluted']), company_confirmed, and per_x all match the settled reply field-for-field."
+    },
+    {
+      "lane_id": "0000940944-26-000005#064/L2",
+      "exact_match": false,
+      "why": "L2 strips the continuing-operations scope out of the name (bare 'earnings_per_share') and instead pushes 'from continuing operations' into measurement_raw_spans; the settled reply treats continuing-operations as a population qualifier that must stay in the name (this document separately reports a different total net-EPS figure including discontinued operations), so both the driver_name and the measurement_raw_spans list differ from L1/the settled reply."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 'from continuing operations' is a name-level population qualifier (like 'current'/'funded' in Rule 3.4) or a measurement-flavor span (like 'GAAP'/'adjusted' in Rule 8).",
+      "why": "The source itself reports two materially different EPS figures side by side ('Earnings from continuing operations' vs. 'Net earnings' per share), which argues for keeping the scope in the name to avoid conflating two distinct drivers; but 'continuing operations' could also be read as an accounting-presentation modifier akin to GAAP/adjusted, which the rules say belongs only in measurement_raw_spans — the rule text does not unambiguously classify this specific term, and the two blind drafts split exactly on this point."
+    }
+  ]
+}
+```

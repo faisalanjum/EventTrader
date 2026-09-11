@@ -1,0 +1,235 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 12.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 12.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "change_value": {"value": 40, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["entity_ownership:companyownedstores", "segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: KFC Division's own company-owned restaurant margin (12.7%, +40bps YoY, Q4 2025) stated with its own value and scale inside the quote."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_margin",
+              "driver_state": "decreased",
+              "change_value": {"value": -40, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "measurement_raw_spans": ["lapping the 53rd week"],
+              "slice_parts": ["entity_ownership:companyownedstores", "segment:tacobellglobaldivision"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_margin",
+              "driver_state": "decreased",
+              "change_value": {"value": -10, "scale_multiplier": 1, "unit_scale_evidence": "basis points"},
+              "change_unit": "basis_points",
+              "measurement_raw_spans": ["lapping the 53rd week"],
+              "slice_parts": ["entity_ownership:companyownedstores", "segment:tacobellglobaldivision"],
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the 40bps-Q4/10bps-FY figures match Taco Bell Division's (not KFC's 20bps) 53rd-week comparability drag on company-owned restaurant margin, a real quantified fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "foreign_currency_translation",
+              "driver_state": "reported",
+              "level_low": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 10, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "foreign_currency_translation",
+              "driver_state": "reported",
+              "level_low": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 12, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcglobaldivision"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the $10M Q4 / $12M FY figures match KFC Division's own FX reconciliation line, a genuine external-cause metric fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_profit",
+              "driver_state": "increased",
+              "change_value": {"value": 12, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["GAAP"],
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: a whole-company GAAP operating profit growth fact, tying to the +12% ($738M vs $657M) figure in the summary table."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote describes a prospective change in financial-statement rounding/presentation convention, not a driver's state, change, surprise, guidance, or action; it is accounting-methodology boilerplate, not a business fact under Rule 1."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: purely a rounding/presentation-basis disclosure with no driver fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["measurement_wording", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote states the 53rd-week lap's impact on the margin change directly in basis points with no explicit 'year-over-year' wording inside it, so comparison_baseline is left null rather than inferred as prior_year."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["measurement_wording", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same quote-boundary reasoning as fact 0 applied to the full-year (-10bps) figure: no explicit comparison wording inside this exact quote, so comparison_baseline stays null."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Rule 5.1's benefit/credit/reversal sign convention is framed around expense-line accounting entries; applying it by analogy to justify a positive sign for plain 'favorably impacted operating profit' phrasing is a reasonable but not explicitly dictated extension."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same favorable-impact sign-convention extension as fact 0, applied to the full-year $12M figure."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "comparison_baseline=prior_year rests on the release's document-wide 'All comparisons are versus the same period a year ago' framing note rather than wording inside this exact quote."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001041061-26-000003#077",
+      "agrees": true,
+      "why": "Independently settled to the same driver_name, state, level/change values, units, comparison_baseline, period, and slice content as this lead."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#078",
+      "agrees": true,
+      "why": "Independently arrived at the same structure (restaurant_margin, decreased, signed -40bps Q4 / -10bps FY, measurement span 'lapping the 53rd week', Taco Bell company-owned slice) and the same null comparison_baseline judgment."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#079",
+      "agrees": true,
+      "why": "Independently settled to the same driver_name (foreign_currency_translation), reported state, point-shaped m_usd level values ($10M Q4, $12M FY), and KFC segment slice."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#080",
+      "agrees": true,
+      "why": "Independently settled to the same operating_profit / increased / +12% percent_yoy / prior_year / GAAP-measurement structure."
+    },
+    {
+      "lead_id": "phase1/0001041061-26-000003#081",
+      "agrees": true,
+      "why": "Independently reached the same abstention: a rounding/presentation-basis change is not a driver state/change/surprise/guidance/action fact."
+    }
+  ],
+  "open_issues": []
+}
+```

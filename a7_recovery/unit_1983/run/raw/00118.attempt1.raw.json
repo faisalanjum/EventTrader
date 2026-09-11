@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "debt_to_ebitdar_ratio",
+        "driver_state": "reported",
+        "level_low": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "x",
+        "time_type": "instant",
+        "period_end_date": "2025-05-25",
+        "measurement_raw_spans": ["adjusted"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

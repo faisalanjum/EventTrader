@@ -1,0 +1,241 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 51.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 51.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 53.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 53.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "period_end_date": "2026-02-14",
+              "period_scope": "ytd"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed as a fact: the quote states a concrete, sourced gross-margin decrease (51.7% vs 53.4% prior-year comparable period); only the period encoding was revised from a half label to year-to-date."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "ieepa_tariffs",
+              "driver_state": "occurred",
+              "time_type": "instant",
+              "period_start_date": "2026-02-20",
+              "period_end_date": "2026-02-20"
+            }
+          },
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "new_tariffs",
+              "driver_state": "occurred"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a lawful_abstention_control, but this settles as containing real facts, not a clean control: the passage reports two distinct, dated regulatory actions (the Supreme Court's IEEPA-tariff invalidation and the President's new tariffs under different authority), each a real action_event; only the trailing 'continues to evolve ... monitoring' clause is generic boilerplate and yields no fact of its own."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "effective_tax_rate",
+              "driver_state": "increased",
+              "level_low": {"value": 20.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 20.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 20.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 20.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "period_end_date": "2026-02-14",
+              "period_scope": "ttm"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: the trailing-four-quarter effective-tax-rate increase (20.4% vs 20.3% a year earlier) is a genuine metric fact, unchanged from prior readings."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 103.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 2,
+              "period_end_date": "2026-02-14",
+              "slice_parts": ["geography:us", "customer:commercial"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: domestic commercial sales carry a concrete stated dollar increase ($103.0 million to $1.2 billion) over the comparable prior year, sliced by geography:us and customer:commercial, encoded as one fact rather than split by dollar/percent basis."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic, standing description of AutoZone's overall seasonal sales pattern (higher sales February-September, lower December-January) with no period-specific state, change, surprise, guidance, or action; a bare background characterization of the business, failing the du_worthy gate's generic-boilerplate exclusion."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed: the seasonality sentence is generic, non-period-specific background about the nature of the business and correctly yields no fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic non-materiality hedge stating the impact of weather on sales mix 'is not significant,' with no stated direction, level, or period-bound event; recurring risk/immateriality boilerplate that fails the du_worthy gate, and the banned generic effect word 'impact' blocks any lawful driver name in any case."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed: the weather/non-materiality sentence is generic risk-hedge boilerplate and correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The 24-week window equals AutoZone's own stated Q1+Q2 (12+12 weeks) structure with no gap from fiscal-year start, which functions as year-to-date even though the filing never uses the literal phrase 'year to date'; I read this as period_scope=ytd with the exact stated end date rather than encoding it via a half/fiscal-quarter shape field, correcting the earlier half-based reading."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "No action_event state cleanly names a third-party court striking down a government tariff regime; I used 'occurred' as the closest literal match to the source's own past-tense 'invalidated,' though 'failed' (involuntary) is a defensible alternative reading of the tariffs' own status."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source names no specific statute for the new tariffs ('different statutory authority' only) and gives no exact date beyond 'immediately' after the February 20 ruling, so the name stays a generic source-grounded label and all period fields are left null rather than inferring a date."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two questions were resolved rather than left open: whether the co-stated $103.0 million dollar change and 9.8% change are one fact or two (settled as one, since Rule 1.5 bars restating one comparison as two records and the percent is not an independent basis like YoY-vs-sequential), and whether 'commercial' is a customer or channel slice kind (settled as customer:commercial using the Overview section's description of commercial credit accounts serving named customer types)."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001104659-26-032757#125",
+      "agrees": false,
+      "why": "Lead's driver_name, state, numeric values, unit, and prior_year baseline match, but it encodes the window with half=1 and no period_scope, whereas the 24-week span is the cumulative year-to-date period since fiscal-year start; I use period_scope=ytd with the exact end date and omit the half shape field."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#126",
+      "agrees": false,
+      "why": "The lead abstains, treating the whole tariff passage as generic monitoring boilerplate, but the text contains two dated, specific completed actions (the SCOTUS invalidation and the President's new tariffs) that are real action_event facts, not bare boilerplate; only the trailing monitoring clause alone is boilerplate."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#127",
+      "agrees": true,
+      "why": "Matches field for field: effective_tax_rate increased, 20.4% vs 20.3% prior-year TTM comparison, same fiscal_year, period_end_date, and period_scope=ttm."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#128",
+      "agrees": true,
+      "why": "Same driver_name, state, level, change_value, unit, baseline, period fields, and slice_parts as my settled fact; I independently resolved the same dollar-vs-percent basis question the lead flagged, in favor of one dollar-based fact, consistent with its choice."
+    },
+    {
+      "lead_id": "hr-021/b1/row4",
+      "agrees": true,
+      "why": "Matches field for field, including time_type=duration and the same slice_parts (geography:us, customer:commercial)."
+    },
+    {
+      "lead_id": "hr-021/b2/row4",
+      "agrees": true,
+      "why": "Same driver, state, values, baseline, period, and slice parts as my settled fact; it omits the time_type field, a minor completeness gap rather than a substantive disagreement."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#129",
+      "agrees": true,
+      "why": "Matches my no-fact/abstention conclusion and boilerplate-seasonality reasoning."
+    },
+    {
+      "lead_id": "phase1/0001104659-26-032757#130",
+      "agrees": true,
+      "why": "Matches my no-fact/abstention conclusion on the weather non-materiality sentence, including citing the banned generic 'impact' framing."
+    }
+  ],
+  "open_issues": []
+}
+```

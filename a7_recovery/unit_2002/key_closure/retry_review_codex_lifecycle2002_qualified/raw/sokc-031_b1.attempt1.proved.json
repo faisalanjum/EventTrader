@@ -1,0 +1,14 @@
+{
+ "source_id": "bzNews_42014391",
+ "facts": [
+  {
+   "fact_type": "action_event",
+   "item": {
+    "driver_name": "e_coli_outbreak",
+    "driver_state": "occurred"
+   }
+  }
+ ],
+ "abstentions": [],
+ "continuity_hints": []
+}

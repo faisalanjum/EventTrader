@@ -1,0 +1,147 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+       "driver_name": "earnings_per_share",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 1.73,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 1.73,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "measurement_raw_spans": [
+        "excluding Special Items"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "franchise_restaurant_acquisition",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": 670,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 670,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "slice_parts": [
+        "unknown:taco bell u.s."
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "system_sales",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 11,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "floor",
+       "level_unit": "m_usd",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "slice_parts": [
+        "channel:digital"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales_mix",
+       "driver_state": "reported",
+       "level_high": {
+        "value": 60,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "ceiling",
+       "level_unit": "percent",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "slice_parts": [
+        "channel:digital"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "0001041061-26-000003",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic risk-factor boilerplate from the forward-looking-statements list: it names weather and climate change as things that could affect results, with no stated state, change, size, direction, guidance or action for this company or period, so it is a bare risk mention and yields no fact."
+     }
+    ],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

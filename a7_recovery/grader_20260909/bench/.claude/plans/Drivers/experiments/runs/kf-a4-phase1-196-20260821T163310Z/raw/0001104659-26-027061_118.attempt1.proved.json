@@ -1,0 +1,41 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#118",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [
+      {
+        "fact_type": "guidance",
+        "per_x": "share",
+        "item": {
+          "driver_name": "earnings_per_share",
+          "driver_state": "introduced",
+          "level_low": {"value": 28.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_high": {"value": 28.55, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+          "level_shape_hint": "range",
+          "level_unit": "usd",
+          "fiscal_year": 2026,
+          "time_type": "duration",
+          "measurement_raw_spans": ["Diluted"],
+          "company_confirmed": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#118/L1",
+      "exact_match": true,
+      "why": "Identical fact_type, per_x, driver_name, driver_state, level_low/high objects, level_shape_hint, level_unit, fiscal_year, time_type, measurement_raw_spans, and company_confirmed; only JSON key ordering differs, which is not semantic."
+    },
+    {
+      "lane_id": "0001104659-26-027061#118/L2",
+      "exact_match": true,
+      "why": "Identical fact_type, per_x, driver_name, driver_state, level_low/high objects, level_shape_hint, level_unit, fiscal_year, time_type, measurement_raw_spans, and company_confirmed; only JSON key ordering differs, which is not semantic."
+    }
+  ],
+  "ambiguities": []
+}
+```

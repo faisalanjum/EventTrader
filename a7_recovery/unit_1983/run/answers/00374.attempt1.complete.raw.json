@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "underperforming_store_closures",
+        "driver_state": "announced",
+        "level_low": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "slice_parts": ["segment:pizzahutglobaldivision", "geography:us"],
+        "half": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

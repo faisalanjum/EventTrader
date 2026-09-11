@@ -1,0 +1,118 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "comparison_low": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_high": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "level_unit": "percent",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase",
+              "driver_state": "occurred",
+              "level_low": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales_guidance",
+              "driver_state": "introduced",
+              "level_low": {"value": 2.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:international"],
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic forward-looking risk-factor boilerplate listing macroeconomic conditions, inflation, interest rates, and cost pressures as hypothetical future risks, not a stated actual driver state, change, or action; Rule 1.2 requires abstention for generic risk boilerplate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five items describe entirely unrelated facts — a quarterly gross-margin decline versus the prior-year quarter, a completed share-repurchase transaction, newly introduced fiscal 2026 comparable-sales guidance, an end-of-year international store count, and generic boilerplate macroeconomic risk language — so no single underlying fact ties them together."
+}
+```

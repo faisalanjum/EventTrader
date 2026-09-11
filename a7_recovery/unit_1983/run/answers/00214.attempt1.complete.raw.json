@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "interest_coverage_ratio",
+        "driver_state": "persists",
+        "level_low": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "floor",
+        "level_unit": "x",
+        "slice_parts": ["entity_ownership:spacenk"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "jet_fuel_expense",
+        "driver_state": "introduced",
+        "change_value": {
+          "value": 4,
+          "scale_multiplier": 1000000000,
+          "unit_scale_evidence": "billion"
+        },
+        "change_unit": "m_usd",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

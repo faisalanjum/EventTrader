@@ -1,0 +1,168 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "same_store_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 3.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 3.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2,
+       "slice_parts": [
+        "geography:us"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "lifo_charge",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 138,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "basis point"
+       },
+       "level_high": {
+        "value": 138,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "basis point"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "basis_points",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2,
+       "measurement_raw_spans": [
+        "non-cash"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "net_new_store_openings",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "net_new_store_openings_surprise",
+       "driver_state": "in_line",
+       "level_low": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 64,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 2,
+       "surprise_basis_hint": "actual",
+       "comparison_baseline": "previous_guidance",
+       "has_favorability_wording": true
+      }
+     },
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "store_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 350,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 360,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "range",
+       "level_unit": "count",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "company_confirmed": true
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Bare topic mention inside the forward-looking-statements risk list: weather is named as a generic uncertainty with no stated state, change, size, direction, period or action, which the gate drops as risk boilerplate."
+     }
+    ],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

@@ -1,0 +1,22 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "core_operating_profit",
+        "driver_state": "increased",
+        "change_value": {"value": 10, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "slice_parts": ["segment:tacobellglobaldivision"],
+        "time_type": "duration",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

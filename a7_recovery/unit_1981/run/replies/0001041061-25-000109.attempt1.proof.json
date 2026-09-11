@@ -1,0 +1,65 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0001041061-25-000109",
+ "ordinal_one_based": 14,
+ "ordinal_receipt": 13,
+ "attempt_number": 1,
+ "run_id": "wf_c8c0617e-4a3",
+ "agent_id": "aab4978f75defc267",
+ "raw_sha256": "4b4ea0d9ea991b2af2d2ef8ca1cd558f60a2901d11ad1033975e272d215543a7",
+ "prompt_sha256": "9c3efa8bede7c4f8ee859479d99dce628be063ca6de8b6b2b13436061a387b55",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 4,
+  "additions": 9,
+  "exclusions_considered": 6,
+  "open_issues": 0
+ },
+ "blocked": null,
+ "open_issues": [],
+ "locator": {
+  "additions": {
+   "located": 8,
+   "not_located": [
+    {
+     "index": 0,
+     "problem": "quote does not occur in the named part (fabricated locator)",
+     "quote_head": "During the quarter ended March 31, 2024, we sold our approxi"
+    }
+   ],
+   "total_with_quote": 9
+  },
+  "exclusions_considered": {
+   "located": 6,
+   "not_located": [],
+   "total_with_quote": 6
+  }
+ },
+ "receipt_attempts": 15,
+ "receipt_missing": 22,
+ "receipt_other_problems": [
+  "the run accepted 14 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 13,
+  "attempt": 1,
+  "source_id": "0001041061-25-000109",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c8c0617e-4a3.json",
+  "agent_id": "aab4978f75defc267",
+  "raw_name": "0001041061-25-000109.attempt1.complete.raw.json"
+ }
+}

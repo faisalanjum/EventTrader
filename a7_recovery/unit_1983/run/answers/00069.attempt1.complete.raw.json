@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quoted net pre-tax gain/charge figure ($71M for the quarter, $0.07 per share) bundles multiple independent one-off causes — property sale gains and non-cash impairment charges from the South Korea business sale, plus separate transaction costs from the unrelated Israel business acquisition — into a single undifferentiated net value with no per-cause breakdown stated. Rule 3.2 requires splitting independent causes into separate facts, but the source gives no way to allocate the net $71 million (or $0.07 EPS) between the South Korea divestiture and the Israel acquisition without inventing unstated values, so this item cannot be lawfully resolved into a single compliant driver name/value pairing."
+    }
+  ],
+  "continuity_hints": []
+}
+```

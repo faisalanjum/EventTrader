@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "increased",
+        "change_value": {"value": 7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["Adjusted", "constant currency basis"],
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "fiscal_quarter": 4
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

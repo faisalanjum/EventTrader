@@ -1,0 +1,62 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "YUM_2026-02-04T08.15",
+ "ordinal_one_based": 32,
+ "ordinal_receipt": 31,
+ "attempt_number": 1,
+ "run_id": "wf_c1d790b4-d26",
+ "agent_id": "ae119097ed5f0c98e",
+ "raw_sha256": "faeb44eb27165ff8168fd039bc41259e0340ebe5c90e281d7f50ae47b73f872a",
+ "prompt_sha256": "165359b10cbeaff7e9395e615e9103b2b343846b175dd4fbcd391f619893ab9e",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 6,
+  "additions": 12,
+  "exclusions_considered": 5,
+  "open_issues": 2
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"The sentence 'Our fourth quarter results reflect the comparison against an extra week in 2024 for business units that report on a period calendar basis.' is not clearly settled as real_item ",
+  "{'what': \"This event's prepared remarks and Q&A supply no genuine candidate for the ambiguous_menus tag (no prose part is plausible under two or more menu slice kinds) and no candidate for the correct"
+ ],
+ "locator": {
+  "additions": {
+   "located": 12,
+   "not_located": [],
+   "total_with_quote": 12
+  },
+  "exclusions_considered": {
+   "located": 5,
+   "not_located": [],
+   "total_with_quote": 5
+  }
+ },
+ "receipt_attempts": 36,
+ "receipt_missing": 1,
+ "receipt_other_problems": [
+  "the run accepted 35 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 31,
+  "attempt": 1,
+  "source_id": "YUM_2026-02-04T08.15",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c1d790b4-d26.json",
+  "agent_id": "ae119097ed5f0c98e",
+  "raw_name": "YUM_2026-02-04T08.15.attempt1.complete.raw.json"
+ }
+}

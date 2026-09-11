@@ -1,0 +1,91 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restructuring_costs",
+              "driver_state": "reported",
+              "level_low": {"value": 80, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 80, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["pre-tax"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The $71 million Q4-2024 net pre-tax gain and $70 million FY2024 net pre-tax charge aggregate two independent causes — the South Korea business sale (property sale gains, transaction costs, non-cash impairment) and the Israel business acquisition (transaction costs) — with no breakdown of how much of the net figure is attributable to each, so no single driver can be lawfully named or valued."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:usmarket"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic forward-looking-statements safe-harbor boilerplate stating that the release contains forward-looking statements, not a real statement about a specific driver's state, change, surprise, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is standard 'About McDonald's' company-profile boilerplate describing the general franchise ownership structure of the business, not an event-specific change, surprise, guidance, or action for this filing period."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five members cover unrelated, independent matters — a 2025 Q4 Accelerating-the-Organization restructuring charge, an unresolvable netted 2024 gain/charge figure tied to the separate South Korea sale and Israel acquisition transactions, U.S. Q4 comparable-sales growth, generic forward-looking-statements boilerplate, and generic franchise-ownership boilerplate — so they cannot be one underlying fact."
+}
+```

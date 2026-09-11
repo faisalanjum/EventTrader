@@ -1,0 +1,190 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "verdicts": [
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P000",
+      "decision": "exclude",
+      "why": "Already tested elsewhere; this proposal's target (Q4 implied total sales growth 13%-14.5%) is outside this fresh sample by task design, not a claim that it is false or mislocated.",
+      "row": null
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P001",
+      "decision": "exclude",
+      "why": "Already tested elsewhere; this proposal's target (Q3 total sales $3.3B, 5.9% higher) is outside this fresh sample by task design, not a claim that it is false or mislocated.",
+      "row": null
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P002",
+      "decision": "exclude",
+      "why": "Already tested elsewhere; this proposal's target (Longhorn total sales +11.2%) is outside this fresh sample by task design, not a claim that it is false or mislocated.",
+      "row": null
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P003",
+      "decision": "exclude",
+      "why": "Already tested elsewhere; this proposal's target ('in line with our expectations' EPS surprise) is outside this fresh sample by task design, not a claim that it is false or mislocated.",
+      "row": null
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P004",
+      "decision": "exclude",
+      "why": "Already tested elsewhere; this proposal's target (FY2026 total sales growth guidance ~9.5%) is outside this fresh sample by task design, not a claim that it is false or mislocated.",
+      "row": null
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P005",
+      "decision": "exclude",
+      "why": "Already tested elsewhere; this proposal's target (restaurant labor 20bps lower) is outside this fresh sample by task design, not a claim that it is false or mislocated.",
+      "row": null
+    },
+    {
+      "proposal_id": "DRI_2026-03-19T08.30#P006",
+      "decision": "exclude",
+      "why": "Already tested elsewhere; this proposal's target (adjusted diluted EPS $2.95, +5.4%) is outside this fresh sample by task design, not a claim that it is false or mislocated.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We generated $3.3 billion of total sales, 5.9% higher than last year, driven by same-restaurant sales growth of 4.2%.",
+        "raw_label_or_claim": "same-restaurant sales growth of 4.2%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      },
+      "why": "Fresh fact: Q3 actual same-restaurant (comp-store) sales growth of 4.2%, a different Driver from bare total sales already tested by proposals (NAME-13/OD-17). Exercises point_range_floor_ceiling (point value) and portion_versus_whole (same-restaurant is the qualified population distinct from consolidated total sales)."
+    },
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We generated $579 million of adjusted EBITDA",
+        "raw_label_or_claim": "adjusted EBITDA",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "Fresh fact: quarterly adjusted EBITDA of $579 million, untested by any proposal. Exercises point_range_floor_ceiling (point value) and measurement_wording (NAME-14/FS-25 'adjusted' qualifier)."
+    },
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "adjusted diluted net earnings per share of $10.57 to $10.67",
+        "raw_label_or_claim": "adjusted diluted net earnings per share of $10.57 to $10.67",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "Fresh fact: updated full-year FY2026 guidance for adjusted diluted EPS as a closed range, distinct from the tested actual Q3 EPS ($2.95) and from the tested total-sales guidance figures. Exercises point_range_floor_ceiling (closed range) and measurement_wording (adjusted diluted)."
+    },
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Olive Garden delivered a strong segment profit margin of 23% for the quarter, which was only 10 basis points below last year.",
+        "raw_label_or_claim": "Olive Garden delivered a strong segment profit margin of 23%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "Fresh fact: Olive Garden segment profit margin of 23%, a segment-scoped metric untested by any proposal. Exercises point_range_floor_ceiling (point value) and slices_and_unknown_axes (segment:olivegarden on the supplied menu)."
+    },
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "These statements are subject to risks and uncertainties that could cause actual results to differ materially from our expectations and projections.",
+        "raw_label_or_claim": "risks and uncertainties that could cause actual results to differ materially from our expectations and projections",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Negative control: the call's standard forward-looking-statements disclaimer is generic risk boilerplate with no specific, current, source-flagged adverse threat; it fails DU-03/Rule 1, so the correct reader behavior is omission, never abstention or a stored fact."
+    },
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we've completed the exploration of strategic alternatives for the Bahama Breeze brand and determined that 14 locations will permanently close and the remaining 14 will be converted to other Darden brands over the next 12 to 18 months.",
+        "raw_label_or_claim": "14 locations will permanently close and the remaining 14 will be converted to other Darden brands",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "Fresh fact: a decided corporate action on the Bahama Breeze brand (14 closures, 14 conversions), a real, specific, non-boilerplate action fact distinct from every tested financial-metric proposal. Exercises slices_and_unknown_axes (Bahama Breeze is a named brand/other-operating-segment on the supplied menu)."
+    },
+    {
+      "row": {
+        "source_id": "DRI_2026-03-19T08.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Team restaurant sales growth of 3.5% to 5% incorporates the strong trends we have seen through the past three weeks of March.",
+        "raw_label_or_claim": "Team restaurant sales growth of 3.5% to 5%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "portion_versus_whole"]
+      },
+      "why": "Fresh fact: Q4 guidance for same-restaurant sales growth stated as a bare percentage range on a sub-annual (quarterly) guided period with no stated sequential/YoY basis word -- the canonical OD-11 default-to-percent_yoy scenario the design calls a monitored residual. Exercises point_range_floor_ceiling (closed range), sequential_comparison (OD-11 growth-basis default), and portion_versus_whole (same-restaurant qualified population)."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Total sales for Olive Garden increased by 4.7%, driven by strong same-restaurant sales growth, as well as the addition of 17 net new restaurants.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A third total-sales-type figure for this event (overall and Longhorn total sales are already tested by proposals; Olive Garden is already represented via its segment-margin addition); does not repair any declared coverage gap."
+    },
+    {
+      "quote": "same-restaurant sales growth of approximately 4.5%",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Duplicative in kind with the Q3 actual same-restaurant-sales row and the Q4 guidance same-restaurant-sales row already selected; a third same-restaurant-sales value for one event is not needed to repair coverage."
+    },
+    {
+      "quote": "We expect adjusted diluted net earnings per share between $3.59 and $3.69.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Same fact-type (adjusted diluted EPS guidance range) as the annual guidance row already selected; a second EPS-guidance range for this event is not needed to repair coverage."
+    },
+    {
+      "quote": "to get us to that EPS growth plus dividend yield of 10% to 15%.",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "A further point/range example beyond the rows already selected for this event; not needed to repair declared coverage."
+    },
+    {
+      "quote": "During the fiscal third quarter, average same restaurant sales for the industry decreased 1.2%, and average same restaurant guest counts decreased 3%.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Describes the casual-dining industry benchmark, not a fact about Darden itself; fails the driver-fact gate (no DRI state/change/surprise/guidance/action)."
+    },
+    {
+      "quote": "there's still double-digit demand destruction that we're seeing even in February in retail",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Macro grocery/retail beef-demand commentary, not a stated fact about Darden's own driver; out of scope for a DRI benchmark row."
+    },
+    {
+      "quote": "Adjusted G&A expenses were flat to last year.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Qualitative 'flat' restatement of a margin-line item already represented in kind by the adjusted-EBITDA and segment-margin rows selected; not needed to repair coverage."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event's text supplies no fresh (not already covered by a supplied proposal) real candidate for four hard classes: losses_and_sign (no stated loss/charge/benefit/credit language appears anywhere in the transcript), expectation_routing (no consensus-referenced or guidance-vs-consensus surprise language beyond the already-tested 'in line with our expectations' proposal), ambiguous_menus (no prose passage presents a genuinely two-or-more-plausible-kind slice label against the supplied menu), and corrections_and_amendments (no amendment/typo-correction wording appears; the only guidance movement discussed is an ordinary raise, not an OD-14 correction).",
+      "why": "Reporting a genuine per-event coverage shortage rather than inventing or widening a candidate to fill it, per the instruction to say so in open_issues when fresh coverage is insufficient."
+    },
+    {
+      "what": "The transcript contains several apparent speech-to-text errors that fall inside quoted spans used above or considered as candidates, e.g. 'same-russian sales growth' (for 'same-restaurant'), 'Team restaurant sales growth' (apparently 'Same restaurant sales growth'), 'eat margin' (possibly 'EBIT margin'), and 'Baha'u'llah brief conversions' (for 'Bahama Breeze'/'Bahama Breeze conversions').",
+      "why": "Quotes above are copied character-for-character from the supplied source including these apparent errors, since the authority does not instruct whether to correct, exclude, or otherwise treat garbled ASR spans; recorded as an unsettled point rather than silently corrected."
+    }
+  ],
+  "blocked": null
+}
+```

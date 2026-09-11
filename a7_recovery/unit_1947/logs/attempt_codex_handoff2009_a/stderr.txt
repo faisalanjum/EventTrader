@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2009/check_saved_handoff.py", line 38, in <module>
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 521, in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 337, in gold_by_event
+    bound = _approved_bound()
+            ^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_build.py", line 310, in _approved_bound
+    raise ValueError("this run's binding pins no approved ordinary "
+ValueError: this run's binding pins no approved ordinary binding at /tmp/a7_approved_key/ordinary_bound.json

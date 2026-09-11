@@ -1,0 +1,64 @@
+```json
+{
+  "packet_id": "0000764478-25-000057#047",
+  "settled": {
+    "source_id": "0000764478-25-000057",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restructuring_charges",
+          "driver_state": "reported",
+          "level_low": {"value": -1.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": -1.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_points",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "fiscal_quarter": 3,
+          "period_end_date": "2025-11-01"
+        }
+      },
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "restructuring_charges",
+          "driver_state": "reported",
+          "level_low": {"value": 3.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 3.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_points",
+          "time_type": "duration",
+          "fiscal_year": 2026,
+          "period_scope": "ytd",
+          "period_end_date": "2025-11-01"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000764478-25-000057#047/L1",
+      "exact_match": true,
+      "why": "Same two facts (Q3 -1.5 pct-pts, 9mo 3.2 pct-pts, percent_points, point shape, duration, FY2026/Q3 and FY2026 YTD ending 2025-11-01, state reported) and same driver_name 'restructuring_charges'."
+    },
+    {
+      "lane_id": "0000764478-25-000057#047/L2",
+      "exact_match": false,
+      "why": "Identical values, units, periods and state, but uses driver_name 'restructuring_costs' instead of the source-grounded 'restructuring_charges', so it does not match the settled name."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether the canonical driver name should be 'restructuring_charges' (the exact, repeatedly-used source term) or 'restructuring_costs' (the bare-root form named in Rule 3.8's lane-default list).",
+      "why": "Both are lawful synonyms under Rule 3.12 (meaning over spelling), and the two drafts split on this exact point; the rule text's bare-root list is meant to fix the lane (metric vs action_event), not necessarily to mandate 'costs' over 'charges' as the literal string."
+    },
+    {
+      "what": "Whether the adjacent prior-period '—%' entries in the same table row should make driver_state 'decreased' (via Rule 4's 'a prior value stated beside the value') instead of 'reported'.",
+      "why": "The dash could be read as a stated zero comparator, but it more plausibly denotes 'no meaningful/rounds-to-zero amount' in this non-GAAP bridge rather than an asserted comparable value, and the source narrates no direction for this specific line, so 'reported' was kept as the safer, non-inferred state."
+    }
+  ]
+}
+```

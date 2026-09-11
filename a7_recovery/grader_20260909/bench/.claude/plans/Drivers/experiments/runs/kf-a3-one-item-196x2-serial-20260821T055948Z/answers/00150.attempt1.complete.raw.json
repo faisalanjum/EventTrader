@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote ('Operating Profit (Loss) $ (2) $ 1 (572) (572) $ — $ (2) 82 82' — the Habit Burger & Grill Division operating profit/loss row) carries numeric values whose scale (millions of U.S. dollars) is stated only in the MD&A's introductory paragraph outside this quote, not by any span inside the quote itself (only bare '$' markers appear). Since scale_multiplier here is not 1, unit_scale_evidence cannot be lawfully sourced from inside the quote (Rule 5.6), so the numeric values cannot be populated and the fact must be abstained rather than extended with outside evidence."
+    }
+  ],
+  "continuity_hints": []
+}
+```

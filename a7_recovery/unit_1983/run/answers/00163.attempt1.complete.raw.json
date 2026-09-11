@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The quoted text is a generic risk-factor boilerplate item inside the forward-looking-statements safe-harbor list ('...pending or future litigation... adverse effects of severe weather and climate change...'), not a real statement about a driver's state, change, surprise, guidance, or action. Rule 1.2 requires abstention for bare topic mentions / generic risk boilerplate."}
+  ],
+  "continuity_hints": []
+}
+```

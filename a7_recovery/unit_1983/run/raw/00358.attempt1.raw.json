@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "\"We beat and raised throughout the year\" and \"exceeded on all metrics\" is a generic retrospective summary that names no specific metric, guide, or comparison — it covers an unspecified bundle of results already stated elsewhere with concrete detail (e.g., diluted EPS above prior guidance). With no identifiable single driver, period, or basis to attach, this cannot be lawfully resolved into a driver_name without guessing or duplicating facts already captured specifically."
+    }
+  ],
+  "continuity_hints": []
+}
+```

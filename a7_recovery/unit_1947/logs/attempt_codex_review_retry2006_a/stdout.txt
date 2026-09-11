@@ -1,0 +1,115 @@
+{
+ "kind": "approved invalid-only candidate, no new call",
+ "primary": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004",
+ "child": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry",
+ "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2004",
+ "parent_receipt_sha256": "cd428741f21588529dbe0dc6893daaf1fbfc30cc4c1e9eff761674188b3e64ba",
+ "parent_finalization_sha256": "155edfd613170cd913f4036f818cf2a3018795daabb0607adbeb0daef099899f",
+ "child_receipt_sha256": "00de4262f247539b65637813dc2555ede228a63029526ba17bebfe4d02a3524f",
+ "primary_valid_preserved": 52,
+ "scheduled_child": 14,
+ "call_total_before": 481,
+ "call_total_after": 495,
+ "ceiling": 4382,
+ "native_existing_child_identities": [],
+ "invocations": [
+  {
+   "label": "sokc-001/b1",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-001_b1.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-001_b1.attempt2.js",
+   "script_sha256": "b0a697df788f88edb0cd8f17de5d06f75b0a198005c825d1863bc2eb33125de0"
+  },
+  {
+   "label": "sokc-004/b1",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-004_b1.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-004_b1.attempt2.js",
+   "script_sha256": "c5653500cc14028a6a8a0a60b7ebc16b1c7ed6d093983c1a65497be9bc6e340c"
+  },
+  {
+   "label": "sokc-010/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-010_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-010_b2.attempt2.js",
+   "script_sha256": "30d7c81320898b7fbcc0ce52d4f2656310051d159db77397cc742e6b54553778"
+  },
+  {
+   "label": "sokc-011/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-011_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-011_b2.attempt2.js",
+   "script_sha256": "99c650c593eedcbb329eeca9afac95e450368f48a6ad5c30d9fcbd8bd73842a3"
+  },
+  {
+   "label": "sokc-013/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-013_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-013_b2.attempt2.js",
+   "script_sha256": "25002b9fae815d243fc13c523030443d093acbdfbcbba5c9c041dc5c883e83b0"
+  },
+  {
+   "label": "sokc-014/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-014_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-014_b2.attempt2.js",
+   "script_sha256": "e48f0b96aaf7e90750eeb3349d6b734e633803433c8c07732bd92a5b4ae6ff41"
+  },
+  {
+   "label": "sokc-016/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-016_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-016_b2.attempt2.js",
+   "script_sha256": "9414b7a484b5e1c854a245ea1cbac9a65b89c1e4762673fd4dec90ffcd485f10"
+  },
+  {
+   "label": "sokc-018/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-018_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-018_b2.attempt2.js",
+   "script_sha256": "4cde5d4661b2d318225dd68cd493d92580e5c2f132756f1d29a9d672daca230e"
+  },
+  {
+   "label": "sokc-020/b1",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-020_b1.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-020_b1.attempt2.js",
+   "script_sha256": "046d13a9a98d182800f132ed4197d682f22d2b776bcdef563f93d1f6a339732f"
+  },
+  {
+   "label": "sokc-025/b1",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-025_b1.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-025_b1.attempt2.js",
+   "script_sha256": "ab17f0438bfba2337200bb6f4e6373b0ed75b2e1789029e07706f8b0e4fc82fe"
+  },
+  {
+   "label": "sokc-025/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-025_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-025_b2.attempt2.js",
+   "script_sha256": "035dd3d3724d0cba03e431a2816ccabd1b354b8f27b298a6a6230097fec64dca"
+  },
+  {
+   "label": "sokc-026/b1",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-026_b1.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-026_b1.attempt2.js",
+   "script_sha256": "81e5bf522d5415117f2fbccf0b39ac1845be9e734910675173dc9d4c22a326e6"
+  },
+  {
+   "label": "sokc-028/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-028_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-028_b2.attempt2.js",
+   "script_sha256": "970e44cd59f368b85ea492a0dae85721caa6162100d913c45171bcef064380dc"
+  },
+  {
+   "label": "sokc-029/b2",
+   "attempt": 2,
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/review_retry_2006/sokc-029_b2.attempt2.js",
+   "durable_logical_script": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/scripts/sokc-029_b2.attempt2.js",
+   "script_sha256": "279c2998a4b4a1e21607b7e7b6a79f8b1574a8c4b6d3ed598ead397502576480"
+  }
+ ]
+}

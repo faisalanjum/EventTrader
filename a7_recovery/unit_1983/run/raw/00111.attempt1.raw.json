@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The targeted text ('all share and per share data in current and comparable periods have been adjusted to reflect the split') is a methodology/restatement note explaining how prior per-share figures were recast for the already-reported 15-for-1 stock split in the same sentence; it names no separate driver state, change, surprise, guidance, or action of its own. Emitting it would just restate the stock-split action fact a second time, which Rule 1.5 forbids."
+    }
+  ],
+  "continuity_hints": []
+}
+```

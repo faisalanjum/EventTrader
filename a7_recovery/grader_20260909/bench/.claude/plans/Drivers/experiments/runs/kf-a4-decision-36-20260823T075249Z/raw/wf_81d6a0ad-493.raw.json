@@ -1,0 +1,204 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_channel_mix",
+              "driver_state": "unchanged",
+              "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["segment:thecheesecakefactory", "channel:off_premise"],
+              "time_type": "duration",
+              "period_scope": "ytd",
+              "period_end_date": "2025-09-30",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a genuine metric fact, but because this states a percentage mix/share (not an absolute dollar amount), it is named 'sales_channel_mix' rather than reusing an amount-identity name like 'restaurant_sales', per the ratio-is-a-different-meaning rule."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "restaurant_operating_week",
+            "item": {
+              "driver_name": "sales_per_restaurant_operating_week",
+              "driver_state": "increased",
+              "level_low": {"value": 231971, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 231971, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 231011, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 231011, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:thecheesecakefactory"],
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a genuine metric fact: average sales per restaurant operating week at The Cheesecake Factory Restaurants increased year over year in Q3 FY2025, consistent with the proposal."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revolving_credit_facility_commitment_increase_feature",
+              "driver_state": "reported",
+              "level_high": {"value": 200, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "m_usd"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item; although the accordion/commitment-increase capacity is contingent and unexercised, it is a specific quantified $200 million structural term directly parallel to the undisputed $400 million commitment and $50 million letter-of-credit sublimit in the same paragraph, so it settles as a genuine metric fact, consistent with the proposal."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 139.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 139.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 106.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": 106.8, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:flowerchild"],
+              "time_type": "duration",
+              "period_scope": "ytd",
+              "period_end_date": "2025-09-30",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and settled as a genuine metric fact: Flower Child segment sales increased 30.9% year over year on a nine-month (YTD) basis, consistent with the proposal."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "This is a ratio/mix fact (off-premise channel's share of segment sales); preserving that as a distinct driver identity from the absolute-dollar 'sales' amount for the same segment required departing from the name most prior leads used ('restaurant_sales'/'sales')."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an averaged per-week sales rate over the quarter counts as time_type duration (a computed flow-based average) rather than instant (a balance at a moment) is a judgment call the rules do not explicitly resolve."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether a stated but unexercised, conditions-precedent-gated commitment-increase ceiling counts as a real, re-readable driver fact or merely describes a hypothetical, non-activated contractual mechanism is genuinely debatable; settled as a fact because it is directly parallel in specificity to the surrounding, undisputed $400 million commitment and $50 million letter-of-credit sublimit."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The exact period_end_date (2025-09-30) is drawn from the surrounding filing's table headings rather than stated literally inside this quote, which only says 'first nine months of fiscal 2025.'"
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0001104659-25-105631#101",
+      "agrees": false,
+      "why": "Matches the slice pairing (segment:thecheesecakefactory + channel:off_premise), the point 21% level/comparison values, the 'approximately' measurement span, and the prior_year baseline, but keeps the driver_name 'restaurant_sales', which is the identity for the absolute-dollar amount; since this fact states a mix/share, not an amount, Rule 3's ratio-is-a-different-meaning requirement calls for a distinct name such as 'sales_channel_mix'."
+    },
+    {
+      "lead_id": "hr-016/b1/row1",
+      "agrees": false,
+      "why": "Uses the even broader driver_name 'sales' (compounding the mix-vs-amount identity collision), omits the source-stated repeated comparison_low/high object even though the source explicitly states the same 21% held in the prior-year period too, and drops the segment:thecheesecakefactory slice element even though the sentence sits inside the Cheesecake Factory Restaurants-specific paragraph."
+    },
+    {
+      "lead_id": "hr-016/b2/row1",
+      "agrees": false,
+      "why": "Uses driver_name 'restaurant_sales' (an amount identity, not the required distinct mix identity) and omits the segment:thecheesecakefactory slice element even though the sentence sits entirely inside the Cheesecake Factory Restaurants paragraph; otherwise matches on level/comparison values and baseline."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-105631#102",
+      "agrees": true,
+      "why": "Identical driver_name, per_x, state, level/comparison point values and units, prior_year baseline, thecheesecakefactory segment slice, and duration/Q3 FY2025 period."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-105631#103",
+      "agrees": true,
+      "why": "Identical driver_name using the source's own 'commitment increase feature' phrase, reported state, ceiling shape, correctly-scaled 200-million level_high, m_usd unit, and no period fields since none are stated in the sentence itself."
+    },
+    {
+      "lead_id": "hr-017/b1/row3",
+      "agrees": false,
+      "why": "Agrees on state, shape, level_high value/scale, and unit, but renames the driver 'revolving_credit_facility_accordion', importing the word 'accordion', which never appears anywhere in the source text, where the settlement keeps the source's own phrase 'commitment increase feature'."
+    },
+    {
+      "lead_id": "hr-017/b2/row3",
+      "agrees": false,
+      "why": "Mis-scales level_high to 200000000 while separately keeping scale_multiplier 1000000 (double-counting the million scale and violating the never-rescale-yourself rule), uses the over-broad driver_name 'revolving_credit_facility' that erases the increase-feature qualifier, and adds instant/Q3/FY2025 period fields that are not stated in the sentence itself."
+    },
+    {
+      "lead_id": "phase1/0001104659-25-105631#104",
+      "agrees": true,
+      "why": "Identical driver_name 'sales', increased state, point level/comparison values and units, prior_year baseline, flowerchild segment slice, and ytd/FY2025/2025-09-30 period, with change_value correctly left null since 30.9% is derivable from the two stated dollar values."
+    }
+  ],
+  "open_issues": []
+}
+```

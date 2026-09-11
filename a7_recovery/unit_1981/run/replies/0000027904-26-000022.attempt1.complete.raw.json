@@ -1,0 +1,160 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "verdicts": [
+    {
+      "proposal_id": "0000027904-26-000022#P000",
+      "decision": "exclude",
+      "why": "Already-tested target (CASM 22.20 vs 19.69 cents, 13% increase) — outside this fresh sample by definition; no claim about its truth or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000022#P001",
+      "decision": "exclude",
+      "why": "Already-tested target (Gain/(loss) on investments, net, (550)/(40)/(510)) — outside this fresh sample by definition; no claim about its truth or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000022#P002",
+      "decision": "exclude",
+      "why": "Already-tested target (Domestic passenger revenue +8% on +1% capacity) — outside this fresh sample by definition; no claim about its truth or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000022#P003",
+      "decision": "exclude",
+      "why": "Already-tested target (operating income $501M, decrease of $68M) — outside this fresh sample by definition; no claim about its truth or classification.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The refinery generated an operating loss of $39 million in the March 2026 quarter compared to a loss of $1 million in the March 2025 quarter.",
+        "raw_label_or_claim": "refinery generated an operating loss",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "A segment-level (refinery) operating-loss fact, distinct from the total-company operating income already tested (P003). Point-shape loss values in both periods (sign convention per OD-12); refinery is a distinct segment slice (menu entry segment:refinery)."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Interest expense, net $ (151) $ (179) $ 28",
+        "raw_label_or_claim": "Interest expense, net",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A distinct non-operating line item (interest expense) from the Non-Operating Results table, not covered by any proposal (which named Gain/(loss) on investments). Values are stated as negative expense via accounting-notation parentheses, exercising the OD-12 signed-axis rule; both periods are exact point values."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Total revenue, adjusted (a non-GAAP financial measure, which excludes revenue related to refinery sales to third parties) increased in the March 2026 quarter by $1.2 billion, or 9.4%, compared to the March 2025 quarter.",
+        "raw_label_or_claim": "Total revenue, adjusted",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A non-GAAP adjusted measurement variant of total revenue (NAME-14/FS-25 measurement token), distinct from any proposal. States both a point dollar change ($1.2B) and a percent growth figure (9.4%) versus the year-ago quarter, exercising the OD-11 growth-basis determination (YoY default)."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "CASM-Ex (2) \n\n15.13 ¢ 14.23 ¢ 6 %",
+        "raw_label_or_claim": "CASM-Ex",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "A separately named non-GAAP measure (non-fuel unit cost) from the Operating Statistics table, distinct from the CASM fact already tested (P000). Exact point values for both periods; the earlier bare-percent prose mention of CASM-Ex lacks level values, so this table row is the first complete occurrence."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Atlantic 1,517 11 % 4 % 3 % 6 % 7 % 1 pt",
+        "raw_label_or_claim": "Atlantic",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A geography-slice revenue fact (matches menu geography:atlanticdestination), genuinely different population from the Domestic slice already tested (P002). Carries an exact point-level dollar figure and a percent YoY growth figure, exercising the OD-11 growth-basis rule."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000022",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "There have been no material changes from the risk factors described in our Form 10-K.",
+        "raw_label_or_claim": "no material changes from the risk factors",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic boilerplate risk-factor statement with no specific current source-flagged adverse threat; fails the DU-03/Rule-1 fact gate, so the correct reader behavior is omission — a clean negative control from the risk part."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Domestic $ 8,717 8 % 2 % 1 % 6 % 6 % — pts",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same fact as proposal P002 (domestic passenger revenue +8% on +1% capacity) restated with richer table detail; not a fresh fact under the first-complete-quote/fusion rule."
+    },
+    {
+      "quote": "Our total operating cost per available seat mile (\"CASM\") increased 13% compared to the March 2025 quarter",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Same fact as proposal P000 (CASM +13%) restated in prose; not fresh."
+    },
+    {
+      "quote": "Latin America 1,328 — % (4) % (3) % 4 % 3 % (1) pt",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A lawful, distinct geography-slice fact, but losses_and_sign and slices_and_unknown_axes coverage for this event is already served by other selected rows; not added per representative-sample restraint (no proposal names it, so this is a considered-but-declined candidate, not a duplicate)."
+    },
+    {
+      "quote": "Compared to the March 2025 quarter, our total revenue increased $1.8 billion.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A lawful fact (unadjusted GAAP total revenue growth), distinguishable by measurement from the adjusted-revenue row already selected, but not added — one measurement-wording exemplar from this event is sufficient; not added merely because another lawful fact exists."
+    },
+    {
+      "quote": "The refinery typically produces approximately 200,000 barrels of refined products per day, which represents approximately 75% of our daily consumption",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A genuine per-X (per-day) stated fact relevant to the NAME-13 total-vs-per-X general rule, but none of the ten required hard-class tags names a per-X category; not added per representative-sample restraint."
+    },
+    {
+      "quote": "We paid $1.3 billion in profit sharing payments in February 2026 related to our 2025 pre-tax profit",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A lawful, distinct fact not named by any proposal, but not added — representative-sample restraint; does not repair a declared coverage gap for this event."
+    },
+    {
+      "quote": "In January 2026, we entered into a definitive agreement with The Boeing Company to acquire 30 Boeing 787-10 aircraft, with an option to purchase up to an additional 30 of the same aircraft.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A lawful, distinct action/commitment fact not named by any proposal, but not added — representative-sample restraint; does not repair a declared coverage gap for this event."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the Non-Operating Results table's explicit 'Favorable (Unfavorable)' column heading should make the favourable_unfavourable_direction tag applicable to ordinary YoY expense-variance rows (e.g. Interest expense, net) even though there is no stated consensus/guidance expectation comparison.",
+      "why": "The quoted OD-13/surprise rule text is written for actual-vs-expectation 'beat/missed/in_line' judgments; it does not explicitly address a plain financial-statement 'favorable/unfavorable' YoY variance column. I did not apply the tag to the Interest expense row on the narrower reading, but the authority does not crisply rule out the broader reading."
+    },
+    {
+      "what": "Whether OD-11's growth-basis rule (crosswalk label 'sequential comparisons') should be tagged on ordinary year-over-year percentage-growth facts (the default basis throughout this filing) or reserved only for facts that specifically exercise a sequential-vs-annual override or the annual pin.",
+      "why": "The crosswalk maps 'sequential comparisons -> OD-11' without narrowing to sequential-only cases, and OD-11's own text covers the YoY default determination too. I tagged two YoY percent-growth rows (Total revenue, adjusted; Atlantic) as sequential_comparison under this broad reading, but a narrower reading limited to true sequential/override cases would exclude them; this event's supplied text contains no explicit sequential (quarter-over-quarter within one year) comparison."
+    }
+  ],
+  "blocked": null
+}
+```

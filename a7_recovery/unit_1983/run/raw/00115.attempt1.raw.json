@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "restaurant_divestiture",
+        "driver_state": "announced",
+        "level_low": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025,
+        "slice_parts": ["segment:olivegarden", "geography:canada"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

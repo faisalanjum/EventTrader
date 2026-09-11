@@ -1,0 +1,1815 @@
+{
+ "door": "a4_phase1_one_item_key",
+ "kind": "correction_regrade",
+ "authority": "Codex SEQ 1370",
+ "owner_before": "13d00b1f2a057701972b97d27f3dbb815e36ed72d9b284f76ff25f03e644c071",
+ "owner_after": "a289601b0bf52f223661f63f64128717baabb9ab1d061055119474d3cc4321f9",
+ "primary": {
+  "run_id": "kf-a4-phase1-196-20260821T163310Z",
+  "receipt_sha256": "98ecc6762493a5a36a02ca785b836b2761a5dfa8602bd3789068231008573442",
+  "finalization_sha256": "45e0f404506c6178a11cd455ad8e5fe3e2a466bf5cb4b29ae743df67781f277e",
+  "problems": [],
+  "ledger_after": {
+   "scheduled": 196,
+   "valid": 184,
+   "invalid_response": 12,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "missing": 0
+  }
+ },
+ "child": {
+  "run_id": "retry",
+  "receipt_sha256": "ec6f58b6ead6764e792e303613a566ecfc418b972a5abee17b75641a31a5875c",
+  "finalization_sha256": "008190ab7deca0a5d3a5c9180ad8819779891a569a3f69d6fc385ce4b6e5fdbe",
+  "problems": [],
+  "ledger_after": {
+   "scheduled": 44,
+   "valid": 38,
+   "invalid_response": 6,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "missing": 0
+  }
+ },
+ "selection": {
+  "usable": 190,
+  "from_primary": 184,
+  "from_child": 6,
+  "child_surplus": 32,
+  "unresolved": [
+   "0000006201-26-000032#012",
+   "0001171843-26-001288#131",
+   "MCD_2026-02-11T16.30#166",
+   "MCD_2026-02-11T16.30#168",
+   "MCD_2026-02-11T16.30#174",
+   "ULTA_2026-03-12T16.30#181"
+  ]
+ },
+ "items": [
+  {
+   "packet_id": "0000006201-26-000031#000",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#001",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#002",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#003",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#004",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#005",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#006",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#007",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000031#008",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000032#009",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000032#010",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000032#011",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000032#012",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "invalid_response",
+   "selected_attempt": null,
+   "selected_from": null
+  },
+  {
+   "packet_id": "0000006201-26-000032#013",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000006201-26-000032#014",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#015",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#016",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#017",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#018",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#019",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#020",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#021",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#022",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000013#023",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000020#024",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000020#025",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000020#026",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000020#027",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000022#028",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000022#029",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000022#030",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000027904-26-000022#031",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000063908-26-000032#032",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000063908-26-000032#033",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000063908-26-000032#034",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000063908-26-000032#035",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000063908-26-000032#036",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000063908-26-000032#037",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000063908-26-000032#038",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000092380-26-000044#039",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000092380-26-000044#040",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000092380-26-000044#041",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000092380-26-000044#042",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000092380-26-000044#043",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000764478-25-000057#044",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000764478-25-000057#045",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000764478-25-000057#046",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000764478-25-000057#047",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000764478-25-000057#048",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000764478-26-000005#049",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#050",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#051",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#052",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#053",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#054",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#055",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#056",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000898173-26-000006#057",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-25-000038#058",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-25-000038#059",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-25-000038#060",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-25-000038#061",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-25-000038#062",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-25-000038#063",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000005#064",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000005#065",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000005#066",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000005#067",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000009#068",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 2,
+   "selected_from": "child"
+  },
+  {
+   "packet_id": "0000940944-26-000009#069",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000009#070",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000009#071",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0000940944-26-000009#072",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-25-000109#073",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-25-000109#074",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-25-000109#075",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-25-000109#076",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000003#077",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000003#078",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000003#079",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000003#080",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000003#081",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#082",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#083",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#084",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#085",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#086",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#087",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#088",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#089",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001041061-26-000084#090",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001058090-26-000007#091",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001058090-26-000007#092",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001058090-26-000007#093",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001058090-26-000007#094",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-102611#095",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-102611#096",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-102611#097",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-102611#098",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-102611#099",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-102611#100",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-105631#101",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-105631#102",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-105631#103",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-105631#104",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-118458#105",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-118458#106",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-118458#107",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-25-118458#108",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-017090#109",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "invalid_response",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-017090#110",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-017090#111",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-017090#112",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-017090#113",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#114",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#115",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#116",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#117",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#118",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#119",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#120",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#121",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#122",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#123",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-027061#124",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-032757#125",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-032757#126",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-032757#127",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-032757#128",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-032757#129",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001104659-26-032757#130",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001171843-26-001288#131",
+   "primary_before": "valid",
+   "primary_after": "invalid_response",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": null,
+   "selected_from": null
+  },
+  {
+   "packet_id": "0001171843-26-001288#132",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001171843-26-001288#133",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001171843-26-001288#134",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "0001171843-26-001288#135",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#136",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#137",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#138",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "AAL_2026-04-23T08.30#139",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#140",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#141",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#142",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#143",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#144",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "BBY_2026-03-03T08.00#145",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#146",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#147",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#148",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#149",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#150",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#151",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "CMG_2026-02-03T16.30#152",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#153",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#154",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#155",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DAL_2026-04-08T10.00#156",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#157",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#158",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#159",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#160",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#161",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#162",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "DRI_2026-03-19T08.30#163",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#164",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 2,
+   "selected_from": "child"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#165",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#166",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "invalid_response",
+   "selected_attempt": null,
+   "selected_from": null
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#167",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#168",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "invalid_response",
+   "selected_attempt": null,
+   "selected_from": null
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#169",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#170",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 2,
+   "selected_from": "child"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#171",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 2,
+   "selected_from": "child"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#172",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#173",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "MCD_2026-02-11T16.30#174",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "invalid_response",
+   "selected_attempt": null,
+   "selected_from": null
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#175",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#176",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#177",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#178",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 2,
+   "selected_from": "child"
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#179",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#180",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 2,
+   "selected_from": "child"
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#181",
+   "primary_before": "invalid_response",
+   "primary_after": "invalid_response",
+   "child_before": "unproved",
+   "child_after": "invalid_response",
+   "selected_attempt": null,
+   "selected_from": null
+  },
+  {
+   "packet_id": "ULTA_2026-03-12T16.30#182",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#183",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#184",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#185",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#186",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#187",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "YUM_2026-02-04T08.15#188",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "bzNews_42014391#189",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "bzNews_42014391#190",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "bzNews_49256211#191",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "bzNews_50877032#192",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "bzNews_50877032#193",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "bzNews_50877032#194",
+   "primary_before": "invalid_response",
+   "primary_after": "valid",
+   "child_before": "unproved",
+   "child_after": "valid",
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  },
+  {
+   "packet_id": "bzNews_51962983#195",
+   "primary_before": "valid",
+   "primary_after": "valid",
+   "child_before": null,
+   "child_after": null,
+   "selected_attempt": 1,
+   "selected_from": "primary"
+  }
+ ]
+}

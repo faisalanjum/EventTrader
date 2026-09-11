@@ -1,0 +1,109 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_50877032#P000",
+      "decision": "exclude",
+      "why": "This target (the $1B Miami concourse-D investment/2027-start fact) has already been tested by a supplied proposal; it is out of scope for this fresh sample regardless of its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "bzNews_50877032#P001",
+      "decision": "exclude",
+      "why": "This target (Benzinga Edge Rankings momentum/growth/price-trend statement) has already been tested by a supplied proposal; it is out of scope for this fresh sample regardless of its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "bzNews_50877032#P002",
+      "decision": "exclude",
+      "why": "This target (jet fuel cost volatility tied to crude oil/Washington-Tehran tension) has already been tested by a supplied proposal; it is out of scope for this fresh sample regardless of its correctness.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "bzNews_50877032",
+        "part_ref": "body",
+        "occurrence_in_part": null,
+        "quote": "In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates.",
+        "raw_label_or_claim": "boast 17 new gates",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A distinct, specific, non-boilerplate quantified fact (a stated count of 17 new gates) about the concourse-D project, different in measurement from the already-tested dollar-investment/timing fact (P000); no proposal names this target. The stated count is a point-shaped number, so it exercises the FINAL_DESIGN §7.1 number-shape rule."
+    },
+    {
+      "row": {
+        "source_id": "bzNews_50877032",
+        "part_ref": "body",
+        "occurrence_in_part": null,
+        "quote": "In an official statement released by the airline on Wednesday, American outlined its vision for the new Concourse D, which can accommodate larger aircraft and eliminate outside boarding, as well as boast 17 new gates.",
+        "raw_label_or_claim": "eliminate outside boarding",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "A distinct, specific, non-boilerplate stated operational-design fact (elimination of outside boarding) sharing the sentence's smallest complete quote with the gate-count fact but carrying its own separate label/meaning, per the rule that distinct facts stay separate even when grammar forces a shared quote. No proposal names this target and it is numberless/qualitative, which still counts (DU-05)."
+    },
+    {
+      "row": {
+        "source_id": "bzNews_50877032",
+        "part_ref": "body",
+        "occurrence_in_part": null,
+        "quote": "The revamped area will also be able to facilitate international travel in the future with direct access to the airport's customs hall, the statement said.",
+        "raw_label_or_claim": "facilitate international travel in the future with direct access to the airport's customs hall",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "A distinct, specific, source-attributed (company statement) future capability fact (international-travel/customs-hall access) that is a different scope/measurement from the investment-amount and gate-count facts and is not named by any supplied proposal; qualitative facts count under DU-05."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "American Airlines To Invest $1 Billion In Miami Airport Expansion To Accommodate Larger Aircraft",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "Duplicate/richer-label restatement of the same $1B Miami concourse-D investment fact already tested via proposal P000 (same amount, location, purpose) — not a fresh distinct fact under the within-event first-complete-quote rule."
+    },
+    {
+      "quote": "American Airlines Group Inc. (NASDAQ: AAL ) has pledged a $1 billion investment in the Miami International Airport to build a new three-level concourse D extension, facilitating larger aircraft.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Richer restatement of the same investment/project fact already tested via P000 (same $1B amount, same Miami/concourse-D project, same larger-aircraft purpose) — fuses under the within-event first-complete-quote rule, not a fresh fact."
+    },
+    {
+      "quote": "The project is set to break ground in 2027.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Duplicate restatement of the 2027 project-start fact already tested via P000's teaser quote ('with the project starting in 2027') — same series/period/state, not a fresh fact."
+    },
+    {
+      "quote": "\"The brand-new, reimagined D60 is a transformational project that will provide a much-improved experience for our customers and our team,\" American Airlines CEO Robert Isom said in the statement.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Generic promotional/PR language ('transformational project', 'much-improved experience') with no specific stated fact — fails DU-03/Rule 1; correct behavior is omission, not selection."
+    },
+    {
+      "quote": "American Airlines recently recorded a dip in its stock price as rising crude oil prices proved to be a headwind for the flight operator.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Stock-move attribution (a price move explained by a cause); the protocol states stock-move attribution (EXPLAINED_BY) never enters the DU-03 fact gate, so it is not eligible for this inventory."
+    },
+    {
+      "quote": "The Department of Homeland Security (DHS) had earlier suspended the Transportation Security Administration 's (TSA) PreCheck and Global Entry programs as it deals with a lack of funding amid the ongoing partial government shutdown.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "General government/agency news with no stated fact about American Airlines' own business state/change/surprise/guidance/action; not a company driver fact, out of scope for this benchmark."
+    },
+    {
+      "quote": "AAL surged 1.29% to $13.32 at Market close on Wednesday, and further surged 0.08% to 13.33 during the overnight trading session.",
+      "part_ref": "body",
+      "occurrence_in_part": null,
+      "why": "Raw market/trading price data, not a business-driver fact (state/change/surprise/guidance/action) within the DU-03 fact gate's scope."
+    }
+  ],
+  "open_issues": [],
+  "blocked": null
+}
+```

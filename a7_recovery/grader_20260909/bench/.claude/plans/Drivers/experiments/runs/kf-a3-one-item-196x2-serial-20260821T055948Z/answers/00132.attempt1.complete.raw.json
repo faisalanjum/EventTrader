@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "This item describes a change in accounting/reporting methodology — a redefinition of how segment profit is calculated (now excluding pre-opening costs) — not a driver's own state, change, surprise, guidance, or action. It is a disclosure-construct change, not a business driver; Rule 3.8 treats such accounting constructs as non-drivers, with the underlying segment profit values captured separately as their own metric facts. Abstaining."
+    }
+  ],
+  "continuity_hints": []
+}
+```

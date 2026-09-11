@@ -1,0 +1,63 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0001104659-26-027061",
+ "ordinal_one_based": 22,
+ "ordinal_receipt": 21,
+ "attempt_number": 1,
+ "run_id": "wf_5ed59342-fd9",
+ "agent_id": "a5662fb2a77075635",
+ "raw_sha256": "daba8d3f1fee19017888d8d341da0b346cf3e618b9011b143cf89b25a7993ea6",
+ "prompt_sha256": "3185503fdf6f662c9c1acc26ec6efe34fbdd0fb4cd91ba3e490f32c546519f8c",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 11,
+  "additions": 15,
+  "exclusions_considered": 7,
+  "open_issues": 3
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"Several selected rows (#10-13 in additions) reproduce '\\u200b' separator markers exactly as they appear in the supplied event text.\", 'why': \"The authority does not state whether these marke",
+  "{'what': \"Whether a co-stated total-dollar metric and its 'percentage of net sales' ratio form (e.g., gross profit dollars vs. gross margin %) must be split into separate rows the same way the total-v",
+  "{'what': \"How liberally the sequential_comparison tag should be applied to routine YoY percentage-change statements that lack the word 'year-over-year' but sit under an explicit '<Period> Compared to "
+ ],
+ "locator": {
+  "additions": {
+   "located": 15,
+   "not_located": [],
+   "total_with_quote": 15
+  },
+  "exclusions_considered": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  }
+ },
+ "receipt_attempts": 24,
+ "receipt_missing": 13,
+ "receipt_other_problems": [
+  "the run accepted 23 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 21,
+  "attempt": 1,
+  "source_id": "0001104659-26-027061",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_5ed59342-fd9.json",
+  "agent_id": "a5662fb2a77075635",
+  "raw_name": "0001104659-26-027061.attempt1.complete.raw.json"
+ }
+}

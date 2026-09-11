@@ -1,0 +1,12 @@
+```json
+{
+ "source_id": "0000027904-26-000020",
+ "facts": [],
+ "abstentions": [
+  {
+   "reason": "This is a third-party survey finding about what corporate-travel-budget respondents themselves expect for their own future spending, not a statement of Delta's own driver state, change, or confirmed guidance; guidance requires the company's own forward outlook (company_confirmed true), which is absent here, and the 85 percent figure measures the share of survey respondents holding a view rather than any level/change/comparison value of a company driver, so it cannot be lawfully mapped into a fact."
+  }
+ ],
+ "continuity_hints": []
+}
+```

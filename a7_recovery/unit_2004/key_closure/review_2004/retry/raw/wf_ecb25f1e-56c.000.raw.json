@@ -1,0 +1,157 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "discontinued_operations",
+              "driver_state": "decreased",
+              "level_low": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "measurement_raw_spans": ["net of tax"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "continuing_operations_earnings_per_share",
+              "driver_state": "decreased",
+              "level_low": {"value": 2.68, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.68, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 2.74, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 2.74, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "change_value": {"value": -2.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "measurement_raw_spans": ["Diluted"]
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_high": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "change_value": {"value": 4.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["segment:finediningsegment"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "reported",
+              "level_low": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "period_end_date": "2026-02-22",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "instant",
+              "slice_parts": ["channel:franchisedunits"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic risk-factor boilerplate bullet (climate change/weather/natural disasters) listing a possible future risk category with no stated driver state, change, or action, so it fails the Rule 1 fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "segment_profit_methodology",
+              "driver_state": "occurred",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["recast for comparability"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six located items describe six unrelated facts — a discontinued-operations after-tax loss line, continuing-operations diluted EPS, Fine Dining segment sales, a franchised-restaurant unit count, a generic risk-boilerplate bullet yielding no fact, and a segment-profit reporting-methodology change — each with its own metric, value/state, and period, so they cannot be settled as one underlying fact."
+}
+```

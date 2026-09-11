@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "loyalty_90_day_active_users",
+        "driver_state": "increased",
+        "change_value": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "level_low": {"value": 210, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_high": {"value": 210, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "instant",
+        "period_end_date": "2025-12-31",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

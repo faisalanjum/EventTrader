@@ -1,0 +1,41 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "decreased",
+        "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "in_line",
+        "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent_yoy",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": false,
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

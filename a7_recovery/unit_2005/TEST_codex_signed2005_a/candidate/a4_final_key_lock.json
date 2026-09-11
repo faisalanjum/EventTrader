@@ -1,0 +1,146 @@
+{
+ "schema": "a4-final-key-lock/1511",
+ "state": "LOCKED",
+ "authority": {
+  "instruction": "archive_CODEX_2005.md",
+  "instruction_sha256": "97199d746160fdf480e70357a97de490638c06ffbd0e8f182dfe0d78c2215807"
+ },
+ "artifacts": {
+  "key_identity": "befed5f121e75031b981ecb1265e2cb254ecc37a3e08869a4366aa5609ddc68c",
+  "sidecar": "5c4712b2aac7a3fbd313cf9403b5add840b4e27065d764666674608f954b8785",
+  "validator_receipt": "d4d18f9ee175abffb657fd02dfee32419c7b56833e090ffec838b70502aad680",
+  "provenance": "4fad5fa81453919dc8cfd4d3ee718b009fa460fd067e30dec43d0cbee54192df",
+  "signer_prompt": "25480e61c10965abe0cfdeafd57fa411b08e3688bc448f1926d2b2bba2d0ea89",
+  "signer_launcher": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+  "signer_manifest": "a8eb585889ac7d736bd3657444ad9636eee6ce24c826ce59e4872c2121170533",
+  "signer_raw": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "signer_evidence": "e25c4ac7c54895911316f7e49cfeb761e6c1bde45f9acd428a5888ff68bf4e33",
+  "signer_reply": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "attempt1_record": "e25c4ac7c54895911316f7e49cfeb761e6c1bde45f9acd428a5888ff68bf4e33",
+  "attempt1_launcher": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+  "attempt1_raw": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "attempt1_state": "0d5b32412ea306f18710fb6d9a43c00c99cfcd525769ca178b3a73b70536f9f4",
+  "attempt1_transcript": "301f9ebb7f53c9ea87ac35bc97f2159c53dd5167086f1bbad4dd993217c4d37c"
+ },
+ "key": {
+  "identity": "key_identity.json: the ordered exact raw component shards, the four bindings and the pinned loader",
+  "loader": {
+   "module": "build_kfields_final",
+   "entry": "signing_gate",
+   "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+  },
+  "materializer": {
+   "module": "build_kfields_final",
+   "entry": "materialize",
+   "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+  },
+  "bindings": {
+   "final_package": "f94c0ac3ac819f242008331205f25090ab73764dfaa9b1669ee392d6a9f29cc0",
+   "initial_source_package": "4ec8a90ebf39c1d46b4c9b938531df0fefd1183c4a95ed9149f3b26cccd6735c",
+   "hard_review_package": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "initial_source_receipt": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+   "initial_source_finalization": "ad0f11be0117e6d6c892596e6f5b4a64f7577eea1541163d46f857fb49a43add",
+   "hard_review_receipt": "40ad77f88b57c7e7632819bc0c8b151a1d596ff2de9350145c75e6de6a060bad",
+   "hard_review_finalization": "25f5bfcf0676ac037498e16979e3bb48a1fa1d0947f2d0b5b03dcfe889433c32",
+   "event_receipt": "b7d660781a5562ef639b08260900328b01e370e038562ddd16aabb59cf6e4bad",
+   "event_finalization": "0f8e0a0d531fc63db9dc4fb3b40d50e546ca28ac262dbad1d74c3ce39239885f"
+  },
+  "events": 33,
+  "composed_events": 0
+ },
+ "counts": {
+  "events_accounted": 33,
+  "rows_accounted": 191,
+  "accepted_facts": 206,
+  "du_worthy_facts": 206,
+  "controls": 34,
+  "exclusions": 3,
+  "abstentions": 37,
+  "record_kind_conflicts": 4,
+  "duplicate_gold_facts": 0,
+  "open_issues": 0,
+  "phase1_ambiguities": 0,
+  "tag_floor": 5,
+  "distinct_rows_per_tag": {
+   "point_range_floor_ceiling": 134,
+   "losses_and_sign": 31,
+   "sequential_comparison": 46,
+   "measurement_wording": 56,
+   "favourable_unfavourable_direction": 17,
+   "expectation_routing": 17,
+   "slices_and_unknown_axes": 69,
+   "portion_versus_whole": 25,
+   "ambiguous_menus": 32,
+   "corrections_and_amendments": 5
+  },
+  "tags_below_floor": [],
+  "sequential_rows": 46
+ },
+ "validator": {
+  "problems": [],
+  "open_issues": 0,
+  "tags_below_floor": [],
+  "rows_accounted": 191,
+  "class_floor": 5
+ },
+ "signer": {
+  "signed": true,
+  "blocked": [],
+  "run_id": "wf_TEST_signed_codex_signed2005_a",
+  "agent_id": "siged2005_a",
+  "attempt": 1,
+  "state_sha256": "0d5b32412ea306f18710fb6d9a43c00c99cfcd525769ca178b3a73b70536f9f4",
+  "transcript_sha256": "301f9ebb7f53c9ea87ac35bc97f2159c53dd5167086f1bbad4dd993217c4d37c",
+  "raw_sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+  "prompt_sha256": "25480e61c10965abe0cfdeafd57fa411b08e3688bc448f1926d2b2bba2d0ea89",
+  "script_sha256": "aa85a61a69c399d2ece6dfbb5f59d077150ce74a6e4374799f4d566eaac89d5f",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "model": "opus",
+  "effort": "high",
+  "agent_type": "lean-probe",
+  "runtime_model_ids": [
+   "claude-opus-5"
+  ],
+  "transport": {
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "transport": "Claude Code Workflow agent(), subscription",
+   "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "tool_calls": 0,
+  "parser": "build_kfields_final.read_signature"
+ },
+ "call_accounting": {
+  "ledger_before": 514,
+  "signer_calls": 1,
+  "retries": 0,
+  "ledger_after": 515,
+  "ceiling": 6000,
+  "retry_law": {
+   "owner": "build_kfields_final.RETRYABLE",
+   "retryable": [
+    "invalid_response"
+   ]
+  },
+  "lawful_attempts": [
+   1,
+   2
+  ],
+  "attempts": [
+   {
+    "attempt": 1,
+    "kind": "evidence",
+    "outcome": "signed",
+    "record_sha256": "e25c4ac7c54895911316f7e49cfeb761e6c1bde45f9acd428a5888ff68bf4e33"
+   }
+  ]
+ }
+}

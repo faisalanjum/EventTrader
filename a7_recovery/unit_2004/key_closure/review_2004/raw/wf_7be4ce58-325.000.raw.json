@@ -1,0 +1,123 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "lifo_charge",
+              "driver_state": "reported",
+              "level_low": {"value": 59.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 59.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["non-cash"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "decreased",
+              "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["approximately"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["product:failure", "product:maintenanceitems"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 6709, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6709, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "period_end_date": "2026-02-14",
+              "time_type": "instant",
+              "slice_parts": ["geography:us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_store_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "measurement_raw_spans": ["constant currency"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a standard risk-factor boilerplate statement asserting no material changes from the prior 10-K, a generic filing disclosure rather than a real statement about a driver's state, change, surprise, guidance, or action, so Rule 1.2 requires abstention."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five items are independent facts on unrelated topics and quotes: a non-cash LIFO charge impacting operating profit, the failure/maintenance product sales-mix percentage versus the prior year, the U.S. store count at a point in time, the total-company same-store-sales growth rate, and a boilerplate no-material-changes risk-factor disclosure that abstains, so none of them express the same underlying fact."
+}
+```

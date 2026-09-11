@@ -1,0 +1,39 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "store_closures",
+        "driver_state": "occurred",
+        "level_low": {"value": 283, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 283, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "month": 1,
+        "slice_parts": ["segment:kfcturkey"]
+      }
+    },
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "store_closures",
+        "driver_state": "occurred",
+        "level_low": {"value": 254, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 254, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "month": 1,
+        "slice_parts": ["segment:phturkey"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,302 @@
+{
+ "source_id": "0001104659-25-102611",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "lifo_impact",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 64.0,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 64.0,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": -40.0,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_high": {
+        "value": -40.0,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "measurement_raw_spans": [
+        "non-cash"
+       ],
+       "time_type": "duration",
+       "fiscal_year": 2025
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one: the row states a signed, period-anchored LIFO value ($64.0 million charge) beside its prior-year counterpart ($40.0 million benefit), so it carries a real metric fact."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "vendor_concentration",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 13,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "percent"
+       },
+       "level_high": {
+        "value": 13,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "percent"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "time_type": "duration",
+       "fiscal_year": 2025
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one: a stated 13 percent supplier-concentration level for the fiscal year is a re-readable standing metric, not a bare mention."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales_mix",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 85,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 85,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "measurement_raw_spans": [
+        "approximately"
+       ],
+       "slice_parts": [
+        "product:failure",
+        "product:maintenanceitems"
+       ],
+       "time_type": "duration",
+       "fiscal_year": 2025
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one: the row states a measured sales-mix share (about 85% of total sales) for two named product categories in fiscal 2025."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales",
+       "driver_state": "increased",
+       "change_value": {
+        "value": 329.5,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "change_unit": "m_usd",
+       "comparison_baseline": "prior_year",
+       "slice_parts": [
+        "geography:us",
+        "unknown:commercial"
+       ],
+       "time_type": "duration",
+       "fiscal_year": 2025
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one: a source-stated increase of $329.5 million versus the prior fiscal year on the company's own domestic commercial sales population is a real metric change."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "sales_mix",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 31.7,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 31.7,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "slice_parts": [
+        "geography:us",
+        "unknown:commercial"
+       ],
+       "time_type": "duration",
+       "fiscal_year": 2025
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as one, but only for its distinct content: the 31.7% share of total Domestic sales is a real mix level, while the 6.7% increase it repeats is already the row 4 fact and is not emitted twice."
+  },
+  {
+   "row_index": 6,
+   "settled": {
+    "source_id": "0001104659-25-102611",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic ordinary-course litigation boilerplate: no specific proceeding, amount, stage, or change is stated, so it is a bare topic mention and the gate yields no DriverUpdate."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed as a negative_control and confirmed as one: the sentence is generic ordinary-course legal-proceedings boilerplate that the gate explicitly drops."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "reference_name": "non-cash LIFO impact",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The 55 basis points is the LIFO contribution to the gross-margin decrease rather than this driver's own level or a derivable delta, so it stays in the quote and no separate gross_margin record was coined from this row."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "one individual vendor provided 13 percent of our total purchases",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The menu offers a vendor-axis token for 'one individual vendor', but a vendor is never a slice population, so the vendor stays in the driver name and the slice list is empty."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "measurement_wording"
+   ],
+   "reference_name": "failure and maintenance related categories represented the largest portion of our sales mix",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Whether prose 'maintenance related categories' carries the same meaning as the menu value product:maintenanceitems is a judgment call; I reused both menu tokens rather than coining new product parts."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "sequential_comparison",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "Domestic commercial sales increased $329.5 million, or 6.7%",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Two ambiguities recorded: 'commercial' is plausible as both a channel and a customer population so it is filed as unknown:commercial, and the one change slot holds the stated dollar delta while the co-stated 6.7% growth remains in the quote."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "portion_versus_whole",
+    "ambiguous_menus"
+   ],
+   "reference_name": "31.7% of our total Domestic sales",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The denominator here is total Domestic sales rather than total company sales, which the geography slice carries rather than the name, and the kind of the 'commercial' part remains unresolved (unknown:commercial)."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-016/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-016/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

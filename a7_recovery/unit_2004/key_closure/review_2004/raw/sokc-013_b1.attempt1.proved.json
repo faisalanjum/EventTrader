@@ -1,0 +1,115 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 1.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 1.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["excluding Special Items"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "franchise_restaurant_acquisition",
+              "driver_state": "occurred",
+              "level_low": {"value": 670, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 670, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["segment:tacobellglobaldivision", "geography:us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "system_sales",
+              "driver_state": "reported",
+              "level_low": {"value": 11, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "slice_parts": ["channel:digital"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "digital_mix",
+              "driver_state": "reported",
+              "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic forward-looking-statement risk boilerplate listing a possible negative factor (severe weather and climate change) with no stated driver state, change, or company action, so it fails the Rule 1 gate against generic risk boilerplate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five located items describe five distinct, unrelated matters — a reported EPS-excluding-Special-Items figure, a completed Taco Bell restaurant acquisition from a franchisee, digital system sales exceeding $11 billion, the digital sales mix nearing 60%, and generic climate/weather risk boilerplate — so they cannot be settled as one underlying fact."
+}
+```

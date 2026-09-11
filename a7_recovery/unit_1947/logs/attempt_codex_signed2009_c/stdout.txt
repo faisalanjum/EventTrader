@@ -1,0 +1,46 @@
+PASS actual native proof accepts the explicit TEST signature
+  raw final_sign.attempt1.raw.json sha 7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d (151 chars)
+  run wf_TEST_signature_codex_signed2009_c | agent siged2009_c | model opus | effort high | lean-probe | tools 0 | runtime ['claude-opus-5']
+  OUTCOME: signed=True blocked=[]
+  why: SYNTHETIC-CLOSURE-FIXTURE-2000: a TEST signature over reproduced shapes. It establishes no source truth.
+PASS the saved signature is reused and cannot launch again
+a4_final_key_lock.json b135da0ef80d31c4b31e7f305a461c914a65933a1e25c0c7cd52a933d79bdbb5
+  signed=True blocked=[]  ledger 532 -> 533 of 6000
+  artifact:key_identity              refused
+  artifact:sidecar                   refused
+  artifact:validator_receipt         refused
+  artifact:provenance                refused
+  artifact:signer_prompt             refused
+  artifact:signer_launcher           refused
+  artifact:signer_manifest           refused
+  artifact:signer_raw                refused
+  artifact:signer_evidence           refused
+  artifact:signer_reply              refused
+  artifact:attempt1_record           refused
+  artifact:attempt1_launcher         refused
+  artifact:attempt1_raw              refused
+  artifact:attempt1_state            refused
+  artifact:attempt1_transcript       refused
+  signer:run_id                      refused
+  signer:agent_id                    refused
+  signer:raw_sha256                  refused
+  signer:transcript_sha256           refused
+  signer:state_sha256                refused
+  signer:parent_session_id           refused
+  signer:model                       refused
+  signer:effort                      refused
+  signer:agent_type                  refused
+  signer:prompt_sha256               refused
+  signer:script_sha256               refused
+  signer:signed                      refused
+  signer:blocked                     refused
+  block:counts                       refused
+  block:validator                    refused
+  block:call_accounting              refused
+  block:key                          refused
+  block:authority                    refused
+a4_final_key_lock_receipt.json e389feab4cbfaee85002bebeaa1515f1e9d3367952f38fdb1c730f1e80ed74f6
+RESULT EVERY BOUND VALUE REFUSES WHEN MUTATED
+PASS actual compact lock and every existing bound-value mutation validate
+PASS history plus one TEST signer is exactly533 calls, counted once
+COMPLETE 4 checks; zero AI calls /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_signed2009_c

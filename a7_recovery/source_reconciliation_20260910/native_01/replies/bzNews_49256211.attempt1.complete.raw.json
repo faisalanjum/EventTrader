@@ -1,0 +1,35 @@
+```json
+{
+  "source_id": "bzNews_49256211",
+  "verdicts": [
+    {
+      "proposal_id": "bzNews_49256211#P000",
+      "decision": "exclude",
+      "why": "Already tested per task rules: every supplied proposal names a target that has already been located and tested, so it is excluded from this fresh sample by definition. This says nothing about whether the underlying $1.8B repurchase-authorization fact is true, correctly bounded, or correctly classified — only that it is out of scope for THIS turn's fresh additions.",
+      "row": null
+    }
+  ],
+  "additions": [],
+  "exclusions_considered": [
+    {
+      "quote": "Chipotle Mexican Grill Authorizes Additional $1.8B For Share Repurchases",
+      "part_ref": "title",
+      "occurrence_in_part": null,
+      "why": "This is the entire content of the event's only text_part. It is the same single fact (an incremental $1.8B share-repurchase authorization) already named by proposal bzNews_49256211#P000. No different label, boundary, or contiguous span within this quote isolates a genuinely separate target — the company name and the word 'Additional' are grammatical parts of the same one authorization claim, not distinct facts. Selecting it under a shifted boundary or restated label would be the same fact tested again, which the task forbids."
+    },
+    {
+      "quote": "Chipotle Mexican Grill",
+      "part_ref": "title",
+      "occurrence_in_part": 1,
+      "why": "A bare company-name identifier, not a source-stated real, non-boilerplate fact about a driver's state/change/surprise/guidance/action. Fails the DU-03/Rule-1 fact gate as a bare mention, so it is not a candidate item at all (negative-control territory, but not distinct enough from the title's single fact to warrant its own row)."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "This event supplies only a single one-line title as its entire text_parts content, and that title's sole fact is already the target of the one supplied (already-tested) proposal. After accounting for that proposal, no further contiguous quote exists anywhere in the supplied event text from which a genuinely fresh, differently-scoped source item could be drawn.",
+      "why": "The task requires fresh additions to be a target no supplied proposal already names and forbids padding with restated or boundary-shifted versions of an already-tested fact, and forbids adding a row merely because another lawful fact exists. Given the event's text is exhausted by the one already-tested claim, this event lawfully contributes zero fresh rows and zero hard-class tag occurrences toward the cross-event totals. Reporting this shortage here rather than inventing or widening a row is the lawful result required by the representative-not-exhaustive scoping rule."
+    }
+  ],
+  "blocked": null
+}
+```

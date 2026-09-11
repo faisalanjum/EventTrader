@@ -1,0 +1,44 @@
+```json
+{
+  "packet_id": "0000063908-26-000032#033",
+  "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "comparable_sales",
+          "driver_state": "increased",
+          "level_low": {"value": 5.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_high": {"value": 5.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "level_shape_hint": "point",
+          "level_unit": "percent_yoy",
+          "time_type": "duration",
+          "fiscal_quarter": 4,
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000063908-26-000032#033/L1",
+      "exact_match": false,
+      "why": "Matches on fact_type, driver_name, driver_state, values, shapes, unit, time_type and period, but sets unit_scale_evidence to null; the quote contains the '%' marker which, under Rule 5.6, must be cited as the smallest supporting span when multiplier=1 and a marker exists, so null is wrong here."
+    },
+    {
+      "lane_id": "0000063908-26-000032#033/L2",
+      "exact_match": true,
+      "why": "Matches the settled reply exactly, including citing '%' as unit_scale_evidence for both level_low and level_high per Rule 5.6."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether comparison_baseline should be set to 'prior_year' for this metric.",
+      "why": "The release's definitions section states comparable sales are always measured against the same period in the prior year, which would support 'prior_year' as comparison_baseline under Rule 9 (metric lane); but that definitional statement sits outside this item's located quote, and Rule 9 requires the source to state the comparison for it to be recorded, so grounding it strictly to the quote (as both drafts do) leaves it null instead."
+    }
+  ]
+}
+```

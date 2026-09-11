@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The supplied quote is a bare table row ('Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM') with no scale marker (the '(in millions)' label lives in the table header) and no period label (the 'Three Months Ended February 22, 2026 / February 23, 2025' column headers) inside it. Both are needed to lawfully fill unit_scale_evidence (Rule 5.6, which requires abstaining when the scale marker sits outside the quote) and to resolve the fact's period (Rule 6, which requires abstaining when the period cannot be resolved from stated evidence). Cannot lawfully emit a fact from this isolated quote."
+    }
+  ],
+  "continuity_hints": []
+}
+```

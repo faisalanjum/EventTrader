@@ -1,0 +1,28 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "discontinued_operations_income",
+        "driver_state": "decreased",
+        "level_low": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_high": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_high": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["net of tax"],
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

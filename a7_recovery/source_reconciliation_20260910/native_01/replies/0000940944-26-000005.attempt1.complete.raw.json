@@ -1,0 +1,328 @@
+```json
+{
+  "source_id": "0000940944-26-000005",
+  "verdicts": [
+    {
+      "proposal_id": "0000940944-26-000005#P000",
+      "decision": "exclude",
+      "why": "This target (the outlook reported diluted EPS range) has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000940944-26-000005#P001",
+      "decision": "exclude",
+      "why": "This target (losses from discontinued operations) has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000940944-26-000005#P002",
+      "decision": "exclude",
+      "why": "This target (the segment-profit reporting methodology change) has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000940944-26-000005#P003",
+      "decision": "exclude",
+      "why": "This target (full-year total sales growth guidance of ~9.5%) has already been tested; it is outside this fresh sample regardless of the correctness of its location or classification.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total sales increased 5.9% to $3.3 billion",
+        "raw_label_or_claim": "Total sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Q3 actual consolidated total-sales level and YoY growth, a fresh total-dollar fact distinct from the full-year guidance figure in P003 and distinct from the per-share facts elsewhere in this event (NAME-13 total-vs-per-X)."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "a blended same-restaurant sales1 increase of 4.2%",
+        "raw_label_or_claim": "blended same-restaurant sales1",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "First complete occurrence of the consolidated same-restaurant-sales YoY growth fact; the later table cell restating '4.2%' is a compatible duplicate, excluded below under the first-complete-quote rule."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "sales from 31 net new restaurants",
+        "raw_label_or_claim": "31 net new restaurants",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "A distinct real fact (new-restaurant count) genuinely different in measurement from the total-sales and same-restaurant-sales facts stated in the same sentence; not covered by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Olive Garden 3.2%",
+        "raw_label_or_claim": "Olive Garden 3.2%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "Segment-sliced same-restaurant-sales fact for Olive Garden, a real business population distinct from the consolidated figure; exercises the segment slice-kind rule via the menu's segment:olivegarden entry."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "adjusted diluted net earnings per share from continuing operations were $2.95, an increase of 5.4%4",
+        "raw_label_or_claim": "adjusted diluted net earnings per share from continuing operations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "sequential_comparison"]
+      },
+      "why": "Q3 actual adjusted (non-GAAP) diluted EPS with stated YoY change; measurement token 'adjusted diluted' is NAME-14/FS-25 territory and the growth is a stated YoY comparison. Not proposed."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Reported diluted net earnings per share from continuing operations were $2.68",
+        "raw_label_or_claim": "Reported diluted net earnings per share from continuing operations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording"]
+      },
+      "why": "Q3 actual reported (GAAP) diluted EPS, a different fact from the outlook range proposed in P000 (different period/state: actual quarter vs full-year guidance); the 'diluted' measurement token is stated."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "$0.16 of impairment due to restaurant closures3",
+        "raw_label_or_claim": "impairment due to restaurant closures3",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign"]
+      },
+      "why": "Per-share impairment charge component of the Q3 EPS bridge; a charge is positive under OD-12, distinct from the discontinued-operations loss already proposed in P001."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Impairment due to restaurant closures3 24.7 6.2 18.5 0.16",
+        "raw_label_or_claim": "Impairment due to restaurant closures3",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign"]
+      },
+      "why": "Total-dollar (pretax $24.7M) figure for the same impairment charge, kept as its own row per NAME-13/rule 3 (total-dollar and per-share are separate facts even when co-stated)."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Gain on Olive Garden Canada sale (0.26) (0.26)",
+        "raw_label_or_claim": "Gain on Olive Garden Canada sale",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "slices_and_unknown_axes"]
+      },
+      "why": "A specific, source-stated gain (accounting-notation negative per OD-12) tied to the sale of the Canadian Olive Garden business, exercising the menu's entity_ownership:canadianolivegardenrestaurants axis. Not covered by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Sales and profits from Chuy\u2019s restaurants are included within the Other Business segment from the date of acquisition forward.",
+        "raw_label_or_claim": "included within the Other Business segment",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "slices_and_unknown_axes"]
+      },
+      "why": "States which population (Chuy's) is folded into the qualified 'Other Business' segment population, a direct OD-17 portion-vs-whole population-qualifier fact tied to a segment slice."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Annual same-restaurant sales is a 52-week metric and excludes the impact of Chuy\u2019s",
+        "raw_label_or_claim": "Annual same-restaurant sales is a 52-week metric and excludes the impact of Chuy\u2019s",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole"]
+      },
+      "why": "A second, genuinely different portion-vs-whole fact: the full-year same-restaurant-sales guidance metric is itself a qualified population excluding Chuy's and Bahama Breeze, distinct in scope/period from the segment-composition fact above."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total capital spending of $750 to $775 million",
+        "raw_label_or_claim": "Total capital spending",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Fresh full-year guidance closed range (floor $750M / ceiling $775M), a clean range-shape example not covered by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Adjusted diluted net earnings per share from continuing operations of $10.57 to $10.674, including:",
+        "raw_label_or_claim": "Adjusted diluted net earnings per share from continuing operations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "Full-year adjusted (non-GAAP) diluted EPS guidance range, a different Driver/measurement from the reported guidance range in P000."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "We continue to outperform the industry same-restaurant sales benchmark, and this quarter we widened that gap as Olive Garden, LongHorn Steakhouse, Yard House, and Cheddar\u2019s Scratch Kitchen each significantly exceeded the benchmark.",
+        "raw_label_or_claim": "significantly exceeded the benchmark",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["favourable_unfavourable_direction"]
+      },
+      "why": "A stated 'exceeded' claim with no identifiable stated metric or defined comparison baseline (an undefined 'industry benchmark'); this is the ungrounded-beat/no-valid-polarity-proof case the favorability rule and fact gate route to unknown/abstention rather than a guessed beat or a bare-mention drop."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "litigation, unfavorable publicity or failure to respond effectively to adverse publicity",
+        "raw_label_or_claim": "litigation, unfavorable publicity or failure to respond effectively to adverse publicity",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic hypothetical risk-factor boilerplate from the forward-looking-statements list, with no specific current source-flagged adverse threat; fails DU-03/Rule 1 and DU-11's at_risk strictness, so the correct behavior is omission, not abstention."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Bahama Breeze 27 43",
+        "raw_label_or_claim": "Bahama Breeze 27 43",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "Company-owned restaurant count for the Bahama Breeze brand/segment, current period vs prior year, a distinct slice fact from Olive Garden's same-restaurant-sales row added above; exercises segment:otheroperatingsegmentbahamabreezebrand."
+    },
+    {
+      "row": {
+        "source_id": "0000940944-26-000005",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "During the quarter, the Company repurchased approximately 0.7 million shares of its common stock for a total of $127 million.",
+        "raw_label_or_claim": "repurchased approximately 0.7 million shares of its common stock for a total of $127 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "The complete restatement of the Q3 buyback fact (share count plus dollar total); the earlier highlights-bullet mention states only the dollar figure and is incomplete, so per the partial-then-richer rule this later occurrence is the one kept (earlier one excluded below)."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Consolidated Darden1 4.2%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Compatible restatement of the consolidated same-restaurant-sales fact already captured at its first complete occurrence ('a blended same-restaurant sales1 increase of 4.2%'); a duplicate, not a fresh row."
+    },
+    {
+      "quote": "Earnings from continuing operations $ 2.68 $ 2.74",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": 1,
+      "why": "Compatible restatement of the reported diluted EPS fact already captured at its first complete occurrence in the highlights bullet."
+    },
+    {
+      "quote": "The Company repurchased $127 million of its outstanding common stock",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Incomplete partial occurrence of the buyback fact (missing share count); superseded by the richer Share Repurchase Program paragraph selected as the row."
+    },
+    {
+      "quote": "Impairment due to restaurant closures3 0.16 0.16",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Restates the same single non-recurring Q3 impairment charge already captured from the Q3 reconciliation table row; not a distinct new fact."
+    },
+    {
+      "quote": "Adjusted diluted net earnings per share from continuing operations $10.57 to $10.67",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Duplicate restatement of the adjusted diluted EPS guidance range already captured at its first complete occurrence in the Financial Outlook bullet."
+    },
+    {
+      "quote": "1 Will not include Chuy's until they have been owned and operated by Darden for a 16-month period (Q4 fiscal 2026) and does not include Bahama Breeze as all locations are expected to be closed or converted to other brands (between Q3 fiscal 2026 and Q4 fiscal 2027).",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Near-identical population-qualifier wording to the footnote-5 annual version already selected; representative sampling does not require both period variants of the same qualifier."
+    },
+    {
+      "quote": "New restaurant openings of approximately 70",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful guidance fact not selected; point-value hard-class coverage for this event is already sufficiently represented by other selected rows (representative, not exhaustive)."
+    },
+    {
+      "quote": "Total inflation of approximately 3.5%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful guidance fact not selected; same reason as the restaurant-openings figure."
+    },
+    {
+      "quote": "An effective tax rate of approximately 12.5%",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful guidance fact not selected; same reason as above."
+    },
+    {
+      "quote": "Darden's Board of Directors declared a quarterly cash dividend of $1.50 per share on the Company's outstanding common stock.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful per-share fact not selected; the total-vs-per-share (NAME-13) distinction is already demonstrated in this event by the total-sales/adjusted-EPS pairing."
+    },
+    {
+      "quote": "the Company had $516 million remaining under the current $1 billion repurchase authorization",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Lawful point-value fact not selected; point/range hard-class coverage for this event is already sufficient."
+    },
+    {
+      "quote": "impairment of the carrying value of our goodwill or other intangible assets",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Additional generic risk-boilerplate candidate from the forward-looking-statements list, not selected; one negative-control example already represents this event's boilerplate-risk category."
+    },
+    {
+      "quote": "the inability to successfully complete our integration of Chuy's Holdings operations into our business",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Generic hypothetical risk-factor boilerplate, not a specific current source-flagged adverse fact; not selected, category already covered."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The Financial Outlook bullet prints the adjusted-EPS guidance ceiling as '$10.674,' immediately followed by a comma, in the same glued-footnote-digit style the document uses elsewhere (e.g. 'sales1', 'brand2', 'closures3'); whether the true value is $10.67 with a glued footnote '4' or literally $10.674 is not resolvable from the supplied evidence.",
+      "why": "This turn only freezes the quote/location, and the exact printed text is what the row must carry forward; the underlying value ambiguity should be flagged now rather than silently normalized, since resolving it is a later adjudication task."
+    },
+    {
+      "what": "Whether the CEO's qualitative claim of exceeding an undefined 'industry same-restaurant sales benchmark' belongs as lawful_abstention_control (an unresolvable but real surprise-like claim) or negative_control (generic self-congratulatory boilerplate) is not decisively settled by the quoted favorability rule or fact gate for this specific unquantified peer-benchmark phrasing.",
+      "why": "Both authorities describe adjacent but distinct outcomes (ungrounded-beat parking vs generic-boilerplate dropping) without a decisive test that fits this exact case; I selected lawful_abstention_control as the closer fit but the boundary itself is a genuinely fuzzy one the rules leave unresolved."
+    }
+  ],
+  "blocked": null
+}
+```

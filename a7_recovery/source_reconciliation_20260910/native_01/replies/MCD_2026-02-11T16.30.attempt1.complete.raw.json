@@ -1,0 +1,232 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "verdicts": [
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P000",
+      "decision": "exclude",
+      "why": "This target (full year effective tax rate guidance 21%-23%) has already been tested; it is out of scope for this fresh sample regardless of its underlying correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P001",
+      "decision": "exclude",
+      "why": "This target (approximately 2,600 gross restaurant openings in 2026) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P002",
+      "decision": "exclude",
+      "why": "This target (about 4.5 percent unit growth in 2026) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P003",
+      "decision": "exclude",
+      "why": "This target (adjusted EPS constant-currency growth of 7% vs prior-year quarter) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P004",
+      "decision": "exclude",
+      "why": "This target (Q1 IOM sequential acceleration from Q4's 5.2%) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P005",
+      "decision": "exclude",
+      "why": "This target (2025 capex of $3.4 billion) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P006",
+      "decision": "exclude",
+      "why": "This target (Q1 IDL sequential decrease from Q4's 4.5%) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P007",
+      "decision": "exclude",
+      "why": "This target (Q1 US comp-sales sequential deceleration from Q4's 6.8%) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P008",
+      "decision": "exclude",
+      "why": "This target (50,000 restaurants by end of 2027, same quote as P001 under a different label) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P009",
+      "decision": "exclude",
+      "why": "This target (approximately 2,100 net restaurant additions in 2026, same quote as P002 under a different label) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    },
+    {
+      "proposal_id": "MCD_2026-02-11T16.30#P010",
+      "decision": "exclude",
+      "why": "This target (capex slightly above the high end of the guided range, same quote as P005 under a different label) has already been tested; out of scope for this fresh sample.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "system-wide sales of nearly $140 billion, up 5.5% in constant currency for the full year",
+        "raw_label_or_claim": "system-wide sales of nearly $140 billion, up 5.5% in constant currency",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "A distinct FY2025 actual fact (total system-wide sales level plus its constant-currency growth) never named by any supplied proposal. Point-shape number (FINAL_DESIGN 7.1) and a measurement qualifier 'constant currency' that per NAME-14/FS-25/OD-9 belongs in fact_scope.measurement, not the name."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "comp sales for the quarter were up 6.8%, which was above our expectations and was driven by positive check and guest count growth.",
+        "raw_label_or_claim": "comp sales for the quarter were up 6.8%, which was above our expectations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction"]
+      },
+      "why": "The Q4 2025 US actual comp-sales result with explicit favorability wording ('above our expectations'). Distinct from P007, which uses this same 6.8% figure only as the base of a forward Q1-2026 sequential guide -- a different fact and fact type (actual result vs. guidance-basis reference), so this is fresh. Exercises the point-shape rule and the surprise-state/OD-13 favorability rule."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "adjusted earnings per share was $3.12 for the quarter, which includes a 10-cent benefit from foreign currency translation.",
+        "raw_label_or_claim": "adjusted earnings per share was $3.12 for the quarter",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "Nominal-basis adjusted EPS point value, a different measurement basis from P003's constant-currency EPS growth rate (basis-difference split under the partial/richer-restatement rule), so it is a separate fact. Carries the 'adjusted' measurement token (NAME-14/FS-25/OD-9) and a point number shape."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Our total adjusted operating margin for the full year was 46.9% in line with our expectations and reflecting the strength of our business model and the resilience of our system.",
+        "raw_label_or_claim": "total adjusted operating margin for the full year was 46.9% in line with our expectations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "favourable_unfavourable_direction", "expectation_routing"]
+      },
+      "why": "FY2025 actual adjusted operating margin, not named by any proposal. Point-shape number; 'adjusted' measurement token; explicit 'in line' favorability wording (one of the four defined surprise states); and an actual-vs-expectations comparison whose own-target phrasing maps to previous_guidance per the per-X/name crosswalk, exercising OD-21/ISS-16 routing."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we expect interest expense to increase between 4% to 6% from the prior year, primarily due to higher average interest rates",
+        "raw_label_or_claim": "interest expense to increase between 4% to 6% from the prior year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A fresh 2026 guidance fact (interest expense growth, closed range 4%-6%) never named by any proposal. The explicit 'from the prior year' anchor invokes the OD-11 growth-basis rule (percent_yoy), distinct in metric and basis-flavor from the comp-sales sequential facts already tested by P004/P006/P007."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments.",
+        "raw_label_or_claim": "about 750 of these in our U.S. and IOM segments",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"]
+      },
+      "why": "A segment-level sub-population (U.S.+IOM) of the 2026 gross-openings total is a different scope than the whole-company total already tested by P001/P008, so it is fresh. It exercises the slice-kind menu rule (matches the exact frozen menu entry segment:usmarketandinternationaloperatedmarkets) and the portion-vs-whole rule (OD-17), since the qualified segment population differs from the consolidated total."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.",
+        "raw_label_or_claim": "about 1,000 in China",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"]
+      },
+      "why": "A country-level (China) subset of the 2026 IDL segment openings target, off the frozen slice-axis menu but with a clear geography kind from prose framing ('in China'), so it is a source-grounded off-menu coin under the FS-15/T1-05 ladder rung 3, and a portion of the IDL segment population (OD-17). Not named by any proposal and distinct in scope from the U.S./IOM segment fact above."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "the forward-looking statements on our earnings release and 8-K filing also apply to our comments on the call today.",
+        "raw_label_or_claim": "the forward-looking statements on our earnings release and 8-K filing also apply to our comments on the call today.",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Standard safe-harbor/administrative disclaimer -- a bare, non-fact, boilerplate statement that fails the DU-03/Rule-1 fact gate; correct reader behavior is omission, not abstention or encoding. Not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "the market continued to face macroeconomic pressures",
+        "raw_label_or_claim": "the market continued to face macroeconomic pressures",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, unspecific risk/pressure language about China with no named threat -- fails the DU-11 at_risk STRICT test ('generic = drop'), which is a locked (not fuzzy) boundary, so this is a lawful negative_control rather than an abstention exhibit."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "We were slightly above that range in 2025 at $3.4 billion of capital for the year.",
+      "part_ref": "qa",
+      "occurrence_in_part": null,
+      "why": "Same underlying fact as already-tested P005/P010 (2025 capex $3.4B vs guided range), restated in Q&A with added causal narrative (FX headwinds, pipeline timing). Same period/metric/value -- the same fact tested again under a different quote, not fresh, per the first-complete-quote and no-semantic-restatement rules."
+    },
+    {
+      "quote": "The Minecraft movie collaboration was our largest global campaign ever, bringing together two iconic fandoms across more than 100 markets and 37,000 restaurants.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Considered as a possible real_item (campaign market/restaurant reach) but not selected: the authority does not settle whether generic marketing-reach narrative meets the DU-03 driver-fact gate versus promotional color, so it was left out rather than guessed into a record kind."
+    },
+    {
+      "quote": "We sold about 50 million pairs globally across the first few days of the campaign.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A specific promotional-merchandise units-sold figure; excluded because it is unclear whether a novelty-merchandise volume statistic is a Driver-relevant fact under DU-03 versus incidental color -- declined rather than guess the classification."
+    },
+    {
+      "quote": "we're targeting our net income to free cash flow conversion rate in 2026 to be in the low to mid 80% range, which is in line with the 84% in 2025.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A lawful real fact (2026 FCF-conversion guidance, in-line vs 2025) but not added: its favourable_unfavourable_direction (in_line) coverage is already supplied by the added operating-margin row, and representative sampling does not require enumerating every lawful fact in this event."
+    },
+    {
+      "quote": "we expect our operating margin to be in the mid to high 40 percent range and to expand from our 46.9% adjusted operating margin in 2025.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A lawful 2026 operating-margin guidance fact but not added; its measurement-wording ('adjusted') and point-shape coverage are redundant with rows already selected for this event, and adding it would pad the sample beyond what repairs coverage."
+    },
+    {
+      "quote": "Today, we have about 46 million 90-day active users in our U.S. loyalty app.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A lawful loyalty-metric fact, one of several similar loyalty figures in this event (210 million 90-day actives across 70 markets, a 250-million 2027 target, and a 10.5-to-26 visit-frequency lift). None were added: representative sampling does not require exhausting every eligible statistic in one event, and these did not repair any declared coverage gap."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'above our expectations' / 'in line with our expectations' phrasing -- with no explicit numeric consensus or named guidance value stated alongside it -- is sufficient on its own to lawfully route as a formal OD-21/ISS-16 expectation-routing surprise (comparison_baseline=previous_guidance via the own-target mapping), versus only supporting the plain favourable_unfavourable_direction tag.",
+      "why": "The authority states own-target phrasing maps to previous_guidance but does not state a minimum specificity threshold for what counts as a stated comparison when no number or explicit guidance reference accompanies the favorability word. I tagged the FY2025 adjusted operating margin row with expectation_routing on this reading; this is a judgment call the rules do not fully settle."
+    },
+    {
+      "what": "Whether non-financial promotional/operational statistics (e.g., merchandise units sold, campaign market/restaurant reach) qualify as real driver facts under the DU-03 gate, or are out-of-scope narrative color.",
+      "why": "The gate defines a fact as a real statement about 'the driver (state/change/surprise/guidance/action)' but does not enumerate whether a novelty promotional metric counts as an action fact about a Driver. I excluded such candidates from additions rather than guess the boundary."
+    }
+  ],
+  "blocked": null
+}
+```

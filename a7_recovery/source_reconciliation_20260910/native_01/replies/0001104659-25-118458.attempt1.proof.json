@@ -1,0 +1,63 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0001104659-25-118458",
+ "ordinal_one_based": 20,
+ "ordinal_receipt": 19,
+ "attempt_number": 1,
+ "run_id": "wf_c681ef8d-66e",
+ "agent_id": "adccdefa3f0937d26",
+ "raw_sha256": "a047b27e0a618b53767f03e98a6e09e2dda0b7347f691c1453caf434c16f691b",
+ "prompt_sha256": "22b65ad7bf039e1ed0645902819011fe5b0c5fdf5c5929159a8917249fd36ee5",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 4,
+  "additions": 11,
+  "exclusions_considered": 7,
+  "open_issues": 3
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"This event's clean prose supplies no unambiguous instance of measurement_wording (adjusted/diluted/constant-currency wording), favourable_unfavourable_direction (a stated beat/miss vs. an ex",
+  "{'what': \"Whether 'Amendment No. 4 to the Second Amended and Restated Loan Agreement' (a credit-facility amendment title) exercises the corrections_and_amendments tag the way the October 2024 share-re",
+  "{'what': 'Several real facts (e.g., equity net loss of affiliate, the bare comparable-sales table percentage) exist only inside heavily fragmented, zero-width-space-laden table text.', 'why': \"I could"
+ ],
+ "locator": {
+  "additions": {
+   "located": 11,
+   "not_located": [],
+   "total_with_quote": 11
+  },
+  "exclusions_considered": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  }
+ },
+ "receipt_attempts": 22,
+ "receipt_missing": 15,
+ "receipt_other_problems": [
+  "the run accepted 21 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 19,
+  "attempt": 1,
+  "source_id": "0001104659-25-118458",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c681ef8d-66e.json",
+  "agent_id": "adccdefa3f0937d26",
+  "raw_name": "0001104659-25-118458.attempt1.complete.raw.json"
+ }
+}

@@ -1,0 +1,9 @@
+attempt	codex_reuse2006_native_c
+payload	../../unit_2006/run_regression_2006.py
+map	../unit_2006/map_regression_native_2006_c.tsv
+command	run_1957.sh ../unit_2006/map_regression_native_2006_c.tsv ../../unit_2006/run_regression_2006.py codex_reuse2006_native_c 1800
+wrapper_pid	3752764
+payload_pid	3752768
+payload_pgid	3752764
+started_utc	2026-09-11T00:31:27Z
+state	finished exit 0

@@ -1,0 +1,232 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "segment_profit_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 18.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 18.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 19.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 19.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["segment:finediningsegment"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the segment table states a compared Fine Dining segment-profit-margin decrease from 19.0% to 18.6% (a company-defined re-readable rate), a genuine grounded metric fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "leverage_ratio",
+              "driver_state": "reported",
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "ceiling",
+              "level_unit": "x",
+              "time_type": "instant",
+              "measurement_raw_spans": ["consolidated"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed as a fact; it is also a source-stated 'Amendment No. 1' replacing the prior covenant with a new maximum consolidated leverage ratio ceiling, so it additionally carries corrections_and_amendments."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "person",
+            "item": {
+              "driver_name": "average_check_per_person",
+              "driver_state": "reported",
+              "level_low": {"value": 24.0, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 24.0, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["segment:olive_garden"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "alcoholic_beverage_sales_mix",
+              "driver_state": "reported",
+              "level_low": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_high": {"value": 4.7, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:olive_garden"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a single real item, but the sentence carries two distinct numeric bases (a dollar average check and a separate percentage sales-mix share), so it settles as two grounded metric facts rather than one."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote is generic scene-setting inside a hypothetical disaster-recovery risk paragraph ('could have a materially adverse impact... following a major natural disaster'); it states no real driver state, change, surprise, guidance, or action, so it fails the fact gate as boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: this is generic hypothetical-risk boilerplate with no real driver fact, so it lawfully abstains."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a standard historical no-material-impact disclaimer inside generic, forward-looking cybersecurity risk boilerplate; it names no specific incident, magnitude, or company action, so it fails the fact gate as boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and confirmed: a bare historical non-materiality disclaimer inside generic forward-looking cyber-risk boilerplate carries no real driver fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "reported",
+              "level_low": {"value": 2159, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2159, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "period_end_date": "2025-05-25",
+              "fiscal_year": 2025,
+              "slice_parts": ["channel:entityoperatedunits"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the source states a concrete as-of-date owned-and-operated restaurant count; the United States/Canada wording describes the complete extent of that channel rather than a further geographic subset, so geography is omitted as redundant."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "corrections_and_amendments"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The amendment's conditional temporary ceiling increase to 4.00x upon a covered acquisition has no lawful numeric slot (conditions is guidance-only) and stays quote-only rather than a second value."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "slices_and_unknown_axes", "ambiguous_menus"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two same-kind menu tokens (segment:olivegarden and segment:olivegardensegment) both plausibly denote Olive Garden and this brand-narrative sentence's own framing does not select between them, so an off-menu segment:olive_garden value was coined."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same Olive Garden same-kind menu-token ambiguity as the sibling average-check fact in this row applies here too."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000940944-25-000038#058",
+      "agrees": true,
+      "why": "The lead's segment_profit_margin fact matches mine field-for-field: decreased state, point levels 18.6/19.0, prior_year baseline, fiscal_year 2025, duration, finediningsegment slice, and correctly omits the derivable change_value."
+    },
+    {
+      "lead_id": "phase1/0000940944-25-000038#059",
+      "agrees": false,
+      "why": "The lead matches driver_name, ceiling 3.5, unit x, and the consolidated measurement span, but it wrongly adds a single-date instant period (2024-09-16 to 2024-09-16); the covenant is an ongoing, quarter-tested requirement with no stated single observation date, so those period fields stay null, and the lead also omits the source-stated amendment (corrections_and_amendments)."
+    },
+    {
+      "lead_id": "phase1/0000940944-25-000038#060",
+      "agrees": false,
+      "why": "The lead emits only the average-check fact and omits the second distinct fact in the same sentence (Olive Garden's alcoholic-beverage sales mix), and it silently reuses the on-menu segment:olivegardensegment token instead of recognizing the same-kind menu ambiguity against segment:olivegarden."
+    },
+    {
+      "lead_id": "phase1/0000940944-25-000038#061",
+      "agrees": true,
+      "why": "The lead also emits no facts and exactly one abstention citing generic hypothetical-disaster risk-factor boilerplate, matching my settled branch and reasoning."
+    },
+    {
+      "lead_id": "phase1/0000940944-25-000038#062",
+      "agrees": true,
+      "why": "The lead also emits no facts and exactly one abstention citing generic cybersecurity risk-factor boilerplate, matching my settled branch and reasoning."
+    },
+    {
+      "lead_id": "phase1/0000940944-25-000038#063",
+      "agrees": false,
+      "why": "The lead matches driver_name, state, point level 2159, count unit, instant time_type, fiscal_year and period_end_date, but it adds a geography:northamerica slice and a redundant period_start_date; owned-and-operated units exist only in the United States and Canada, so that phrase states the whole extent of the channel rather than a further geographic subset."
+    }
+  ],
+  "open_issues": []
+}
+```

@@ -1,0 +1,519 @@
+{
+ "source_id": "MCD_2026-02-11T16.30",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "system_wide_sales",
+       "driver_state": "increased",
+       "level_high": {
+        "value": 140,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "ceiling",
+       "level_unit": "m_usd",
+       "change_value": {
+        "value": 5.5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "measurement_raw_spans": [
+        "constant currency"
+       ],
+       "fiscal_year": 2025,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as a real fact: the row states a sized system-wide sales level plus a source-stated constant-currency full-year growth rate, so the proposal and my outcome agree."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "comparable_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "comparable_sales_surprise",
+       "driver_state": "beat",
+       "level_low": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": false,
+       "polarity_proof": {
+        "polarity": "favorable",
+        "basis": "metric_meaning",
+        "evidence": "Higher comparable-sales growth for a restaurant operator has no mainstream counter-story; more comparable sales is the favorable direction, and the same sentence attributes it to positive check and guest counts.",
+        "sentence": "In the U.S., comp sales for the quarter were up 6.8%, which was above our expectations and was driven by positive check and guest count growth."
+       },
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "average_check",
+       "driver_state": "increased",
+       "level_unit": "percent_yoy",
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "guest_counts",
+       "driver_state": "increased",
+       "level_unit": "percent_yoy",
+       "slice_parts": [
+        "unknown:usmarket"
+       ],
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as real facts: the row carries a sized comparable-sales actual, an explicit actual-vs-expectation comparison that requires the surprise twin, and two numberless but real component growth statements."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "operating_margin",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "measurement_raw_spans": [
+        "adjusted"
+       ],
+       "fiscal_year": 2025,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "operating_margin_surprise",
+       "driver_state": "in_line",
+       "level_low": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 46.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "comparison_baseline": "previous_guidance",
+       "surprise_basis_hint": "actual",
+       "has_favorability_wording": false,
+       "measurement_raw_spans": [
+        "adjusted"
+       ],
+       "fiscal_year": 2025,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as real facts: the row states a sized full-year adjusted operating margin level and an explicit actual-vs-own-expectation match, which routes to a metric home plus its surprise twin."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 2600,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 2600,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 750,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 750,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "slice_parts": [
+        "segment:usmarketandinternationaloperatedmarkets"
+       ],
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as real facts: the row is the company's own forward opening target, split into the whole-company guide and a separately sized sliced guide for the U.S. and IOM segments."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 1800,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "floor",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "slice_parts": [
+        "segment:internationaldevelopmentallicensedmarketsandcorporate"
+       ],
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "gross_restaurant_openings_guidance",
+       "driver_state": "unknown",
+       "level_low": {
+        "value": 1000,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 1000,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "company_confirmed": true,
+       "slice_parts": [
+        "geography:china"
+       ],
+       "fiscal_year": 2026,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and settled as real facts: the row carries a floor-shaped forward opening guide for the IDL segment plus a distinct point guide for China, both stated by the CFO."
+  },
+  {
+   "row_index": 6,
+   "settled": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Standard forward-looking-statements disclaimer: it states no driver level, change, outlook, expectation comparison or discrete action, so the gate yields no fact."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed as a negative_control and settled as a control: the sentence is pure legal boilerplate about where forward-looking statements apply and names no driver at all, so the proposal holds."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "measurement_wording",
+    "portion_versus_whole"
+   ],
+   "reference_name": "system-wide sales",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Two ambiguities recorded rather than resolved: 'nearly $140 billion' is encoded as a one-sided ceiling (it bounds from above) rather than a point, and the stated level is nominal while the 5.5% growth is constant currency, so the single 'constant currency' measurement span is carried on the whole fact."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "slices_and_unknown_axes",
+    "ambiguous_menus",
+    "portion_versus_whole"
+   ],
+   "reference_name": "comp sales",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": "The U.S. part is menu-ambiguous — the same normalized label sits under both a segment and an entity_ownership kind in the menu and the quote's framing ('In the U.S.') selects neither — so it is recorded honestly as unknown:usmarket."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "expectation_routing",
+    "favourable_unfavourable_direction",
+    "slices_and_unknown_axes",
+    "ambiguous_menus",
+    "portion_versus_whole"
+   ],
+   "reference_name": "comp sales for the quarter were up 6.8%, which was above our expectations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": "'our expectations' is own-party phrasing, so the baseline is recorded as previous_guidance rather than consensus even though no public comp-sales guide exists, and 'above' is a position word only, so the beat rests on a metric_meaning polarity proof with no favorability wording."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 2,
+   "hard_classes": [
+    "sequential_comparison",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "positive check",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The source says only 'check' growth, so the driver is read as average check and left numberless with its year-over-year basis unit."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 3,
+   "hard_classes": [
+    "sequential_comparison",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "guest count growth",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Numberless growth with no stated size, so only the year-over-year basis unit is carried and no numeric slot is populated."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording"
+   ],
+   "reference_name": "total adjusted operating margin",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": "'total' is treated as consolidated scope (already carried by the empty slice) rather than a measurement qualifier, so only 'adjusted' is copied into measurement."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "expectation_routing",
+    "favourable_unfavourable_direction"
+   ],
+   "reference_name": "in line with our expectations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": true
+   },
+   "ambiguity_note": "'in line with our expectations' states a match but no favorable/unfavorable wording, so has_favorability_wording is false, and the own-party phrasing maps the baseline to previous_guidance with no stated expectation value."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling"
+   ],
+   "reference_name": "approximately 2,600 gross restaurant openings",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "No movement wording accompanies the guide inside this row, so the guidance state stays unknown rather than being read as raised."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "about 750 of these in our U.S. and IOM segments",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The two named segments are covered by one existing combined menu value rather than two separate parts; whether the gold intends one combined part or two is genuinely open."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "more than 1,800 restaurants in our IDL segment",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The IDL label exists in the menu under both a segment and an entity_ownership kind; the quote's own word 'segment' selects the segment kind, and 'gross' in the name is carried over from the same passage's opening plan rather than from this row's own words."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "about 1,000 in China",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "China is coined as a geography part only; whether the parent IDL segment should ride alongside it as a second part is left unresolved rather than guessed."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-028/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-028/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

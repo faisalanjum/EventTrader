@@ -1,0 +1,33 @@
+{
+ "attempt": 1,
+ "run_id": "wf_TEST_signature_codex_signed2009_c",
+ "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_TEST_signature_codex_signed2009_c.json",
+ "agent_id": "siged2009_c",
+ "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_TEST_signature_codex_signed2009_c/agent-siged2009_c.jsonl",
+ "state_sha256": "29330d09a4832b44952252922fda6c890d27f23827635c1c582b963898f86353",
+ "transcript_sha256": "da4c2f3e65a9844ed778dfb19dc2b4d3e87b86cdacfe26b13f454e6eaa6e646b",
+ "raw_sha256": "7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d",
+ "raw_chars": 151,
+ "prompt_sha256": "8277d95e31fc3e13e386dfcb071a168eb1d676f003a88b295b76578d304ecad8",
+ "script_sha256": "dc54a9ce1336bd946ade32eb86ae0116219d278fbaf4d6d7863eab682bd13e32",
+ "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "model": "opus",
+ "effort": "high",
+ "agent_type": "lean-probe",
+ "runtime_model_ids": [
+  "claude-opus-5"
+ ],
+ "tool_calls": 0,
+ "total_tokens": 53847,
+ "duration_ms": 222065,
+ "parser": "build_kfields_final.read_signature",
+ "parser_problems": [],
+ "outcome": "signed",
+ "raw_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_join2009_a/candidate/signer/final_sign.attempt1.raw.json",
+ "retry_law": {
+  "owner": "build_kfields_final.RETRYABLE",
+  "retryable": [
+   "invalid_response"
+  ]
+ }
+}

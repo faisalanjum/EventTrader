@@ -1,0 +1,57 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "bzNews_50877032",
+ "ordinal_one_based": 35,
+ "ordinal_receipt": 34,
+ "attempt_number": 1,
+ "run_id": "wf_c705a834-e37",
+ "agent_id": "a102a6a5b25d68921",
+ "raw_sha256": "892e486e1542c7726899004d2065df629b90a230d3031ee9cc12b2378006f37a",
+ "prompt_sha256": "88ed352289587037fbfc372fa7fb41367db58348902bf90dc79ab7ebe7cd9d60",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 3,
+  "additions": 3,
+  "exclusions_considered": 7,
+  "open_issues": 0
+ },
+ "blocked": null,
+ "open_issues": [],
+ "locator": {
+  "additions": {
+   "located": 3,
+   "not_located": [],
+   "total_with_quote": 3
+  },
+  "exclusions_considered": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  }
+ },
+ "receipt_attempts": 37,
+ "receipt_missing": 0,
+ "receipt_other_problems": [],
+ "attempt": {
+  "task": "event",
+  "ordinal": 34,
+  "attempt": 1,
+  "source_id": "bzNews_50877032",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c705a834-e37.json",
+  "agent_id": "a102a6a5b25d68921",
+  "raw_name": "bzNews_50877032.attempt1.complete.raw.json"
+ }
+}

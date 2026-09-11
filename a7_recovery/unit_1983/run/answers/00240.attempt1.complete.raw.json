@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "comparable_sales",
+        "driver_state": "unknown",
+        "level_low": {"value": 2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent_yoy",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "unit_closures",
+        "driver_state": "announced",
+        "level_low": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 250, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "time_type": "duration",
+        "half": 1,
+        "fiscal_year": 2026,
+        "slice_parts": ["geography:us", "segment:pizzahutglobaldivision"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

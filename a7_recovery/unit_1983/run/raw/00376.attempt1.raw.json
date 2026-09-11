@@ -1,0 +1,10 @@
+```json
+{
+ "source_id": "YUM_2026-02-04T08.15",
+ "facts": [],
+ "abstentions": [
+  {"reason": "This is an administrative announcement of the date/logistics of the next earnings call, not a statement about any driver's state, change, surprise, guidance, or action — it fails Rule 1's fact gate."}
+ ],
+ "continuity_hints": []
+}
+```

@@ -1,0 +1,7 @@
+attempt	codex_scope2005_a
+payload	../../unit_1997/ledger/../../unit_2005/check_scope_failures_2005.py
+map	../unit_1997/../unit_2002/map_lifecycle_2002.tsv
+wrapper_pid	3634886
+payload_pid	3634890
+started_utc	2026-09-10T23:13:43Z
+state	finished exit 0

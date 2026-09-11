@@ -1,0 +1,43 @@
+{
+ "composite_frozen": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+ "authority_document": "/home/faisal/.core827-orchestrator/archive_CODEX_2011.md",
+ "authority_sha256": "c9e270c1dabc745af19b4ea48f1151e02deb21c577237e38067aa41c5af67b53",
+ "lock_sha256": "b135da0ef80d31c4b31e7f305a461c914a65933a1e25c0c7cd52a933d79bdbb5",
+ "receipt_sha256": "e389feab4cbfaee85002bebeaa1515f1e9d3367952f38fdb1c730f1e80ed74f6",
+ "lock_owner_sha256": "e95864edd0c0176934ed5b215ea76e1cb631babc1db3b5287520e5a87a42e8e8",
+ "mutations_i_ran": 33,
+ "not_refused": [],
+ "saved_call_selection": [
+  "reuse",
+  "wf_TEST_signature_codex_signed2009_c",
+  null
+ ],
+ "a3_saved_answers": 382,
+ "stage_scheduled": {
+  "initial_key": 33,
+  "review_primary": 66,
+  "review_child": 14,
+  "clarified_review": 4,
+  "final_adjudication": 33
+ },
+ "recomputed_ledger_before": 532,
+ "a3_digest_now": {
+  "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+  "run_files": 799
+ },
+ "counts": {
+  "total": 7,
+  "passed": 7
+ },
+ "failed": [],
+ "cases": [
+  "1 the receipt names the lock that is actually on disk",
+  "2 POSITIVE CONTROL: the published lock verifies clean",
+  "3 every bound value refuses when mutated, re-earned not read",
+  "4 my own replay agrees with the receipt's recorded results",
+  "5 the completed signature selects as REUSE, not a new call",
+  "6 the signed baseline is each stage counted once",
+  "7 the original answer run still carries its recorded digest"
+ ],
+ "ok": true
+}

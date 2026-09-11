@@ -1,0 +1,320 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "verdicts": [
+    {
+      "proposal_id": "0000027904-26-000013#P000",
+      "decision": "exclude",
+      "why": "This target (fuel-cost percentage of operating expense, 2023-2025) has already been tested by a prior proposal; it is out of scope for this fresh sample regardless of its correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P001",
+      "decision": "exclude",
+      "why": "This target (Pacific region passenger revenue growth on capacity) has already been tested by a prior proposal; excluded from this fresh sample only, not a judgment on its truth or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P002",
+      "decision": "exclude",
+      "why": "This target (expected 2026 fuel consumption increase) has already been tested by a prior proposal; excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P003",
+      "decision": "exclude",
+      "why": "This target (the SkyMiles Credit Facility amendment event itself) has already been tested by a prior proposal; excluded from this fresh sample only. (Note: the specific amendment TERMS, e.g. the amortization-rate reduction, are a different, untested target and are added separately below.)",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P004",
+      "decision": "exclude",
+      "why": "This target (20% of employees unionized) has already been tested by a prior proposal; excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P005",
+      "decision": "exclude",
+      "why": "This target (domestic PRASM decrease) has already been tested by a prior proposal; excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P006",
+      "decision": "exclude",
+      "why": "This target (quarterly per-share dividend amounts) has already been tested by a prior proposal; excluded from this fresh sample only. (Note: the separate TOTAL dividend dollar figure is a different NAME-13 fact and is added below.)",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P007",
+      "decision": "exclude",
+      "why": "This target (the Court's stay of the DOT order) has already been tested by a prior proposal; excluded from this fresh sample only.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000027904-26-000013#P008",
+      "decision": "exclude",
+      "why": "This target (DOT terminating antitrust immunity for the Aeroméxico joint cooperation agreement) has already been tested by a prior proposal; excluded from this fresh sample only.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Our 2025 operating income was $5.8 billion, a decrease of $173 million compared to 2024",
+        "raw_label_or_claim": "operating income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "GAAP operating income level plus its YoY temporal change; not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "operating income, adjusted (a non-GAAP financial measure) was $5.8 billion, a decrease of $212 million compared to 2024.",
+        "raw_label_or_claim": "operating income, adjusted",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "The 'adjusted' (non-GAAP) measurement variant of operating income is a fact_scope.measurement-distinct series from the GAAP figure above (FS-25/NAME-14) and is a different fact from any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Loss on extinguishment of debt (26) (39) 13",
+        "raw_label_or_claim": "Loss on extinguishment of debt",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling"]
+      },
+      "why": "A named, signed loss line item with stated 2025/2024 point values; exercises OD-12 and is untouched by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.",
+        "raw_label_or_claim": "CASM-Ex",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["measurement_wording", "point_range_floor_ceiling"]
+      },
+      "why": "CASM-Ex home metric fact (adjusted unit-cost measurement, point value plus YoY change); no proposal names this metric."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.",
+        "raw_label_or_claim": "in line with our long-term target of low-single digit growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "The company's actual-vs-its-own-target comparison (own-target phrasing maps to previous_guidance) with a stated in_line favorability state; the OD-21 surprise sibling of the CASM-Ex home fact above; no proposal covers it."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Excluding the mark-to-market results, we project our annual effective tax rate to be between 23% and 25% for 2026.",
+        "raw_label_or_claim": "annual effective tax rate to be between 23% and 25% for 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "A forward closed-range guidance figure (floor 23%, ceiling 25%) with an exclusionary measurement qualifier; untouched by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "As of December 31, 2025 we had approximately $3.1 billion undrawn and available under our revolving credit facilities.",
+        "raw_label_or_claim": "undrawn and available under our revolving credit facilities",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "point_range_floor_ceiling"]
+      },
+      "why": "The undrawn/available portion of the credit facilities is a qualified population distinct from the whole facility (OD-17); a fresh point-value fact no proposal names."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "business",
+        "occurrence_in_part": null,
+        "quote": "we currently own an approximately 19% equity stake in Grupo Aeroméxico, S.A.B. de C.V., the parent company of Aeroméxico.",
+        "raw_label_or_claim": "19% equity stake in Grupo Aeroméxico",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "A stated equity ownership percentage on the entity_ownership axis (menu value grupoaeromexico); a fresh, distinct fact from the DOT/antitrust proposals already tested for this same partner."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "the sale of a portion of our equity investment in Unifi Aviation",
+        "raw_label_or_claim": "sale of a portion of our equity investment in Unifi Aviation",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole", "slices_and_unknown_axes"]
+      },
+      "why": "An explicit partial (portion-of-holding) divestiture action tied to a named entity_ownership slice value (unifi); no proposal covers it."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Exchanged products $ 580 $ 1,473 (61) %",
+        "raw_label_or_claim": "Exchanged products",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "point_range_floor_ceiling"]
+      },
+      "why": "Refinery-segment product-slice revenue line (menu value product:exchangedproducts) with stated point values; distinct from the refinery/third-party-sales facts implicit elsewhere and untouched by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "with an option to purchase up to an additional 30 of the same aircraft",
+        "raw_label_or_claim": "option to purchase up to an additional 30 of the same aircraft",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "An explicit ceiling-only number shape ('up to' an additional 30), separate from the co-stated firm 30-aircraft order; no proposal covers it."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "(iii) reduced the principal amortization payments from 20% to 1% per year, payable quarterly",
+        "raw_label_or_claim": "reduced the principal amortization payments from 20% to 1% per year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["corrections_and_amendments", "point_range_floor_ceiling"]
+      },
+      "why": "A specific SkyMiles Credit Facility amendment term (amortization-rate change) distinct from the generic 'an amendment was entered' fact already tested in a supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "Between 2023 and 2025, our average fuel price per gallon has ranged from a monthly high of $3.22 in October 2023 to a monthly low of $2.20 in August 2025.",
+        "raw_label_or_claim": "ranged from a monthly high of $3.22 in October 2023 to a monthly low of $2.20 in August 2025",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A stated closed range with explicit floor and ceiling values and dates; no proposal covers this fact."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Total dividend payments during the year ended December 31, 2025 were $440 million.",
+        "raw_label_or_claim": "Total dividend payments during the year ended December 31, 2025 were $440 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Total-dollar dividend figure is a separate fact from the per-share dividend amounts already tested by a supplied proposal (NAME-13 total-vs-per-X)."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": 1,
+        "quote": "We had minimum funding requirements of $70 million during 2025",
+        "raw_label_or_claim": "minimum funding requirements of $70 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A stated actual 2025 pension funding requirement, first complete occurrence of this sentence in the part (it repeats verbatim later); untouched by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "An aircraft crash or other serious accident involving our aircraft or those of our airline partners could expose us to significant liability.",
+        "raw_label_or_claim": "could expose us to significant liability",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Canonical generic risk boilerplate (no specific current source-flagged adverse threat, no stated fact) fails DU-03/Rule 1; correct behavior is omission."
+    },
+    {
+      "row": {
+        "source_id": "0000027904-26-000013",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "A hypothetical 10% change in the number of outstanding miles estimated to be redeemed would result in an impact of less than 1% of total operating revenue recognized for the year ended December 31, 2025.",
+        "raw_label_or_claim": "hypothetical 10% change in the number of outstanding miles estimated to be redeemed",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "An explicitly hypothetical sensitivity disclosure, not a stated real fact; fails DU-03/Rule 1, correct behavior is omission (not abstention)."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "We currently own an approximately 11% equity stake in LATAM.",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "A second entity_ownership equity-stake fact; omitted as non-essential duplicate coverage of the entity_ownership kind already represented by the Grupo Aeroméxico stake selected for this event."
+    },
+    {
+      "quote": "estimate that there will be approximately $5 million of minimum funding requirements under these plans in 2026",
+      "part_ref": "mdna",
+      "occurrence_in_part": 1,
+      "why": "A forward funding estimate co-stated in the same sentence as the selected 2025 actual figure; omitted to avoid over-selecting near-duplicate facts from one sentence for this event."
+    },
+    {
+      "quote": "Sales to airline segment 1,150 1,421 (19) %",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Another refinery-segment product-slice line; omitted as redundant coverage of the product-slice kind already represented by 'Exchanged products' selected for this event."
+    },
+    {
+      "quote": "Total non-operating income was $363 million in 2025, compared to total non-operating expense of $1.3 billion in 2024, primarily due to mark-to-market gains on certain of our equity investments in 2025 compared to losses in 2024.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A gain/loss sign-flip narrative; omitted as redundant with the losses_and_sign coverage already provided by the 'Loss on extinguishment of debt' item selected for this event."
+    },
+    {
+      "quote": "we entered into a definitive agreement with Airbus S.A.S. to purchase 16 Airbus A330-900 aircraft and 15 Airbus A350-900 aircraft, with an option to purchase up to an additional 20 widebody aircraft.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A second firm-order/ceiling-option aircraft cluster; omitted as redundant with the Boeing 787-10 pattern already selected for this event."
+    },
+    {
+      "quote": "we own just under 15% of the outstanding common stock of Hanjin-KAL, the largest shareholder of Korean Air",
+      "part_ref": "business",
+      "occurrence_in_part": null,
+      "why": "Another minority equity-stake fact on an off-menu investment-name axis; omitted as non-essential duplicate of the equity-stake pattern already represented."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "No candidate in this event's text exercises sequential_comparison (OD-11): the document is an annual 10-K whose numeric comparisons are consistently YoY (annual-pin territory), and no in-document immediately-prior-period (sub-annual) comparison was found stated.",
+      "why": "The authority does not require every event to supply every tag; recording this as a gap for this event rather than inventing or stretching a candidate to fit."
+    },
+    {
+      "what": "No candidate in this event's text exercises ambiguous_menus (T1-05/FS-15 ladder): no source-stated part was found whose normalized label is plausible under two or more slice kinds without the quote's own framing selecting one.",
+      "why": "Owner ruling 6 requires an actual source item to exercise the exact rule; none was found here, so none was added rather than forcing a fit."
+    },
+    {
+      "what": "Classifying 'Excluding the mark-to-market results' as measurement_wording (rather than a plain narrative qualifier outside fact_scope.measurement) is a judgment call: FINAL_DESIGN's worked examples for the measurement token are adjusted/diluted/constant-currency style qualifiers, not an explicit MTM-exclusion phrase.",
+      "why": "The owning rule text does not enumerate this exact phrasing; recorded as an open point for the reviewer rather than silently resolved."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,29 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "full_time_equivalent_employees",
+        "driver_state": "increased",
+        "level_low": {"value": 32500, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 32500, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count",
+        "comparison_low": {"value": 30700, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "comparison_high": {"value": 30700, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "instant",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "period_end_date": "2026-03-31",
+        "slice_parts": ["product:regionalcarrier"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

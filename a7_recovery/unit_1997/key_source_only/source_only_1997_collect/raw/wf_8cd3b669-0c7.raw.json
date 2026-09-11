@@ -1,0 +1,384 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration",
+              "measurement_raw_spans": ["adjusted"]
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "operating_margin_surprise",
+              "driver_state": "beat",
+              "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": true,
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration",
+              "measurement_raw_spans": ["adjusted"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_profit_margin",
+              "driver_state": "unknown",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "gross_profit_margin_surprise",
+              "driver_state": "beat",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": true,
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sga_expense_rate",
+              "driver_state": "unknown",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "sga_expense_rate_surprise",
+              "driver_state": "beat",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": true,
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: the row states a reported adjusted operating income rate of 5% plus an explicit better-than-plan comparison, which the twin rule turns into a metric home and a surprise, with the trailing clause adding two numberless favorable-versus-plan pairs."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "decreased",
+              "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: a stated, dated, signed comparable-sales value versus last year is a real metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "comparable_sales_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": -0.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": false,
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: the same sentence also compares the delivered comp to the company's own prior guidance range, which is the surprise twin of row 2's home fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "reported",
+              "level_low": {"value": 1.1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["unknown:best buy business"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: a stated full-year revenue floor for a named company part is a real metric fact, even though the part's slice kind had to be filed as unknown."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 0.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 4,
+              "time_type": "duration",
+              "slice_parts": ["unknown:international"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: a stated level, a stated year-over-year change and a stated direction all resolve, so the row carries a real metric fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard forward-looking-statement safe-harbour and generic risk language; it names no driver, no state, no change, no guidance value and no action, so the gate drops it as boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed as one: the text is pure safe-harbour boilerplate and yields no fact of any lane."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "revenue_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 41.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 42.1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "range",
+              "level_unit": "m_usd",
+              "company_confirmed": true,
+              "fiscal_year": 2027,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as one: a closed company revenue range for the stated full fiscal-27 guidance block is a real guidance fact with no stated movement."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "BBY_2026-03-03T08.00",
+        "facts": [],
+        "abstentions": [
+          {"reason": "A real-sounding below-expectations claim that cannot be lawfully resolved: it names no company metric value or period-bearing home fact, and 'expectations ... from an industry perspective' is neither analyst consensus nor the company's own prior guide, so no surprise baseline can be stated without guessing."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a lawful_abstention_control and confirmed as one: the statement is real but ungrounded and baseline-unresolvable, so it lawfully yields the single abstention rather than a fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "expectation_routing"],
+      "reference_name": "adjusted operating income rate",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The word 'adjusted' had to ride the measurement slot rather than the name, and the home fact carries no temporal baseline because the only comparison stated is versus plan."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "adjusted operating income rate",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'better than planned' is own-plan phrasing, so the baseline maps to previous_guidance rather than consensus, and no expectation value is stated to compare against."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 2,
+      "hard_classes": ["expectation_routing"],
+      "reference_name": "gross profit",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The clause may instead be read as a decomposition of the single operating-income beat rather than its own driver statement, so this numberless home is recorded as the honest reading, not a certainty."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 3,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "gross profit",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'slightly favorable' is explicit favorability wording but the sentence never states the plan value, so the beat is numberless and rests entirely on the quote."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 4,
+      "hard_classes": ["expectation_routing"],
+      "reference_name": "SG&A",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Same decomposition-versus-distinct-driver ambiguity as the gross profit pair; the SG&A rate is treated as its own driver because it is a separately readable standing rate."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 5,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "SG&A",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Favorability comes from the source's own word 'favorable', not from any assumption that a lower expense rate is better, so no polarity proof was needed."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "reference_name": "comparable sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Comparable sales is itself a growth rate, so the -0.8% sits in the level slots on a percent_yoy basis rather than in change_value."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "comparable sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The guidance range bounds are not stated in this quote, so in_line rests on the source's own 'within our guidance range' wording with no favorability language present."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "$1.1 billion in revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Best Buy business' is plausible as both a customer population it sells to and a segment it operates as, and it is absent from the menu, so the slice kind is filed as unknown rather than guessed."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "International revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu carries 'international' under both a geography kind and a segment kind and this quote's framing selects neither, so the part is recorded as unknown:international."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "Revenue in the range of $41.2 to $42.1 billion",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The target period is not inside the quote itself and is taken from the guidance block's own 'full year fiscal 27' framing in the same remarks."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [2, 3],
+      "members_are_one_fact": false,
+      "reason": "The single sentence states two separable things — the delivered comparable-sales value versus last year and that value's position against the company's own guidance range — and the expectation rule requires the actual to be written as a metric home plus a distinct surprise record."
+    }
+  ],
+  "lead_reconciliation": [],
+  "open_issues": [
+    {
+      "what": "Whether row 1's trailing clause 'included slightly favorable rates for both gross profit and SG&A' should yield two additional numberless surprise-plus-home pairs, as settled here, or be absorbed into the single operating-income-rate beat.",
+      "why": "No rule in the packet says whether a decomposition clause attached to a beat statement is a separate driver statement; both readings are lawful, and the count of stored facts for this row changes from two to six depending on which is taken."
+    },
+    {
+      "what": "The slice kind for 'International' in row 5 is filed as unknown:international instead of reusing the menu's geography:international or segment:international.",
+      "why": "The identical normalized label sits under two kinds in this company's menu and this quote's own framing does not select one, so any pick would be a guessed kind that becomes byte-identical in the stored id to an axis-confirmed one."
+    },
+    {
+      "what": "The slice kind for 'Best Buy business' in row 4 is filed as unknown:best buy business.",
+      "why": "It is describable both as a customer population sold to and as a business arm operated as, it has no menu entry, and coining a kind would fabricate an axis-grade confirmation."
+    }
+  ]
+}
+```

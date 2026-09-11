@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "DAL_2026-04-08T10.00#155",
+  "settled": {
+    "source_id": "DAL_2026-04-08T10.00",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "net_debt",
+          "driver_state": "decreased",
+          "level_low": {"value": 13.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_high": {"value": 13.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+          "level_shape_hint": "point",
+          "level_unit": "m_usd",
+          "change_value": {"value": -20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+          "change_unit": "percent_yoy",
+          "comparison_baseline": "prior_year",
+          "time_type": "instant",
+          "fiscal_quarter": 1,
+          "fiscal_year": 2026,
+          "measurement_raw_spans": ["adjusted"]
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "DAL_2026-04-08T10.00#155/L1",
+      "exact_match": true,
+      "why": "Same driver_name (net_debt), decreased state, point level 13.5 billion, change_value -20 percent_yoy vs prior_year, instant/Q1 FY2026, measurement span 'adjusted' — identical content to settled reply, order of keys is not meaningful."
+    },
+    {
+      "lane_id": "DAL_2026-04-08T10.00#155/L2",
+      "exact_match": true,
+      "why": "Identical fields and values to L1 and to the settled reply (only key ordering differs, which is not semantically distinct); matches on name, state, level, change, baseline, period, and measurement span."
+    }
+  ],
+  "ambiguities": []
+}
+```

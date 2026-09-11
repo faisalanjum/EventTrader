@@ -1,0 +1,274 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "verdicts": [
+    {
+      "proposal_id": "0000898173-26-000006#P000",
+      "decision": "exclude",
+      "why": "Already-tested target (full-year comparable store sales vs revised guidance range); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P001",
+      "decision": "exclude",
+      "why": "Already-tested target (full-year comparable store sales YoY); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P002",
+      "decision": "exclude",
+      "why": "Already-tested target (full-year gross profit); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P003",
+      "decision": "exclude",
+      "why": "Already-tested target (excise tax on shares repurchased); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P004",
+      "decision": "exclude",
+      "why": "Already-tested target (FY2026 comparable store sales guidance range); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P005",
+      "decision": "exclude",
+      "why": "Already-tested target (33 consecutive years narrative claim); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P006",
+      "decision": "exclude",
+      "why": "Already-tested target (fourth-quarter net income); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000898173-26-000006#P007",
+      "decision": "exclude",
+      "why": "Already-tested target (risk-factor boilerplate list, labeled 'weather'); outside this fresh sample by task rule, not a comment on its correctness.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Comparable store sales increased 5.6% for the fourth quarter ended December 31, 2025, on top of 4.4% for the same period one year ago.",
+        "raw_label_or_claim": "Comparable store sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Fresh target: Q4 comparable-store-sales YoY figure, distinct period/scope from the FY comparable-store-sales facts named by P000/P001. Real, source-stated point figures exercising the number-shape rule and the YoY growth-basis rule (OD-11)."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Operating income for the year ended December 31, 2025, increased 6% to $3.46 billion (or 19.5% of sales) from $3.25 billion (or 19.5% of sales) for the same period one year ago.",
+        "raw_label_or_claim": "Operating income",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Full-year operating income is not named by any proposal (only net income and gross profit were tested). Complete first occurrence with prior-year comparator; stated YoY percent change exercises OD-11 growth-basis handling."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Diluted earnings per common share for the year ended December 31, 2025, increased 10% to $2.97 on 856 million shares versus $2.71 on 881 million shares for the same period one year ago.",
+        "raw_label_or_claim": "Diluted earnings per common share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"]
+      },
+      "why": "Per-share fact, not named by any proposal (which cover net income and gross profit totals). Under NAME-13 a per-share figure is a separate fact from its total-dollar counterpart. 'Diluted' is a measurement qualifier (NAME-14/FS-25); stated YoY percent exercises OD-11."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Sales for the year ended December 31, 2025, increased $1.07 billion, or 6%, to $17.78 billion from $16.71 billion for the same period one year ago.",
+        "raw_label_or_claim": "Sales",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "Total company sales (FY) is not named by any proposal. Complete stated point value with prior-year comparator and YoY percent (OD-11 growth basis)."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total revenue $18.7 billion to $19.0 billion",
+        "raw_label_or_claim": "Total revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "FY2026 guidance line for total revenue, a distinct Driver/metric from the comparable-store-sales guidance figure named by P004; a stated closed range exercises the §7.1 number-shape rule."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Diluted earnings per share (1) \u200b $3.10 to $3.20",
+        "raw_label_or_claim": "Diluted earnings per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "FY2026 guidance line for diluted EPS, a per-share Driver distinct from the guided comparable-store-sales figure and from historical EPS facts already selected; closed-range shape plus 'diluted' measurement qualifier."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Effective income tax rate 22.6%",
+        "raw_label_or_claim": "Effective income tax rate",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "FY2026 guidance line, a single-point number shape (unlike the ranged neighbours in the same table), distinct Driver from any proposal target."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "SG&A expenses again exceeded our expectations in the fourth quarter due to pressure from heightened inflation in team member health care and casualty claim costs.",
+        "raw_label_or_claim": "SG&A expenses again exceeded our expectations",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["favourable_unfavourable_direction", "expectation_routing"]
+      },
+      "why": "Grounded numberless surprise (SG&A vs the company's own expectation) not named by any proposal. Directionally unfavourable (a cost line coming in above expectation) and routes as an actual-vs-guidance-type expectation comparison (OD-21); qualifies as DU-05 numberless fact under the fact gate."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Ending domestic store count \u200b 6,447",
+        "raw_label_or_claim": "Ending domestic store count",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole"]
+      },
+      "why": "Fresh, not named by any proposal. 'Domestic' is a qualified sub-population distinct from the consolidated store base (which also includes Mexico and Canada), exercising OD-17 portion-vs-whole; Q4-end and FY-end dates coincide (Dec 31, 2025) so the value is unambiguous regardless of column read."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Ending Mexico store count \u200b 112",
+        "raw_label_or_claim": "Ending Mexico store count",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "Fresh, not named by any proposal. Geography-kind slice matching the menu's geography:mx entry (FS-05..24); value unambiguous since Q4-end equals FY-end at the same fiscal date."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "Total shareholders\u2019 deficit \u200b (763,352)",
+        "raw_label_or_claim": "Total shareholders\u2019 deficit",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "Fresh balance-sheet fact, not named by any proposal. Negative equity value shown with accounting parenthesis notation, exercising OD-12's signed-axis/accounting-notation handling."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "During the fourth quarter ended December 31, 2025, the Company repurchased 5.2 million shares of its common stock, at an average price per share of $96.69, for a total investment of $500 million.",
+        "raw_label_or_claim": "total investment of $500 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "Q4 share-repurchase action/amount, not named by any proposal (only the excise tax on repurchases, P003, was tested). Complete first occurrence with share count and average price."
+    },
+    {
+      "row": {
+        "source_id": "0000898173-26-000006",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null,
+        "quote": "The Company claims the protection of the safe-harbor for forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995.",
+        "raw_label_or_claim": "safe-harbor for forward-looking statements",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Fresh negative control: generic legal safe-harbor boilerplate carrying no driver state/change/surprise/guidance/action fact, distinct disclosure and distinct label from the risk-factor list already tested under P007. Correct reader behavior is omission (DU-03/Rule 1), not abstention."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Sales to do-it-yourself customers $ 2,180,418 \u200b $ 2,096,829 \u200b $ 8,765,647 \u200b $ 8,473,041",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real customer-slice revenue fact, but the four co-listed values (Q4-2025/Q4-2024/FY2025/FY2024) are distinguished only by an external column header appearing well before this row, not inside a contiguous span with this quote; cannot bind an unambiguous single period/value without inventing structure, so left out rather than guessed."
+    },
+    {
+      "quote": "Our top-line results, coupled with strong gross margin performance, drove a 12% increase in operating profit dollars and a 13% increase in diluted earnings per share for the fourth quarter.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Partial restatement (no prior-year dollar comparator) of the same operating-income/EPS facts stated more completely elsewhere; under the fuse-before-collision/first-complete-quote rule this narrative mention does not create a separate row."
+    },
+    {
+      "quote": "During the year ended December 31, 2025, the Company repurchased 22.7 million shares of its common stock, at an average price per share of $92.26, for a total investment of $2.10 billion.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Same fact family (share repurchase amount) as the selected Q4 buyback row, differing only by period; excluded to keep the sample representative rather than exhaustive."
+    },
+    {
+      "quote": "As of December 31, 2025, the Company operated 6,585 stores across 48 U.S. states, Puerto Rico, Mexico, and Canada.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, fresh total store-count fact, but excluded to stay representative; the portion-vs-whole and geography-slice hard classes are already exercised by the selected domestic and Mexico ending-count rows from the same store-count table."
+    },
+    {
+      "quote": "Adjusted debt to EBITDAR \u200b 2.03 \u200b 1.99",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real non-GAAP measurement fact, but excluded to stay representative; measurement_wording and point_range_floor_ceiling are already exercised by the selected diluted-EPS and guidance rows."
+    },
+    {
+      "quote": "trade disputes and changes in trade policies, including the imposition of new or increased tariffs",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Different named peril within the same generic risk-factor list already tested as a negative control under P007; same boilerplate class/fact under the DU-03 gate, not a fresh fact merely because the topic word differs."
+    },
+    {
+      "quote": "opening 207 net, new stores in the U.S., Mexico and Canada",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real FY2025 store-expansion fact, but overlaps the store-count family already covered by the selected domestic/Mexico ending-count rows; excluded to avoid redundant family coverage in a representative (not exhaustive) sample."
+    },
+    {
+      "quote": "Net income for the year ended December 31, 2025, increased $152 million, or 6%, to $2.54 billion (or 14.3% of sales) from $2.39 billion (or 14.3% of sales) for the same period one year ago.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null,
+      "why": "Real, fresh full-year net-income fact (only the Q4 figure was tested by P006), but excluded to keep the sample representative; the net-income fact family and its sequential/YoY hard class are already exercised by the selected FY sales and FY operating-income rows."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Several tables in this exhibit (revenue disaggregation by customer, store-count roll-forward) state multiple period values per labelled row and rely on a column header appearing earlier in the text, non-contiguous with the row itself, to fix which value belongs to which period.",
+      "why": "The authority requires one exact contiguous quote per row and a label lying inside that quote, but does not say how to bind period/scope for a table row whose period markers sit outside the smallest complete span; where the values genuinely differed across columns I left the fact out rather than guess, which may under-represent slice/customer facts in this event."
+    },
+    {
+      "what": "Whether `point_range_floor_ceiling` is meant to be applied to every row carrying a definite stated numeric level (counts, dollar totals, percentages), or reserved for rows that meaningfully test range/floor/ceiling shape logic specifically.",
+      "why": "The rule text defines the tag as naming the §7.1 number-shape rule, which technically governs every number's shape (point included); I applied the tag broadly and literally to any row with a stated definite level number, per the 'every tag whose rule it exercises' instruction, but the authority does not confirm this breadth is intended versus a narrower reading limited to non-trivial shapes."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,149 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "effective_tax_rate_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 24, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 26, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "conditions": "though it may vary based on discrete items",
+              "company_confirmed": true,
+              "measurement_raw_spans": ["underlying"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_openings",
+              "driver_state": "increased",
+              "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "change_value": {"value": 38, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:canada"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "reported",
+              "level_high": {"value": 3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent",
+              "slice_parts": ["product:group_occasions"],
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "sales_mix_guidance",
+              "driver_state": "unknown",
+              "value_text": "double-digit percentage of sales",
+              "sentinel_class": "long_term",
+              "slice_parts": ["product:group_occasions"],
+              "time_type": "instant",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The claim that 'the results ... were in line with expectations and guidance for the full year' is a generic, unattributed umbrella remark not tied to any specific named metric, so it is an ungrounded surprise with no identifiable home fact and must abstain under Rule 9.6 / Rule 1.2."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "legal_contingencies",
+              "driver_state": "decreased",
+              "change_value": {"value": -4, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "CMG_2026-02-03T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic forward-looking-statement boilerplate pointing readers to the 10-K/10-Q risk factors, not a real statement about a driver's state, change, surprise, guidance, or action, so it fails the Rule 1.2 gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven located quotes describe unrelated matters - an effective-tax-rate guidance range, Canada restaurant openings growth, group-occasions' current and long-term share of sales, a generic 'in line' remark with no named metric, a one-off legal-contingencies reduction inside G&A, and boilerplate risk-factor language - so they cannot be one underlying fact."
+}
+```

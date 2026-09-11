@@ -1,0 +1,301 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "increased",
+       "change_value": {
+        "value": 10.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "unknown",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "surprise",
+      "item": {
+       "driver_name": "revenue_surprise",
+       "driver_state": "beat",
+       "surprise_basis_hint": "actual",
+       "comparison_baseline": "previous_guidance",
+       "has_favorability_wording": false,
+       "polarity_proof": {
+        "polarity": "favorable",
+        "basis": "metric_meaning",
+        "evidence": "Total revenue above the company's own prior expectation is favorable; revenue is not a spending, investment or burn metric and has no mainstream lower-is-better reading.",
+        "sentence": "Revenue performance in the quarter exceeded our initial expectations."
+       },
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+       "driver_name": "earnings_per_share",
+       "driver_state": "reported",
+       "level_low": {
+        "value": -40,
+        "scale_multiplier": 0.01,
+        "unit_scale_evidence": "cents"
+       },
+       "level_high": {
+        "value": -40,
+        "scale_multiplier": 0.01,
+        "unit_scale_evidence": "cents"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "measurement_raw_spans": [
+        "Excluding net special items",
+        "adjusted",
+        "diluted"
+       ],
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "winter_storm",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 320,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 320,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "unit_revenue",
+       "driver_state": "increased",
+       "change_value": {
+        "value": 25,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "slice_parts": [
+        "geography:london"
+       ],
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 6,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "increased",
+       "change_value": {
+        "value": 11,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "slice_parts": [
+        "unknown:tmc"
+       ],
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 7,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "guidance",
+      "item": {
+       "driver_name": "fuel_recapture_rate_guidance",
+       "driver_state": "unknown",
+       "value_text": "fuel recapture rate in the 90s",
+       "conditions": "if fuel is still at the level with capacity reductions",
+       "company_confirmed": true,
+       "fiscal_year": 2026,
+       "fiscal_quarter": 4,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 8,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking-statement risk boilerplate about unspecified risks and uncertainties; it names no driver state, change, surprise, guidance or action, so the gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 9,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "increased",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "slice_parts": [
+        "product:otherrevenue"
+       ],
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "increased",
+       "level_unit": "percent_sequential",
+       "comparison_baseline": "sequential_period",
+       "slice_parts": [
+        "product:otherrevenue"
+       ],
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 10,
+   "settled": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "unit_revenue",
+       "driver_state": "increased",
+       "level_unit": "percent_yoy",
+       "slice_parts": [
+        "geography:domesticdestination"
+       ],
+       "fiscal_year": 2026,
+       "month": 3,
+       "time_type": "duration"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

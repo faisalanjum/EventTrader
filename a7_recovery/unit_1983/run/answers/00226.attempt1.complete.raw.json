@@ -1,0 +1,10 @@
+```json
+{
+ "source_id": "0001104659-26-017090",
+ "facts": [],
+ "abstentions": [
+  {"reason": "The quoted $24.6 million pre-tax net expense is an aggregate sum bundling three independent causes (impairment of assets and lease termination expenses, FRC acquisition-related items, and gift card breakage/inventory adjustments). Rule 3.2 requires splitting independent causes into separate facts, but this quote states only the combined total, not a per-cause breakdown, so the value cannot be lawfully assigned to any single driver name; the individual components are reported with their own figures elsewhere in the document."}
+ ],
+ "continuity_hints": []
+}
+```

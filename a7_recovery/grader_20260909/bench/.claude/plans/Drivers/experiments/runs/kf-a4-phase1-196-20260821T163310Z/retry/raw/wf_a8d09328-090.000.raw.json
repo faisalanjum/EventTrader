@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0000940944-25-000038#062",
+  "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quoted sentence is generic risk-factor boilerplate — a standard forward-looking disclaimer stating that, to date, cybersecurity infiltration attempts have not had a material impact — not a real, non-boilerplate statement about a driver's state, change, surprise, guidance, or action (Rule 1.2)."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000940944-25-000038#062/L1",
+      "exact_match": true,
+      "why": "L1 also returns empty facts with a single abstention grounded in Rule 1.2, correctly identifying the sentence as generic cybersecurity risk-factor boilerplate rather than a real driver fact."
+    },
+    {
+      "lane_id": "0000940944-25-000038#062/L2",
+      "exact_match": true,
+      "why": "L2 reaches the identical conclusion (empty facts, one Rule 1.2 abstention) with a slightly more detailed reason quoting the same boilerplate language and context."
+    }
+  ],
+  "ambiguities": []
+}
+```

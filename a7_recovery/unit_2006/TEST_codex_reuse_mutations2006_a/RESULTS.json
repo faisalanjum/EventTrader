@@ -1,0 +1,177 @@
+[
+ {
+  "case": "missing evaluation block/a4_lock_receipt_sha256",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/a4_lock_sha256",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/activated",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/arm_of_lane",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/armed_grader_calls",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/budget",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/code",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/contract_suffix",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/corrected_inventory_sha256",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/database_writes",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/executed",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/finalizations",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/initial_key_manifest",
+  "refused": true,
+  "reason": "'initial_key_manifest'"
+ },
+ {
+  "case": "missing evaluation block/initial_key_manifest_sha256",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/launcher_prefix",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/launchers",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/receipt_sha256",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/reused_calls",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/run_dir",
+  "refused": true,
+  "reason": "'run_dir'"
+ },
+ {
+  "case": "missing evaluation block/schedule",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/schema",
+  "refused": true,
+  "reason": "the saved evaluation does not match its external freeze"
+ },
+ {
+  "case": "missing evaluation block/source_manifest",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "missing evaluation block/source_manifest_sha256",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "changed evaluation value/contract_suffix",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "changed evaluation value/reused_calls",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "changed evaluation value/armed_grader_calls",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "changed evaluation value/database_writes",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "changed evaluation value/activated",
+  "refused": true,
+  "reason": "the saved evaluation no longer rederives from its evidence"
+ },
+ {
+  "case": "CLI cannot choose a different freeze",
+  "refused": true,
+  "reason": "the saved evaluation does not match its external freeze"
+ },
+ {
+  "case": "CLI cannot omit the freeze",
+  "refused": true,
+  "reason": "a7_prepared_run/1: name the accepted A6 freeze hash with --expect-freeze <sha>. The CURRENT route will not launch an unpinned run (Codex SEQ 1517)."
+ },
+ {
+  "case": "changed context descriptor/root",
+  "refused": true,
+  "reason": "the approved input for '0000006201-26-000031' is missing at .claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000031.json"
+ },
+ {
+  "case": "changed context descriptor/manifest_path",
+  "refused": true,
+  "reason": "[Errno 2] No such file or directory: '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/TEST_codex_reuse_mutations2006_a/not_the_producer_input'"
+ },
+ {
+  "case": "changed context descriptor/manifest_sha256",
+  "refused": true,
+  "reason": "input descriptor differs from the producer manifest"
+ },
+ {
+  "case": "changed context descriptor/source_manifest_sha256",
+  "refused": true,
+  "reason": "input descriptor differs from the producer manifest"
+ },
+ {
+  "case": "changed context descriptor/rows",
+  "refused": true,
+  "reason": "input descriptor differs from the producer manifest"
+ }
+]

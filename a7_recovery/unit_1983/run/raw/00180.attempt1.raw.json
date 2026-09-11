@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "restaurant_lease_termination",
+        "driver_state": "occurred",
+        "level_low": {"value": -1518, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+        "level_high": {"value": -1518, "scale_multiplier": 1000, "unit_scale_evidence": "thousands"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

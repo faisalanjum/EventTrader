@@ -1,0 +1,49 @@
+{
+ "door": "a4_source_only_key_1997",
+ "phase": "signer",
+ "attempt": 1,
+ "run_id": "signer_codex_final2002_qualified",
+ "receipt_sha256": "88cd41076b84a665e29ec53327baf4a9667610774730ffb453dcb75250fd7c6c",
+ "manifest_sha256": "f94c0ac3ac819f242008331205f25090ab73764dfaa9b1669ee392d6a9f29cc0",
+ "bound": {
+  "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "build_kfields_hard_review.py": "7c5ac0ecac07b3f85f25cae9982f7921ee313405215bea42342a88def861c09e",
+  "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+  "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+  "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+  "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+  "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+  "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+  "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+  "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+  "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+  "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689"
+ },
+ "harvested_raw": [
+  "wf_sigcodex_final2002_qualified.raw.json"
+ ],
+ "phase_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "a4-final-signer",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 1,
+  "valid": 1,
+  "invalid_response": 0,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "retry": []
+}

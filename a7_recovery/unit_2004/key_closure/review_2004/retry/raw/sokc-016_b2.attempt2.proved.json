@@ -1,0 +1,154 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "lifo_impact",
+              "driver_state": "increased",
+              "level_low": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 64.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -40.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "measurement_raw_spans": ["non-cash"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "vendor_concentration",
+              "driver_state": "reported",
+              "level_low": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_high": {"value": 13, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "product_mix",
+              "driver_state": "reported",
+              "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["product:failure", "product:maintenanceitems"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "increased",
+              "change_value": {"value": 329.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["geography:us", "customer:commercial"]
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "increased",
+              "change_value": {"value": 6.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["geography:us", "customer:commercial"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "reported",
+              "level_low": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 31.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "slice_parts": ["geography:us", "customer:commercial"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0001104659-25-102611",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic litigation/legal-proceedings boilerplate stating only that the company is involved in ordinary-course lawsuits, regulatory investigations and other proceedings, with no company-specific direction, magnitude or discrete action stated, matching the generic risk-boilerplate exclusion, so it yields no fact."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six items describe six unrelated measurements — a non-cash LIFO gross-margin impact (current-year charge vs prior-year benefit), single-vendor purchase concentration, the failure/maintenance product-mix share of total sales, domestic commercial sales' dollar and percent growth vs the prior year, commercial sales' share of total domestic sales, and generic ordinary-course litigation boilerplate that yields no fact — so they are distinct facts rather than one underlying fact."
+}
+```

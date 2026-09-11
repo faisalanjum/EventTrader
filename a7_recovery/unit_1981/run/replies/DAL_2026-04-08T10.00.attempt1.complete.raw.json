@@ -1,0 +1,256 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "verdicts": [
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P000",
+      "decision": "exclude",
+      "why": "This target (6% to 8% operating margin guidance) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its underlying correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P001",
+      "decision": "exclude",
+      "why": "This target (Q2 revenue-growth acceleration vs March quarter unit revenue growth) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its underlying correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P002",
+      "decision": "exclude",
+      "why": "This target (adjusted net debt $13.5B, down 20% YoY, and gross leverage 2.4x) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its underlying correctness or classification.",
+      "row": null
+    },
+    {
+      "proposal_id": "DAL_2026-04-08T10.00#P003",
+      "decision": "exclude",
+      "why": "This target (Q2 fuel-headwind recapture guidance, >$2B headwind) has already been tested by a supplied proposal; it is outside this fresh sample regardless of its underlying correctness or classification.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "a pre-tax profit of $530 million",
+        "raw_label_or_claim": "pre-tax profit of $530 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A distinct, source-stated Q1 pre-tax profit level fact, not named by any supplied proposal; a clean closed point value."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "earnings of 64 cents per share",
+        "raw_label_or_claim": "earnings of 64 cents per share",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A per-share EPS point fact (NAME-13 separate identity from the total pre-tax profit above), fresh and not named by any proposal; also serves as the required ordinary home fact for the paired guidance-comparison surprise below."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "earnings per share of 64 cents within our initial guidance range",
+        "raw_label_or_claim": "within our initial guidance range",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "A stated actual-vs-own-guidance comparison (in_line, no favorability wording, inside a closed range) — a fresh surprise fact distinct from the plain EPS level fact and from every supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "$2.4 billion of operating cash flow",
+        "raw_label_or_claim": "$2.4 billion of operating cash flow",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A distinct cash-flow-statement level fact, not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Fuel prices averaged $2.62 per gallon, including a six cent benefit from our refinery.",
+        "raw_label_or_claim": "Fuel prices averaged $2.62 per gallon",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A fresh per-gallon fuel-price actual fact, distinct from every supplied proposal, pairing with the next row's stated non-derivable delta."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "This was nearly 40 cents higher than we expected at the start of the quarter, driven by the sharp run-up in March.",
+        "raw_label_or_claim": "nearly 40 cents higher than we expected at the start of the quarter",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["expectation_routing", "favourable_unfavourable_direction"]
+      },
+      "why": "A source-stated actual-vs-own-expectation surprise on fuel price (unfavorable, framed as a headwind), with its ordinary home fact supplied by the preceding row; fresh and not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "Non-fuel unit costs grew 6% over prior year, reflecting lower capacity growth than planned and higher recovery costs.",
+        "raw_label_or_claim": "Non-fuel unit costs grew 6% over prior year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "A fresh explicit YoY (percent_yoy) growth-basis fact on the cost side, distinct from every supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million on execution by the Delta Tech Ops team.",
+        "raw_label_or_claim": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "A fresh actual level+YoY-growth fact for the MRO product slice (menu entry product:productandserviceothermrobusiness), not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "supporting a full-year revenue outlook of $1.2 billion, representing nearly a 50% improvement over last year with expanding margins.",
+        "raw_label_or_claim": "a full-year revenue outlook of $1.2 billion, representing nearly a 50% improvement over last year",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"]
+      },
+      "why": "A fresh forward guidance fact for the same MRO slice, distinct from the actual-result row above (guidance vs. actual) and from every supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "This includes an estimated $300 million benefit from our refinery.",
+        "raw_label_or_claim": "an estimated $300 million benefit from our refinery",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "A fresh guidance-period fact where the source's own word 'benefit' is the OD-12 sign signal (a benefit/credit is negative on the cost axis); not named by any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "sequential improvement from the fourth quarter in all regions",
+        "raw_label_or_claim": "sequential improvement from the fourth quarter in all regions",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "A fresh, numberless but source-stated (DU-05) explicit sequential (Q4-to-Q1) comparison, the textbook immediately-prior-period trigger for percent_sequential; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "We delivered earnings that were 40% higher than last year",
+        "raw_label_or_claim": "earnings that were 40% higher than last year",
+        "proposed_record_kind": "lawful_abstention_control",
+        "proposed_hard_classes": ["sequential_comparison"]
+      },
+      "why": "A real, stated 40%-YoY growth claim whose underlying metric identity (pre-tax profit vs. EPS vs. net income — all introduced later in the same paragraph with no prior-year comparator ever stated for any of them) cannot be lawfully resolved from the supplied evidence; correct reader behavior is abstention, not a guessed binding."
+    },
+    {
+      "row": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "part_ref": "prepared_remarks",
+        "occurrence_in_part": null,
+        "quote": "All forward-looking statements involve risks and uncertainties that could cause actual results to differ materially from the forward-looking statements. Some of the factors that may cause such differences are described in Delta's SEC filings.",
+        "raw_label_or_claim": "forward-looking statements involve risks and uncertainties that could cause actual results to differ materially",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "Generic, boilerplate risk/safe-harbor language with no specific current source-flagged adverse threat and no stated driver/change/surprise/guidance/action; fails DU-03/Rule 1, correct behavior is omission."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "Total unit revenue grew by 8.2%, with a nearly two-point contribution from MRO.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real fact, but excluded under representative-sampling restraint: this event's sequential/point-shape coverage is already supplied by the non-fuel-unit-cost and MRO rows; not added merely because another lawful fact exists."
+    },
+    {
+      "quote": "Domestic and international unit revenue grew mid single digits and improved through the quarter with strong performance in both premium and main cabin.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real fact and a genuine geography-slice example, but excluded under representative-sampling restraint since this event's slices_and_unknown_axes coverage is already supplied by the two MRO rows; not added merely because another lawful fact exists."
+    },
+    {
+      "quote": "This year, we expect to cross 110 million customer logins, reflecting strong adoption and growing engagement.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real forward-looking fact, excluded under representative-sampling restraint: this event's point/floor-shape coverage is already well supplied."
+    },
+    {
+      "quote": "have reduced our adjusted net debt below 2019 levels",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Same underlying adjusted-net-debt series already named by supplied proposal P002. A comparison anchor of 2019 is not a temporal prior baseline (comparison_baseline=null per the owning rule), so under DU-15's single-primary-baseline rule this is the same fact re-surfaced under a different, non-storable anchor, not a fresh one."
+    },
+    {
+      "quote": "gross leverage of 2.4 times",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Identical fact already named verbatim inside supplied proposal P002's quote; re-testing it under the same label is not a fresh target."
+    },
+    {
+      "quote": "I want to acknowledge the ongoing conflict in the Middle East. Our thoughts are with all those affected, and we remain hopeful for a peaceful resolution.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "Bare sentiment with no stated driver/change/surprise/guidance/action; fails the fact gate (DU-03/Rule 1). One clean negative_control example was already selected from this event, so this was not added as a second."
+    },
+    {
+      "quote": "During the quarter, we placed firm orders for 95 additional aircraft, accelerating our fleet renewal and supporting international growth in the years ahead.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real, non-boilerplate fact, but excluded under representative-sampling restraint — it does not repair any declared coverage gap for this event."
+    },
+    {
+      "quote": "Corporate sales grew double digits and set a quarterly record.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real numberless growth fact, excluded under representative-sampling restraint as redundant with the sequential_comparison coverage already selected from this event."
+    },
+    {
+      "quote": "Cash sales grew mid-teens in March with momentum extending into April across the booking curve and in both premium and main cabin.",
+      "part_ref": "prepared_remarks",
+      "occurrence_in_part": null,
+      "why": "A real growth fact, excluded under representative-sampling restraint for the same reason — redundant with growth-basis coverage already selected."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the guidance-comparison clause fused in the same sentence as the ambiguous 40%-YoY earnings claim ('...and consistent with our January guidance...') should be split out as a second, independently-tested favourable/expectation-routing candidate, given that the underlying metric identity is itself unresolved.",
+      "why": "The owner rulings settle how to classify a resolvable vs. unresolvable fact but do not say whether an abstention on the primary (YoY) baseline also blocks treating a co-stated, differently-anchored comparison in the same fused sentence as a separate candidate. I did not invent a splitting rule, so I left this second clause out of the addition rather than guess."
+    },
+    {
+      "what": "The company menu lists the label 'wheelsup' under two different machine-axis kinds (unknown:dal:EquitySecuritiesInvestmentNameAxis__wheelsup and entity_ownership:wheelsup) — the exact dual-kind pattern the T1-05/FS-15 ladder addresses — but no passage in this event's supplied transcript text (prepared remarks or Q&A) mentions Wheels Up at all.",
+      "why": "Per ruling 6, an unused menu entry needs no matching text fact and is candidate context only; flagging this so the final reconciliation does not mistake the menu's dual-kind presence for a tested ambiguous_menus exemplar drawn from this event — no source item here exercises that rule."
+    }
+  ],
+  "blocked": null
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote gives net loss figures with only a bare '$' marker ($(267), $(386)); the 'in millions' scale wording that would fix scale_multiplier sits in the table's column header outside this quote, not inside it. Rule 5a/5.6 requires the scale evidence to come from inside the quote and directs abstention when the scale marker sits in a header outside the quote rather than letting me assume or import it."
+    }
+  ],
+  "continuity_hints": []
+}
+```

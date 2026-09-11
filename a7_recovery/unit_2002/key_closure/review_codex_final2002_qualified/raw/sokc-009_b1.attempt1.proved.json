@@ -1,0 +1,136 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "segment_profit_margin",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 19.3,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 19.3,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "comparison_low": {
+        "value": 18.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_high": {
+        "value": 18.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2025,
+       "time_type": "duration",
+       "slice_parts": [
+        "segment:longhornsteakhouse"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "restaurant_divestiture",
+       "driver_state": "announced",
+       "level_low": {
+        "value": 8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "time_type": "instant",
+       "slice_parts": [
+        "segment:olivegarden",
+        "geography:canada"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic risk-factor boilerplate: it says litigation may adversely affect the business without stating any specific current litigation, its stage, size, or any change in state, so the gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "0000940944-25-000038",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "debt_to_ebitdar_ratio",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 2.1,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 2.1,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "x",
+       "period_start_date": "2025-05-25",
+       "period_end_date": "2025-05-25",
+       "time_type": "instant",
+       "measurement_raw_spans": [
+        "adjusted"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

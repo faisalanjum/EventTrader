@@ -1,0 +1,29 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales_mix",
+        "driver_state": "decreased",
+        "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "comparison_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 2,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "slice_parts": ["product:failure", "product:maintenanceitems"],
+        "measurement_raw_spans": ["approximately", "approximately"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

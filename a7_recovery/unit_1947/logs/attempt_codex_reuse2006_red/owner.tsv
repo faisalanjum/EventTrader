@@ -1,0 +1,7 @@
+attempt	codex_reuse2006_red
+payload	../../unit_1997/ledger/../../unit_2006/check_reuse_2006.py
+map	../unit_1997/../unit_2006/map_reuse_TEST_2006.tsv
+wrapper_pid	3678618
+payload_pid	3678622
+started_utc	2026-09-10T23:48:32Z
+state	finished exit 1

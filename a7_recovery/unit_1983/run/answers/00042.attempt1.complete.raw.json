@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000027904-26-000020",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "reported",
+        "level_low": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 0.64, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31",
+        "time_type": "duration"
+      },
+      "per_x": "share"
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

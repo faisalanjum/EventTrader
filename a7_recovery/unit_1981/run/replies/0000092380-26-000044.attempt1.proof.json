@@ -1,0 +1,65 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000092380-26-000044",
+ "ordinal_one_based": 7,
+ "ordinal_receipt": 6,
+ "attempt_number": 1,
+ "run_id": "wf_8f5a3c40-211",
+ "agent_id": "ac9ed8b0172a65f86",
+ "raw_sha256": "0821772559b4a60a9cbc05f224f424f8b661e97b0c3dfb4f3811fc3bb3ff078a",
+ "prompt_sha256": "04854cfc0ab5af911bbf4d9680a7ba235922911b25f54f634e7a7fc650071d72",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 5,
+  "additions": 14,
+  "exclusions_considered": 7,
+  "open_issues": 5
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"Whether the headline's 'in line with guidance' surprise wording (R3) attaches to EPS alone, to net income alone, or jointly to both, is not stated in the source.\", 'why': \"The headline bundl",
+  "{'what': 'No genuine T1-05/FS-15 ambiguous-menu (two-or-more-plausible-kind) instance was found in this event.', 'why': 'Every disclosed company part in this event (Passenger/Freight/Other, Managed bu",
+  "{'what': 'No genuine lawful_abstention_control candidate was found in this event.', 'why': \"Fuzzy-looking cases examined (the peer-comparison net-margin claim; the 'up from approximately 20% in 2025' ",
+  "{'what': \"The negative-control quote (R13) contains what looks like a PDF-extraction artifact \u2014 a stray '6' folded mid-sentence: 'fuel price 6 volatility'.\", 'why': 'Copied verbatim per the exact-quot",
+  "{'what': 'No corrections/amendments-class disclosure (OD-14/current-view correction wording) was found in this event.', 'why': 'The text contains no restatement, amendment, or correction-of-a-prior-va"
+ ],
+ "locator": {
+  "additions": {
+   "located": 14,
+   "not_located": [],
+   "total_with_quote": 14
+  },
+  "exclusions_considered": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  }
+ },
+ "receipt_attempts": 8,
+ "receipt_missing": 29,
+ "receipt_other_problems": [
+  "the run accepted 7 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 6,
+  "attempt": 1,
+  "source_id": "0000092380-26-000044",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8f5a3c40-211.json",
+  "agent_id": "ac9ed8b0172a65f86",
+  "raw_name": "0000092380-26-000044.attempt1.complete.raw.json"
+ }
+}

@@ -1,0 +1,250 @@
+{
+ "suite": "TEST a4_source_key 1989",
+ "owner_sha256": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+ "test_sha256": "edeef7299711a202b2950ee4aa762a8fdd558c51854658667c26f0d8542f89a3",
+ "checks": 60,
+ "failed": [],
+ "all_passed": true,
+ "results": {
+  "population/every frozen row scheduled once in frozen order": {
+   "passed": true,
+   "detail": "191 rows over 33 events"
+  },
+  "population/derives clean": {
+   "passed": true,
+   "detail": ""
+  },
+  "population/all source events accounted": {
+   "passed": true,
+   "detail": "36 events, 33 scheduled"
+  },
+  "population/NEGATIVE a dropped row refuses": {
+   "passed": true,
+   "detail": ""
+  },
+  "prompt/every rendered prompt enumerates to its owners": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "source/the served source is the frozen one": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "prompt/no evaluated reply is read while rendering": {
+   "passed": true,
+   "detail": "0 run paths opened"
+  },
+  "source/NEGATIVE altered source text is caught": {
+   "passed": true,
+   "detail": "[\"0000006201-26-000031: the source the payload renders is not the file it names\"]"
+  },
+  "seat/no role is declared, so nothing publishes and nothing renders": {
+   "passed": true,
+   "detail": "[\"no key-owner role is declared at /tmp/TEST_source_key_role_absent_codex1997.json: the independent key owner's model, effort, agent type, tool policy and output limit are UNDECLARED, so this door pub"
+  },
+  "seat/the manifest declares no observed proof and names what is missing": {
+   "passed": true,
+   "detail": ""
+  },
+  "seat/NEGATIVE the model under test may not own this key": {
+   "passed": true,
+   "detail": "[\"the declared alias IS the alias under test (sonnet); it may read evidence but may not own this key\", \"the declared runtime IS the runtime under test (claude-sonnet-5); it may read evidence but may not own this key\", \"t"
+  },
+  "seat/NEGATIVE a changed effort refuses": {
+   "passed": true,
+   "detail": "[\"effort 'TEST-not-high' is not the reviewed 'high'\"]"
+  },
+  "seat/NEGATIVE an emptied tool policy refuses": {
+   "passed": true,
+   "detail": "[\"the tool policy [] is not the reviewed ['Read']\"]"
+  },
+  "seat/NEGATIVE a shrunken output limit refuses": {
+   "passed": true,
+   "detail": "[\"the output limit 1 is not the reviewed '128000'\"]"
+  },
+  "seat/NEGATIVE an unknown kind refuses": {
+   "passed": true,
+   "detail": "[\"kind 'TEST-not-a-kind' is not one of ['LIVE', 'TEST']\"]"
+  },
+  "seat/POSITIVE CONTROL a well-formed TEST role is accepted": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "seat/a request renders from the DECLARATION alone": {
+   "passed": true,
+   "detail": "106234 bytes"
+  },
+  "seat/NO BOOTSTRAP DEADLOCK: rendering needed no completed call": {
+   "passed": true,
+   "detail": ""
+  },
+  "seat/a TEST binding may never publish a real call": {
+   "passed": true,
+   "detail": "refused against the real package even as a test binding"
+  },
+  "seat/the tested Sonnet role is identical after every operation": {
+   "passed": true,
+   "detail": "hard review still sonnet/high"
+  },
+  "seat/the hard reviewers stay two blind calls on the tested role": {
+   "passed": true,
+   "detail": ""
+  },
+  "lifecycle/the package re-derives from the live owners": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "lifecycle/the locked owner writes this door's typed expectation": {
+   "passed": true,
+   "detail": "door=a4_source_only_key_1997 prompts=33"
+  },
+  "lifecycle/prepare publishes one request per event, in order": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "lifecycle/every published request is a written script file": {
+   "passed": true,
+   "detail": ""
+  },
+  "lifecycle/NEGATIVE a second prepare into the same directory refuses": {
+   "passed": true,
+   "detail": ""
+  },
+  "lifecycle/resume shows every label still owed and none served": {
+   "passed": true,
+   "detail": "owed=33 served=0"
+  },
+  "lifecycle/finalize runs raw-first over an empty run and keeps every label visible": {
+   "passed": true,
+   "detail": "[\"attempt\", \"bound\", \"door\", \"harvested_raw\", \"ledger\", \"manifest_sha256\", \"outcomes\", \"phase\", \"phase_complete\", \"problems\", \"receipt_sha256\", \"retry\", \"run_id\"]"
+  },
+  "lifecycle/NEGATIVE a foreign-role state cannot serve a label": {
+   "passed": true,
+   "detail": "[\"DAL_2026-04-08T10.00: result model is 'opus', not 'TEST-declared-key-owner'\"]"
+  },
+  "lifecycle/a refused state serves nothing and repeats nothing": {
+   "passed": true,
+   "detail": ""
+  },
+  "lifecycle/the tested Sonnet role is still identical": {
+   "passed": true,
+   "detail": ""
+  },
+  "facts/the TEST reference is a verbatim span of the frozen quote": {
+   "passed": true,
+   "detail": "'Loss per common share: Basic and diluted' in 'Loss per common share: Basic and diluted $ (0.58) $ (0.72)'"
+  },
+  "facts/POSITIVE CONTROL a source-grounded TEST fact is accepted": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "facts/the accepted fact keeps its own source binding": {
+   "passed": true,
+   "detail": "fact keys [\"fact_type\", \"item\", \"occurrence_in_part\", \"part_ref\", \"per_x\"]"
+  },
+  "facts/POSITIVE CONTROL the key materializes with a real fact": {
+   "passed": true,
+   "detail": "191 rows, 0 problems"
+  },
+  "facts/the locked counts see the accepted fact and its gold fields": {
+   "passed": true,
+   "detail": "{\"accepted_facts\": 1, \"du_worthy_facts\": 1, \"rows_accounted\": 191, \"controls\": 0, \"exclusions\": 190, \"abstentions\": 190}"
+  },
+  "signing/an unresolved outcome stops the gate on its owed blind readings": {
+   "passed": true,
+   "detail": "[\"the hard-review reading sok-hr-000/b1 is missing: no run of this stage carries it\", \"the hard-review reading sok-hr-000/b2 is missing: no run of this stage carries it\"]"
+  },
+  "signing/with nothing unresolved the gate reaches the live floors and still refuses": {
+   "passed": true,
+   "detail": "[\"hard-class tags below the floor of 5 distinct rows: {'point_range_floor_ceiling': 0, 'losses_and_sign': 0, 'sequential_comparison': 0, 'measurement_wording': 0, 'favourable_unfavourable_direction': 0, 'expectation_routing': 0, 'slices_and_unknown_axes': 0, 'portion_versus_whole': 0, 'ambiguous_men"
+  },
+  "signing/NEGATIVE a missing event cannot be signed": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "signing/NEGATIVE a drifted event cannot be signed": {
+   "passed": true,
+   "detail": ""
+  },
+  "signing/NEGATIVE an exact duplicate fact cannot be signed": {
+   "passed": true,
+   "detail": "[\"1 duplicate gold facts\", \"hard-class tags below the floor of 5 distinct rows: {'point_range_floor_ceiling': 0, 'losses_and_sign': 0, 'sequential_comparison': 0, 'measurement_wording': 0, 'favourable_unfavourable_direction': 0, 'expectation_routing': 0, 'slices_and_unknown_axes': 0, 'portion_versus"
+  },
+  "signing/NEGATIVE an open issue cannot be signed": {
+   "passed": true,
+   "detail": "[\"the hard-review reading sok-hr-000/b1 is missing: no run of this stage carries it\", \"the hard-review reading sok-hr-000/b2 is missing: no run of this stage carries it\"]"
+  },
+  "signing/NEGATIVE an invalid reply is refused by the locked reader": {
+   "passed": true,
+   "detail": ""
+  },
+  "1990/the declared runtime survives the declaration read": {
+   "passed": true,
+   "detail": "read back 'TEST-independent-runtime'"
+  },
+  "1990/the binding serves the declared runtime, never the tested one": {
+   "passed": true,
+   "detail": "effective 'TEST-independent-runtime'"
+  },
+  "1990/NEGATIVE the tested runtime is refused whatever the alias": {
+   "passed": true,
+   "detail": "[\"the declared runtime IS the runtime under test (claude-sonnet-5); it may read evidence but may not own this key\", \"the declared workflow row model IS the row model under test (claude-sonnet-5); it m"
+  },
+  "1990/POSITIVE the richer source-grounded fact parses": {
+   "passed": true,
+   "detail": "[]"
+  },
+  "1990/the public finalizer completes its parser callback": {
+   "passed": true,
+   "detail": "\"valid\""
+  },
+  "1990/raw bytes are saved before any parse": {
+   "passed": true,
+   "detail": ""
+  },
+  "1990/accepted_shards reads the same accepted result": {
+   "passed": true,
+   "detail": "[\"32 events have no accepted shard: ['0000006201-26-000032', '0000027904-26-000013', '0000027904-26-000020']\"]"
+  },
+  "1990/NEGATIVE proved-but-unparseable bytes are not served": {
+   "passed": true,
+   "detail": "{\"served\": [], \"retryable\": [\"0000006201-26-000031\"]}"
+  },
+  "1992/NEGATIVE a hand-written closeout earns no credit": {
+   "passed": true,
+   "detail": "{\"served\": [], \"problems\": [\"the attempt 1 closeout calls 1 labels valid that its own evidence does not, first 0000006201-26-000031\"]}"
+  },
+  "1992/the receipt of that closeout records no call at all": {
+   "passed": true,
+   "detail": ""
+  },
+  "1990/signing routes through the locked gate, not a copy": {
+   "passed": true,
+   "detail": "the locked signing_gate was called"
+  },
+  "package/it writes exactly its two files": {
+   "passed": true,
+   "detail": ""
+  },
+  "package/it declares itself unarmed with no arming mechanism": {
+   "passed": true,
+   "detail": ""
+  },
+  "package/preflight refuses for exactly the undeclared role": {
+   "passed": true,
+   "detail": "[\"no key-owner role is declared at /tmp/TEST_source_key_role_absent_codex1997.json: the independent key owner's model, effort, agent type, tool policy and output limit are UNDECLARED, so this door publishes no call\"]"
+  },
+  "package/NEGATIVE a reordered call list is caught": {
+   "passed": true,
+   "detail": ""
+  },
+  "package/the restored manifest re-derives again": {
+   "passed": true,
+   "detail": ""
+  },
+  "package/NEGATIVE arming one package cannot arm another": {
+   "passed": true,
+   "detail": "the mechanism Codex broke no longer exists"
+  }
+ }
+}

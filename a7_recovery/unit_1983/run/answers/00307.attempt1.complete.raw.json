@@ -1,0 +1,19 @@
+```json
+{
+  "source_id": "CMG_2026-02-03T16.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "group_occasion_sales_mix",
+        "driver_state": "unknown",
+        "value_text": "double-digit percentage of sales longer term",
+        "sentinel_class": "long_term",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "facts": [
+    {
+      "fact_type": "action_event",
+      "item": {
+        "driver_name": "goodwill_and_intangible_asset_impairment",
+        "driver_state": "occurred",
+        "level_low": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_high": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": 0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_high": {"value": 0, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

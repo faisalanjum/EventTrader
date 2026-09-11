@@ -1,0 +1,7 @@
+attempt	core_probe2010_b
+payload	../../unit_2009/probe_old_owner.py
+map	../unit_2010_native_fixture/map_native_2010.tsv
+wrapper_pid	3916127
+payload_pid	3916131
+started_utc	2026-09-11T02:10:43Z
+state	finished exit 0

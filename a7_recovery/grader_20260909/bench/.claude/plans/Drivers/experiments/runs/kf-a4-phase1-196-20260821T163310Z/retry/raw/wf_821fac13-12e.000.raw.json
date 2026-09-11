@@ -1,0 +1,28 @@
+```json
+{
+  "packet_id": "0001104659-26-027061#115",
+  "settled": {
+    "source_id": "0001104659-26-027061",
+    "facts": [],
+    "abstentions": [
+      {
+        "reason": "The quote gives raw digits ('2,624' and '(1,994)') for 'Interest expense (income), net' with no dollar sign, 'thousand', or other scale/unit marker anywhere inside the quote span itself. The applicable scale caption ('In thousands, except per share data') that would fix scale_multiplier=1000 sits in the Exhibit 1 table header, outside this quote. Per Rule 5.6, unit_scale_evidence may be null only when the multiplier is 1 and no marker exists at all; here the true multiplier is not 1, and its supporting marker sits in a header outside the quote, so the lawful action is to abstain rather than extend the quote or guess the scale."
+      }
+    ],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001104659-26-027061#115/L1",
+      "exact_match": true,
+      "why": "L1 also emits facts=[] with a single abstention and empty continuity_hints, citing Rule 5.6's header-scale-marker-outside-quote abstention, matching the settled structural outcome and reasoning."
+    },
+    {
+      "lane_id": "0001104659-26-027061#115/L2",
+      "exact_match": true,
+      "why": "L2 also emits facts=[] with a single abstention and empty continuity_hints, citing the same Rule 5.6 basis (no in-quote scale marker, header sits outside the quote), matching the settled structural outcome and reasoning."
+    }
+  ],
+  "ambiguities": []
+}
+```

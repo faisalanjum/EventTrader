@@ -1,0 +1,224 @@
+{
+ "door": "a4_hard_review_double_blind",
+ "authority": "Codex SEQ 2000: complete and prove the source-only key-closure connection on the existing owners, without model calls",
+ "step": "live Step 1 A4 - the source-only key closure",
+ "derived_from": {
+  "key_owner_sha256": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+  "hard_review_owner_sha256": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+  "final_owner_sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "source_key_owner_sha256": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "closure_owner_sha256": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "frozen_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "source_key_manifest_sha256": "e6000b7960ef2ed20bc324b06172a3631c3467d7f1e92513571102a08d4a42ad",
+  "contract_package_sha256": "62a5c49ae71f323eff275e98ca60efaae18ca16ca6c15f447c10c9d5d8976154",
+  "initial_collection": {
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect",
+   "receipt_sha256": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+   "finalization_sha256": "ad0f11be0117e6d6c892596e6f5b4a64f7577eea1541163d46f857fb49a43add",
+   "raw_tree": {
+    "files": 66,
+    "sha256": "2ca71af94945827108d1f4636718fc391342ec8a0f87e3e3e701ad2e7ebc85c9"
+   }
+  },
+  "affected_events": [
+   "0000006201-26-000031",
+   "0000006201-26-000032",
+   "0000027904-26-000013",
+   "0000027904-26-000020",
+   "0000027904-26-000022",
+   "0000063908-26-000032",
+   "0000092380-26-000044",
+   "0000764478-25-000057",
+   "0000898173-26-000006",
+   "0000940944-25-000038",
+   "0000940944-26-000005",
+   "0000940944-26-000009",
+   "0001041061-25-000109",
+   "0001041061-26-000003",
+   "0001041061-26-000084",
+   "0001058090-26-000007",
+   "0001104659-25-102611",
+   "0001104659-25-105631",
+   "0001104659-25-118458",
+   "0001104659-26-017090",
+   "0001104659-26-027061",
+   "0001104659-26-032757",
+   "0001171843-26-001288",
+   "AAL_2026-04-23T08.30",
+   "BBY_2026-03-03T08.00",
+   "CMG_2026-02-03T16.30",
+   "DAL_2026-04-08T10.00",
+   "DRI_2026-03-19T08.30",
+   "MCD_2026-02-11T16.30",
+   "ULTA_2026-03-12T16.30",
+   "YUM_2026-02-04T08.15",
+   "bzNews_42014391",
+   "bzNews_50877032"
+  ]
+ },
+ "item_role_sha256": "05c386b2a68e7eed84bb84f88c1a8706d95ec2fd7dd50568eafa63bafa175ccd",
+ "semantic_rules_sha256": "72baa25a816e956061ccd624634231aa3e2f96ce1cb857382e6e65f6330451e4",
+ "output_card_sha256": "94c3e6e5d6470f558a0faaf4f471f9891de52bf075c805f7954b226dcbcb3723",
+ "boundary_sha256": "1f5c876a21c08ef92a08ba62201408494b6bda9f88779fd1e374b7b2869fd178",
+ "injection_control_sha256": "a8586510dfafa6a02245e51c5f14bbe3e9919171df3a431aaaf265f61997ad82",
+ "prefix_item_sha256": "216caccb6edeb327e16a40b0cb97e835986846cd51a87f2520d351980f94ee99",
+ "prefix_group_sha256": "12f49d92331c025741778b03e88b1532e924f25b9b1b6673d75c6d3b0ae307a7",
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "budget": {
+  "before": 495,
+  "primaries": 4,
+  "after_primaries": 499,
+  "max_attempts_per_call": 2,
+  "worst_case_total": 8,
+  "worst_case_after": 503,
+  "global_ceiling": 4382
+ },
+ "counts": {
+  "tasks": 4,
+  "item_tasks": 0,
+  "group_tasks": 4,
+  "reviewed_packets": 24,
+  "primary_calls": 4
+ },
+ "capacity": {
+  "unit": "UTF-8 bytes of the serialized launcher script the runtime actually runs; never summed",
+  "transport_limit_bytes": 524288,
+  "largest_script_bytes": 99523,
+  "smallest_script_bytes": 65358,
+  "largest_prompt_bytes": 95461,
+  "at_or_over_transport_limit": []
+ },
+ "sources": [
+  {
+   "source_id": "0001041061-26-000003",
+   "source_sha256": "e798a6fe730da70551a96f364066f589628e8b2534aa2222de6de2ae676c3000",
+   "menu_display_sha256": "f979eba7b7605dace38f9aa9e050d81be5787812b80057f2d6cdaa42d70c021b",
+   "menu_back_sha256": "eba120cca692e474b0d8133d5f3e5d03e3e9f7ebd7e691e4534f261d802b0a4f"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "source_sha256": "9621a03f10e98e72c47d9b24553df47cacf13d943e771afbf386c231dc9fd628",
+   "menu_display_sha256": "25a36c1450a6825cda34919b11ad93e5c90be394348a3f07de647cdf15e4d31c",
+   "menu_back_sha256": "7a8359611db84200afb4b9557e247c13faa2de2755a7fc65cf8baab8fe1b9211"
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "source_sha256": "6d71edec78ef0271817646b47b93193ef2c86fc41908c4b155362ae472864fb5",
+   "menu_display_sha256": "4138533dd1d3b29f53fbdc3c1f9c794d412de95583e95c39390b4ab8f25ea769",
+   "menu_back_sha256": "c11a85dd6e756f79d0ff7a21ac3377ece7424f267f71a8d86db73dd14f66e4fc"
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "source_sha256": "f3f13f61b444dde44de238b36110d2681941df80207eccce65116faf3e92825a",
+   "menu_display_sha256": "25a36c1450a6825cda34919b11ad93e5c90be394348a3f07de647cdf15e4d31c",
+   "menu_back_sha256": "7a8359611db84200afb4b9557e247c13faa2de2755a7fc65cf8baab8fe1b9211"
+  }
+ ],
+ "tasks": [
+  {
+   "task_id": "sokc-013",
+   "kind": "group",
+   "origin": "source_only_key_closure",
+   "members": [
+    "0001041061-26-000003#077",
+    "0001041061-26-000003#078",
+    "0001041061-26-000003#079",
+    "0001041061-26-000003#080",
+    "0001041061-26-000003#081"
+   ],
+   "source_id": "0001041061-26-000003",
+   "payload_sha256": "b79169047ef76da4b15c4f7307e7664406edaf7150147a39fe39e09eb71940d7",
+   "prompt_sha256": "0bd68ee46b355bbbeb94c03d09fca53c178b579003fc2d23b7bede2563120cba",
+   "prompt_bytes": 95461,
+   "blind2_script_sha256": "23985f482ff2ff7f6749b535a3aba774ee6e666be141b454462c98fc85e0c16f",
+   "largest_script_bytes": 98615
+  },
+  {
+   "task_id": "sokc-020",
+   "kind": "group",
+   "origin": "source_only_key_closure",
+   "members": [
+    "0001104659-26-027061#118",
+    "0001104659-26-027061#119",
+    "0001104659-26-027061#120",
+    "0001104659-26-027061#121",
+    "0001104659-26-027061#122"
+   ],
+   "source_id": "0001104659-26-027061",
+   "payload_sha256": "8476d75ec64ca8aaae7def5930dc64f7ad5701a9dee8dd05e939c87d469af01e",
+   "prompt_sha256": "046edb355900acdb781d519c25d5daaf425c525792e402b26770ac181c3014b8",
+   "prompt_bytes": 61554,
+   "blind1_script_sha256": "9ea0f1fd317e0438488e314518c8951cd10eacaf1421f71d6ba7e878919dacef",
+   "largest_script_bytes": 65358
+  },
+  {
+   "task_id": "sokc-026",
+   "kind": "group",
+   "origin": "source_only_key_closure",
+   "members": [
+    "DAL_2026-04-08T10.00#157",
+    "DAL_2026-04-08T10.00#158",
+    "DAL_2026-04-08T10.00#159",
+    "DAL_2026-04-08T10.00#160",
+    "DAL_2026-04-08T10.00#161",
+    "DAL_2026-04-08T10.00#162",
+    "DAL_2026-04-08T10.00#163"
+   ],
+   "source_id": "DAL_2026-04-08T10.00",
+   "payload_sha256": "bd26b030e973d49946b08514dc97e043e3be60e2bca2150308861ef8d490ce9d",
+   "prompt_sha256": "44183fe6324df070e35f48c9115c19b9c6871c0bfe7d526339e6155d2849dd72",
+   "prompt_bytes": 94605,
+   "blind1_script_sha256": "eb462deb41e8504099ba1383d07fecc5012c09dbb4b5f8e02b867399f1bef92b",
+   "largest_script_bytes": 99523
+  },
+  {
+   "task_id": "sokc-029",
+   "kind": "group",
+   "origin": "source_only_key_closure",
+   "members": [
+    "ULTA_2026-03-12T16.30#175",
+    "ULTA_2026-03-12T16.30#176",
+    "ULTA_2026-03-12T16.30#177",
+    "ULTA_2026-03-12T16.30#178",
+    "ULTA_2026-03-12T16.30#179",
+    "ULTA_2026-03-12T16.30#180",
+    "ULTA_2026-03-12T16.30#181"
+   ],
+   "source_id": "ULTA_2026-03-12T16.30",
+   "payload_sha256": "866810f8a6159337bdaf2cdd950a498456db01677f968010576bc15c4660f031",
+   "prompt_sha256": "ac9bdb0ca9057d471216b44ecb23784471d61cc6455d0256b64f3668448ab56f",
+   "prompt_bytes": 92241,
+   "blind2_script_sha256": "99c32407c18315834645efc4c2203007b2d9fbe54da923ceb95d3afe24193623",
+   "largest_script_bytes": 95949
+  }
+ ],
+ "call_order": [
+  "sokc-013/b2",
+  "sokc-020/b1",
+  "sokc-026/b1",
+  "sokc-029/b2"
+ ],
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "expected_input_source": {
+  "path": "/tmp/a7_lane_input_profiles.json",
+  "sha256": "1220662f00c3ba865b1620569ae42f78c773b0bf5b9d054f8d4b4e7d83f8bff6"
+ },
+ "contract_suffix": ".v3"
+}

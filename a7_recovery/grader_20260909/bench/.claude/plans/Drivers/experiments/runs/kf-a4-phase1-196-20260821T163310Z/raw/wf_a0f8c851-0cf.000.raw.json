@@ -1,0 +1,52 @@
+```json
+{
+  "packet_id": "0001171843-26-001288#134",
+  "settled": {
+    "source_id": "0001171843-26-001288",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "sales",
+          "driver_state": "unknown",
+          "slice_parts": ["geography:nonus"],
+          "measurement_raw_spans": ["constant currency"],
+          "time_type": "duration",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026
+        }
+      },
+      {
+        "fact_type": "surprise",
+        "item": {
+          "driver_name": "sales",
+          "driver_state": "missed",
+          "slice_parts": ["geography:nonus"],
+          "measurement_raw_spans": ["constant currency"],
+          "time_type": "duration",
+          "fiscal_quarter": 2,
+          "fiscal_year": 2026,
+          "surprise_basis_hint": "actual",
+          "comparison_baseline": "consensus",
+          "has_favorability_wording": true
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001171843-26-001288#134/L1",
+      "exact_match": false,
+      "why": "L1 emits only a surprise fact with driver_name 'same_store_sales' and no numberless metric home twin; the quote says 'international sales' not 'same store sales' (Rule 3.3 forbids the more specific unstated reading), and Rule 9.6 requires a numberless-home metric sibling for this numberless actual-vs-consensus surprise, which L1 omits."
+    },
+    {
+      "lane_id": "0001171843-26-001288#134/L2",
+      "exact_match": true,
+      "why": "L2 correctly emits both the numberless metric home (driver_name 'sales', state 'unknown', slice geography:nonus, measurement 'constant currency', FQ2 FY2026) and its surprise twin (state 'missed', basis 'actual', baseline 'consensus', favorability wording true) with matching slice/measurement/period, satisfying the TWINS rule (Rule 2) and Rule 9.6."
+    }
+  ],
+  "ambiguities": []
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The target text describes a retroactive restatement of how prior-period non-GAAP reconciliation tables are presented (applying a new MTM settlement-gain/loss treatment to earlier periods' reconciliations) — a presentation/methodology adjustment for a non-GAAP disclosure, not a real statement about a driver's state, change, surprise, guidance, or action."
+    }
+  ],
+  "continuity_hints": []
+}
+```

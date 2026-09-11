@@ -1,0 +1,187 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": 5.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 5.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": -212, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted (a non-GAAP financial measure)"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "debt_extinguishment",
+              "driver_state": "increased",
+              "level_low": {"value": -26, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": -26, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "cost_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 13.86, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 13.86, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            },
+            "per_x": "available_seat_mile"
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "cost_per_available_seat_mile_surprise",
+              "driver_state": "in_line",
+              "change_value": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "measurement_raw_spans": ["Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            },
+            "per_x": "available_seat_mile"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "effective_tax_rate_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 25, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["Excluding the mark-to-market results"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "equity_stake",
+              "driver_state": "reported",
+              "level_low": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["entity_ownership:grupoaeromexico"],
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "aircraft_purchase_option",
+              "driver_state": "announced",
+              "level_high": {"value": 30, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "ceiling",
+              "level_unit": "count"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic accident-liability risk boilerplate ('could expose us to significant liability') with no stated driver state, change, surprise, guidance, or discrete action; it fails the Rule 1 gate as boilerplate risk language."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven located quotes describe seven unrelated subjects (adjusted operating income, loss on extinguishment of debt, CASM-Ex unit-cost growth vs. long-term target, 2026 effective tax rate guidance, the Grupo Aeroméxico equity stake, a Boeing aircraft purchase option, and generic accident-liability risk boilerplate), so they cannot be the same underlying fact."
+}
+```

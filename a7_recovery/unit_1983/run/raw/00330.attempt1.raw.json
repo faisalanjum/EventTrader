@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "DRI_2026-03-19T08.30",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "raised",
+        "level_low": {"value": 10.57, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_high": {"value": 10.67, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+        "level_shape_hint": "range",
+        "level_unit": "usd",
+        "measurement_raw_spans": ["adjusted diluted"],
+        "comparison_baseline": "previous_guidance",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

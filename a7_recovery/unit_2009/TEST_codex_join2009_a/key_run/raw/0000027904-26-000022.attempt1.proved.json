@@ -1,0 +1,210 @@
+{
+ "source_id": "0000027904-26-000022",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "operating_income",
+       "driver_state": "decreased",
+       "level_low": {
+        "value": -39,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": -39,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": -1,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_high": {
+        "value": -1,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "slice_parts": [
+        "segment:refinery"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item holds: the row states a measured refinery operating result for the March 2026 quarter with the prior-year value stated beside it, so it settles as one real metric fact."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "increased",
+       "change_value": {
+        "value": 1.2,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "change_unit": "m_usd",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "measurement_raw_spans": [
+        "adjusted"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item holds: the row states a real, source-stated year-over-year increase in the company's adjusted total revenue, so it settles as one real metric fact."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "revenue",
+       "driver_state": "increased",
+       "change_value": {
+        "value": 11,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1,
+       "slice_parts": [
+        "geography:atlanticdestination",
+        "product:passenger"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind real_item holds: the row carries a real source-stated growth figure for Atlantic passenger revenue, though only the in-quote percentage could be stored because the level's scale marker sits outside the quote."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic filing boilerplate stating that no material changes occurred to the Form 10-K risk factors; it reports no driver state, change, surprise, guidance or action, so the du_worthy gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "The frozen proposed_record_kind negative_control holds: the sentence is risk-factor boilerplate carrying no driver fact, so it correctly yields none."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0000027904-26-000022",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "The passage states only a change in how hedge settlement gains and losses on Monroe inventory are presented inside non-GAAP adjusted results; a measurement-definition and presentation change belongs to measurement, never a driver name, and no driver's state, change, guidance, surprise or business action is reported, so no lawful fact can be named."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "exclusion",
+   "record_kind_note": "The frozen proposed_record_kind real_item does NOT hold: this row is a non-GAAP measurement/presentation redefinition with no nameable driver, so it settles as an exclusion rather than a real fact, and that disagreement is stated openly rather than passed silently."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "The refinery generated an operating loss",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": null
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "measurement_wording",
+    "sequential_comparison"
+   ],
+   "reference_name": "Total revenue, adjusted",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The same increase is stated twice, as $1.2 billion and as 9.4%, and only one change slot exists, so the dollar change was stored and the percentage left to the quote rather than split into a second record."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "Atlantic",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The 1,517 level's scale marker ('in millions') and the year-ago comparison wording live in the table header outside the quote, so the level was omitted and only the in-quote 11% year-over-year growth was stored."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-004/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-004/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

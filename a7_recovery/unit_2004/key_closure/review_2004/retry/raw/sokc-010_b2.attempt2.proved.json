@@ -1,0 +1,132 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_restaurant_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 4.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["blended"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "increased",
+              "level_low": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.95, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "change_value": {"value": 5.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted diluted", "from continuing operations"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_closure_impairment",
+              "driver_state": "occurred",
+              "level_low": {"value": 24.7, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 24.7, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "slice_parts": ["segment:otheroperatingsegmentbahamabreezebrand"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "divestiture",
+              "driver_state": "occurred",
+              "level_low": {"value": -0.26, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": -0.26, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_year": 2026,
+              "slice_parts": ["entity_ownership:canadianolivegardenrestaurants"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This sentence only describes segment-reporting classification methodology (that Chuy's results are booked under the Other Business segment), not a driver's state, change, surprise, guidance, or action, so it fails the Rule 1 fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0000940944-26-000005",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic litigation/adverse-publicity risk-factor boilerplate from the forward-looking-statements safe-harbor list, with no stated driver state, change, surprise, guidance, or action, so it fails the Rule 1 fact gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six located items describe unrelated matters — consolidated same-restaurant sales growth, adjusted diluted EPS growth, a restaurant-closure impairment charge, a gain on the Olive Garden Canada sale, a segment-classification note, and generic litigation boilerplate — so they are distinct facts (two of which are non-facts), not one underlying fact."
+}
+```

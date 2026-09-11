@@ -1,0 +1,7 @@
+attempt	core_gate2011_a
+payload	../../unit_2011_retention_review/probe_gate_2011.py
+map	../unit_2011_retention_review/map_retention_2011.tsv
+wrapper_pid	3933855
+payload_pid	3933859
+started_utc	2026-09-11T02:22:13Z
+state	finished exit 0

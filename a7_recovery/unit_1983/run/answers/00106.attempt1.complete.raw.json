@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0000898173-26-000006",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "shareholders_equity",
+        "driver_state": "increased",
+        "level_low": {"value": -763352, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "level_high": {"value": -763352, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": -1370961, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "comparison_high": {"value": -1370961, "scale_multiplier": 1000, "unit_scale_evidence": "In thousands"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "time_type": "instant",
+        "period_end_date": "2025-12-31",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

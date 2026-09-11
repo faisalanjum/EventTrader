@@ -1,0 +1,32 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "unknown",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "beat",
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The located target 'Taco Bell' is only the company's own brand/segment name — per Rule 3.4 and Rule 10 that can only ever be a slice, never a driver name, and standing alone it is a bare entity mention rather than a specific claim. The quote itself bundles two independent, differently-shaped facts under that name (a discrete count of new markets entered, and a separate international gross-unit-opening count with its own stated YoY growth), and nothing in the target identifies which of these — if either alone — is the intended meaning. Picking one would be guessing rather than resolving, so this item yields no fact."}
+  ],
+  "continuity_hints": []
+}
+```

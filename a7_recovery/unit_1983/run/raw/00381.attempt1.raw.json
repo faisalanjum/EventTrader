@@ -1,0 +1,20 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "airport_gates",
+        "driver_state": "reported",
+        "level_low": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_high": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": null},
+        "level_shape_hint": "point",
+        "level_unit": "count"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

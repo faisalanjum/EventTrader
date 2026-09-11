@@ -1,0 +1,40 @@
+```json
+{
+  "packet_id": "0000027904-26-000013#018",
+  "settled": {
+    "source_id": "0000027904-26-000013",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "skymiles_credit_facility",
+          "driver_state": "occurred",
+          "time_type": "instant",
+          "fiscal_year": 2025,
+          "month": 9
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0000027904-26-000013#018/L1",
+      "exact_match": true,
+      "why": "L1's fact_type action_event, driver_name skymiles_credit_facility, driver_state occurred, time_type instant, fiscal_year 2025, month 9 matches the settled reply field-for-field with no extra or missing keys."
+    },
+    {
+      "lane_id": "0000027904-26-000013#018/L2",
+      "exact_match": true,
+      "why": "L2 is byte-identical to L1 and likewise matches the settled reply exactly on every field."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether time_type=instant should be stated at all for a one-off action_event (entering into a loan amendment) versus leaving it null.",
+      "why": "Rule 6 frames the duration/instant distinction mainly around metric periods (a flow over a window vs. a balance at a moment); applying it to a discrete corporate transaction is a reasonable but not explicitly spelled-out extension, since the amendment itself is neither a flow nor a balance but a completed one-time act."
+    }
+  ]
+}
+```

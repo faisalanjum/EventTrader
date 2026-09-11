@@ -1,0 +1,134 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "unchanged",
+              "level_low": {"value": 0.25, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.25, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["Adjusted diluted"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "comparison_baseline": "prior_year"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 23.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 23.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 24.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 24.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Restaurant level"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_lease_termination",
+              "driver_state": "occurred",
+              "level_low": {"value": -1518, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+              "level_high": {"value": -1518, "scale_multiplier": 1000, "unit_scale_evidence": "in thousands"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 350, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 370, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "range",
+              "level_unit": "count",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic boilerplate risk-factor language ('risks of food safety incidents and food-borne illnesses') listed among standard forward-looking-statement risk factors — a topic mention, not a stated fact about the company's actual state, change, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0001058090-26-000007",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence is vague promotional commentary ('continue to perform well', 'helping enhance guest access and convenience, as well as increase new restaurant sales, margins and returns') that bundles a channel (Chipotlanes, which Rule 7 makes a slice, not a name) with several unquantified downstream effects on distinct metrics without stating a single resolvable driver or any number, so it cannot be lawfully resolved into one fact."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six located items describe entirely unrelated matters — adjusted diluted EPS, restaurant-level operating margin, a one-off gain on restaurant lease termination, forward 2026 restaurant-opening guidance, a generic food-safety risk-factor mention, and vague Chipotlane commentary — each with different drivers, periods, and lanes, so they cannot express one underlying fact."
+}
+```

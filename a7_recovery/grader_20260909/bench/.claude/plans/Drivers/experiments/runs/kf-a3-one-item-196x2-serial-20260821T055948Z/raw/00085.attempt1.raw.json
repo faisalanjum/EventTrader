@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "Quote 'PROVISION (BENEFIT) FOR INCOME TAXES 58 (43) n.m.' states numeric values (58, -43) but contains no scale marker inside it; the 'in millions' wording that would support scale_multiplier=1,000,000 sits only in the table's header line, which is outside this quote. Per Rule 5.6, a scale marker sitting in a header outside the quote requires abstention rather than borrowing it or defaulting to scale_multiplier=1 (which would misstate the value)."
+    }
+  ],
+  "continuity_hints": []
+}
+```

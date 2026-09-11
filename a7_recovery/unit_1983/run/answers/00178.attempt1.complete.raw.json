@@ -1,0 +1,27 @@
+```json
+{
+  "source_id": "0001058090-26-000007",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "restaurant_level_operating_margin",
+        "driver_state": "decreased",
+        "level_low": {"value": 23.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 23.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "comparison_low": {"value": 24.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_high": {"value": 24.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "comparison_shape_hint": "point",
+        "level_unit": "percent",
+        "comparison_baseline": "prior_year",
+        "time_type": "duration",
+        "fiscal_year": 2025,
+        "fiscal_quarter": 4
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

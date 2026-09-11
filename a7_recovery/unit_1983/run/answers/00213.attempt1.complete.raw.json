@@ -1,0 +1,12 @@
+```json
+{
+  "source_id": "0001104659-25-118458",
+  "facts": [],
+  "abstentions": [
+    {
+      "reason": "The quote is a background/overview mention that the company operates in Mexico through a joint venture (part of a list alongside a Middle East franchise and the Space NK subsidiary). It states no change, magnitude, direction, decision, transaction, or forward outlook for this venture — just that it exists as one of the company's international structures. This is a bare topic/structural mention, not a real driver state, change, surprise, guidance, or discrete action (Rule 1.2), so it fails the fact gate."
+    }
+  ],
+  "continuity_hints": []
+}
+```

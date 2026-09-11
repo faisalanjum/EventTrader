@@ -1,0 +1,64 @@
+{
+ "kind": "consumer refusal branch tests; dependency mutations, not native proof",
+ "model_calls": 0,
+ "passed": 14,
+ "results": [
+  {
+   "case": "foreign original run",
+   "refused": "saved evaluation is not the independently bound A3 run"
+  },
+  {
+   "case": "foreign signed initial package",
+   "refused": "the initial source package is not bound by the signed key"
+  },
+  {
+   "case": "different original plan",
+   "refused": "the source key was not made from this original plan"
+  },
+  {
+   "case": "different inventory",
+   "refused": "the source key and original run use different inventories"
+  },
+  {
+   "case": "unproved original native evidence",
+   "refused": "the original A3 evidence does not hold: ['TEST unproved']"
+  },
+  {
+   "case": "missing original finalization",
+   "refused": "saved evaluation needs preserved, finalized original evidence"
+  },
+  {
+   "case": "empty original evidence digest",
+   "refused": "saved evaluation needs preserved, finalized original evidence"
+  },
+  {
+   "case": "raw rows not bound to native answers",
+   "refused": "the original raw binding does not hold: ['TEST wrong raw binding']"
+  },
+  {
+   "case": "wrong baseline value/type 381",
+   "refused": "the original observed calls are not the source-key baseline"
+  },
+  {
+   "case": "wrong baseline value/type True",
+   "refused": "the original observed calls are not the source-key baseline"
+  },
+  {
+   "case": "wrong baseline value/type 382.0",
+   "refused": "the original observed calls are not the source-key baseline"
+  },
+  {
+   "case": "disagreement with original accounting owner",
+   "refused": "the original observed calls are not the source-key baseline"
+  },
+  {
+   "case": "signed baseline lost original calls",
+   "refused": "the signed key baseline lost its original calls"
+  },
+  {
+   "case": "foreign G1 callable owner",
+   "refused": "the saved evaluation needs this harness's G1 owner"
+  }
+ ],
+ "positive_controls": "real proved freeze before and after each refusal"
+}

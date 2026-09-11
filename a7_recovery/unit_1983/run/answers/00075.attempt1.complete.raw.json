@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "facts": [],
+  "abstentions": [
+    {"reason": "Boilerplate company-profile statement ('Approximately 95% of McDonald's restaurants worldwide are owned and operated by independent local business owners') from the standard 'ABOUT McDONALD'S' section — a generic, static description repeated in every filing, not a stated driver state, change, surprise, guidance, or action for this event."}
+  ],
+  "continuity_hints": []
+}
+```

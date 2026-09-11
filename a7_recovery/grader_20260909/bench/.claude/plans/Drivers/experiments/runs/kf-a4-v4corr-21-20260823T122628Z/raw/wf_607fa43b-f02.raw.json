@@ -1,0 +1,219 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "unknown",
+              "level_low": {"value": 6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_unit": "percent",
+              "level_shape_hint": "range",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "pretax_income",
+              "driver_state": "unknown",
+              "level_low": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_unit": "m_usd",
+              "level_shape_hint": "point",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the quote states two distinct Q2 guidance facts -- a 6%-8% operating margin range and a $1 billion pre-tax profit point -- both recorded separately."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "capacity",
+              "driver_state": "unknown",
+              "value_text": "flat",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "unknown",
+              "value_text": "double-digit growth",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["product:passenger"],
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "change_unit": "percent_yoy",
+              "slice_parts": ["product:passenger"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed, and richer than proposed: the quote yields three facts -- flat Q2 capacity guidance, double-digit Q2 passenger unit-revenue guidance, and a genuinely new, previously-unstated Q1 passenger unit-revenue metric (mid-single-digit growth) -- while the opening 'total revenue growth of low teens' clause restates the identical Q2 guide already given by Ed Bastian and is kept only at its earliest occurrence (row 4)."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_debt",
+              "driver_state": "decreased",
+              "level_low": {"value": 13.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 13.5, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_unit": "m_usd",
+              "level_shape_hint": "point",
+              "change_value": {"value": -20, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted"],
+              "time_type": "instant",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_leverage",
+              "driver_state": "reported",
+              "level_low": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "times"},
+              "level_high": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "times"},
+              "level_unit": "x",
+              "level_shape_hint": "point",
+              "time_type": "instant",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the quote states two distinct point-in-time metrics -- adjusted net debt (with a stated year-over-year decrease) and gross leverage -- both recorded separately."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "unknown",
+              "value_text": "low teens growth",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "fuel_recapture",
+              "driver_state": "unknown",
+              "level_low": {"value": 40, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 50, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_unit": "percent",
+              "level_shape_hint": "range",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          },
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "fuel_expense",
+              "driver_state": "unknown",
+              "level_low": {"value": 2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and confirmed: the quote yields three facts -- the low-teens Q2 revenue guide (kept here as its earliest source-order occurrence), the 40%-50% fuel-recapture guide, and the 'more than $2 billion' incremental fuel-cost impact, recorded as a floor-shaped level under the base driver fuel_expense rather than the metaphor 'fuel headwind', which Rule 3.10 forbids inside a name."
+    }
+  ],
+  "review": [
+    {"row_index": 1, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 1, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 2, "fact_index": 0, "hard_classes": [], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether a stated 'flat' capacity level should carry an implicit zero-value numeric slot or remain purely qualitative value_text is not settled by the rules, since it is a precise claim of no change rather than a vague quantity."},
+    {"row_index": 2, "fact_index": 1, "hard_classes": ["slices_and_unknown_axes", "sequential_comparison"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "The guide is explicitly framed as an acceleration from the immediately prior (March) quarter's actual growth rate -- a genuine sequential-trend comparison -- even though the guide's own growth basis defaults to percent_yoy absent in-document sequential-basis wording."},
+    {"row_index": 2, "fact_index": 2, "hard_classes": ["slices_and_unknown_axes"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether 'mid-single-digit unit revenue growth in the March quarter' specifically denotes passenger unit revenue (paralleling the immediately preceding passenger unit-revenue guide) or loosely restates the already-reported domestic/international mid-single-digit figure cannot be fully certain from the quote alone, though its grammatical placement supports a passenger-specific reading."},
+    {"row_index": 3, "fact_index": 0, "hard_classes": ["point_range_floor_ceiling", "measurement_wording"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 3, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": null},
+    {"row_index": 4, "fact_index": 0, "hard_classes": [], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "This is the same Q2 total-revenue-growth guide restated later in the call by Joe Esposito (row 2); kept here at its earliest source-order occurrence rather than duplicated."},
+    {"row_index": 4, "fact_index": 1, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "Whether the 40%-50% fuel-recapture rate names an independently trackable driver or is descriptive color within the revenue-growth guide is not fully settled by the rules."},
+    {"row_index": 4, "fact_index": 2, "hard_classes": ["point_range_floor_ceiling"], "du_worthy": true, "gold_extra": {"expectation_comparison_present": false}, "ambiguity_note": "The 'more than $2 billion' figure is framed as an incremental/additional fuel-cost impact rather than a total quarterly fuel-expense level, but change_value has no floor/ceiling shape field, so it is recorded as a level floor under the base driver fuel_expense instead."}
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {"lead_id": "phase1/DAL_2026-04-08T10.00#153", "agrees": false, "why": "Its operating_margin guidance fact (6-8% range, unknown, Q2 FY2026, company_confirmed true) matches mine exactly, but the quote also states a co-stated $1 billion pre-tax-profit guidance fact that this lead omits entirely, so its settlement of the row is incomplete."},
+    {"lead_id": "phase1/DAL_2026-04-08T10.00#154", "agrees": false, "why": "It correctly identifies a Q2 double-digit passenger unit-revenue guide with slice product:passenger, but it folds the backward-looking 'meaningful acceleration ... March quarter' comparison into that same fact's value_text instead of recognizing it names a distinct, previously-unstated Q1 passenger unit-revenue metric fact, and it entirely omits the co-stated flat-capacity guidance fact present in the same quote."},
+    {"lead_id": "hr-023/b1/row2", "agrees": false, "why": "Its captured fact (unit_revenue increased, percent_yoy, slice product:passenger, Q1 FY2026) closely matches the new Q1 passenger unit-revenue metric fact I settle on, but it treats this as the only fact in the row and entirely omits the row's two genuine forward Q2 guidance facts (flat capacity and double-digit passenger unit-revenue growth), so the row-level settlement is incomplete."},
+    {"lead_id": "hr-023/b2/row2", "agrees": false, "why": "Like its sibling lead it isolates only the backward-looking Q1 comparison and misses both forward Q2 guidance facts, and it additionally folds the company's own measured product population 'passenger' directly into the driver name (passenger_unit_revenue) instead of the required slice_parts=[product:passenger], violating the slice-not-name rule."},
+    {"lead_id": "phase1/DAL_2026-04-08T10.00#155", "agrees": false, "why": "Its net_debt fact (decreased, 13.5B point, change -20% percent_yoy vs prior_year, measurement 'adjusted', instant, Q1 FY2026) matches mine exactly, but it omits the co-stated gross_leverage of 2.4 times present in the same quote, so its settlement of the row is incomplete."},
+    {"lead_id": "phase1/DAL_2026-04-08T10.00#156", "agrees": false, "why": "Its floor-shaped $2 billion-plus guidance fact under driver_name fuel_expense matches my naming and shape for that one fact, but it omits the row's two other co-stated guidance facts (the low-teens Q2 revenue guide and the 40%-50% fuel-recapture guide), so its settlement of the row is incomplete."}
+  ],
+  "open_issues": []
+}
+```

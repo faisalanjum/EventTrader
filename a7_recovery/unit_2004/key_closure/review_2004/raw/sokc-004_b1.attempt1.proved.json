@@ -1,0 +1,101 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "slice_parts": ["segment:refinery"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 9.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quoted fragment 'Atlantic 1,517 11 %' states a passenger-revenue level whose scale marker ('in millions') sits only in the table header outside this quote, so the value's scale_multiplier cannot be lawfully verified from inside the quote itself; abstain rather than assume the scale."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic risk-factor boilerplate stating no material changes from the prior Form 10-K disclosure, not a real statement about any driver's state, change, surprise, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "facts": [],
+        "abstentions": [
+          {"reason": "This sentence describes a change in non-GAAP reconciliation presentation methodology (how settlement gains/losses are timed into adjusted results), an accounting construct rather than a real business driver's state, change, surprise, guidance, or action."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five items cover unrelated subjects with no shared driver, period-scope, or slice: refinery-segment operating loss, adjusted total-revenue growth, an Atlantic-region revenue table row (abstained for missing in-quote scale), generic 'no material changes' risk-factor boilerplate, and a non-GAAP reconciliation presentation-timing change, so they cannot be the same underlying fact."
+}
+```

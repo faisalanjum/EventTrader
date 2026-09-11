@@ -1,0 +1,31 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "available_seat_mile",
+      "item": {
+        "driver_name": "operating_cost_per_available_seat_mile",
+        "driver_state": "increased",
+        "level_low": {"value": 15.29, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_high": {"value": 15.29, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "comparison_low": {"value": 14.54, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "comparison_high": {"value": 14.54, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["excluding net special items, fuel and profit sharing"],
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "period_start_date": "2026-01-01",
+        "period_end_date": "2026-03-31",
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

@@ -1,0 +1,143 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 84, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant",
+              "period_start_date": "2025-11-01",
+              "period_end_date": "2025-11-01",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "slice_parts": ["geography:gb", "geography:ie", "entity_ownership:spacenk"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Bare descriptive mention, in the general Overview section, of an existing joint venture structure in Mexico with no stated state, change, magnitude, or discrete action — generic business-description boilerplate under Rule 1.2."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "interest_coverage_ratio",
+              "driver_state": "reported",
+              "level_low": {"value": 4.0, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "x",
+              "slice_parts": ["entity_ownership:spacenk"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard forward-looking-statement risk-factor listing the hypothetical possibility that anticipated Space NK acquisition benefits may not be realized, with no stated actual event, change, or magnitude — generic risk boilerplate under Rule 1.2."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "credit_facility_interest_rate",
+              "driver_state": "reported",
+              "level_low": {"value": 0.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 1.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "slice_parts": ["unknown:us-gaap:VariableRateAxis__baserate"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase_authorization",
+              "driver_state": "canceled",
+              "time_type": "instant",
+              "month": 10,
+              "fiscal_year": 2024,
+              "slice_parts": ["unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 7,
+      "settled": {
+        "source_id": "0001104659-25-118458",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "credit_facility_interest_rate",
+              "driver_state": "reported",
+              "level_low": {"value": 1.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 2.0, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "slice_parts": ["unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The seven located items describe entirely distinct underlying facts with no shared subject — Space NK's excluded store count as of a date, a boilerplate mention of a Mexico joint venture, Space NK's facility interest-coverage covenant, a boilerplate acquisition-integration risk, the base-rate borrowing margin on Ulta's main credit facility, the March/October 2024 share-repurchase-program revocation, and the SOFR borrowing margin on the same facility, so they cannot be settled as one fact."
+}
+```

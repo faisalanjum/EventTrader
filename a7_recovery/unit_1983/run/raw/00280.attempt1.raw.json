@@ -1,0 +1,21 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "increased",
+        "comparison_baseline": "sequential_period",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 1,
+        "slice_parts": ["product:loyaltyprogrammarketingservices"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

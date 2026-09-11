@@ -1,0 +1,188 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "per_x": "available_seat_mile",
+      "item": {
+       "driver_name": "operating_cost_per_available_seat_mile",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 15.29,
+        "scale_multiplier": 0.01,
+        "unit_scale_evidence": "cents"
+       },
+       "level_high": {
+        "value": 15.29,
+        "scale_multiplier": 0.01,
+        "unit_scale_evidence": "cents"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "comparison_low": {
+        "value": 14.54,
+        "scale_multiplier": 0.01,
+        "unit_scale_evidence": "cents"
+       },
+       "comparison_high": {
+        "value": 14.54,
+        "scale_multiplier": 0.01,
+        "unit_scale_evidence": "cents"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "measurement_raw_spans": [
+        "excluding net special items, fuel and profit sharing"
+       ],
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "income_tax_expense",
+       "driver_state": "increased",
+       "level_low": {
+        "value": -94,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "level_high": {
+        "value": -94,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": -175,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "comparison_high": {
+        "value": -175,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "pre_tax_income",
+       "driver_state": "increased",
+       "level_low": {
+        "value": -327,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "level_high": {
+        "value": -327,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "comparison_low": {
+        "value": -530,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "comparison_high": {
+        "value": -530,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "In millions"
+       },
+       "comparison_shape_hint": "point",
+       "comparison_baseline": "prior_year",
+       "measurement_raw_spans": [
+        "excluding net special items"
+       ],
+       "time_type": "duration",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "full_time_equivalent_employees",
+       "driver_state": "increased",
+       "change_value": {
+        "value": 3.9,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "slice_parts": [
+        "product:mainline"
+       ],
+       "time_type": "instant",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 1
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "0000006201-26-000032",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic risk boilerplate: an undifferentiated statement that unknown or currently immaterial risks could adversely affect the business, naming no driver state, change, surprise, guidance or action, so the gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

@@ -1,0 +1,43 @@
+```json
+{
+  "packet_id": "0001041061-26-000084#089",
+  "settled": {
+    "source_id": "0001041061-26-000084",
+    "facts": [
+      {
+        "fact_type": "metric",
+        "item": {
+          "driver_name": "net_new_units",
+          "driver_state": "reported",
+          "level_low": {"value": 1939, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_high": {"value": 1939, "scale_multiplier": 1, "unit_scale_evidence": null},
+          "level_shape_hint": "point",
+          "level_unit": "count",
+          "time_type": "duration",
+          "fiscal_year": 2025
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "0001041061-26-000084#089/L1",
+      "exact_match": false,
+      "why": "L1 names the driver 'unit_count' and stores 1,939 as a change_value with state 'increased', but the quote states the net-new-units figure as a bare standalone value (no prior value given beside it) for a distinct, source-named metric ('net new unit growth'/'net new units'), not as a stated delta to a separately-reported unit_count balance; state should be 'reported' and the number belongs in level_low/level_high (point shape), not change_value."
+    },
+    {
+      "lane_id": "0001041061-26-000084#089/L2",
+      "exact_match": true,
+      "why": "L2 matches: driver_name 'net_new_units', state 'reported' (bare value, no inline comparison), level_low/level_high both {1939, scale 1, null evidence}, shape 'point', unit 'count', time_type 'duration' (a flow over the fiscal year), and fiscal_year 2025 -- identical to the settled reply."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether 1,939 should be modeled as a level of a standalone 'net_new_units' metric (chosen) versus a change_value representing the period-over-period delta of a broader 'unit_count' metric.",
+      "why": "Net new units is mathematically gross openings minus closures (a derivable delta of total unit counts), but the source explicitly defines and reports 'Net new unit growth' as its own named performance metric with its own standalone value in this sentence, with no adjacent prior-period unit_count stated for comparison -- supporting treating it as a level of a distinct metric rather than a change to a different one."
+    }
+  ]
+}
+```

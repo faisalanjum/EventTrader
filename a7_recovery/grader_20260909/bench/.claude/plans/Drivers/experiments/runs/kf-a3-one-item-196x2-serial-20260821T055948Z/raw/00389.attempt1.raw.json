@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "bzNews_50877032",
+  "facts": [],
+  "abstentions": [
+    {"reason": "The target text is a generic, evergreen characterization ('one of the most volatile expenses') about jet fuel costs, not a specific reported level, direction, change, or action for this period — it reads as generic risk/background commentary explaining a stock dip rather than a real driver fact, so it fails Rule 1's boilerplate gate."}
+  ],
+  "continuity_hints": []
+}
+```

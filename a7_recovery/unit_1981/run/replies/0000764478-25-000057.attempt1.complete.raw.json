@@ -1,0 +1,206 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "verdicts": [
+    {
+      "proposal_id": "0000764478-25-000057#P000",
+      "decision": "exclude",
+      "why": "This proposal names a target that has already been tested; it is excluded from this fresh sample regardless of the underlying fact's correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000764478-25-000057#P001",
+      "decision": "exclude",
+      "why": "This proposal names a target that has already been tested; it is excluded from this fresh sample regardless of the underlying fact's correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000764478-25-000057#P002",
+      "decision": "exclude",
+      "why": "This proposal names a target that has already been tested; it is excluded from this fresh sample regardless of the underlying fact's correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000764478-25-000057#P003",
+      "decision": "exclude",
+      "why": "This proposal names a target that has already been tested; it is excluded from this fresh sample regardless of the underlying fact's correctness or location.",
+      "row": null
+    },
+    {
+      "proposal_id": "0000764478-25-000057#P004",
+      "decision": "exclude",
+      "why": "This proposal names a target that has already been tested; it is excluded from this fresh sample regardless of the underlying fact's correctness or location.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Goodwill and intangible asset impairments $ 171 $ - $ 171 $ -",
+        "raw_label_or_claim": "Goodwill and intangible asset impairments",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "losses_and_sign"]
+      },
+      "why": "A distinct, source-stated point-value impairment charge, not named by any supplied proposal; a charge is a positive-signed value under OD-12, exercising the sign rule."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Adjusted diluted EPS $ 1.40 $ 1.26 $ 3.82 $ 3.80",
+        "raw_label_or_claim": "Adjusted diluted EPS",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "measurement_wording"]
+      },
+      "why": "The non-GAAP 'adjusted' diluted EPS figures are a different measurement version of the GAAP diluted EPS already named by proposal P001 (different period-scope pairing and measurement token), a real difference under NAME-14/FS-25, so this is a fresh fact."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Computing and Mobile Phones: The 7.6% comparable sales growth was driven primarily by computing and mobile phones.",
+        "raw_label_or_claim": "The 7.6% comparable sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "portion_versus_whole", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A product-category slice fact (menu entry product:computingandmobilephones) for the Domestic segment, a portion of the whole company, none of which any proposal named."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Appliances: The 8.4% comparable sales decline was driven primarily by large appliances.",
+        "raw_label_or_claim": "The 8.4% comparable sales decline",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "portion_versus_whole", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "A different product-category slice value (Appliances, Domestic segment) from a different period/product than any other selected or proposed item."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Consumer Electronics: The 3.6% comparable sales growth was driven primarily by digital imaging.",
+        "raw_label_or_claim": "The 3.6% comparable sales growth",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes", "portion_versus_whole", "point_range_floor_ceiling", "sequential_comparison"]
+      },
+      "why": "An International-segment product-category slice fact, distinct in scope (segment, product, value) from the Domestic-segment items above and from all proposals."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Total online revenue $ 2,823 $ 2,727 $ 8,258 $ 7,970",
+        "raw_label_or_claim": "Total online revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"]
+      },
+      "why": "A total-dollar channel (online) slice fact, a portion of segment revenue; distinct measurement (dollar total) from the online % change figure named by proposal P000."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Online revenue as a % of total segment revenue 31.8 % 31.4 % 32.1 % 31.2 %",
+        "raw_label_or_claim": "Online revenue as a % of total segment revenue",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling", "portion_versus_whole", "slices_and_unknown_axes"]
+      },
+      "why": "An explicit portion-of-whole ratio fact (online share of total segment revenue), a different measurement than the total-dollar and comparable-% figures already used elsewhere."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Diluted EPS decreased in the first nine months of fiscal 2026, primarily due to lower net earnings driven by higher restructuring charges and goodwill and intangible asset impairments, partially offset by lower income tax expense.",
+        "raw_label_or_claim": "Diluted EPS decreased in the first nine months of fiscal 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign"]
+      },
+      "why": "A nine-month-period Diluted EPS decrease fact with a different causal composition (adds restructuring charges) than the third-quarter version named by proposal P001; a real period-scope difference under the split rule."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The impairments reflect downward revisions of our revenue growth rates and margin rates compared to previous projections, in part due to pressures in the Medicaid and Medicare Advantage markets.",
+        "raw_label_or_claim": "pressures in the Medicaid and Medicare Advantage markets",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": []
+      },
+      "why": "A specific, current, source-flagged adverse condition (not generic boilerplate) driving the Best Buy Health impairment, satisfying the DU-11-style specific-threat fact gate; not named by any proposal."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "We also may use the term \u201cconstant currency,\u201d which represents results adjusted to exclude foreign currency impacts.",
+        "raw_label_or_claim": "constant currency",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": ["measurement_wording"]
+      },
+      "why": "A generic methodological definition of a measurement term, not a stated fact about any driver's state/change/surprise/guidance/action; a lawful negative control on the measurement-wording boundary (NAME-14/FS-25)."
+    },
+    {
+      "row": {
+        "source_id": "0000764478-25-000057",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "product safety and quality concerns",
+        "raw_label_or_claim": "product safety and quality concerns",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A bare, generic, hypothetical risk-factor list entry from the safe-harbor forward-looking statement, failing DU-03/Rule 1; a lawful negative control matching the fact gate's own boilerplate example."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "As of November 1, 2025, we had $500 million of principal amount of notes due October 1, 2028, and $650 million of principal amount of notes due October 1, 2030.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A lawful, fresh point-value debt fact exists here, but this event already has sufficient point/range/floor/ceiling coverage among the selected additions; not added because it repairs no declared gap (representative, not exhaustive)."
+    },
+    {
+      "quote": "Total Domestic stores 926 957",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A further portion-versus-whole (segment store count) fact, but redundant with the online-revenue portion/whole examples already selected; excluded to avoid padding this event's sample."
+    },
+    {
+      "quote": "On February 28, 2022, our Board approved a $5.0 billion share repurchase program.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A real, non-boilerplate authorization fact, but it repairs no declared hard-class or coverage gap for this event, so it is left out under the representative-sampling rule."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the ambiguous_menus (T1-05) tag can be claimed here given the menu's dual-kind 'domestic'/'international' entries under both segment: and geography: (matching T1-05's own worked dual-axis example), when every actual prose use in this event explicitly says 'segment' and leaves no kind unclear.",
+      "why": "Rule 6 requires an actual source item to exercise the ladder's ambiguous rung; I found none, so I neither tagged nor added a row for this, but the tension between the menu's shape and the clean prose is not settled by the quoted authority."
+    },
+    {
+      "what": "Whether the sequential_comparison hard-class tag covers bare year-over-year-default growth percentages (as tagged on several comparable-sales figures here), or is reserved only for facts that literally invoke OD-11's sequential-period or annual-pin branches.",
+      "why": "OD-11's quoted text governs the whole growth-basis decision including the YoY default, so I tagged plain YoY comp-sales growth rows with sequential_comparison as a judgment call; the authority does not explicitly confirm this scope."
+    },
+    {
+      "what": "This event supplies no forward guidance, consensus, or guidance-vs-prior-guidance language, so no row here can lawfully carry the expectation_routing or favourable_unfavourable_direction tags.",
+      "why": "Recorded so the absence is not mistaken for an oversight; per rule 6 an event need not supply every hard class."
+    }
+  ],
+  "blocked": null
+}
+```

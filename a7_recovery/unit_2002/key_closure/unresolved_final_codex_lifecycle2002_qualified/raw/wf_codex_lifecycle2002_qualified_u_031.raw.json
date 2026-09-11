@@ -1,0 +1,51 @@
+{
+ "source_id": "bzNews_42014391",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "bzNews_42014391",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "e_coli_outbreak",
+       "driver_state": "occurred"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "The frozen proposed_record_kind of real_item is confirmed: the quote states a specific, completed adverse incident (a severe E. Coli outbreak) that drove diners away, which is a real non-boilerplate driver fact rather than a control or an exclusion."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [],
+   "reference_name": "E. Coli outbreak",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "Lane is genuinely arguable — the outbreak reads as a discrete incident (action_event, taken here) but its lingering demand pressure could be read as a standing metric condition, and the effect wording 'spooked diners away' is kept in the quote rather than coined as a separate customer-traffic driver."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-031/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-031/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": []
+}

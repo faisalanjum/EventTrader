@@ -1,0 +1,181 @@
+{
+ "TEMPLATE": "This file binds nothing and is NOT the final turn. finalize() writes the real final_sign_input.json.",
+ "authority": {
+  "path": ".claude/plans/Drivers/FinalDesign/LeftOverSteps/step1.md",
+  "sha256": "bc5a0043a743547b7e5117aed4bdede75de08031682d8e3cc37d0b70402579e1"
+ },
+ "binds": [
+  "final_inventory",
+  "adjudication_sidecar",
+  "event_verdicts",
+  "source_manifest",
+  "validator_receipt",
+  "candidate_commit",
+  "candidate_tree"
+ ],
+ "event_turns": [
+  {
+   "prompt_sha256": "04b30974b028f330a4573b6790d688e2f9932e1176135e96e75cd622e83bfecc",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "prompt_sha256": "3c345666385d40220fad7a1ad086e8fcdddb0613ca6ecc28d12da87b5e5c57bd",
+   "source_id": "0000006201-26-000032"
+  },
+  {
+   "prompt_sha256": "c7c505e7d3c41e27f8813ac3de7a8a370445245df77371b45ada42140ccb1b7e",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "prompt_sha256": "c6e95ee52a256ba6b1b81225f124dc0190d665bebd6693fd2363a7757538c706",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "prompt_sha256": "666ee371edf11c2e2c733086b8631a1dc879680e713a625229c2d99df3735c47",
+   "source_id": "0000027904-26-000022"
+  },
+  {
+   "prompt_sha256": "44609a0a41bb6f9770b8c048b79e027a4639b90fbb4f7d9c908b05e3aefc7c40",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "prompt_sha256": "04854cfc0ab5af911bbf4d9680a7ba235922911b25f54f634e7a7fc650071d72",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "prompt_sha256": "98f4fd90f0d1d360405520134d61e67b37b5342ffd9e994895ba3ffe4166ff3e",
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "prompt_sha256": "34e2fbcb4902d3441d04029892ba5f1ec7aa7081a6b6e21920c9ccd747a17e9a",
+   "source_id": "0000764478-26-000005"
+  },
+  {
+   "prompt_sha256": "7ca62eab5eb204f15bceb0c7a5ae1d10a64d55f530603503d68078eddc70e5ee",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "prompt_sha256": "f4468f722378a0a3a60b6d58705c7aa432e8f932b0c2efa7266e5007d7aea78d",
+   "source_id": "0000940944-25-000038"
+  },
+  {
+   "prompt_sha256": "1c355a2a6a6ed4884d7986721291704240fbef3925fed050456fd09ccda28971",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "prompt_sha256": "555b5362b836ae20d9d08b351abb0823ceb6fee73496af220b9894ec5fb90854",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "prompt_sha256": "9c3efa8bede7c4f8ee859479d99dce628be063ca6de8b6b2b13436061a387b55",
+   "source_id": "0001041061-25-000109"
+  },
+  {
+   "prompt_sha256": "26b779342f4220064117ff0f7b56381d63802e019eeeb53265ccdabd6a835ed3",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "prompt_sha256": "4ba111b74470e082a7b55ab69c59482d790379631ae7dd635c7c349ba3fca480",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "prompt_sha256": "2e7ccd62a456fab5594c3392d59768dcff90467d47e42d3104e6757b87fdfb01",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "prompt_sha256": "e76602d6a88bcce24e238b47356c5179a7f2508c36273b7129054c8389a3055b",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "prompt_sha256": "14600e160e3ad4c331caae3b7cdb6ff2b6c2bb764ab113a6608e14d76bb5da9d",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "prompt_sha256": "22b65ad7bf039e1ed0645902819011fe5b0c5fdf5c5929159a8917249fd36ee5",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "prompt_sha256": "8f93fb8b4330ca606b3cc1dd263c4cdb0c34c0b89d1eb15858781e8e5ff70562",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "prompt_sha256": "3185503fdf6f662c9c1acc26ec6efe34fbdd0fb4cd91ba3e490f32c546519f8c",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "prompt_sha256": "fade95d4bb89ded99293e67c056af42e693eb46686f20091302f71ec82ebbcd2",
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "prompt_sha256": "7095a3108162c41bc661e9f224d44ee592810d521583b30260bac95acf64864a",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "prompt_sha256": "bae26f34fac5e63646622243ef7b95c6387c2113a14784ef9d71f8e1058f067a",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "prompt_sha256": "5a2e53f1c0a7286f60ccda597ebae5374ee19a6a7da2bb6bf10b4db6cc187967",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "prompt_sha256": "de8a489f465d0aa585010dfc844f740309bc7a062f01a134b3df875a88bffbab",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "prompt_sha256": "42d05a606cfc64fbc4f89e8c66d9853d79ac19754761742edf71e4aa7bb7a614",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "prompt_sha256": "7aad476cf95eb54a9ef313f7513077ab284acc0a5d7558a644f7248216423790",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "prompt_sha256": "d324e168c39943583b9e412d86c0a7d2facf1c6097e750435c152ce05ab3762d",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "prompt_sha256": "68fc90e55d8c44a278cda4aded44da4c92bbf38913e56a8348cc1255f8bf1123",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "prompt_sha256": "165359b10cbeaff7e9395e615e9103b2b343846b175dd4fbcd391f619893ab9e",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "prompt_sha256": "0be7e5dd6f4268232d18c9658b0064bb806e44d2b48891c422c1e2f83aae41ce",
+   "source_id": "bzNews_42014391"
+  },
+  {
+   "prompt_sha256": "de055cdfbb554e9b61b8bcd22c5229e3ecf3cccf254e4ec8104a600b7493141b",
+   "source_id": "bzNews_49256211"
+  },
+  {
+   "prompt_sha256": "88ed352289587037fbfc372fa7fb41367db58348902bf90dc79ab7ebe7cd9d60",
+   "source_id": "bzNews_50877032"
+  },
+  {
+   "prompt_sha256": "da50a62815e52793ca6e4f09cb7d3d76bb5ce62778fb20b043c61491c1aec02d",
+   "source_id": "bzNews_51962983"
+  }
+ ],
+ "output": "One JSON object: {\"signed\": true|false, \"blocked\": null|string, \"why\": string}. No prose outside it.",
+ "prefix_sha256": "6a4273b6f1b44382261248bd7c04110137d5a7327775f0c3e2a4902a870a3de9",
+ "required_report": [
+  "proposals_reconciled",
+  "rows_final",
+  "record_kind_counts",
+  "hard_class_counts",
+  "sequential_comparison_count",
+  "exclusions_considered",
+  "open_issues"
+ ],
+ "scope": "the pre-A2 benchmark source-item and control inventory only; not the A3 drafting run and not the A4 completed answer key",
+ "source_manifest": {
+  "combined_sha256": "3794d26d7ba47ac33a3b402d536e31c5c3b6c278cc2c0b0c471561dcbbb28883",
+  "file_sha256": "e083cd6a72ff2a79e51b99935c79978ef16c9042e507e21ae47ab4ca3d12b386",
+  "n": 36,
+  "path": "keys/K-fields/draft_inputs.hashes.json"
+ },
+ "task": "Confirm that the materialized representative inventory is exactly the rows the 36 event verdicts decided, that no judgment changed between those verdicts and this materialization, and sign. If anything differs, return blocked and name the row."
+}

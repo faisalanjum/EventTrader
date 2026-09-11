@@ -1,0 +1,49 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "available_seat_mile",
+      "item": {
+        "driver_name": "non_fuel_cost_per_available_seat_mile",
+        "driver_state": "increased",
+        "level_low": {"value": 13.86, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_high": {"value": 13.86, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "change_value": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "prior_year",
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "measurement_raw_spans": [
+          "\"CASM-Ex\", a non-GAAP financial measure",
+          "which excludes fuel, expenses related to refinery sales to third parties and other items"
+        ]
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "per_x": "available_seat_mile",
+      "item": {
+        "driver_name": "non_fuel_cost_per_available_seat_mile",
+        "driver_state": "in_line",
+        "change_value": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "comparison_baseline": "previous_guidance",
+        "surprise_basis_hint": "actual",
+        "has_favorability_wording": true,
+        "fiscal_year": 2025,
+        "time_type": "duration",
+        "measurement_raw_spans": [
+          "\"CASM-Ex\", a non-GAAP financial measure",
+          "which excludes fuel, expenses related to refinery sales to third parties and other items"
+        ]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

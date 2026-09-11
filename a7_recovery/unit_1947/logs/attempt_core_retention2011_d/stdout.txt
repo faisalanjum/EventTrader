@@ -1,0 +1,89 @@
+{
+ "composite_under_review": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+ "old_owner": "7c5ac0ecac07b3f85f25cae9982f7921ee313405215bea42342a88def861c09e",
+ "successor_owner": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+ "old_run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004",
+ "old_pkg": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2004",
+ "per_attempt": {
+  "primary": [
+   52,
+   14
+  ],
+  "child": [
+   10,
+   4
+  ]
+ },
+ "paired_valid_tasks": 29,
+ "identity_swaps_tested": 58,
+ "identity_swaps_accepted": 2,
+ "first_swap_reason": "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9",
+ "accepted_swaps": [
+  {
+   "from": "sokc-031/b1",
+   "into": "sokc-031/b2",
+   "the two answers were already byte-identical": true,
+   "so no foreign answer was substituted": true
+  },
+  {
+   "from": "sokc-031/b2",
+   "into": "sokc-031/b1",
+   "the two answers were already byte-identical": true,
+   "so no foreign answer was substituted": true
+  }
+ ],
+ "pairs_already_identical": [
+  [
+   "sokc-031/b1",
+   "sokc-031/b2"
+  ],
+  [
+   "sokc-031/b2",
+   "sokc-031/b1"
+  ]
+ ],
+ "substitutions_of_a_DIFFERENT_answer": [],
+ "negatives": {
+  "missing proved artifact": "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-",
+  "drifted proved artifact": "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-",
+  "drifted closeout": "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-",
+  "missing child receipt": "ValueError: the finalized retry has no receipt: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7c",
+  "drifted kept raw": "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-"
+ },
+ "gate_kept": {
+  "recreated_the_missing_evidence": false,
+  "reason": "ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9"
+ },
+ "gate_removed": {
+  "recreated_the_missing_evidence": true,
+  "reason": "ValueError: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpa"
+ },
+ "files_this_battery_rewrote": 61,
+ "mtime_drift_after_everything": 61,
+ "drift_outside_what_i_rewrote": [],
+ "counts": {
+  "total": 17,
+  "passed": 17
+ },
+ "failed": [],
+ "cases": [
+  "1a the old owner itself proves the historical population",
+  "1b both original attempts are replayed as complete closeouts",
+  "1c the two closeouts re-derive his replayed counts",
+  "1d exactly the unsatisfied slots are carried forward",
+  "1e the record-based input no longer exists at all",
+  "1f nothing was written by reading the population",
+  "2a no DIFFERENT reviewer's answer is ever substituted",
+  "2b the positive control is restored after every swap",
+  "2c the swaps left every byte as it was",
+  "2d every missing or drifted evidence negative refuses",
+  "2e the run is byte-identical after the negatives",
+  "2f the gate is load-bearing: without it the finalizer re-manufactures the missing completed evidence, with it the run refuses",
+  "2g the positive control returns after the gate is restored",
+  "2h only files this battery rewrote have a new mtime",
+  "3a a refusal restores the transport writers",
+  "3b old_scope restores every patched owner after a failure",
+  "3c the composite never changed a byte in the run"
+ ],
+ "ok": true
+}

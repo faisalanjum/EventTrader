@@ -1,0 +1,181 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "verdicts": [
+    {
+      "proposal_id": "0001041061-25-000109#P000",
+      "decision": "exclude",
+      "why": "Already-tested target (Less Special Items EPS quarter/YTD table) — outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-25-000109#P001",
+      "decision": "exclude",
+      "why": "Already-tested target (Pizza Hut Division unit count / geography-outside-U.S. sentence) — outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-25-000109#P002",
+      "decision": "exclude",
+      "why": "Already-tested target (Habit Burger & Grill Operating Profit (Loss) row) — outside this fresh sample regardless of its own correctness.",
+      "row": null
+    },
+    {
+      "proposal_id": "0001041061-25-000109#P003",
+      "decision": "exclude",
+      "why": "Already-tested target (KFC Division quarterly Company-sales-increase driver sentence, +6% same-store sales) — outside this fresh sample regardless of its own correctness.",
+      "row": null
+    }
+  ],
+  "additions": [
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "During the quarter ended March 31, 2024, we sold our approximate 5% minority investment in Devyani International Limited (“Devyani”), a franchise entity that operates KFC and Pizza Hut restaurants in India, for pre-tax proceeds of $104 million.",
+        "raw_label_or_claim": "sold our approximate 5% minority investment in Devyani International Limited (“Devyani”)",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "A distinct, source-stated divestiture fact (proceeds $104M) tied to the entity_ownership:devyani menu value; no supplied proposal names any Devyani-related target."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Changes in the fair value of our ownership interest in Devyani prior to the date of sale resulted in pre-tax investment losses of $20 million in the year to date ended September 30, 2024.",
+        "raw_label_or_claim": "pre-tax investment losses of $20 million",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "point_range_floor_ceiling", "slices_and_unknown_axes"]
+      },
+      "why": "A separate stated measurement (fair-value investment loss, not the sale proceeds) on the same entity_ownership:devyani population — real point-valued loss, signed negative per OD-12."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "risk",
+        "occurrence_in_part": null,
+        "quote": "There have been no material changes from the risk factors disclosed in Part I, Item 1A “Risk Factors” in our Annual Report on Form 10-K for the year ended December 31, 2024.",
+        "raw_label_or_claim": "no material changes from the risk factors disclosed in Part I, Item 1A “Risk Factors” in our Annual Report on Form 10-K for the year ended December 31, 2024",
+        "proposed_record_kind": "negative_control",
+        "proposed_hard_classes": []
+      },
+      "why": "A bare pointer/no-change statement carrying no specific current adverse fact — fails the DU-03/Rule-1 gate; correct behavior is omission, a negative control from the risk part."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "We currently anticipate the OBBBA will have a favorable impact on our ongoing effective tax rate beginning in 2026.",
+        "raw_label_or_claim": "favorable impact on our ongoing effective tax rate beginning in 2026",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["favourable_unfavourable_direction"]
+      },
+      "why": "A numberless, source-stated forward direction claim (explicit 'favorable') on the effective tax rate, distinct from any proposal and from the current-quarter OBBBA tax-expense fact."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "As of September 30, 2025, approximately 96%, including the impact of interest rate swaps, of our $11.5 billion of total debt outstanding, excluding finance leases and debt issuance costs and discounts, is fixed with an effective overall interest rate of approximately 4.5%.",
+        "raw_label_or_claim": "approximately 96%, including the impact of interest rate swaps, of our $11.5 billion of total debt outstanding, excluding finance leases and debt issuance costs and discounts, is fixed",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["point_range_floor_ceiling"]
+      },
+      "why": "A stated point value (96% of $11.5B fixed) not named by any proposal; a genuinely fresh point-shape fact."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "As a result, 283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January.",
+        "raw_label_or_claim": "283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "First complete occurrence (earlier than the differently-worded footnote (d) restatement) of a real, specific store-closure fact tied to the segment:kfcturkey / segment:phturkey menu values."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "Tax (Benefit) - Tax audit in the quarter and year to date ended September 30, 2025, reflects the benefit associated with the reversal of a reserve due to a favorable audit resolution. Such reserve was established in prior years and was originally recorded as a Special Item.",
+        "raw_label_or_claim": "benefit associated with the reversal of a reserve due to a favorable audit resolution",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["losses_and_sign", "favourable_unfavourable_direction"]
+      },
+      "why": "A stated benefit/reversal (negative sign per OD-12) explicitly framed as favorable (a 'favorable audit resolution'), fresh and unrelated to any supplied proposal."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "The year to date increase in Company sales, excluding the impacts of foreign currency translation, was driven by the KFC U.K. and Ireland restaurant acquisition (see Note 2) in the second quarter of 2024 and Company same-store sales growth of 4%.",
+        "raw_label_or_claim": "driven by the KFC U.K. and Ireland restaurant acquisition (see Note 2) in the second quarter of 2024 and Company same-store sales growth of 4%",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["slices_and_unknown_axes"]
+      },
+      "why": "A distinct YEAR-TO-DATE driver fact (period differs from the excluded quarter-scoped proposal P003 with its own 6% figure); exercises the unknown-axis KFC U.K. and Ireland acquisition token."
+    },
+    {
+      "row": {
+        "source_id": "0001041061-25-000109",
+        "part_ref": "mdna",
+        "occurrence_in_part": null,
+        "quote": "System sales and System sales excluding the impacts of foreign currency translation (“FX”) reflect the results of all restaurants regardless of ownership, including Company-owned and franchise restaurants.",
+        "raw_label_or_claim": "System sales and System sales excluding the impacts of foreign currency translation (“FX”) reflect the results of all restaurants regardless of ownership, including Company-owned and franchise restaurants.",
+        "proposed_record_kind": "real_item",
+        "proposed_hard_classes": ["portion_versus_whole"]
+      },
+      "why": "The source's own definition establishing System sales as the systemwide/whole population versus the Company-owned and franchise subsets (OD-17 population-qualifier pattern); not named by any proposal."
+    }
+  ],
+  "exclusions_considered": [
+    {
+      "quote": "On January 8, 2025, we terminated our franchise agreements with franchisee IS Gida A.S. (IS Gida), the owner and operator of KFC and Pizza Hut restaurants in Turkey and a subsidiary of IS Holding A.S., after failure by IS Gida to meet our standards.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A candidate distinct action fact adjacent to the selected Turkey store-closure fact; excluded under the representative, not exhaustive, rule rather than added merely because another lawful fact exists in the same passage."
+    },
+    {
+      "quote": "Tax Expense - U.S. OBBBA in the quarter and year to date ended September 30, 2025, reflects the tax expense recorded upon the July 4, 2025, enactment of H.R.1, commonly known as the One Big Beautiful Bill Act (“OBBBA”) in the United States.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Its numeric value ($76M) sits only in a non-contiguous table row; a numberless version would largely restate the already-selected OBBBA favorable-effective-tax-rate guidance fact — excluded as non-required repetition."
+    },
+    {
+      "quote": "We ended the quarter with a consolidated net leverage ratio of 3.7x EBITDA.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Another point-shape fact of the same hard class already represented by the debt-96%-fixed item; excluded under representative-sampling restraint."
+    },
+    {
+      "quote": "we maintain a $1.5 billion Revolving Facility under our Credit Agreement that was undrawn as of September 30, 2025",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "Another point-shape fact redundant with the debt-96%-fixed item already selected; excluded under representative-sampling restraint."
+    },
+    {
+      "quote": "In the first quarter of 2025, the Company prospectively changed its basis of presentation to round financial figures in the Financial Statements and as presented in the tabular presentations in this MD&A to the nearest whole number in millions in all instances.",
+      "part_ref": "mdna",
+      "occurrence_in_part": null,
+      "why": "A rounding/presentation methodology note, not a stated business/driver fact; whether it is boilerplate or a reportable fact is not settled by the quoted authority, so it is excluded rather than guessed into a record kind."
+    },
+    {
+      "quote": "We have begun a review of strategic options for the Pizza Hut brand.",
+      "part_ref": "mdna",
+      "occurrence_in_part": 1,
+      "why": "The underlying strategic-review initiative and its costs are already substantially carried by the Special-Items footnote (e) narrative; a second row for the same disclosed initiative is excluded under representative-sampling restraint."
+    }
+  ],
+  "open_issues": [],
+  "blocked": null
+}
+```

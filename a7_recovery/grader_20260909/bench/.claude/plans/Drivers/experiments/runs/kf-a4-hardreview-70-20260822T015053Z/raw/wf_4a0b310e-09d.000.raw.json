@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales",
+        "driver_state": "unchanged",
+        "level_low": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 21, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "comparison_baseline": "prior_year",
+        "slice_parts": ["segment:thecheesecakefactory", "channel:off-premise"],
+        "time_type": "duration",
+        "period_scope": "ytd",
+        "period_end_date": "2025-09-30",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

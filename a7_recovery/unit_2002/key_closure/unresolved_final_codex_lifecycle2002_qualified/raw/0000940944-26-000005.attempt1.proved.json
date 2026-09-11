@@ -1,0 +1,288 @@
+{
+ "source_id": "0000940944-26-000005",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "same_restaurant_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 4.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 4.2,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "blended"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and it settles as one: the quote states a real, quantified comparable-sales level for the quarter, so the frozen kind and my outcome agree."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+       "driver_name": "earnings_per_share",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 2.95,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": 2.95,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "change_value": {
+        "value": 5.4,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "change_unit": "percent_yoy",
+       "comparison_baseline": "prior_year",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "adjusted diluted",
+        "from continuing operations"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and it settles as one: a stated per-share level plus a stated year-over-year change, so the frozen kind and my outcome agree."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "asset_impairment",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": 24.7,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "in millions"
+       },
+       "level_high": {
+        "value": 24.7,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "in millions"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "fiscal_year": 2026,
+       "fiscal_quarter": 3,
+       "time_type": "duration",
+       "measurement_raw_spans": [
+        "Earnings Before Income Tax"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and it settles as one: the labelled line records an actual impairment charge taken in the quarter, a discrete one-off charge, so the frozen kind and my outcome agree."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "asset_sale",
+       "driver_state": "occurred",
+       "level_low": {
+        "value": -0.26,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_high": {
+        "value": -0.26,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "$"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "usd",
+       "fiscal_year": 2026,
+       "time_type": "duration",
+       "slice_parts": [
+        "entity_ownership:canadianolivegardenrestaurants"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Proposed as a real_item and it settles as one: the line records a real disposal of the company's Canadian Olive Garden operations with a stated per-share gain, so the frozen kind and my outcome agree."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Segment-reporting presentation note: it states only where Chuy's sales and profits are classified for reporting, giving no driver state, change, surprise, guidance or action, so the gate yields no DriverUpdate."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "exclusion",
+   "record_kind_note": "Frozen as a real_item but it carries NO fact — I say this plainly: it is a reporting-classification statement about where an acquired brand's results are presented, an accounting-presentation exclusion rather than a driver fact, so my outcome departs from the proposed kind."
+  },
+  {
+   "row_index": 6,
+   "settled": {
+    "source_id": "0000940944-26-000005",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking risk-factor boilerplate listing litigation and unfavorable publicity as things that could hurt results, with no specific current source-flagged threat, which the gate drops."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Proposed as a negative_control and it settles as one: the quote is a generic risk-factor list item of exactly the kind the gate names as boilerplate, so the frozen kind and my outcome agree."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "measurement_wording",
+    "portion_versus_whole"
+   ],
+   "reference_name": "blended same-restaurant sales",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The marker on 'same-restaurant sales1' points to a footnote excluding Chuy's and Bahama Breeze, so whether the measured population is the true consolidated whole or a qualified subset is unresolved; I kept the slice empty and recorded 'blended' as measurement."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "measurement_wording",
+    "portion_versus_whole"
+   ],
+   "reference_name": "adjusted diluted net earnings per share from continuing operations",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "'from continuing operations' is readable either as a population qualifier belonging in the name or as an uncaptured number modifier for the measurement sink; I kept it in measurement so nothing is lost, and flagged the choice."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "reference_name": "Impairment due to restaurant closures",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The quote shows four side-by-side figures for this line (24.7 pre-tax, 6.2 tax, 18.5 net, 0.16 per share) with no rule selecting one, and the brand attribution sits in a footnote outside this quote, so I took the pre-tax charge, marked its column in measurement, and coined no slice."
+  },
+  {
+   "row_index": 4,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "Gain on Olive Garden Canada sale",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The stated 0.26 is a per-share earnings reconciliation impact rather than the sale's own denominator, so per_x stays null on this action driver, and the slice kind for Olive Garden Canada (owned entity versus geography) was settled only by the exact same-meaning menu entry."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-010/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-010/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": [
+  {
+   "what": "Which column of the Q3 reported-to-adjusted table the row 3 impairment fact should carry: pre-tax 24.7, tax 6.2, after-tax 18.5, or 0.16 per share.",
+   "why": "The located quote presents all four for the same line and no quoted rule selects one; I stored the pre-tax charge and named the column in measurement rather than resolving the choice silently."
+  },
+  {
+   "what": "Whether 'from continuing operations' belongs in the driver name as a population qualifier or in measurement_raw_spans as the never-drop sink.",
+   "why": "OD-17 (population qualifiers stay in the name) and the FS-25 never-drop sink both reach it, and the answer changes the fact identity of every continuing-operations earnings fact in this event."
+  },
+  {
+   "what": "How a stated per-share magnitude attaches to an action_event driver (row 4's asset_sale).",
+   "why": "Rule 3.5 requires a stated per-X denominator to appear in the name too, but writing a per-share action driver would invent one, so the value sits in per-share dollars with per_x null pending a ruling."
+  },
+  {
+   "what": "Whether the row 4 line is an occurred transaction or a component of the fiscal 2026 forward outlook block it sits in.",
+   "why": "The block is titled an outlook reconciliation, yet the nine-month statements already show a net gain on disposal, and the guidance lane is closed to this driver because stripping '_guidance' would leave an action root, so I settled it as occurred."
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "kind": "TEST ONLY: no real approval or model calls",
+ "model_calls": 0,
+ "passed": 4,
+ "checks": [
+  "the new signed TEST key enters the actual saved-answer grading path",
+  "full36 events,191 packets,382 original answers with zero new producer calls",
+  "the signed533 baseline includes rather than re-adds the382 saved calls",
+  "all original answer bytes unchanged"
+ ],
+ "evaluation_sha256": "5456d7b64b0b5f2cff7bf59280170f3697b89796138befa105652a4febc15a1a",
+ "identity": {
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+  "contract_suffix": null,
+  "source_manifest_sha256": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+  "receipt_sha256": "8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e",
+  "a4_lock_sha256": "b135da0ef80d31c4b31e7f305a461c914a65933a1e25c0c7cd52a933d79bdbb5",
+  "a4_lock_receipt_sha256": "e389feab4cbfaee85002bebeaa1515f1e9d3367952f38fdb1c730f1e80ed74f6",
+  "corrected_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "finalizations": {
+   "primary": "2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f"
+  },
+  "executed": {
+   "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+   "run_files": 799
+  },
+  "schema": "a7_prepared_run/1",
+  "evaluation_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/TEST_codex_handoff2009_b",
+  "a6_freeze_sha256": "5456d7b64b0b5f2cff7bf59280170f3697b89796138befa105652a4febc15a1a",
+  "scheduled_calls": 382
+ }
+}

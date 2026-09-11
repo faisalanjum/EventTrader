@@ -1,0 +1,27 @@
+{
+ "attempt": 1,
+ "lanes": [
+  "G2-000/G1a",
+  "G2-000/G1b",
+  "G2-001/G1a",
+  "G2-001/G1b",
+  "G2-002/G1a",
+  "G2-002/G1b",
+  "G2-003/G1a",
+  "G2-003/G1b",
+  "G2-004/G1a",
+  "G2-004/G1b",
+  "G2-005/G1a",
+  "G2-005/G1b",
+  "G2-006/G1a",
+  "G2-006/G1b",
+  "G2-007/G1a",
+  "G2-007/G1b",
+  "G2-008/G1a",
+  "G2-008/G1b"
+ ],
+ "parent": null,
+ "root_sha256": "cea1f28cdf4e4d8d835cee5698a7c7909288bb4337924715c7f3ca4a7c8c1a9f",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 1
+}

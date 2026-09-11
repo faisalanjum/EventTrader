@@ -1,0 +1,494 @@
+{
+  "schema": "a7_source_instants/2",
+  "events": 36,
+  "supersedes": {
+    "path": "/tmp/a7_source_instants.v1.json",
+    "schema": "a7_source_instants/1"
+  },
+  "expected_tickers": 12,
+  "live_fields": [
+    "event_time"
+  ],
+  "copied_from_signed_input": [
+    "source_id",
+    "source_type",
+    "ticker",
+    "fye_month"
+  ],
+  "step5_production_adapter_risk": {
+    "what": "input fye_month differs from live Company.fiscal_year_end_month; the route is proved against the temporary test store, not the live Company adapter",
+    "events": 15,
+    "by_ticker": {
+      "BBY": 4,
+      "DAL": 4,
+      "ULTA": 3,
+      "YUM": 4
+    },
+    "rows": [
+      {
+        "source_id": "0000027904-26-000013",
+        "ticker": "DAL",
+        "input_fye_month": 12,
+        "live_company_fye_month": "6"
+      },
+      {
+        "source_id": "0000027904-26-000020",
+        "ticker": "DAL",
+        "input_fye_month": 12,
+        "live_company_fye_month": "6"
+      },
+      {
+        "source_id": "0000027904-26-000022",
+        "ticker": "DAL",
+        "input_fye_month": 12,
+        "live_company_fye_month": "6"
+      },
+      {
+        "source_id": "0000764478-25-000057",
+        "ticker": "BBY",
+        "input_fye_month": 1,
+        "live_company_fye_month": "2"
+      },
+      {
+        "source_id": "0000764478-26-000005",
+        "ticker": "BBY",
+        "input_fye_month": 1,
+        "live_company_fye_month": "2"
+      },
+      {
+        "source_id": "0001041061-25-000109",
+        "ticker": "YUM",
+        "input_fye_month": 12,
+        "live_company_fye_month": "3"
+      },
+      {
+        "source_id": "0001041061-26-000003",
+        "ticker": "YUM",
+        "input_fye_month": 12,
+        "live_company_fye_month": "3"
+      },
+      {
+        "source_id": "0001041061-26-000084",
+        "ticker": "YUM",
+        "input_fye_month": 12,
+        "live_company_fye_month": "3"
+      },
+      {
+        "source_id": "0001104659-25-118458",
+        "ticker": "ULTA",
+        "input_fye_month": 1,
+        "live_company_fye_month": "2"
+      },
+      {
+        "source_id": "0001104659-26-027061",
+        "ticker": "ULTA",
+        "input_fye_month": 1,
+        "live_company_fye_month": "2"
+      },
+      {
+        "source_id": "BBY_2026-03-03T08.00",
+        "ticker": "BBY",
+        "input_fye_month": 1,
+        "live_company_fye_month": "2"
+      },
+      {
+        "source_id": "DAL_2026-04-08T10.00",
+        "ticker": "DAL",
+        "input_fye_month": 12,
+        "live_company_fye_month": "6"
+      },
+      {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "ticker": "ULTA",
+        "input_fye_month": 1,
+        "live_company_fye_month": "2"
+      },
+      {
+        "source_id": "YUM_2026-02-04T08.15",
+        "ticker": "YUM",
+        "input_fye_month": 12,
+        "live_company_fye_month": "3"
+      },
+      {
+        "source_id": "bzNews_51962983",
+        "ticker": "BBY",
+        "input_fye_month": 1,
+        "live_company_fye_month": "2"
+      }
+    ]
+  },
+  "by_source_label": {
+    "News": 4,
+    "Report": 24,
+    "Transcript": 8
+  },
+  "by_source_type": {
+    "10k": 4,
+    "10q": 8,
+    "8k": 12,
+    "news": 4,
+    "transcript": 8
+  },
+  "rows": {
+    "0000006201-26-000031": {
+      "source_id": "0000006201-26-000031",
+      "source_type": "8k",
+      "ticker": "AAL",
+      "fye_month": 12,
+      "event_time": "2026-04-23T07:01:15-04:00",
+      "event_date": "2026-04-23",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000006201-26-000032": {
+      "source_id": "0000006201-26-000032",
+      "source_type": "10q",
+      "ticker": "AAL",
+      "fye_month": 12,
+      "event_time": "2026-04-23T07:02:52-04:00",
+      "event_date": "2026-04-23",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000027904-26-000013": {
+      "source_id": "0000027904-26-000013",
+      "source_type": "10k",
+      "ticker": "DAL",
+      "fye_month": 12,
+      "event_time": "2026-02-10T17:48:03-05:00",
+      "event_date": "2026-02-10",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000027904-26-000020": {
+      "source_id": "0000027904-26-000020",
+      "source_type": "8k",
+      "ticker": "DAL",
+      "fye_month": 12,
+      "event_time": "2026-04-08T06:30:17-04:00",
+      "event_date": "2026-04-08",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000027904-26-000022": {
+      "source_id": "0000027904-26-000022",
+      "source_type": "10q",
+      "ticker": "DAL",
+      "fye_month": 12,
+      "event_time": "2026-04-08T16:21:48-04:00",
+      "event_date": "2026-04-08",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000063908-26-000032": {
+      "source_id": "0000063908-26-000032",
+      "source_type": "8k",
+      "ticker": "MCD",
+      "fye_month": 12,
+      "event_time": "2026-02-11T16:02:36-05:00",
+      "event_date": "2026-02-11",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000092380-26-000044": {
+      "source_id": "0000092380-26-000044",
+      "source_type": "8k",
+      "ticker": "LUV",
+      "fye_month": 12,
+      "event_time": "2026-04-22T16:19:14-04:00",
+      "event_date": "2026-04-22",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000764478-25-000057": {
+      "source_id": "0000764478-25-000057",
+      "source_type": "10q",
+      "ticker": "BBY",
+      "fye_month": 1,
+      "event_time": "2025-12-05T16:57:48-05:00",
+      "event_date": "2025-12-05",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000764478-26-000005": {
+      "source_id": "0000764478-26-000005",
+      "source_type": "8k",
+      "ticker": "BBY",
+      "fye_month": 1,
+      "event_time": "2026-03-03T07:01:36-05:00",
+      "event_date": "2026-03-03",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000898173-26-000006": {
+      "source_id": "0000898173-26-000006",
+      "source_type": "8k",
+      "ticker": "ORLY",
+      "fye_month": 12,
+      "event_time": "2026-02-04T16:34:03-05:00",
+      "event_date": "2026-02-04",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000940944-25-000038": {
+      "source_id": "0000940944-25-000038",
+      "source_type": "10k",
+      "ticker": "DRI",
+      "fye_month": 5,
+      "event_time": "2025-07-18T16:34:57-04:00",
+      "event_date": "2025-07-18",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000940944-26-000005": {
+      "source_id": "0000940944-26-000005",
+      "source_type": "8k",
+      "ticker": "DRI",
+      "fye_month": 5,
+      "event_time": "2026-03-19T07:06:37-04:00",
+      "event_date": "2026-03-19",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0000940944-26-000009": {
+      "source_id": "0000940944-26-000009",
+      "source_type": "10q",
+      "ticker": "DRI",
+      "fye_month": 5,
+      "event_time": "2026-03-27T16:02:18-04:00",
+      "event_date": "2026-03-27",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001041061-25-000109": {
+      "source_id": "0001041061-25-000109",
+      "source_type": "10q",
+      "ticker": "YUM",
+      "fye_month": 12,
+      "event_time": "2025-11-07T14:19:21-05:00",
+      "event_date": "2025-11-07",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001041061-26-000003": {
+      "source_id": "0001041061-26-000003",
+      "source_type": "8k",
+      "ticker": "YUM",
+      "fye_month": 12,
+      "event_time": "2026-02-04T07:01:45-05:00",
+      "event_date": "2026-02-04",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001041061-26-000084": {
+      "source_id": "0001041061-26-000084",
+      "source_type": "10k",
+      "ticker": "YUM",
+      "fye_month": 12,
+      "event_time": "2026-02-20T16:54:25-05:00",
+      "event_date": "2026-02-20",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001058090-26-000007": {
+      "source_id": "0001058090-26-000007",
+      "source_type": "8k",
+      "ticker": "CMG",
+      "fye_month": 12,
+      "event_time": "2026-02-03T16:10:45-05:00",
+      "event_date": "2026-02-03",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001104659-25-102611": {
+      "source_id": "0001104659-25-102611",
+      "source_type": "10k",
+      "ticker": "AZO",
+      "fye_month": 8,
+      "event_time": "2025-10-27T16:37:35-04:00",
+      "event_date": "2025-10-27",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001104659-25-105631": {
+      "source_id": "0001104659-25-105631",
+      "source_type": "10q",
+      "ticker": "CAKE",
+      "fye_month": 12,
+      "event_time": "2025-11-03T17:01:27-05:00",
+      "event_date": "2025-11-03",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001104659-25-118458": {
+      "source_id": "0001104659-25-118458",
+      "source_type": "10q",
+      "ticker": "ULTA",
+      "fye_month": 1,
+      "event_time": "2025-12-04T16:09:51-05:00",
+      "event_date": "2025-12-04",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001104659-26-017090": {
+      "source_id": "0001104659-26-017090",
+      "source_type": "8k",
+      "ticker": "CAKE",
+      "fye_month": 12,
+      "event_time": "2026-02-18T16:31:17-05:00",
+      "event_date": "2026-02-18",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001104659-26-027061": {
+      "source_id": "0001104659-26-027061",
+      "source_type": "8k",
+      "ticker": "ULTA",
+      "fye_month": 1,
+      "event_time": "2026-03-12T16:07:33-04:00",
+      "event_date": "2026-03-12",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001104659-26-032757": {
+      "source_id": "0001104659-26-032757",
+      "source_type": "10q",
+      "ticker": "AZO",
+      "fye_month": 8,
+      "event_time": "2026-03-20T16:36:49-04:00",
+      "event_date": "2026-03-20",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "0001171843-26-001288": {
+      "source_id": "0001171843-26-001288",
+      "source_type": "8k",
+      "ticker": "AZO",
+      "fye_month": 8,
+      "event_time": "2026-03-03T06:55:29-05:00",
+      "event_date": "2026-03-03",
+      "source_label": "Report",
+      "source_time_property": "created"
+    },
+    "AAL_2026-04-23T08.30": {
+      "source_id": "AAL_2026-04-23T08.30",
+      "source_type": "transcript",
+      "ticker": "AAL",
+      "fye_month": 12,
+      "event_time": "2026-04-23T08:30:00-04:00",
+      "event_date": "2026-04-23",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "BBY_2026-03-03T08.00": {
+      "source_id": "BBY_2026-03-03T08.00",
+      "source_type": "transcript",
+      "ticker": "BBY",
+      "fye_month": 1,
+      "event_time": "2026-03-03T08:00:00-05:00",
+      "event_date": "2026-03-03",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "CMG_2026-02-03T16.30": {
+      "source_id": "CMG_2026-02-03T16.30",
+      "source_type": "transcript",
+      "ticker": "CMG",
+      "fye_month": 12,
+      "event_time": "2026-02-03T16:30:00-05:00",
+      "event_date": "2026-02-03",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "DAL_2026-04-08T10.00": {
+      "source_id": "DAL_2026-04-08T10.00",
+      "source_type": "transcript",
+      "ticker": "DAL",
+      "fye_month": 12,
+      "event_time": "2026-04-08T10:00:00-04:00",
+      "event_date": "2026-04-08",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "DRI_2026-03-19T08.30": {
+      "source_id": "DRI_2026-03-19T08.30",
+      "source_type": "transcript",
+      "ticker": "DRI",
+      "fye_month": 5,
+      "event_time": "2026-03-19T08:30:00-04:00",
+      "event_date": "2026-03-19",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "MCD_2026-02-11T16.30": {
+      "source_id": "MCD_2026-02-11T16.30",
+      "source_type": "transcript",
+      "ticker": "MCD",
+      "fye_month": 12,
+      "event_time": "2026-02-11T16:30:00-05:00",
+      "event_date": "2026-02-11",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "ULTA_2026-03-12T16.30": {
+      "source_id": "ULTA_2026-03-12T16.30",
+      "source_type": "transcript",
+      "ticker": "ULTA",
+      "fye_month": 1,
+      "event_time": "2026-03-12T16:30:00-04:00",
+      "event_date": "2026-03-12",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "YUM_2026-02-04T08.15": {
+      "source_id": "YUM_2026-02-04T08.15",
+      "source_type": "transcript",
+      "ticker": "YUM",
+      "fye_month": 12,
+      "event_time": "2026-02-04T08:15:00-05:00",
+      "event_date": "2026-02-04",
+      "source_label": "Transcript",
+      "source_time_property": "conference_datetime"
+    },
+    "bzNews_42014391": {
+      "source_id": "bzNews_42014391",
+      "source_type": "news",
+      "ticker": "MCD",
+      "fye_month": 12,
+      "event_time": "2024-11-15T12:10:22-05:00",
+      "event_date": "2024-11-15",
+      "source_label": "News",
+      "source_time_property": "created"
+    },
+    "bzNews_49256211": {
+      "source_id": "bzNews_49256211",
+      "source_type": "news",
+      "ticker": "CMG",
+      "fye_month": 12,
+      "event_time": "2025-12-08T09:16:59-05:00",
+      "event_date": "2025-12-08",
+      "source_label": "News",
+      "source_time_property": "created"
+    },
+    "bzNews_50877032": {
+      "source_id": "bzNews_50877032",
+      "source_type": "news",
+      "ticker": "AAL",
+      "fye_month": 12,
+      "event_time": "2026-02-26T01:28:06-05:00",
+      "event_date": "2026-02-26",
+      "source_label": "News",
+      "source_time_property": "created"
+    },
+    "bzNews_51962983": {
+      "source_id": "bzNews_51962983",
+      "source_type": "news",
+      "ticker": "BBY",
+      "fye_month": 1,
+      "event_time": "2026-04-22T07:03:20-04:00",
+      "event_date": "2026-04-22",
+      "source_label": "News",
+      "source_time_property": "created"
+    }
+  }
+}

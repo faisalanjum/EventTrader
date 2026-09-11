@@ -1,0 +1,25 @@
+```json
+{
+  "source_id": "AAL_2026-04-23T08.30",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "per_x": "share",
+      "item": {
+        "driver_name": "earnings_per_share",
+        "driver_state": "reported",
+        "level_low": {"value": -40, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_high": {"value": -40, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+        "level_shape_hint": "point",
+        "level_unit": "usd",
+        "measurement_raw_spans": ["adjusted", "diluted"],
+        "fiscal_quarter": 1,
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

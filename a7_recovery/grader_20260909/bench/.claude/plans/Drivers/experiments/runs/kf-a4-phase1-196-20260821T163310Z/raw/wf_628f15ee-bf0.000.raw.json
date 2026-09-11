@@ -1,0 +1,39 @@
+```json
+{
+  "packet_id": "bzNews_51962983#195",
+  "settled": {
+    "source_id": "bzNews_51962983",
+    "facts": [
+      {
+        "fact_type": "action_event",
+        "item": {
+          "driver_name": "ceo_appointment",
+          "driver_state": "announced",
+          "fiscal_quarter": 3,
+          "time_type": "instant"
+        }
+      }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+  },
+  "reconciliation": [
+    {
+      "lane_id": "bzNews_51962983#195/L1",
+      "exact_match": true,
+      "why": "L1's driver_name (ceo_appointment), driver_state (announced), fiscal_quarter (3), and time_type (instant), with fiscal_year omitted, match the settled reply exactly."
+    },
+    {
+      "lane_id": "bzNews_51962983#195/L2",
+      "exact_match": false,
+      "why": "L2 adds fiscal_year=2027, a value the title never states ('Effective At End Of Q3' names no year); the settled reply leaves fiscal_year null rather than guess it."
+    }
+  ],
+  "ambiguities": [
+    {
+      "what": "Whether fiscal_quarter=3 may stand without an accompanying fiscal_year.",
+      "why": "The title states only 'end of Q3' with no fiscal year; Rule 6 says fiscal_year normally accompanies a quarter but does not require inventing one, so the settled reply records the quarter alone and treats the missing year as unresolved rather than guessed."
+    }
+  ]
+}
+```

@@ -1,0 +1,13 @@
+source cards are rebuilt and validated by the existing reference owner PASS
+complete G1 question freeze has no missing identity or accounting PASS
+only the derived two blind readings per nonempty batch are planned PASS
+each question occurs in exactly one event batch PASS
+G1 rebuild is byte-identical PASS
+source context retains the original manifest identity PASS
+all original source contexts revalidate from their actual bytes PASS
+both original arms and their union reach the existing matcher PASS
+every event and leg reaches the real public no-write route once PASS
+final meaning/extras grading remains refused until real identity judgments exist PASS
+the source-key role does not alter the Sonnet grader role PASS
+every original answer byte remains unchanged PASS
+TEST pipeline: 12 checks passed; no AI or database writes

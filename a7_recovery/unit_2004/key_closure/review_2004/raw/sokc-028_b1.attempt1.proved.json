@@ -1,0 +1,174 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "system_wide_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 140, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 140, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 5.5, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["constant currency"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "change_value": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "change_unit": "percent_yoy",
+              "slice_parts": ["segment:usmarket"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "comparable_sales_surprise",
+              "driver_state": "beat",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "consensus",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "favorable",
+                "basis": "metric_meaning",
+                "evidence": "Higher comparable-sales growth than expected is an unambiguously favorable outcome for a retailer, with no mainstream counter-story.",
+                "sentence": "comp sales for the quarter were up 6.8%, which was above our expectations and was driven by positive check and guest count growth."
+              },
+              "slice_parts": ["segment:usmarket"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "operating_margin_surprise",
+              "driver_state": "in_line",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "consensus",
+              "has_favorability_wording": true,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 750, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 750, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["segment:usmarketandinternationaloperatedmarkets"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 1000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 1000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:china"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 6,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic forward-looking-statements legal disclaimer pointing to the earnings release/8-K, not a real statement about a driver's state, change, surprise, guidance, or action — it fails Rule 1's boilerplate gate."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The six located items describe six distinct, unrelated facts — total system-wide sales growth, U.S. comparable-sales performance vs. expectations, full-year adjusted operating margin vs. expectations, a U.S./IOM restaurant-openings target, a China restaurant-openings target, and a generic forward-looking-statements legal disclaimer — none of which share the same driver, metric, or claim, so they cannot be one underlying fact."
+}
+```

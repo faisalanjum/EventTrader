@@ -1,0 +1,24 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "effective_tax_rate",
+        "driver_state": "unknown",
+        "level_low": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 25, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "range",
+        "level_unit": "percent",
+        "fiscal_year": 2026,
+        "time_type": "duration",
+        "measurement_raw_spans": ["Excluding the mark-to-market results"],
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

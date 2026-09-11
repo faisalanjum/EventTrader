@@ -1,0 +1,67 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "0000006201-26-000032",
+ "ordinal_one_based": 2,
+ "ordinal_receipt": 1,
+ "attempt_number": 2,
+ "run_id": "wf_0698a0bc-18a",
+ "agent_id": "ab337b287280e43e1",
+ "raw_sha256": "234f67f81a06c70371a02ee36bcf3e06c8909bda0b48b1c65ff68308889e0f24",
+ "prompt_sha256": "3c345666385d40220fad7a1ad086e8fcdddb0613ca6ecc28d12da87b5e5c57bd",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 6,
+  "additions": 8,
+  "exclusions_considered": 4,
+  "open_issues": 1
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"Whether AAG (parent) and American (wholly-owned subsidiary co-registrant) count as the same 'scope' for the within-event fuse-before-collision rule, or as distinct scopes requiring separate "
+ ],
+ "locator": {
+  "additions": {
+   "located": 8,
+   "not_located": [],
+   "total_with_quote": 8
+  },
+  "exclusions_considered": {
+   "located": 3,
+   "not_located": [
+    {
+     "index": 1,
+     "problem": "quote occurs 2x in this part \u2014 occurrence_in_part required",
+     "quote_head": "Other operating revenue increased $232 million, or 23.9%, in"
+    }
+   ],
+   "total_with_quote": 4
+  }
+ },
+ "receipt_attempts": 3,
+ "receipt_missing": 34,
+ "receipt_other_problems": [
+  "the run accepted 2 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 1,
+  "attempt": 2,
+  "source_id": "0000006201-26-000032",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_0698a0bc-18a.json",
+  "agent_id": "ab337b287280e43e1",
+  "raw_name": "0000006201-26-000032.attempt2.complete.raw.json"
+ }
+}

@@ -1,0 +1,7 @@
+attempt	codex_scope2002_qualified
+payload	../../unit_1997/ledger/../../unit_2002/ledger/check_final_scope_2002.py
+map	../unit_1997/../unit_2002/map_lifecycle_2002.tsv
+wrapper_pid	3512840
+payload_pid	3512844
+started_utc	2026-09-10T21:38:42Z
+state	finished exit 0

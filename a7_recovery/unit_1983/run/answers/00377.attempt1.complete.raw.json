@@ -1,0 +1,10 @@
+```json
+{
+  "source_id": "YUM_2026-02-04T08.15",
+  "facts": [],
+  "abstentions": [
+    {"reason": "Announcement of the date/time of the next earnings call is administrative/boilerplate scheduling information, not a statement about a driver's state, change, surprise, guidance, or action."}
+  ],
+  "continuity_hints": []
+}
+```

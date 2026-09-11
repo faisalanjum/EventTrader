@@ -1,0 +1,207 @@
+{
+ "members": [
+  {
+   "member_index": 1,
+   "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "store_count",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 84,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_high": {
+        "value": 84,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "point",
+       "level_unit": "count",
+       "period_start_date": "2025-11-01",
+       "period_end_date": "2025-11-01",
+       "time_type": "instant",
+       "slice_parts": [
+        "geography:gb",
+        "geography:ie",
+        "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 2,
+   "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "joint_venture",
+       "driver_state": "continued",
+       "slice_parts": [
+        "geography:mexico"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 3,
+   "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "interest_coverage_ratio_covenant",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 4.0,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": null
+       },
+       "level_shape_hint": "floor",
+       "level_unit": "x",
+       "time_type": "instant",
+       "slice_parts": [
+        "unknown:us-gaap:BusinessAcquisitionAxis__spacenk"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 4,
+   "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking cautionary bullet about the possibility of not realizing anticipated Space NK acquisition benefits: it states no current, source-flagged specific adverse threat and no actual state, change, guide, or completed action, so the gate drops it as risk boilerplate."
+     }
+    ],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 5,
+   "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "credit_facility_base_rate_margin",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 0.5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 1.0,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "range",
+       "level_unit": "percent",
+       "time_type": "instant"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 6,
+   "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "share_repurchase_program",
+       "driver_state": "announced",
+       "level_high": {
+        "value": 3.0,
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion"
+       },
+       "level_shape_hint": "ceiling",
+       "level_unit": "m_usd",
+       "month": 10,
+       "fiscal_year": 2024,
+       "time_type": "instant",
+       "slice_parts": [
+        "unknown:srt:ShareRepurchaseProgramAxis__october2024sharerepurchaseprogram"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "share_repurchase_program",
+       "driver_state": "canceled",
+       "month": 10,
+       "fiscal_year": 2024,
+       "time_type": "instant",
+       "slice_parts": [
+        "unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  },
+  {
+   "member_index": 7,
+   "settled": {
+    "source_id": "0001104659-25-118458",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "credit_facility_term_sofr_margin",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 1.5,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 2.0,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "range",
+       "level_unit": "percent",
+       "time_type": "instant"
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   }
+  }
+ ],
+ "members_are_one_fact": true,
+ "reason": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reading built from this event's own already-proved settlements; it is not a judgment."
+}

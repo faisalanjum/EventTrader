@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2006/check_reuse_boundaries_2006.py", line 111, in <module>
+    assert PR.reuse(str(frozen_root), pin)['run_dir'] == primary
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_prepared_run.py", line 320, in reuse
+    raise ValueError("the saved evaluation no longer rederives from its evidence")
+ValueError: the saved evaluation no longer rederives from its evidence

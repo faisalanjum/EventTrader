@@ -1,0 +1,361 @@
+```json
+{
+  "source_id": "0000006201-26-000031",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "unknown",
+              "level_low": {"value": 13.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 16.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as a real Q2 2026 forward revenue-growth guidance fact; confirmed, though the name drops the source word 'total' in favor of the empty-slice whole-company convention."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located quote 'Net loss excluding net special items $ (267) $ (386) (30.8%)' is a bare reconciliation-table row carrying no scale wording of its own beyond a bare '$'; the '(in millions, except share and per share amounts)' marker that fixes the true multiplier sits in the table's caption outside this quote. The quote must itself carry its scale (owner ruling 2), so multiplier=1 cannot be assumed and no lawful numeric fact can be built; abstain."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item, but the quote's dollar figures have no in-quote scale marker beyond a bare '$', so it is excluded (abstained) rather than stored as a guessed-scale fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "change_value": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as a real whole-company unit-revenue metric fact (7.6% YoY); confirmed, name drops 'total' per the whole-company empty-slice convention."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 17.35, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 17.35, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 16.30, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_high": {"value": 16.30, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["product:passenger"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as a real passenger-sliced unit-revenue metric fact (17.35 vs 16.30 cents); confirmed."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "winter_storms",
+              "driver_state": "occurred",
+              "level_low": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -320, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["estimated"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as a real one-off action-event fact (an estimated $320M adverse revenue impact from winter storms); confirmed."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "unknown",
+              "value_text": "modest profitability",
+              "conditions": "assuming the current forward fuel curve",
+              "company_confirmed": true,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settles as a real numberless FY2026 net-income/profitability guidance fact confirmed by the CEO; confirmed."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote 'Total operating revenues 13,912 12,551 10.8' is a bare income-statement table row with no scale wording inside it; the '(In millions, except share and per share amounts)' caption that fixes the multiplier sits in the statement header outside this quote. The quote must itself carry its scale, so this item cannot be lawfully resolved; abstain."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item, but the located quote carries no in-quote scale marker, so it is excluded (abstained) rather than stored."
+    },
+    {
+      "row_index": 8,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:domesticdestination", "product:passenger"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          },
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:pacificdestination", "product:passenger"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          },
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "revenue_per_available_seat_mile",
+              "driver_state": "increased",
+              "change_value": {"value": 16.7, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:atlanticdestination", "product:passenger"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a single real_item naming only Atlantic, but per owner ruling 1 (raw_label_or_claim cannot suppress another fact present in the quote) the quote also states real, numberless domestic and Pacific unit-revenue growth facts, so three facts are settled instead of one."
+    },
+    {
+      "row_index": 9,
+      "settled": {
+        "source_id": "0000006201-26-000031",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The quote 'Net loss $ (382) $ (473) (19.2)' is a bare income-statement table row; the '(In millions, except share and per share amounts)' caption fixing the dollar multiplier, and the 'Percent Increase (Decrease)' header identifying the third column as a percent, both sit outside this quote. The quote must itself carry its scale, so no lawful fact can be resolved; abstain."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item, but the located quote carries no in-quote scale or column-identity markers, so it is excluded (abstained) rather than stored."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'total' should remain in driver_name (matching the source's own 'total revenue growth' wording) or be dropped in favor of an empty slice_parts list signaling whole-company scope, given the release separately reports passenger/cargo/other revenue components."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'total' should remain in driver_name given the source's own parallel 'Passenger revenue per ASM' line distinguishes it from this whole-company figure, versus relying solely on the empty slice to signal consolidated scope."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the $320 million figure belongs in level_low/level_high (event magnitude) versus change_value, and whether a negative sign is correct given the source calls it a revenue 'impact' rather than an explicit loss/charge/benefit term."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": [],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'we still anticipate modest profitability for the year' is explicit reaffirmation language (per owner ruling 8's 'remains on track' standard) versus a first bare qualitative guide; settled as unknown since 'still anticipate' is not among the enumerated explicit-reaffirmation phrasings."
+    },
+    {
+      "row_index": 8,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison", "slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the domestic entity's unit-revenue growth in this sentence specifically means passenger revenue per ASM (as the preceding sentence and the by-region table imply) or a broader all-revenue-types unit revenue, since the word 'passenger' in this sentence is grammatically attached only to the Atlantic clause."
+    },
+    {
+      "row_index": 8,
+      "fact_index": 1,
+      "hard_classes": ["sequential_comparison", "slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the Pacific entity's unit-revenue growth in this sentence specifically means passenger revenue per ASM or a broader all-revenue-types unit revenue, since 'passenger' is grammatically attached only to the Atlantic clause."
+    },
+    {
+      "row_index": 8,
+      "fact_index": 2,
+      "hard_classes": ["sequential_comparison", "slices_and_unknown_axes", "portion_versus_whole"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000006201-26-000031#000",
+      "agrees": false,
+      "why": "The lead keeps 'total' in driver_name ('total_revenue'); this settlement drops it in favor of the empty-slice whole-company convention, though the numeric range, unit, period and company_confirmed all match."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#001",
+      "agrees": true,
+      "why": "The lead abstains for the identical Rule-5.6-style reason: the dollar figures have no in-quote scale marker beyond a bare '$', and the 'in millions' caption sits in a header outside the quote."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#002",
+      "agrees": false,
+      "why": "The lead keeps 'total' in driver_name ('total_revenue_per_available_seat_mile'); this settlement drops it, otherwise the change value, unit, baseline and period match."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#003",
+      "agrees": true,
+      "why": "The lead's settled record matches this settlement field for field: driver_name revenue_per_available_seat_mile, slice_parts [product:passenger], point-shaped level/comparison values, level_unit usd, prior_year baseline, and Q1 FY2026 period."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#004",
+      "agrees": true,
+      "why": "The lead's settled record matches this settlement exactly: action_event/winter_storms/occurred, point-shaped -320 million level, m_usd unit, 'estimated' measurement span, Q1 FY2026."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#005",
+      "agrees": true,
+      "why": "The lead's settled record matches this settlement field for field: guidance/net_income/unknown, value_text 'modest profitability', conditions clause, company_confirmed true, fiscal_year 2026."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#006",
+      "agrees": true,
+      "why": "The lead abstains for the same reason: the operating-revenue table row has no in-quote scale marker and the millions caption sits outside the quote."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#007",
+      "agrees": false,
+      "why": "The lead settles only the Atlantic fact and omits the domestic and Pacific unit-revenue growth statements that owner ruling 1 requires be extracted as separate real facts from the same quote."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000031#008",
+      "agrees": true,
+      "why": "The lead abstains for the same reason: the net-loss table row has no in-quote scale or column-identity markers, forcing abstention."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether 'total' should be dropped from driver names for whole-company facts (rows 1 and 3), relying solely on an empty slice_parts list to signal consolidated scope, versus keeping the source's own 'total revenue'/'total unit revenue' wording in the name.",
+      "why": "Rule 7 outcome 4 and Rule 3.10's ban on bare category words support dropping it, but the filing itself repeatedly and deliberately uses 'total' to distinguish whole-company figures from passenger-only ones, so a naming-convention ruling would remove residual doubt before catalog admission."
+    },
+    {
+      "what": "Whether the numberless domestic and Pacific unit-revenue growth statements in row 8 should carry a product:passenger slice by contextual inference, or remain unsliced (all-revenue-types) since the word 'passenger' in that sentence is grammatically attached only to the Atlantic clause.",
+      "why": "The by-region table's Passenger revenue per ASM figures for Domestic (6.6%) and Pacific (7.8%) are consistent with, but not proven equal to, this quote's unnumbered 'positive growth' claims, so the slice choice is a judgment call that changes each fact's identity."
+    }
+  ]
+}
+```

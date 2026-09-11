@@ -1,0 +1,107 @@
+```json
+{
+  "members": [
+    {
+      "member_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:refinery"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "measurement_raw_spans": ["adjusted"],
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "passenger_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 11, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:atlanticdestination"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is generic boilerplate stating no material changes to previously disclosed risk factors, not a real statement about a driver's state, change, surprise, guidance, or action (Rule 1.2)."}
+        ],
+        "continuity_hints": []
+      }
+    },
+    {
+      "member_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This describes a change in how the company presents its non-GAAP adjusted-results reconciliation (excluding certain hedge settlement gains/losses on on-hand Monroe inventory, applied retroactively to prior-period reconciliations); it is a definitional accounting-presentation construct, not a substantive business driver's state, change, surprise, guidance, or discrete action."}
+        ],
+        "continuity_hints": []
+      }
+    }
+  ],
+  "members_are_one_fact": false,
+  "reason": "The five located items describe entirely distinct, unrelated facts — the refinery segment's operating loss, whole-company adjusted total revenue growth, Atlantic-region passenger revenue growth, a boilerplate no-risk-factor-change statement, and a non-GAAP reconciliation presentation-methodology note — so they cannot be one underlying fact."
+}
+```

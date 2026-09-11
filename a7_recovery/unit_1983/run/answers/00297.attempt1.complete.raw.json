@@ -1,0 +1,23 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "guidance",
+      "item": {
+        "driver_name": "revenue",
+        "driver_state": "introduced",
+        "level_low": {"value": 41.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 42.1, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "range",
+        "level_unit": "m_usd",
+        "time_type": "duration",
+        "fiscal_year": 2027,
+        "company_confirmed": true
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

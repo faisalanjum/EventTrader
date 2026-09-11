@@ -1,0 +1,26 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "operating_income",
+        "driver_state": "decreased",
+        "level_low": {"value": 5.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_high": {"value": 5.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "change_value": {"value": -212, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+        "change_unit": "m_usd",
+        "comparison_baseline": "prior_year",
+        "measurement_raw_spans": ["adjusted (a non-GAAP financial measure)"],
+        "time_type": "duration",
+        "fiscal_year": 2025
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

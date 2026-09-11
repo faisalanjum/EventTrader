@@ -1,0 +1,38 @@
+```json
+{
+  "source_id": "BBY_2026-03-03T08.00",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "operating_margin",
+        "driver_state": "reported",
+        "level_low": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_high": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "level_shape_hint": "point",
+        "level_unit": "percent",
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "measurement_raw_spans": ["adjusted"]
+      }
+    },
+    {
+      "fact_type": "surprise",
+      "item": {
+        "driver_name": "operating_margin",
+        "driver_state": "beat",
+        "surprise_basis_hint": "actual",
+        "comparison_baseline": "previous_guidance",
+        "has_favorability_wording": true,
+        "time_type": "duration",
+        "fiscal_quarter": 4,
+        "fiscal_year": 2026,
+        "measurement_raw_spans": ["adjusted"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```

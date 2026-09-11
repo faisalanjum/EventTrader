@@ -1,0 +1,346 @@
+{
+ "source_id": "0000063908-26-000032",
+ "rows": [
+  {
+   "row_index": 1,
+   "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "restructuring_costs",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 80,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 80,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "measurement_raw_spans": [
+        "pre-tax"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Frozen proposal real_item is confirmed: the row states a specific, stated-value restructuring charge for the quarter, which is a real metric fact, not a control or an exclusion."
+  },
+  {
+   "row_index": 2,
+   "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "gains_and_charges",
+       "driver_state": "reported",
+       "level_low": {
+        "value": -71,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": -71,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "time_type": "duration",
+       "fiscal_year": 2024,
+       "fiscal_quarter": 4,
+       "measurement_raw_spans": [
+        "Net pre-tax"
+       ]
+      }
+     },
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "gains_and_charges",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 70,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_high": {
+        "value": 70,
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "m_usd",
+       "time_type": "duration",
+       "fiscal_year": 2024,
+       "measurement_raw_spans": [
+        "net pre-tax"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "business_divestiture",
+       "driver_state": "occurred",
+       "slice_parts": [
+        "geography:south korea"
+       ]
+      }
+     },
+     {
+      "fact_type": "action_event",
+      "item": {
+       "driver_name": "business_acquisition",
+       "driver_state": "occurred",
+       "slice_parts": [
+        "unknown:us-gaap:BusinessAcquisitionAxis__israelmarket"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Frozen proposal real_item is confirmed: the row carries stated prior-year net gain and net charge amounts plus two completed transactions, so it settles as real facts rather than a control."
+  },
+  {
+   "row_index": 3,
+   "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "comparable_sales",
+       "driver_state": "increased",
+       "level_low": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 6.8,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent_yoy",
+       "time_type": "duration",
+       "fiscal_year": 2025,
+       "fiscal_quarter": 4,
+       "slice_parts": [
+        "segment:u_s_market"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Frozen proposal real_item is confirmed: the row states a directional, numeric comparable-sales change for the company's U.S. part, which is a real metric fact."
+  },
+  {
+   "row_index": 4,
+   "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [],
+    "abstentions": [
+     {
+      "reason": "Generic forward-looking-statements safe-harbor boilerplate: it names no driver and states no state, change, surprise, guidance or action, so the gate drops it."
+     }
+    ],
+    "continuity_hints": []
+   },
+   "final_outcome": "control",
+   "record_kind_note": "Frozen proposal negative_control is confirmed: the sentence is standard safe-harbor language carrying no driver fact, so it correctly yields none."
+  },
+  {
+   "row_index": 5,
+   "settled": {
+    "source_id": "0000063908-26-000032",
+    "facts": [
+     {
+      "fact_type": "metric",
+      "item": {
+       "driver_name": "franchised_restaurant_share",
+       "driver_state": "reported",
+       "level_low": {
+        "value": 95,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_high": {
+        "value": 95,
+        "scale_multiplier": 1,
+        "unit_scale_evidence": "%"
+       },
+       "level_shape_hint": "point",
+       "level_unit": "percent",
+       "time_type": "instant",
+       "measurement_raw_spans": [
+        "Approximately"
+       ]
+      }
+     }
+    ],
+    "abstentions": [],
+    "continuity_hints": []
+   },
+   "final_outcome": "fact",
+   "record_kind_note": "Frozen proposal real_item is confirmed: although it sits in the descriptive company blurb, it states a specific re-readable ownership-mix level, not a bare mention or risk boilerplate."
+  }
+ ],
+ "review": [
+  {
+   "row_index": 1,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "reference_name": "restructuring charges associated with Accelerating the Organization",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "It is ambiguous whether the internal programme label 'Accelerating the Organization' should specialise the name or stay out of it as a company-internal initiative; I kept the bare-root restructuring_costs name."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "reference_name": "Net pre-tax gains of $71 million",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The source states a positive $71 million of gains while the signed axis requires a benefit to be negative, so the stored value's sign deliberately differs from the printed figure."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 1,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "losses_and_sign",
+    "measurement_wording"
+   ],
+   "reference_name": "net pre-tax charges of $70 million",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The co-stated 'or $0.08 per share' is the same underlying item restated on a per-share denominator, and I recorded it as one fact rather than a second per-share record."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 2,
+   "hard_classes": [
+    "slices_and_unknown_axes"
+   ],
+   "reference_name": "the sale of McDonald's business in South Korea",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The disposal is named only as the association of the charges, so whether it is an asserted action fact of this event or contextual reference is genuinely arguable, and no menu value existed so the geography kind was coined."
+  },
+  {
+   "row_index": 2,
+   "fact_index": 3,
+   "hard_classes": [
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "the acquisition of McDonald's business in Israel",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The Israel part reuses an existing unknown-axis menu token while the South Korea part had to be coined as a geography, so two comparable parts carry different kinds."
+  },
+  {
+   "row_index": 3,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "sequential_comparison",
+    "slices_and_unknown_axes",
+    "ambiguous_menus"
+   ],
+   "reference_name": "U.S.",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "The U.S. label appears in the menu under both segment and entity_ownership kinds and under two differently spelled segment tokens, so the exact reuse token is not fully determined even though the reporting-segment framing selects segment."
+  },
+  {
+   "row_index": 5,
+   "fact_index": 0,
+   "hard_classes": [
+    "point_range_floor_ceiling",
+    "portion_versus_whole",
+    "measurement_wording"
+   ],
+   "reference_name": "Approximately 95% of McDonald’s restaurants worldwide are owned and operated by independent local business owners",
+   "du_worthy": true,
+   "gold_extra": {
+    "expectation_comparison_present": false
+   },
+   "ambiguity_note": "It is ambiguous whether the franchised population belongs in the name as a portion qualifier or as the channel:franchisedunits menu slice, since slicing it would leave a meaningless whole-company base driver."
+  }
+ ],
+ "groups": [],
+ "lead_reconciliation": [
+  {
+   "lead_id": "sokc-005/b1",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  },
+  {
+   "lead_id": "sokc-005/b2",
+   "agrees": true,
+   "why": "SYNTHETIC-CLOSURE-FIXTURE-2000: a stand-in reconciliation; no meaning was decided."
+  }
+ ],
+ "open_issues": [
+  {
+   "what": "Row 3 slice token cannot be pinned to one exact menu string.",
+   "why": "The menu carries segment:u_s_market, segment:usmarket, entity_ownership:u_s_market and entity_ownership:usmarket for the same U.S. meaning, so exact-token reuse (which drives fact identity) is not decidable from this event alone."
+  },
+  {
+   "what": "Row 5 name-versus-slice placement of the franchised population is unresolved.",
+   "why": "The portion rule keeps population qualifiers in the name while the slice rule sends the company's own channel to the slice, and a channel:franchisedunits menu value exists; the two rules point opposite ways for a share-of-total metric."
+  },
+  {
+   "what": "Row 2's aggregate gains/charges driver name is provisional.",
+   "why": "The $71M/$70M figures are a net bundle of property sale gains, transaction costs and impairments that cannot be split by value, so no single cause name is fully supported and the source's own '(Gains)/Charges, net' label was used."
+  },
+  {
+   "what": "Row 2's per-share restatements ($0.07 and $0.08 per share) were not written as separate per-share records.",
+   "why": "The 'or ... per share' construction reads as one fact restated, which the once-only rule forbids duplicating, yet the different-denominator naming rule would make it a distinct driver; the two rules conflict here."
+  }
+ ]
+}

@@ -1,0 +1,67 @@
+{
+ "kind": "REAL_SOURCE_EVENT_PROOF",
+ "source_id": "ULTA_2026-03-12T16.30",
+ "ordinal_one_based": 31,
+ "ordinal_receipt": 30,
+ "attempt_number": 1,
+ "run_id": "wf_02337e89-9f7",
+ "agent_id": "af979bd21d6f500be",
+ "raw_sha256": "a82a65f6534fc6c53bfdc9c851fb1653b80a57cdcdbdbcca15ee0e929317f070",
+ "prompt_sha256": "68fc90e55d8c44a278cda4aded44da4c92bbf38913e56a8348cc1255f8bf1123",
+ "package_manifest_sha256": "35a2142740b2fe3c296fdf23212d14dc3be60570e024e9b9a2bdf551a98d8fad",
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "attempt_evidence_problems": [],
+ "retry_lawful": [
+  false,
+  "a schema-valid reply is a semantic result"
+ ],
+ "parse_reply": "ok",
+ "event_shape_problems": [],
+ "counts": {
+  "verdicts": 8,
+  "additions": 14,
+  "exclusions_considered": 7,
+  "open_issues": 1
+ },
+ "blocked": null,
+ "open_issues": [
+  "{'what': \"Whether an unattributed, company-stated expectation about industry-wide category growth (e.g. 'beauty category growth ... 2% to 4% range') counts as a real Driver fact under the DU-03/Rule-1"
+ ],
+ "locator": {
+  "additions": {
+   "located": 13,
+   "not_located": [
+    {
+     "index": 11,
+     "problem": "quote does not occur in the named part (fabricated locator)",
+     "quote_head": "We beat and raised throughout the year. And we exceeded on a"
+    }
+   ],
+   "total_with_quote": 14
+  },
+  "exclusions_considered": {
+   "located": 7,
+   "not_located": [],
+   "total_with_quote": 7
+  }
+ },
+ "receipt_attempts": 33,
+ "receipt_missing": 4,
+ "receipt_other_problems": [
+  "the run accepted 32 tasks, not the scheduled 36"
+ ],
+ "attempt": {
+  "task": "event",
+  "ordinal": 30,
+  "attempt": 1,
+  "source_id": "ULTA_2026-03-12T16.30",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_02337e89-9f7.json",
+  "agent_id": "af979bd21d6f500be",
+  "raw_name": "ULTA_2026-03-12T16.30.attempt1.complete.raw.json"
+ }
+}

@@ -1,0 +1,261 @@
+```json
+{
+  "source_id": "0000006201-26-000032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "pretax_income",
+              "driver_state": "increased",
+              "level_low": {"value": -476, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -476, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -648, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -648, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: the sentence states a genuine reported pretax-loss level versus its prior-year value, so it is a real metric fact (pretax_income), one of two distinct facts carried by this shared quote."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "operating_cost_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 19.38, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 19.38, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 18.34, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_high": {"value": 18.34, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: the quote states an explicit CASM level and its prior-year comparison with a stated increase, a real per-unit metric fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_operating_revenues",
+              "driver_state": "increased",
+              "level_low": {"value": 13.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 13.9, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 1.4, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: total operating revenues with a stated level and a stated dollar change versus the prior-year period is a real metric fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This is a generic, forward-looking statement of ordinary financing intent/policy ('we intend to finance future aircraft deliveries and option exercises using long-term debt') naming no discrete transaction, decision, or measurable driver state/change and no specific forecast value, so it fails the fact gate as boilerplate (Rule 1.2)."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as negative_control and confirmed: the statement is routine capital-structure intent with no discrete fact, correctly yielding no DriverUpdate."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Covenant compliance is stated only 'as of the most recent applicable measurement dates,' a vague period the surrounding text ties to different annual/semiannual/ratio-triggered measurement cadences across debt instruments, so the fact's required period cannot be safely resolved to any period field or dateless horizon, forcing abstention under Rule 6 rather than guessing the filing's own quarter-end."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as negative_control and confirmed: the covenant-compliance sentence's stated-but-unresolvable period and generic phrasing correctly yield no DriverUpdate."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000006201-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "increased",
+              "level_low": {"value": -382, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -382, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -473, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -473, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and confirmed: the same shared sentence also states a genuine reported net-loss level versus its prior-year value, a second distinct fact (net_income) alongside row 1's pretax_income."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source states both a $1.4 billion dollar change and a 10.8% change for the same prior-year comparison; the rules do not specify a priority between a co-stated dollar delta and percent delta, so choosing to store the dollar-denominated change_value (matching level_unit m_usd) over a percent representation is a defensible but not uniquely forced reading."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [1, 6],
+      "members_are_one_fact": false,
+      "reason": "The shared sentence co-states two distinct standard income-statement lines with different values (pre-tax loss $476M vs $648M; net loss $382M vs $473M); per Rule 3.9 a loss is the negative region of its own specifically named base metric, so pretax_income and net_income are different drivers reported together in one sentence, not one fact stated twice."
+    }
+  ],
+  "lead_reconciliation": [
+    {
+      "lead_id": "phase1/0000006201-26-000032#009",
+      "agrees": true,
+      "why": "Matches my settled row-1 pretax_income fact field-for-field: signed point values -476/-648 in m_usd, prior_year baseline, duration, Q1 FY2026."
+    },
+    {
+      "lead_id": "hr-028/b1/row1",
+      "agrees": true,
+      "why": "Matches my group decision that rows 1 and 6 are two distinct facts (pretax_income and net_income) rather than one, and the settled values for both members match mine exactly."
+    },
+    {
+      "lead_id": "hr-028/b2/row1",
+      "agrees": true,
+      "why": "Same content and same members_are_one_fact=false conclusion as mine, differing only in immaterial field ordering."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000032#010",
+      "agrees": true,
+      "why": "Matches my settled row-2 CASM fact: same driver_name, point level 19.38 vs comparison 18.34 in cents (usd, multiplier 0.01), prior_year baseline, duration, Q1 FY2026, no invented period dates."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000032#011",
+      "agrees": true,
+      "why": "Matches my settled row-3 total_operating_revenues fact including the same dollar-based change_value choice and the same flagged ambiguity about dollar-vs-percent representation."
+    },
+    {
+      "lead_id": "hr-000/b1/row4",
+      "agrees": true,
+      "why": "Same abstention outcome and same substantive reason (generic forward financing-intent boilerplate fails Rule 1.2)."
+    },
+    {
+      "lead_id": "hr-000/b2/row4",
+      "agrees": true,
+      "why": "Same abstention outcome and same substantive reason as mine for row 4."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000032#013",
+      "agrees": true,
+      "why": "Same abstention outcome and same substantive reason (unresolvable covenant-measurement period triggers Rule 6 abstention) as mine for row 5."
+    },
+    {
+      "lead_id": "phase1/0000006201-26-000032#014",
+      "agrees": true,
+      "why": "Matches my settled row-6 net_income fact field-for-field."
+    },
+    {
+      "lead_id": "hr-028/b1/row6",
+      "agrees": true,
+      "why": "Same two-fact group conclusion and same net_income values as mine for row 6."
+    },
+    {
+      "lead_id": "hr-028/b2/row6",
+      "agrees": true,
+      "why": "Same two-fact group conclusion and same net_income values as mine for row 6, differing only in immaterial field ordering."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 3's total_operating_revenues fact stores only the dollar change ($1.4B) though the source also states a 10.8% change for the same comparison.",
+      "why": "The rules do not specify a priority between a co-stated absolute-dollar delta and a percent delta for one comparison, so the choice to store the dollar figure (matching the level's m_usd unit) over the percent is a defensible but not uniquely forced reading; either encoding is arguably lawful."
+    },
+    {
+      "what": "Row 5's covenant-compliance abstention could rest on two different gate reasons: generic risk boilerplate (Rule 1.2) versus a real qualitative fact whose period cannot be lawfully resolved (Rule 6).",
+      "why": "Both readings land on the same abstention outcome, but the rules do not make explicit which gate clause governs standard end-of-period covenant-compliance language, leaving the underlying classification genuinely open even though the final answer (control/no fact) is not in doubt."
+    }
+  ]
+}
+```

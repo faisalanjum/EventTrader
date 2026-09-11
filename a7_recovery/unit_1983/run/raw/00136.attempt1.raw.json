@@ -1,0 +1,31 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "facts": [
+    {
+      "fact_type": "metric",
+      "item": {
+        "driver_name": "sales",
+        "driver_state": "increased",
+        "level_low": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_high": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "level_shape_hint": "point",
+        "level_unit": "m_usd",
+        "comparison_low": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_high": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+        "comparison_shape_hint": "point",
+        "comparison_baseline": "prior_year",
+        "change_value": {"value": 4.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+        "change_unit": "percent_yoy",
+        "time_type": "duration",
+        "fiscal_quarter": 3,
+        "fiscal_year": 2026,
+        "period_end_date": "2026-02-22",
+        "slice_parts": ["segment:finediningsegment"]
+      }
+    }
+  ],
+  "abstentions": [],
+  "continuity_hints": []
+}
+```
