@@ -1,0 +1,7 @@
+attempt	codex_completed2015_a
+payload	../../unit_1997/ledger/../../unit_2015_codex_check/check_completed.py
+map	../unit_1997/../unit_2015_real_reviews/map_real_launch_2015.tsv
+wrapper_pid	4099567
+payload_pid	4099571
+started_utc	2026-09-11T04:14:02Z
+state	finished exit 0

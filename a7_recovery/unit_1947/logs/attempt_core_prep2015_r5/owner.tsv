@@ -1,0 +1,7 @@
+attempt	core_prep2015_r5
+payload	../../unit_2015_real_reviews/prepare_real_2015.py
+map	../unit_2015_real_reviews/map_real_2015b.tsv
+wrapper_pid	4064293
+payload_pid	4064297
+started_utc	2026-09-11T03:50:38Z
+state	finished exit 0

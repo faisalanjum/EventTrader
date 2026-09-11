@@ -1,0 +1,7 @@
+attempt	core_verify2015_a
+payload	../../unit_2015_real_reviews/verify_prepared_2015.py
+map	../unit_2015_real_reviews/map_real_launch_2015.tsv
+wrapper_pid	4067358
+payload_pid	4067362
+started_utc	2026-09-11T03:51:54Z
+state	finished exit 0

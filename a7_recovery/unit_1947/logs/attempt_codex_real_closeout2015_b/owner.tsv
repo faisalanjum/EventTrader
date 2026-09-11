@@ -1,0 +1,7 @@
+attempt	codex_real_closeout2015_b
+payload	../../unit_1997/ledger/../../unit_2015_codex_check/diagnose_closeout.py
+map	../unit_1997/../unit_2015_real_reviews/map_real_2015b.tsv
+wrapper_pid	4065155
+payload_pid	4065159
+started_utc	2026-09-11T03:50:59Z
+state	finished exit 0

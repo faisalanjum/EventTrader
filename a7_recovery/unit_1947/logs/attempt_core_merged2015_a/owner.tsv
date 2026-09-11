@@ -1,0 +1,7 @@
+attempt	core_merged2015_a
+payload	../../unit_2015_real_reviews/merged_2015.py
+map	../unit_2015_real_reviews/map_real_launch_2015.tsv
+wrapper_pid	4101293
+payload_pid	4101297
+started_utc	2026-09-11T04:14:57Z
+state	finished exit 0

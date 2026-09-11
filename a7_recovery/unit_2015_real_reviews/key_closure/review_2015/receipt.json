@@ -1,0 +1,108 @@
+{
+ "run_id": "review_2015",
+ "door": "a4_hard_review_double_blind",
+ "attempt": 1,
+ "allowed": [
+  "sokc-013/b2",
+  "sokc-020/b1",
+  "sokc-026/b1",
+  "sokc-029/b2"
+ ],
+ "parent": null,
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "manifest_sha256": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083",
+ "derived_from": {
+  "key_owner_sha256": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+  "hard_review_owner_sha256": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+  "final_owner_sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "source_key_owner_sha256": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "closure_owner_sha256": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "frozen_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "source_key_manifest_sha256": "e6000b7960ef2ed20bc324b06172a3631c3467d7f1e92513571102a08d4a42ad",
+  "contract_package_sha256": "62a5c49ae71f323eff275e98ca60efaae18ca16ca6c15f447c10c9d5d8976154",
+  "initial_collection": {
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect",
+   "receipt_sha256": "fb335913f8bcdf33a6e323fa3d4831190966d5501694dd831a77e8bba97d93c5",
+   "finalization_sha256": "ad0f11be0117e6d6c892596e6f5b4a64f7577eea1541163d46f857fb49a43add",
+   "raw_tree": {
+    "files": 66,
+    "sha256": "2ca71af94945827108d1f4636718fc391342ec8a0f87e3e3e701ad2e7ebc85c9"
+   }
+  },
+  "affected_events": [
+   "0000006201-26-000031",
+   "0000006201-26-000032",
+   "0000027904-26-000013",
+   "0000027904-26-000020",
+   "0000027904-26-000022",
+   "0000063908-26-000032",
+   "0000092380-26-000044",
+   "0000764478-25-000057",
+   "0000898173-26-000006",
+   "0000940944-25-000038",
+   "0000940944-26-000005",
+   "0000940944-26-000009",
+   "0001041061-25-000109",
+   "0001041061-26-000003",
+   "0001041061-26-000084",
+   "0001058090-26-000007",
+   "0001104659-25-102611",
+   "0001104659-25-105631",
+   "0001104659-25-118458",
+   "0001104659-26-017090",
+   "0001104659-26-027061",
+   "0001104659-26-032757",
+   "0001171843-26-001288",
+   "AAL_2026-04-23T08.30",
+   "BBY_2026-03-03T08.00",
+   "CMG_2026-02-03T16.30",
+   "DAL_2026-04-08T10.00",
+   "DRI_2026-03-19T08.30",
+   "MCD_2026-02-11T16.30",
+   "ULTA_2026-03-12T16.30",
+   "YUM_2026-02-04T08.15",
+   "bzNews_42014391",
+   "bzNews_50877032"
+  ],
+  "composite_owner_sha256": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+  "preserved_review": {
+   "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2004",
+   "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004",
+   "manifest_sha256": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "evidence": {
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004": {
+     "receipt_sha256": "cd428741f21588529dbe0dc6893daaf1fbfc30cc4c1e9eff761674188b3e64ba",
+     "finalization_sha256": "155edfd613170cd913f4036f818cf2a3018795daabb0607adbeb0daef099899f"
+    },
+    "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry": {
+     "receipt_sha256": "7431bc9e03af25d79351188e0ea1260d669d7a5a8e3aedac33b24f649c5e2e3e",
+     "finalization_sha256": "f86bca0d7f554e10e6aff639485ff6650430ca1ff695af000a9fe5b00c8ed29d"
+    }
+   }
+  }
+ },
+ "prompts": {
+  "sokc-013/b2": "0bd68ee46b355bbbeb94c03d09fca53c178b579003fc2d23b7bede2563120cba",
+  "sokc-020/b1": "046edb355900acdb781d519c25d5daaf425c525792e402b26770ac181c3014b8",
+  "sokc-026/b1": "44183fe6324df070e35f48c9115c19b9c6871c0bfe7d526339e6155d2849dd72",
+  "sokc-029/b2": "ac9bdb0ca9057d471216b44ecb23784471d61cc6455d0256b64f3668448ab56f"
+ },
+ "states": [
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_9330cc68-a67.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_db8bd3a8-5c9.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_17476f26-171.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_faa4d1e4-eca.json"
+ ]
+}

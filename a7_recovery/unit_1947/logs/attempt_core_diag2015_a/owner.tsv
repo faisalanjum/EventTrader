@@ -1,0 +1,7 @@
+attempt	core_diag2015_a
+payload	../../unit_2015_real_reviews/diag_retry_2015.py
+map	../unit_2015_real_reviews/map_real_2015.tsv
+wrapper_pid	4060128
+payload_pid	4060132
+started_utc	2026-09-11T03:48:24Z
+state	finished exit 0

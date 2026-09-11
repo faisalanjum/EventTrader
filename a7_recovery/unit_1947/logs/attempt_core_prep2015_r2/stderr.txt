@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2015_real_reviews/prepare_real_2015.py", line 101, in <module>
+    check("6 the answers read are the real native run, not a TEST copy",
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2015_real_reviews/prepare_real_2015.py", line 41, in check
+    assert got == want, "%s: got %r want %r" % (name, got, want)
+           ^^^^^^^^^^^
+AssertionError: 6 the answers read are the real native run, not a TEST copy: got [False, False] want [True, False]

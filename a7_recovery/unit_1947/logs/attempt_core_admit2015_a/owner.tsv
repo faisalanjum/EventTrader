@@ -1,0 +1,7 @@
+attempt	core_admit2015_a
+payload	../../unit_2015_real_reviews/lifecycle_2015.py
+map	../unit_2015_real_reviews/map_real_launch_2015.tsv
+wrapper_pid	4095679
+payload_pid	4095683
+started_utc	2026-09-11T04:11:23Z
+state	finished exit 0

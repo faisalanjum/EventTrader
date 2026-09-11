@@ -1,0 +1,98 @@
+{
+ "verified": "native review completion, not approved key truth",
+ "preserved_valid": 62,
+ "new_valid": 4,
+ "combined_valid": 66,
+ "new_calls": 4,
+ "retry_calls": 0,
+ "ledger_after": 499,
+ "receipt_sha256": "63d39415cc74bf53a7a790a7f81170a9c7563ed776ab6f4d5b204d22870eefc6",
+ "finalization_sha256": "0bf9a9d60731529d3a41845e08466a633118f595b8a85ad57be892ef3946e35b",
+ "preserved_copies": [
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_9330cc68-a67.state.json",
+   "sha256": "8e7edf57c216ed2daecc01388f4c1939125c3bf3cb18cc372727b85954dd9737"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_9330cc68-a67.transcript.jsonl",
+   "sha256": "17204a09008b5e098724f4f2de3c565eab9b0d98aa1e9b665150f07c9c0af932"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_9330cc68-a67.returned.txt",
+   "sha256": "4cb9bf952c94121347cc151163098f6c2f93713ef8fe4f0525e9de0cd14d66ae"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_db8bd3a8-5c9.state.json",
+   "sha256": "1c261787e876879ab5e3e20d71875a40fedf53e0b7d343d792a281084c32538b"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_db8bd3a8-5c9.transcript.jsonl",
+   "sha256": "4219471042bccf295cb0b7834b5ae4f87f781be1de1ac00d7db66f8dd8e4b1bc"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_db8bd3a8-5c9.returned.txt",
+   "sha256": "33f396aa00e8d47fab1ec53b4b6d356e7d22e38f196fff790d8df52dcdcb8c3a"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_17476f26-171.state.json",
+   "sha256": "8ef1ee6f407c5489dce5d12c4ad91613393b9a97f83ed6245c0f409648f5c972"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_17476f26-171.transcript.jsonl",
+   "sha256": "657000b25c4fcf99c3cd169b280cc567f613e9bd3fb2ffb12cb8549c50d374ca"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_17476f26-171.returned.txt",
+   "sha256": "9effd8b0d81d5e0093fca3aaa4fd210cf4588e89b2d0b7810b0f43c6bc86f9da"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_faa4d1e4-eca.state.json",
+   "sha256": "5be00defe0c01425414d57b944e811ad0f61dcbe4f45739f6d2f9746931c79e3"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_faa4d1e4-eca.transcript.jsonl",
+   "sha256": "5ec05c12b469bf6a7b12bac0a105227e2a68cfd1051e93596c9161e9e12fccca"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/evidence/review/wf_faa4d1e4-eca.returned.txt",
+   "sha256": "f9f9b8aadca7f1407ffda08693245cdfa1258ac31e9134493e39b5cffc629d32"
+  }
+ ],
+ "a3": {
+  "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+  "run_files": 799
+ },
+ "next_key_counts": {
+  "source_events": 36,
+  "events_scheduled": 33,
+  "events_with_no_located_row": [
+   "0000764478-26-000005",
+   "bzNews_49256211",
+   "bzNews_51962983"
+  ],
+  "frozen_rows": 191,
+  "rows_scheduled": 191,
+  "locator_groups": 5,
+  "leads_shown": 66
+ },
+ "next_key_budget": {
+  "before": 499,
+  "planned_key_calls": 33,
+  "planned_signer": 1,
+  "planned_note": "the independent signature remains separately gated",
+  "after_planned": 533,
+  "max_attempts_per_call": 2,
+  "retry_cap": 1,
+  "retry_cap_meaning": "PER CALL, invalid replies only, never a run total",
+  "retryable_states": [
+   "invalid_response"
+  ],
+  "worst_case_total": 68,
+  "worst_case_after": 567,
+  "package_ceiling": 567,
+  "global_ceiling": 6000,
+  "calls_made_by_this_package": 0,
+  "planned_total": 34
+ },
+ "model_calls_by_this_check": 0
+}

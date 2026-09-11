@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2015_real_reviews/prepare_real_2015.py", line 74, in <module>
+    check("4 the clarified owner is served from the published harness",
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2015_real_reviews/prepare_real_2015.py", line 41, in check
+    assert got == want, "%s: got %r want %r" % (name, got, want)
+           ^^^^^^^^^^^
+AssertionError: 4 the clarified owner is served from the published harness: got '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py' want '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3/build_kfields_hard_review.py'

@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2015_codex_check/diagnose_closeout.py", line 25, in <module>
+    old, stage = R.old_readings()
+                 ^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/owner/a4_review_composite.py", line 116, in old_readings
+    return _stage(OLD, CL._ctx(), OLD_RUN, OLD_PKG)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/owner/a4_review_composite.py", line 96, in _stage
+    _completed(owner, ctx, base, package)
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/owner/a4_review_composite.py", line 80, in _completed
+    got = owner._finalize(ctx, run, package)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1997/harness_g1v3/build_kfields_hard_review.py", line 1221, in _finalize
+    K.RT.write_new(os.path.join(out_dir, FINALIZATION_NAME),
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_1997/ledger/../../unit_2015_codex_check/diagnose_closeout.py", line 14, in compared
+    return original(path, text)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/owner/a4_review_composite.py", line 59, in _existing
+    raise ValueError('completed evidence is missing or differs: %s' % path)
+ValueError: completed evidence is missing or differs: /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry/finalization.json

@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2015_real_reviews/prepare_real_2015.py", line 123, in <module>
+    old, stage = R.old_readings()
+                 ^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2009/owner/a4_review_composite.py", line 116, in old_readings
+    return _stage(OLD, CL._ctx(), OLD_RUN, OLD_PKG)
+                       ^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/owner/a4_source_closure.py", line 311, in _ctx
+    return {"items": SK.items(), "tasks": tasks(), "suffix": SUFFIX,
+                                          ^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/owner/a4_source_closure.py", line 218, in tasks
+    for n, sid in enumerate(affected()):
+                            ^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/owner/a4_source_closure.py", line 204, in affected
+    owed = {u["source_id"] for u in unresolved()}
+                                    ^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/owner/a4_source_closure.py", line 122, in unresolved
+    shards, raws = _initial()
+                   ^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2002/owner/a4_source_closure.py", line 86, in _initial
+    raise ValueError("the initial collection does not read back: %s"
+ValueError: the initial collection does not read back: ["the declaration's provenance is not the served approved artifact /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1792/evidence/lane_input_profiles.json at 1220662f00c3ba865b1620569ae42f78c773b0bf5b9d054f8d4b4e7d83f8bff6", "33 events have no accepted shard: ['0000006201-26-000031', '0000006201-26-000032', '0000027904-26-000013']"]

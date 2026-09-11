@@ -1,0 +1,66 @@
+{
+ "stage": "admit",
+ "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2015",
+ "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2015",
+ "owners": {
+  "review_composite": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+  "clarified_hard_review": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+  "source_closure": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d"
+ },
+ "ledger_states": {
+  "preserved": 4
+ },
+ "recorded_now": [
+  "sokc-013/b2",
+  "sokc-020/b1",
+  "sokc-026/b1",
+  "sokc-029/b2"
+ ],
+ "already_recorded": [],
+ "states_absent": [],
+ "record_problems": [],
+ "receipt": {
+  "sha256": "63d39415cc74bf53a7a790a7f81170a9c7563ed776ab6f4d5b204d22870eefc6",
+  "attempt": 1,
+  "allowed": [
+   "sokc-013/b2",
+   "sokc-020/b1",
+   "sokc-026/b1",
+   "sokc-029/b2"
+  ],
+  "states": 4
+ },
+ "run_problems": [],
+ "outcomes": {
+  "valid": 4
+ },
+ "per_label": {
+  "sokc-013/b2": {
+   "state": "valid",
+   "why": "",
+   "text_sha256": "4cb9bf952c94121347cc151163098f6c2f93713ef8fe4f0525e9de0cd14d66ae",
+   "text_bytes": 3932
+  },
+  "sokc-020/b1": {
+   "state": "valid",
+   "why": "",
+   "text_sha256": "33f396aa00e8d47fab1ec53b4b6d356e7d22e38f196fff790d8df52dcdcb8c3a",
+   "text_bytes": 4319
+  },
+  "sokc-026/b1": {
+   "state": "valid",
+   "why": "",
+   "text_sha256": "9effd8b0d81d5e0093fca3aaa4fd210cf4588e89b2d0b7810b0f43c6bc86f9da",
+   "text_bytes": 6443
+  },
+  "sokc-029/b2": {
+   "state": "valid",
+   "why": "",
+   "text_sha256": "f9f9b8aadca7f1407ffda08693245cdfa1258ac31e9134493e39b5cffc629d32",
+   "text_bytes": 5556
+  }
+ },
+ "terminal": true,
+ "finalized_before": false,
+ "model_calls": 0
+}

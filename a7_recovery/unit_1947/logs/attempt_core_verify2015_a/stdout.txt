@@ -1,0 +1,41 @@
+{
+ "record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2015_real_reviews/PREPARED_REVIEW_2015.core_prep2015_real.json",
+ "record_sha256": "82b0138c3710b63a62eb77b76f6e592a58da75bfd739a351717576012ee1d47e",
+ "new_run_outcomes": {
+  "missing": 4
+ },
+ "new_run_problems": [],
+ "preserved_outcomes": {
+  "valid": 62,
+  "invalid_response": 4
+ },
+ "launch_failures": [],
+ "a3_answer_run": {
+  "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+  "run_files": 799
+ },
+ "package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2015",
+ "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2015",
+ "map_sha256": "78bcd74a2b2b46beb10e7339ffc732162060231ded144e966dea35822eb63073",
+ "checks": [
+  "1 the composite owner re-measures",
+  "2 the clarified hard-review owner re-measures",
+  "3 the preserved hard-review owner re-measures",
+  "4 every package file re-measures",
+  "5 the receipt re-measures",
+  "6 the receipt still schedules exactly the four, unserved",
+  "7 no call has been made and the run cannot close",
+  "8 every owed reading is visibly MISSING, with no run problem",
+  "9 the preserved review is untouched: 62 valid, 4 invalid",
+  "10 the preserved receipts and package re-measure",
+  "11 all four launch paths carry the pinned script, read-only",
+  "12 the launch directory holds exactly those four scripts",
+  "13 the launch binding refuses a changed or missing source",
+  "14 the call accounting is the one that was frozen",
+  "15 the transport is Sonnet 5 at high effort, 128000 output tokens",
+  "16 the original answer run is still 799 files"
+ ],
+ "passed": 16,
+ "model_calls": 0,
+ "launched": 0
+}
