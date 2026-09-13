@@ -4,7 +4,15 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Newest evidence checkpoint,10:38 Eastern: normally committed/pushed
+Newest evidence checkpoint,11:28 Eastern: normally committed/pushed
+c94cfe4e722afe625eb2b8c28b6cfb4f4c0413bf, treebe29c4045de167b8065276597c8747ea78609fb6;
+fresh remote matches. G2_PROGRESS_PUBLICATION_2111_C.json SHAbc28b72f pins1559
+reviewed files through G2 segment70 plus the unchanged persisted G3 completion.
+393 changed paths; all1560 selected committed files match, index empty,
+unrelated work preserved. No grader or input change.65 primaries remain at
+this snapshot; Core continues Codex2110. No final score or PASS is claimed.
+
+Earlier evidence checkpoint,10:38 Eastern: normally committed/pushed
 1631fadde6d7cde591e16a1bee56209917f8a6a2, tree7fcb623d4e738c6906f75d916938c08c085a0495;
 fresh remote matches. G2_PROGRESS_PUBLICATION_2111_B.json SHA80557b15 pins1169
 verified files through G2 segment54, plus the already persisted G3 completion.
@@ -31,12 +39,12 @@ G3 is already verified. Actual G2 evidence review and final scoring remain;
 no A7 score or PASS is implied. The pass log below preserves pre-publication
 proof history; its former closure/publication blockers are resolved.
 
-Collection review,11:24 Eastern: G2 segments6–70 independently replayed through
+Collection review,12:27 Eastern: G2 segments6–84 independently replayed through
 the original native/parser checks (REVIEWs SHAbcbef7be,2f949a42,dd226d67,
-96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1), and all272
-durable native copies match their sources. The71 readings include24 original-
-valid and47 recovered; exact retry-filter replays preserve every negative
-judgment and require no retry. Two-reading segments17,24,27,36,49 and66 are verified.
+96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5), and all330
+durable native copies match their sources. The86 readings include33 original-
+valid and53 recovered; exact retry-filter replays preserve every negative
+judgment and require no retry. Two-reading segments17,24,27,36,49,66 and83 are verified.
 G3's reviewed completion
 is now saved through C.persist_g23 and reloaded: exact approved bytesad575661,
 110 agreed/7 unresolved,147-file run unchanged. PERSISTED_G3 report11ed9654.
@@ -95,10 +103,10 @@ an agreed judgment, erase an invalid, relax a passing bar or imply A7 PASS.
 - PROVED format class:3 of first4 G2 replies used exact quoted boolean/null
   values. Original parser correctly rejected them. A quoted template is a
   plausible cause, not proved causal attribution. No prompt is changed here.
-- Original G2-000/G1b retry is spent. Original G2-001/G1a retry is published
-  but uncalled (segment5). Do not repeat a successfully recovered reading.
-  Resolve the published reservation through a lawful explicit instruction;
-  never delete it, fake a native result or ignore a pending segment.
+- RESOLVED: the spent G2-000/G1b retry remains in history. G2-001/G1a's
+  unused published retry (segment5) is explicitly zero-call closed, verified
+  and pushed (applied review6703734b; manifest9954bb59). Never rerun that
+  closure or a successfully recovered reading; segment5 has no pending reservation.
 - Meaning is separate: false judgments, nulls, disagreements, the known G1
   missing reading and duplicate findings are not formatting errors to fix.
   They must survive into the result. No final score currently exists.
@@ -121,10 +129,10 @@ an agreed judgment, erase an invalid, relax a passing bar or imply A7 PASS.
 | Explicit recovery identity; original errors still refuse | FOCUSED VERIFIED: scope3fail/56pass →59pass. Wrong code/rule pins refuse; original evidence errors are not waived; G1/G3 unchanged; scope restoration verified. Unit doubles are not native proof. |
 | Actual saved G2 replies recover correctly | VERIFIED: four externally pinned whole replies; three recovered, one originally valid; original parser errors and raw hashes unchanged. Independent JSON-literal calculation matches every verdict. Current code7aeabc6b is proved in `codex_formatreal2107_a/RECOVERY.json` SHA7b1307320e2c7528a101d78c3217962066025ade98af8176b1f844851f379f26; payloadexit0, empty stderr, zero calls. Earlier2105a report1a561676 remains proof of its earlier code revision, not a current-code pin. |
 | Full original-record → recovery → actual scorer path | VERIFIED: `codex_formatnative2105_c/SCORING_CONNECTION.json` SHAbe7ddc2123c5722c8fd9c8272c8afc24636e220606119b1cc4448c8a7fba8c06.141 original-invalid TEST attempts retained,139 recovered;299 agreed/7 unresolved meaning questions;99 exact event-leg routes;163 gold per leg. Injected false yields1 confirmed wrong accept; all7 unknown/disputed/unusable questions remain missing judgments. Existing G1 gap/duplicate findings survive. Wrong completion hash and no-recovery consumer controls refuse. Exit0;4 existing guidance warnings, no traceback. NOT an A7 score. |
-| Attempt/resume path and no repeated success | CODE VERIFIED: format68 + retry14 focused tests; six retry mutations caught/restored14-test control. Native TEST proof excludes139 recovered readings and retains the genuine invalid; actual segment4 CLI preserves false judgments and requires no retry. Real operator setup/selection blocks invoke the pinned filter; recoveredG2 chooses prepare, G3 unchanged, wrong rule pin stops (OPERATOR_CONNECTION SHA96c084dc). Core independently replayed the filter. Remaining-count helper now uses the EXACT served G5523c5b6 lane-state owner, not another history scan or the different2008 G copy: helperc3aa3a99, native/host14-test proof. It retains uncalled/refused rows and reports137G2/0G3. Closuree72647b3 passes Codex's51-check rerun and independent native/sidecar controls plus three caught mutations; exact306 question/batch outcomes and original-invalid audit verified (codex_unusedfinal2109_a/REVIEW.json SHA085ed22011df451914c427fbc25e300becaf734a78b6b7fa7b6f5088173a0bc1). Actual zero-call closure is now being applied through pinned callerc2cd24be; no AI call authorized yet. |
+| Attempt/resume path and no repeated success | CODE VERIFIED: format68 + retry14 focused tests; six retry mutations caught/restored14-test control. Native TEST proof excludes139 recovered readings and retains the genuine invalid; actual segment4 CLI preserves false judgments and requires no retry. Real operator setup/selection blocks invoke the pinned filter; recoveredG2 chooses prepare, G3 unchanged, wrong rule pin stops (OPERATOR_CONNECTION SHA96c084dc). Core independently replayed the filter. Remaining-count helper now uses the EXACT served G5523c5b6 lane-state owner, not another history scan or the different2008 G copy: helperc3aa3a99, native/host14-test proof. It retains uncalled/refused rows and reported137G2/0G3 at the original test snapshot. Closuree72647b3 passes Codex's51-check rerun and independent native/sidecar controls plus three caught mutations; exact306 question/batch outcomes and original-invalid audit verified (codex_unusedfinal2109_a/REVIEW.json SHA085ed22011df451914c427fbc25e300becaf734a78b6b7fa7b6f5088173a0bc1). Actual zero-call closure is VERIFIED, applied and pushed through pinned callerc2cd24be (applied review6703734b; manifest9954bb59). Never apply it again. Codex2110 authorizes the ongoing G2 collection; current coverage is recorded above. |
 | Duplication, organization, simplicity | VERIFIED for format7aeabc6b, retry127bd6c0 and closuree72647b3: original strict parser, native auditor, finalizer, lane-state owner, reconciler, selector, completion and scorer retain their own rules. Exact JSON literals/G2 scope and external identity pins are required constants, not semantic hardcoding. One pinned recovery view preserves frozen owners; retry filtering subtracts recovered results from the original eligible set; zero-call closure reuses existing no-output/parent/state/accounting primitives. No cache, new parser/scorer, prompt change, production import or speculative configuration. Core's two non-findings (exception contract and a validity row already guaranteed by the finalizer) require no extra code. |
 | Meaningful mutations and full affected regression | VERIFIED for format patch:12 in-memory mutations all caught by behavioral tests; restored68-test control passes, stderr0. `codex_formatmut2106_a/MUTATIONS.json` SHA730e41c3660642d98d6fa5c22c71ce035a58034a9d7c5065f398f4562ad4adf9. Full19-module result698pass/2named skips/0fail, combining `grader_formatnative2106_fixed` with unchanged ordinary `grader_formatordinary2105`. The rerun first exposed the trace test's fixed shared workflow name; canonical test now supplies one unique tag per test run to the existing collision-refusing helper (test SHAa518ce46b0e9061763add0be8615e727436088335a46226878157a0a5620bbc1).11-test focus and repeat full native suite pass; no validator weakened. Historical fixture/owner copies stay untouched; one explicit TEST overlay serves the corrected test. |
-| Freeze, commit/push verified increment, score | PREPARATION VERIFIED; PUBLICATION IN PROGRESS. Actual zero-call closure is applied through callerc2cd24be:46 existing run files unchanged, exactly3 administrative artifacts added, zero new AI. Independent actual C.evidence/F.scope and W.next_admissible replay passes; four saved readings reused,137 primaries remain, nextG2-001/G1b. Applied review6703734b and manifest9954bb59 pin the result. No new model collection or A7 score yet. Current committed parent isfd4c9cba. |
+| Freeze, commit/push verified increment, score | PREPARATION VERIFIED AND PUSHED; ACTUAL COLLECTION IN PROGRESS. Actual zero-call closure is applied through callerc2cd24be:46 existing run files unchanged, exactly3 administrative artifacts added, zero new AI. Independent actual C.evidence/F.scope and W.next_admissible replay passes; four saved readings reused and the original137 remaining primaries admitted under Codex2110. Applied review6703734b and manifest9954bb59 pin the result. The latest verified/pushed evidence and current collection coverage are recorded above. Final collection reconciliation and actual scoring remain; no A7 score or PASS is claimed. |
 
 Raw test logs are under `../unit_1947/logs/attempt_codex_format2105_*` and
 `attempt_codex_formatscope2105_*`. The initialformat_red import failure is

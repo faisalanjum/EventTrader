@@ -1,0 +1,92 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "c66316e31222099a7ca4766106df6427c6059446b89bf038243564a41c353968",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "73cafad69a7967d39ad4ce4106d10038ffcffc616077ee0a532da7a941480fcb",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M12f0e3b0f622a71c": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mf8dc0510a0ba179c": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-041/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "36265f2e5fcc88d948cad6c49e78a4a7416120cf4cad84a24b82cccae5948705"
+    }
+   ],
+   "segment": 79,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "f05cb90b64d4e9d3324b17e02047b5f02447c0457d731583cafd2f2a683aad91",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "b3bc697cdf50b32c5e8c33170db5d02722ad31c9e1a5fb93080591ce664483fb",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M12f0e3b0f622a71c": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mf8dc0510a0ba179c": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-041/G1b",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "e8040fd78a8866681c92c41b678245aa3be49980c3ee2ec870069226f3974dd0"
+    }
+   ],
+   "segment": 80,
+   "uncalled": []
+  }
+ ]
+}

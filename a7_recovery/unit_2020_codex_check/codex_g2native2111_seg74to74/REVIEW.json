@@ -1,0 +1,77 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "218de66aa24ad7b5da8607e049a6170c806cc38c6032d9168bb3b3f6fd314840",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "4307f8d52a79760f1f5560fdec5de9a4d75de25df9f768b05a5cd7b7223f7a55",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M0e085961f8057af7": {
+       "driver_name_meaning": false,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": false,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "M292ac8520c3978ff": {
+       "driver_name_meaning": true,
+       "driver_state": false,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "M2a81c745481f2ebc": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M8f3cb6b387ec8ba9": {
+       "driver_name_meaning": true,
+       "driver_state": false,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "Me283ca1f2067854f": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-038/G1b",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "04df414f16b3e8535d1d5546a77dbed5e7c975b74407bb920c683ef0d0aafb67"
+    }
+   ],
+   "segment": 74,
+   "uncalled": []
+  }
+ ]
+}

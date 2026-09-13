@@ -1,0 +1,64 @@
+```json
+[
+  {
+    "question_id": "Mb87e99d1b27c6c1d",
+    "verdicts": {
+      "driver_name_meaning": "true",
+      "driver_state": "true",
+      "favorability": "true",
+      "growth_basis": "true",
+      "lane_routing": "true",
+      "record_matches_source": "true",
+      "slice_vs_menu": "true"
+    }
+  },
+  {
+    "question_id": "M1a1d8504821bf26a",
+    "verdicts": {
+      "driver_name_meaning": "true",
+      "driver_state": "false",
+      "favorability": "true",
+      "growth_basis": "true",
+      "lane_routing": "true",
+      "record_matches_source": "false",
+      "slice_vs_menu": "true"
+    }
+  },
+  {
+    "question_id": "M7c7c1ecb69bbe2c9",
+    "verdicts": {
+      "driver_name_meaning": "true",
+      "driver_state": "true",
+      "favorability": "true",
+      "growth_basis": "true",
+      "lane_routing": "true",
+      "record_matches_source": "true",
+      "slice_vs_menu": "true"
+    }
+  },
+  {
+    "question_id": "M22ede9a4b555fd5b",
+    "verdicts": {
+      "driver_name_meaning": "true",
+      "driver_state": "false",
+      "favorability": "true",
+      "growth_basis": "true",
+      "lane_routing": "true",
+      "record_matches_source": "false",
+      "slice_vs_menu": "true"
+    }
+  },
+  {
+    "question_id": "Me35ea17f29972c9f",
+    "verdicts": {
+      "driver_name_meaning": "true",
+      "driver_state": "true",
+      "favorability": "true",
+      "growth_basis": "true",
+      "lane_routing": "true",
+      "record_matches_source": "true",
+      "slice_vs_menu": "true"
+    }
+  }
+]
+```

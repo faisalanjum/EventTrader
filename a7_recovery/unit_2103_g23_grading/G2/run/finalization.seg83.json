@@ -1,0 +1,43 @@
+{
+ "accounting_sha256": "1086af35647866bedae67038055a35027000f3918b71f714a23f77a005474ec5",
+ "attempt": 1,
+ "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+ "ledger": {
+  "invalid": 2,
+  "retry": 2,
+  "scheduled": 2,
+  "uncalled": 0,
+  "valid": 0
+ },
+ "problems": {
+  "G2-043/G1a": [
+   "Mb87e99d1b27c6c1d carries a value that is not true, false or null",
+   "M1a1d8504821bf26a carries a value that is not true, false or null",
+   "M7c7c1ecb69bbe2c9 carries a value that is not true, false or null"
+  ],
+  "G2-043/G1b": [
+   "Mb87e99d1b27c6c1d carries a value that is not true, false or null",
+   "M1a1d8504821bf26a carries a value that is not true, false or null",
+   "M7c7c1ecb69bbe2c9 carries a value that is not true, false or null"
+  ]
+ },
+ "receipt_sha256": "ae352710c810cbd6c7d5106f774d58613b193fd9c5477da3d6b35a9029cfbf48",
+ "retry": [
+  "G2-043/G1a",
+  "G2-043/G1b"
+ ],
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 83,
+ "uncalled": [],
+ "validity": [
+  [
+   "G2-043/G1a",
+   false
+  ],
+  [
+   "G2-043/G1b",
+   false
+  ]
+ ]
+}
