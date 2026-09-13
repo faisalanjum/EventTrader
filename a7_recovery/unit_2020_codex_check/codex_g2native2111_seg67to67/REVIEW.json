@@ -1,0 +1,59 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "c0a617e1cb98cb4e50d0b222e6af1be68d0a65301c7f8dd12b69de8c6ce5d843",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "ed6b061a55c8ae2f2f8fecfe59a1e533daf4c8bacdf038bd338cdad95d0bc754",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M25a3c0332278688d": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M2ad3c19c55a33b22": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M2badc2f344015152": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-035/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "a89ff59bd09fa56cb8000d2a42e34f2c1621a03d4f05ac4e4d05865741431a87"
+    }
+   ],
+   "segment": 67,
+   "uncalled": []
+  }
+ ]
+}

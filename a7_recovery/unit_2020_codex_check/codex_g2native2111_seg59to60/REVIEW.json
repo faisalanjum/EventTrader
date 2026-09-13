@@ -1,0 +1,146 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "fe7d7c153863a44eef2310fa3d1cfd7965795cfdab7ae2458c71bc680be311de",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "095eb2213ff8c1b84bf0534332a91e7d9754939698b31dd85e3fdb4f974a3b5f",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M3c01992f2e58d996": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M54c69cfbbfb770fe": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "M961a664de76b0d2d": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mf6ae20255741f5af": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mf74bd5a258f4c57b": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-030/G1b",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "d73be8693c3bf5ec2b540202e64d507da2de9a109c4124b44d1654c12015d262"
+    }
+   ],
+   "segment": 59,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "1f9787c18c4444ad5cf1c686a6d8b26f4ccbcc56db0a6b0b7f70040bf521f4b2",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "c2ce51d217bdee9f59ff108d7aab4a39033d86522074bf176923ba46f80197fc",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M2631bbcafac8881d": {
+       "driver_name_meaning": false,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "M51fe2eb8ba3ffada": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M56692399adb07bf0": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Md5b6c966cbdbf15c": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mf779fb08c3d45f27": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-031/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "ff356f00c21be252da691de4c3a9675018ce14b22d076e0653aa2eb5b1bee643"
+    }
+   ],
+   "segment": 60,
+   "uncalled": []
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "lanes": {
+  "G2-031/G1b": {
+   "chars": 1369,
+   "sha256": "fc2f3a42cd46fd74c4e0ef6e0b68aed55f06f1fef26d32fb16a910ef02628547",
+   "text": "```json\n[\n {\n  \"question_id\": \"Mf779fb08c3d45f27\",\n  \"verdicts\": {\n   \"driver_name_meaning\": \"true\",\n   \"driver_state\": \"true\",\n   \"favorability\": \"true\",\n   \"growth_basis\": \"true\",\n   \"lane_routing\": \"true\",\n   \"record_matches_source\": \"true\",\n   \"slice_vs_menu\": \"true\"\n  }\n },\n {\n  \"question_id\": \"M51fe2eb8ba3ffada\",\n  \"verdicts\": {\n   \"driver_name_meaning\": \"true\",\n   \"driver_state\": \"false\",\n   \"favorability\": \"true\",\n   \"growth_basis\": \"true\",\n   \"lane_routing\": \"false\",\n   \"record_matches_source\": \"false\",\n   \"slice_vs_menu\": \"true\"\n  }\n },\n {\n  \"question_id\": \"Md5b6c966cbdbf15c\",\n  \"verdicts\": {\n   \"driver_name_meaning\": \"true\",\n   \"driver_state\": \"true\",\n   \"favorability\": \"true\",\n   \"growth_basis\": \"true\",\n   \"lane_routing\": \"true\",\n   \"record_matches_source\": \"true\",\n   \"slice_vs_menu\": \"true\"\n  }\n },\n {\n  \"question_id\": \"M56692399adb07bf0\",\n  \"verdicts\": {\n   \"driver_name_meaning\": \"true\",\n   \"driver_state\": \"true\",\n   \"favorability\": \"true\",\n   \"growth_basis\": \"true\",\n   \"lane_routing\": \"true\",\n   \"record_matches_source\": \"true\",\n   \"slice_vs_menu\": \"true\"\n  }\n },\n {\n  \"question_id\": \"M2631bbcafac8881d\",\n  \"verdicts\": {\n   \"driver_name_meaning\": \"false\",\n   \"driver_state\": \"true\",\n   \"favorability\": \"true\",\n   \"growth_basis\": \"true\",\n   \"lane_routing\": \"true\",\n   \"record_matches_source\": \"false\",\n   \"slice_vs_menu\": \"true\"\n  }\n }\n]\n```"
+  }
+ },
+ "segment": 61
+}

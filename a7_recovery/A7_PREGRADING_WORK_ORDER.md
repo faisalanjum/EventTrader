@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 110, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 119, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -44,7 +44,18 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-NEWEST PUBLICATION,09:04 Eastern: the independently checked G2 prefix6–32
+NEWEST PUBLICATION,10:38 Eastern: G2 prefix6–54 and G3's persisted completion
+are now committed and normally pushed as1631fadde6d7cde591e16a1bee56209917f8a6a2,
+tree7fcb623d4e738c6906f75d916938c08c085a0495, sole parent79e62c588a958570880829502750dc4156e290c3.
+Fresh remote read equals that commit. G2_PROGRESS_PUBLICATION_2111_B.json
+SHA80557b1520f4a2638f1979e7580ad7e20884dfc7849332e5e07543d9be585b4a
+pins1169 verified files;523 changed paths. Every selected staged/committed blob
+matches; the index is empty. No grader, prompt, key, rule, main or database
+change. Unrelated work is excluded and preserved. Core continues the same2110
+collection task. The live counter reports80 remaining primaries; later segments
+are outside this published prefix. No final A7 score or PASS is claimed.
+
+EARLIER PUBLICATION,09:04 Eastern: the independently checked G2 prefix6–32
 and persisted G3 completion are committed and normally pushed as
 79e62c588a958570880829502750dc4156e290c3, tree
 a2366e974361f1909fd1bd7c85da94096f0f7c64, sole parentb86c9052267bcee86b9ca9bae4dac0ce513c712e.
@@ -91,7 +102,7 @@ use the existing completion/route/scorer owners to report all denominators,
 wrong accepts, misses, disagreements and exhausted invalids. No new framework.
 The active goal and one Codex watcher remain unchanged; no handover restart.
 
-INDEPENDENT PROGRESS, 10:31 Eastern: segments6–54 pass original native,
+INDEPENDENT PROGRESS, 11:24 Eastern: segments6–70 pass original native,
 whole-reply and parser replay; proof codex_g2native2111_seg6to7/REVIEW.json
 SHAbcbef7bef33af8e3e611bfa311dc228d931d9120bf174ffcb7c0adcdae5eb2c7.
 The second prefix proof is codex_g2native2111_seg8to9/REVIEW.json
@@ -133,11 +144,31 @@ SHA02ca76c55f9ad9a11e10e21e5dd7b4c045d9866299728be2bb3e8451bbcf4f26;
 codex_g2native2111_seg52to52/REVIEW.json
 SHA146714835012d09b47479aeb0114954df2471e313910769bece1ae68c0d9e6e6;
 codex_g2native2111_seg53to54/REVIEW.json
-SHAd1344a6cab33542de9786639b6e6e708acd454916b4d9fc5fff39eb4071e2d05.
-All206 copied native files match their original sources. Separate exact pinned
-retry-filter replays pass with empty stderr. The54 new primary readings across
-these49 segments include16 originally valid and38 recovered readings; all54
-require zero retry. Segments17,24,27,36 and49 each lawfully contain both readings of
+SHAd1344a6cab33542de9786639b6e6e708acd454916b4d9fc5fff39eb4071e2d05;
+codex_g2native2111_seg55to58/REVIEW.json
+SHA691dd870e615d0e7958df329ddd2b70ec5f1c3468e96b45bed0882d57a0115f0;
+codex_g2native2111_seg59to60/REVIEW.json
+SHA34de60c881ec5fec74fd0b455b9d6fc16cc4bda1315649f0bbcb0231fefacba2;
+codex_g2native2111_seg61to62/REVIEW.json
+SHA9239775055417390a0b4c35e563e19511bae960f1992627e648557cedba6f58a;
+codex_g2native2111_seg63to63/REVIEW.json
+SHAbd13f38f6809170cfd0ef9118043d1a0c143ef77ced9e6260d4e8d8398876d07;
+codex_g2native2111_seg64to64/REVIEW.json
+SHA117af5fa12a67c77fac9097ef157a092bb0b15cee81b018d6ce06f4f5a4fddf3;
+codex_g2native2111_seg65to65/REVIEW.json
+SHA972f798b08a161014f3bac38d0995a16376cef111dc357dc6ee205f622957794;
+codex_g2native2111_seg66to66/REVIEW.json
+SHA1aad1c255096064cfe0c41e90ede16b51e61ad7edc7791e94edbacb313c12601;
+codex_g2native2111_seg67to67/REVIEW.json
+SHAe00e3cc5d86d73b657c46e18b9c64adcc340bca60fa14d39e8229a2937c973a3;
+codex_g2native2111_seg68to68/REVIEW.json
+SHAc3f23e91c5252fe8d9c59147d32102bde40ed04364f28192f6ef4f8462fd165b;
+codex_g2native2111_seg69to70/REVIEW.json
+SHA581193e1446c607eeff7f7fd62856eb424735b628aa7ddffbf2df2efbde49d26.
+All272 copied native files match their original sources. Separate exact pinned
+retry-filter replays pass with empty stderr. The71 new primary readings across
+these65 segments include24 originally valid and47 recovered readings; all71
+require zero retry. Segments17,24,27,36,49 and66 each lawfully contain both readings of
 their frozen batch. All negative judgments remain unchanged.
 These are usable grading judgments, not claims that the tested answers were
 correct.
@@ -164,9 +195,13 @@ and seg9 stdout65b346d5; seg10 stdoutafa03f96,11 stdout85145929,
 44 stdout19138271,45 stdouta5b40742,46 stdout80a3b0cb,
 47 stdout2ff1cc98,48 stdout4c1767b4,49 stdoutd882cdc4,
 50 stdouta6e38703,51 stdout3d74b986,52 stdout4c764ebb,
-53 stdoutd16dc66f,54 stdout5e95b5ee.
+53 stdoutd16dc66f,54 stdout5e95b5ee,55 stdout07b6e9bf,
+56 stdout939a45ed,57 stdout702ec129,58 stdoutfeae3a2e,
+59 stdout2dc03e7d,60 stdoutf52b7eca,61 stdout4e3ce12b,62 stdoutd25d43b2,
+63 stdout6312a222,64 stdoutbe16fe2b,65 stdout5623f72b,66 stdoutf4ceb567,
+67 stdout363943b9,68 stdoutfc788970,69 stdout63e82f05,70 stdout17b7c4f2.
 All segment review payloads exit0 with empty stderr. The live lane-state owner
-last reported83 primaries remaining at10:29. Segments after54 are not yet included
+last reported66 primaries remaining at11:23. Segments after70 are not yet included
 in this reviewed prefix. Counts are
 a timestamped snapshot only. ETA updated10:23: best estimate17:00 Eastern,
 provisional16:00–19:00 range. The most recent12 preserved workflows (42–53)
@@ -175,6 +210,19 @@ took348438,402232,346682,335912ms. This replaces the15:30 estimate and earlier
 13:00–17:00 range because actual AI runtime slowed, not because scope grew.
 These timings are provider durationMs/startTime/timestamp values, not Core's
 guess. No new blocker or code change. This is the checked report, not A7 PASS.
+
+Timing check11:08: preserved native segments53–64 are12 completed single-reading
+workflows, mean203020ms. Their first start through last finish spans2784020ms
+(46.4min including handoffs). At73 remaining this still supports the17:00
+checked-report estimate;16:00–19:00 range is retained, not reset. No new work
+or call is authorized by this timing observation.
+
+Identity observation11:21: segments67/68 returned byte-identical all-true
+judgments, not a reused model result. The original native starts/results bind
+wf_b1b4c6d1-342/a8874112df651d745 and wf_ae42e8c8-02e/a83badf8d623e0f74
+respectively, with distinct start times and completed durations. Their shared
+prompt/cache key does not replace the distinct actual agent identities.
+No defect or extra call follows from identical answer text.
 
 The exact existing renderer forecasts135 then-remaining primaries in125
 Workflow groups (116 single,8 double,1 triple), excluding retries. Evidence:
@@ -194,8 +242,8 @@ the result afterward; payloadexit0/stderr0. Report:
 codex_g3persist2111_a/PERSISTED_G3.json
 SHA11ed9654a2fec1822ce91da058fc4b85dfafe90e3d9a6f594fc167f4c0af9036.
 The147-file G3 run is unchanged. Do NOT persist G3 again or rerun its AI calls.
-No final A7 score yet. Evidence through G2 segment32 and the G3 persistence
-is published in79e62c58; later verified evidence awaits the next checkpoint.
+No final A7 score yet. Evidence through G2 segment54 and the G3 persistence
+is published in1631fadd; later verified evidence awaits the next checkpoint.
 The grading code is unchanged from pushed b86c9052.
 
 Final scoring execution note (09:11, no new requirement): after Core's one

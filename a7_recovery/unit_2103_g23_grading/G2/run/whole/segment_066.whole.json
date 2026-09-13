@@ -1,0 +1,15 @@
+{
+ "lanes": {
+  "G2-034/G1a": {
+   "chars": 584,
+   "sha256": "0bdb8c569e8d069b1a79a5dc8b5a31f6f84e1fda1b7c0e6273b89cf84f5e7700",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M4ee9337472e91555\",\n    \"verdicts\": {\n      \"driver_name_meaning\": true,\n      \"driver_state\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"lane_routing\": true,\n      \"record_matches_source\": true,\n      \"slice_vs_menu\": true\n    }\n  },\n  {\n    \"question_id\": \"M78a5c6360c93a561\",\n    \"verdicts\": {\n      \"driver_name_meaning\": true,\n      \"driver_state\": true,\n      \"favorability\": true,\n      \"growth_basis\": true,\n      \"lane_routing\": true,\n      \"record_matches_source\": true,\n      \"slice_vs_menu\": true\n    }\n  }\n]\n```"
+  },
+  "G2-034/G1b": {
+   "chars": 612,
+   "sha256": "c6aa30ba18151b028889307ece0542a933df982aff47b348bad72a20d5ba13ec",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M4ee9337472e91555\",\n    \"verdicts\": {\n      \"driver_name_meaning\": \"true\",\n      \"driver_state\": \"true\",\n      \"favorability\": \"true\",\n      \"growth_basis\": \"true\",\n      \"lane_routing\": \"true\",\n      \"record_matches_source\": \"true\",\n      \"slice_vs_menu\": \"true\"\n    }\n  },\n  {\n    \"question_id\": \"M78a5c6360c93a561\",\n    \"verdicts\": {\n      \"driver_name_meaning\": \"true\",\n      \"driver_state\": \"true\",\n      \"favorability\": \"true\",\n      \"growth_basis\": \"true\",\n      \"lane_routing\": \"true\",\n      \"record_matches_source\": \"true\",\n      \"slice_vs_menu\": \"true\"\n    }\n  }\n]\n```"
+  }
+ },
+ "segment": 66
+}
