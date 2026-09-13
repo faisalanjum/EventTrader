@@ -4,7 +4,16 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Newest evidence checkpoint, verified13:25 Eastern: normally committed/pushed
+Newest evidence checkpoint, verified14:29 Eastern: normally committed/pushed
+56bdb12c70e547d3801b23a1f5622a0d255f58d0, treefb5381ef460b675c1340c3a9d3a00ca35f5beae3;
+fresh remote matches. G2_PROGRESS_PUBLICATION_2111_F.json SHAb6196960 pins2667
+reviewed files through G2 segment114 plus unchanged G3 completion and the
+owner's clarified correction/reuse/stop instruction.425 changed paths; all2668
+selected committed files were read from Git and byte-hash verified. Index
+empty; main and unrelated work preserved. Core's collection is unchanged;
+no final score, A7 PASS or proven model-switch capability is claimed.
+
+Earlier evidence checkpoint, verified13:25 Eastern: normally committed/pushed
 353a7f2182992abb36291fef5f538acdd12ba4fe, tree6c8d970075f3d46b41adfaa1cb72b41aaa8d94a5;
 fresh remote matches. G2_PROGRESS_PUBLICATION_2111_E.json SHA0db1d986 pins2245
 reviewed files through G2 segment97 plus unchanged G3 completion.326 changed
@@ -55,11 +64,11 @@ G3 is already verified. Actual G2 evidence review and final scoring remain;
 no A7 score or PASS is implied. The pass log below preserves pre-publication
 proof history; its former closure/publication blockers are resolved.
 
-Collection review,14:18 Eastern: G2 segments6–114 independently replayed through
+Collection review,14:50 Eastern: G2 segments6–121 independently replayed through
 the original native/parser checks (REVIEWs SHAbcbef7be,2f949a42,dd226d67,
-96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5,73241d30,a6f6f669,c91f1246,39f87cf4,193b01c2,c0b9aa67,1ac95c61,8a14957a,686ee614,cceb3064,9a1f5ba3,3e3b16e9,6ac467b5,97850833,75a8c4ed,cbe023f2,5336fce1,2d1b40ac,997683e0,9e83285c,5c6cf2ff,9cfa5c9d,d96ae913), and all450
-durable native copies match their sources. The116 readings include42 original-
-valid and74 recovered; exact retry-filter replays preserve every negative
+96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5,73241d30,a6f6f669,c91f1246,39f87cf4,193b01c2,c0b9aa67,1ac95c61,8a14957a,686ee614,cceb3064,9a1f5ba3,3e3b16e9,6ac467b5,97850833,75a8c4ed,cbe023f2,5336fce1,2d1b40ac,997683e0,9e83285c,5c6cf2ff,9cfa5c9d,d96ae913,5112b21b,cf0fc51c,19c2aa2a,4076a34e,284aca3d,a597bc46,394b95fb), and all478
+durable native copies match their sources. The123 readings include43 original-
+valid and80 recovered; exact retry-filter replays preserve every negative
 judgment and require no retry. Two-reading segments17,24,27,36,49,66 and83 are verified.
 G3's reviewed completion
 is now saved through C.persist_g23 and reloaded: exact approved bytesad575661,
@@ -74,6 +83,10 @@ owns the tasks and closure conditions. The provisional33 agreed error flags
 are not confirmed source errors;91 unresolved comparisons are not proved
 wrong. Latest owner scope also requires proving reuse through one supported
 model selection, including the existing local setup, then STOP AND WAIT.
+Latest local limitation: this setup check belongs at the END, against
+LeftOverSteps/QwenInference.md and QwenTests/LOCAL_QWEN_HANDOFF.md. Offline
+A7-side contract checks only; no engine/client/server change or live local
+model/preflight/probe. Actual local execution belongs to its host-side task.
 The work order §6 owns that bounded task; no A8 or later task may start.
 No later-step gate, current frozen model identity or production boundary is waived.
 Owner clarified that corrections target faults in the test/key/grading, not
