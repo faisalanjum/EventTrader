@@ -1,0 +1,7 @@
+SEGMENT     : 4 state_file wf_1b35494d-174.json
+OFFICIAL_ROWS: 43
+LEDGER      : {"invalid":1,"retry":1,"scheduled":43,"uncalled":0,"valid":42}
+RETRY       : ['G1-069/G1b'] UNCALLED []
+NONVALID    : [['G1-069/G1b', False]] why {"G1-069/G1b":["the reply is dict, not an array"]}
+SEGMENT_CLEAN: False
+STOP: segment 4 is not clean; do NOT start the next segment

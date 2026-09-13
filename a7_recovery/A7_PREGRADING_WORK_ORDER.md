@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 68, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 69, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -39,7 +39,66 @@ plan tree. The amendment changes reuse/key timing, not coverage or pass bars.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT TASK: Codex2093, SHA256
+CURRENT TASK: Codex2095, SHA256
+93daa0fcb71263f7967e735b0161723f52f25607aff6b5430e05126d11e92ba7,
+answers Core2095 9d0b6e7237d0ae5ce8418723e2cc1f358462c3c46e55d1585fba904658965e3e.
+Core collects ONLY47 uncalled G1 primary rows145–191, maximum47 calls,
+814→861 completed calls. No retry under2095. Fully evidenced malformed
+replies remain invalid but do not stop the next primary batch. Actual refusal,
+missing/ambiguous evidence, identity/input/owner drift, pending finalization
+or safety conflicts still stop. Existing operator/owners only; no Core code,
+helper, prompt, key, hook or settings edits. One combined reply then WAIT.
+
+OWNER DECISION: the owner explicitly approved the partial-scoring exception
+and instructed Codex to implement/test it, then investigate remaining failures
+and commit/push verified progress. Its one rule owner is now
+FableExperimentPlan.md §2 A7 amendment point6 in this recovery worktree.
+Main is untouched. Partial reporting is not A7 PASS and does not waive later
+entry gates. Unknown required grading stays INCONCLUSIVE unless an established
+safety failure already proves FAIL. No unlimited retry or automatic A8.
+
+VERIFIED CURRENT COLLECTION:146 completed G1 calls,143 valid readings,
+3 invalid attempts on2 lanes.145 of192 primary lanes attempted,47 uncalled.
+G1-050/G1a is exhausted after two malformed replies:5 questions in
+P2/source0001104659-25-118458. G1-069/G1b has ONE unused retry:
+1 question in UNION/source0000063908-26-000032. Do not describe the remaining
+gap as necessarily only one P2 event. Original382 producer replies unchanged.
+All segment4 native88 copies match originals;43 complete worker/returned/
+journal/raw bindings match,146 worker transcript lines parse strictly, and
+all43 agent/request/response identities are disjoint from all103 prior calls.
+
+INDEPENDENT PUBLIC-ENTRY PROOF: codex_g1stop2095_a payload exit0,stderr0;
+146 native whole replies,zero evidence problems; original B.refuse and
+official_resolutions reject exactly49 missing-valid lanes. REVIEW.json
+d8938a5ee5f0ff152b59e8ab68f7af0c559f7d3934f045554a63aa04a338e8c1;
+STOP_PROOF.json78f9820ca20fbf286f50de528834a59846ae58998ca0bf84c042669ef38e93f3.
+Reviewed pre-next-segment run c09f6cf2b1fb772d3a67263d2e543b2b428cd0672c8bb0c7479ea45187344bf7,
+325files. This corrects2093's incomplete reasoning: the per-leg incomplete
+logic exists but the public all-valid gate previously prevented reaching it.
+The original parser/gate worked as frozen; the new behavior is an approved
+reporting-rule change, not a claimed bug fix or JSON coercion.
+
+CODEX WORK IN PARALLEL: preserve/publish verified segment4 and its gate proof;
+test first, then add only the approved reporting admission change, keeping
+frozen collection owners/raw records intact and pinning the reporting policy.
+Prove all evidence/identity refusals remain, exhausted invalids get no credit,
+full denominators and incomplete findings reach the real scorer, and the
+unchanged final gate cannot PASS missing required grading. Then finish the
+remaining G1 attempt2 subset and use the existing G2/G3 workflow and scorer.
+G.latest_retry retains already-used historical entries; the thin old.retry
+wrapper compares that whole map. G.lifecycle_problems is the existing owner
+that refuses consumed attempts. Resolve only this actual operator seam, never
+launch a third attempt or repeat a successful call. No new scoring framework.
+
+LATEST VERIFIED/PUSHED COMMIT: bffbfbbfada10c21c482f2b9be01b41a028d0aaf,
+tree d840295f39c98e89e429ce307454c72406b061ed,
+parent30bafd205af0f83cb58469add364ce9983a353aa. Normal push/fresh remote
+verified.37 scoped changed paths,258 manifest records. This includes the
+exhausted retry and two required helper-record corrections, not segment4.
+
+### Superseded collection history — not an active authorization
+
+HISTORICAL TASK: Codex2093, SHA256
 cc59a9052f559faac9aabb007bce97d74fbf670d1cd1b6c1b94c6edfbac39525,
 answers Core2093 324939e7081a03bf1d7761089f59d1ca9f85d8a58cf16e70de89e279a379959c.
 

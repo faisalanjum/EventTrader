@@ -1,0 +1,27 @@
+{
+ "capture": "seg04.pos027",
+ "error": null,
+ "has_error": false,
+ "has_text": true,
+ "position": 27,
+ "raw_path": "raw/00129.attempt1.raw.json",
+ "raw_sha256": "7110b11cb2635f610431399a1b3d236e6e3451ed77489a9ffa9de33ee189049d",
+ "returned": {
+  "agentType": "lean-probe",
+  "attempt": 1,
+  "batch_id": "G1-064",
+  "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "invocation_sha256": "bed7b02ab62bc32ce6b2cf77ed5951bd2c331a2ae07f79c9275836062b2cf452",
+  "lane_id": "G1-064/G1b",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "ordinal": 129,
+  "prompt_sha256": "853229430962ef9957fd1a9843afdd20002691f0b721835e2c72f67ff4bc7e62",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "segment": 4
+}

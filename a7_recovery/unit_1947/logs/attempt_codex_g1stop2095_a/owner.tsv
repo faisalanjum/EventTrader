@@ -1,0 +1,7 @@
+attempt	codex_g1stop2095_a
+payload	../../unit_2020_codex_check/review_grading_stop_2095.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3838094
+payload_pid	3838098
+started_utc	2026-09-13T05:06:20Z
+state	finished exit 0
