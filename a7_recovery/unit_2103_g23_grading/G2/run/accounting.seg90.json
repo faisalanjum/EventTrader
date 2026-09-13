@@ -1,0 +1,16 @@
+{
+ "attempt": 1,
+ "captures": [
+  "seg90.pos000"
+ ],
+ "counts": {
+  "served": 1
+ },
+ "outcomes": {
+  "G2-047/G1a": "served"
+ },
+ "receipt_sha256": "d9c3e193848ed01e4e1124b876f91d8cd9dd6f14bdad39b5a2538d84020336af",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 90,
+ "selected": 1
+}

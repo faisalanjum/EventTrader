@@ -4,7 +4,15 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Newest evidence checkpoint,11:28 Eastern: normally committed/pushed
+Newest evidence checkpoint,12:31 Eastern: normally committed/pushed
+c03009733270ab985ad64fb1bd8f55fedccb4bf8, treea82b5c0e75ebe406ee6de430aae3213f2994de04;
+fresh remote matches. G2_PROGRESS_PUBLICATION_2111_D.json SHA26e2091f pins1922
+reviewed files through G2 segment84 plus unchanged G3 completion.366 changed
+paths; all1923 selected committed files match, index empty, unrelated work
+preserved. No grader or input change.49 primaries remain at this snapshot;
+Core continues Codex2110. No final score or PASS is claimed.
+
+Earlier evidence checkpoint,11:28 Eastern: normally committed/pushed
 c94cfe4e722afe625eb2b8c28b6cfb4f4c0413bf, treebe29c4045de167b8065276597c8747ea78609fb6;
 fresh remote matches. G2_PROGRESS_PUBLICATION_2111_C.json SHAbc28b72f pins1559
 reviewed files through G2 segment70 plus the unchanged persisted G3 completion.
@@ -39,11 +47,11 @@ G3 is already verified. Actual G2 evidence review and final scoring remain;
 no A7 score or PASS is implied. The pass log below preserves pre-publication
 proof history; its former closure/publication blockers are resolved.
 
-Collection review,12:27 Eastern: G2 segments6–84 independently replayed through
+Collection review,13:18 Eastern: G2 segments6–97 independently replayed through
 the original native/parser checks (REVIEWs SHAbcbef7be,2f949a42,dd226d67,
-96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5), and all330
-durable native copies match their sources. The86 readings include33 original-
-valid and53 recovered; exact retry-filter replays preserve every negative
+96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5,73241d30,a6f6f669,c91f1246,39f87cf4,193b01c2,c0b9aa67,1ac95c61,8a14957a,686ee614,cceb3064), and all382
+durable native copies match their sources. The99 readings include37 original-
+valid and62 recovered; exact retry-filter replays preserve every negative
 judgment and require no retry. Two-reading segments17,24,27,36,49,66 and83 are verified.
 G3's reviewed completion
 is now saved through C.persist_g23 and reloaded: exact approved bytesad575661,

@@ -1,0 +1,7 @@
+attempt	codex_g2native2111_seg85to86
+payload	../../unit_2020_codex_check/review_finalized_grading_2104.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	739118
+payload_pid	739122
+started_utc	2026-09-13T16:32:49Z
+state	finished exit 0
