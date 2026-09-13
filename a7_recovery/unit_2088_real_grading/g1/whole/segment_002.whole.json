@@ -1,0 +1,255 @@
+{
+ "lanes": {
+  "G1-026/G1a": {
+   "chars": 310,
+   "sha256": "63baa76ea8f12850e52870bd0a2cdb08d8c8d90a1d1b57344e0599cb9c121549",
+   "text": "```json\n[{\"question_id\": \"Q6d22364e7885a38a\", \"produced_idxs\": []}, {\"question_id\": \"Qfc2fb35bd374630b\", \"produced_idxs\": []}, {\"question_id\": \"Q5ae144e542db311b\", \"produced_idxs\": [4]}, {\"question_id\": \"Q40921076b4597647\", \"produced_idxs\": [5]}, {\"question_id\": \"Q013f02b2d03c8fb5\", \"produced_idxs\": [6]}]\n```"
+  },
+  "G1-026/G1b": {
+   "chars": 312,
+   "sha256": "9e2a79f40460f74a90839f0d63f3087065b9972e1acc4b8bdc4d9e72e7753efa",
+   "text": "```json\n[\n{\"question_id\": \"Q6d22364e7885a38a\", \"produced_idxs\": []},\n{\"question_id\": \"Qfc2fb35bd374630b\", \"produced_idxs\": []},\n{\"question_id\": \"Q5ae144e542db311b\", \"produced_idxs\": [4]},\n{\"question_id\": \"Q40921076b4597647\", \"produced_idxs\": [5]},\n{\"question_id\": \"Q013f02b2d03c8fb5\", \"produced_idxs\": [6]}\n]\n```"
+  },
+  "G1-027/G1a": {
+   "chars": 240,
+   "sha256": "7d0fa041bb6053ff81b585301fe647a09aef835152e0ad05fac365d67e24ea42",
+   "text": "[{\"question_id\": \"Qffbe52027f496d4e\", \"produced_idxs\": [1]}, {\"question_id\": \"Qc5bef38a72a085b5\", \"produced_idxs\": [2]}, {\"question_id\": \"Qfcaa9815252c5d3b\", \"produced_idxs\": [3]}, {\"question_id\": \"Q6f92438182072a61\", \"produced_idxs\": [4]}]"
+  },
+  "G1-027/G1b": {
+   "chars": 240,
+   "sha256": "7d0fa041bb6053ff81b585301fe647a09aef835152e0ad05fac365d67e24ea42",
+   "text": "[{\"question_id\": \"Qffbe52027f496d4e\", \"produced_idxs\": [1]}, {\"question_id\": \"Qc5bef38a72a085b5\", \"produced_idxs\": [2]}, {\"question_id\": \"Qfcaa9815252c5d3b\", \"produced_idxs\": [3]}, {\"question_id\": \"Q6f92438182072a61\", \"produced_idxs\": [4]}]"
+  },
+  "G1-028/G1a": {
+   "chars": 416,
+   "sha256": "1a376826d969ff0787cd50f7e6f30d99ea285809bafa4e2697645fe7100b6009",
+   "text": "[{\"question_id\": \"Qb167d8f3fe441cfa\", \"produced_idxs\": [0]}, {\"question_id\": \"Q97e94e7d29d99937\", \"produced_idxs\": []}, {\"question_id\": \"Q443fecf4b22e3f19\", \"produced_idxs\": []}, {\"question_id\": \"Qb3e34b13927e9b6b\", \"produced_idxs\": []}, {\"question_id\": \"Q4b49cec6f1fde776\", \"produced_idxs\": []}, {\"question_id\": \"Q71c4f350f1b4b8e0\", \"produced_idxs\": [5]}, {\"question_id\": \"Q1074269174675d28\", \"produced_idxs\": [6]}]"
+  },
+  "G1-028/G1b": {
+   "chars": 416,
+   "sha256": "1a376826d969ff0787cd50f7e6f30d99ea285809bafa4e2697645fe7100b6009",
+   "text": "[{\"question_id\": \"Qb167d8f3fe441cfa\", \"produced_idxs\": [0]}, {\"question_id\": \"Q97e94e7d29d99937\", \"produced_idxs\": []}, {\"question_id\": \"Q443fecf4b22e3f19\", \"produced_idxs\": []}, {\"question_id\": \"Qb3e34b13927e9b6b\", \"produced_idxs\": []}, {\"question_id\": \"Q4b49cec6f1fde776\", \"produced_idxs\": []}, {\"question_id\": \"Q71c4f350f1b4b8e0\", \"produced_idxs\": [5]}, {\"question_id\": \"Q1074269174675d28\", \"produced_idxs\": [6]}]"
+  },
+  "G1-029/G1a": {
+   "chars": 359,
+   "sha256": "89aa878e4b027868a7764673d1369da19e99b021f590cc9e1f0f490fc0464d96",
+   "text": "[{\"question_id\": \"Qbdb28574e786588d\", \"produced_idxs\": [0]}, {\"question_id\": \"Q61d74581c3b02a6c\", \"produced_idxs\": [1]}, {\"question_id\": \"Q896555560f6be0c3\", \"produced_idxs\": [2]}, {\"question_id\": \"Q2751ca97051a9e70\", \"produced_idxs\": [3]}, {\"question_id\": \"Q4a6da58e91406462\", \"produced_idxs\": []}, {\"question_id\": \"Q21983b2ea5731bf2\", \"produced_idxs\": [4]}]"
+  },
+  "G1-029/G1b": {
+   "chars": 371,
+   "sha256": "04bf5b3c1fa75cea28a9c9cf20547b17d7b967ef59011257d1ab16b68f09bc7e",
+   "text": "```json\n[{\"question_id\": \"Qbdb28574e786588d\", \"produced_idxs\": [0]},\n{\"question_id\": \"Q61d74581c3b02a6c\", \"produced_idxs\": [1]},\n{\"question_id\": \"Q896555560f6be0c3\", \"produced_idxs\": [2]},\n{\"question_id\": \"Q2751ca97051a9e70\", \"produced_idxs\": [3]},\n{\"question_id\": \"Q4a6da58e91406462\", \"produced_idxs\": []},\n{\"question_id\": \"Q21983b2ea5731bf2\", \"produced_idxs\": [4]}]\n```"
+  },
+  "G1-030/G1a": {
+   "chars": 298,
+   "sha256": "c29e26e6f4417ee208196e9af559113d0be1d9570e52af85c3ca7634c7d9ce72",
+   "text": "[{\"question_id\": \"Qb774ef2e2ad3629e\", \"produced_idxs\": [1]}, {\"question_id\": \"Qf4ced50d6e3a3c63\", \"produced_idxs\": []}, {\"question_id\": \"Qc68d16b851226973\", \"produced_idxs\": []}, {\"question_id\": \"Q1b08b90ad270576d\", \"produced_idxs\": [5]}, {\"question_id\": \"Q9bb9e4670dab2355\", \"produced_idxs\": [6]}]"
+  },
+  "G1-030/G1b": {
+   "chars": 317,
+   "sha256": "95347369daeb5a9d0eb9ea77bae5f86eb1be46af69a4ae1ca09d6daac6d648c6",
+   "text": "```json\n[\n {\"question_id\": \"Qb774ef2e2ad3629e\", \"produced_idxs\": [1]},\n {\"question_id\": \"Qf4ced50d6e3a3c63\", \"produced_idxs\": []},\n {\"question_id\": \"Qc68d16b851226973\", \"produced_idxs\": []},\n {\"question_id\": \"Q1b08b90ad270576d\", \"produced_idxs\": [5]},\n {\"question_id\": \"Q9bb9e4670dab2355\", \"produced_idxs\": [6]}\n]\n```"
+  },
+  "G1-031/G1a": {
+   "chars": 60,
+   "sha256": "fc8440c34542e6c8e29de08c6dcd4acacdb537528985f1885f499b290e38c4aa",
+   "text": "[{\"question_id\": \"Q50a0de9a0225672e\", \"produced_idxs\": [0]}]"
+  },
+  "G1-031/G1b": {
+   "chars": 60,
+   "sha256": "fc8440c34542e6c8e29de08c6dcd4acacdb537528985f1885f499b290e38c4aa",
+   "text": "[{\"question_id\": \"Q50a0de9a0225672e\", \"produced_idxs\": [0]}]"
+  },
+  "G1-032/G1a": {
+   "chars": 370,
+   "sha256": "19d27a3c4cdda827bdbaf3877c4fd07a6516edbd2d5eab46a7e6c0514b3ecef8",
+   "text": "```json\n[{\"question_id\": \"Qd976ac904facd5aa\", \"produced_idxs\": []}, {\"question_id\": \"Q2c74c68003ea81ca\", \"produced_idxs\": []}, {\"question_id\": \"Qd4f7effaa5e55cc0\", \"produced_idxs\": [2]}, {\"question_id\": \"Q98d99b1d8f07b67e\", \"produced_idxs\": [3]}, {\"question_id\": \"Qa08ced1889b9377e\", \"produced_idxs\": [4]}, {\"question_id\": \"Qa315331ec5839896\", \"produced_idxs\": [5]}]\n```"
+  },
+  "G1-032/G1b": {
+   "chars": 358,
+   "sha256": "f9cbee841ad340be6c7ea87811fd24d7ec6b853f5197e69369c79d965ce01d62",
+   "text": "[{\"question_id\": \"Qd976ac904facd5aa\", \"produced_idxs\": []}, {\"question_id\": \"Q2c74c68003ea81ca\", \"produced_idxs\": []}, {\"question_id\": \"Qd4f7effaa5e55cc0\", \"produced_idxs\": [2]}, {\"question_id\": \"Q98d99b1d8f07b67e\", \"produced_idxs\": [3]}, {\"question_id\": \"Qa08ced1889b9377e\", \"produced_idxs\": [4]}, {\"question_id\": \"Qa315331ec5839896\", \"produced_idxs\": [5]}]"
+  },
+  "G1-033/G1a": {
+   "chars": 240,
+   "sha256": "09027658bd525bbfec7e2bde75c40069a414053fbe58ea8e3cb9cf9dd004755d",
+   "text": "[{\"question_id\": \"Qd3371fe5f451f448\", \"produced_idxs\": [0]}, {\"question_id\": \"Q2d914c8c9c32338b\", \"produced_idxs\": [1]}, {\"question_id\": \"Q3127e51be5a2dd06\", \"produced_idxs\": [2]}, {\"question_id\": \"Q55d751204d118ffe\", \"produced_idxs\": [3]}]"
+  },
+  "G1-033/G1b": {
+   "chars": 240,
+   "sha256": "09027658bd525bbfec7e2bde75c40069a414053fbe58ea8e3cb9cf9dd004755d",
+   "text": "[{\"question_id\": \"Qd3371fe5f451f448\", \"produced_idxs\": [0]}, {\"question_id\": \"Q2d914c8c9c32338b\", \"produced_idxs\": [1]}, {\"question_id\": \"Q3127e51be5a2dd06\", \"produced_idxs\": [2]}, {\"question_id\": \"Q55d751204d118ffe\", \"produced_idxs\": [3]}]"
+  },
+  "G1-034/G1a": {
+   "chars": 298,
+   "sha256": "1de64097073943acb74b8919ceb4e8e716d530f334f393b00fadd9f4c9e759a8",
+   "text": "[{\"question_id\": \"Qd51dd91ea53fcf6f\", \"produced_idxs\": []}, {\"question_id\": \"Q0aeb805d9252d078\", \"produced_idxs\": []}, {\"question_id\": \"Qf98228214a75152b\", \"produced_idxs\": [4]}, {\"question_id\": \"Qd9a967741e354e91\", \"produced_idxs\": [5]}, {\"question_id\": \"Q2874f263e1c8cb8a\", \"produced_idxs\": [6]}]"
+  },
+  "G1-034/G1b": {
+   "chars": 298,
+   "sha256": "1de64097073943acb74b8919ceb4e8e716d530f334f393b00fadd9f4c9e759a8",
+   "text": "[{\"question_id\": \"Qd51dd91ea53fcf6f\", \"produced_idxs\": []}, {\"question_id\": \"Q0aeb805d9252d078\", \"produced_idxs\": []}, {\"question_id\": \"Qf98228214a75152b\", \"produced_idxs\": [4]}, {\"question_id\": \"Qd9a967741e354e91\", \"produced_idxs\": [5]}, {\"question_id\": \"Q2874f263e1c8cb8a\", \"produced_idxs\": [6]}]"
+  },
+  "G1-035/G1a": {
+   "chars": 416,
+   "sha256": "5ba143084a2719fe5c8553aeccfa5312bbead4aae63e8c6ea32042408dc63387",
+   "text": "[{\"question_id\": \"Q028caa1e844f5e19\", \"produced_idxs\": [0]}, {\"question_id\": \"Q6475b0b721f715ab\", \"produced_idxs\": [1]}, {\"question_id\": \"Q79a5ae710703b4f0\", \"produced_idxs\": []}, {\"question_id\": \"Qaa20144348dfa4aa\", \"produced_idxs\": []}, {\"question_id\": \"Q0a1080d896a3d294\", \"produced_idxs\": []}, {\"question_id\": \"Q72a831a8c345468c\", \"produced_idxs\": []}, {\"question_id\": \"Q2046288bca73ab69\", \"produced_idxs\": [9]}]"
+  },
+  "G1-035/G1b": {
+   "chars": 416,
+   "sha256": "5ba143084a2719fe5c8553aeccfa5312bbead4aae63e8c6ea32042408dc63387",
+   "text": "[{\"question_id\": \"Q028caa1e844f5e19\", \"produced_idxs\": [0]}, {\"question_id\": \"Q6475b0b721f715ab\", \"produced_idxs\": [1]}, {\"question_id\": \"Q79a5ae710703b4f0\", \"produced_idxs\": []}, {\"question_id\": \"Qaa20144348dfa4aa\", \"produced_idxs\": []}, {\"question_id\": \"Q0a1080d896a3d294\", \"produced_idxs\": []}, {\"question_id\": \"Q72a831a8c345468c\", \"produced_idxs\": []}, {\"question_id\": \"Q2046288bca73ab69\", \"produced_idxs\": [9]}]"
+  },
+  "G1-036/G1a": {
+   "chars": 183,
+   "sha256": "d1a6e778d5e3b91fd8dcf581cfeea1faa0f7644b9d4e74f60b576126eb943c8c",
+   "text": "[{\"question_id\": \"Qa6e52cea02bcc64e\", \"produced_idxs\": [0]}, {\"question_id\": \"Q8d39a6fa65ba3592\", \"produced_idxs\": [1, 2]}, {\"question_id\": \"Q12dd85ea3ab14b9f\", \"produced_idxs\": [3]}]"
+  },
+  "G1-036/G1b": {
+   "chars": 183,
+   "sha256": "d1a6e778d5e3b91fd8dcf581cfeea1faa0f7644b9d4e74f60b576126eb943c8c",
+   "text": "[{\"question_id\": \"Qa6e52cea02bcc64e\", \"produced_idxs\": [0]}, {\"question_id\": \"Q8d39a6fa65ba3592\", \"produced_idxs\": [1, 2]}, {\"question_id\": \"Q12dd85ea3ab14b9f\", \"produced_idxs\": [3]}]"
+  },
+  "G1-037/G1a": {
+   "chars": 59,
+   "sha256": "e0c63a8867a62c93129cab4c88f631854a3b3fc27ebfc88866044cc750abee92",
+   "text": "[{\"question_id\": \"Q01a1dcd04b2978d6\", \"produced_idxs\": []}]"
+  },
+  "G1-037/G1b": {
+   "chars": 59,
+   "sha256": "e0c63a8867a62c93129cab4c88f631854a3b3fc27ebfc88866044cc750abee92",
+   "text": "[{\"question_id\": \"Q01a1dcd04b2978d6\", \"produced_idxs\": []}]"
+  },
+  "G1-038/G1a": {
+   "chars": 534,
+   "sha256": "41131092c35d1e25a0fc548df8157d256814eb8a5de508306735dd8385ec94f5",
+   "text": "[{\"question_id\": \"Q555b3b8599e77547\", \"produced_idxs\": []}, {\"question_id\": \"Q1faf4f6a817c371d\", \"produced_idxs\": []}, {\"question_id\": \"Qd35598dc446f3c9a\", \"produced_idxs\": []}, {\"question_id\": \"Q7f56bfc7b2235aad\", \"produced_idxs\": []}, {\"question_id\": \"Qbec488910396d8bc\", \"produced_idxs\": [4]}, {\"question_id\": \"Qa8442ceb12943c42\", \"produced_idxs\": [5]}, {\"question_id\": \"Q25468f57809039d5\", \"produced_idxs\": []}, {\"question_id\": \"Q71ad4ad8f08343b8\", \"produced_idxs\": []}, {\"question_id\": \"Q426e0397f098f3ef\", \"produced_idxs\": [8]}]"
+  },
+  "G1-038/G1b": {
+   "chars": 548,
+   "sha256": "ee979a66ef3676d40c8eedee11c2be34615c6d8bce1f5cac7973ce5a1b6b6cb6",
+   "text": "```json\n[\n{\"question_id\": \"Q555b3b8599e77547\", \"produced_idxs\": []},\n{\"question_id\": \"Q1faf4f6a817c371d\", \"produced_idxs\": []},\n{\"question_id\": \"Qd35598dc446f3c9a\", \"produced_idxs\": []},\n{\"question_id\": \"Q7f56bfc7b2235aad\", \"produced_idxs\": []},\n{\"question_id\": \"Qbec488910396d8bc\", \"produced_idxs\": [4]},\n{\"question_id\": \"Qa8442ceb12943c42\", \"produced_idxs\": [5]},\n{\"question_id\": \"Q25468f57809039d5\", \"produced_idxs\": []},\n{\"question_id\": \"Q71ad4ad8f08343b8\", \"produced_idxs\": []},\n{\"question_id\": \"Q426e0397f098f3ef\", \"produced_idxs\": [8]}\n]\n```"
+  },
+  "G1-039/G1a": {
+   "chars": 240,
+   "sha256": "d14331426833e7bd443e8c30858f418ff84a6f96c55b52ce75b42acc79d89ddf",
+   "text": "[{\"question_id\": \"Qf33cb9b71a0567cb\", \"produced_idxs\": [0]}, {\"question_id\": \"Qfabe5d96a2114c53\", \"produced_idxs\": [1]}, {\"question_id\": \"Qaf5da5aa3b2ab79d\", \"produced_idxs\": [2]}, {\"question_id\": \"Q101e064f93298e8e\", \"produced_idxs\": [4]}]"
+  },
+  "G1-039/G1b": {
+   "chars": 240,
+   "sha256": "d14331426833e7bd443e8c30858f418ff84a6f96c55b52ce75b42acc79d89ddf",
+   "text": "[{\"question_id\": \"Qf33cb9b71a0567cb\", \"produced_idxs\": [0]}, {\"question_id\": \"Qfabe5d96a2114c53\", \"produced_idxs\": [1]}, {\"question_id\": \"Qaf5da5aa3b2ab79d\", \"produced_idxs\": [2]}, {\"question_id\": \"Q101e064f93298e8e\", \"produced_idxs\": [4]}]"
+  },
+  "G1-040/G1a": {
+   "chars": 298,
+   "sha256": "45af4bd0555d717ef66b9205688848351c6c40988fd841dd5a98480fe1447ad7",
+   "text": "[{\"question_id\": \"Q22d7a17bb2262a4d\", \"produced_idxs\": [0]}, {\"question_id\": \"Q460481cb159beb63\", \"produced_idxs\": []}, {\"question_id\": \"Q1c7503e53b4e38a1\", \"produced_idxs\": []}, {\"question_id\": \"Q032e0f69508a49e4\", \"produced_idxs\": [3]}, {\"question_id\": \"Qc81ca583daf38ba5\", \"produced_idxs\": [4]}]"
+  },
+  "G1-040/G1b": {
+   "chars": 298,
+   "sha256": "45af4bd0555d717ef66b9205688848351c6c40988fd841dd5a98480fe1447ad7",
+   "text": "[{\"question_id\": \"Q22d7a17bb2262a4d\", \"produced_idxs\": [0]}, {\"question_id\": \"Q460481cb159beb63\", \"produced_idxs\": []}, {\"question_id\": \"Q1c7503e53b4e38a1\", \"produced_idxs\": []}, {\"question_id\": \"Q032e0f69508a49e4\", \"produced_idxs\": [3]}, {\"question_id\": \"Qc81ca583daf38ba5\", \"produced_idxs\": [4]}]"
+  },
+  "G1-041/G1a": {
+   "chars": 180,
+   "sha256": "776b560c6ec71cd5913c9dae6568dea1ed5be255cd2b5be8e353d970d0b3e1d7",
+   "text": "[{\"question_id\": \"Q99c91c710229a327\", \"produced_idxs\": [0]}, {\"question_id\": \"Q0bf043fa3538e470\", \"produced_idxs\": [1]}, {\"question_id\": \"Qccc7b3dfd4381020\", \"produced_idxs\": [2]}]"
+  },
+  "G1-041/G1b": {
+   "chars": 180,
+   "sha256": "776b560c6ec71cd5913c9dae6568dea1ed5be255cd2b5be8e353d970d0b3e1d7",
+   "text": "[{\"question_id\": \"Q99c91c710229a327\", \"produced_idxs\": [0]}, {\"question_id\": \"Q0bf043fa3538e470\", \"produced_idxs\": [1]}, {\"question_id\": \"Qccc7b3dfd4381020\", \"produced_idxs\": [2]}]"
+  },
+  "G1-042/G1a": {
+   "chars": 240,
+   "sha256": "6de0a2a6a43c3e0accbf988c0537b1f250eb6f7cf616b28cbaadc67a9d719eee",
+   "text": "[{\"question_id\": \"Q6acc4a87dde948e8\", \"produced_idxs\": [0]}, {\"question_id\": \"Qc04ce484f19716d0\", \"produced_idxs\": [1]}, {\"question_id\": \"Q18c90484be40c6bf\", \"produced_idxs\": [2]}, {\"question_id\": \"Q677a107cca2bae24\", \"produced_idxs\": [3]}]"
+  },
+  "G1-042/G1b": {
+   "chars": 240,
+   "sha256": "6de0a2a6a43c3e0accbf988c0537b1f250eb6f7cf616b28cbaadc67a9d719eee",
+   "text": "[{\"question_id\": \"Q6acc4a87dde948e8\", \"produced_idxs\": [0]}, {\"question_id\": \"Qc04ce484f19716d0\", \"produced_idxs\": [1]}, {\"question_id\": \"Q18c90484be40c6bf\", \"produced_idxs\": [2]}, {\"question_id\": \"Q677a107cca2bae24\", \"produced_idxs\": [3]}]"
+  },
+  "G1-043/G1a": {
+   "chars": 240,
+   "sha256": "49329e99f80c3ed9c3d52157b829bf982b648b0cdb58748bd5837bcf5780555c",
+   "text": "[{\"question_id\": \"Q299222b850286362\", \"produced_idxs\": [0]}, {\"question_id\": \"Q12b66311a1505a54\", \"produced_idxs\": [1]}, {\"question_id\": \"Qd4402833513be661\", \"produced_idxs\": [2]}, {\"question_id\": \"Q44bc1d0f708d7210\", \"produced_idxs\": [3]}]"
+  },
+  "G1-043/G1b": {
+   "chars": 240,
+   "sha256": "49329e99f80c3ed9c3d52157b829bf982b648b0cdb58748bd5837bcf5780555c",
+   "text": "[{\"question_id\": \"Q299222b850286362\", \"produced_idxs\": [0]}, {\"question_id\": \"Q12b66311a1505a54\", \"produced_idxs\": [1]}, {\"question_id\": \"Qd4402833513be661\", \"produced_idxs\": [2]}, {\"question_id\": \"Q44bc1d0f708d7210\", \"produced_idxs\": [3]}]"
+  },
+  "G1-044/G1a": {
+   "chars": 300,
+   "sha256": "872300bc62c7c610d6da192a7dd0539f5fc9c38254bd30866a22105e667d1322",
+   "text": "[{\"question_id\": \"Q59cce6dab3cea2d5\", \"produced_idxs\": [0]}, {\"question_id\": \"Q9c4c41dcc2643c62\", \"produced_idxs\": [1]}, {\"question_id\": \"Qe91034a7badb41fd\", \"produced_idxs\": [2]}, {\"question_id\": \"Q3c2795e391ae620e\", \"produced_idxs\": [3]}, {\"question_id\": \"Q659164b204cb0ceb\", \"produced_idxs\": [4]}]"
+  },
+  "G1-044/G1b": {
+   "chars": 300,
+   "sha256": "872300bc62c7c610d6da192a7dd0539f5fc9c38254bd30866a22105e667d1322",
+   "text": "[{\"question_id\": \"Q59cce6dab3cea2d5\", \"produced_idxs\": [0]}, {\"question_id\": \"Q9c4c41dcc2643c62\", \"produced_idxs\": [1]}, {\"question_id\": \"Qe91034a7badb41fd\", \"produced_idxs\": [2]}, {\"question_id\": \"Q3c2795e391ae620e\", \"produced_idxs\": [3]}, {\"question_id\": \"Q659164b204cb0ceb\", \"produced_idxs\": [4]}]"
+  },
+  "G1-045/G1a": {
+   "chars": 120,
+   "sha256": "fe6810d4dc98a0f6d6c8457910428ea021190a3c6226a70e4ae6b7742c18f6ab",
+   "text": "[{\"question_id\": \"Qb741bdc2fcf71fa1\", \"produced_idxs\": [1]}, {\"question_id\": \"Qf127ae314966d54e\", \"produced_idxs\": [3]}]"
+  },
+  "G1-045/G1b": {
+   "chars": 120,
+   "sha256": "fe6810d4dc98a0f6d6c8457910428ea021190a3c6226a70e4ae6b7742c18f6ab",
+   "text": "[{\"question_id\": \"Qb741bdc2fcf71fa1\", \"produced_idxs\": [1]}, {\"question_id\": \"Qf127ae314966d54e\", \"produced_idxs\": [3]}]"
+  },
+  "G1-046/G1a": {
+   "chars": 240,
+   "sha256": "756acf00ad7ace437cf8597a4709d06edb4f85a26950f9306fd42b4d528407c7",
+   "text": "[{\"question_id\": \"Q51df411657666595\", \"produced_idxs\": [0]}, {\"question_id\": \"Qfea2ae35a61feb5f\", \"produced_idxs\": [1]}, {\"question_id\": \"Q601401ae84430489\", \"produced_idxs\": [3]}, {\"question_id\": \"Qa49d4627921fba21\", \"produced_idxs\": [4]}]"
+  },
+  "G1-046/G1b": {
+   "chars": 240,
+   "sha256": "756acf00ad7ace437cf8597a4709d06edb4f85a26950f9306fd42b4d528407c7",
+   "text": "[{\"question_id\": \"Q51df411657666595\", \"produced_idxs\": [0]}, {\"question_id\": \"Qfea2ae35a61feb5f\", \"produced_idxs\": [1]}, {\"question_id\": \"Q601401ae84430489\", \"produced_idxs\": [3]}, {\"question_id\": \"Qa49d4627921fba21\", \"produced_idxs\": [4]}]"
+  },
+  "G1-047/G1a": {
+   "chars": 179,
+   "sha256": "a7de9b51e3990d98abd70762e49c7d084eca65ba9119bd0d7e4bcc1153852387",
+   "text": "[{\"question_id\": \"Qe0b120778c4c0037\", \"produced_idxs\": [2]}, {\"question_id\": \"Q4b7d65bbba11e470\", \"produced_idxs\": [3]}, {\"question_id\": \"Q57fc207b139a2765\", \"produced_idxs\": []}]"
+  },
+  "G1-047/G1b": {
+   "chars": 179,
+   "sha256": "a7de9b51e3990d98abd70762e49c7d084eca65ba9119bd0d7e4bcc1153852387",
+   "text": "[{\"question_id\": \"Qe0b120778c4c0037\", \"produced_idxs\": [2]}, {\"question_id\": \"Q4b7d65bbba11e470\", \"produced_idxs\": [3]}, {\"question_id\": \"Q57fc207b139a2765\", \"produced_idxs\": []}]"
+  },
+  "G1-048/G1a": {
+   "chars": 243,
+   "sha256": "914e3fe2b08b6c29de0c5e0420860cddb709f03ca9c4b89cc4144d9cef7d9c26",
+   "text": "[{\"question_id\": \"Qd3d13d50967d6774\", \"produced_idxs\": [0]}, {\"question_id\": \"Qedcccfff6aed0073\", \"produced_idxs\": [2]}, {\"question_id\": \"Q23b9b221437344ba\", \"produced_idxs\": [3, 4]}, {\"question_id\": \"Qd0009e84da975aea\", \"produced_idxs\": [5]}]"
+  },
+  "G1-048/G1b": {
+   "chars": 261,
+   "sha256": "52d6e780577ab25e36b4e83fd3a13f2a8df0ac19a7616ee14e9622d992c5f42a",
+   "text": "```json\n[\n {\"question_id\": \"Qd3d13d50967d6774\", \"produced_idxs\": [0]},\n {\"question_id\": \"Qedcccfff6aed0073\", \"produced_idxs\": [2]},\n {\"question_id\": \"Q23b9b221437344ba\", \"produced_idxs\": [3, 4]},\n {\"question_id\": \"Qd0009e84da975aea\", \"produced_idxs\": [5]}\n]\n```"
+  },
+  "G1-049/G1a": {
+   "chars": 180,
+   "sha256": "7a0a7a8aa8f3c13c929d1a425a8bb6a354f1650ef5cbb13fc3832899fe1e0639",
+   "text": "[{\"question_id\": \"Q5b1f7a66a7f814d2\", \"produced_idxs\": [1]}, {\"question_id\": \"Q91d7fc2304d08fbf\", \"produced_idxs\": [2]}, {\"question_id\": \"Q47d75b2d6666d9e2\", \"produced_idxs\": [3]}]"
+  },
+  "G1-049/G1b": {
+   "chars": 180,
+   "sha256": "7a0a7a8aa8f3c13c929d1a425a8bb6a354f1650ef5cbb13fc3832899fe1e0639",
+   "text": "[{\"question_id\": \"Q5b1f7a66a7f814d2\", \"produced_idxs\": [1]}, {\"question_id\": \"Q91d7fc2304d08fbf\", \"produced_idxs\": [2]}, {\"question_id\": \"Q47d75b2d6666d9e2\", \"produced_idxs\": [3]}]"
+  },
+  "G1-050/G1a": {
+   "chars": 294,
+   "sha256": "826e27d50299ccd4cb5dceccd35874e0615b91bbbc1cc19141d04d6c5f4f0b28",
+   "text": "{\"question_id\": \"Q0ee3de74c087ac63\", \"produced_idxs\": [0]}\n{\"question_id\": \"Qdbec5e062a4909a1\", \"produced_idxs\": [1]}\n{\"question_id\": \"Qac842fe2cf4e9d16\", \"produced_idxs\": [2]}\n{\"question_id\": \"Q80ca57a79eacdd17\", \"produced_idxs\": [3]}\n{\"question_id\": \"Qab1d12f21194ee56\", \"produced_idxs\": [4]}"
+  },
+  "G1-050/G1b": {
+   "chars": 300,
+   "sha256": "11845d2a0f7a343881b8541f372bec304574559fe6ca4b64f84ff3281558f4b9",
+   "text": "[{\"question_id\": \"Q0ee3de74c087ac63\", \"produced_idxs\": [0]}, {\"question_id\": \"Qdbec5e062a4909a1\", \"produced_idxs\": [1]}, {\"question_id\": \"Qac842fe2cf4e9d16\", \"produced_idxs\": [2]}, {\"question_id\": \"Q80ca57a79eacdd17\", \"produced_idxs\": [3]}, {\"question_id\": \"Qab1d12f21194ee56\", \"produced_idxs\": [4]}]"
+  }
+ },
+ "segment": 2
+}

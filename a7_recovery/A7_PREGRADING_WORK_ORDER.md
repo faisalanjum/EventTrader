@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 66, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 67, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -39,9 +39,53 @@ plan tree. The amendment changes reuse/key timing, not coverage or pass bars.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT TASK: Codex2091, SHA256
-bbfec3e3e4b3878940eb2f7fde5700cbccb6a8b25a71b46f2ece380a9159e72f,
-answers Core2091 89de2aac3c46a1e84e78ac7e0a3544566163a896c0bfa223d90cf36a6d695f57.
+CURRENT TASK: Codex2092, SHA256
+9079e1896a99d0e1821c45d05d84af18e6e21ae356f54cb1e5ac453f2d754d23,
+answers Core2092 75f58c482e5013e8e631461f2456508ee19660aaa00d175af9bc56b71d909640.
+Segment2 is independently verified as50 returned,49 valid,1 invalid;
+NOT a clean segment or an A7 score. Across both segments:102 completed
+readings,101 valid,90 primary rows unlaunched,1 eligible retry. The original
+malformed G1-050/G1a reply remains rejected, not rewritten or replaced by its
+valid twin. Native and completion replay: codex_g1review2092_a exit0,stderr0,
+REVIEW.json33f9530ac0a353e6073d0a06602bee2739da4f6bbcd5653a858e1c6905c884f8;
+102 whole answers,zero evidence problems. Reviewed pre-retry run
+e8d3e334c1af52bc57302377bfd9c25433eea04e49beb205e55292ba33a3e465,221files.
+
+NEXT: one bounded collection task, maximum91 additional calls. FIRST run
+ALREADY-PREPARED segment3, only G1-050/G1a attempt2. Receipt
+2b89e744483c2cd8e86175555eadb477e1adeb80fe0f0674bafa4acb32a106db,
+script26fa59e889e4f192a8545bc3b4e776fa8fa819778ebd46d7844df71dd0c6b368,
+22069bytes; parent is segment2 finalization
+2f60306b195429b3de7d738ed0fc1e2e97e67fa0c53091ca2fa6bc52959293e4.
+Codex's existing-operator retry preparation passed; never prepare it twice.
+Only if that retry finalizes valid, Core may prepare/run the90 unlaunched
+primary rows102–191, G1-051/G1a through G1-095/G1b, using the unchanged
+byte-bounded publisher, one segment at a time. Every segment needs a frozen
+precall receipt, native preservation and clean existing finalization before
+advancing. First refusal/invalid/missing/drift stops the task. No further
+retry is authorized. One combined reply to2092, then WAIT. Maximum completed
+calls770→861 under this message; successful calls never repeat.
+
+SCOPE RULINGS: no pair-alignment change: C.evidence reads all segments and
+C.lane_relations already pairs across their boundaries. No redundant
+foreground progress/sleep calls alongside an existing completion waiter;
+Core's2092 no-wait-over15seconds assertion is contradicted by the original
+04:08:25Z60second and04:09:31Z100second calls. Use existing completion
+notifications and one monitor; no hook/settings edits. The two supporting
+recording helpers need only truthful current-authority/attempt reporting and
+removal of their duplicated valid-only cumulative call count before reuse;
+no grading owner, parser, prompt, policy or framework change. Codex owns
+review/publication/this note. Source/key/signature and original382 answers
+remain closed and unchanged. No G2/G3 or A8 under this task.
+
+VERIFIED/PUSHED FIRST-BATCH CHECKPOINT: recovery commit
+64fb0143a4b29f24a25a14f45a550dfce7a9470e,tree
+1918034c5bcae0b01c4fc01466227af3df882649,parent
+9d8041df46fada8cebc13c6275e1a27b3a433322; fresh remote matched64fb.
+242 exact scoped changed paths,251 manifest identities. The main repo and
+unrelated user edits were untouched. This is preservation, not A7 PASS.
+
+EARLIER VERIFIED SEGMENT1:
 Segment1 is independently VERIFIED within collection/native/schema scope:
 52 valid,0 invalid/retry/uncalled. The existing native auditor and completion
 reader replayed all52 whole answers, with zero problems. Proof and remaining
@@ -62,16 +106,17 @@ identities. The actual run completed in419230ms:52 workers,52 returned results,
 answers and0 failed records. Subsequent independent finalization checks are
 recorded above; this is not an A7 score.
 
-NEXT: only the ALREADY-PREPARED segment2,50 new primary lanes, ordinals52–101,
+COMPLETED SEGMENT2 PREPARATION HISTORY:50 new primary lanes, ordinals52–101,
 G1-026/G1a through G1-050/G1b. Codex used the existing operator: preparation
 codex_g1prepare2091_a exited0, stderr empty; exact next unused root rows and
 arguments independently checked. Receipt794833b75d4b82d5a8e81810225486f002b3b1f76147824ac47740281062949c,
 scriptab0b75f8eea7935881c5e8b0e9e56892e5936cab6c87363bf7a09f0386dab7ac,
 523774 bytes; invocation6f82ea463c92caf4a49b6a6ebb403c0cfb8c425f5c85484419e74a39d161b6e1.
-Core may run only that published segment once, preserve and finalize it,
-report once to2091 and WAIT. No prepare-again, successful-call repeat, further
-segment, G2/G3 or code/prompt/key change. Codex owns checkpoint publication
-and independently verifies each batch. The existing goal is active again;
+Core ran it once as wf_afd003ba-837,372626ms,50 workers,947738tokens,0tools.
+It preserved102 native files and reported49 valid/1 invalid once to2091.
+The new task above supersedes the previous wait; it never repeats successes.
+Codex owns checkpoint publication and independently verifies each batch.
+The existing goal is active;
 both sessions and the single watcher are unchanged. The permission blocker
 did not recur in this run; its underlying cause is not proved by that fact.
 
@@ -82,10 +127,11 @@ state, journal and exact launch were independently verified and committed/
 pushed at9d8041df46fada8cebc13c6275e1a27b3a433322. Do not overwrite or hide
 that evidence. No source/key/grader repair was needed for the successful
 launch. Details: unit_2020_codex_check/REFUSAL_REVIEW_2088.md. The cumulative
-completed-call count is now668+52=720, with the denied dispatch separately
-reported. Full initial G1 requires192 readings:52 collected,140 not yet run;
-whole-response validity for the first52 is now independently verified; final
-whole-run semantic reconciliation and scoring remain to be completed.
+completed-call count after segment1 was668+52=720; after segment2 it is770,
+including the invalid-but-completed reply, with the denied dispatch separately
+reported. Full initial G1 requires192 readings:102 collected,101 valid,
+90 not yet run and1 retry eligible. Final whole-run semantic reconciliation
+and scoring remain to be completed.
 
 PUBLICATION COMPLETE: commit467c5de71e0a4e362c26927a8984c97cf713dee3,
 treee6081be7c6c3753ab403e2a9ebdda68672ce6860, single parent8f1fcd7f3532fb1a9f85b3fc6487f25830753dda.
@@ -156,8 +202,8 @@ is the exact old map plus one durable RW run binding. Same root, answers,
 prompts, ordered arguments,192-lane population, owners and rules. Only the
 invocation path and its derived hash/script/receipt change. No call repeated.
 
-Preparation is now published. NEXT: actual receipted grading under2091;
-independently verify the first segment before the next bounded task. No further
+Preparation is now published. NEXT: actual receipted grading under2092,
+within the exact bounded collection above. No further
 source review, signature, blanket regression or grading framework is needed.
 The real signature is proved, canonically harvested and LOCKED:667+1=668
 actual calls, no retry. Source closure and signature need no further AI call.

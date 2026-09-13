@@ -1,0 +1,8 @@
+RETRY_SET   : ['G1-050/G1a']
+SEGMENT     : 3 (attempt-2 retry)
+LANES       : 1
+RECEIPT_SHA : 2b89e744483c2cd8e86175555eadb477e1adeb80fe0f0674bafa4acb32a106db
+SCRIPT_PATH : /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1/grade_batch.seg03.js
+ARGS_FILE   : /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/g1_args_seg03.json rows 1
+ROW_CHECK   : batch G1-050 lane G1-050/G1a ordinal 100 attempt 2 prompt_sha 1848b01aa03967034b17f49389baf37f9bb0450054ff6753dfd4885fb571729a
+RETRY_OK
