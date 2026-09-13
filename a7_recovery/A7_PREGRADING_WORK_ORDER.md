@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 67, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 68, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -39,9 +39,51 @@ plan tree. The amendment changes reuse/key timing, not coverage or pass bars.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT TASK: Codex2092, SHA256
-9079e1896a99d0e1821c45d05d84af18e6e21ae356f54cb1e5ac453f2d754d23,
-answers Core2092 75f58c482e5013e8e631461f2456508ee19660aaa00d175af9bc56b71d909640.
+CURRENT TASK: Codex2093, SHA256
+cc59a9052f559faac9aabb007bce97d74fbf670d1cd1b6c1b94c6edfbac39525,
+answers Core2093 324939e7081a03bf1d7761089f59d1ca9f85d8a58cf16e70de89e279a379959c.
+
+CURRENT COUNTS:103 completed G1 calls,101 valid readings,2 invalid attempts
+on ONE lane,G1-050/G1a. Its sole retry was a distinct real worker but returned
+the same294 invalid bytes; no retry remains. Never call that lane again under
+this root.90 primary rows remain unlaunched. Total completed calls771.
+Independent replay codex_g1review2093_a exit0,stderr0,103 native whole
+answers with zero evidence problems; REVIEW.json
+63f10cc93b6b8dc5d8b19039511addfae382da25f119b3287c1f2c53fe1a7501.
+Reviewed pre-segment4 run23025199c312d55e97b82bdd951ed2d302303ae2e17aec6a866d5030601d15b5,
+231files. Segment3 finalizationbdf6e8fd718bd01f39253561f470d0fc977a9a986a8cad320ab3e1ad44760bfa
+is0valid/1invalid/0retry. It is a truthful failure record, NOT a clean segment.
+
+NEXT: only the90 uncalled PRIMARY rows102–191, G1-051/G1a throughG1-095/G1b,
+maximum90 additional calls771→861. Codex2093 explicitly replaces the old
+requirement that the exhausted retry first turn valid; no scoring or retry
+rule changes. The failed five questions belong to P2/source
+0001104659-25-118458. Existing completion/scoring owners retain that leg's
+incomplete result; it is neither accepted nor silently attributed to other
+legs. Completing the rest measures the other required cases/arms; it does
+not promise A7 PASS or authorize later-step advance.
+
+ALREADY PREPARED segment4:43 rows102–144, G1-051/G1a throughG1-072/G1a.
+Receiptf27778d746d8b48cea47ace7b599fed1c1c8c2a47215186193051e58bdc3b75b;
+script843e590c65d0d1e7e23678c348a4aba2f2ebf72b205eafe2e90df36c37f3fc94,
+502232bytes; invocationbed7b02ab62bc32ce6b2cf77ed5951bd2c331a2ae07f79c9275836062b2cf452;
+arg7c8259e8462012bfeb3d6ad248cfd49cf351f5cc864fb36494adfe50c9b66efc.
+codex_g1prepare2093_a payload exit0,stderr0. DO NOT prepare again. After
+each NEW segment has durable native evidence and clean existing finalization,
+Core may prepare/run the next unchanged byte-bounded prefix of the remaining
+rows. Stop on any NEW invalid/missing/refusal/drift, report once then WAIT;
+otherwise one combined report after all90. No retry, code/prompt/key change,
+G2/G3 or source/signature work. No pair-alignment change or duplicate watcher.
+
+VERIFIED/PUSHED SECOND-BATCH CHECKPOINT: recovery commit
+30bafd205af0f83cb58469add364ce9983a353aa,tree
+d6704894b73062136511d5bbcd5744d75d778d17,parent64fb0143a4b29f24a25a14f45a550dfce7a9470e;
+fresh remote matched30bafd.229 exact changed paths,348 manifest identities;
+manifestc0ebfef59c07e4353f90a228c48332f45b3d293d06afdea6406196c2367b281d.
+This preserves the49-valid/1-invalid batch2 evidence, not A7 PASS. It excludes
+the subsequently completed retry and helper edits, pending their checkpoint.
+
+COMPLETED SEGMENT2 REVIEW HISTORY:
 Segment2 is independently verified as50 returned,49 valid,1 invalid;
 NOT a clean segment or an A7 score. Across both segments:102 completed
 readings,101 valid,90 primary rows unlaunched,1 eligible retry. The original
@@ -51,20 +93,18 @@ REVIEW.json33f9530ac0a353e6073d0a06602bee2739da4f6bbcd5653a858e1c6905c884f8;
 102 whole answers,zero evidence problems. Reviewed pre-retry run
 e8d3e334c1af52bc57302377bfd9c25433eea04e49beb205e55292ba33a3e465,221files.
 
-NEXT: one bounded collection task, maximum91 additional calls. FIRST run
+SUPERSEDED Codex2092 task: maximum91 additional calls. FIRST run
 ALREADY-PREPARED segment3, only G1-050/G1a attempt2. Receipt
 2b89e744483c2cd8e86175555eadb477e1adeb80fe0f0674bafa4acb32a106db,
 script26fa59e889e4f192a8545bc3b4e776fa8fa819778ebd46d7844df71dd0c6b368,
 22069bytes; parent is segment2 finalization
 2f60306b195429b3de7d738ed0fc1e2e97e67fa0c53091ca2fa6bc52959293e4.
-Codex's existing-operator retry preparation passed; never prepare it twice.
-Only if that retry finalizes valid, Core may prepare/run the90 unlaunched
-primary rows102–191, G1-051/G1a through G1-095/G1b, using the unchanged
-byte-bounded publisher, one segment at a time. Every segment needs a frozen
-precall receipt, native preservation and clean existing finalization before
-advancing. First refusal/invalid/missing/drift stops the task. No further
-retry is authorized. One combined reply to2092, then WAIT. Maximum completed
-calls770→861 under this message; successful calls never repeat.
+Codex's existing-operator retry preparation passed. The retry ran once as
+wf_e1e631c0-080,taskwo17p2zk8,5190ms,20175tokens,0tools; it was invalid.
+The previous task allowed the90 primaries only after a valid retry. Core
+correctly honored that condition, stopped and reported once as2093.
+The new task above now finishes only the remaining primaries, without a
+third attempt. No successful call repeats and both invalid attempts count.
 
 SCOPE RULINGS: no pair-alignment change: C.evidence reads all segments and
 C.lane_relations already pairs across their boundaries. No redundant
@@ -72,9 +112,11 @@ foreground progress/sleep calls alongside an existing completion waiter;
 Core's2092 no-wait-over15seconds assertion is contradicted by the original
 04:08:25Z60second and04:09:31Z100second calls. Use existing completion
 notifications and one monitor; no hook/settings edits. The two supporting
-recording helpers need only truthful current-authority/attempt reporting and
-removal of their duplicated valid-only cumulative call count before reuse;
-no grading owner, parser, prompt, policy or framework change. Codex owns
+recording helpers now derive current authority/attempt from actual artifacts
+and omit the duplicated valid-only cumulative count. Actual segment3 outputs
+were independently verified; the nine text-inspection controls were not used
+as runtime proof. No more helper/test task is needed. No grading owner,
+parser, prompt, policy or framework change. Codex owns
 review/publication/this note. Source/key/signature and original382 answers
 remain closed and unchanged. No G2/G3 or A8 under this task.
 
@@ -202,7 +244,7 @@ is the exact old map plus one durable RW run binding. Same root, answers,
 prompts, ordered arguments,192-lane population, owners and rules. Only the
 invocation path and its derived hash/script/receipt change. No call repeated.
 
-Preparation is now published. NEXT: actual receipted grading under2092,
+Preparation is now published. NEXT: actual receipted grading under2093,
 within the exact bounded collection above. No further
 source review, signature, blanket regression or grading framework is needed.
 The real signature is proved, canonically harvested and LOCKED:667+1=668

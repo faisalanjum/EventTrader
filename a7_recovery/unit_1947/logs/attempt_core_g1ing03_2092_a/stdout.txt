@@ -1,0 +1,7 @@
+SEGMENT     : 3 state_file wf_e1e631c0-080.json
+OFFICIAL_ROWS: 1
+LEDGER      : {"invalid":1,"retry":0,"scheduled":1,"uncalled":0,"valid":0}
+RETRY       : [] UNCALLED []
+NONVALID    : [['G1-050/G1a', False]] why {"G1-050/G1a":["the reply is not one lawful JSON payload: reply is not valid JSON: Extra data: line 2 column 1 (char 59)"]}
+SEGMENT_CLEAN: False
+STOP: segment 3 is not clean; do NOT start the next segment

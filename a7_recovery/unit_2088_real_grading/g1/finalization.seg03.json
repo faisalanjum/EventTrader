@@ -1,0 +1,29 @@
+{
+ "accounting_sha256": "d6fef83b5252421efec8484fd7ce7cab2ec79b67d778888ad87ec12808690678",
+ "attempt": 2,
+ "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+ "ledger": {
+  "invalid": 1,
+  "retry": 0,
+  "scheduled": 1,
+  "uncalled": 0,
+  "valid": 0
+ },
+ "problems": {
+  "G1-050/G1a": [
+   "the reply is not one lawful JSON payload: reply is not valid JSON: Extra data: line 2 column 1 (char 59)"
+  ]
+ },
+ "receipt_sha256": "2b89e744483c2cd8e86175555eadb477e1adeb80fe0f0674bafa4acb32a106db",
+ "retry": [],
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 3,
+ "uncalled": [],
+ "validity": [
+  [
+   "G1-050/G1a",
+   false
+  ]
+ ]
+}

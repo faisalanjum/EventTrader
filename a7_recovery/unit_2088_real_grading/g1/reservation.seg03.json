@@ -1,0 +1,18 @@
+{
+ "attempt": 2,
+ "lanes": [
+  "G1-050/G1a"
+ ],
+ "parent": {
+  "finalization_sha256": [
+   "2f60306b195429b3de7d738ed0fc1e2e97e67fa0c53091ca2fa6bc52959293e4"
+  ],
+  "named": "retry",
+  "segments": [
+   2
+  ]
+ },
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 3
+}

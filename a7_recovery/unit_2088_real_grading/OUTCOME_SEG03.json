@@ -1,0 +1,57 @@
+{
+ "kind": "the authorized Workflow call for G1 seg03 and its outcome",
+ "authority_sha256": "9079e1896a99d0e1821c45d05d84af18e6e21ae356f54cb1e5ac453f2d754d23",
+ "publication_head": "64fb0143a4b29f24a25a14f45a550dfce7a9470e",
+ "recorded_utc": "2026-09-13T04:24:47Z",
+ "recorded_utc_note": "recording time, not the call start; the official state startTime is the truth",
+ "segment": 3,
+ "workflow_run_id": "wf_e1e631c0-080",
+ "task_id": "wo17p2zk8",
+ "launch_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/LAUNCH_RECORD_SEG03.json",
+ "launch_record_sha256": "bbc648792c314627fdfc0e70af5d8d24ef6177619ba6631f4a52b6e10874e27f",
+ "script_path_called": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1/grade_batch.seg03.js",
+ "executed_script_sha256": "26fa59e889e4f192a8545bc3b4e776fa8fa819778ebd46d7844df71dd0c6b368",
+ "preserved_script_sha256": "26fa59e889e4f192a8545bc3b4e776fa8fa819778ebd46d7844df71dd0c6b368",
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+ "receipt_sha256": "2b89e744483c2cd8e86175555eadb477e1adeb80fe0f0674bafa4acb32a106db",
+ "invocation_sha256": "e0aa82646d243cb596e0aeb0442fcae846a311c204fd59b0f15f4882fa5cf8fe",
+ "transport": {
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "transcript_models_observed": [
+  "claude-sonnet-5"
+ ],
+ "counts": {
+  "scheduled": 1,
+  "launched": 1,
+  "captured_with_text": 1,
+  "journal_failed": 0,
+  "distinct_agents": 1,
+  "distinct_requests": 1,
+  "distinct_responses": 1
+ },
+ "lane_identities": [
+  {
+   "lane_id": "G1-050/G1a",
+   "agent_id": "a64b830ed60536184",
+   "request_id": "req_011CezoUQtfHAhPfe4SM7Jvi",
+   "response_id": "msg_011CezoUREkWwN6AgzPhydRX",
+   "raw_text_sha256": "826e27d50299ccd4cb5dceccd35874e0615b91bbbc1cc19141d04d6c5f4f0b28"
+  }
+ ],
+ "completed_calls_note": "this record reports THIS run only. A cumulative call total must not be derived from valid readings: a completed call that the finalizer rejects is still a spent call. The authoritative running totals are the finalizers own attempted/valid/invalid columns.",
+ "full_initial_g1_requirement": 192,
+ "evidence_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/native/seg03/wf_e1e631c0-080",
+ "evidence_inventory": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/NATIVE_INVENTORY_SEG03.json",
+ "evidence_inventory_sha256": "ba533d813a22903a2da8a2810c32c0378994dd1c3cb72a6b8b09505756f8ef9f",
+ "finalization": "not yet run at the time this record was written",
+ "no_grading_score_claimed": true
+}

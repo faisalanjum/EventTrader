@@ -1,0 +1,10 @@
+{
+ "lanes": {
+  "G1-050/G1a": {
+   "chars": 294,
+   "sha256": "826e27d50299ccd4cb5dceccd35874e0615b91bbbc1cc19141d04d6c5f4f0b28",
+   "text": "{\"question_id\": \"Q0ee3de74c087ac63\", \"produced_idxs\": [0]}\n{\"question_id\": \"Qdbec5e062a4909a1\", \"produced_idxs\": [1]}\n{\"question_id\": \"Qac842fe2cf4e9d16\", \"produced_idxs\": [2]}\n{\"question_id\": \"Q80ca57a79eacdd17\", \"produced_idxs\": [3]}\n{\"question_id\": \"Qab1d12f21194ee56\", \"produced_idxs\": [4]}"
+  }
+ },
+ "segment": 3
+}
