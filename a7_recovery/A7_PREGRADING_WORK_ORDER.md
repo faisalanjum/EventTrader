@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 97, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 110, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -44,6 +44,20 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
+NEWEST PUBLICATION,09:04 Eastern: the independently checked G2 prefix6–32
+and persisted G3 completion are committed and normally pushed as
+79e62c588a958570880829502750dc4156e290c3, tree
+a2366e974361f1909fd1bd7c85da94096f0f7c64, sole parentb86c9052267bcee86b9ca9bae4dac0ce513c712e.
+Fresh remote read equals that commit. G2_PROGRESS_PUBLICATION_2111.json
+SHA2924a448efccfa6f05990598468026b18f7d92f3f94ba33fd9676c937ad8e1c5
+pins649 verified files;650 changed paths including the manifest. All selected
+staged and committed blobs match; index is empty. The unrelated tracked edit
+and unrelated untracked work remain untouched. No grading owner, prompt, model,
+key, rule, main or database changed. Core continues its existing2110 task;
+this evidence-only checkpoint does not replace that task or its frozen inputs.
+Live remaining-count owner reports101 uncalled primaries; later G2 segments
+are not included in this published prefix. No final A7 score or PASS exists.
+
 LIVE STATUS, 2026-09-13 07:04 Eastern: preparation is VERIFIED, committed and
 normally pushed to recovery/a3-a7-verified. Local and freshly checked remote
 HEAD b86c9052267bcee86b9ca9bae4dac0ce513c712e; tree
@@ -77,7 +91,7 @@ use the existing completion/route/scorer owners to report all denominators,
 wrong accepts, misses, disagreements and exhausted invalids. No new framework.
 The active goal and one Codex watcher remain unchanged; no handover restart.
 
-INDEPENDENT PROGRESS, 08:54 Eastern: segments6–32 pass original native,
+INDEPENDENT PROGRESS, 10:31 Eastern: segments6–54 pass original native,
 whole-reply and parser replay; proof codex_g2native2111_seg6to7/REVIEW.json
 SHAbcbef7bef33af8e3e611bfa311dc228d931d9120bf174ffcb7c0adcdae5eb2c7.
 The second prefix proof is codex_g2native2111_seg8to9/REVIEW.json
@@ -99,14 +113,42 @@ SHA8a798ecf1b0fdb800277047a06268f056a722d4941544a2fd5a5cd17cd1f0bfc;
 codex_g2native2111_seg27to28/REVIEW.json
 SHA843d333131995c0a29b97f9c0a7acd3d4b162eddacf7ab08be3611019f6075f9;
 codex_g2native2111_seg29to32/REVIEW.json
-SHAbaf1e66255d721d9b0cc0cb68847674abe4cea97a74e09ac4bd4c68e5c34ac0b.
-All114 copied native files match their original sources. Separate exact pinned
-retry-filter replays pass with empty stderr. The30 new primary readings across
-these27 segments include11 originally valid and19 recovered readings; all30
-require zero retry. Segments17,24 and27 each lawfully contain both readings of
+SHAbaf1e66255d721d9b0cc0cb68847674abe4cea97a74e09ac4bd4c68e5c34ac0b;
+codex_g2native2111_seg33to38/REVIEW.json
+SHA5c999c884e08e934f52b172493da8e651e55a13f99e0ed34a31e37452b0acade;
+codex_g2native2111_seg39to39/REVIEW.json
+SHAd36b65674cff37c105698c3bb6796539892934ae0233ecb86fae223c2ac38e2a;
+codex_g2native2111_seg40to41/REVIEW.json
+SHAc4f2a534262e7c61419ae7661147b0bf9846f9c30ff3723f2ddc678f98993f1a;
+codex_g2native2111_seg42to43/REVIEW.json
+SHAb1b205636d3a9c4f207e094e0a0a3dd37a8158eac817af6a92b38c8371c6ef2c;
+codex_g2native2111_seg44to46/REVIEW.json
+SHA70a942d70a1deb21c7b32f6c78b4fbbf0d58a05d55b8249cd3cb9c8147c52b80;
+codex_g2native2111_seg47to48/REVIEW.json
+SHA8eb5fdace4e06ee2197f4c2458801163818e24fb57aaacdf237b0d506c88f90f;
+codex_g2native2111_seg49to49/REVIEW.json
+SHAd6c91ac036f79179c3b86e66e09a7c219f4837703f9f963429f11ba2d60e914c;
+codex_g2native2111_seg50to51/REVIEW.json
+SHA02ca76c55f9ad9a11e10e21e5dd7b4c045d9866299728be2bb3e8451bbcf4f26;
+codex_g2native2111_seg52to52/REVIEW.json
+SHA146714835012d09b47479aeb0114954df2471e313910769bece1ae68c0d9e6e6;
+codex_g2native2111_seg53to54/REVIEW.json
+SHAd1344a6cab33542de9786639b6e6e708acd454916b4d9fc5fff39eb4071e2d05.
+All206 copied native files match their original sources. Separate exact pinned
+retry-filter replays pass with empty stderr. The54 new primary readings across
+these49 segments include16 originally valid and38 recovered readings; all54
+require zero retry. Segments17,24,27,36 and49 each lawfully contain both readings of
 their frozen batch. All negative judgments remain unchanged.
 These are usable grading judgments, not claims that the tested answers were
 correct.
+Bounded instruction/record check,10:02: G2-025 promptd0d515b45f39ddec8e56be84122e3715e3aee7869c63b66cd882b4502168c819
+explicitly permits null when evidence does not settle an aspect (STEP10).
+Segment49's first reader uses null for favorability on all five questions,
+and for several growth-basis judgments; the second reader differs. These are
+grader uncertainties, not format failures or automatically proved producer
+errors. Preserve them separately in the report. No code defect or lawful
+semantic reroll was established by this instruction/record check; no prompt,
+key, verdict or task was changed.
 Raw logs:unit_1947/logs/attempt_codex_g2format2111_seg6 (stdout121b2c4f)
 and attempt_codex_g2format2111_seg7 (stdout22aaffd1); seg8 stdoutcc2ff5a5
 and seg9 stdout65b346d5; seg10 stdoutafa03f96,11 stdout85145929,
@@ -115,13 +157,24 @@ and seg9 stdout65b346d5; seg10 stdoutafa03f96,11 stdout85145929,
 20 stdout974d9b9a,21 stdoutd86a176e,22 stdout2de1ac85,23 stdoutee13e61d,
 24 stdoutb0d974f8,25 stdout9ef9610a,26 stdout5374dc45,
 27 stdout71522222,28 stdout4f23931a,29 stdoutb8e28320,
-30 stdoutda0bcaae,31 stdout662db4ef,32 stdout115fdf83.
+30 stdoutda0bcaae,31 stdout662db4ef,32 stdout115fdf83,
+33 stdoutdd7332c3,34 stdoutc0860076,35 stdout907bf780,
+36 stdoutdc27e46a,37 stdouta608a754,38 stdout39fe56e9,39 stdoutb9ca60ec,
+40 stdoutf8e5f07b,41 stdoutd345cc88,42 stdoutd72e68e6,43 stdout2e80674c,
+44 stdout19138271,45 stdouta5b40742,46 stdout80a3b0cb,
+47 stdout2ff1cc98,48 stdout4c1767b4,49 stdoutd882cdc4,
+50 stdouta6e38703,51 stdout3d74b986,52 stdout4c764ebb,
+53 stdoutd16dc66f,54 stdout5e95b5ee.
 All segment review payloads exit0 with empty stderr. The live lane-state owner
-last reported104 primaries remaining. Segments after32 are not yet included
+last reported83 primaries remaining at10:29. Segments after54 are not yet included
 in this reviewed prefix. Counts are
-a timestamped snapshot only. The central target stays about15:00 Eastern
-(provisional13:00–17:00 range), measured from the07:04 estimate, not reset
-with each update. This is the checked grading report, not guaranteed A7 PASS.
+a timestamped snapshot only. ETA updated10:23: best estimate17:00 Eastern,
+provisional16:00–19:00 range. The most recent12 preserved workflows (42–53)
+averaged268691ms versus the earlier194906ms recent average; the last four
+took348438,402232,346682,335912ms. This replaces the15:30 estimate and earlier
+13:00–17:00 range because actual AI runtime slowed, not because scope grew.
+These timings are provider durationMs/startTime/timestamp values, not Core's
+guess. No new blocker or code change. This is the checked report, not A7 PASS.
 
 The exact existing renderer forecasts135 then-remaining primaries in125
 Workflow groups (116 single,8 double,1 triple), excluding retries. Evidence:
@@ -141,8 +194,25 @@ the result afterward; payloadexit0/stderr0. Report:
 codex_g3persist2111_a/PERSISTED_G3.json
 SHA11ed9654a2fec1822ce91da058fc4b85dfafe90e3d9a6f594fc167f4c0af9036.
 The147-file G3 run is unchanged. Do NOT persist G3 again or rerun its AI calls.
-No final A7 score yet. These new review notes/artifacts await the next verified
-publication increment; the grading code remains at pushed b86c9052.
+No final A7 score yet. Evidence through G2 segment32 and the G3 persistence
+is published in79e62c58; later verified evidence awaits the next checkpoint.
+The grading code is unchanged from pushed b86c9052.
+
+Final scoring execution note (09:11, no new requirement): after Core's one
+final2110-task report, reconcile every required G2 lane/attempt and externally
+freeze its whole run plus native evidence. Reuse run_grading_2086.py's G2
+preflight context and the pinned F.scope to call C.evidence →
+C.relations_from_run → C.complete_g23; compare the whole independently
+reviewed result, then C.persist_g23 once and C.load_g23. Do not persist G3 again.
+For actual scoring, use prepare_g23_partial_2097.with_prepared_inputs with
+the ORIGINAL G1 launch/pins, not the G2 launch environment. Supply each kind's
+exact saved run_dir/root_sha256/completion_sha256 to the same required legs
+and call B.official_tier_decision inside F.scope. Preserve exact path strings,
+including existing .. components. The existing native TEST proves99 exact
+event-leg routes, two completion loads and163 gold facts per leg; derive and
+check the real values, never insert TEST judgments. E creates its unique output
+directory on import. Separate one-time persistence from scoring; no blind
+rerun of completed writes, no second scoring framework or new AI call here.
 
 PRE-PUBLICATION PREPARATION CHECKPOINT (history): Core2110 SHAbf09684e43684231ae5e1e27ecfc842dc9bbbb1eab5010c31b5eb25cba89471c
 answered Codex2109 SHAde52193585318c5a03b5685c20c6bd18225acb8162701952e65b76be1963acbc.

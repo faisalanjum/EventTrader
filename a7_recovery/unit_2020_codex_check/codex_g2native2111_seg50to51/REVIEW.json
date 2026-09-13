@@ -1,0 +1,70 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "9b571af9f4d8d2533eeb2ef6d0e2a89d0aeb2694a07f780eac50d5b8e20bd7d2",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "f76ba4d3281727d783cc0f665fcbe850df4f6a314b65b93abcaacc3872916b66",
+   "retry": [
+    "G2-026/G1a"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-026/G1a",
+     "problems": [
+      "M48176346f1082ca4 carries a value that is not true, false or null",
+      "Md537d4751f505235 carries a value that is not true, false or null",
+      "Mdeaf9591a2dcc241 carries a value that is not true, false or null",
+      "M2c147d86c788aab4 carries a value that is not true, false or null",
+      "Ma0a6445d4ac518c0 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "faec3fa875ba372b4e661d2ecc4fe11d957053dd4764c9d58d8b091afa9914dd"
+    }
+   ],
+   "segment": 50,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "885f56119f5207c7a735bbe621435bf42aed430e67d3f44792e2b447ea23ca8d",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "38ae5b80b3532e283814eeab711e31869f678f44ea5bc2929f7d23912310c2b3",
+   "retry": [
+    "G2-026/G1b"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-026/G1b",
+     "problems": [
+      "M48176346f1082ca4 carries a value that is not true, false or null",
+      "Md537d4751f505235 carries a value that is not true, false or null",
+      "Mdeaf9591a2dcc241 carries a value that is not true, false or null",
+      "M2c147d86c788aab4 carries a value that is not true, false or null",
+      "Ma0a6445d4ac518c0 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "96cb948baada424404813e7884624b0bbe75de8629e383ebe1add1d21ed4c4dc"
+    }
+   ],
+   "segment": 51,
+   "uncalled": []
+  }
+ ]
+}

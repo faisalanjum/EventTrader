@@ -1,0 +1,92 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "3de23de5c9474b4272304cfccb630d5fe52ee6cb0c636bcc16ecc28841ba3c76",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 2,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "2c31fd30ee11852ead7b022addd061836736a644ad40604a2083acd9429e4216",
+   "retry": [
+    "G2-025/G1b"
+   ],
+   "rows": [
+    {
+     "answer": {
+      "M4c7103daca170dcc": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M558257457a55f3be": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M752dab6e0c48afa8": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mba17df14d96f594b": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Md493b607e9f607e3": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-025/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "544d5a3e3c1b884a0bf64029eca0e9c8cab0882565e53297c15e0dcd7757ceab"
+    },
+    {
+     "answer": null,
+     "lane": "G2-025/G1b",
+     "problems": [
+      "Md493b607e9f607e3 carries a value that is not true, false or null",
+      "Mba17df14d96f594b carries a value that is not true, false or null",
+      "M558257457a55f3be carries a value that is not true, false or null",
+      "M4c7103daca170dcc carries a value that is not true, false or null",
+      "M752dab6e0c48afa8 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "afcd29fc72fac2315fa604a7a70ff6d417e596f52669e94fbd943a7254c5fe51"
+    }
+   ],
+   "segment": 49,
+   "uncalled": []
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "lanes": {
+  "G2-016/G1b": {
+   "chars": 614,
+   "sha256": "a4638f82d2e83eac6e32290673dd2fe68b9b946116f0ac6f86735cce953c3b98",
+   "text": "```json\n[\n  {\n    \"question_id\": \"M31b20a4a0b7e5203\",\n    \"verdicts\": {\n      \"driver_name_meaning\": \"true\",\n      \"driver_state\": \"true\",\n      \"favorability\": \"true\",\n      \"growth_basis\": \"true\",\n      \"lane_routing\": \"true\",\n      \"record_matches_source\": \"true\",\n      \"slice_vs_menu\": \"true\"\n    }\n  },\n  {\n    \"question_id\": \"Mee82318cbe88a420\",\n    \"verdicts\": {\n      \"driver_name_meaning\": \"true\",\n      \"driver_state\": \"true\",\n      \"favorability\": \"true\",\n      \"growth_basis\": \"false\",\n      \"lane_routing\": \"true\",\n      \"record_matches_source\": \"false\",\n      \"slice_vs_menu\": \"true\"\n    }\n  }\n]\n```"
+  }
+ },
+ "segment": 33
+}

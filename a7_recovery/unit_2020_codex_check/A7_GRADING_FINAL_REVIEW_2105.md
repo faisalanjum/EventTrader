@@ -4,6 +4,13 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
+Evidence-only checkpoint,09:04 Eastern: committed and normally pushed
+79e62c588a958570880829502750dc4156e290c3, treea2366e974361f1909fd1bd7c85da94096f0f7c64;
+fresh remote matches. G2_PROGRESS_PUBLICATION_2111.json SHA2924a448 pins649
+verified files, including G2 segments6–32 and G3's persisted completion.
+Grader code and frozen collection inputs are unchanged.101 primaries remain
+at this snapshot; Core continues Codex2110. This is not a final A7 result.
+
 Post-publication status, 2026-09-13 07:04 Eastern: preparation is committed and
 normally pushed as b86c9052267bcee86b9ca9bae4dac0ce513c712e, tree
 e662a86844f3e4c6a6e9a956ad8aa7517af5d4a2. The remote commit was independently
@@ -17,12 +24,12 @@ G3 is already verified. Actual G2 evidence review and final scoring remain;
 no A7 score or PASS is implied. The pass log below preserves pre-publication
 proof history; its former closure/publication blockers are resolved.
 
-Collection review,08:54 Eastern: G2 segments6–32 independently replayed through
+Collection review,10:31 Eastern: G2 segments6–54 independently replayed through
 the original native/parser checks (REVIEWs SHAbcbef7be,2f949a42,dd226d67,
-96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662), and all114
-durable native copies match their sources. The30 readings include11 original-
-valid and19 recovered; exact retry-filter replays preserve every negative
-judgment and require no retry. Two-reading segments17,24 and27 are verified.
+96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c), and all206
+durable native copies match their sources. The54 readings include16 original-
+valid and38 recovered; exact retry-filter replays preserve every negative
+judgment and require no retry. Two-reading segments17,24,27,36 and49 are verified.
 G3's reviewed completion
 is now saved through C.persist_g23 and reloaded: exact approved bytesad575661,
 110 agreed/7 unresolved,147-file run unchanged. PERSISTED_G3 report11ed9654.
