@@ -1,0 +1,6 @@
+PASS real selected lock and receipt are the independently verified bytes None
+PASS the evaluation reuses every original call without scheduling another None
+PASS the actual grader bound is exactly the signed source-key bound None
+PASS the actual grading consumer accepts the complete saved population []
+PASS each saved producer arm is present ['P1', 'P2']
+FAIL the refreshed reference inventory covers the exact signed key None

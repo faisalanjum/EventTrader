@@ -1,0 +1,7 @@
+attempt	codex_cand2082_a
+payload	../../unit_2081_final_key_candidate/build_real_candidate_2081.py
+map	../unit_2081_final_key_candidate/map_2081.tsv
+wrapper_pid	3464993
+payload_pid	3464997
+started_utc	2026-09-13T00:31:02Z
+state	finished exit 0

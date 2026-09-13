@@ -1,0 +1,159 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:refinery"],
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as one: the quote states the refinery's own operating result for the March 2026 quarter with the year-ago figure beside it, which is a real metric level plus a stated prior-year comparison on the signed operating-income axis."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted"],
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as one: the quote states a source-given dollar increase in total revenue versus the March 2025 quarter, with the non-GAAP flavour word carried in the measurement slot rather than in the driver name."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "passenger_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 11, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:atlanticdestination"],
+              "time_type": "duration",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as one, though only in part: the percentage carries its own marker inside the located quote and yields a lawful year-over-year increase in Atlantic passenger revenue, while the figure 1,517 has no currency or scale marker inside that quote and is therefore left unstated rather than guessed."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence only reports that the risk factors described in the Form 10-K have not materially changed; it names no driver and reports no state, change, surprise, guidance or action, so it is bare boilerplate and the fact gate yields nothing."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: risk-factor boilerplate that correctly yields no fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The target describes a change in how the company PRESENTS its adjusted (non-GAAP) results and restates prior-period reconciliations on the same basis; its subject is a measurement/presentation construct, not any driver's state, change, surprise, guidance or discrete business action, and a measurement flavour may never itself become a driver name, so no lawful fact can be coined."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Frozen as real_item but I settle it as carrying no fact and say so plainly: the statement is about the definition and presentation of a non-GAAP measure, an accounting construct with no lawful driver name, so I name it an exclusion rather than let it pass."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "reference_name": "refinery generated an operating loss",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source gives the noun 'loss' with no direction verb, so the move from $1 million to $39 million had to be read on the signed operating-income axis as 'decreased' rather than as a growing positive loss magnitude."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "Total revenue, adjusted",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "One single movement is stated on two expressions at once ($1.2 billion and 9.4%), and since the record holds one change value with one unit and the basis-split rule governs growth bases rather than dollars-versus-percent, I carried the dollar figure and left the percentage in the quote."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "Atlantic",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The figure 1,517 has its currency and '(in millions)' wording only in the table header outside the located quote, so I scoped the abstention to that unscaled value and encoded only the percentage, whose '%' marker sits inside the quote at multiplier 1."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-004/b1",
+      "agrees": true,
+      "why": "Settling the event first from its own text I reached the same five outcomes this lead reports - facts on rows 1, 2 and 3 and no fact on rows 4 and 5 - and my independently chosen name, state, values, baseline, slice and period land in the same place, so I record agreement without adopting its evidence or wording."
+    },
+    {
+      "lead_id": "sokc-004/b2",
+      "agrees": false,
+      "why": "It matches what I settled on rows 1, 2, 4 and 5, but it voids row 3 entirely for a missing scale marker, whereas that marker is missing only for the dollar figure I did not encode; the 11% carries its own marker inside the located quote at multiplier 1, so a lawful fact survives there."
+    }
+  ],
+  "open_issues": []
+}
+```

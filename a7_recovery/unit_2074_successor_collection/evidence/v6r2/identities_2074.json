@@ -1,0 +1,140 @@
+{
+ "any_collision": false,
+ "authority": "Codex SEQ 2074",
+ "collides_with_first_round": {
+  "agentId": [],
+  "request_ids": [],
+  "response_ids": [],
+  "runId": []
+ },
+ "events": {
+  "0000027904-26-000013": {
+   "agentId": "a8c5fb1bbf668b043",
+   "cli_versions": [
+    "2.1.261"
+   ],
+   "observed": {
+    "agentType": "lean-probe",
+    "agent_state": "done",
+    "record_shape": [
+     "user",
+     "attachment",
+     "assistant",
+     "assistant"
+    ],
+    "status": "completed",
+    "toolCalls": 0,
+    "transcript_efforts": [
+     "high"
+    ],
+    "transcript_models": [
+     "claude-opus-5"
+    ],
+    "workflow_row_effort": null,
+    "workflow_row_model": "claude-opus-5[1m]"
+   },
+   "preserved": {
+    "returned_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2074_successor_collection/evidence/v6r2/wf_5cf3b965-90a.returned.txt",
+    "returned_sha256": "ad22a00f596ae2787b07a5e9de2451b9b94af987c73676990f68121fb9235f6b",
+    "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2074_successor_collection/evidence/v6r2/wf_5cf3b965-90a.state.json",
+    "state_sha256": "764f12dfabbbb0a463c059ea603c3ff5cba49685e9096c71c2c07e12ca66e22a",
+    "transcript_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2074_successor_collection/evidence/v6r2/wf_5cf3b965-90a.transcript.jsonl",
+    "transcript_sha256": "746bb070086df296e9671887dbddffbf563d332afd3dd9621d90acce2a42203c"
+   },
+   "request_ids": [
+    "req_011CezLBdse2vRKXadeLY6sz"
+   ],
+   "response_ids": [
+    "msg_011CezLBePQE7CciqL5EsFzW"
+   ],
+   "returned": {
+    "attempt": 1,
+    "declared_agentType": "lean-probe",
+    "declared_effort": "high",
+    "declared_model": "opus",
+    "is_error": null,
+    "refusal_or_wait": null,
+    "text_bytes": 13824,
+    "text_sha256": "ad22a00f596ae2787b07a5e9de2451b9b94af987c73676990f68121fb9235f6b"
+   },
+   "runId": "wf_5cf3b965-90a",
+   "timestamps": [
+    "2026-09-12T22:26:23.560Z",
+    "2026-09-12T22:29:46.328Z"
+   ],
+   "usage": {
+    "agentCount": 1,
+    "durationMs": 207588,
+    "totalTokens": 116164,
+    "totalToolCalls": 0
+   }
+  },
+  "DAL_2026-04-08T10.00": {
+   "agentId": "a98c5ac0d2c7f8ddc",
+   "cli_versions": [
+    "2.1.261"
+   ],
+   "observed": {
+    "agentType": "lean-probe",
+    "agent_state": "done",
+    "record_shape": [
+     "user",
+     "attachment",
+     "assistant",
+     "assistant"
+    ],
+    "status": "completed",
+    "toolCalls": 0,
+    "transcript_efforts": [
+     "high"
+    ],
+    "transcript_models": [
+     "claude-opus-5"
+    ],
+    "workflow_row_effort": null,
+    "workflow_row_model": "claude-opus-5[1m]"
+   },
+   "preserved": {
+    "returned_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2074_successor_collection/evidence/v6r2/wf_78e0368f-d12.returned.txt",
+    "returned_sha256": "38059f303d5beb96980fb36b424e6b45de861660e2afccf431588999b311079f",
+    "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2074_successor_collection/evidence/v6r2/wf_78e0368f-d12.state.json",
+    "state_sha256": "a3c351b9fd170291627de5d0cdb2fd7e0eac9808f6f407f09cd4b622431acf95",
+    "transcript_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2074_successor_collection/evidence/v6r2/wf_78e0368f-d12.transcript.jsonl",
+    "transcript_sha256": "4d0ea6d1709611e51f65c8d5ef9c76103361b6dc6e09890c224b17a56673c6e5"
+   },
+   "request_ids": [
+    "req_011CezLBsr2EZPdTdFDwHn9u"
+   ],
+   "response_ids": [
+    "msg_011CezLBtLnkm1kCx9hP7mSA"
+   ],
+   "returned": {
+    "attempt": 1,
+    "declared_agentType": "lean-probe",
+    "declared_effort": "high",
+    "declared_model": "opus",
+    "is_error": null,
+    "refusal_or_wait": null,
+    "text_bytes": 12226,
+    "text_sha256": "38059f303d5beb96980fb36b424e6b45de861660e2afccf431588999b311079f"
+   },
+   "runId": "wf_78e0368f-d12",
+   "timestamps": [
+    "2026-09-12T22:26:26.803Z",
+    "2026-09-12T22:30:35.370Z"
+   ],
+   "usage": {
+    "agentCount": 1,
+    "durationMs": 255052,
+    "totalTokens": 74014,
+    "totalToolCalls": 0
+   }
+  }
+ },
+ "repeats_within_this_round": {
+  "agentId": [],
+  "request_ids": [],
+  "response_ids": [],
+  "runId": []
+ }
+}

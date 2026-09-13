@@ -1,0 +1,26 @@
+PASS COLD: the original executed prompt owner rebuilds unchanged 
+PASS the successor scope leaves the original owner restored 
+PASS the scope restores every owner it bound, at all six phases 
+PASS COLD: the body still carries the FIRST ROUND's reply under its own name 
+PASS COLD: the merge still reports the TRUE mixed origins {'a4_final_v2_correction': 1, 'a4_final_v6_correction': 1, 'a4_final_v1': 31}
+PASS COLD: all three v6 rounds are still on disk with receipt and finalization 
+PASS COLD RESUME: the published successor receipt is still the proved one and its pinned prompt re-derives byte-identically from disk ([], '597006d0a7d1e5adc8393c3f9e6f4c00a31c5adb167cdce64d7fef9b2c8f7e28')
+PASS COLD RESUME: this receipt pins both earlier rounds exactly 
+PASS COLD RESUME: each round's finalization records its own valid call 
+PASS DISCONNECT 1: pointing the successor at the superseded closeout instead of the first round REFUSES rather than serving a stale prior reply ValueError: the first v6 round does not read cleanly: ['/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_core_clo2065_c
+PASS DISCONNECT 2: and the published receipt cannot even be RE-VALIDATED under the wrong first round - the resume path refuses outright rather than silently accepting it ValueError: the first v6 round does not read cleanly: ['/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_core_clo2065_c
+PASS the consumer binding reader carries ALL FIVE later phases 
+PASS the SUCCESSOR content is what the REAL consumer sees for that event ['zz_v6r3_settled_zz_v6r2_settled_zz_v6_fixed_zz_v5_closed_zz_v4_settled_zz_v3_decided_zz_v2_1_operating_cost_per_available_seat_mile', 'income_tax_expense', 'pre_tax_income', 'full_time_equivalent_employees']
+PASS the first round's name it replaced is NOT at the consumer 
+PASS the event whose correction stood keeps its CORRECTED content 
+PASS no successor name leaks into any other event 
+PASS both carried ORIGINAL news results are still original 
+PASS DISCONNECT 3: dropping the v6 slot at the consumer read boundary silently loses ONLY this round - the first round is still served as the successor's merge base, and the positive name assertion is what detects the loss ['zz_v6r2_settled_zz_v6_fixed_zz_v5_closed_zz_v4_settled_zz_v3_decided_zz_v2_1_operating_cost_per_available_seat_mile', 'income_tax_expense', 'pre_tax_income', 'full_time_equivalent_employees']
+PASS DISCONNECT 4: dropping every correction phase DOES refuse, and the named mechanism is an INCOMPLETE key rather than a silent swap ("ValueError: the approved key's signing gate is not clean: []", 1)
+PASS POSITIVE CONTROL: bound to the FIRST round under its own scope the consumer still produces that complete key, unchanged ['zz_v6r2_settled_zz_v6_fixed_zz_v5_closed_zz_v4_settled_zz_v3_decided_zz_v2_1_operating_cost_per_available_seat_mile', 'income_tax_expense', 'pre_tax_income', 'full_time_equivalent_employees']
+PASS the successor fact survives into G.live_key, the key every G1 path reads 
+PASS the first round's superseded name is nowhere in the live key 
+PASS the successor TEST key enters the actual saved-answer grading path []
+PASS all 36 events, 191 packets and 382 original answers, zero new producer calls 
+PASS every original answer byte is unchanged 
+COMPLETE 25 checks; zero AI calls; /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/TEST_codex_cons2080_a

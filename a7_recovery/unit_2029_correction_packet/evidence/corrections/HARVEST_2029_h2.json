@@ -1,0 +1,142 @@
+{
+ "harvested_now": [
+  {
+   "label": "0001041061-25-000109",
+   "runId": "wf_1cea3dbc-05f",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 10295,
+   "ms": 111728,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001041061-26-000003",
+   "runId": "wf_2f18e487-3e5",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 9553,
+   "ms": 85940,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001041061-26-000084",
+   "runId": "wf_d56de244-ada",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 12396,
+   "ms": 118542,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001058090-26-000007",
+   "runId": "wf_30b5ea16-b01",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 11052,
+   "ms": 115787,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001104659-25-102611",
+   "runId": "wf_3b215526-f82",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 11224,
+   "ms": 117670,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001104659-25-105631",
+   "runId": "wf_1ef0a9ab-223",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 9454,
+   "ms": 101029,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001104659-25-118458",
+   "runId": "wf_e3a15205-16e",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 12373,
+   "ms": 127852,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001104659-26-017090",
+   "runId": "wf_9f4649ca-459",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 11699,
+   "ms": 93385,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001104659-26-027061",
+   "runId": "wf_61851db8-4b5",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 8764,
+   "ms": 103984,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001104659-26-032757",
+   "runId": "wf_eb98341e-f65",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 10232,
+   "ms": 103840,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0001171843-26-001288",
+   "runId": "wf_b1a794d7-501",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 8452,
+   "ms": 113279,
+   "script_matches_launch": true
+  },
+  {
+   "label": "BBY_2026-03-03T08.00",
+   "runId": "wf_7ce93788-fc8",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 14658,
+   "ms": 154077,
+   "script_matches_launch": true
+  },
+  {
+   "label": "CMG_2026-02-03T16.30",
+   "runId": "wf_c37c0249-b4e",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 11469,
+   "ms": 107923,
+   "script_matches_launch": true
+  },
+  {
+   "label": "DAL_2026-04-08T10.00",
+   "runId": "wf_132086a2-1e8",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 12831,
+   "ms": 143206,
+   "script_matches_launch": true
+  },
+  {
+   "label": "DRI_2026-03-19T08.30",
+   "runId": "wf_87ed4fe0-ce5",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 11031,
+   "ms": 112793,
+   "script_matches_launch": true
+  },
+  {
+   "label": "YUM_2026-02-04T08.15",
+   "runId": "wf_27bd5e41-c09",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 14744,
+   "ms": 146659,
+   "script_matches_launch": true
+  }
+ ],
+ "states": {
+  "preserved": 28,
+  "in_flight": 3
+ },
+ "in_flight": [
+  "AAL_2026-04-23T08.30",
+  "MCD_2026-02-11T16.30",
+  "ULTA_2026-03-12T16.30"
+ ],
+ "launched_total": 31
+}

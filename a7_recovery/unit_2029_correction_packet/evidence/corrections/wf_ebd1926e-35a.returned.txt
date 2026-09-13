@@ -1,0 +1,172 @@
+```json
+{
+  "source_id": "0000027904-26-000022",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": -1, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:refinery"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as one: the quote states the refinery segment's operating result for the March 2026 quarter beside the prior-year quarter's value, which is a real metric change, so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "total_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 1.2, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as one: the quote states a source-given dollar increase in a named revenue measure against the year-ago quarter, so the proposal and my outcome agree."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "passenger_revenue",
+              "driver_state": "increased",
+              "change_value": {"value": 11, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["geography:atlanticdestination"],
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as one, though only in part: the in-quote growth figure is a real metric change, while the dollar figure in the same row carries no in-quote currency or scale marker and is therefore left unstated rather than guessed."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence only cross-references the Form 10-K and says nothing material changed in the risk factors; it reports no driver state, change, surprise, guidance or action, so it is bare boilerplate and the fact gate returns nothing."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: the sentence is risk-factor boilerplate and correctly yields no fact."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000022",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The target states that the company changed how its non-GAAP adjusted results and prior-period reconciliations are presented (which hedge settlement gains and losses are excluded); its subject is a measurement/presentation construct, not any driver's state, change, surprise, guidance or action, and measurement flavor can never be a driver name, so no lawful fact can be coined from it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Frozen as real_item but it yields no fact, and I record that disagreement openly: the statement is about the presentation of a non-GAAP measure rather than about a driver, so I name it an exclusion rather than let the proposal pass silently."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes"],
+      "reference_name": "refinery generated an operating loss",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated comparison is a prior-period actual, so it is a metric change with a prior_year baseline and never a surprise, and the loss is carried in the negative region of operating income rather than as its own loss driver."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison"],
+      "reference_name": "Total revenue, adjusted",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "One movement is stated on two different units at once ($1.2 billion and 9.4%), and since a single record carries one change value and unit, the dollar statement is carried while the percentage stays in the quote."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes"],
+      "reference_name": "Atlantic",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The row's figure 1,517 has neither a currency nor a scale marker inside the located quote, so the level is left unstated and only the in-quote percentage growth, whose own marker is present, is encoded."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-004/b1",
+      "agrees": true,
+      "why": "Settling the event first on its own text, I reached the same five outcomes this lead reports - real facts on rows 1, 2 and 3 and no fact on rows 4 and 5 - and my name, state, values, baseline, slice and period choices coincide with it, so I record agreement without borrowing its evidence."
+    },
+    {
+      "lead_id": "sokc-004/b2",
+      "agrees": false,
+      "why": "It matches what I settled on rows 1, 2, 4 and 5, but it abstains on all of row 3 for a missing scale marker, whereas the marker that is missing belongs only to the dollar figure I did not encode, while the percentage I did encode carries its own marker inside the quote."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 3's stated figure 1,517 is not carried on any record.",
+      "why": "Neither a currency symbol nor the table's scale wording sits inside the located quote, so no lawful scale evidence can be cited for it, and a genuinely stated level is therefore dropped from the record rather than encoded."
+    },
+    {
+      "what": "Row 2's single increase is stated on two units at once ($1.2 billion and 9.4%).",
+      "why": "A record carries one change value with one unit and no rule ranks a dollar movement against a percentage movement for the same increase, so carrying the dollar figure is my judgment rather than a rule-forced answer."
+    },
+    {
+      "what": "Row 5 sits in the fuzzy middle of the gate with no locked boundary.",
+      "why": "A retrospective change to what a non-GAAP measure excludes is a real, deliberate company decision, yet its subject is a measurement construct for which no lawful driver name exists, and the gate text fixes no boundary for this class, so the exclusion needs owner confirmation before it is treated as settled."
+    }
+  ]
+}
+```

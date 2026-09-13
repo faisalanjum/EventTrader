@@ -1,0 +1,145 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located sentence attributes the $80 million only 'primarily' to restructuring, so the whole stated amount cannot lawfully ride a restructuring cause name and the source states no split of the remainder; the only other supported reading is the source's own aggregate line label, 'pre-tax charges', whose 'pre-tax' element is a measurement basis (the release also shows the same items 'net of tax') that Rule 3.6/Rule 8 keep out of the name, leaving the bare category word 'charges', which Rule 3.10 forbids as a driver name — so this real, non-boilerplate statement cannot be resolved into any lawful fact without inventing an attribution or a name."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but it settles as an exclusion, and I state that mismatch plainly: the statement is genuine and non-boilerplate, yet 'primarily' bars attributing the full $80 million to restructuring and the source's own aggregate label reduces, after its measurement basis is stripped, to a bare category word that is not a lawful driver name."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The named target is a netted prior-year aggregate ($71 million of net pre-tax gains for the quarter, shown beside a separate $70 million net pre-tax charge for the year) that the sentence itself says 'primarily consisted of' property sale gains, transaction costs and non-cash impairment charges tied to the South Korea business SALE together with transaction costs tied to the Israel business ACQUISITION; those are at least two independent causes, the source gives no per-cause amount and the word 'primarily' leaves a further unattributed remainder, so one name cannot lawfully cover the figure and no split may be invented."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but it settles as an exclusion, and I say so plainly: the statement is real and non-boilerplate, yet its netted multi-cause figure admits neither one lawful cause name nor one lawful value, so it yields no emittable fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "slice_parts": ["segment:usmarket"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and confirmed as one: the located line states a directional 6.8% comparable-sales level for the company's U.S. part in the fourth quarter, a real re-readable metric state, so proposal and outcome agree."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence only announces that the release contains forward-looking statements reflecting management's expectations and that they speak as of the date hereof; it names no driver and states no level, change, outlook value, expectation comparison or action, so it is generic legal boilerplate and fails the fact gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and it behaves as one: the safe-harbour sentence carries no driver-bearing content and correctly yields nothing."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "franchised_restaurant_share",
+              "driver_state": "reported",
+              "level_low": {"value": 95, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 95, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "instant",
+              "measurement_raw_spans": ["Approximately"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it settles as one: although the sentence sits in the company-description section, it states a quantified standing level - about 95% of restaurants held by independent owner-operators - that can be read again over time, and the gate explicitly excludes recurrence and materiality as grounds for dropping a fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "U.S. increased 6.8%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The U.S. part appears in the menu under two kinds and two spellings (segment:usmarket, segment:u_s_market, entity_ownership:usmarket, entity_ownership:u_s_market); the comparable-sales breakdown alongside the two named International segments selects the operating-segment reading, but the duplicate spelling is genuinely unresolved and I recorded rather than resolved it."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "portion_versus_whole", "slices_and_unknown_axes"],
+      "reference_name": "owned and operated by independent local business owners",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The franchised population can lawfully be carried as a qualifier inside the driver name (my reading) or as a channel slice on a restaurant-population metric, and the sentence alone does not settle which encoding is intended; the hedge word 'Approximately' was kept as a number modifier in measurement rather than dropped."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-005/b1",
+      "agrees": false,
+      "why": "It matches my outcomes only on rows 2, 3 and 4: it emits a restructuring-named fact carrying the whole $80 million on row 1 where the 'primarily' wording bars whole-amount attribution and I abstained, it drops row 5 as company-profile boilerplate where I settled a real quantified standing level, and on row 3 it left the scale evidence null although a percent marker sits inside that row's own quote."
+    },
+    {
+      "lead_id": "sokc-005/b2",
+      "agrees": false,
+      "why": "It matches my outcomes only on rows 2, 3 and 4: on row 1 it emits an even more specific programme-based name carrying the entire stated amount, which the 'primarily' wording does not support and where I abstained, and it drops row 5 explicitly because the sentence repeats across releases - recurrence, which the gate names as NOT part of the test - while I settled a fact there."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 1 needs a naming ruling: the $80 million is only 'primarily' restructuring and the source's own aggregate label ('pre-tax charges') collapses to a bare category word once its measurement basis is stripped.",
+      "why": "Without a ruling, the only choices are attributing an unstated remainder to a restructuring cause name or emitting an unlawful bare-category name, so a real quantified charge stays unrecorded and the correct encoding is blocked."
+    },
+    {
+      "what": "The slice menu carries the U.S. market four times: segment:usmarket, segment:u_s_market, entity_ownership:usmarket and entity_ownership:u_s_market.",
+      "why": "Row 3's stored slice identity depends on which token is canonical, and neither the quote nor the menu supplies evidence to choose between the two segment spellings, so one real population can fork into two ids."
+    },
+    {
+      "what": "Row 5 admits two lawful encodings: franchise share as a population-qualified driver name, or a restaurant-population metric sliced by a franchised channel value (the menu offers channel:franchisedunits, channel:conventionalfranchises, channel:developmentallicensees and channel:affiliatedentity, and 'independent local business owners' spans more than one of them).",
+      "why": "The two encodings produce different fact identities for the same sentence, and the sentence alone does not select one."
+    }
+  ]
+}
+```

@@ -1,0 +1,230 @@
+{
+ "door": "a4_source_only_key_1997",
+ "phase": "corrections",
+ "attempt": 1,
+ "run_id": "corrections",
+ "receipt_sha256": "e085196ff5ca9e95b506cbffc6da80cdd3ae1818d2fcef57b388fb8573e876ed",
+ "manifest_sha256": "65b393b2658611834b2f997648242f18e61397a72b76f0a897f04f106601627d",
+ "bound": {
+  "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "build_kfields_hard_review.py": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+  "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+  "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+  "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+  "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+  "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+  "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+  "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+  "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+  "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+  "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+  "review_composite_owner": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+  "clarified_review_manifest": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+ },
+ "harvested_raw": [
+  "wf_e31d007c-af7.raw.json",
+  "wf_08c4aeaa-55f.raw.json",
+  "wf_866b8ce4-bef.raw.json",
+  "wf_ebd1926e-35a.raw.json",
+  "wf_7de3d393-14c.raw.json",
+  "wf_f110b2df-3f6.raw.json",
+  "wf_0753bf94-afe.raw.json",
+  "wf_bafaccdf-bf3.raw.json",
+  "wf_7fa739cd-fc0.raw.json",
+  "wf_662c5c9f-6e2.raw.json",
+  "wf_d0d7a05c-abc.raw.json",
+  "wf_1cea3dbc-05f.raw.json",
+  "wf_2f18e487-3e5.raw.json",
+  "wf_d56de244-ada.raw.json",
+  "wf_30b5ea16-b01.raw.json",
+  "wf_3b215526-f82.raw.json",
+  "wf_1ef0a9ab-223.raw.json",
+  "wf_e3a15205-16e.raw.json",
+  "wf_9f4649ca-459.raw.json",
+  "wf_61851db8-4b5.raw.json",
+  "wf_eb98341e-f65.raw.json",
+  "wf_b1a794d7-501.raw.json",
+  "wf_33541b6f-d2a.raw.json",
+  "wf_7ce93788-fc8.raw.json",
+  "wf_c37c0249-b4e.raw.json",
+  "wf_132086a2-1e8.raw.json",
+  "wf_87ed4fe0-ce5.raw.json",
+  "wf_7eb574d4-982.raw.json",
+  "wf_384c0ebc-de9.raw.json",
+  "wf_27bd5e41-c09.raw.json"
+ ],
+ "phase_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "0000006201-26-000031",
+   "valid",
+   ""
+  ],
+  [
+   "0000027904-26-000013",
+   "valid",
+   ""
+  ],
+  [
+   "0000027904-26-000020",
+   "valid",
+   ""
+  ],
+  [
+   "0000027904-26-000022",
+   "valid",
+   ""
+  ],
+  [
+   "0000063908-26-000032",
+   "valid",
+   ""
+  ],
+  [
+   "0000092380-26-000044",
+   "valid",
+   ""
+  ],
+  [
+   "0000764478-25-000057",
+   "valid",
+   ""
+  ],
+  [
+   "0000898173-26-000006",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-25-000038",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-26-000005",
+   "valid",
+   ""
+  ],
+  [
+   "0000940944-26-000009",
+   "valid",
+   ""
+  ],
+  [
+   "0000006201-26-000032",
+   "transport_no_answer",
+   "the worker was launched and never answered"
+  ],
+  [
+   "0001041061-25-000109",
+   "valid",
+   ""
+  ],
+  [
+   "0001041061-26-000003",
+   "valid",
+   ""
+  ],
+  [
+   "0001041061-26-000084",
+   "valid",
+   ""
+  ],
+  [
+   "0001058090-26-000007",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-25-102611",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-25-105631",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-25-118458",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-26-017090",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-26-027061",
+   "valid",
+   ""
+  ],
+  [
+   "0001104659-26-032757",
+   "valid",
+   ""
+  ],
+  [
+   "0001171843-26-001288",
+   "valid",
+   ""
+  ],
+  [
+   "AAL_2026-04-23T08.30",
+   "valid",
+   ""
+  ],
+  [
+   "BBY_2026-03-03T08.00",
+   "valid",
+   ""
+  ],
+  [
+   "CMG_2026-02-03T16.30",
+   "valid",
+   ""
+  ],
+  [
+   "DAL_2026-04-08T10.00",
+   "valid",
+   ""
+  ],
+  [
+   "DRI_2026-03-19T08.30",
+   "valid",
+   ""
+  ],
+  [
+   "MCD_2026-02-11T16.30",
+   "valid",
+   ""
+  ],
+  [
+   "ULTA_2026-03-12T16.30",
+   "valid",
+   ""
+  ],
+  [
+   "YUM_2026-02-04T08.15",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 31,
+  "valid": 30,
+  "invalid_response": 0,
+  "transport_no_answer": 1,
+  "unproved": 0,
+  "missing": 0
+ },
+ "retry": []
+}

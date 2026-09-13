@@ -1,0 +1,62 @@
+PASS packet and saved bindings name the same first round and phase None
+PASS the exact reviewed source leads are saved, not reconstructed answers None
+PASS every declared runtime module still matches its frozen bytes None
+PASS the current successor owner and boundary map match this packet None
+PASS the two predecessor replies and their earlier history still reconstruct None
+PASS the real uncalled receipt resumes from saved inputs None
+PASS the two requests are uncalled, with nothing finalized None
+PASS the receipt pins the exact first-round history None
+PASS all previous calls are counted once before these two 665
+PASS the independently derived request set equals the saved set None
+PASS cold prompt, script, source and prior reply: 0000027904-26-000013 None
+PASS cold prompt, script, source and prior reply: DAL_2026-04-08T10.00 None
+PASS the complete 33-source merge base is byte-identical None
+PASS all 191 rows remain accounted for, with the one recorded open issue OrderedDict([('events_accounted', 33), ('rows_accounted', 191), ('accepted_facts', 162), ('du_worthy_facts', 162), ('controls', 34), ('exclusions', 10), ('abstentions', 44), ('record_kind_conflicts', 11), ('duplicate_gold_facts', 0), ('open_issues', 1), ('phase1_ambiguities', 0), ('tag_floor', 5), (
+PASS the real proof owner credits no answer; both remain missing {'proved': 0, 'missing': ['0000027904-26-000013', 'DAL_2026-04-08T10.00']}
+PASS the immediate predecessor has two real run and agent identities [2, 2, 2, 2]
+PASS all older identity protection stays intact: events {'before': 0, 'after': 0}
+PASS all older identity protection stays intact: corrections {'before': 1, 'after': 1}
+PASS all older identity protection stays intact: decision {'before': 3, 'after': 3}
+PASS all older identity protection stays intact: decision_correction {'before': 4, 'after': 4}
+PASS all older identity protection stays intact: decision_correction_v5 {'before': 5, 'after': 5}
+PASS all older identity protection stays intact: decision_correction_v6 {'before': 6, 'after': 8}
+PASS all older identity protection stays intact: signer {'before': 7, 'after': 9}
+PASS prior identity protection includes the first round: decision_correction_v6 {'first_round_in_prior_runs': True, 'omitted_id_counts': [0, 0, 0, 0]}
+PASS prior identity protection includes the first round: signer {'first_round_in_prior_runs': True, 'omitted_id_counts': [0, 0, 0, 0]}
+PASS the outer recovery identity owner is restored on exit None
+{
+ "packet": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a",
+ "packet_sha256": "1cb495e033376dfa5b930d5ded3881564866f6d94889da08fa0aa96c30fbbef7",
+ "owner_sha256": "beed43091c4a5088f248122c3cf627ef82fd72cdbad7d9390863d1cb4ad558a7",
+ "passed": 26,
+ "checks": [
+  "packet and saved bindings name the same first round and phase",
+  "the exact reviewed source leads are saved, not reconstructed answers",
+  "every declared runtime module still matches its frozen bytes",
+  "the current successor owner and boundary map match this packet",
+  "the two predecessor replies and their earlier history still reconstruct",
+  "the real uncalled receipt resumes from saved inputs",
+  "the two requests are uncalled, with nothing finalized",
+  "the receipt pins the exact first-round history",
+  "all previous calls are counted once before these two",
+  "the independently derived request set equals the saved set",
+  "cold prompt, script, source and prior reply: 0000027904-26-000013",
+  "cold prompt, script, source and prior reply: DAL_2026-04-08T10.00",
+  "the complete 33-source merge base is byte-identical",
+  "all 191 rows remain accounted for, with the one recorded open issue",
+  "the real proof owner credits no answer; both remain missing",
+  "the immediate predecessor has two real run and agent identities",
+  "all older identity protection stays intact: events",
+  "all older identity protection stays intact: corrections",
+  "all older identity protection stays intact: decision",
+  "all older identity protection stays intact: decision_correction",
+  "all older identity protection stays intact: decision_correction_v5",
+  "all older identity protection stays intact: decision_correction_v6",
+  "all older identity protection stays intact: signer",
+  "prior identity protection includes the first round: decision_correction_v6",
+  "prior identity protection includes the first round: signer",
+  "the outer recovery identity owner is restored on exit"
+ ],
+ "model_calls": 0,
+ "limitation": "Source decisions, real signature and grading are not established."
+}

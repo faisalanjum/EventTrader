@@ -1,0 +1,105 @@
+{
+ "mode": "inspect",
+ "pins": {
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/PACKET.json": "1cb495e033376dfa5b930d5ded3881564866f6d94889da08fa0aa96c30fbbef7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/FINDINGS_BY_EVENT.json": "83411d44871cb7dbfe296b8d08d2811cde28d4431a63e6a65b3c2a9f5c232e1f",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/LAUNCH_RECORD_2080.json": "9f710c69ee0826e5753b3effddde3a435d2b1dcded3107e68baeec714333e02a",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/evidence/v6r3/launch_ledger_2080.json": "664a7272f429b4d377f7870352369b04c6cc82b4ee07e0616a88f828279eaac1",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/a4_v6_successor_chain.py": "beed43091c4a5088f248122c3cf627ef82fd72cdbad7d9390863d1cb4ad558a7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/a4_phase_input.py": "cadb0367b28373bd602773bfe1257aa17cddab3cbb6dc1203a64120d459ebe2b",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py": "d96db730a9e2a54a6f2ac221e328649ad8babe9139b26365f13babe2db3ab7ee"
+ },
+ "expected": 2,
+ "rows": [
+  {
+   "source_id": "0000027904-26-000013",
+   "run_id": "wf_c100b6e4-e40",
+   "native_status": "completed",
+   "raw_sha256": "cade0230381801623f6b2c8ceafa8cc6f5525a98f722105ee12b125ad1e9ce1e",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "run_id": "wf_30437ec6-e96",
+   "native_status": "completed",
+   "raw_sha256": "4d661c36cbb4922aef896a102f4e4553ac22a900f66e14ed182bce97984a9588",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  }
+ ],
+ "native_problems": [],
+ "native_results": {
+  "0000027904-26-000013": [
+   "proved",
+   ""
+  ],
+  "DAL_2026-04-08T10.00": [
+   "proved",
+   ""
+  ]
+ }
+}
+{
+ "mode": "inspect",
+ "pins": {
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/PACKET.json": "1cb495e033376dfa5b930d5ded3881564866f6d94889da08fa0aa96c30fbbef7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/FINDINGS_BY_EVENT.json": "83411d44871cb7dbfe296b8d08d2811cde28d4431a63e6a65b3c2a9f5c232e1f",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/LAUNCH_RECORD_2080.json": "9f710c69ee0826e5753b3effddde3a435d2b1dcded3107e68baeec714333e02a",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/evidence/v6r3/launch_ledger_2080.json": "664a7272f429b4d377f7870352369b04c6cc82b4ee07e0616a88f828279eaac1",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/a4_v6_successor_chain.py": "beed43091c4a5088f248122c3cf627ef82fd72cdbad7d9390863d1cb4ad558a7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/a4_phase_input.py": "cadb0367b28373bd602773bfe1257aa17cddab3cbb6dc1203a64120d459ebe2b",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py": "d96db730a9e2a54a6f2ac221e328649ad8babe9139b26365f13babe2db3ab7ee"
+ },
+ "expected": 2,
+ "rows": [
+  {
+   "source_id": "0000027904-26-000013",
+   "run_id": "wf_c100b6e4-e40",
+   "native_status": "completed",
+   "raw_sha256": "cade0230381801623f6b2c8ceafa8cc6f5525a98f722105ee12b125ad1e9ce1e",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "run_id": "wf_30437ec6-e96",
+   "native_status": "completed",
+   "raw_sha256": "4d661c36cbb4922aef896a102f4e4553ac22a900f66e14ed182bce97984a9588",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  }
+ ],
+ "native_problems": [],
+ "native_results": {
+  "0000027904-26-000013": [
+   "proved",
+   ""
+  ],
+  "DAL_2026-04-08T10.00": [
+   "proved",
+   ""
+  ]
+ },
+ "limitation": "Native/schema/accounting only; source approval, signature and grading remain separate."
+}

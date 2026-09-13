@@ -1,0 +1,7 @@
+attempt	codex_ids2080_a
+payload	../../unit_2020_codex_check/check_chain_native_ids_2078.py
+map	../unit_2076_latest_source_decisions/map_fix_2076.tsv
+wrapper_pid	3426929
+payload_pid	3426933
+started_utc	2026-09-13T00:04:03Z
+state	finished exit 0

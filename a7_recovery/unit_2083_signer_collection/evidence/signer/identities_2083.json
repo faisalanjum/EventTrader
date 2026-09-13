@@ -1,0 +1,79 @@
+{
+ "any_collision": false,
+ "authority": "Codex SEQ 2083",
+ "collides_with_earlier_rounds": {
+  "agentId": [],
+  "request_ids": [],
+  "response_ids": [],
+  "runId": []
+ },
+ "events": {
+  "a4-final-signer": {
+   "agentId": "aded04e635e6e4aed",
+   "cli_versions": [
+    "2.1.261"
+   ],
+   "observed": {
+    "agentType": "lean-probe",
+    "agent_state": "done",
+    "record_shape": [
+     "user",
+     "attachment",
+     "assistant",
+     "assistant"
+    ],
+    "status": "completed",
+    "toolCalls": 0,
+    "transcript_efforts": [
+     "high"
+    ],
+    "transcript_models": [
+     "claude-opus-5"
+    ],
+    "workflow_row_effort": null,
+    "workflow_row_model": "claude-opus-5[1m]"
+   },
+   "preserved": {
+    "returned_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2083_signer_collection/evidence/signer/wf_cf398299-777.returned.txt",
+    "returned_sha256": "46c0847c677657877b7a1a914404ec35be397023ba1394db039b3d79872a2ee3",
+    "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2083_signer_collection/evidence/signer/wf_cf398299-777.state.json",
+    "state_sha256": "dbba413f53faec8d5a35c00e5f54124566e895dda44ebecdf11d5438637b8d48",
+    "transcript_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2083_signer_collection/evidence/signer/wf_cf398299-777.transcript.jsonl",
+    "transcript_sha256": "99d5c7c158508ab06433ddbfbcd70509b8588eab74a4ea895d965c3ea139dbd7"
+   },
+   "request_ids": [
+    "req_011CezWixhkmThhkPDG3zhEk"
+   ],
+   "response_ids": [
+    "msg_011CezWiyEm4qTNsfYcgfojq"
+   ],
+   "returned": {
+    "attempt": 1,
+    "declared_agentType": "lean-probe",
+    "declared_effort": "high",
+    "declared_model": "opus",
+    "is_error": null,
+    "refusal_or_wait": null,
+    "text_bytes": 560,
+    "text_sha256": "46c0847c677657877b7a1a914404ec35be397023ba1394db039b3d79872a2ee3"
+   },
+   "runId": "wf_cf398299-777",
+   "timestamps": [
+    "2026-09-13T00:44:36.701Z",
+    "2026-09-13T00:46:31.283Z"
+   ],
+   "usage": {
+    "agentCount": 1,
+    "durationMs": 121931,
+    "totalTokens": 146054,
+    "totalToolCalls": 0
+   }
+  }
+ },
+ "repeats_within_this_round": {
+  "agentId": [],
+  "request_ids": [],
+  "response_ids": [],
+  "runId": []
+ }
+}

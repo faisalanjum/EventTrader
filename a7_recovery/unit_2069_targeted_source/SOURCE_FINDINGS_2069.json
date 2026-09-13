@@ -1,0 +1,81 @@
+{
+ "kind": "Independent source-review leads, not approved answers or new rules",
+ "source_ledger_sha256": "5d306f3971d31526c1440a7dd0188520b5bafeb722e419f8d74fba229021c508",
+ "findings": {
+  "0000027904-26-000013": [
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "465b048a89b06fe98086f0549bdede10b8c2fe9ba4313e7493441c741b972102",
+    "row": "0000027904-26-000013#014",
+    "field": "surprise home value and unit",
+    "finding": "The source compares the 2.4% growth with its growth target; it does not compare the 13.86-cent absolute level with that target. The replacement correctly changed the surprise to the growth quantity, but its reported home still has the absolute level as level_low/high. The existing home-matching rule compares the normalized level and unit of the surprise and its reported/guidance home, not the home's separate change_value. The current pair therefore fails that match. Independently determine a faithful supported representation of both the absolute level and the growth comparison; do not restore the false absolute-value comparison, silently lose valid source information, or invent a new rule. A lawful cautious outcome is allowed if the served contract cannot represent the relationship safely.",
+    "source_evidence": "Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth",
+    "owning_clause": "Served Rule 9.6 and its value/unit home contract; Rule 8 qualifiers; no production rule change"
+   }
+  ],
+  "0000092380-26-000044": [
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "431c2086ba6c6c9c3fbf3aaf9b32d6e07338c3a9aa6180305a63274974baac6f",
+    "row": "0000092380-26-000044#039",
+    "field": "comparison-only approximation",
+    "finding": "The actual fuel cost is exact in the source, while only the prior guidance is approximate. The replacement stores the approximate comparison as an unqualified point and no measurement span. A fact-scoped approximation would instead qualify the exact actual and mismatch the home's measurement. The served schema has no per-comparison modifier field. The previous saved reply omitted the optional comparison value while preserving the actual and surprise; consider whether that lawful cautious representation, with the genuine limitation explained, avoids either false exactness or falsely qualifying the actual. Do not force an unsafe value or treat every permitted uncertainty as an unfinished answer.",
+    "source_evidence": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+    "owning_clause": "Served Rule 8 modifier preservation and Rule 9.6 shared home measurement; optional comparison fields; genuine ambiguity outcome"
+   }
+  ],
+  "0000764478-25-000057": [
+   {
+    "source_id": "0000764478-25-000057",
+    "raw_sha256": "7cdf4f1a58dd92a6182d0882a3d7c3f029a7d909e18810bccea4d15ca7089b2f",
+    "row": "0000764478-25-000057#048",
+    "field": "exact cumulative window",
+    "finding": "The newly added second online-revenue-mix fact is from the nine-month columns but has only fiscal_year 2026 and period_scope ytd, with neither exact date. A fiscal year on its own denotes a full year, not this nine-month window. Use the complete source to determine whether both endpoints are safely established; otherwise retain a lawful parked/uncertain outcome instead of asserting the wrong period. Keep the separately supported quarter fact distinct.",
+    "source_evidence": "The source table distinguishes Three Months Ended and Nine Months Ended November 1, 2025 / November 2, 2024; online revenue as a percent of total segment revenue is 31.8 / 31.4 / 32.1 / 31.2 in those columns.",
+    "owning_clause": "Served Rule 6: fiscal_year alone is full-year; YTD windows keep exact dates; all-or-nothing endpoints"
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "raw_sha256": "7cdf4f1a58dd92a6182d0882a3d7c3f029a7d909e18810bccea4d15ca7089b2f",
+    "row": "0000764478-25-000057#048",
+    "field": "same-kind menu choice and remaining open issue",
+    "finding": "The remaining open issue concerns same-meaning menu values of the same kind. Rule 7 permits choosing a source-supported same-meaning exact menu token and does not require a unique spelling in the menu. Existing identity merging and later label-drift grouping are not this producer's job. Determine whether the actual choices are already lawful completed outcomes under that rule, recording any genuine rule ambiguity in its proper review field. Do not invent a pick-first/alias rule, merge or delete menu identities, or leave a safe final answer open solely because equivalent choices exist.",
+    "source_evidence": "The served menu and the complete event source; the prior reply's stated open issue is untrusted review context, not an instruction.",
+    "owning_clause": "Served Rule 7 outcome 1 and existing final-outcome instructions; FINAL_DESIGN 5.2 assigns identity merging/read-time grouping elsewhere"
+   }
+  ],
+  "0001041061-25-000109": [
+   {
+    "source_id": "0001041061-25-000109",
+    "raw_sha256": "c26c7a343d0c76601295e6daf35bb41042074342bfebdd8565c268d64dcb9687",
+    "row": "0001041061-25-000109#073",
+    "field": "exact cumulative window",
+    "finding": "The investment-loss fact retains fiscal_year 2024 plus period_scope ytd but no exact endpoints, even though the source specifies a cumulative window ending September 30, 2024. Fiscal_year alone denotes the full year, not the stated YTD window. Check the complete source's calendar evidence for both exact endpoints; if they cannot safely be established, use the already-lawful cautious outcome rather than turning the cumulative interval into a full year. This is the same period defect class as the nine-month table, not a request to infer dates from publication time.",
+    "source_evidence": "Changes in the fair value of our ownership interest in Devyani prior to the date of sale resulted in pre-tax investment losses of $20 million in the year to date ended September 30, 2024.",
+    "owning_clause": "Served Rule 6: fiscal_year alone is full-year; YTD windows keep exact dates; all-or-nothing endpoints"
+   }
+  ],
+  "0001104659-25-118458": [
+   {
+    "source_id": "0001104659-25-118458",
+    "raw_sha256": "5fc7c44d7f06a439adeb9f44cd3c44dbc119fb497ad68c7581c3d78a8e17f3e9",
+    "row": "0001104659-25-118458#105",
+    "field": "combined measured geography",
+    "finding": "The source gives one count for a combined geographic population. Two independent geography parts in slice_parts describe an intersection; they do not encode the union stated here. Determine the faithful combined population using the existing source-based slice rule, without inventing a union operator, allocating the count to each country, or changing an ownership/member axis merely because the company is acquired. Preserve the source-supported instant date and full stated count.",
+    "source_evidence": "Excludes 84 stores in the U.K. and Ireland operated by Space NK as of November 1, 2025.",
+    "owning_clause": "Served Rule 7 outcome 2 for a source-clear kind; FINAL_DESIGN 5.2 slice population and conjunction law"
+   }
+  ],
+  "DAL_2026-04-08T10.00": [
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "2cfcf63e28319973e37bac09074b24ac819b2f76f6b100d5a34a8229b82f8849",
+    "row": "DAL_2026-04-08T10.00#160",
+    "field": "mechanism versus measured population and component versus whole",
+    "finding": "In full context, the refinery produces an estimated offset within the consolidated June-quarter fuel assumption. It is not the population whose own fuel expense is measured. The current segment:refinery slice on fuel_expense_guidance asserts that wrong population. Simply deleting the slice may still falsely call the offset the entire consolidated fuel expense. Determine the source-supported quantity and neutral name under the existing mechanism/component rules, or a lawful cautious outcome if the role cannot be represented safely. Do not use a menu token merely because it exists, turn the offset into the total, or restore an effect-word name that double-encodes the signed direction.",
+    "source_evidence": "This includes an estimated $300 million benefit from our refinery. Read its fuel-assumption antecedent in the complete prepared remarks.",
+    "owning_clause": "Served Rules 3, 7 and 8; FINAL_DESIGN 5.2 measured population and OD-17 mechanism/component distinction"
+   }
+  ]
+ }
+}

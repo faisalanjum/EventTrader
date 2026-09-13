@@ -1,0 +1,186 @@
+{
+ "run_id": "closeout",
+ "door": "a4_source_only_key_1997",
+ "phase": "decision_correction_v5",
+ "attempt": 1,
+ "allowed": [
+  "0000006201-26-000031",
+  "0000006201-26-000032",
+  "0000027904-26-000013",
+  "0000027904-26-000020",
+  "0000027904-26-000022",
+  "0000063908-26-000032",
+  "0000092380-26-000044",
+  "0000764478-25-000057",
+  "0000898173-26-000006",
+  "0000940944-25-000038",
+  "0000940944-26-000005",
+  "0000940944-26-000009",
+  "0001041061-25-000109",
+  "0001041061-26-000003",
+  "0001041061-26-000084",
+  "0001058090-26-000007",
+  "0001104659-25-102611",
+  "0001104659-25-105631",
+  "0001104659-25-118458",
+  "0001104659-26-017090",
+  "0001104659-26-027061",
+  "0001104659-26-032757",
+  "0001171843-26-001288",
+  "AAL_2026-04-23T08.30",
+  "BBY_2026-03-03T08.00",
+  "CMG_2026-02-03T16.30",
+  "DAL_2026-04-08T10.00",
+  "DRI_2026-03-19T08.30",
+  "MCD_2026-02-11T16.30",
+  "ULTA_2026-03-12T16.30",
+  "YUM_2026-02-04T08.15"
+ ],
+ "parent": null,
+ "transport": {
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+ },
+ "manifest_sha256": "a979a78cb5c1227f30b43d1645ef13270d60a85173f819d6ee12a6d35623b977",
+ "bound": {
+  "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "build_kfields_hard_review.py": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+  "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+  "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+  "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+  "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+  "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+  "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+  "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+  "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+  "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+  "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+  "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+  "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+  "review_composite_owner": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+  "clarified_review_manifest": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+ },
+ "v1_evidence": {
+  "v1": {
+   "receipt.json": "8fc9c91d56382ed71ea4414ee5a6e8cb452f9a2b8b342e801bc25c49973598b4",
+   "finalization.json": "76f6a35d161636a67360bbff4f7849959dfeb0a4bfeca5635e284cf5ea351112",
+   "raw_tree": {
+    "files": 66,
+    "sha256": "00d63014ed4ab3bbf7209072119fed42e58621805cfaf05439c0d9504d523636"
+   }
+  },
+  "v2": {
+   "receipt.json": "e085196ff5ca9e95b506cbffc6da80cdd3ae1818d2fcef57b388fb8573e876ed",
+   "finalization.json": "7ede599ea06a5d9ddf175020fc31e7e47ec60a683415a50917a63865b7cab78e",
+   "raw_tree": {
+    "files": 60,
+    "sha256": "bb7539dbbdbf98a824bd696bffb182bfadabfa2879235072dda0bc97f6cec33f"
+   }
+  },
+  "v3": {
+   "receipt.json": "881c95fffd5fd970060adb122a4f02c91c07922dff12f695b4810376f026e68a",
+   "finalization.json": "33a37daccdf0b7002209f05dacca0021c4c61c6312eec928f33e0f3bac8f22bf",
+   "raw_tree": {
+    "files": 62,
+    "sha256": "dd95cb0853f90f0270fcc2c21c9c5688820a9411c2da5a37dac650d5f0e5d41d"
+   }
+  },
+  "v4": {
+   "receipt.json": "bc3d6c21d2ad5db1700049f2f83341ca24b1876e34f3af3b56b097c64aefff42",
+   "finalization.json": "1f295b8a9cd3acd97a7f9bad900eda5f970188432e39b94126fefe265c8bce4e",
+   "raw_tree": {
+    "files": 62,
+    "sha256": "5b26f9937cfd9e6d7e12233f0eef34473ce6478f0ee6bd0675e4ae8ec5edd7c5"
+   }
+  },
+  "v2_recovery": {
+   "receipt.json": "702c540dda8cb79a67ae0bee94a43ef437a01a211bad7a8e516003f180a5a56f",
+   "finalization.json": "d0579c653e913545ef7369c0ed9dd2c60c0dca6e4e163d89cfcd03a58ac76334",
+   "raw_tree": {
+    "files": 2,
+    "sha256": "e31cf46a89aa81fb266cf0f814849d6ab6373f21b591b637794b45c6abf41c54"
+   },
+   "recovery.json": "18da812a2c748810222f93f68489690fc98c6f8cce73ad95ce8036ee158d29e9"
+  }
+ },
+ "prompts": {
+  "0000006201-26-000031": "7229eb8a693c89d700c65d920c3ebd0c6ebdb80420665fd6b04f0e6bfb50eea7",
+  "0000006201-26-000032": "4dcf90747849b02b282933b474b2aaec9fc714f3a863eb8ab1e01aae99cff083",
+  "0000027904-26-000013": "0986777ac095efdbc9ef5eb3036551fbda6f5ffaad5d2745fedbe4cadb3566ac",
+  "0000027904-26-000020": "e7d72db22e4050836a6ed9cb9d67c5ec08b7099504eac3cc0f41df8fdb407889",
+  "0000027904-26-000022": "0f4a0c2ae63ef4a4fafda2615943bb7071be1f06950bc35a3d775e83b600b2b6",
+  "0000063908-26-000032": "7fca3d1af6db7a61513922dffe054c75adecdac9dcbae4a8e546bce720337928",
+  "0000092380-26-000044": "76954698422302ec04a34a77babc37387c3a2c99838802c291a01a2d4a056e2e",
+  "0000764478-25-000057": "a6ca7077a6bbf92b0d0aa05063c88e5e412b382f7f706ab6621ea0252801a1ec",
+  "0000898173-26-000006": "ac13182260b3e69830eb29b04b3cc3ee0914432a616fef3a9fede95af08aed99",
+  "0000940944-25-000038": "620ac2f158bf2edbf7bb60230e46cf7bb2744355217b6520375151fad3b4583b",
+  "0000940944-26-000005": "cc69b0b4b18fcdeb1545e517c77d153f69a59db642bac56cfa5b3d34a7ab81a2",
+  "0000940944-26-000009": "1eda637fa6de56d311d10f4650d990b6c3333b3cac107eeac1208df3fa712f19",
+  "0001041061-25-000109": "d10a272d8244dff2e08b6d49475faa22c62b7e51d7f3c07136dad6c0a5e4920c",
+  "0001041061-26-000003": "b50f21ff0fc88beb846de8de2dedfcc20f900f8c820d7f0097420d0730218cc1",
+  "0001041061-26-000084": "e8d0a092137c9f230eeb7200a1ac6cda514b9c784a8d301a69600ebb231f7089",
+  "0001058090-26-000007": "81f758f766ac74ac7f1cac24216084199cf1a5ebe91b6381197278d06a4847d6",
+  "0001104659-25-102611": "9b9d34f8ece073b795de4197394ed0aec37c28fa707910323bcff7521dff3ab6",
+  "0001104659-25-105631": "4ca31d17e82029db340a165a66b4da30b476bb24c99ff99537af2aead524646f",
+  "0001104659-25-118458": "d183f9c4146e2064f7cf698405f9d88e8ff88db20d0b2ac41ba595e0f17d46d3",
+  "0001104659-26-017090": "be34c507dfdfe058de2ae7cb1a70f7c6f4c328bc294b6fd1b0888b26dacda19f",
+  "0001104659-26-027061": "920bfd4dd83a96ebe0c8c30ea40fe446f6ec62283b2f1cea08252ee0eb7af146",
+  "0001104659-26-032757": "02158313248584393275a33136f2d82153d30dee0f816165705e4c26c1981666",
+  "0001171843-26-001288": "1ec1f1cb91d4f1d9543a073a2da0f01122031927e308ebf90a219e76385d1cb8",
+  "AAL_2026-04-23T08.30": "c39a8e6954968368c2566e7ea043fe4c4570cc863d2a63f6d7d54a7fd76ee784",
+  "BBY_2026-03-03T08.00": "4341d4a542869118fda2d81a64a2ed812b3581517fb73efb06aabf1d5b01db96",
+  "CMG_2026-02-03T16.30": "ff81ba4174d1a2a2a9132f56639974658dcb2038ee73ed432318b672ea7464f8",
+  "DAL_2026-04-08T10.00": "ddd361cb42c419bd94efa41d5eac348f69428d2f8bc4448419fdf35c598d16d1",
+  "DRI_2026-03-19T08.30": "a51358ef55f1c25c69a5f5e358b273dc6fe91550fa9045c97fda810a57143fce",
+  "MCD_2026-02-11T16.30": "e94ae79a5935a3804798b12cfe97f7f0d546a2b39f7ba04b5c64585322b17473",
+  "ULTA_2026-03-12T16.30": "69ef938f8761fe9732aa2639c3e610a41f9c19b3d4d4462350dd61b19efed6c7",
+  "YUM_2026-02-04T08.15": "1554d2ffc26b70ffaf3d7d52771db91ac1839bcaa9b7968fdc733eb35c8df282"
+ },
+ "states": [
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_df5f2e60-8c8.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_6d2348bf-2b5.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_d10127ba-ab0.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_6201fe41-fca.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_a441cec8-606.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_954501d5-aaf.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ecb2c305-86a.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_ebf8310b-3dc.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_9bf827b0-c54.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_a60b0e8b-268.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_75188ad4-eb0.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_56bf1069-ac2.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_bcaccb83-271.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_b5c9b285-287.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_6150e77b-8d0.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_6bd47120-4e4.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_248f482e-4c2.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_8c2fceac-ab4.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_9458af8e-069.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_79b0624f-450.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_4e09b38c-93c.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_511a0626-15f.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_93b61673-f11.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_1038da55-012.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_2a7589ed-426.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_949e75f0-ae6.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_fdc206e5-396.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_26ef1e84-34b.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_19e1c4f7-67d.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_7c3eb2d4-e93.json",
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_d31da453-02e.json"
+ ]
+}

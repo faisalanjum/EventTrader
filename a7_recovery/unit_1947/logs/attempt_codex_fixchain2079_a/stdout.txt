@@ -1,0 +1,82 @@
+--- step 1: the successor input: a lead on the accepted FIRST-ROUND v6 reply
+PASS the successor lead binds the FIRST ROUND, not the closeout it already superseded 
+PASS a lead bound to the superseded closeout reply is refused 
+--- step 2: prepare the successor round through F.prepare_v6
+PASS F's own preparer publishes exactly the named population []
+PASS the receipt is a real decision_correction_v6 phase from F, attempt 1 of its own round decision_correction_v6
+PASS the receipt PINS the completed first round as history, which F cannot do for itself 
+PASS the body carries the FIRST ROUND's accepted reply, named for the round that produced it 
+PASS the declaration names exactly the keys the body sends ['menu', 'event', 'rows', 'groups', 'leads', 'v6_shard', 'reviewer_finding']
+PASS the served base is the SOURCE-ONLY one, not F's answer-informed decision base 
+PASS the receipt pins this event's own prompt, reproduced live 
+--- step 3: one TEST successor answer, recorded and finalized
+PASS F's own finalizer proves the TEST successor reply {"scheduled": 1, "valid": 1, "invalid_response": 0, "transport_no_answer": 0, "unproved": 0, "missing": 0}
+--- step 4: F.v6_shards over the first round's key, and the existing gate
+PASS the merge BASE is the first round's completed key, not the closeout it replaced []
+PASS every frozen event is present exactly once []
+PASS the TRUE origins are unchanged in shape: a second round of one phase re-stamps the same origin, it does not add a seventh {'a4_final_v2_correction': 1, 'a4_final_v6_correction': 1, 'a4_final_v1': 31}
+PASS the successor content replaced the first round's for this event 
+PASS the event nobody corrected keeps its CORRECTED content 
+PASS the existing gate accepts the complete successor TEST key []
+--- step 5: the count through the one authoritative owner
+PASS the candidate owner really bound this run's ordinary binding /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/TEST_codex_fixchain2079_a/ordinary_bound.json
+PASS F's chain omits BOTH completed rounds and the successor adds each exactly once (537, 539, 2, 1)
+PASS the authoritative owner then adds THIS round on top, once (539, 540)
+PASS MUTATION: without the successor's count seam the signer loses exactly the calls BOTH earlier rounds really made (537, 538, 540, 2, 1)
+--- step 6: the candidate over the successor key, with the successor evidence
+PASS the candidate builder and its full verifier accept 
+PASS the candidate binds THIS round's receipt and finalization ['final_package', 'initial_source_package', 'hard_review_package', 'initial_source_receipt', 'initial_source_finalization', 'hard_review_receipt', 'hard_review_finalization', 'hard_review_retry_receipt', 'hard_review_retry_finalization', 'event_receipt', 'event_finalization', 'correction_receipt', '
+PASS every bound artifact is the exact byte on disk 
+PASS and through that receipt the FIRST ROUND is pinned too, so a later edit to it diverges 
+PASS no earlier phase was displaced ['final_package', 'initial_source_package', 'hard_review_package', 'initial_source_receipt', 'initial_source_finalization', 'hard_review_receipt', 'hard_review_finalization', 'hard_review_retry_receipt', 'hard_review_retry_finalization', 'event_receipt', 'event_finalization', 'correction_receipt', '
+PASS the candidate carries each event's TRUE origin and exact raw hash 
+PASS the signer budget counts both v6 rounds OrderedDict([('before', 540), ('primaries', 1), ('retry_cap', 1), ('after_clean', 541), ('worst', 542), ('ceiling', 6000)])
+--- step 7: the TEST native signature and the actual compact lock
+PASS the actual native proof accepts the explicit TEST signature []
+  raw final_sign.attempt1.raw.json sha 7956698bc1d98a6ec719d3dfed9a599dbd677ef109858498716a448833cfa44d (151 chars)
+  run wf_TEST_v6r3_codex_fixchain2079_a_signature | agent sigignature | model opus | effort high | lean-probe | tools 0 | runtime ['claude-opus-5']
+  OUTCOME: signed=True blocked=[]
+  why: SYNTHETIC-CLOSURE-FIXTURE-2000: a TEST signature over reproduced shapes. It establishes no source truth.
+a4_final_key_lock.json 9e0843884ef8d37d9bf6e7676098ed2502efa17958b6fa5128abf1409b36bd4d
+  signed=True blocked=[]  ledger 540 -> 541 of 6000
+  artifact:key_identity              refused
+  artifact:sidecar                   refused
+  artifact:validator_receipt         refused
+  artifact:provenance                refused
+  artifact:signer_prompt             refused
+  artifact:signer_launcher           refused
+  artifact:signer_manifest           refused
+  artifact:signer_raw                refused
+  artifact:signer_evidence           refused
+  artifact:signer_reply              refused
+  artifact:attempt1_record           refused
+  artifact:attempt1_launcher         refused
+  artifact:attempt1_raw              refused
+  artifact:attempt1_state            refused
+  artifact:attempt1_transcript       refused
+  signer:run_id                      refused
+  signer:agent_id                    refused
+  signer:raw_sha256                  refused
+  signer:transcript_sha256           refused
+  signer:state_sha256                refused
+  signer:parent_session_id           refused
+  signer:model                       refused
+  signer:effort                      refused
+  signer:agent_type                  refused
+  signer:prompt_sha256               refused
+  signer:script_sha256               refused
+  signer:signed                      refused
+  signer:blocked                     refused
+  block:counts                       refused
+  block:validator                    refused
+  block:call_accounting              refused
+  block:key                          refused
+  block:authority                    refused
+a4_final_key_lock_receipt.json d90ac9a738ee6b6b4dd4e648d7ec051bd654e91c1d9681104907b33a921e4f49
+RESULT EVERY BOUND VALUE REFUSES WHEN MUTATED
+PASS the actual compact lock verifies and every bound value refuses when mutated 
+PASS the lock counts one TEST signer on top of BOTH v6 rounds {"ledger_before": 540, "signer_calls": 1, "retries": 0, "ledger_after": 541, "ceiling": 6000, "retry_law": {"owner": "build_kfields_final.RETRYABLE", "retryable": ["invalid_response"]}, "lawful_attempts": [1, 2], "attempts": [{"attempt": 1, "kind": "evidence", "outcome": "signed", "record_sha256": "
+--- step 8: the first round is untouched by its successor
+PASS every byte of the first v6 round this phase read is unchanged 
+PASS and its frozen prompts and receipt still re-derive byte-identically under its OWN inputs ([], ['0000006201-26-000032'])
+COMPLETE 32 checks; zero AI calls; /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/TEST_codex_fixchain2079_a

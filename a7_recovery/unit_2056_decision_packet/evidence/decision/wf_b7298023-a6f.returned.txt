@@ -1,0 +1,211 @@
+```json
+{
+  "source_id": "0001041061-25-000109",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "minority_investment_divestiture",
+              "driver_state": "occurred",
+              "level_low": {"value": 104, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 104, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "instant",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2024,
+              "measurement_raw_spans": ["pre-tax"],
+              "slice_parts": ["entity_ownership:devyani"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: the quote states a completed sale of an owned minority stake for stated pre-tax proceeds in a stated quarter, a discrete transaction the gate admits."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "investment_income",
+              "driver_state": "reported",
+              "level_low": {"value": -20, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -20, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2024,
+              "period_scope": "ytd",
+              "measurement_raw_spans": ["pre-tax"],
+              "slice_parts": ["entity_ownership:devyani"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: a stated pre-tax investment loss for a stated year-to-date window is a real readable value, stored as the signed-negative region of investment income."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard 10-Q risk-factor boilerplate asserting no material change from the prior Form 10-K; it names no driver state, change, surprise, guidance or action, so it fails the fact gate and yields nothing."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and confirmed as a control: the sentence is generic no-change risk boilerplate and correctly yields no fact."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_closures",
+              "driver_state": "occurred",
+              "level_low": {"value": 283, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 283, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "month": 1,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:kfcturkey"]
+            }
+          },
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_closures",
+              "driver_state": "occurred",
+              "level_low": {"value": 254, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 254, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "duration",
+              "month": 1,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:phturkey"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: completed store closures with two separately stated counts on two different company parts, so the one located target lawfully yields one fact per slice."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001041061-25-000109",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "tax_audit",
+              "driver_state": "resolved",
+              "time_type": "instant",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: a favorable audit resolution that released a previously established reserve is a discrete settled dispute, real though numberless inside this quote."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "slices_and_unknown_axes", "portion_versus_whole"],
+      "reference_name": "minority investment in Devyani International Limited",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two numbers sit in one sentence (the approximate 5% stake and the $104 million proceeds); I stored only the proceeds and left the ownership percentage in the quote, and whether a one-off transaction amount is instant or duration is genuinely arguable."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording", "slices_and_unknown_axes"],
+      "reference_name": "pre-tax investment losses",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Only the closing endpoint of the cumulative window is stated, so exact dates were not stateable (all-or-nothing) and I carried period_scope ytd with the anchor quarter 3 of fiscal 2024 instead."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "283 KFC",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The part reads either as the existing menu segment value for KFC Turkey or as a coined brand-plus-geography pair, and the year behind the stated January comes from the surrounding event paragraph rather than from this quote."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "254 Pizza Hut restaurants in Turkey",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Same slice-kind ambiguity as the KFC count — menu segment reuse versus a coined brand-plus-geography part — with the January year again taken from the surrounding event text."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": [],
+      "reference_name": "reversal of a reserve due to a favorable audit resolution",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote names a benefit but carries no number of its own (the amount sits in a table outside it), and it frames both a quarter and a year-to-date window while the resolution itself is one discrete event I anchored to the quarter."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-012/b1",
+      "agrees": false,
+      "why": "It matches the lanes, values, slices and the control abstention on rows 1-3, but it names the row-4 closures after a franchise-agreement termination this row's quote never states and omits a time_type judgment on rows 1 and 4."
+    },
+    {
+      "lead_id": "sokc-012/b2",
+      "agrees": false,
+      "why": "It diverges materially on two rows: it encodes the year-to-date investment loss as a change with an invented January start date instead of the stated level, and it collapses the Turkey closures into one numberless fact carrying two slices, discarding both stated counts."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether a discrete action fact (a stake sale, a store closure, a reserve release) should carry time_type instant, duration, or be left null.",
+      "why": "The rules define time_type as a meaning judgment for levels and flows but never state which value a one-off action takes, so instant on rows 1 and 5 and duration on row 4 are judgments a later owner could overturn."
+    },
+    {
+      "what": "The fiscal year for the row-4 closures comes from the surrounding event paragraph, not from the located quote, which says only 'in January'.",
+      "why": "If a period must be resolvable from the located quote alone, that fact's year framing would have to be dropped, leaving only the month."
+    }
+  ]
+}
+```

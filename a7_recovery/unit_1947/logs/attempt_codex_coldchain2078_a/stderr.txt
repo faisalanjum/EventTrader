@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/check_chain_packet_2078.py", line 174, in <module>
+    main()
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 81, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/check_chain_packet_2078.py", line 75, in main
+    with X.first_round_scope(closed, first, first_findings, inputs, prior):
+                                                                    ^^^^^
+UnboundLocalError: cannot access local variable 'prior' where it is not associated with a value

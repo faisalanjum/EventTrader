@@ -1,0 +1,28 @@
+{
+ "kind": "Source-only review leads on two preserved v6 reservations, not answers or new rules",
+ "source_ledger_sha256": "cf1a98e5610662871546766cd31a1108d1f6e3315a2571cb1900151b27e208c1",
+ "findings": {
+  "0000027904-26-000013": [
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "77a8b592d19673d50b2198ab175146a1fa0a23729f8c514ac49c4607711683a0",
+    "row": "0000027904-26-000013#014",
+    "field": "current open issue: growth comparison and its home",
+    "finding": "The current reply safely retains the absolute metric and source-stated change but leaves the growth-versus-target comparison open. An independent review's claim that two homes must be the same fact merely because build_id gives the same bare identifier is not a valid impossibility proof: the existing OD-8 fusion/collision rule distinguishes pairwise-conflicting ten-slot value signatures. Its pure planner retains two differing value/unit signatures as separate members; an exact duplicate positive control is deduplicated. That mechanical fact does NOT decide whether a second quantity would be semantically distinct or required here. Independently apply the existing quantity, growth-basis, emit-once and home-sibling rules to the complete source. A source-supported growth-level home and its surprise must not double-count a growth already carried elsewhere, invent a new driver meaning, or compare the absolute cent level to a growth target. If no representation is lawful, use the already-permitted counted ambiguity/abstention outcome and its reason or ambiguity note when that truly settles the source under the rules; retain an open issue only for a specific required decision still unresolvable. Preserve all safely established source information. Do not treat this lead as an approved encoding or change any product rule.",
+    "source_evidence": "Non-fuel unit costs increased 2.4% to 13.86 cents compared to 2024, which was in line with the company's long-term target of low-single digit growth; use the complete frozen quote and source for the exact qualifiers.",
+    "owning_clause": "Served Rules1/2/5a/9.6; FINAL_DESIGN5.1 OD-8; FableExperimentPlan2.7 and the served final-outcome instructions"
+   }
+  ],
+  "DAL_2026-04-08T10.00": [
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "9b62d8bce9a627a22628ad82f84fd6d6744a6cd6cda4e8aa439313643d59b38c",
+    "row": "DAL_2026-04-08T10.00#160",
+    "field": "current exclusion/open issue: refinery-produced fuel component",
+    "finding": "The current reply assumes that the only possible component names contain a banned effect word. Check that premise independently against the existing cause-only name, own-measured-population role and qualified-portion rules. A format-valid name and a distinct identifier do not prove a correct meaning, but neither does rejecting a few effect words prove that every source-grounded neutral causal quantity is forbidden. The refinery is the mechanism producing a component of the consolidated fuel assumption, not the population whose own fuel spending is measured; the component is not the full consolidated amount. Read both the guided dollar component and the delivered per-gallon refinery component in the complete source to determine the actual reusable quantity without importing a number or period from another target. Retain the exact estimated modifier, appropriate sign and stated target window for any lawful fact. If the rules permit no safe name/quantity, settle that through the permitted explicit ambiguity/abstention outcome when it faithfully accounts for the source; do not invent a name or suppress a genuinely unresolved required decision. No candidate name in a reviewer report is an approved answer.",
+    "source_evidence": "This includes an estimated $300 million benefit from our refinery. Its antecedent is the June-quarter consolidated fuel-price assumption; the prepared remarks also describe a six-cent refinery benefit within the delivered quarter's fuel price.",
+    "owning_clause": "Served Rules3/5/6/7/8; FINAL_DESIGN3 NAME-10/11/12 and OD-17; FableExperimentPlan2.7 and the served final-outcome instructions"
+   }
+  ]
+ }
+}

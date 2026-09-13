@@ -1,0 +1,8 @@
+{
+ "expected_input_for_served_lanes": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1"
+ }
+}

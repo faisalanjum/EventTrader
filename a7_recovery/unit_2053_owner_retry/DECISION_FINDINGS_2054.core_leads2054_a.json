@@ -1,0 +1,202 @@
+{
+ "kind": "UNTRUSTED source-only leads and their corrected review. Not the blind key owner, not its signature, not an approved answer, not a launch packet.",
+ "model_calls": 0,
+ "supersedes": {
+  "artifact": "DECISION_FINDINGS_2046.core_delta2046_a.json",
+  "sha256": "4e62ba6f1a7e9e81d503ee8a39438e4cd0a6a956c8cc8939c250cf961729d5ae",
+  "for": "adds the one recovered-reply coverage lead Codex SEQ 2054 returned; every 2046 lead is carried unchanged"
+ },
+ "correction_findings_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2035_input_bound_resume/FINDINGS_BY_EVENT.json",
+ "correction_findings_sha256": "b4493c02f69f4499e9559befc20360b0813d0fa4df6ec61d63c313c8902da322",
+ "inputs": {
+  "dispositions": "0f2f154f12eba82eab82d3de2d1dca7f9fcbcad86f99bc3c8ca4a0a4387582ea",
+  "amendment_builder": "205bfd70e6061d57fa80918c1bef8a7c09b9964fb27f33e412085ac006aa382c",
+  "current_review": "f4f31f67b9ce75ec2230372d3ce988b6f7189a44903db95eeb124a4fdc6e4de0",
+  "frozen_inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "correction_findings": "b4493c02f69f4499e9559befc20360b0813d0fa4df6ec61d63c313c8902da322",
+  "decision_owner": "d0e9b8dfdea1636f362a8b337032c895d676a945140f5e1049defe2932fe4b89",
+  "recovered_lead_table": "b0e6728ce1adc77678ee2afd8df5d122b3619e92e680c4b73e2898c59e6fe349",
+  "recovery_owner": "b85d7fa37ff12e2b38ae80fb39275c0c39274c674ee19b91ad2e791ea3cff534",
+  "recovery_binding": "6ebcad6935acccb75237b908e8e4c50e381aa9442894edd42603edcf2cf98cda"
+ },
+ "decision_by_event": {
+  "0000006201-26-000032": [
+   {
+    "row": "0000006201-26-000032#010",
+    "source_id": "0000006201-26-000032",
+    "raw_sha256": "3ffc791a49c0e989f5a0efa0ebb49acd86e3328e0b6e5ce57261301ca495b229",
+    "fact_index": null,
+    "field": "review[].hard_classes (row_index 4, fact_index 0)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025' (mdna, row 0000006201-26-000032#010). RECOVERED-REPLY REVIEW: Codex SEQ 2054, RECOVERED_SOURCE_REVIEW_2053.md: the recovered reply labels this row `sequential_comparison` even though it sets `percent_yoy` and `prior_year`. The surrounding frozen MD&A compares the first quarter of 2026 with the first quarter of 2025; 'subsequent to' does not make this an immediately prior comparable quarter. It must not earn sequential coverage merely because of that word. This is a source/tag adjudication for the final key owner, not a new code rule, prompt example or quota waiver, and it approves no new coverage count.",
+    "owning_clause": "Codex SEQ 2054, RECOVERED_SOURCE_REVIEW_2053.md: the recovered reply labels this row `sequential_comparison` even though it sets `percent_yoy` and `prior_year`. The surrounding frozen MD&A compares the first quarter of 2026 with the first quarter of 2025; 'subsequent to' does not make this an immediately prior comparable quarter. It must not earn sequential coverage merely because of that word. This is a source/tag adjudication for the final key owner, not a new code rule, prompt example or quota waiver, and it approves no new coverage count."
+   }
+  ],
+  "0000027904-26-000013": [
+   {
+    "row": "0000027904-26-000013#014",
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "8679ab96bc36b126af3b4a4f0861506b8b16a1cbdbc6949efbc74a69a3e3dff3",
+    "fact_index": null,
+    "field": "level_low / level_high / level_unit (on the surprise)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.' (mdna, row 0000027904-26-000013#014). CURRENT REVIEW: Current: a compatible encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states both the actual level and its growth ('increased 2.4% to 13.86 cents'), so under the existing home-pair owner the source-stated 13.86-cent actual may stand on BOTH records while the vague expectation ('low-single digit growth') leaves the expectation numbers unknown; what that owner refuses is the value-absent surprise currently emitted beside a value-bearing home (independently checked by Codex SEQ 2038, check_disposition_claims_2038.py cases 3 and 4). The key owner encodes it. HISTORICAL question 6 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 3: a numberless surprise sitting against a value-bearing home fact. The stated expectation ('low-single digit growth') is a vague quantity and therefore not a number, so no comparison or delta value may lawfully be stored on the surprise; yet the home fact is value-bearing, and the home-sibling rule as written pairs a numberless surprise with a numberless home, so the two clauses cannot both be satisfied here.",
+    "owning_clause": "Current: a compatible encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states both the actual level and its growth ('increased 2.4% to 13.86 cents'), so under the existing home-pair owner the source-stated 13.86-cent actual may stand on BOTH records while the vague expectation ('low-single digit growth') leaves the expectation numbers unknown; what that owner refuses is the value-absent surprise currently emitted beside a value-bearing home (independently checked by Codex SEQ 2038, check_disposition_claims_2038.py cases 3 and 4). The key owner encodes it."
+   },
+   {
+    "row": "0000027904-26-000013#014",
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "8679ab96bc36b126af3b4a4f0861506b8b16a1cbdbc6949efbc74a69a3e3dff3",
+    "fact_index": null,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.' (mdna, row 0000027904-26-000013#014). CURRENT REVIEW: Current, unchanged and source-backed: in the exact quote 'Non-fuel' is separated from the later qualifiers by non-qualifier prose ('unit costs (\"CASM-Ex\",'), so the three spans are NOT punctuation-contiguous and must not be forced into one. The two later qualifier clauses may be considered together under the existing maximal-contiguous-span rule (OD-9). A generic rule, not an example-specific preference. HISTORICAL question 8 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 3: how many measurement entries the contiguous qualifier prose yields. 'a non-GAAP financial measure' and 'which excludes fuel, ... and other items' are separated only by punctuation, so they may be one span rather than two, and the split changes the normalized measurement tokens that form the fact identity.",
+    "owning_clause": "Current, unchanged and source-backed: in the exact quote 'Non-fuel' is separated from the later qualifiers by non-qualifier prose ('unit costs (\"CASM-Ex\",'), so the three spans are NOT punctuation-contiguous and must not be forced into one. The two later qualifier clauses may be considered together under the existing maximal-contiguous-span rule (OD-9). A generic rule, not an example-specific preference."
+   }
+  ],
+  "0000063908-26-000032": [
+   {
+    "row": "0000063908-26-000032#033",
+    "source_id": "0000063908-26-000032",
+    "raw_sha256": "186bc8cd2389eef1a2eeab2a4609e7ea3273cd663e140468ac72f2d647aa5038",
+    "fact_index": null,
+    "field": "driver_name and the row's outcome",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.' (exhibit_99_1, row 0000063908-26-000032#033). CURRENT REVIEW: Current, unchanged: the quote attributes the $80 million only 'primarily' to restructuring and names no base metric the aggregate belongs to, so emitting the whole stated amount under a restructuring cause name attributes an unstated remainder to that cause. The existing supported outcomes are the source's own aggregate line name or a reasoned abstention; no new naming preference and no whole-amount attribution. HISTORICAL question 17 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 1's $80 million is described as only 'primarily' restructuring, and the source names no base metric the aggregate belongs to. Emitting the full stated amount under a restructuring cause name attributes an unstated remainder to that cause; a reviewer could instead read this as unresolvable, so the residual attribution risk should be settled by a naming ruling rather than by me guessing again.",
+    "owning_clause": "Current, unchanged: the quote attributes the $80 million only 'primarily' to restructuring and names no base metric the aggregate belongs to, so emitting the whole stated amount under a restructuring cause name attributes an unstated remainder to that cause. The existing supported outcomes are the source's own aggregate line name or a reasoned abstention; no new naming preference and no whole-amount attribution."
+   }
+  ],
+  "0000092380-26-000044": [
+   {
+    "row": "0000092380-26-000044#042",
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "0ce6f6083fb965225b61eae517eb33204cc8d867768bef929b7992ae2c247736",
+    "fact_index": null,
+    "field": "level_low / level_high / level_unit (on the surprise)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance' (exhibit_99_1, row 0000092380-26-000044#042). CURRENT REVIEW: Current: a lawful encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states a change and NO level, so the home is correctly level-numberless with change 2.3 percent_yoy and the existing pair owner accepts a level-numberless surprise beside it (Codex SEQ 2038 cases 5 and 6). What it refuses is the 2.3 currently placed in the surprise's level slots, which restates the actual rather than a delta the source never states (Rule 5.8). HISTORICAL question 18 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 5: I disagree with the shown finding that the CASM-X surprise must carry no level numbers. The design derives beat size at read as level_low minus comparison_low, so the surprise's level slot is the compared actual, not a delta; emptying it would leave a numberless surprise whose home carries a stated 2.3% change, which the numberless-surprise clause forbids.",
+    "owning_clause": "Current: a lawful encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states a change and NO level, so the home is correctly level-numberless with change 2.3 percent_yoy and the existing pair owner accepts a level-numberless surprise beside it (Codex SEQ 2038 cases 5 and 6). What it refuses is the 2.3 currently placed in the surprise's level slots, which restates the actual rather than a delta the source never states (Rule 5.8)."
+   },
+   {
+    "row": "0000092380-26-000044#039",
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "0ce6f6083fb965225b61eae517eb33204cc8d867768bef929b7992ae2c247736",
+    "fact_index": null,
+    "field": "measurement_raw_spans; required home-pair measurement",
+    "decision": "REVIEW",
+    "source_evidence": "Source: 'First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40' (exhibit_99_1, row 0000092380-26-000044#039). CURRENT REVIEW: Current, narrow: the quote reads 'fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40', so the approximation qualifies the EXPECTATION operand while the actual is exact. Keeping it on the surprise alone breaks the required home/surprise measurement match; keeping it on both would mark the exact $2.73 approximate. This asks for NO schema addition, invented range or deleted qualifier: the served Rule 1.4 reasoned abstention and the final task's recorded-ambiguity outcome are the already-supported safe answers if no source-faithful encoding exists. Do not generalize it to ULTA's ordinary 17% or its stated 85 million delta. HISTORICAL question 19 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 2: the hedge \"approximately\" on the $2.40 guide is not stored in measurement on either sibling. The never-drop sink argues for keeping it, but it modifies only the expectation operand, and attaching it to the surprise alone breaks the required home/surprise measurement match while attaching it to both would falsely mark the exact $2.73 actual as approximate.",
+    "owning_clause": "Current, narrow: the quote reads 'fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40', so the approximation qualifies the EXPECTATION operand while the actual is exact. Keeping it on the surprise alone breaks the required home/surprise measurement match; keeping it on both would mark the exact $2.73 approximate. This asks for NO schema addition, invented range or deleted qualifier: the served Rule 1.4 reasoned abstention and the final task's recorded-ambiguity outcome are the already-supported safe answers if no source-faithful encoding exists. Do not generalize it to ULTA's ordinary 17% or its stated 85 million delta."
+   }
+  ],
+  "0001041061-25-000109": [
+   {
+    "row": "0001041061-25-000109#073",
+    "source_id": "0001041061-25-000109",
+    "raw_sha256": "5c6a302c431db465ea3cf1840ffc8e11a39d7b0292ed2e3581833cecce967139",
+    "fact_index": null,
+    "field": "period fields",
+    "decision": "PRESERVE",
+    "source_evidence": "Source: 'Changes in the fair value of our ownership interest in Devyani prior to the date of sale resulted in pre-tax investment losses of $20 million in the year to date ended September 30, 2024.' (mdna, row 0001041061-25-000109#073). CURRENT REVIEW: Cleared at Core SEQ 2021 against the existing period owner and independently checked by Codex SEQ 2038 (cases 1 and 2): ensure_driver_period resolves a source-supported FY2024 Q3 year-to-date framing to 2024-01-01..2024-09-30 and keeps period_scope ytd, and it parks when the anchor quarter is absent. The anchor quarter may stand; no ruling and no code change is required. The historical question's doubt below is superseded by this conclusion. HISTORICAL question 41 of the source-only key review, quoted as history and superseded wherever the current review says so: Whether a ytd fact may carry the anchor fiscal_quarter (3) alongside fiscal_year and period_scope ytd, as I recorded on row 2. Rule 6 says a ytd window keeps its exact dates and is never collapsed to a quarter, yet only one endpoint is stated here; fiscal_year alone would describe the full year, so naming the anchor quarter is a semantic call, not a stated framing.",
+    "owning_clause": "Cleared at Core SEQ 2021 against the existing period owner and independently checked by Codex SEQ 2038 (cases 1 and 2): ensure_driver_period resolves a source-supported FY2024 Q3 year-to-date framing to 2024-01-01..2024-09-30 and keeps period_scope ytd, and it parks when the anchor quarter is absent. The anchor quarter may stand; no ruling and no code change is required. The historical question's doubt below is superseded by this conclusion."
+   }
+  ],
+  "0001104659-25-102611": [
+   {
+    "row": "0001104659-25-102611#098",
+    "source_id": "0001104659-25-102611",
+    "raw_sha256": "cd08bd09d2fb68a1733255272a1f9d474f8ca93451a39bb25085ee95b7863682",
+    "fact_index": null,
+    "field": "per_x / slice_parts and the row's outcome",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .' (mdna, row 0001104659-25-102611#098). CURRENT REVIEW: Current: the stored fact is NOT lawful as it stands and my earlier 'lawful as is' conclusion is WITHDRAWN. The quote names its own denominator - 'Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales' - and the emitted share cannot record it, so it is indistinguishable from a share of total company sales. Preserve the actual domestic-sales denominator in a supported representation or count a lawful abstention; an exhibit does not approve a conflated identity and no new field or schema is authorized. This row was located by the exact quoted fragment recorded with the historical question, unique within this event. HISTORICAL question 57 of the source-only key review, quoted as history and superseded wherever the current review says so: A share whose denominator is a sub-population ('31.7% of our total Domestic sales') cannot record that denominator. per_x covers only stated per-something denominators, and the slice parts describe the numerator population, so nothing distinguishes this share from one taken against total company sales.",
+    "owning_clause": "Current: the stored fact is NOT lawful as it stands and my earlier 'lawful as is' conclusion is WITHDRAWN. The quote names its own denominator - 'Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales' - and the emitted share cannot record it, so it is indistinguishable from a share of total company sales. Preserve the actual domestic-sales denominator in a supported representation or count a lawful abstention; an exhibit does not approve a conflated identity and no new field or schema is authorized. This row was located by the exact quoted fragment recorded with the historical question, unique within this event."
+   }
+  ],
+  "AAL_2026-04-23T08.30": [
+   {
+    "row": "AAL_2026-04-23T08.30#135",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "the signed value (level_low / level_high)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'a $320 million revenue impact from winter storms' (prepared_remarks, row AAL_2026-04-23T08.30#135). CURRENT REVIEW: Current: the sign IS decidable and my earlier 'undecidable without another worked example' claim is WITHDRAWN. The served OD-12 expressly lists context as a sign signal, and the served paragraph calls this '$320 million revenue impact from winter storms' a challenge and then a headwind - an adverse revenue effect, not an expense charge - so the +320 currently stored under the charge convention is unsupported. The key owner applies the existing signed-axis meaning. HISTORICAL question 78 of the source-only key review, quoted as history and superseded wherever the current review says so: Sign convention for an adverse revenue magnitude stored on the causing event (row 4). The signed-axis worked examples cover a loss (negative) and a charge (positive) but not a revenue hit carried on an event driver, so +320 versus -320 is not decidable from the rules alone; I applied the charge convention.",
+    "owning_clause": "Current: the sign IS decidable and my earlier 'undecidable without another worked example' claim is WITHDRAWN. The served OD-12 expressly lists context as a sign signal, and the served paragraph calls this '$320 million revenue impact from winter storms' a challenge and then a headwind - an adverse revenue effect, not an expense charge - so the +320 currently stored under the charge convention is unsupported. The key owner applies the existing signed-axis meaning."
+   },
+   {
+    "row": "AAL_2026-04-23T08.30#140",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "level_shape_hint / the change slot",
+    "decision": "REVIEW",
+    "source_evidence": "Source: 'on the other revenue or the marketing component of it we did see an increase that's pretty meaningful year over year quarter over quarter just versus the fourth quarter was up you know something less than 10 percent' (qa, row AAL_2026-04-23T08.30#140). CURRENT REVIEW: Current, unchanged: a one-sided growth bound on a driver whose own level is absolute has no shape hint on the change slot, so the ceiling can only be expressed through the level slots with a growth unit, which sits against the clause that growth on an absolute-level driver belongs in the change slot. This stays an open encoding and shape review under the existing uncertainty rules; no quota-driven encoding and no automatic source substitution. HISTORICAL question 79 of the source-only key review, quoted as history and superseded wherever the current review says so: Slot placement for a one-sided growth bound on a driver whose own level is absolute (row 9). The change slot carries no shape hint, so a ceiling can only be expressed through the level slots with a growth unit, which sits against the clause that growth on an absolute-level driver belongs in the change slot; the source review of this same row also left the meaning undecided.",
+    "owning_clause": "Current, unchanged: a one-sided growth bound on a driver whose own level is absolute has no shape hint on the change slot, so the ceiling can only be expressed through the level slots with a growth unit, which sits against the clause that growth on an absolute-level driver belongs in the change slot. This stays an open encoding and shape review under the existing uncertainty rules; no quota-driven encoding and no automatic source substitution."
+   },
+   {
+    "row": "AAL_2026-04-23T08.30#133",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "required companion fact (row-level)",
+    "decision": "PRESERVE",
+    "source_evidence": "Source: 'Revenue performance in the quarter exceeded our initial expectations.' (prepared_remarks, row AAL_2026-04-23T08.30#133). CURRENT REVIEW: Codex SEQ 2043 and unit_2020_codex_check/AAL_HOME_REVIEW_2038.md: the selected revenue row states a CHANGE (10.8% year over year), not an absolute LEVEL, and the actual event route fuses the two revenue fragments before home validation, so the level-numberless home and its beat survive together. My 2021 slot question is WITHDRAWN; no new pairing rule and no runtime change is needed. The historical question's doubt below is superseded by this conclusion. HISTORICAL question 81 of the source-only key review, quoted as history and superseded wherever the current review says so: Possible collision between the numberless revenue home sibling (row 2) and the valued revenue fact (row 1). Both cover company-wide revenue for the same reported quarter; the rules require a numberless home for a numberless surprise while also forbidding one fact being written twice, and the located rows do not say which wins.",
+    "owning_clause": "Codex SEQ 2043 and unit_2020_codex_check/AAL_HOME_REVIEW_2038.md: the selected revenue row states a CHANGE (10.8% year over year), not an absolute LEVEL, and the actual event route fuses the two revenue fragments before home validation, so the level-numberless home and its beat survive together. My 2021 slot question is WITHDRAWN; no new pairing rule and no runtime change is needed. The historical question's doubt below is superseded by this conclusion."
+   },
+   {
+    "row": "AAL_2026-04-23T08.30#137",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "driver_name and slice_parts",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American.' (qa, row AAL_2026-04-23T08.30#137). CURRENT REVIEW: Current, unchanged and source-backed: the located quote names no measured variable ('our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American'), so 'revenue' rests on neighbouring sentences, and travel-management partners are plausible under both channel and customer. The served T1-05 ladder's rung 4 requires the unknown kind when neither is clear; an actual unresolved two-kind choice must not be replaced by a guessed channel. HISTORICAL question 82 of the source-only key review, quoted as history and superseded wherever the current review says so: The measured variable behind 'TMC performance' and the slice kind for travel-management partners (row 6). The located quote names no metric, so 'revenue' rests on neighbouring sentences, and the partners are plausible under both channel and customer, which the ladder says should trigger an unknown kind if neither is clear.",
+    "owning_clause": "Current, unchanged and source-backed: the located quote names no measured variable ('our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American'), so 'revenue' rests on neighbouring sentences, and travel-management partners are plausible under both channel and customer. The served T1-05 ladder's rung 4 requires the unknown kind when neither is clear; an actual unresolved two-kind choice must not be replaced by a guessed channel."
+   }
+  ],
+  "DAL_2026-04-08T10.00": [
+   {
+    "row": "DAL_2026-04-08T10.00#160",
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "48534fef46bc6742a9f78cf7ee6443bd3dcfbfb7c58ec913bd1c760a7ecb7fbf",
+    "fact_index": null,
+    "field": "driver_name only; the signed value stays negative",
+    "decision": "REVIEW",
+    "source_evidence": "Source: 'This includes an estimated $300 million benefit from our refinery.' (prepared_remarks, row DAL_2026-04-08T10.00#160). CURRENT REVIEW: Current, corrected: the served signed-axis rule REQUIRES a stated benefit to be negative, so the stored negative value STANDS and my double-negation claim is WITHDRAWN - nothing here asks for a sign change. What remains is a naming question alone: the served naming rule (Rule 3 item 10, 'NEVER in a name: state/direction/polarity words ... sentiment, metaphor, effect, or vague words') bears on the effect word inside this driver's name. I do NOT establish that as an error and force no replacement name or word deletion; it stays REVIEW for the qualified owner to settle from the source and the rule. HISTORICAL question 90 of the source-only key review, quoted as history and superseded wherever the current review says so: Sign of the $300 million refinery benefit (row 4). The signed-axis rule makes a stated benefit negative, yet the driver name itself contains 'benefit', so a literal reading stores a double negative; a wrong sign would invert the whole stored series and the rules do not disambiguate the axis the name sits on.",
+    "owning_clause": "Current, corrected: the served signed-axis rule REQUIRES a stated benefit to be negative, so the stored negative value STANDS and my double-negation claim is WITHDRAWN - nothing here asks for a sign change. What remains is a naming question alone: the served naming rule (Rule 3 item 10, 'NEVER in a name: state/direction/polarity words ... sentiment, metaphor, effect, or vague words') bears on the effect word inside this driver's name. I do NOT establish that as an error and force no replacement name or word deletion; it stays REVIEW for the qualified owner to settle from the source and the rule."
+   }
+  ],
+  "ULTA_2026-03-12T16.30": [
+   {
+    "row": "ULTA_2026-03-12T16.30#180",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62",
+    "fact_index": null,
+    "field": "required companion fact (row-level) only",
+    "decision": "PRESERVE",
+    "source_evidence": "Source: 'we over delivered sales above the high end of our guidance by about 85 million' (qa, row ULTA_2026-03-12T16.30#180). CURRENT REVIEW: Cleared at Core SEQ 2021 and accepted by Codex SEQ 2039, SCOPED to the home and selected-target aspect of this row and to nothing else: the other net-sales amount stands at an UNLOCATED sentence, which the served task does not settle, so the emitted level-numberless home is required rather than a duplicate of it. This clearance does NOT cover the rest of the row: #180 itself states 'about 85 million' and keeps its own measurement issue, carried as a separate lead on this same row. My earlier sentence moving that modifier to the other row is WITHDRAWN. HISTORICAL question 104 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 6: the numberless net-sales home sibling I emitted may duplicate the event's own quarterly net-sales metric. The twin rule requires a home in the same event and no located row carries the actual level, but the event states 'net sales for the quarter increased 11.8% to $3.9 billion' at an unlocated sentence, so an assembler must merge or suppress one of the two homes.",
+    "owning_clause": "Cleared at Core SEQ 2021 and accepted by Codex SEQ 2039, SCOPED to the home and selected-target aspect of this row and to nothing else: the other net-sales amount stands at an UNLOCATED sentence, which the served task does not settle, so the emitted level-numberless home is required rather than a duplicate of it. This clearance does NOT cover the rest of the row: #180 itself states 'about 85 million' and keeps its own measurement issue, carried as a separate lead on this same row. My earlier sentence moving that modifier to the other row is WITHDRAWN."
+   },
+   {
+    "row": "ULTA_2026-03-12T16.30#176",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62",
+    "fact_index": null,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.' (prepared_remarks, row ULTA_2026-03-12T16.30#176). CURRENT REVIEW: Current, split from a question that named TWO rows: this row's quote is 'Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.' It is an ORDINARY growth statement with no surprise pair at all, so the served Rule 8 never-drop sink simply keeps 'about' in measurement. The LUV expectation-operand conflict does NOT apply here, and my earlier shared reasoning that applied it is WITHDRAWN. HISTORICAL question 105 of the source-only key review, quoted as history and superseded wherever the current review says so: Rows 2 and 6: the approximation word 'about' is stored in no field. Rule 8's never-drop sink says to keep an uncaptured number modifier, but making it a measurement token would pollute the series identity and break the row-6 twin's measurement match, so I left it to the quote and record the conflict.",
+    "owning_clause": "Current, split from a question that named TWO rows: this row's quote is 'Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.' It is an ORDINARY growth statement with no surprise pair at all, so the served Rule 8 never-drop sink simply keeps 'about' in measurement. The LUV expectation-operand conflict does NOT apply here, and my earlier shared reasoning that applied it is WITHDRAWN."
+   },
+   {
+    "row": "ULTA_2026-03-12T16.30#180",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62",
+    "fact_index": null,
+    "field": "measurement_raw_spans; required home-pair measurement",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'we over delivered sales above the high end of our guidance by about 85 million' (qa, row ULTA_2026-03-12T16.30#180). CURRENT REVIEW: Current, the SECOND row the same question named and which my single-row binding had dropped: this row's quote is 'we over delivered sales above the high end of our guidance by about 85 million'. Here 'about' qualifies the STATED delta, so the never-drop sink keeps it and the required pair measurement match is satisfied by keeping the same modifier on its level-numberless home (Codex SEQ 2038 cases 7 and 8). This is not the LUV expectation-only case. HISTORICAL question 105 of the source-only key review, quoted as history and superseded wherever the current review says so: Rows 2 and 6: the approximation word 'about' is stored in no field. Rule 8's never-drop sink says to keep an uncaptured number modifier, but making it a measurement token would pollute the series identity and break the row-6 twin's measurement match, so I left it to the quote and record the conflict.",
+    "owning_clause": "Current, the SECOND row the same question named and which my single-row binding had dropped: this row's quote is 'we over delivered sales above the high end of our guidance by about 85 million'. Here 'about' qualifies the STATED delta, so the never-drop sink keeps it and the required pair measurement match is satisfied by keeping the same modifier on its level-numberless home (Codex SEQ 2038 cases 7 and 8). This is not the LUV expectation-only case."
+   }
+  ]
+ }
+}

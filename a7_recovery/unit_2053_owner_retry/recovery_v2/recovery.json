@@ -1,0 +1,48 @@
+{
+ "schema": "a7-source-recovery/2054",
+ "kind": "recovery of an already saved result, after the call; not a scheduled phase, not a retry allowance, not an approval",
+ "authority": "owner instruction 2026-09-12T04:04:45Z; Codex SEQ 2053 authorizes recovery of THIS saved result with zero new calls",
+ "recovered_labels": [
+  "0000006201-26-000032"
+ ],
+ "frozen_parent": {
+  "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2035_input_bound_resume/corrections",
+  "receipt_sha256": "e085196ff5ca9e95b506cbffc6da80cdd3ae1818d2fcef57b388fb8573e876ed",
+  "finalization_sha256": "7ede599ea06a5d9ddf175020fc31e7e47ec60a683415a50917a63865b7cab78e",
+  "ledger": {
+   "scheduled": 31,
+   "valid": 30,
+   "invalid_response": 0,
+   "transport_no_answer": 1,
+   "unproved": 0,
+   "missing": 0
+  },
+  "recovered_from_outcome": {
+   "0000006201-26-000032": "transport_no_answer"
+  }
+ },
+ "result_evidence": {
+  "0000006201-26-000032": {
+   "state": {
+    "native_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_2fe2b85c-90c.json",
+    "preserved_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/evidence/wf_2fe2b85c-90c.json",
+    "sha256": "7b688dc3fab320c6dc57012a5646cf5788257c45e52e4c89a3d94036dc18cf9a",
+    "bytes": 167181
+   },
+   "response": {
+    "native_path": "the returned text inside wf_2fe2b85c-90c.json",
+    "preserved_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/evidence/wf_2fe2b85c-90c.raw.json",
+    "sha256": "3ffc791a49c0e989f5a0efa0ebb49acd86e3328e0b6e5ce57261301ca495b229",
+    "bytes": 9794
+   },
+   "transcript": {
+    "native_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_2fe2b85c-90c/agent-afcc5a50d74861b61.jsonl",
+    "preserved_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/evidence/agent-afcc5a50d74861b61.jsonl",
+    "sha256": "d6e284209ae8de6662793228671c600d67e5cbd73ce5e5745308883911eb0614",
+    "bytes": 174513
+   }
+  }
+ },
+ "extra_call_ordinal": 32,
+ "model_calls_by_this_module": 0
+}

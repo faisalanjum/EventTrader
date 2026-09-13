@@ -1,0 +1,32 @@
+{
+ "authority": "Codex SEQ 2083",
+ "launches": [
+  {
+   "attempt": 1,
+   "durationMs": 121931,
+   "label": "a4-final-signer",
+   "launched_utc": "2026-09-13T00:44:39Z",
+   "official_state_sha256": "dbba413f53faec8d5a35c00e5f54124566e895dda44ebecdf11d5438637b8d48",
+   "preserved_utc": "2026-09-13T00:46:56Z",
+   "returned_text_bytes": 560,
+   "returned_text_sha256": "46c0847c677657877b7a1a914404ec35be397023ba1394db039b3d79872a2ee3",
+   "row_agent_type": "lean-probe",
+   "row_effort": null,
+   "row_label": "a4-final-signer",
+   "row_model": "claude-opus-5[1m]",
+   "row_tool_calls": 0,
+   "runId": "wf_cf398299-777",
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/signer_2083/final_sign.attempt1.js",
+   "script_sha256": "87f896d24bb211524467239ed7482b40d88d439bd3aa0949102b5baefcace9fe",
+   "state": "preserved",
+   "state_script_sha256": "87f896d24bb211524467239ed7482b40d88d439bd3aa0949102b5baefcace9fe",
+   "state_status": "completed",
+   "totalTokens": 146054,
+   "transcript_models": [
+    "claude-opus-5"
+   ],
+   "transcript_sha256": "99d5c7c158508ab06433ddbfbcd70509b8588eab74a4ea895d965c3ea139dbd7"
+  }
+ ],
+ "phase": "a7 REAL final-key signature, attempt 1"
+}

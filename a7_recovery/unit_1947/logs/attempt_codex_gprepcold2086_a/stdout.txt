@@ -1,0 +1,69 @@
+PASS the cold check names the exact previously frozen preparation None
+PASS real selected lock and receipt are the independently verified bytes None
+PASS the cold check preserves the frozen saved-answer evaluation None
+PASS the evaluation reuses every original call without scheduling another None
+PASS the actual grader bound is exactly the signed source-key bound None
+PASS the actual grading consumer accepts the complete saved population []
+PASS each saved producer arm is present ['P1', 'P2']
+PASS the refreshed reference inventory covers the exact signed key None
+PASS the real G1 candidate re-derives byte-identically in a fresh process []
+PASS all real grader prompts re-derive byte-identically None
+PASS the cold reference is the exact frozen inventory None
+PASS existing G1 owner freezes the real population without a refusal []
+PASS both producer arms AND their union are counted {'P1': {'auto': 26, 'unmatched_gold': 137, 'unmatched_produced': 103}, 'P2': {'auto': 19, 'unmatched_gold': 144, 'unmatched_produced': 109}, 'UNION': {'auto': 31, 'unmatched_gold': 132, 'unmatched_produced': 178}}
+PASS every unmatched gold question has one unique complete binding None
+PASS every event batch has exactly both independent grader lanes None
+PASS all frozen grader prompts match their recorded bytes None
+PASS the budget counts completed work once and both readers for each batch {'after_initial': 860, 'after_max': 1052, 'ceiling': 6000, 'initial_grader_calls': 192, 'max_attempts_per_row': 2, 'max_grader_calls': 384, 'prior_g1_calls': [{'calls': 668, 'finalization_sha256': 'a52323e2ee08be81714109d7f743036c553ebe28f15b529f21dc9ef5e4fad991', 'receipt_sha256': 'dc9192271da3af0c3a0bb2fc2590c151073076f2893ac21136aee30424022e52', 'run_dir': 'wf_cf398299-777', 'stage': 'a4_final_
+PASS all original answer bytes remain unchanged None
+{
+ "passed": 18,
+ "model_calls": 0,
+ "population": {
+  "events": 36,
+  "packets": 191,
+  "answers": 382,
+  "legs": {
+   "P1": {
+    "auto": 26,
+    "unmatched_gold": 137,
+    "unmatched_produced": 103
+   },
+   "P2": {
+    "auto": 19,
+    "unmatched_gold": 144,
+    "unmatched_produced": 109
+   },
+   "UNION": {
+    "auto": 31,
+    "unmatched_gold": 132,
+    "unmatched_produced": 178
+   }
+  },
+  "questions": 413,
+  "batches": 96,
+  "reviewer_calls": 192
+ },
+ "budget": {
+  "after_initial": 860,
+  "after_max": 1052,
+  "ceiling": 6000,
+  "initial_grader_calls": 192,
+  "max_attempts_per_row": 2,
+  "max_grader_calls": 384,
+  "prior_g1_calls": [
+   {
+    "calls": 668,
+    "finalization_sha256": "a52323e2ee08be81714109d7f743036c553ebe28f15b529f21dc9ef5e4fad991",
+    "receipt_sha256": "dc9192271da3af0c3a0bb2fc2590c151073076f2893ac21136aee30424022e52",
+    "run_dir": "wf_cf398299-777",
+    "stage": "a4_final_key"
+   }
+  ],
+  "spent_before": 668,
+  "under_ceiling": true
+ },
+ "trace_statuses": {
+  "answered": 382
+ }
+}

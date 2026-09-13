@@ -1,0 +1,54 @@
+{
+ "authority": "Codex SEQ 2074",
+ "phase": "a7 source-only SUCCESSOR round of decision_correction_v6 (round 2, two events)",
+ "packet": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/PACKET.json",
+ "packet_sha256": "b097da259728e7447625725417819d1f32bc2212c1bbfcbdaf6653f55f697dd1",
+ "findings_by_event_sha256": "8a8c000da9805e6877ac3b064621a6523eca4dc222138d9b755ba7cc8deaa2f3",
+ "source_findings_sha256": "deeed7cf06dab5603d69d0381667619dae7fa5db27a2a7bea236a5a27ffabdce",
+ "phase_input_binding": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/proof_codex_in2068_e/phase_binding.json",
+ "receipt_sha256": "a44bb3884286e2a102076ffaf988e8caf6d344cc42be02154ee07d52acc02401",
+ "transport": {
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+ },
+ "runtime_observed_before_launch": "2.1.268 (Claude Code)",
+ "parent_session_observed": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "call_order": [
+  "0000027904-26-000013",
+  "DAL_2026-04-08T10.00"
+ ],
+ "authorized_primaries": 2,
+ "ledger_before": 663,
+ "ledger_at_most": 665,
+ "signer_not_authorized": true,
+ "retry_not_authorized": true,
+ "invocations": [
+  {
+   "label": "0000027904-26-000013",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2/scripts/0000027904-26-000013.attempt1.js",
+   "script_sha256": "a207d38dd7bb4e06caa2d5ec2e6d5c410a17db6ba32af2d22ee671b075fe797a",
+   "script_bytes": 293150,
+   "prompt_sha256": "2e2fdc1860ff33d70b5324058cedd6bddb2994960019fa14aae5845723093b75"
+  },
+  {
+   "label": "DAL_2026-04-08T10.00",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "script_sha256": "819a7952305e1ef0792891743360471c5a1b136a62e5bb47bf6f072e225bd748",
+   "script_bytes": 163301,
+   "prompt_sha256": "acfa45b51f6930e756dcebf1afaa4dc3201a9fadb12044db78355c3ec18829e7"
+  }
+ ],
+ "launched": 0
+}

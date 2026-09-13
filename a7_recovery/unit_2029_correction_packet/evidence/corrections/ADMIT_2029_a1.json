@@ -1,0 +1,103 @@
+{
+ "recorded": [
+  {
+   "label": "0000006201-26-000031",
+   "runId": "wf_e31d007c-af7",
+   "tag": "core_corr2029_rec01",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000027904-26-000013",
+   "runId": "wf_08c4aeaa-55f",
+   "tag": "core_corr2029_rec02",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000027904-26-000020",
+   "runId": "wf_866b8ce4-bef",
+   "tag": "core_corr2029_rec03",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000027904-26-000022",
+   "runId": "wf_ebd1926e-35a",
+   "tag": "core_corr2029_rec04",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000063908-26-000032",
+   "runId": "wf_7de3d393-14c",
+   "tag": "core_corr2029_rec05",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000092380-26-000044",
+   "runId": "wf_f110b2df-3f6",
+   "tag": "core_corr2029_rec06",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000764478-25-000057",
+   "runId": "wf_0753bf94-afe",
+   "tag": "core_corr2029_rec07",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000898173-26-000006",
+   "runId": "wf_bafaccdf-bf3",
+   "tag": "core_corr2029_rec08",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000940944-25-000038",
+   "runId": "wf_7fa739cd-fc0",
+   "tag": "core_corr2029_rec09",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000940944-26-000005",
+   "runId": "wf_662c5c9f-6e2",
+   "tag": "core_corr2029_rec10",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0000940944-26-000009",
+   "runId": "wf_d0d7a05c-abc",
+   "tag": "core_corr2029_rec11",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  }
+ ],
+ "already": [],
+ "held_no_text": [
+  {
+   "label": "0000006201-26-000032",
+   "runId": "wf_0d3288e0-c5d",
+   "state": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_0d3288e0-c5d.json"
+  }
+ ],
+ "failed": [],
+ "receipt_states_after": 11,
+ "model_calls": 0
+}

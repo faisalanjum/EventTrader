@@ -1,0 +1,179 @@
+{
+ "recorded": [
+  {
+   "label": "0001041061-25-000109",
+   "runId": "wf_1cea3dbc-05f",
+   "tag": "core_ibr2035_rec01",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001041061-26-000003",
+   "runId": "wf_2f18e487-3e5",
+   "tag": "core_ibr2035_rec02",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001041061-26-000084",
+   "runId": "wf_d56de244-ada",
+   "tag": "core_ibr2035_rec03",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001058090-26-000007",
+   "runId": "wf_30b5ea16-b01",
+   "tag": "core_ibr2035_rec04",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001104659-25-102611",
+   "runId": "wf_3b215526-f82",
+   "tag": "core_ibr2035_rec05",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001104659-25-105631",
+   "runId": "wf_1ef0a9ab-223",
+   "tag": "core_ibr2035_rec06",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001104659-25-118458",
+   "runId": "wf_e3a15205-16e",
+   "tag": "core_ibr2035_rec07",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001104659-26-017090",
+   "runId": "wf_9f4649ca-459",
+   "tag": "core_ibr2035_rec08",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001104659-26-027061",
+   "runId": "wf_61851db8-4b5",
+   "tag": "core_ibr2035_rec09",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001104659-26-032757",
+   "runId": "wf_eb98341e-f65",
+   "tag": "core_ibr2035_rec10",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "0001171843-26-001288",
+   "runId": "wf_b1a794d7-501",
+   "tag": "core_ibr2035_rec11",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "AAL_2026-04-23T08.30",
+   "runId": "wf_33541b6f-d2a",
+   "tag": "core_ibr2035_rec12",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "BBY_2026-03-03T08.00",
+   "runId": "wf_7ce93788-fc8",
+   "tag": "core_ibr2035_rec13",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "CMG_2026-02-03T16.30",
+   "runId": "wf_c37c0249-b4e",
+   "tag": "core_ibr2035_rec14",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "DAL_2026-04-08T10.00",
+   "runId": "wf_132086a2-1e8",
+   "tag": "core_ibr2035_rec15",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "DRI_2026-03-19T08.30",
+   "runId": "wf_87ed4fe0-ce5",
+   "tag": "core_ibr2035_rec16",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "MCD_2026-02-11T16.30",
+   "runId": "wf_7eb574d4-982",
+   "tag": "core_ibr2035_rec17",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "ULTA_2026-03-12T16.30",
+   "runId": "wf_384c0ebc-de9",
+   "tag": "core_ibr2035_rec18",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  },
+  {
+   "label": "YUM_2026-02-04T08.15",
+   "runId": "wf_27bd5e41-c09",
+   "tag": "core_ibr2035_rec19",
+   "exit": "0",
+   "stderr_bytes": 0,
+   "problems": []
+  }
+ ],
+ "already": [
+  "0000006201-26-000031",
+  "0000027904-26-000013",
+  "0000027904-26-000020",
+  "0000027904-26-000022",
+  "0000063908-26-000032",
+  "0000092380-26-000044",
+  "0000764478-25-000057",
+  "0000898173-26-000006",
+  "0000940944-25-000038",
+  "0000940944-26-000005",
+  "0000940944-26-000009"
+ ],
+ "held_no_text": [
+  {
+   "label": "0000006201-26-000032",
+   "runId": "wf_0d3288e0-c5d",
+   "state": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_0d3288e0-c5d.json"
+  }
+ ],
+ "failed": [],
+ "receipt_states_after": 31,
+ "model_calls": 0
+}

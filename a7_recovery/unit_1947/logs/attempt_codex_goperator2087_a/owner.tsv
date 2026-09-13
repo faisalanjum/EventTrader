@@ -1,0 +1,7 @@
+attempt	codex_goperator2087_a
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_real_grading_2086.tsv
+wrapper_pid	3589550
+payload_pid	3589554
+started_utc	2026-09-13T01:56:57Z
+state	finished exit 0

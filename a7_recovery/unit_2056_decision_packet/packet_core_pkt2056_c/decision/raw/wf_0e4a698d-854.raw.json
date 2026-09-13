@@ -1,0 +1,199 @@
+```json
+{
+  "source_id": "0001041061-26-000003",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 1.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 1.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["excluding Special Items"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the quote states a per-share earnings level of $1.73 on an excluding-Special-Items basis for the fourth quarter, a standing re-readable metric rather than a bare mention."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "franchise_restaurant_acquisition",
+              "driver_state": "occurred",
+              "level_low": {"value": 670, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 670, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["segment:tacobellglobaldivision", "unknown:us"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the quote states one discrete, completed, sized transaction - buying 128 restaurants back from a franchisee for about $670 million - which is an action event, not boilerplate."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "system_sales",
+              "driver_state": "reported",
+              "level_low": {"value": 11, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "floor",
+              "level_unit": "m_usd",
+              "slice_parts": ["channel:digital"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the quote gives a re-readable systemwide sales level for digitally ordered sales with a stated floor of $11 billion."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "digital_sales_mix",
+              "driver_state": "reported",
+              "level_high": {"value": 60, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "ceiling",
+              "level_unit": "percent",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the share of sales placed digitally is a standing level the company can read again over time, stated here as approaching 60 percent."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001041061-26-000003",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The phrase is a single entry in the safe-harbor forward-looking-statements risk list: it names a topic that could affect results, with no stated level, direction, change, outlook or company action, so it is generic risk boilerplate and yields no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as negative_control and confirmed as a control: the severe-weather and climate-change wording sits inside the cautionary forward-looking-statements paragraph and carries no driver state, change, guidance or action."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "EPS excluding Special Items",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote says only \"EPS\" while the release's own reconciliation labels the same $1.73 as Diluted EPS excluding Special Items, so I kept only the qualifier the quote itself states."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "acquisition of 128 Taco Bell U.S. restaurants from a franchisee",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The label \"U.S.\" sits on this company's menu under two kinds (segment:us and geography:us) and the release itself uses \"Taco Bell U.S.\" as a reporting sub-unit as well as a location, so the framing does not select one kind and I recorded the honest unknown:us instead of guessing."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "digital system sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "\"Digital\" has no menu value, so I coined an off-menu part from the release's own definition of digital as how the order is placed (a channel), and the fourth-quarter period comes from the section heading rather than the sentence itself."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "digital mix",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "\"nearly 60%\" states a digit with an approach-from-below qualifier, so I recorded a ceiling at 60 percent rather than a point, and the quote does not name which sales base the mix is a share of."
+    }
+  ],
+  "groups": [
+    {
+      "member_row_indexes": [3, 4],
+      "members_are_one_fact": false,
+      "reason": "The one sentence carries two different measures with different units and different meanings - a dollar level of digitally ordered system sales (floor $11 billion) and a percentage share of sales that is digital (ceiling 60%) - so they are distinct facts."
+    }
+  ],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-013/b1",
+      "agrees": false,
+      "why": "It matches what I settled on lanes, states, values, shapes, periods and the row-5 abstention, but on row 2 it picks geography:us for a label the menu carries under two kinds without framing that selects one, where I settled the honest unknown:us; its digital_mix versus my digital_sales_mix is only a lawful synonym."
+    },
+    {
+      "lead_id": "sokc-013/b2",
+      "agrees": false,
+      "why": "It also matches on lanes, states, values, periods and the row-5 abstention, but on row 2 it takes geography:us where I settled unknown:us, names the cause with the broader restaurant_acquisition rather than the franchise-specific form the quote supports, and drops the number modifier \"approximately\" that the never-drop measurement sink requires be kept."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 2 slice kind for \"U.S.\": I stored unknown:us because the menu carries the same normalized label under both segment:us and geography:us.",
+      "why": "The two tokens make different stored fact identities, and if the owner judges \"Taco Bell U.S. restaurants\" to select location, geography:us would be the correct token, so the pick must be confirmed before this row is locked."
+    },
+    {
+      "what": "Row 2 brand part: I reused segment:tacobellglobaldivision for a population that is only the U.S. portion of that division.",
+      "why": "Menu reuse requires the same meaning, and the composite of the division part plus the U.S. part is what narrows it; if that composite reading is rejected, the brand part would have to be coined instead."
+    },
+    {
+      "what": "Row 2 carries two stated numbers - 128 restaurants and approximately $670 million - and only one level slot group.",
+      "why": "I stored the purchase consideration and left the unit count inside the quote; if the intended encoding is a count level for the acquisition, this row needs a different unit, so the choice should be confirmed rather than assumed."
+    },
+    {
+      "what": "Row 3 off-menu part channel:digital has no menu counterpart.",
+      "why": "The release defines digital by how the order is placed, which reads as a channel, but a first coin creates a new company slice value later readers will reuse, so the kind should be confirmed before promotion."
+    }
+  ]
+}
+```

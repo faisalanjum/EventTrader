@@ -1,0 +1,35 @@
+--- step 1: the real lane, rebuilt from the saved record only
+PASS the ACTUAL signing gate is clean over the real key []
+PASS all 33 source events carry a raw origin 33
+PASS the gate reports zero open issues 0
+--- step 2: the ordinary binding, derived from the live owners
+PASS the candidate owner bound THIS run's ordinary binding /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/ordinary_bound.json
+PASS the derived binding round-trips to the same live bound (Bound(package='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/proof_codex_in2068_e/key_package', evidence='__source_only_1988_has_no_phase_one__', hr=None, fix=None, events='/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/
+--- step 3: the pre-signer count through the authoritative owner
+PASS the pre-signer count is exactly 667, every call once (667, 8)
+--- step 4: the current receipt, finalization and history pins
+PASS this round is finalized with exactly two valid calls {"scheduled": 2, "valid": 2, "invalid_response": 0, "transport_no_answer": 0, "unproved": 0, "missing": 0}
+PASS the receipt pins BOTH earlier rounds exactly 
+PASS the finalized receipt is still the proved one []
+PASS the live source input is the identity the packet froze 
+--- step 5: the REAL candidate through C.build and C.verify
+PASS C.build and its full verifier accept the ACTUAL final key []
+PASS the candidate binds this round's receipt and finalization and names the run 
+PASS every bound artifact is the exact byte on disk 
+PASS the saved recovery binding and every recovered-stage artifact are carried {'recovery_binding': '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/RECOVERY_BINDING.json', 'recovery_record': '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/recovery_v2/recovery.json', 'recovery_receipt': '/home/faisal/EventMarketDB-driv
+PASS the candidate carries all 33 TRUE origins 33
+PASS the signer manifest counts 667 before it OrderedDict([('before', 667), ('primaries', 1), ('retry_cap', 1), ('after_clean', 668), ('worst', 669), ('ceiling', 6000)])
+--- step 6: the UNRUN signer packet
+PASS the signer prompt and script exist and NOTHING was run 
+PASS the signer script is under the transport limit (385373, 524288)
+{
+ "ordinary": "e7117620ca7a33ab4a68814d8107df4d47304e408f0c1296bbe5dcc14c9a01c7",
+ "signer_before": 667,
+ "signer_script_bytes": 385373,
+ "origins": {
+  "a4_final_v5_correction": 25,
+  "a4_final_v6_correction": 6,
+  "a4_final_v1": 2
+ }
+}
+COMPLETE 18 checks; zero AI calls; /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a

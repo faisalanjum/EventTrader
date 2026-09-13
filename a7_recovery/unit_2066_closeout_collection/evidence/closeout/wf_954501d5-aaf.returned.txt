@@ -1,0 +1,132 @@
+```json
+{
+  "source_id": "0000063908-26-000032",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence states a real, non-boilerplate quantity - pre-tax charges of $80 million - but it attributes that TOTAL only 'primarily' to restructuring charges associated with Accelerating the Organization, leaving an unnamed, unquantified remainder inside the same figure; naming the fact after restructuring would assign the whole amount to one component the source never sized, and no lawful name exists for the undifferentiated whole because stripping the measurement qualifier 'pre-tax' leaves only the bare category word 'charges', so the item is real but cannot be lawfully resolved into a fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but settled as an exclusion, and I say the mismatch plainly: the statement is genuine and quantified, yet the $80 million is a total that the source itself calls only PRIMARILY restructuring, so neither a component name carrying the whole value nor a lawful whole-name is available and the row yields no emittable fact."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located target is a prior-year NETTED aggregate ($71 million of net pre-tax gains for the quarter and $70 million of net pre-tax charges for the year) that the same sentence says primarily consisted of property sale gains, transaction costs and non-cash impairment charges tied to the SALE of the South Korea business together with transaction costs tied to the ACQUISITION of the Israel business - at least two independent causes plus an unattributed remainder implied by 'primarily' - with no per-cause amount stated, so one cause name cannot lawfully carry the mixed figure and any split would invent numbers the source does not state."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real_item but settled as an exclusion, stated plainly: the disclosure is real and non-boilerplate, yet a single netted amount spanning two independently named corporate actions supports neither one cause name nor one lawful value, so no fact may be emitted."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "time_type": "duration",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "slice_parts": ["segment:u_s_market"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it settles as one: the row states a directional 6.8% comparable-sales increase for the company's own U.S. market part in the fourth quarter, a standing re-readable measure, so proposal and outcome agree."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The sentence only announces that the release contains forward-looking statements reflecting management's expectations and that they speak as of the date hereof; it names no driver and states no level, change, outlook value, expectation comparison or action, so it is generic legal boilerplate and fails the fact gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and it behaves exactly as one: the safe-harbour sentence carries no driver-bearing content and correctly yields nothing."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000063908-26-000032",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "franchised_restaurant_share",
+              "driver_state": "reported",
+              "level_low": {"value": 95, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 95, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "time_type": "instant",
+              "measurement_raw_spans": ["Approximately"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and it settles as one: although the sentence sits in the company-description section, it states a quantified standing level - about 95% of the worldwide restaurant estate held by independent owner-operators - that can be re-read over time, and the gate excludes recurrence and materiality as grounds for dropping a fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "U.S. increased 6.8%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The kind is settled as segment by the operates-as test (the line sits in the segment breakdown beside International Operated Markets), but the menu holds one and the same U.S. market meaning under two segment spellings, segment:u_s_market and segment:usmarket, and nothing in the source chooses between them, so I reused the spelling that matches the source's punctuated 'U.S.' and recorded the residual rather than merging or inventing a token."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "portion_versus_whole", "slices_and_unknown_axes"],
+      "reference_name": "owned and operated by independent local business owners",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The measured quantity is a ratio of the franchised population to the whole worldwide estate, so the population qualifier stays in the name and the slice list stays empty to preserve the whole-company denominator; a channel slice was rejected because 'independent local business owners' spans several menu channel values at once and a sliced restaurant count is a different quantity, and the hedge 'Approximately' was kept as a number modifier in measurement rather than dropped."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-005/b1",
+      "agrees": false,
+      "why": "It matches my outcomes on rows 2, 3 and 4, but it emits a $80 million restructuring_costs fact for row 1 where the quote says the charges were only PRIMARILY restructuring, which assigns a whole to one unsized component, and it drops row 5 as company-profile boilerplate although that sentence states a quantified standing level and the gate excludes recurrence."
+    },
+    {
+      "lead_id": "sokc-005/b2",
+      "agrees": false,
+      "why": "It matches my outcomes on rows 2, 3 and 4, but for row 1 it names the whole $80 million after the Accelerating the Organization restructuring programme despite the source's 'primarily' hedge, and it drops row 5 expressly because the sentence repeats across releases - recurrence, which the gate names as NOT part of the test - where I settled a real fact."
+    }
+  ],
+  "open_issues": []
+}
+```

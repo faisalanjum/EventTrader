@@ -1,0 +1,38 @@
+{
+ "proof": {
+  "attempt": 1,
+  "run_id": "wf_cf398299-777",
+  "state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_cf398299-777.json",
+  "agent_id": "aded04e635e6e4aed",
+  "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_cf398299-777/agent-aded04e635e6e4aed.jsonl",
+  "state_sha256": "dbba413f53faec8d5a35c00e5f54124566e895dda44ebecdf11d5438637b8d48",
+  "transcript_sha256": "99d5c7c158508ab06433ddbfbcd70509b8588eab74a4ea895d965c3ea139dbd7",
+  "raw_sha256": "46c0847c677657877b7a1a914404ec35be397023ba1394db039b3d79872a2ee3",
+  "raw_chars": 558,
+  "prompt_sha256": "b7987ebd324ad66491d9990f3522a846e58a104903c36c203293447c353a267c",
+  "script_sha256": "87f896d24bb211524467239ed7482b40d88d439bd3aa0949102b5baefcace9fe",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "model": "opus",
+  "effort": "high",
+  "agent_type": "lean-probe",
+  "runtime_model_ids": [
+   "claude-opus-5"
+  ],
+  "tool_calls": 0,
+  "total_tokens": 146054,
+  "duration_ms": 121931,
+  "parser": "build_kfields_final.read_signature",
+  "parser_problems": [],
+  "outcome": "signed",
+  "_reply": {
+   "signed": true,
+   "blocked": [],
+   "why": "I recomputed every figure from the 33 raw shards and each matched exactly \u2014 33 events, 191 rows, 163 accepted facts each carrying hard_classes, du_worthy and gold_extra (all du_worthy true), 34 controls, 10 exclusions, 44 abstentions, 11 record-kind conflicts all resolved in their record_kind_notes, all five group relations stated with reasons, every hard class drawn from the ten mapped tags with the lowest (corrections_and_amendments, 7) above the floor of 5, 41 sequential rows, and no open issue in any shard."
+  }
+ },
+ "ledger_after": 668,
+ "model_calls": 0,
+ "harvest": false,
+ "lock": false,
+ "durable_native_copies_identical": true
+}

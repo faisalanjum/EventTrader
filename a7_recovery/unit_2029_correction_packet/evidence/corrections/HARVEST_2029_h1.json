@@ -1,0 +1,105 @@
+{
+ "harvested_now": [
+  {
+   "label": "0000006201-26-000031",
+   "runId": "wf_e31d007c-af7",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 13314,
+   "ms": 144739,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000006201-26-000032",
+   "runId": "wf_0d3288e0-c5d",
+   "row_model": "opus",
+   "bytes": null,
+   "ms": 88539,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000027904-26-000013",
+   "runId": "wf_08c4aeaa-55f",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 14660,
+   "ms": 169696,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000027904-26-000020",
+   "runId": "wf_866b8ce4-bef",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 16615,
+   "ms": 172946,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000027904-26-000022",
+   "runId": "wf_ebd1926e-35a",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 8626,
+   "ms": 120493,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000063908-26-000032",
+   "runId": "wf_7de3d393-14c",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 9264,
+   "ms": 159840,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000092380-26-000044",
+   "runId": "wf_f110b2df-3f6",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 19143,
+   "ms": 279503,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000764478-25-000057",
+   "runId": "wf_0753bf94-afe",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 10933,
+   "ms": 132865,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000898173-26-000006",
+   "runId": "wf_bafaccdf-bf3",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 12095,
+   "ms": 169407,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000940944-25-000038",
+   "runId": "wf_7fa739cd-fc0",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 8460,
+   "ms": 99639,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000940944-26-000005",
+   "runId": "wf_662c5c9f-6e2",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 10397,
+   "ms": 135247,
+   "script_matches_launch": true
+  },
+  {
+   "label": "0000940944-26-000009",
+   "runId": "wf_d0d7a05c-abc",
+   "row_model": "claude-opus-5[1m]",
+   "bytes": 11041,
+   "ms": 202532,
+   "script_matches_launch": true
+  }
+ ],
+ "states": {
+  "preserved": 12
+ },
+ "in_flight": [],
+ "launched_total": 12
+}

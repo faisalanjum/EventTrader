@@ -1,0 +1,2799 @@
+{
+ "reuse_search": {
+  "receipts": [
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/baseline_tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/baseline_tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/candidate_tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/candidate_tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1853/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1853/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1855/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1855/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1857/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1857/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/baseline_tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/baseline_tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1860/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1860/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1862/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1862/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1864/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1864/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1866/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1866/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1867/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1867/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1869/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1869/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1871/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1871/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1872/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1872/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1874/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1874/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1876/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1876/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1877/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1877/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1879/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1879/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1882/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1882/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1884/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1884/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1885/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1885/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1886/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1886/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1887/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1887/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1888/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1888/view/tree/runs/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_gitonly/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_gitonly/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_module/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_module/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_scorer/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_scorer/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_sibling/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_sibling/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_signer/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_signer/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_old/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 21,
+    "states_recorded": 21,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 21,
+     "valid": 20,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27aa8eb0af403f1c58cb6d887c59d9864de6aeb71829fa3b1636510a4848b3c4"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_old/a5_recovery/unit_1758/view/runs_composed/kf-a4-v4corr-21-20260823T122628Z/retry",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "8a3a73e55ba2a617ce233379354acc22208c8f96254b0aea2425f9af5b7d959a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_codex_set2061_a/settlement",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "cae70c685110bab2924e58b21eae008416516abd0524452de16194539a4881c0"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_codex_set2061_a/settlement_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "94e0f43eea47d33c98b1ea95517eff2ed7904f2cccd02188b1cdac3502e4c77a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_codex_set2061_a/settlement_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "96735c2e6c4c456fb3202e0e700e7c9b24c01d71bb53fcfabd7c453e9009e29a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_b/settlement",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "e089d267dc9148bdde77263a2de67842e13922b07258fcb5bbebfa042cf484da"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_c/settlement",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "67ef0d09300ae5736e4e93b790d3c723fa5f8ef4739cfb61ed52f2b0d6dd4011"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_d/settlement",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1aa597cae43bfa88533168a015d2e7afd1fef8737cc912b06a6c616ea8f7d648"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_d/settlement_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "94e0f43eea47d33c98b1ea95517eff2ed7904f2cccd02188b1cdac3502e4c77a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_d/settlement_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "61660f8d14fe812d4386cbaeea6fec5fcc63e4e082c664eca2fc3d04f2c44f26"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_e/settlement",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "a4e1beae0cb2ffa3e9a6cf9e95df4531c505e1496c4bf04cf8bb4a8798f31642"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_e/settlement_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "94e0f43eea47d33c98b1ea95517eff2ed7904f2cccd02188b1cdac3502e4c77a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2061_settlement_connection/TEST_core_set2061_e/settlement_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "27d87df5e8797f9073ea0b5422b7ccf1dc1935dba55530def5d768eafb337397"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_codex_ret2062_a/phase_invalid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "7ea4281abaed49a7e695e1f4b022e750016029aad57d964d9471592f02bfdcfb"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_codex_ret2062_a/phase_invalid/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "9c3f6b144850ee474507251356e0a8e233a72bdb268238db566ce177dc4bd692"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_codex_ret2062_a/phase_missing",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "93d56338a300bb35a0d1dcea6304bd9ddfeb62d60973ecb67979193cebe81ef1"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_codex_ret2062_a/phase_twice_invalid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "94412678f8446e0646705ced94235d4a9d259c82b5dedced3c272e489290618c"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_codex_ret2062_a/phase_twice_invalid/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "60a82a3bb3ecb77e130ba7d609ca60c7e921a7dadf7f6dad04d076d1f18c6390"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_codex_ret2062_a/phase_valid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "e5350af8a2af005bf43168787c2b861cf506941c6a80f4f25879442753859bd3"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_core_ret2062_a/phase_invalid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "0d6b014ed5a0e62939eebfe9dc0bd2d1c28064d8a7c838da29e55f5cca8490b8"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_core_ret2062_a/phase_invalid/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "351627b5226a94a9f3598740827c0240630aaadf8d83b4a9a4e271f4f8990dc7"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_core_ret2062_a/phase_missing",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "93d56338a300bb35a0d1dcea6304bd9ddfeb62d60973ecb67979193cebe81ef1"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_core_ret2062_a/phase_twice_invalid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "ae35a77ae9979c9307af1fa78a0956b6d5ee35ee5f41805d7bd500528da48e24"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_core_ret2062_a/phase_twice_invalid/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "ee4e697a42e5fc888c8fce5f6a9b61800d9a0532039d55186f3811562788ef02"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/TEST_core_ret2062_a/phase_valid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "15d8ef7c996a740744a0ad685702c30549c11b6fdf89d73272aed3dc31256d33"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_a/settlement",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "fefcc46deef288846c49fb12881db72637cf602b3573a6e7cab652308987aa4f"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_b/settlement",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "fefcc46deef288846c49fb12881db72637cf602b3573a6e7cab652308987aa4f"
+   }
+  ],
+  "native": [],
+  "for_this_key": [
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_a/settlement",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "fefcc46deef288846c49fb12881db72637cf602b3573a6e7cab652308987aa4f"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_b/settlement",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "fefcc46deef288846c49fb12881db72637cf602b3573a6e7cab652308987aa4f"
+   }
+  ],
+  "manifest_sha256": "65b393b2658611834b2f997648242f18e61397a72b76f0a897f04f106601627d"
+ },
+ "accounting": {
+  "ledger_before_call": 595,
+  "candidate_counter_agrees": 595,
+  "primaries_this_phase": 31,
+  "reserved_signer": 1,
+  "planned_total_including_the_reserved_signer": 32,
+  "after_planned": 627,
+  "retry_law_owner": "build_kfields_final.RETRYABLE",
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "max_attempts": 2,
+  "invalid_only_retry_allowance_for_the_settlements": 31,
+  "invalid_only_retry_allowance_reserved_for_the_signer": 1,
+  "worst_case_after": 659,
+  "phase_ceiling": 659,
+  "global_ceiling": 6000,
+  "budget_problems": [],
+  "a_reserved_signer_slot_is_not_permission_to_sign": true
+ },
+ "role_and_transport": {
+  "transport": {
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "transport": "Claude Code Workflow agent(), subscription",
+   "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "bound_owners": {
+   "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+   "build_kfields_hard_review.py": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+   "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+   "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+   "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+   "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+   "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+   "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+   "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+   "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+   "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+   "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+   "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+   "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+   "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+   "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+   "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+   "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "review_composite_owner": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+   "clarified_review_manifest": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+  },
+  "door": "a4_source_only_key_1997",
+  "manifest_sha256": "65b393b2658611834b2f997648242f18e61397a72b76f0a897f04f106601627d",
+  "requested_key_role": {
+   "kind": "LIVE",
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000",
+   "transport": "Claude Code Workflow agent(), subscription"
+  },
+  "observed_key_role_proof": null,
+  "sonnet_role_untouched": {
+   "tested_transport": {
+    "model_alias": "sonnet",
+    "runtime_model_id": "claude-sonnet-5",
+    "effort": "high",
+    "agentType": "lean-probe",
+    "disallowedTools": [
+     "Read"
+    ],
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+    "transport": "Claude Code Workflow agent(), subscription",
+    "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+   },
+   "hard_review_model": "sonnet",
+   "hard_review_effort": "high",
+   "hard_review_agent_type": "lean-probe",
+   "hard_review_row_model": "claude-sonnet-5",
+   "hard_review_disallowed": [
+    "Read"
+   ],
+   "blinds_per_hard_task": [
+    1,
+    2
+   ]
+  }
+ },
+ "native_proof_dependencies": {
+  "history_evidence": {
+   "v1": {
+    "receipt.json": "8fc9c91d56382ed71ea4414ee5a6e8cb452f9a2b8b342e801bc25c49973598b4",
+    "finalization.json": "76f6a35d161636a67360bbff4f7849959dfeb0a4bfeca5635e284cf5ea351112",
+    "raw_tree": {
+     "files": 66,
+     "sha256": "00d63014ed4ab3bbf7209072119fed42e58621805cfaf05439c0d9504d523636"
+    }
+   },
+   "v2": {
+    "receipt.json": "e085196ff5ca9e95b506cbffc6da80cdd3ae1818d2fcef57b388fb8573e876ed",
+    "finalization.json": "7ede599ea06a5d9ddf175020fc31e7e47ec60a683415a50917a63865b7cab78e",
+    "raw_tree": {
+     "files": 60,
+     "sha256": "bb7539dbbdbf98a824bd696bffb182bfadabfa2879235072dda0bc97f6cec33f"
+    }
+   },
+   "v3": {
+    "receipt.json": "881c95fffd5fd970060adb122a4f02c91c07922dff12f695b4810376f026e68a",
+    "finalization.json": "33a37daccdf0b7002209f05dacca0021c4c61c6312eec928f33e0f3bac8f22bf",
+    "raw_tree": {
+     "files": 62,
+     "sha256": "dd95cb0853f90f0270fcc2c21c9c5688820a9411c2da5a37dac650d5f0e5d41d"
+    }
+   },
+   "v2_recovery": {
+    "receipt.json": "702c540dda8cb79a67ae0bee94a43ef437a01a211bad7a8e516003f180a5a56f",
+    "finalization.json": "d0579c653e913545ef7369c0ed9dd2c60c0dca6e4e163d89cfcd03a58ac76334",
+    "raw_tree": {
+     "files": 2,
+     "sha256": "e31cf46a89aa81fb266cf0f814849d6ab6373f21b591b637794b45c6abf41c54"
+    },
+    "recovery.json": "18da812a2c748810222f93f68489690fc98c6f8cce73ad95ce8036ee158d29e9"
+   }
+  },
+  "parent": null,
+  "states_recorded_so_far": 0
+ },
+ "population": {
+  "merged_events": 33,
+  "rows_accounted": 191,
+  "owed_settlements": 31,
+  "carried_events_kept": 2,
+  "carried_event_origins": {
+   "bzNews_42014391": "a4_final_v1",
+   "bzNews_50877032": "a4_final_v1"
+  },
+  "decisions_reused": 31,
+  "recovered_corrections_included": [
+   "0000006201-26-000032"
+  ],
+  "frozen_findings_total": 113,
+  "served_findings_total": 113,
+  "largest_script_bytes": 307955,
+  "open_issues_before_this_phase": 106
+ },
+ "events": [
+  {
+   "source_id": "0000006201-26-000031",
+   "rows": 7,
+   "open_issues": 3,
+   "decided_raw_sha256": "3842dfb507b509ba2365252872248d05bcd7d89535a8e12e76a1fe8984aaa34e",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "3842dfb507b509ba2365252872248d05bcd7d89535a8e12e76a1fe8984aaa34e",
+   "findings": 3,
+   "finding_rows": [
+    "0000006201-26-000031#005",
+    "0000006201-26-000031#003",
+    "0000006201-26-000031#002"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "fce7db641274a6519889e7b2528e12143a35b7778dc2c9c00dc333b9b76d1216",
+   "script_sha256": "16c47b6ccf0c797c1d339ceb6eb9e534c853bebce31fee9c5e157001d9b25992",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 145289,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000006201-26-000031.attempt1.js",
+   "receipt_prompt_pin": "fce7db641274a6519889e7b2528e12143a35b7778dc2c9c00dc333b9b76d1216"
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "rows": 5,
+   "open_issues": 2,
+   "decided_raw_sha256": "94b2e92b758628e1765094344916930c9d2c6f9f5c0a2cc8ee2dc73b0338cafc",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "94b2e92b758628e1765094344916930c9d2c6f9f5c0a2cc8ee2dc73b0338cafc",
+   "findings": 2,
+   "finding_rows": [
+    "0000006201-26-000032#008",
+    "0000006201-26-000032#010"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "0fc9b39cd989f931800ae0d324fbc4ceddff57ec3fe1c52251c33e842e75fa10",
+   "script_sha256": "49d6f8ee3bf90480890d43e58e0bce969d23e755ede084e888e8cbfac6407850",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 146315,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000006201-26-000032.attempt1.js",
+   "receipt_prompt_pin": "0fc9b39cd989f931800ae0d324fbc4ceddff57ec3fe1c52251c33e842e75fa10"
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "rows": 7,
+   "open_issues": 3,
+   "decided_raw_sha256": "6589ef89710d5e9b1b8b07284bfc874dd0a3a5430428c3edec96f641a65d11e0",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "6589ef89710d5e9b1b8b07284bfc874dd0a3a5430428c3edec96f641a65d11e0",
+   "findings": 4,
+   "finding_rows": [
+    "0000027904-26-000013#014",
+    "0000027904-26-000013#014",
+    "0000027904-26-000013#016",
+    "0000027904-26-000013#014"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "1afad3fbec91f9a7279608f73fd393a9d1072258ad8de4b4c1ac7ecc9baf04ff",
+   "script_sha256": "b38ea6654310b49975f89c692844a96a8f7b806379b7be8cb71dd1c948eba1b8",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 295613,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000027904-26-000013.attempt1.js",
+   "receipt_prompt_pin": "1afad3fbec91f9a7279608f73fd393a9d1072258ad8de4b4c1ac7ecc9baf04ff"
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "rows": 9,
+   "open_issues": 3,
+   "decided_raw_sha256": "c6f02893b86039144d8df2f89b0836eed68be29f5e160c28053eea0529e9e540",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "c6f02893b86039144d8df2f89b0836eed68be29f5e160c28053eea0529e9e540",
+   "findings": 3,
+   "finding_rows": [
+    "0000027904-26-000020#026",
+    "0000027904-26-000020#019",
+    "0000027904-26-000020#027"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "805b3ae85f8788285498aae2ccf82a5dd8f6c800445256346a3dd5b0baf09faa",
+   "script_sha256": "5014f3a8c3c1eab1d921d63e69dbdb363ead516f43ca96b6db13b3f2c9029188",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 164580,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000027904-26-000020.attempt1.js",
+   "receipt_prompt_pin": "805b3ae85f8788285498aae2ccf82a5dd8f6c800445256346a3dd5b0baf09faa"
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "rows": 5,
+   "open_issues": 3,
+   "decided_raw_sha256": "de5201894314d83e16953c4121f7d685cb121fcc387cc3ff1eade96c6b138dde",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "de5201894314d83e16953c4121f7d685cb121fcc387cc3ff1eade96c6b138dde",
+   "findings": 3,
+   "finding_rows": [
+    "0000027904-26-000022#030",
+    "0000027904-26-000022#029",
+    "0000027904-26-000022#032"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "295ced0cfd90d432a06b3e29f73fc5039a5cf23bcbceffff06ce977fb75beb86",
+   "script_sha256": "4dee614efc7dcdfbcbdeb82680e2095b0ccb8c6ba34467f9ccb2c788b6a7efa2",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 130503,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000027904-26-000022.attempt1.js",
+   "receipt_prompt_pin": "295ced0cfd90d432a06b3e29f73fc5039a5cf23bcbceffff06ce977fb75beb86"
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "rows": 5,
+   "open_issues": 3,
+   "decided_raw_sha256": "a76d61dbc66c5c61ddaa047d56e8e19ca73f014840ee28ebd15a60f08beb8e94",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "a76d61dbc66c5c61ddaa047d56e8e19ca73f014840ee28ebd15a60f08beb8e94",
+   "findings": 3,
+   "finding_rows": [
+    "0000063908-26-000032#033",
+    "0000063908-26-000032#035",
+    "0000063908-26-000032#037"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "84eaab09a7aabba0f003ddfa7252be8b5db08d1a6a8d64c53f1460c48f9fa8c6",
+   "script_sha256": "793196923588992e30555a47bb78bbeaf77c5a7c4c0b7eac0da060f00f4ff3ea",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 108518,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000063908-26-000032.attempt1.js",
+   "receipt_prompt_pin": "84eaab09a7aabba0f003ddfa7252be8b5db08d1a6a8d64c53f1460c48f9fa8c6"
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "rows": 7,
+   "open_issues": 6,
+   "decided_raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+   "findings": 7,
+   "finding_rows": [
+    "0000092380-26-000044#039",
+    "0000092380-26-000044#042",
+    "0000092380-26-000044#039",
+    "0000092380-26-000044#041",
+    "0000092380-26-000044#038",
+    "0000092380-26-000044#040",
+    "0000092380-26-000044#042"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "18d822f6c453af8ca8eb6a2ab14dc7e21093ec6f49e0ba9b1d465c34e46f0e13",
+   "script_sha256": "e1c5ad273781325d042e8da72014cb1ee1de9aded708b81077870449e77f1550",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 165586,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000092380-26-000044.attempt1.js",
+   "receipt_prompt_pin": "18d822f6c453af8ca8eb6a2ab14dc7e21093ec6f49e0ba9b1d465c34e46f0e13"
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "rows": 5,
+   "open_issues": 4,
+   "decided_raw_sha256": "c52f881bbefa0a2632aa88e7ceacaebeb39abfd36c0ec76ee205dedeb4e1a425",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "c52f881bbefa0a2632aa88e7ceacaebeb39abfd36c0ec76ee205dedeb4e1a425",
+   "findings": 4,
+   "finding_rows": [
+    "0000764478-25-000057#045",
+    "0000764478-25-000057#046",
+    "0000764478-25-000057#046",
+    "0000764478-25-000057#045"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "92c462ce002acdd9ae8a94b9a36ad6e05251d59a335bb8c70fa2ac626acec950",
+   "script_sha256": "3430c2c579ae8b04d14b0ceb2300d87f3288a6b76ac58298099e9c98ae754320",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 144026,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000764478-25-000057.attempt1.js",
+   "receipt_prompt_pin": "92c462ce002acdd9ae8a94b9a36ad6e05251d59a335bb8c70fa2ac626acec950"
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "rows": 6,
+   "open_issues": 4,
+   "decided_raw_sha256": "a0ec5ffd600f26f846e107d219a64739be289f2609d6fe1bef9195644bff661b",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "a0ec5ffd600f26f846e107d219a64739be289f2609d6fe1bef9195644bff661b",
+   "findings": 4,
+   "finding_rows": [
+    "0000898173-26-000006#051",
+    "0000898173-26-000006#052",
+    "0000898173-26-000006#053",
+    "0000898173-26-000006#055"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "63b1d466b2c290666edbd94e3e6d00e5512bb7975ce3ef257c44785395acaab2",
+   "script_sha256": "49c4afe9fcd441531ae56783ecb74e7a4fd620e3f6f159fb21c6e46cc0766e43",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 138761,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000898173-26-000006.attempt1.js",
+   "receipt_prompt_pin": "63b1d466b2c290666edbd94e3e6d00e5512bb7975ce3ef257c44785395acaab2"
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "rows": 4,
+   "open_issues": 2,
+   "decided_raw_sha256": "b5d4f690a132bb7b6e4313c251b8b583ad8323d8e8bbf701da64a9326160798f",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "b5d4f690a132bb7b6e4313c251b8b583ad8323d8e8bbf701da64a9326160798f",
+   "findings": 2,
+   "finding_rows": [
+    "0000940944-25-000038#056",
+    "0000940944-25-000038#057"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "564bc1ff12ce16ba453b348e3dab2cd40940454baf69d87860a6b25ce2e12f81",
+   "script_sha256": "a0212413d9f8f65e811f889bf4cb519e6bfe383a666ac685e3d694b124395fcd",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 268363,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000940944-25-000038.attempt1.js",
+   "receipt_prompt_pin": "564bc1ff12ce16ba453b348e3dab2cd40940454baf69d87860a6b25ce2e12f81"
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "rows": 6,
+   "open_issues": 4,
+   "decided_raw_sha256": "3dc5f87702d557d4174ed483799aa8796995d6d79e54a1b41465fb36c34451c8",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "3dc5f87702d557d4174ed483799aa8796995d6d79e54a1b41465fb36c34451c8",
+   "findings": 4,
+   "finding_rows": [
+    "0000940944-26-000005#060",
+    "0000940944-26-000005#060",
+    "0000940944-26-000005#061",
+    "0000940944-26-000005#061"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "5d9b84b77e1f312aa66ee386df4525e04d7310982d462492eee004d9ccf58810",
+   "script_sha256": "696dd31b5545a970745c1dbe5e90728ef2edda44956a7f648f97a6f7a0824c6f",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 120766,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000940944-26-000005.attempt1.js",
+   "receipt_prompt_pin": "5d9b84b77e1f312aa66ee386df4525e04d7310982d462492eee004d9ccf58810"
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "rows": 6,
+   "open_issues": 2,
+   "decided_raw_sha256": "39ea47adc1477f49adf1a911e20965e59073f7c0e2fedfbf2e3e415f8041094b",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "39ea47adc1477f49adf1a911e20965e59073f7c0e2fedfbf2e3e415f8041094b",
+   "findings": 2,
+   "finding_rows": [
+    "0000940944-26-000009#071",
+    "0000940944-26-000009#069"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "f29cf4dc7cd8f76ddf4fd1f8aedec075d339792ca0bb7410e892913878bb8854",
+   "script_sha256": "7841beafa6a6f6565014fcaa66e3575b6632f297a12bedf2b992ba2ae4909c1e",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 147476,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000940944-26-000009.attempt1.js",
+   "receipt_prompt_pin": "f29cf4dc7cd8f76ddf4fd1f8aedec075d339792ca0bb7410e892913878bb8854"
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "rows": 5,
+   "open_issues": 2,
+   "decided_raw_sha256": "77889e62c4dc1e8967756d587699d4cd755305843fd631b0403aef740591084a",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "77889e62c4dc1e8967756d587699d4cd755305843fd631b0403aef740591084a",
+   "findings": 3,
+   "finding_rows": [
+    "0001041061-25-000109#072",
+    "0001041061-25-000109#075",
+    "0001041061-25-000109#073"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "496555ed3e77aebcab83cae72a9bc3282b6b924489f1f857b90a186e4cc6e612",
+   "script_sha256": "2b9fa74c9e442c910ff855a7698d92069eb410c99ddc4e521fea3e5384b3c6e2",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 153978,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001041061-25-000109.attempt1.js",
+   "receipt_prompt_pin": "496555ed3e77aebcab83cae72a9bc3282b6b924489f1f857b90a186e4cc6e612"
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "rows": 5,
+   "open_issues": 4,
+   "decided_raw_sha256": "1fdb75e5fea6ca967f5452bf33b8766a4065f25cef8c6325953ece7159cdf715",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "1fdb75e5fea6ca967f5452bf33b8766a4065f25cef8c6325953ece7159cdf715",
+   "findings": 4,
+   "finding_rows": [
+    "0001041061-26-000003#078",
+    "0001041061-26-000003#078",
+    "0001041061-26-000003#078",
+    "0001041061-26-000003#079"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "65202d59bad6ea5b9d95880c22ed1f2f6677cd061b64fef5ad3bab3ac1e27891",
+   "script_sha256": "aa430dfbe49d17182707dc6f4d250e9c5b43b61f8d1e7a9c11d72ae086ac16d2",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 155898,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001041061-26-000003.attempt1.js",
+   "receipt_prompt_pin": "65202d59bad6ea5b9d95880c22ed1f2f6677cd061b64fef5ad3bab3ac1e27891"
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "rows": 6,
+   "open_issues": 3,
+   "decided_raw_sha256": "b89d05fee5a7bce39a94afa0a1b73d18c797fd1ef9c672ebe1ea497e128acb0f",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "b89d05fee5a7bce39a94afa0a1b73d18c797fd1ef9c672ebe1ea497e128acb0f",
+   "findings": 3,
+   "finding_rows": [
+    "0001041061-26-000084#086",
+    "0001041061-26-000084#082",
+    "0001041061-26-000084#083"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "660dc5279b05048c5213c53709adb4cb5c2daf090b7b6287c371d8cfdf60dee6",
+   "script_sha256": "2748d93595fd557dcbd7e6edd57b1de6483ed1adf45bbc3367dd348c9fc6b4f4",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 307955,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001041061-26-000084.attempt1.js",
+   "receipt_prompt_pin": "660dc5279b05048c5213c53709adb4cb5c2daf090b7b6287c371d8cfdf60dee6"
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "rows": 6,
+   "open_issues": 5,
+   "decided_raw_sha256": "b1363cd863da8f4677ee6ad439c503ffc660223047ed90cd3bd89a9d1a6bdf71",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "b1363cd863da8f4677ee6ad439c503ffc660223047ed90cd3bd89a9d1a6bdf71",
+   "findings": 5,
+   "finding_rows": [
+    "0001058090-26-000007#090",
+    "0001058090-26-000007#090",
+    "0001058090-26-000007#089",
+    "0001058090-26-000007#093",
+    "0001058090-26-000007#088"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "a6ba05db50393366631fe17ee96b8254010a3233d2ddd841dfdf8344211a9ba7",
+   "script_sha256": "b896f338445831c97a2cd654d14941bb88efaa4cc7c4d34afa22aecec5d67a4f",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 133978,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001058090-26-000007.attempt1.js",
+   "receipt_prompt_pin": "a6ba05db50393366631fe17ee96b8254010a3233d2ddd841dfdf8344211a9ba7"
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "rows": 6,
+   "open_issues": 4,
+   "decided_raw_sha256": "b4592a3f8456806e0b842fb43111bb18e2922385053d30f1dee3dafc931d095b",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "b4592a3f8456806e0b842fb43111bb18e2922385053d30f1dee3dafc931d095b",
+   "findings": 4,
+   "finding_rows": [
+    "0001104659-25-102611#098",
+    "0001104659-25-102611#097",
+    "0001104659-25-102611#098",
+    "0001104659-25-102611#095"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "85302dc40ff399f822b1a614a952ac2a3575fb7300543c8cc085a87033c80e9e",
+   "script_sha256": "353ee29387fe92d70926db1f6fb6a12a4fbda62b73d663db9668cdec568e54d4",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 258003,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-25-102611.attempt1.js",
+   "receipt_prompt_pin": "85302dc40ff399f822b1a614a952ac2a3575fb7300543c8cc085a87033c80e9e"
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "rows": 5,
+   "open_issues": 4,
+   "decided_raw_sha256": "fe833e65709f57a8aef04f02c395cf78ce7022b3cd9daaa7689d6d09f292cb11",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "fe833e65709f57a8aef04f02c395cf78ce7022b3cd9daaa7689d6d09f292cb11",
+   "findings": 4,
+   "finding_rows": [
+    "0001104659-25-105631#102",
+    "0001104659-25-105631#101",
+    "0001104659-25-105631#102",
+    "0001104659-25-105631#104"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "62b27fc4cc7d00399ba4b9d2abbfd223d2e892f6ff560d9c5fd0e7254c90612e",
+   "script_sha256": "517025a4abc4b0320976cfb55a4bbe69961ec05142e56364c757f0d4d3015094",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 149723,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-25-105631.attempt1.js",
+   "receipt_prompt_pin": "62b27fc4cc7d00399ba4b9d2abbfd223d2e892f6ff560d9c5fd0e7254c90612e"
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "rows": 7,
+   "open_issues": 4,
+   "decided_raw_sha256": "20629692a9cd6189c08699e7af063bf1a6a6ca0fa66bc7c7477124fcb5586596",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "20629692a9cd6189c08699e7af063bf1a6a6ca0fa66bc7c7477124fcb5586596",
+   "findings": 4,
+   "finding_rows": [
+    "0001104659-25-118458#105",
+    "0001104659-25-118458#110",
+    "0001104659-25-118458#106",
+    "0001104659-25-118458#107"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "48557da46078e89a265fb4ef6ffa53a5a97e614b0361979c66b776ab8b3bca66",
+   "script_sha256": "558bbe52fe990660dc35f60ed9e18c0e6f198baa94dcb62ffb386240bbf6061c",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 145258,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-25-118458.attempt1.js",
+   "receipt_prompt_pin": "48557da46078e89a265fb4ef6ffa53a5a97e614b0361979c66b776ab8b3bca66"
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "rows": 6,
+   "open_issues": 4,
+   "decided_raw_sha256": "cfa3f354f2355562f4773b1c375016a8c9f47778b5d4eeb8c26b979c88ba2a96",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "cfa3f354f2355562f4773b1c375016a8c9f47778b5d4eeb8c26b979c88ba2a96",
+   "findings": 4,
+   "finding_rows": [
+    "0001104659-26-017090#115",
+    "0001104659-26-017090#113",
+    "0001104659-26-017090#114",
+    "0001104659-26-017090#115"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "5b66c60972bf1bd4fb225e077253a2212c07f75ea84ed793679e0726fe527639",
+   "script_sha256": "f40a9a4b4aeb3510f2d375bf5414ef393e56fd4342984ac290de5c2ac440ccf3",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 123099,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-26-017090.attempt1.js",
+   "receipt_prompt_pin": "5b66c60972bf1bd4fb225e077253a2212c07f75ea84ed793679e0726fe527639"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "rows": 5,
+   "open_issues": 1,
+   "decided_raw_sha256": "845de3b134e0eac88a1357ff93cff9c25da6e3ee78dcbe100ec39e0be4c33d47",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "845de3b134e0eac88a1357ff93cff9c25da6e3ee78dcbe100ec39e0be4c33d47",
+   "findings": 1,
+   "finding_rows": [
+    "0001104659-26-027061#121"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "bdcbf16da79ace2a05694844a721a6538135d2989c0af98343ecd1bb842e268c",
+   "script_sha256": "d77a95fd0a9fb67b1a467f2aed83457fbabb96c7e47b957075f62cf6124cbf18",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 119744,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-26-027061.attempt1.js",
+   "receipt_prompt_pin": "bdcbf16da79ace2a05694844a721a6538135d2989c0af98343ecd1bb842e268c"
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "rows": 5,
+   "open_issues": 5,
+   "decided_raw_sha256": "7e722a74b80b30504448a01346bcc372ddf29fea4d0191879b8a145693652971",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "7e722a74b80b30504448a01346bcc372ddf29fea4d0191879b8a145693652971",
+   "findings": 5,
+   "finding_rows": [
+    "0001104659-26-032757#123",
+    "0001104659-26-032757#124",
+    "0001104659-26-032757#126",
+    "0001104659-26-032757#125",
+    "0001104659-26-032757#124"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "4b01750556bc73a3edb75043eba15dd0dcaddb4d82def5805f67fde322531b22",
+   "script_sha256": "6a095512339c4c031b944028d980bbb00256def26e9484c8effc574931f999b4",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 146935,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-26-032757.attempt1.js",
+   "receipt_prompt_pin": "4b01750556bc73a3edb75043eba15dd0dcaddb4d82def5805f67fde322531b22"
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "rows": 4,
+   "open_issues": 3,
+   "decided_raw_sha256": "1b5b6fb360cd6c10f3900a9206c8c18ed1ff31843458e6864de1de0fb14b6edb",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "1b5b6fb360cd6c10f3900a9206c8c18ed1ff31843458e6864de1de0fb14b6edb",
+   "findings": 3,
+   "finding_rows": [
+    "0001171843-26-001288#129",
+    "0001171843-26-001288#130",
+    "0001171843-26-001288#130"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "c66c19cc160931bdf37e9ba29d237252ab291f479aa2763c995b5d98ec7d9f6f",
+   "script_sha256": "a769edd57083b46b980e23607c323f4ea823d005c72c1aa7277f21792a6c7404",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 107999,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001171843-26-001288.attempt1.js",
+   "receipt_prompt_pin": "c66c19cc160931bdf37e9ba29d237252ab291f479aa2763c995b5d98ec7d9f6f"
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "rows": 10,
+   "open_issues": 5,
+   "decided_raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+   "findings": 7,
+   "finding_rows": [
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#137",
+    "AAL_2026-04-23T08.30#141",
+    "AAL_2026-04-23T08.30#135",
+    "AAL_2026-04-23T08.30#133"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "ffb53d72f9ecdf2da79b3f9ca324311235349e21e4cc62a5852d5f30e11c30c4",
+   "script_sha256": "358d2e2c29092b6d8d09a2a9c95f94d0695a50924ad8218bb2166a75a5379a5b",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 180626,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/AAL_2026-04-23T08.30.attempt1.js",
+   "receipt_prompt_pin": "ffb53d72f9ecdf2da79b3f9ca324311235349e21e4cc62a5852d5f30e11c30c4"
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "rows": 8,
+   "open_issues": 2,
+   "decided_raw_sha256": "3aa3a87a04bfaeabd1b92f15e68d5a56e662cf30d46131885721422338b274b3",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "3aa3a87a04bfaeabd1b92f15e68d5a56e662cf30d46131885721422338b274b3",
+   "findings": 2,
+   "finding_rows": [
+    "BBY_2026-03-03T08.00#145",
+    "BBY_2026-03-03T08.00#144"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "5be4b56343e53cf8b421bdf319b498ad1d853182d9c8b5b9a2187defd6902369",
+   "script_sha256": "48a5bcf666adf8fce80413336ff1119ba2acfd769f8783688476560d0786dc04",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 167818,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/BBY_2026-03-03T08.00.attempt1.js",
+   "receipt_prompt_pin": "5be4b56343e53cf8b421bdf319b498ad1d853182d9c8b5b9a2187defd6902369"
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "rows": 7,
+   "open_issues": 4,
+   "decided_raw_sha256": "1ea980c93443675db01b74dcfbec4a023d1fbe57e24c4dcfcaf3a22bdf1d2080",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "1ea980c93443675db01b74dcfbec4a023d1fbe57e24c4dcfcaf3a22bdf1d2080",
+   "findings": 4,
+   "finding_rows": [
+    "CMG_2026-02-03T16.30#152",
+    "CMG_2026-02-03T16.30#152",
+    "CMG_2026-02-03T16.30#153",
+    "CMG_2026-02-03T16.30#155"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "3e602d8cbb29670da93f9100b6ff47eb512b1035a85d8d5d220c87af93b16cb9",
+   "script_sha256": "d6775244a2c08a42aa2632f3f5e03c48f0ef026e492863b227782ab7b517bf04",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 164610,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/CMG_2026-02-03T16.30.attempt1.js",
+   "receipt_prompt_pin": "3e602d8cbb29670da93f9100b6ff47eb512b1035a85d8d5d220c87af93b16cb9"
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "rows": 7,
+   "open_issues": 4,
+   "decided_raw_sha256": "52a0135dcc8f53449928ce7c695b9ab059d80fa3f9f14d5b3345a3a026beedbb",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "52a0135dcc8f53449928ce7c695b9ab059d80fa3f9f14d5b3345a3a026beedbb",
+   "findings": 4,
+   "finding_rows": [
+    "DAL_2026-04-08T10.00#160",
+    "DAL_2026-04-08T10.00#160",
+    "DAL_2026-04-08T10.00#161",
+    "DAL_2026-04-08T10.00#157"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "cf2941f87ebeed512e569d5c6e95c0f3ceed0cd6cae3f1213cee413f089b6336",
+   "script_sha256": "def45b2f7cf0ec5db625bb0841d893b48f79edbcd230ce7ba2794777d81b7e5a",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 166205,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "receipt_prompt_pin": "cf2941f87ebeed512e569d5c6e95c0f3ceed0cd6cae3f1213cee413f089b6336"
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "rows": 5,
+   "open_issues": 4,
+   "decided_raw_sha256": "d87d9908f3c18595c96417d4f463f8446879614baf77bd3edfafc7c2bf750590",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "d87d9908f3c18595c96417d4f463f8446879614baf77bd3edfafc7c2bf750590",
+   "findings": 4,
+   "finding_rows": [
+    "DRI_2026-03-19T08.30#168",
+    "DRI_2026-03-19T08.30#165",
+    "DRI_2026-03-19T08.30#166",
+    "DRI_2026-03-19T08.30#168"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "de6914a69df63f8a050e4c687e458b4e3bc48f805e7e2914d57596a1ea030302",
+   "script_sha256": "01322bce8e29f505bb5467bf31bf879b231bcfbe0573485f617e8b0bdfadaad4",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 181133,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/DRI_2026-03-19T08.30.attempt1.js",
+   "receipt_prompt_pin": "de6914a69df63f8a050e4c687e458b4e3bc48f805e7e2914d57596a1ea030302"
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "rows": 6,
+   "open_issues": 4,
+   "decided_raw_sha256": "cc4e8d20fcc063e384c27630cfd8b51157debb6a0326edb41316fc9b0a856889",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "cc4e8d20fcc063e384c27630cfd8b51157debb6a0326edb41316fc9b0a856889",
+   "findings": 4,
+   "finding_rows": [
+    "MCD_2026-02-11T16.30#170",
+    "MCD_2026-02-11T16.30#170",
+    "MCD_2026-02-11T16.30#169",
+    "MCD_2026-02-11T16.30#171"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "544aa3f4bc98ab7db2689e37f3df83f6ff859edabbae29691ac980663fc28bdb",
+   "script_sha256": "cfafa066d5a30f8b7250aa780b968f11008525bd74284eb072e3f50b41f52aad",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 169396,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/MCD_2026-02-11T16.30.attempt1.js",
+   "receipt_prompt_pin": "544aa3f4bc98ab7db2689e37f3df83f6ff859edabbae29691ac980663fc28bdb"
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "rows": 7,
+   "open_issues": 2,
+   "decided_raw_sha256": "c01db731d053685c2839cb3351f0b5831fea054604e8283c96e7828563bd496e",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "c01db731d053685c2839cb3351f0b5831fea054604e8283c96e7828563bd496e",
+   "findings": 4,
+   "finding_rows": [
+    "ULTA_2026-03-12T16.30#177",
+    "ULTA_2026-03-12T16.30#178",
+    "ULTA_2026-03-12T16.30#180",
+    "ULTA_2026-03-12T16.30#176"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "e8838c3c3481294f2bdce871b2e17e8767f6601ae01b436f0439ec621c1a3bb3",
+   "script_sha256": "6b89868bc373c8c25270ecc6c493d80624fa583d2ee3289eab87cc0efeca2e46",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 159770,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/ULTA_2026-03-12T16.30.attempt1.js",
+   "receipt_prompt_pin": "e8838c3c3481294f2bdce871b2e17e8767f6601ae01b436f0439ec621c1a3bb3"
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "rows": 7,
+   "open_issues": 3,
+   "decided_raw_sha256": "05817fef2889c9b460907383e8a27d7fad821e80b3246dd7d82508bac7028c20",
+   "origin_before_this_phase": "a4_final_v3_decision",
+   "v3_shard_origin": "a4_final_v3_decision_reply",
+   "v3_shard_sha256": "05817fef2889c9b460907383e8a27d7fad821e80b3246dd7d82508bac7028c20",
+   "findings": 3,
+   "finding_rows": [
+    "YUM_2026-02-04T08.15#184",
+    "YUM_2026-02-04T08.15#186",
+    "YUM_2026-02-04T08.15#186"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v3_shard",
+    "reviewer_finding"
+   ],
+   "prompt_sha256": "2fe0bd52160bc9ecc165558830c076aab7e3b51861dbdf26362874516255706e",
+   "script_sha256": "d8dac0c34c3714046ea300468f02ca39591c390d4c4fefc92a56eaee20c1e565",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 162800,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/YUM_2026-02-04T08.15.attempt1.js",
+   "receipt_prompt_pin": "2fe0bd52160bc9ecc165558830c076aab7e3b51861dbdf26362874516255706e"
+  }
+ ],
+ "inputs": {
+  "decision_packet_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/FINDINGS_BY_EVENT.json",
+  "decision_packet_record_sha256": "a945c12765c954b8bde033e992e19e33cf58cc5a30191f113c5e067a1a6aa77f",
+  "settlement_findings": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2058_source_delta/SETTLEMENT_FINDINGS_2060.json",
+  "settlement_findings_sha256": "72fc8e85f5d28a925e01abb73ce2e2756f1aae4159f06a6b3257a26f45e0a1ab",
+  "recovery_binding": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/RECOVERY_BINDING.json",
+  "recovery_binding_sha256": "25fb31ffa588835a0b8ea9589c54fd30f253c59009c2b5e2af4b96a54a7ac59e",
+  "input_binding": "/tmp/a7_input_binding_2035.json",
+  "input_binding_sha256": "44bc6af5145d17ad82eb825e31798db0a0154aa982fb77337d2df90618030071",
+  "settlement_owner_sha256": "ffa8797e61d3e6d4d6eb6a5fac35178de67058474cf37b282e0bd834706ce33d",
+  "decision_owner_sha256": "d0e9b8dfdea1636f362a8b337032c895d676a945140f5e1049defe2932fe4b89",
+  "correction_owner_sha256": "6c76ecfd72e7ebd33d2cf6396456cf7b3e20f8cacae739fb65be636fdcc848b0",
+  "recovery_owner_sha256": "8fc587ef77d5553ef4895ddb74a060658bd4ea0f86417ff109503fc9678beb90",
+  "harness_owner_sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "preparer_sha256": "aaea873e150fe915ec443c9fd336f4f076091858f977f1fe8ecd742137ce6e3e"
+ },
+ "kind": "PREPARED ONLY. No model call, no signature, no lock, no grading, and NO call authorization.",
+ "model_calls": 0,
+ "launched": false,
+ "checks": [
+  "no durable settlement phase for THIS key has ever recorded a state or finalized, so no completed call can be repeated",
+  "and this phase's own launcher never produced a native state",
+  "the merged DECIDED key is clean and complete",
+  "the settlement population is exactly the decided events this phase's own frozen findings name, in frozen order",
+  "the two carried originals are NOT scheduled and keep their own origin",
+  "the recovered correction is still in the key it derives from",
+  "every frozen finding names an event of this key and that event's own current decision raw",
+  "the existing preparer published the phase with no problems",
+  "the receipt exists BEFORE any call and declares this phase",
+  "the receipt pins the recovery run and its record as history",
+  "every published script IS the canonical renderer's own bytes",
+  "the receipt pins each event's own prompt, reproduced live",
+  "every body carries THIS event's accepted decision as its one prior reply",
+  "every event gets exactly its own frozen findings, none other",
+  "every script declares the same key list, derived from its body",
+  "the decided key this phase starts from is complete and gated by its own owner, over the whole frozen inventory",
+  "the budget describes THIS phase's own derived schedule",
+  "the two live counters agree before this phase",
+  "the existing budget owner reports no problem and the worst case stays under the global ceiling",
+  "every frozen finding is served exactly once, none dropped"
+ ]
+}

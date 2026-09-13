@@ -1,0 +1,302 @@
+```json
+{
+  "source_id": "MCD_2026-02-11T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "system_wide_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 140, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 140, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": 5.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["nearly", "constant currency"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: the target states a full-year whole-company system-wide sales level together with a source-stated constant-currency growth rate, which is a genuine metric statement, so the frozen kind holds."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:usmarket"],
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "comparable_sales_surprise",
+              "driver_state": "beat",
+              "level_low": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 6.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "favorable",
+                "basis": "source_framing",
+                "evidence": "The same sentence attributes the above-expectation comparable-sales figure to positive check and guest count growth, and the surrounding remarks present the quarter's comparable-sales result as strong momentum, so the source itself frames the higher-than-expected value as the good side.",
+                "sentence": "comp sales for the quarter were up 6.8%, which was above our expectations and was driven by positive check and guest count growth."
+              },
+              "slice_parts": ["segment:usmarket"],
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: the target reports a delivered quarterly comparable-sales value and measures it against the company's own expectation, so the frozen kind holds and the row yields the metric home plus its required surprise twin."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_margin",
+              "driver_state": "reported",
+              "level_low": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "operating_margin_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 46.9, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "measurement_raw_spans": ["adjusted"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: the target states a full-year adjusted operating-margin level and explicitly places it against the company's own expectation, so the frozen kind holds and the row yields the metric home plus its surprise twin."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 750, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 750, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "measurement_raw_spans": ["about"],
+              "slice_parts": ["segment:usmarketandinternationaloperatedmarkets"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: the target is a company-stated forward opening count for a named reported segment grouping, a lawful guidance fact, so the frozen kind holds."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "gross_restaurant_openings_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 1000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 1000, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "measurement_raw_spans": ["about"],
+              "slice_parts": ["geography:china"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real_item and settled as a fact: the target is a company-stated forward opening count for China, the same openings driver as row 4 carried on a different slice, so the frozen kind holds."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "MCD_2026-02-11T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "A generic safe-harbour sentence extending the earnings release and 8-K forward-looking-statements disclaimer to the call; it names no driver and states no state, change, surprise, guidance or action, so it fails the fact gate as boilerplate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative_control and settled as a control: the sentence is procedural legal boilerplate about disclaimers and correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison", "portion_versus_whole"],
+      "reference_name": "system-wide sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "\"nearly $140 billion\" is an approximation that can be read either as the point I recorded with \"nearly\" kept in the never-drop measurement sink or as a ceiling at 140, and the rules do not choose between those two encodings."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "expectation_routing"],
+      "reference_name": "comp sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The U.S. label appears four times in the menu across two kinds and two spellings (segment:usmarket, segment:u_s_market, entity_ownership:usmarket, entity_ownership:u_s_market); the call's three-operating-segment framing selects the segment kind, but which of the two segment spellings is the reuse token is not determined."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "above our expectations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "\"our expectations\" is the company's own expectation and no prior public company guide for U.S. quarterly comparable sales appears anywhere in the event, so the own-target mapping to previous_guidance is arguable against a consensus reading."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "expectation_routing"],
+      "reference_name": "total adjusted operating margin",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "\"total\" sits contiguously before \"adjusted\" and could be read as a single measurement span \"total adjusted\" rather than the consolidated-scope word I treated it as, which the empty slice already carries."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "in line with our expectations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "\"in line with\" states the comparison verdict but expresses no favourable or unfavourable direction, so I set has_favorability_wording false while noting the opposite reading of the flag is arguable."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "measurement_wording", "portion_versus_whole"],
+      "reference_name": "about 750 of these in our U.S. and IOM segments",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The single figure covers a combined U.S.-and-IOM grouping, so reusing the one combined menu value rather than splitting it into two slice parts is a choice the evidence does not decisively settle."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "measurement_wording", "portion_versus_whole"],
+      "reference_name": "about 1,000 in China",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "No menu value carries China's exact meaning (only entity_ownership:chinaandhongkong, which is broader), so I coined geography:china on the ladder's own \"in China\" locational example, and the \"gross\" qualifier in the name is inferred from the event's own 2,600-gross breakdown rather than stated in this target."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-028/b1",
+      "agrees": false,
+      "why": "It agrees with me on rows 1, 4, 5 and 6 and on the twin structure of rows 2 and 3, but it puts the 6.8% comparable-sales figure in the change slot although comparable sales is itself the growth metric whose value belongs in the level slots, it maps the company's own \"our expectations\" to consensus where own-expectation phrasing maps to previous_guidance, its surprise twins omit the home-matching value, unit and measurement, and it drops every stated approximation modifier from the measurement sink."
+    },
+    {
+      "lead_id": "sokc-028/b2",
+      "agrees": false,
+      "why": "It agrees with my level-slot and previous_guidance settlement on rows 2 and 3 and with my reading of rows 1, 4 and 6, but it marks \"above our expectations\" as explicit favourability wording and so ships a wordless beat with no polarity proof, it reuses entity_ownership:chinaandhongkong for a China-only opening count whose meaning is narrower than that menu value, it drops the gross qualifier from the openings name, and it drops the stated approximation modifiers from measurement."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Baseline enum for \"above our expectations\" (row 2) and \"in line with our expectations\" (row 3).",
+      "why": "The company's own expectation is the stated operand, but no prior public company guide for U.S. quarterly comparable sales or full-year adjusted operating margin appears anywhere in the event, so the own-expectation mapping to previous_guidance versus a consensus reading cannot be settled from the event alone."
+    },
+    {
+      "what": "Which U.S. menu token to reuse for the row 2 slice.",
+      "why": "The supplied menu carries the same U.S. label four times, across the segment and entity_ownership kinds and in two spellings, so even after the segment kind is selected a single correct reference token is not determinable and the fact identity could fork."
+    },
+    {
+      "what": "Whether approximation words (\"nearly\", \"about\") belong in measurement_raw_spans or in the number shape.",
+      "why": "Rule 8's never-drop sink says any uncaptured number modifier stays in measurement and to keep when unsure, but keeping them mints identity-bearing measurement tokens, while the alternative encoding (\"nearly $140 billion\" as a ceiling) changes the shape instead, and the rules do not choose between the routes."
+    },
+    {
+      "what": "Whether \"total\" in \"total adjusted operating margin\" is a measurement qualifier contiguous with \"adjusted\".",
+      "why": "Rule 8 makes a maximal contiguous qualifier span one token, but \"total\" here plausibly denotes consolidated scope already carried by the empty slice, so keeping or dropping it changes the stored measurement identity."
+    },
+    {
+      "what": "Whether the row 5 openings driver may carry the \"gross\" qualifier.",
+      "why": "The row 5 target says only \"about 1,000 in China\"; \"gross\" comes from the event's adjacent 2,600-gross breakdown, so naming it gross keeps one meaning under one name but relies on evidence outside the target, while omitting it forks the same openings driver into two names."
+    },
+    {
+      "what": "Kind for the China slice in row 5.",
+      "why": "The prose framing \"in China\" reads as geography under the ladder's own example, but this company's menu already carries China under entity_ownership (as \"chinaandhongkong\") and China is a developmental licensed market, so a competing kind for the same population is possible and unknown:china remains defensible."
+    }
+  ]
+}
+```

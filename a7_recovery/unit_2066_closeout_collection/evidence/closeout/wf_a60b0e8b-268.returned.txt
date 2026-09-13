@@ -1,0 +1,147 @@
+```json
+{
+  "source_id": "0000940944-25-000038",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "segment_profit_margin",
+              "driver_state": "increased",
+              "level_low": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 19.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 18.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration",
+              "slice_parts": ["segment:longhornsteakhouse"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed by my own reading: the row states a standing, re-readable segment profit margin level of 19.3 percent set beside its prior-year 18.4 percent, which is a real metric state and not a control."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "restaurant_divestiture",
+              "driver_state": "occurred",
+              "level_low": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 8, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "period_start_date": "2025-07-14",
+              "period_end_date": "2025-07-14",
+              "time_type": "instant",
+              "slice_parts": ["segment:olivegarden", "geography:canada"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: the target names a discrete, counted disposal of eight identified restaurants to a named outside buyer, a real completed action rather than a control."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located sentence is conditional litigation risk-factor wording — litigation 'may adversely affect our business, financial condition and results of operations' — stating no level, direction, size, outlook or completed action; it is exactly the generic risk boilerplate the fact gate drops, so it yields no record."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "The frozen proposed_record_kind negative_control is confirmed: the quote carries only conditional, generic risk language with no driver state, change, surprise, guidance or action, so it correctly yields nothing."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-25-000038",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "debt_to_ebitdar_ratio",
+              "driver_state": "reported",
+              "level_low": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 2.1, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "x",
+              "period_start_date": "2025-05-25",
+              "period_end_date": "2025-05-25",
+              "time_type": "instant",
+              "measurement_raw_spans": ["adjusted"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item is confirmed: a dated leverage level of 2.1 is a standing balance-type value that can be re-read at a later date, so it is a real whole-company metric fact, not a control."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "LongHorn Steakhouse",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Recorded, not resolved: the stated 90 BP movement is fully derivable from the two closed point values so change_value stays null and the points wording survives only in the quote, and the menu offers two same-kind LongHorn values where I reused the one whose label matches the stated part character for character."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "Olive Garden’s eight Canadian restaurants",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Recorded, not resolved: the latest stage of this action is the closing the same event dates to July 14, 2025 rather than the agreement window named inside the quote, and the menu carries no plain Canada geography value (only composite regions), so that part is coined while the Olive Garden part reuses the menu label matching the stated part exactly."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "adjusted debt to EBITDAR ratio",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-009/b1",
+      "agrees": false,
+      "why": "Its lanes, names, states and values coincide with what I settled from the source and its row-3 abstention is right, but it stores the longer '...segment' variants of both brand slice values where the stated labels match the shorter menu values exactly, and it dates row 2 to fourth quarter fiscal 2025 — a window that labels the agreement, not the closing whose stage it records as occurred."
+    },
+    {
+      "lead_id": "sokc-009/b2",
+      "agrees": false,
+      "why": "It reaches the same row-3 abstention and the same lanes, and its 2025-07-14 instant for row 2 coincides with the closing date I settled from the event's own sentence, but it stores 'segment:longhornsteakhousesegment' and 'segment:olivegardensegment' where the stated labels match the shorter menu values exactly, which changes the stored fact identity."
+    }
+  ],
+  "open_issues": []
+}
+```

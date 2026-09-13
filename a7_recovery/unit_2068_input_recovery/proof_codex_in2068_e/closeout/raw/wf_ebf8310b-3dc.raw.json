@@ -1,0 +1,217 @@
+```json
+{
+  "source_id": "0000764478-25-000057",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "asset_impairment",
+              "driver_state": "occurred",
+              "level_low": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "slice_parts": ["unknown:us-gaap:ReportingUnitAxis__bestbuyhealth"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 3,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the line states a discrete $171 million goodwill and intangible asset impairment recognised in the three months ended November 1, 2025, a completed one-off charge, so the proposed kind holds."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:domestic", "product:computingandmobilephones"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 3,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: a stated 7.6% comparable sales growth for a named revenue category is a standing, re-readable level with a stated direction, so the proposed kind holds."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:international", "product:consumerelectronics"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 3,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the stated 3.6% comparable sales growth for the Consumer Electronics category is a real metric level with a stated direction, so the proposed kind holds."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue_mix",
+              "driver_state": "increased",
+              "level_low": {"value": 31.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 31.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 31.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 31.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:domestic", "channel:online"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 3,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue_mix",
+              "driver_state": "increased",
+              "level_low": {"value": 32.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 32.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 31.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 31.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:domestic", "channel:online"],
+              "fiscal_year": 2026,
+              "period_scope": "ytd",
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as real facts: online revenue's share of total segment revenue is a standing ratio stated for two different windows with two different values, each beside its prior-year value, so the proposed kind holds."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located sentence only defines the reporting term \"constant currency\" as results adjusted to exclude foreign currency impacts; it states no driver level, change, surprise, guidance or action, so it fails the Rule 1 gate as a methodology definition."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: the sentence is a definitional methodology statement carrying no driver state, change, guidance, surprise or action, so it correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "Goodwill and intangible asset impairments",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The caption fuses two impairment components into one unallocable $171 million amount that repeats identically in the nine-month column, so I named the combined cause asset_impairment, recorded the single third-quarter charge exactly once, and read the prior-period dash as no stated number rather than a stated zero."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "The 7.6% comparable sales growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The bullet names only the revenue category, so the Domestic part comes from the surrounding Domestic revenue-category table where 7.6% appears (International states 9.2%), and \"domestic\" sits on the menu under a geography kind and under two segment spellings, which I resolved to segment:domestic on the filing's own two-reportable-segments prose."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "The 3.6% comparable sales growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "An identically shaped Consumer Electronics bullet exists in both segment sections, so the International part is fixed only by 3.6% appearing solely in the International table (Domestic states (2.9)%), and \"international\" sits on the menu under both a geography kind and two segment spellings, resolved to segment:international on the filing's reportable-segment prose."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "Online revenue as a % of total segment revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote is four bare percentages whose window and year meanings come from the table header above them, so the first pair is read as the three months ended November 1, 2025 against the prior-year quarter, and \"online\" has no menu counterpart so its channel kind is coined from the filing's website/app/virtual-store selling description."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "Online revenue as a % of total segment revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The second pair is the nine-month window and carries a genuinely different value (32.1% vs the quarter's 31.8%), so it is a distinct fact, and because only its end date is stated I recorded fiscal-year framing plus a year-to-date scope instead of deriving an unstated start date."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-007/b1",
+      "agrees": false,
+      "why": "It reaches the same lane, value and period as I did on rows 1, 2 and 3 and the same abstention on row 5, but it carries no segment part on rows 2, 3 and 4 (leaving the Domestic category fact indistinguishable from the International one), attaches no Best Buy Health population to the impairment the MD&A expressly attributes there, names row 4's driver `revenue` when the quoted figure is a share-of-revenue ratio, and records only one of row 4's two differing windows."
+    },
+    {
+      "lead_id": "sokc-007/b2",
+      "agrees": false,
+      "why": "It matches my rows 2, 3 and 5 readings and my revenue_mix reading on row 4, but it encodes row 1's prior-period dash as a stated zero carrying a prior_year baseline when the source states no number there, keeps a glue word in the row 1 name, omits the Best Buy Health population and the segment slice parts, and records only one of row 4's two differing windows."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "The company menu carries two same-kind tokens with identical meaning for each reportable segment — segment:domestic alongside segment:domesticsegment, and segment:international alongside segment:internationalsegment — and nothing states which is canonical.",
+      "why": "Rule 7's menu ladder and the T1-05 clarification resolve only the case where one label appears under two or more KINDS; a duplicate label under the SAME kind is unaddressed, so code that validates an exact menu pick will accept either token and the two spellings will fork one slice identity no matter which I choose."
+    }
+  ]
+}
+```

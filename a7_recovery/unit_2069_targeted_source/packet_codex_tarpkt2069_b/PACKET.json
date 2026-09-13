@@ -1,0 +1,90 @@
+{
+ "kind": "verified no-call preparation; source truth still unapproved",
+ "events": [
+  {
+   "source_id": "0000027904-26-000013",
+   "prompt_sha256": "1108166f6fa8914f0a08657811be67848d5f0e0efd3dc71ccebc635a424ff501",
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6/scripts/0000027904-26-000013.attempt1.js",
+   "script_sha256": "2d30b8173c4218791582ed493217cdc2eb5b56ba06a537d5e9050557961da333",
+   "script_bytes": 293170
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "prompt_sha256": "31f6a77544740dcc0dbb6c233b7dc8e08755d8563ab56ae1da0cf7f82a996c56",
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6/scripts/0000092380-26-000044.attempt1.js",
+   "script_sha256": "4a2d9a962de1217d46c718baf00535e0ed5078b09152e26b93762d2425e3f72d",
+   "script_bytes": 157479
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "prompt_sha256": "c9aa5c23498449e8f035fe2cf6c6c3eb78f2864212bbdf1b60f4670a38af4463",
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6/scripts/0000764478-25-000057.attempt1.js",
+   "script_sha256": "04720416860bbe90286772c400e25cb50f2f062c9c6936332311d81aee964b43",
+   "script_bytes": 143680
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "prompt_sha256": "5ef908d928d740159200081be8f240a70203a8df7e62901a54c479a1637a815b",
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6/scripts/0001041061-25-000109.attempt1.js",
+   "script_sha256": "2687b5d46e17c353af56b861d7c65ae7479ba54f1d3fae5f4776c1c90639c760",
+   "script_bytes": 151890
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "prompt_sha256": "be0d9d3929c978ef0f860ee9dd071fac0d8d9a5d679aa7fb242cf367fc5a208d",
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6/scripts/0001104659-25-118458.attempt1.js",
+   "script_sha256": "bc7b8fcb8eed66f85e4828287b2d607ab7e24379641694d5e4b3851618bb110f",
+   "script_bytes": 140596
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "prompt_sha256": "8420eaa0f293a55a3d60d54a6a72e1b79e1ad798d5671ba3a0c4e53dfbfa1c86",
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "script_sha256": "b32911bc89d6f71aa17d6c29ec12a904ccc6a0f49dd21accfea006024acf156a",
+   "script_bytes": 162679
+  }
+ ],
+ "findings_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/SOURCE_FINDINGS_2069.json",
+ "findings_sha256": "9ad53d02e217f461e5cc31e3c26e3dae1031746ff147d9a6c3b55528653148db",
+ "phase_input_binding": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/proof_codex_in2068_e/phase_binding.json",
+ "receipt_sha256": "5226a28f62cd89f4696160dae490f58ad4874e53f9e64fd945c937fe88299bbe",
+ "transport": {
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+ },
+ "budget": {
+  "before": 657,
+  "planned_corrections": 6,
+  "planned_signer": 1,
+  "planned_total": 7,
+  "after_planned": 664,
+  "max_attempts_per_call": 2,
+  "worst_case_total": 14,
+  "worst_case_after": 671,
+  "phase_ceiling": 671,
+  "global_ceiling": 6000
+ },
+ "checks": [
+  "the existing v6 owner selects exactly the six reviewed sources",
+  "pre-call ledger remains657 and no new call is inferred",
+  "existing preparer freezes six requests before any launch",
+  "all six exact source/raw/row findings reach the real body and script",
+  "the real receipt is still uncalled and unfinalized",
+  "all31 earlier phase scripts and the real receipt remain unchanged",
+  "wrong finding identity refuses: raw_sha256",
+  "wrong finding identity refuses: source_id",
+  "wrong finding identity refuses: row",
+  "a changed population order refuses at the existing owner"
+ ],
+ "model_calls": 0
+}

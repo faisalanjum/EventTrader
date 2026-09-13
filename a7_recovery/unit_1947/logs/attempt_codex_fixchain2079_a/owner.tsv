@@ -1,0 +1,7 @@
+attempt	codex_fixchain2079_a
+payload	../../unit_2076_latest_source_decisions/fixture_third_2078.py
+map	../unit_2076_latest_source_decisions/map_fix_2076.tsv
+wrapper_pid	3405223
+payload_pid	3405227
+started_utc	2026-09-12T23:47:43Z
+state	finished exit 0

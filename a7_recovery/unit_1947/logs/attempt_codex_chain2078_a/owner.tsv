@@ -1,0 +1,7 @@
+attempt	codex_chain2078_a
+payload	../../unit_2020_codex_check/check_saved_chain_2078.py
+map	../unit_2072_two_event_closeout/map_succ_2072b.tsv
+wrapper_pid	3373160
+payload_pid	3373164
+started_utc	2026-09-12T23:26:39Z
+state	finished exit 0

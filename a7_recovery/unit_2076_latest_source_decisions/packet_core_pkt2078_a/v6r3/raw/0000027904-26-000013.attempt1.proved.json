@@ -1,0 +1,279 @@
+```json
+{
+  "source_id": "0000027904-26-000013",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "operating_income",
+              "driver_state": "decreased",
+              "level_low": {"value": 5.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_high": {"value": 5.8, "scale_multiplier": 1000000000, "unit_scale_evidence": "billion"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "change_value": {"value": -212, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["adjusted (a non-GAAP financial measure)"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the quote states an adjusted full-year operating income level of $5.8 billion together with a source-stated $212 million decrease versus 2024, a genuine metric level with a stated direction."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "debt_extinguishment",
+              "driver_state": "increased",
+              "level_low": {"value": -26, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": -26, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": -39, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the located line gives the 2025 loss on extinguishment of debt in accounting parentheses beside its 2024 value, a signed level with a source-stated prior-year comparison."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "cost_per_available_seat_mile",
+              "driver_state": "increased",
+              "level_low": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Non-fuel", "a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "cost_per_available_seat_mile_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 2.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "measurement_raw_spans": ["Non-fuel", "a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items"],
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the named target is the comparison of the delivered 2025 non-fuel unit-cost growth against the company's own long-term growth target, which lawfully yields a surprise plus its value-matched growth-basis metric home, so the contextual 13.86-cent figure is not a second required fact and nothing is left unsettled."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "effective_tax_rate_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 23, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 25, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["Excluding the mark-to-market results"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the company projects its own forward annual effective tax rate range for the stated 2026 target period, with no movement wording, so the guidance state stays unknown."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "equity_stake",
+              "driver_state": "reported",
+              "level_low": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 19, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["entity_ownership:grupoaeromexico"],
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: a stated approximately 19% ownership level in a named owned entity is a standing, re-readable condition rather than a bare mention."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "aircraft_purchase_option",
+              "driver_state": "announced",
+              "level_high": {"value": 30, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "ceiling",
+              "level_unit": "count",
+              "measurement_raw_spans": ["additional"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a real fact: the located text states a discrete agreed purchase option with a stated ceiling of 30 aircraft, a lawful periodless action_event."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000027904-26-000013",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic risk boilerplate: a hypothetical crash that 'could expose us to significant liability' states no driver state, change, guidance, surprise or discrete action, and flags no specific current source-flagged adverse threat, so the gate yields no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as negative_control and confirmed as a control: the sentence is conditional accident-liability boilerplate and correctly yields no fact under the gate."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "operating income, adjusted",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The level is stated rounded in billions while the change is stated in millions, so the two numeric objects carry different scale markers under one shared m_usd unit."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "Loss on extinguishment of debt",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The line is labelled a loss and shown in accounting parentheses, so both values are signed negative and the move from -39 to -26 reads as 'increased', while the co-stated favorable 13 is derivable from the two closed points and therefore stays out of change_value."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison", "expectation_routing"],
+      "reference_name": "Non-fuel unit costs",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The quantity the source sets against the company's own long-term target is the 2.4% growth, so the growth carries this home's level slots on a percent_yoy basis and the contextual 13.86-cent figure is not emitted as a second fact restating the same cause."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "sequential_comparison", "expectation_routing", "favourable_unfavourable_direction"],
+      "reference_name": "in line with our long-term target of low-single digit growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "'In line with' states position rather than favorable/unfavorable polarity, so favorability wording is recorded as absent, and the company's own target ('low-single digit') is a vague quantity, so the expectation carries no comparison numbers."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "annual effective tax rate",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Excluding the mark-to-market results' could be read as a condition clause, but it qualifies the measurement basis rather than gating the outlook, so it stays in measurement and conditions is null."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "measurement_wording"],
+      "reference_name": "equity stake in Grupo Aeroméxico",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Grupo Aeroméxico appears in the menu both as an entity_ownership value and as an unknown counterparty-axis value, and the quote's own 'we currently own ... equity stake' framing selects the stake-it-owns kind, while 'currently' states no date so every period field stays null on an instant meaning."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "option to purchase up to an additional 30 of the same aircraft",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "An unexercised option could be argued to be a standing re-readable count, but the located text states a discrete agreed contract term with no window, so it is an announced action_event carrying no period."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-002/b1",
+      "agrees": false,
+      "why": "It matches my lane and broad encoding on rows 1, 2, 4, 6 and 7, but on row 3 it stores the 2.4% actual growth in the surprise's change_value (a slot reserved for a source-stated non-derivable delta) and pairs that surprise with a cents-level home it cannot match on normalized value and unit, and it reports explicit favorability wording for the neutral phrase 'in line with'; it also asserts fiscal_year 2025 on row 5 where the quote says only 'currently', and leaves unit_scale_evidence null on the row-4 and row-5 percentages even though '%' sits inside those quotes."
+    },
+    {
+      "lead_id": "sokc-002/b2",
+      "agrees": false,
+      "why": "It repeats the same row-3 misuse of the surprise change_value, the same value/unit-unmatched surprise-home pair and the same favorability claim; it names the row-5 driver 'equity_ownership_percentage', which carries a unit word the naming rules keep out of a name; and it trims the row-1 measurement span to 'adjusted' alone, dropping the contiguous non-GAAP qualifier — although its periodless row-5 period reading and its row-2, row-4 and row-6 encodings match what the source supports."
+    }
+  ],
+  "open_issues": []
+}
+```

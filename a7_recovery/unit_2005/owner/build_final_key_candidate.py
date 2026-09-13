@@ -20,6 +20,7 @@ X = S + "/bench_1306/.claude/plans/Drivers/experiments"; H = X + "/harness_g1v3"
 sys.path.insert(0, H); sys.path.insert(0, "/home/faisal/EventMarketDB")
 import a6_launch_freeze as A6, build_kfields_final as F, build_kfields_final_targeted as FT, build_kfields_key as K
 import build_inventory_review as BIR, raw_transport as RT
+from a4_call_accounting import finalized_scheduled as _finalized_scheduled
 RUNS = ("/tmp/a4_final_targeted_corr_run_1504", "/tmp/a4_final_targeted_corr2_run_1506", "/tmp/a4_final_targeted_corr3_run_1509")
 DEFAULT_OUT = S + "/lock/final_key_candidate_1511"
 SCHEMA = "a4-final-key-candidate/1511"
@@ -32,9 +33,50 @@ ORDINARY = os.environ.get("A7_ORDINARY_BOUND")
 
 def _ordinary_bound():
     d = json.load(io.open(ORDINARY, encoding="utf-8"))
+    # `corrections` is carried when the run serves one: dropping it would let
+    # a bound correction phase reach signing_gate as the UNCORRECTED key
+    # (Codex SEQ 2023 defect 2). None stays None, so the ordinary run is
+    # byte-identical.
+    # `decision` is carried for the same reason `corrections` is: dropping it
+    # would materialize the CORRECTED key here while the signed candidate was
+    # built over the DECIDED one (Codex SEQ 2039 item 3). Absent stays None,
+    # so an undecided run is byte-identical.
+    # `decision_correction` is carried for the same reason, one phase later:
+    # dropping it would materialize the DECIDED key here while the signed
+    # candidate was built over the SETTLED one (Codex SEQ 2060 item 2).
+    # Absent stays None, so an unsettled run is byte-identical.
+    # `decision_correction_v5` is carried for the same reason, one phase later
+    # again: dropping it would materialize the SETTLED key here while the
+    # signed candidate was built over the CLOSED one (Codex SEQ 2064 item 4).
+    # Absent stays None, so an unclosed run is byte-identical.
+    # `decision_correction_v6` is carried for the same reason, one phase later
+    # again: dropping it would materialize the CLOSED key here while the
+    # signed candidate was built over the V6-CORRECTED one (Codex SEQ 2069).
+    # Absent stays None, so a run with no v6 correction is byte-identical.
     return F.Bound(package=d["package"], evidence=d["evidence"],
                    hr=d["hr"], fix=None, events=d["events"],
+                   corrections=d.get("corrections"),
+                   decision=d.get("decision"),
+                   decision_correction=d.get("decision_correction"),
+                   decision_correction_v5=d.get("decision_correction_v5"),
+                   decision_correction_v6=d.get("decision_correction_v6"),
                    hr_package=d.get("hr_package"))
+
+
+def signer_ledger_before(b):
+    """THE authoritative count of every completed call before the signer.
+
+    F's chain ends at `v6_ledger_before`, which counts THROUGH v5 - events,
+    corrections, decision, settlement and closeout, each with its finalized
+    retry, and the recovery attempt through F's own module name - but NOT a
+    completed v6 run. F is the immutable legacy owner, so the final link is
+    added here and in no second place (Codex SEQ 2069). With no v6 run bound
+    this returns F's own number unchanged, so every earlier key's budget is
+    byte-identical.
+    """
+    return F.v6_ledger_before(b) + (
+        _finalized_scheduled(b.decision_correction_v6)
+        if b.decision_correction_v6 else 0)
 sha = lambda t: hashlib.sha256(t.encode("utf-8") if isinstance(t, str) else t).hexdigest()
 shaf = lambda p: sha(io.open(p, "rb").read())
 def dumps(doc): return json.dumps(doc, indent=1, ensure_ascii=False)     # STRICT: a stray Decimal raises; no encoder, no preview
@@ -215,7 +257,30 @@ def build(out_dir=DEFAULT_OUT):
     for name, text in (("key_identity.json", key_text), ("sidecar.json", side_text), ("provenance.json", prov_text), ("validator_receipt.json", val_text)):
         RT.write_new(os.path.join(out_dir, name), text)
     # the signer packet through the ONE signer owner, frozen, unrun
-    ledger = (F.ledger_before_next_call(b) if ORDINARY
+    # decision_ledger_before is the EXISTING owner that includes completed
+    # correction attempts; ledger_before_next_call omits them and would
+    # undercount a corrected key (Codex SEQ 2023 defect 3). On an uncorrected
+    # run the two owners return the same number.
+    # v4_ledger_before is the EXISTING owner that also counts the decision run
+    # and its retry child; decision_ledger_before reads only events and
+    # corrections and would undercount a decided key (Codex SEQ 2039 item 4b).
+    # With no decision run bound the two owners return the same number.
+    # v5_ledger_before is the EXISTING owner that also counts the settlement
+    # run and its retry child; v4_ledger_before stops at the decision and
+    # would undercount a settled key (Codex SEQ 2060 item 2). Its historical
+    # name is not its scope. With no settlement bound the two owners return
+    # the same number, so an unsettled run's budget is byte-identical, and it
+    # reaches v4_ledger_before through F's own module name, so a recovery
+    # scope that wraps that name is still counted exactly once.
+    # v6_ledger_before is the EXISTING owner that also counts the closeout
+    # run and its retry child; v5_ledger_before stops at the settlement and
+    # would undercount a closed key (Codex SEQ 2064 item 4). Its historical
+    # name is not its scope. With no closeout bound the two owners return the
+    # same number, so a settled run's budget is byte-identical.
+    # signer_ledger_before is the ONE owner of the final total: F's chain
+    # stops at v6_ledger_before, which omits a completed v6 run, and F may not
+    # be edited (Codex SEQ 2069). With no v6 bound the two agree exactly.
+    ledger = (signer_ledger_before(b) if ORDINARY
               else A6.ledger()[0])
     block = collections.OrderedDict([("candidate", collections.OrderedDict([("key_identity_sha256", sha(key_text)), ("sidecar_sha256", sha(side_text)), ("provenance_sha256", sha(prov_text)), ("validator_receipt_sha256", sha(val_text))])),
                                      ("full_counts", fc), ("counts", counts), ("bindings", collections.OrderedDict((d, v["sha256"]) for d, v in bindings.items())),

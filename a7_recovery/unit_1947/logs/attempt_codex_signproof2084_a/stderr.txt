@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/prove_real_signer_2084.py", line 31, in <module>
+    assert not problems, problems
+           ^^^^^^^^^^^^
+AssertionError: ["scriptPath '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/signer_2083/final_sign.attempt1.js' is not readable", "the returned model is 'opus', not 'sonnet'", "agent aded04e635e6e4aed answered with model 'claude-opus-5', not 'claude-sonnet-5'", "agent aded04e635e6e4aed answered with model 'claude-opus-5', not 'claude-sonnet-5'"]

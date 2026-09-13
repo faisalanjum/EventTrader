@@ -1,0 +1,7 @@
+attempt	codex_cons2080_a
+payload	../../unit_2020_codex_check/consumer_chain_2078.py
+map	../unit_2020_codex_check/map_chain_consumer_2079.tsv
+wrapper_pid	3426918
+payload_pid	3426922
+started_utc	2026-09-13T00:04:03Z
+state	finished exit 0

@@ -1,0 +1,368 @@
+```json
+{
+  "source_id": "0000092380-26-000044",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 0.45, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a fact: the row states a delivered per-share result explicitly positioned against the company's own prior guide, so it yields the metric home plus its required surprise twin."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "gallon",
+            "item": {
+              "driver_name": "fuel_cost_per_gallon",
+              "driver_state": "reported",
+              "level_low": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "per_x": "gallon",
+            "item": {
+              "driver_name": "fuel_cost_per_gallon_surprise",
+              "driver_state": "missed",
+              "level_low": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.73, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 2.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 2.40, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "unfavorable",
+                "basis": "source_framing",
+                "evidence": "The company's own sentence continues that the overrun versus its prior guide increased fuel expense by $164 million and was a headwind to EPS, so landing above the guided price is the unfavorable side.",
+                "sentence": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40, which increased fuel expense by $164 million and represented an approximate $0.22 headwind to EPS"
+              },
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a fact: a delivered per-gallon fuel price is stated against the company's own prior guide, producing the metric home and its surprise twin."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 44, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 44, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": 41, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["product:cargoandfreight"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a fact: the freight revenue line carries a current-quarter value beside its prior-year value, a real metric change measured on a product slice."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "starlink_wifi",
+              "driver_state": "announced"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a fact: the target meaning is a discrete company-announced fleet deployment of an external provider's Wi-Fi service, which settles on the action lane with its schedule and count detail left in the quote."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "operating_expense_per_available_seat_mile",
+              "driver_state": "increased",
+              "change_value": {"value": 2.3, "scale_multiplier": 1, "unit_scale_evidence": "percent"},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["CASM-X"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "per_x": "available_seat_mile",
+            "item": {
+              "driver_name": "operating_expense_per_available_seat_mile_surprise",
+              "driver_state": "beat",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": false,
+              "polarity_proof": {
+                "polarity": "favorable",
+                "basis": "source_framing",
+                "evidence": "The release presents this same 2.3% unit-cost increase as evidence of strong cost discipline, so coming in under the guided level is the favorable side.",
+                "sentence": "Strong cost discipline continued in the quarter, with operating expenses increasing 4.0% and unit costs (CASM-X1) increasing 2.3% on capacity growth of 1.5%, all year-over-year"
+              },
+              "measurement_raw_spans": ["CASM-X"],
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a fact: a delivered unit-cost growth rate is stated against the company's own prior guide, producing the metric home and its numberless surprise twin."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located text is one entry in the cautionary forward-looking-statements factor list, naming fuel price changes, volatility and availability only as things that could affect the Company's business plans and results; it states no driver state, change, guide, surprise or action, so it is generic risk boilerplate and the gate returns no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as negative_control and confirmed as one: the located text is generic fuel risk-factor boilerplate and correctly yields no fact."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "0000092380-26-000044",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_income",
+              "driver_state": "increased",
+              "level_low": {"value": 227, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 227, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -149, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": -149, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as real_item and settled as a fact: the bottom-line result is stated for the quarter beside its parenthesised prior-year loss, a real signed metric change."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "expectation_routing"],
+      "reference_name": "$0.45 EPS",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The quote says plain EPS while the company's guide elsewhere in this release is on adjusted EPS, so whether a measurement qualifier belongs on this home cannot be settled from the located text and none was stored."
+    },
+    {
+      "row_index": 1,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction", "expectation_routing"],
+      "reference_name": "in line with guidance",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "\"In line with guidance\" states the comparison verdict but names no favorable or unfavorable direction, so has_favorability_wording=true is a judgment that a source-stated verdict counts as favorability wording."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "expectation_routing"],
+      "reference_name": "fuel costs were $2.73 per gallon",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 1,
+      "hard_classes": ["point_range_floor_ceiling", "favourable_unfavourable_direction", "expectation_routing", "measurement_wording"],
+      "reference_name": "above prior guidance of approximately $2.40",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The hedge \"approximately\" qualifies only the expectation operand, so storing it in measurement on the surprise alone would break the required home/surprise measurement match and storing it on both would falsely mark the exact $2.73 actual approximate; it was left in the quote and recorded as an open issue."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "Freight",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Reusing the menu value product:cargoandfreight for the bare income-statement label \"Freight\" is a same-meaning judgment the quote never states."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": [],
+      "reference_name": "planned deployment of Starlink ultra‑fast Wi‑Fi across the fleet",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The same sentence also carries a forward fleet target (at least 300 aircraft by year-end 2026) that would read as guidance, but no rule requires a sibling here, so the row was settled on its announced-action meaning alone."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording", "expectation_routing"],
+      "reference_name": "CASM-X increased 2.3 percent year-over-year",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "Spelling the per-ASM acronym out in the name leaves the \"-X\" exclusions with no home but the measurement slot, so the verbatim span CASM-X was kept there to avoid dropping them."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 1,
+      "hard_classes": ["sequential_comparison", "measurement_wording", "favourable_unfavourable_direction", "expectation_routing"],
+      "reference_name": "below prior guidance",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The guided level is never stated numerically and the quote states a change rather than a level, so the surprise carries no numeric slots at all — putting the 2.3 in its level slots would restate the actual as if it were the compared operand, which the source does not state."
+    },
+    {
+      "row_index": 7,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "NET INCOME (LOSS)",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-006/b1",
+      "agrees": false,
+      "why": "It matches my settlement on rows 3, 6 and 7 and on the twin structure for rows 1, 2 and 5, but it leaves the per-ASM acronym unexpanded as casm_x and drops the \"-X\" exclusion qualifier entirely, and it rests both wordless polarity calls on metric_meaning where fuel and unit costs need source_framing and the release in fact supplies it."
+    },
+    {
+      "lead_id": "sokc-006/b2",
+      "agrees": false,
+      "why": "It agrees on rows 3, 6 and 7 and on the row 1 and row 2 twins, but it stores a forward 300-aircraft count as a level on an action fact for row 4, names row 5 casm_x while putting the actual growth rate into the surprise's change_value (the beat-size slot) and then settling that surprise as unknown despite the stated below-guidance direction, and attaches \"approximately\" as a measurement span to the row 2 surprise only, breaking the home/surprise measurement match."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 2: the hedge \"approximately\" on the $2.40 guide is stored in measurement on neither sibling.",
+      "why": "It qualifies only the expectation operand; attaching it to the surprise alone breaks the required home/surprise measurement match, and attaching it to both would falsely mark the exact $2.73 actual as approximate, so no source-faithful measurement encoding exists and the qualifier survives only in the quote."
+    },
+    {
+      "what": "Row 5: where the \"-X\" exclusions of CASM-X belong once the per-X acronym must be spelled out in the name.",
+      "why": "The only verbatim span inside the located quote carrying those exclusions is the acronym itself, so keeping them losslessly means storing \"CASM-X\" as a measurement token against a name that already spells the measure out."
+    },
+    {
+      "what": "Rows 2 and 5: both polarity proofs draw their sentence from event text beyond the located fragment.",
+      "why": "\"Above\" and \"below\" are position words carrying no favorability, so the favorable/unfavorable reading rests on the release's own headwind and cost-discipline framing elsewhere in the same document; a strictly quote-bounded reading would send both states to unknown."
+    },
+    {
+      "what": "Row 4: the forward target of at least 300 Starlink-equipped aircraft by year-end 2026 is recorded nowhere.",
+      "why": "A row may yield more than one fact only where a sibling or basis split is required, so a genuine forward company target sits unencoded inside an action fact's quote."
+    },
+    {
+      "what": "Row 1: whether \"in line with guidance\" counts as favorability wording.",
+      "why": "The required boolean has no neutral value, yet the phrase states a position outcome without naming a favorable or unfavorable direction, so the stored answer is a judgment either way."
+    },
+    {
+      "what": "Row 3: reuse of the menu value product:cargoandfreight for the income-statement line labelled \"Freight\".",
+      "why": "The quote never links the label to that menu member, so the reuse is a same-meaning judgment; if it is wrong the correct outcome is a newly coined product slice, never a fold."
+    }
+  ]
+}
+```

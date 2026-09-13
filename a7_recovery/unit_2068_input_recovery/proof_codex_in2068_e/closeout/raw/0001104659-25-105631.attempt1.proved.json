@@ -1,0 +1,175 @@
+```json
+{
+  "source_id": "0001104659-25-105631",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 83.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 83.5, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 71.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_high": {"value": 71.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "time_type": "duration",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2025,
+              "slice_parts": ["segment:northitalia"]
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the quote gives a dated sales level for the company's own North Italia brand beside the year-ago level, a genuine metric change, so proposal and outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "debt_extinguishment",
+              "driver_state": "occurred",
+              "level_low": {"value": -15.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -15.9, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "time_type": "duration",
+              "fiscal_quarter": 1,
+              "fiscal_year": 2025
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: an early extinguishment of debt recorded in a named quarter is a completed discrete transaction carrying a stated one-off amount, so proposal and outcome agree."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "company_operated_restaurant_count",
+              "driver_state": "reported",
+              "level_low": {"value": 366, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 366, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the owned-and-operated restaurant base is a standing level re-readable at a later event rather than a bare mention, so proposal and outcome agree."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located sentence only points the reader to risk-factor descriptions held in the Annual Report and an earlier Form 10-Q; it asserts no state, change, surprise, guidance or action of any driver, so under the gate it is a bare cross-reference and yields no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: the incorporation-by-reference to risk factors disclosed elsewhere correctly yields no fact, so proposal and outcome agree."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-25-105631",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "credit_agreement",
+              "driver_state": "occurred",
+              "time_type": "instant",
+              "period_start_date": "2022-10-06",
+              "period_end_date": "2022-10-06"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: entering a loan agreement on a stated date that amends and restates the prior credit agreement in its entirety is a completed discrete transaction, and the quoted gate carries no recency or must-be-a-change test that would drop it, so proposal and outcome agree."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "North Italia sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated 16.1% movement is fully derivable from the two closed point values, so I stored no change_value and let the prior-year comparison carry the movement, and I judged North Italia to be the company's own measured part (a menu slice) rather than part of the driver name."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["losses_and_sign", "point_range_floor_ceiling"],
+      "reference_name": "loss on early debt extinguishment",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether an extinguishment loss sits in the action lane as a one-off charge or as a standing income-statement metric is genuinely arguable; the quote frames one completed repurchase-driven charge, so I took the action lane and applied the signed-loss axis to the amount the quote itself calls a loss."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "portion_versus_whole", "slices_and_unknown_axes"],
+      "reference_name": "366 restaurants",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote dates the count only with the word currently, so I left every period field null rather than importing the filing date, and I judged the United States and Canada to describe the whole owned-and-operated population (international locations being licensed and excluded) rather than a narrower geography slice, keeping the population qualifier in the name."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": [],
+      "reference_name": "Fourth Amended and Restated Loan Agreement",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "I settled that the corrections_and_amendments class covers amended FILINGS becoming new facts at their public time and stored-record collapse, not one business contract superseding another, so no quoted tag reaches this fact and the list is empty by decision rather than by doubt."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-017/b1",
+      "agrees": false,
+      "why": "It reaches the same settlement I did on rows 1, 2 and 4, but on row 3 it drops the owned-and-operated population qualifier the quote's own and operate states and pins the count to an exact 2025-11-03 instant the quote never states, and on row 5 it names the Revolver Facility while the located claim is about the loan agreement that amends and restates the prior credit agreement."
+    },
+    {
+      "lead_id": "sokc-017/b2",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 4 and the row-5 name, but it stores the extinguishment amount as positive against the quote's own loss noun and the signed-loss axis, and it pins the row-3 count to fiscal Q3 2025 although the quote says only currently."
+    }
+  ],
+  "open_issues": []
+}
+```

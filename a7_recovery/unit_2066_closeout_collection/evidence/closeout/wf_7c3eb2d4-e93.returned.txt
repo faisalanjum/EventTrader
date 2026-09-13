@@ -1,0 +1,246 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 28.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 28.55, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["diluted"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item matches my final_outcome fact, because the CFO states the company's own closed forward per-share earnings range for fiscal 2026, which is company-confirmed guidance rather than a control."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sga_expense",
+              "driver_state": "increased",
+              "change_value": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["Excluding the impact of incentive compensation and SpaceNK", "about"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item matches my final_outcome fact, because an ex-items spending growth rate for the quarter is a re-readable expense metric with a stated upward direction, not boilerplate."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "loyalty_program_active_members",
+              "driver_state": "increased",
+              "level_low": {"value": 46.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 46.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "change_value": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item matches my final_outcome fact, because a stated record membership level together with its stated growth rate is a standing countable metric of the company's own member base."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 80, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count",
+              "slice_parts": ["unknown:us-gaap:BusinessAcquisitionAxis__spacenk"],
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item matches my final_outcome fact, because the acquired retailer's footprint is a specific re-readable count level, recorded as an open floor since the source says 'more than 80'."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "'beat and raised' plus 'exceeded on all metrics' names no driver, no value, no comparison operand and no period, so it is an ungrounded expectation claim with no identifiable home fact and cannot be lawfully resolved into any record."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "The frozen proposed_record_kind lawful_abstention_control holds as my final_outcome control, because the sentence sounds substantive but is an ungrounded surprise with no identifiable metric, so the single abstention is the only lawful reply."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "unknown",
+              "measurement_raw_spans": ["about"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "net_sales_surprise",
+              "driver_state": "beat",
+              "change_value": {"value": 85, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "measurement_raw_spans": ["about"],
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item matches my final_outcome fact, and the twin rule makes it two records because a delivered sales actual measured against the company's own prior guide writes the surprise plus its numberless sales home sibling from the same located sentence."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard safe-harbor legal language about not revising forward-looking statements; it states nothing about any driver's state, change, surprise, guidance or action, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "The frozen proposed_record_kind negative_control holds as my final_outcome control, because the sentence is generic disclaimer boilerplate carrying no driver fact in any lane."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "corrections_and_amendments"],
+      "reference_name": "diluted EPS",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source states no raise/lower/reaffirm/withdraw wording for this guide, so under the served guidance-movement paragraph a bare number set stores 'unknown' and the read layer derives 'introduced', and the co-stated 9.4%-11.4% growth is derivable from the guided closed range so no change number is stored."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "reference_name": "SG&A growth for the quarter",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The exclusion clause is read as a measurement qualifier rather than a slice because it removes items from the measure instead of naming a business population, and the approximation word 'about' is kept in measurement under the never-drop sink."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "portion_versus_whole", "slices_and_unknown_axes"],
+      "reference_name": "active members",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether 'loyalty program' is a customer-population slice or part of the driver itself is not decided by the source's own framing, so the explicit unclear-role tie-break keeps it in the name with the 'active' population qualifier rather than forging a guessed slice kind."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "stores in the UK and Ireland",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The acquired-entity part reuses the menu's Space NK token exactly rather than coining a kind, no geography part is attached because 'the UK and Ireland' is the entire already-bounded footprint of that entity rather than a narrower part of it and two separate tokens would read as an intersection, and no period field is set because the event states no window for this count."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing", "measurement_wording"],
+      "reference_name": "sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The located sentence supplies no actual sales level, so the required home sibling is written numberless with state 'unknown' and carries the same 'about' measurement span so the twins match, without borrowing the unlocated quarterly sales figure."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "sales above the high end of our guidance by about 85 million",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The $85 million delta is stated against a guidance high end whose value the event never gives, so it is non-derivable with a determinable positive sign and is stored, and explicit 'over delivered' wording supplies the favorability so no polarity proof is needed."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-029/b1",
+      "agrees": false,
+      "why": "It lands on the same substance for rows 1, 2, 5 and 7, but on row 4 it coins an off-menu 'entity_ownership:spacenk' part although the menu already carries a same-meaning Space NK token and it pins that count to fiscal 2025 although the event states no window for it, on rows 2 and 3 it leaves the '%' marker uncited although '%' sits inside those quotes, it drops the 'about' number modifier on rows 2 and 6, and on row 6 it writes the surprise with no home sibling in the event."
+    },
+    {
+      "lead_id": "sokc-029/b2",
+      "agrees": false,
+      "why": "It lands on the same substance for rows 2 (apart from the uncited '%' and the dropped 'about'), 5, 7 and on reusing the menu Space NK token, but it records row 1 as 'introduced' where the source states no movement, attaches a guessed 'customer:loyalty_program' slice on row 3, adds separate UK and Ireland geography parts plus an invented fiscal-2025 period to the single combined 80-store count on row 4, and writes the row-6 surprise with no home sibling."
+    }
+  ],
+  "open_issues": []
+}
+```

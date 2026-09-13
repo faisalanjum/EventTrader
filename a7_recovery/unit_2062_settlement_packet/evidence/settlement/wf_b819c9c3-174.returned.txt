@@ -1,0 +1,220 @@
+```json
+{
+  "source_id": "0000940944-26-000009",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "discontinued_operations_net_earnings",
+              "driver_state": "decreased",
+              "level_low": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": -3.8, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": -0.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["net of tax"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it settles as one: the located line states an after-tax discontinued-operations result of (3.8) for the current three months beside the prior-year (0.3), a signed, re-readable metric with a source-stated temporal baseline."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "per_x": "share",
+            "item": {
+              "driver_name": "continuing_operations_earnings_per_share",
+              "driver_state": "decreased",
+              "level_low": {"value": 2.68, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 2.68, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_low": {"value": 2.74, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_high": {"value": 2.74, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["Diluted"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it settles as one: the located line states diluted per-share earnings from continuing operations of $2.68 against a stated prior-year $2.74, a real per-share metric with a prior-year baseline."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales",
+              "driver_state": "increased",
+              "level_low": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_high": {"value": 402.0, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_low": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_high": {"value": 385.3, "scale_multiplier": 1000000, "unit_scale_evidence": "in millions"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:finediningsegment"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it settles as one: the located sales-by-segment line states Fine Dining sales of $402.0 million beside the prior-year $385.3 million, a real metric carried on one of the company's own reportable segment parts."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "restaurant_count",
+              "driver_state": "reported",
+              "level_low": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 87, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["channel:franchisedunits", "geography:united states"],
+              "period_end_date": "2026-02-22",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Proposed as a real item and it settles as one: the located sentence states a standing, re-readable level of 87 franchised restaurants inside the company's United States base, a bare-value count metric at a moment."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The target is one bullet in the forward-looking-statements risk list naming categories of possible future harm (climate change, adverse weather conditions, natural disasters) with no stated level, direction, size, period, or specific current source-flagged threat to this company, so it is generic risk boilerplate and fails the fact gate."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Proposed as a negative control and it behaves as one: the bullet is generic risk boilerplate and correctly yields no fact."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "0000940944-26-000009",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The target claim states only that prior-year figures were recast after the company redefined how segment profit is computed; that is a measurement/presentation basis statement about an accounting construct, carrying no driver level, direction, outlook, expectation comparison, or business outcome, and the real metrics it affects (segment profit margin, pre-opening costs) are stated on their own lines elsewhere, so this row yields no lawful fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "exclusion",
+      "record_kind_note": "Proposed as a real item but it carries none, and I say so plainly: a reporting-basis recast is an accounting/presentation construct rather than a driver, and naming it would coin exactly the filing-taxonomy driver the naming rules forbid."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording", "portion_versus_whole"],
+      "reference_name": "Losses from discontinued operations, net of tax",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The parenthesised figures are read as signed negative earnings rather than positive loss magnitudes, so a widening loss settles as 'decreased', and the stated percent change is 'NM' so no change number exists."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording", "portion_versus_whole"],
+      "reference_name": "Earnings from continuing operations",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated (2.2)% follows arithmetically from the two closed point values so change_value stays null, and the three-month fiscal period comes from the surrounding table framing rather than from words inside the located line."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "Fine Dining",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The stated 4.3% is derivable from the two closed points so change_value stays null, and 'Fine Dining' is matched to the one same-meaning menu segment value because the filing names it as one of its four reportable segments."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole"],
+      "reference_name": "87 franchised restaurants",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two judgments had to be recorded: the franchised population is carried as the menu's existing channel part rather than as a qualified name, and the sentence's own 'in the United States' scoping is coined as a second geography part to keep it distinct from the separately stated 77 international franchised restaurants, while the as-of instant is taken from the same Overview paragraph's opening 'At February 22, 2026'."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-011/b1",
+      "agrees": true,
+      "why": "Its six outcomes land where mine do — four real metrics with signed point values, prior-year point comparisons, no derived change numbers, the climate bullet yielding nothing and the recast sentence yielding nothing — and the only divergences are that it stops row 1's name at the population qualifier without the earnings noun and gives row 4 neither the stated as-of date nor the sentence's United States scoping."
+    },
+    {
+      "lead_id": "sokc-011/b2",
+      "agrees": false,
+      "why": "It stores percentage changes on rows 2 and 3 that are fully derivable from the two stated closed points (the change-number rule requires null there), and it writes row 6's reporting-basis recast as an action_event on a methodology name, which I settled as an exclusion; it does match me in substance on rows 1, 4 (apart from the missing geography part) and 5."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 6: whether a company decision to redefine segment profit (excluding pre-opening costs) with prior-year figures recast may ever be written as an action_event, or must always be excluded as an accounting/presentation construct.",
+      "why": "The rules simultaneously admit discrete company decisions as action events and forbid accounting constructs and filing-taxonomy labels as driver names; nothing in the located text resolves the tension, so I recorded the exclusion rather than inventing a general rule."
+    },
+    {
+      "what": "Row 4: whether the sentence's 'in the United States' scoping belongs as a second slice part alongside the franchised channel.",
+      "why": "The same event separately reports 77 international franchised restaurants, so dropping the geography would blur two different franchised populations, but no menu geography value covers the United States and coining one is a judgment a consumer may wish to review."
+    },
+    {
+      "what": "Row 4: the as-of instant '2026-02-22' is taken from the opening clause of the same Overview paragraph, not from words inside the located sentence.",
+      "why": "Period may be clearly implied from full-event context while scale and measurement evidence must be quote-local; a reviewer who reads the location strictly would leave the fiscal framing alone and drop the exact date."
+    }
+  ]
+}
+```

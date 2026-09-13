@@ -1,0 +1,7 @@
+attempt	codex_glaunch2086_a
+payload	../../unit_2020_codex_check/freeze_grading_launch_2086.py
+map	../unit_2020_codex_check/map_real_grading_2086.tsv
+wrapper_pid	3555893
+payload_pid	3555897
+started_utc	2026-09-13T01:33:56Z
+state	finished exit 0

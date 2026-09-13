@@ -310,8 +310,32 @@ def _approved_bound():
         raise ValueError("this run's binding pins no approved ordinary "
                          "binding at %s" % logical)
     doc = A5._pinned_file(logical, want, "approved ordinary binding")
+    # `corrections` is carried when the approved binding names a correction
+    # run: dropping it would materialize the UNCORRECTED key here while the
+    # signed candidate was built over the corrected one (Codex SEQ 2023/2025).
+    # Absent stays None, so an uncorrected approval is byte-identical.
+    # `decision` is carried for the same reason: dropping it would
+    # materialize the CORRECTED key here while the signed candidate was built
+    # over the DECIDED one (Codex SEQ 2039 item 3). Absent stays None.
+    # `decision_correction` is carried for the same reason, one phase later:
+    # dropping it would materialize the DECIDED key here while the signed
+    # candidate was built over the SETTLED one (Codex SEQ 2060 item 2).
+    # Absent stays None, so an unsettled approval is byte-identical.
+    # `decision_correction_v5` is carried for the same reason, one phase later
+    # again: dropping it would materialize the SETTLED key here while the
+    # signed candidate was built over the CLOSED one (Codex SEQ 2064 item 4).
+    # Absent stays None, so an unclosed approval is byte-identical.
+    # `decision_correction_v6` is carried for the same reason, one phase later
+    # again: dropping it would materialize the CLOSED key here while the
+    # signed candidate was built over the V6-CORRECTED one (Codex SEQ 2069).
+    # Absent stays None, so an approval with no v6 is byte-identical.
     return F.Bound(package=doc["package"], evidence=doc["evidence"],
                    hr=doc["hr"], fix=None, events=doc["events"],
+                   corrections=doc.get("corrections"),
+                   decision=doc.get("decision"),
+                   decision_correction=doc.get("decision_correction"),
+                   decision_correction_v5=doc.get("decision_correction_v5"),
+                   decision_correction_v6=doc.get("decision_correction_v6"),
                    hr_package=doc.get("hr_package"))
 
 

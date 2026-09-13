@@ -1,0 +1,306 @@
+{
+ "authority": "Codex SEQ 2062",
+ "phase": "a7 source-only FINAL SETTLEMENT phase over the recovered key",
+ "packet": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/PACKET.json",
+ "packet_sha256": "7f70b8abb0ab6393637663bebd6641b8182f5700b82e622e9081685a07b0ed67",
+ "findings_by_event_sha256": "12df49d0dcc22a68336b588673d2c6ba9870635c7ff8201a5bac42b5e64ec470",
+ "receipt_sha256": "fefcc46deef288846c49fb12881db72637cf602b3573a6e7cab652308987aa4f",
+ "transport": {
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+ },
+ "call_order": [
+  "0000006201-26-000031",
+  "0000006201-26-000032",
+  "0000027904-26-000013",
+  "0000027904-26-000020",
+  "0000027904-26-000022",
+  "0000063908-26-000032",
+  "0000092380-26-000044",
+  "0000764478-25-000057",
+  "0000898173-26-000006",
+  "0000940944-25-000038",
+  "0000940944-26-000005",
+  "0000940944-26-000009",
+  "0001041061-25-000109",
+  "0001041061-26-000003",
+  "0001041061-26-000084",
+  "0001058090-26-000007",
+  "0001104659-25-102611",
+  "0001104659-25-105631",
+  "0001104659-25-118458",
+  "0001104659-26-017090",
+  "0001104659-26-027061",
+  "0001104659-26-032757",
+  "0001171843-26-001288",
+  "AAL_2026-04-23T08.30",
+  "BBY_2026-03-03T08.00",
+  "CMG_2026-02-03T16.30",
+  "DAL_2026-04-08T10.00",
+  "DRI_2026-03-19T08.30",
+  "MCD_2026-02-11T16.30",
+  "ULTA_2026-03-12T16.30",
+  "YUM_2026-02-04T08.15"
+ ],
+ "invocations": [
+  {
+   "label": "0000006201-26-000031",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000006201-26-000031.attempt1.js",
+   "script_sha256": "16c47b6ccf0c797c1d339ceb6eb9e534c853bebce31fee9c5e157001d9b25992",
+   "script_bytes": 145289,
+   "prompt_sha256": "fce7db641274a6519889e7b2528e12143a35b7778dc2c9c00dc333b9b76d1216"
+  },
+  {
+   "label": "0000006201-26-000032",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000006201-26-000032.attempt1.js",
+   "script_sha256": "49d6f8ee3bf90480890d43e58e0bce969d23e755ede084e888e8cbfac6407850",
+   "script_bytes": 146315,
+   "prompt_sha256": "0fc9b39cd989f931800ae0d324fbc4ceddff57ec3fe1c52251c33e842e75fa10"
+  },
+  {
+   "label": "0000027904-26-000013",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000027904-26-000013.attempt1.js",
+   "script_sha256": "b38ea6654310b49975f89c692844a96a8f7b806379b7be8cb71dd1c948eba1b8",
+   "script_bytes": 295613,
+   "prompt_sha256": "1afad3fbec91f9a7279608f73fd393a9d1072258ad8de4b4c1ac7ecc9baf04ff"
+  },
+  {
+   "label": "0000027904-26-000020",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000027904-26-000020.attempt1.js",
+   "script_sha256": "5014f3a8c3c1eab1d921d63e69dbdb363ead516f43ca96b6db13b3f2c9029188",
+   "script_bytes": 164580,
+   "prompt_sha256": "805b3ae85f8788285498aae2ccf82a5dd8f6c800445256346a3dd5b0baf09faa"
+  },
+  {
+   "label": "0000027904-26-000022",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000027904-26-000022.attempt1.js",
+   "script_sha256": "4dee614efc7dcdfbcbdeb82680e2095b0ccb8c6ba34467f9ccb2c788b6a7efa2",
+   "script_bytes": 130503,
+   "prompt_sha256": "295ced0cfd90d432a06b3e29f73fc5039a5cf23bcbceffff06ce977fb75beb86"
+  },
+  {
+   "label": "0000063908-26-000032",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000063908-26-000032.attempt1.js",
+   "script_sha256": "793196923588992e30555a47bb78bbeaf77c5a7c4c0b7eac0da060f00f4ff3ea",
+   "script_bytes": 108518,
+   "prompt_sha256": "84eaab09a7aabba0f003ddfa7252be8b5db08d1a6a8d64c53f1460c48f9fa8c6"
+  },
+  {
+   "label": "0000092380-26-000044",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000092380-26-000044.attempt1.js",
+   "script_sha256": "e1c5ad273781325d042e8da72014cb1ee1de9aded708b81077870449e77f1550",
+   "script_bytes": 165586,
+   "prompt_sha256": "18d822f6c453af8ca8eb6a2ab14dc7e21093ec6f49e0ba9b1d465c34e46f0e13"
+  },
+  {
+   "label": "0000764478-25-000057",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000764478-25-000057.attempt1.js",
+   "script_sha256": "3430c2c579ae8b04d14b0ceb2300d87f3288a6b76ac58298099e9c98ae754320",
+   "script_bytes": 144026,
+   "prompt_sha256": "92c462ce002acdd9ae8a94b9a36ad6e05251d59a335bb8c70fa2ac626acec950"
+  },
+  {
+   "label": "0000898173-26-000006",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000898173-26-000006.attempt1.js",
+   "script_sha256": "49c4afe9fcd441531ae56783ecb74e7a4fd620e3f6f159fb21c6e46cc0766e43",
+   "script_bytes": 138761,
+   "prompt_sha256": "63b1d466b2c290666edbd94e3e6d00e5512bb7975ce3ef257c44785395acaab2"
+  },
+  {
+   "label": "0000940944-25-000038",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000940944-25-000038.attempt1.js",
+   "script_sha256": "a0212413d9f8f65e811f889bf4cb519e6bfe383a666ac685e3d694b124395fcd",
+   "script_bytes": 268363,
+   "prompt_sha256": "564bc1ff12ce16ba453b348e3dab2cd40940454baf69d87860a6b25ce2e12f81"
+  },
+  {
+   "label": "0000940944-26-000005",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000940944-26-000005.attempt1.js",
+   "script_sha256": "696dd31b5545a970745c1dbe5e90728ef2edda44956a7f648f97a6f7a0824c6f",
+   "script_bytes": 120766,
+   "prompt_sha256": "5d9b84b77e1f312aa66ee386df4525e04d7310982d462492eee004d9ccf58810"
+  },
+  {
+   "label": "0000940944-26-000009",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0000940944-26-000009.attempt1.js",
+   "script_sha256": "7841beafa6a6f6565014fcaa66e3575b6632f297a12bedf2b992ba2ae4909c1e",
+   "script_bytes": 147476,
+   "prompt_sha256": "f29cf4dc7cd8f76ddf4fd1f8aedec075d339792ca0bb7410e892913878bb8854"
+  },
+  {
+   "label": "0001041061-25-000109",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001041061-25-000109.attempt1.js",
+   "script_sha256": "2b9fa74c9e442c910ff855a7698d92069eb410c99ddc4e521fea3e5384b3c6e2",
+   "script_bytes": 153978,
+   "prompt_sha256": "496555ed3e77aebcab83cae72a9bc3282b6b924489f1f857b90a186e4cc6e612"
+  },
+  {
+   "label": "0001041061-26-000003",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001041061-26-000003.attempt1.js",
+   "script_sha256": "aa430dfbe49d17182707dc6f4d250e9c5b43b61f8d1e7a9c11d72ae086ac16d2",
+   "script_bytes": 155898,
+   "prompt_sha256": "65202d59bad6ea5b9d95880c22ed1f2f6677cd061b64fef5ad3bab3ac1e27891"
+  },
+  {
+   "label": "0001041061-26-000084",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001041061-26-000084.attempt1.js",
+   "script_sha256": "2748d93595fd557dcbd7e6edd57b1de6483ed1adf45bbc3367dd348c9fc6b4f4",
+   "script_bytes": 307955,
+   "prompt_sha256": "660dc5279b05048c5213c53709adb4cb5c2daf090b7b6287c371d8cfdf60dee6"
+  },
+  {
+   "label": "0001058090-26-000007",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001058090-26-000007.attempt1.js",
+   "script_sha256": "b896f338445831c97a2cd654d14941bb88efaa4cc7c4d34afa22aecec5d67a4f",
+   "script_bytes": 133978,
+   "prompt_sha256": "a6ba05db50393366631fe17ee96b8254010a3233d2ddd841dfdf8344211a9ba7"
+  },
+  {
+   "label": "0001104659-25-102611",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-25-102611.attempt1.js",
+   "script_sha256": "353ee29387fe92d70926db1f6fb6a12a4fbda62b73d663db9668cdec568e54d4",
+   "script_bytes": 258003,
+   "prompt_sha256": "85302dc40ff399f822b1a614a952ac2a3575fb7300543c8cc085a87033c80e9e"
+  },
+  {
+   "label": "0001104659-25-105631",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-25-105631.attempt1.js",
+   "script_sha256": "517025a4abc4b0320976cfb55a4bbe69961ec05142e56364c757f0d4d3015094",
+   "script_bytes": 149723,
+   "prompt_sha256": "62b27fc4cc7d00399ba4b9d2abbfd223d2e892f6ff560d9c5fd0e7254c90612e"
+  },
+  {
+   "label": "0001104659-25-118458",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-25-118458.attempt1.js",
+   "script_sha256": "558bbe52fe990660dc35f60ed9e18c0e6f198baa94dcb62ffb386240bbf6061c",
+   "script_bytes": 145258,
+   "prompt_sha256": "48557da46078e89a265fb4ef6ffa53a5a97e614b0361979c66b776ab8b3bca66"
+  },
+  {
+   "label": "0001104659-26-017090",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-26-017090.attempt1.js",
+   "script_sha256": "f40a9a4b4aeb3510f2d375bf5414ef393e56fd4342984ac290de5c2ac440ccf3",
+   "script_bytes": 123099,
+   "prompt_sha256": "5b66c60972bf1bd4fb225e077253a2212c07f75ea84ed793679e0726fe527639"
+  },
+  {
+   "label": "0001104659-26-027061",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-26-027061.attempt1.js",
+   "script_sha256": "d77a95fd0a9fb67b1a467f2aed83457fbabb96c7e47b957075f62cf6124cbf18",
+   "script_bytes": 119744,
+   "prompt_sha256": "bdcbf16da79ace2a05694844a721a6538135d2989c0af98343ecd1bb842e268c"
+  },
+  {
+   "label": "0001104659-26-032757",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001104659-26-032757.attempt1.js",
+   "script_sha256": "6a095512339c4c031b944028d980bbb00256def26e9484c8effc574931f999b4",
+   "script_bytes": 146935,
+   "prompt_sha256": "4b01750556bc73a3edb75043eba15dd0dcaddb4d82def5805f67fde322531b22"
+  },
+  {
+   "label": "0001171843-26-001288",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/0001171843-26-001288.attempt1.js",
+   "script_sha256": "a769edd57083b46b980e23607c323f4ea823d005c72c1aa7277f21792a6c7404",
+   "script_bytes": 107999,
+   "prompt_sha256": "c66c19cc160931bdf37e9ba29d237252ab291f479aa2763c995b5d98ec7d9f6f"
+  },
+  {
+   "label": "AAL_2026-04-23T08.30",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/AAL_2026-04-23T08.30.attempt1.js",
+   "script_sha256": "358d2e2c29092b6d8d09a2a9c95f94d0695a50924ad8218bb2166a75a5379a5b",
+   "script_bytes": 180626,
+   "prompt_sha256": "ffb53d72f9ecdf2da79b3f9ca324311235349e21e4cc62a5852d5f30e11c30c4"
+  },
+  {
+   "label": "BBY_2026-03-03T08.00",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/BBY_2026-03-03T08.00.attempt1.js",
+   "script_sha256": "48a5bcf666adf8fce80413336ff1119ba2acfd769f8783688476560d0786dc04",
+   "script_bytes": 167818,
+   "prompt_sha256": "5be4b56343e53cf8b421bdf319b498ad1d853182d9c8b5b9a2187defd6902369"
+  },
+  {
+   "label": "CMG_2026-02-03T16.30",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/CMG_2026-02-03T16.30.attempt1.js",
+   "script_sha256": "d6775244a2c08a42aa2632f3f5e03c48f0ef026e492863b227782ab7b517bf04",
+   "script_bytes": 164610,
+   "prompt_sha256": "3e602d8cbb29670da93f9100b6ff47eb512b1035a85d8d5d220c87af93b16cb9"
+  },
+  {
+   "label": "DAL_2026-04-08T10.00",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "script_sha256": "def45b2f7cf0ec5db625bb0841d893b48f79edbcd230ce7ba2794777d81b7e5a",
+   "script_bytes": 166205,
+   "prompt_sha256": "cf2941f87ebeed512e569d5c6e95c0f3ceed0cd6cae3f1213cee413f089b6336"
+  },
+  {
+   "label": "DRI_2026-03-19T08.30",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/DRI_2026-03-19T08.30.attempt1.js",
+   "script_sha256": "01322bce8e29f505bb5467bf31bf879b231bcfbe0573485f617e8b0bdfadaad4",
+   "script_bytes": 181133,
+   "prompt_sha256": "de6914a69df63f8a050e4c687e458b4e3bc48f805e7e2914d57596a1ea030302"
+  },
+  {
+   "label": "MCD_2026-02-11T16.30",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/MCD_2026-02-11T16.30.attempt1.js",
+   "script_sha256": "cfafa066d5a30f8b7250aa780b968f11008525bd74284eb072e3f50b41f52aad",
+   "script_bytes": 169396,
+   "prompt_sha256": "544aa3f4bc98ab7db2689e37f3df83f6ff859edabbae29691ac980663fc28bdb"
+  },
+  {
+   "label": "ULTA_2026-03-12T16.30",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/ULTA_2026-03-12T16.30.attempt1.js",
+   "script_sha256": "6b89868bc373c8c25270ecc6c493d80624fa583d2ee3289eab87cc0efeca2e46",
+   "script_bytes": 159770,
+   "prompt_sha256": "e8838c3c3481294f2bdce871b2e17e8767f6601ae01b436f0439ec621c1a3bb3"
+  },
+  {
+   "label": "YUM_2026-02-04T08.15",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement/scripts/YUM_2026-02-04T08.15.attempt1.js",
+   "script_sha256": "d8dac0c34c3714046ea300468f02ca39591c390d4c4fefc92a56eaee20c1e565",
+   "script_bytes": 162800,
+   "prompt_sha256": "2fe0bd52160bc9ecc165558830c076aab7e3b51861dbdf26362874516255706e"
+  }
+ ],
+ "launched": 0
+}

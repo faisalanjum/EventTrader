@@ -1,0 +1,7 @@
+attempt	codex_gtransport2088_a
+payload	../../unit_2020_codex_check/freeze_grading_transport_2088.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3607266
+payload_pid	3607270
+started_utc	2026-09-13T02:09:50Z
+state	finished exit 0

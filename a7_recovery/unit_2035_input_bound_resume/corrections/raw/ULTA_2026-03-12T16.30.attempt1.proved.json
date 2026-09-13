@@ -1,0 +1,262 @@
+```json
+{
+  "source_id": "ULTA_2026-03-12T16.30",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "per_x": "share",
+            "item": {
+              "driver_name": "earnings_per_share_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 28.05, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_high": {"value": 28.55, "scale_multiplier": 1, "unit_scale_evidence": "$"},
+              "level_shape_hint": "range",
+              "level_unit": "usd",
+              "measurement_raw_spans": ["diluted"],
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item agrees with my final_outcome fact: the CFO states the company's own closed forward diluted-EPS range for fiscal 2026, which is company guidance."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sga_expense",
+              "driver_state": "increased",
+              "change_value": {"value": 17, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "measurement_raw_spans": ["Excluding the impact of incentive compensation and SpaceNK"],
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item agrees with my final_outcome fact: a stated ex-items SG&A growth rate for the quarter is a re-readable spending metric with a stated direction, not boilerplate."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "loyalty_program_active_members",
+              "driver_state": "increased",
+              "level_low": {"value": 46.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 46.7, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "change_value": {"value": 5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item agrees with my final_outcome fact: a stated record member level together with its stated growth is a standing countable metric."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 80, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "floor",
+              "level_unit": "count",
+              "slice_parts": ["unknown:us-gaap:BusinessAcquisitionAxis__spacenk"],
+              "fiscal_year": 2025,
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item agrees with my final_outcome fact: the acquired retailer's store footprint is a re-readable count level, recorded as an open floor because the source says 'more than 80'."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The claim names no driver, no value, no period and no identifiable comparison operand: 'beat and raised' and 'exceeded on all metrics' is an unattached summary of expectation outcomes with no home metric or guidance fact it could be paired with, so it cannot be lawfully resolved into any record."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "The frozen proposed_record_kind lawful_abstention_control holds as my final_outcome control: the sentence sounds substantive but is ungrounded, so the single abstention is the only lawful reply."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "net_sales",
+              "driver_state": "unknown",
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          },
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "net_sales_surprise",
+              "driver_state": "beat",
+              "change_value": {"value": 85, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "surprise_basis_hint": "actual",
+              "comparison_baseline": "previous_guidance",
+              "has_favorability_wording": true,
+              "fiscal_quarter": 4,
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "The frozen proposed_record_kind real_item agrees with my final_outcome fact, and the twin rule makes it two records: a delivered sales actual measured against the company's own prior guide writes the surprise plus its numberless net-sales home sibling from the same sentence."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "ULTA_2026-03-12T16.30",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard safe-harbor legal boilerplate about not revising forward-looking statements; it says nothing about any driver's state, change, surprise, guidance or action, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "The frozen proposed_record_kind negative_control holds as my final_outcome control: the sentence is generic disclaimer language carrying no driver fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "measurement_wording"],
+      "reference_name": "diluted EPS",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The co-stated 9.4%-11.4% growth is itself a range and is derivable from the guided closed range against the reported $25.64, so no change number is stored, and with no movement wording the guidance state stays unknown rather than introduced."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "reference_name": "SG&A growth for the quarter",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "I judged the approximation word 'about' to be quote-carried rather than a measurement flavor, and the exclusion clause to be a measurement qualifier rather than a slice because it removes items from the measure instead of naming a business population."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "portion_versus_whole", "slices_and_unknown_axes"],
+      "reference_name": "active members",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Whether the loyalty program is the company's own customer population (a customer slice) or part of the driver itself is genuinely unclear, so under the unclear-role rule it stays in the name with the 'active' population qualifier rather than a guessed slice kind."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus"],
+      "reference_name": "more than 80 stores in the UK and Ireland",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two ambiguities were recorded rather than guessed: the acquired-entity part reuses the menu's Space NK token under its unknown kind instead of coining an entity_ownership kind, and UK plus Ireland is a combined footprint that no single geography part describes, so no geography part was attached."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing"],
+      "reference_name": "sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The twin rule requires a home sibling in this event and no located row supplies one, so the home is written numberless from this same sentence, which may duplicate the event's separately stated quarterly net-sales level at assembly."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 1,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling"],
+      "reference_name": "sales above the high end of our guidance by about 85 million",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The $85 million delta is stated against an unstated guidance high end, so it is non-derivable with a determinable positive sign and is stored, while the approximation word 'about' is treated as quote-carried rather than a measurement token so the twin's measurement matches its home."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-029/b1",
+      "agrees": false,
+      "why": "It lands where I did on rows 1, 5 and 7, but it coins an off-menu entity_ownership part for Space NK on row 4 where the menu already carries a same-meaning token, leaves the percent marker uncited on the row-2 and row-3 change values although '%' sits inside those quotes, and writes the row-6 surprise with no home sibling in the event."
+    },
+    {
+      "lead_id": "sokc-029/b2",
+      "agrees": false,
+      "why": "It lands where I did on rows 2 (apart from the uncited percent marker), 5, 7 and on the row-4 menu-token reuse, but it records row 1 as 'introduced' where the source states no movement, attaches a guessed customer slice for the loyalty program on row 3, adds UK and Ireland geography parts to a combined 80-store count on row 4, and writes the row-6 surprise with no home sibling."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 3: whether 'loyalty program' belongs in the driver name or is a customer slice.",
+      "why": "Both readings survive the role test, and guessing a kind would forge an axis-grade identity, so I kept it in the name and flag the fork instead of resolving it."
+    },
+    {
+      "what": "Row 4: no period is stated inside the located quote for the Space NK store count.",
+      "why": "The 'more than 80' figure describes the acquired business while the event separately reports 86 Space NK stores at year end, so the fiscal-2025 instant framing I applied is implied by the surrounding recap rather than stated, and a different instant inside the year is possible."
+    },
+    {
+      "what": "Row 6: the numberless net-sales home sibling I emitted may duplicate the event's own quarterly net-sales metric.",
+      "why": "The twin rule requires a home in the same event and no located row carries the actual level, but the event states 'net sales for the quarter increased 11.8% to $3.9 billion' at an unlocated sentence, so an assembler must merge or suppress one of the two homes."
+    },
+    {
+      "what": "Rows 2 and 6: the approximation word 'about' is stored in no field.",
+      "why": "Rule 8's never-drop sink says to keep an uncaptured number modifier, but making it a measurement token would pollute the series identity and break the row-6 twin's measurement match, so I left it to the quote and record the conflict."
+    }
+  ]
+}
+```

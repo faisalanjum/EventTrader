@@ -1,0 +1,2073 @@
+{
+ "reuse_search": {
+  "receipts": [
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/baseline_tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/candidate_tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1853/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1855/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1857/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/baseline_tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1860/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1862/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1864/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1866/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1867/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1869/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1871/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1872/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1874/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1876/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1877/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1879/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1882/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1884/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1885/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1886/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1887/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1888/view/tree/runs/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_gitonly/a5_recovery/unit_1758/view/runs_composed/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_module/a5_recovery/unit_1758/view/runs_composed/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_scorer/a5_recovery/unit_1758/view/runs_composed/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_sibling/a5_recovery/unit_1758/view/runs_composed/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_signer/a5_recovery/unit_1758/view/runs_composed/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_old/a5_recovery/unit_1758/view/runs_composed/kf-a4-decision-36-20260823T075249Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 36,
+    "states_recorded": 36,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 36,
+     "valid": 36,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "1181055f5660c9582bf2dbd1957a477a35d7eb43ac18a49c5d13435c99bd6f60"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_codex_dec2044_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "6d96c077f8c9935bc9949d6c6f017f4905af1e137c2fa59c548d45835431b3f6"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_codex_dec2044_a/decision_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "a3b6418c9aebebec0bd4dcdf695ceece51401ace9828f3e95c6464e13505de72"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_codex_dec2044_a/decision_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "b0c0d061af6436b21106ad6cd64cafe6b23d75c8444f1f9e4df4d6f5a7936020"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_b/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "8b216aa3e91a3008b372c1d6fb0644851aed427ec81df66748cfc0bc4e96927e"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_c/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "fa204dbde00cba5d6744ee19125d5cdd254018a190afa80760d9e5ad884204bb"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_d/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "868ae828f095293c1727bae01de72dc834e04c952e62562b0228dfe8f9deab4e"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_d/decision_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "e2455ec142950e2e0a91b80223c0bac6aac6fb262252a5ca8da2869879d0ce26"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_d/decision_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "d451bb1fee422ff5281de43d12b0222667180be3ee8ec54a52f9e67c1ecb578e"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_d/decision_open/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "d45f080c1e3aa9fafd612fb5d9582a89ace3217fa4c3bafc5860b2aba3c644af"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_e/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "3b7fa5646251b04c261fde177e16c6d73ed84b388301fefc16f2b0d1e2b16551"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_e/decision_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "a473387350171fe6c6cd2dfa3d358e5cbdde5304daac3a414d4a26f0d7d29c85"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_e/decision_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "be5af925adbb7d1f28f43c058cb1971d4aeb2ac218039e433734849b92ef323d"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_g/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "674eb6f00272f52fc0e6a96f4ae38cdbccd8d2d1e9cc0a01054d5df1536aaaa6"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_g/decision_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "62b79690477818c966cfc724cdbee98b3b34e4bf8af2d77d694a84bd01dfe714"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_core_dec2041_g/decision_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "2c980ab5661efd0f30f5773fbc9afa45e3fad53d8691664f146802b2240d1ed3"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_entry_codex_decentry2044_a/replay",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "7d226c9f1fafe581cb793830030edecccd6c72f6d7ea05e3af622a74634045a5"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_entry_core_decentry2041_b/replay",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "7d226c9f1fafe581cb793830030edecccd6c72f6d7ea05e3af622a74634045a5"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_outcomes_codex_decout2044_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "263334569301e1ed991200a31a6a6357891f042a42902fbebdd8f78eed03c2ef"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_outcomes_codex_decout2044_a/decision/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "59b82aabca66745dd69149982e81c18d0ef4c474a6111d638f796a5c27c82247"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_outcomes_core_decout2041_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "0a7947297826afcef51bdc2df6b366e3bd752c613800584343dac0a94a39c978"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_outcomes_core_decout2041_a/decision/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "d310400f416e694d1d66b6924b293e8bd4cd9d25ebf229d989ab53d29f650e3e"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_outcomes_core_decout2041_b/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "63d1ffed570128d0d2bbd916b86eeb8b1875a732fb1fc37dbe5e3f49e2444925"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2041_decision_connection/TEST_outcomes_core_decout2041_b/decision/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "cb59cea06cce1adab6fc80eff9303ef284f7d7f61dc77802dae261895767e294"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_codex_recovery_prepare2054_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_b/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_c/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_d/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2055_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "1595be356b75a94dc0126a148c5e2a69f6d0ae283af5437d2e4c6f8e33b9b894"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_b/decision",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "1595be356b75a94dc0126a148c5e2a69f6d0ae283af5437d2e4c6f8e33b9b894"
+   }
+  ],
+  "native": [],
+  "for_this_key": [
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_codex_recovery_prepare2054_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_b/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_c/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2054_d/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "e72e3b7e8bdf82a1f674cc5c16503e9f4d962b2603706877b033cd0e589c1976"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/TEST_prepare_core_prep2055_a/decision",
+    "is_test_fixture": true,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "1595be356b75a94dc0126a148c5e2a69f6d0ae283af5437d2e4c6f8e33b9b894"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_b/decision",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "1595be356b75a94dc0126a148c5e2a69f6d0ae283af5437d2e4c6f8e33b9b894"
+   }
+  ],
+  "manifest_sha256": "65b393b2658611834b2f997648242f18e61397a72b76f0a897f04f106601627d"
+ },
+ "accounting": {
+  "ledger_before_call": 564,
+  "candidate_counter_agrees": 564,
+  "primaries_this_phase": 31,
+  "reserved_signer": 1,
+  "planned_total_including_the_reserved_signer": 32,
+  "after_planned": 596,
+  "retry_law_owner": "build_kfields_final.RETRYABLE",
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "max_attempts": 2,
+  "invalid_only_retry_allowance_for_the_decisions": 31,
+  "invalid_only_retry_allowance_reserved_for_the_signer": 1,
+  "worst_case_after": 628,
+  "phase_ceiling": 628,
+  "global_ceiling": 6000,
+  "budget_problems": [],
+  "a_reserved_signer_slot_is_not_permission_to_sign": true
+ },
+ "role_and_transport": {
+  "transport": {
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "transport": "Claude Code Workflow agent(), subscription",
+   "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "bound_owners": {
+   "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+   "build_kfields_hard_review.py": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+   "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+   "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+   "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+   "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+   "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+   "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+   "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+   "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+   "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+   "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+   "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+   "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+   "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+   "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+   "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+   "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "review_composite_owner": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+   "clarified_review_manifest": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+  },
+  "door": "a4_source_only_key_1997",
+  "manifest_sha256": "65b393b2658611834b2f997648242f18e61397a72b76f0a897f04f106601627d",
+  "requested_key_role": {
+   "kind": "LIVE",
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000",
+   "transport": "Claude Code Workflow agent(), subscription"
+  },
+  "observed_key_role_proof": null,
+  "sonnet_role_untouched": {
+   "tested_transport": {
+    "model_alias": "sonnet",
+    "runtime_model_id": "claude-sonnet-5",
+    "effort": "high",
+    "agentType": "lean-probe",
+    "disallowedTools": [
+     "Read"
+    ],
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+    "transport": "Claude Code Workflow agent(), subscription",
+    "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+   },
+   "hard_review_model": "sonnet",
+   "hard_review_effort": "high",
+   "hard_review_agent_type": "lean-probe",
+   "hard_review_row_model": "claude-sonnet-5",
+   "hard_review_disallowed": [
+    "Read"
+   ],
+   "blinds_per_hard_task": [
+    1,
+    2
+   ]
+  }
+ },
+ "native_proof_dependencies": {
+  "history_evidence": {
+   "v1": {
+    "receipt.json": "8fc9c91d56382ed71ea4414ee5a6e8cb452f9a2b8b342e801bc25c49973598b4",
+    "finalization.json": "76f6a35d161636a67360bbff4f7849959dfeb0a4bfeca5635e284cf5ea351112",
+    "raw_tree": {
+     "files": 66,
+     "sha256": "00d63014ed4ab3bbf7209072119fed42e58621805cfaf05439c0d9504d523636"
+    }
+   },
+   "v2": {
+    "receipt.json": "e085196ff5ca9e95b506cbffc6da80cdd3ae1818d2fcef57b388fb8573e876ed",
+    "finalization.json": "7ede599ea06a5d9ddf175020fc31e7e47ec60a683415a50917a63865b7cab78e",
+    "raw_tree": {
+     "files": 60,
+     "sha256": "bb7539dbbdbf98a824bd696bffb182bfadabfa2879235072dda0bc97f6cec33f"
+    }
+   },
+   "v2_recovery": {
+    "receipt.json": "702c540dda8cb79a67ae0bee94a43ef437a01a211bad7a8e516003f180a5a56f",
+    "finalization.json": "d0579c653e913545ef7369c0ed9dd2c60c0dca6e4e163d89cfcd03a58ac76334",
+    "raw_tree": {
+     "files": 2,
+     "sha256": "e31cf46a89aa81fb266cf0f814849d6ab6373f21b591b637794b45c6abf41c54"
+    },
+    "recovery.json": "18da812a2c748810222f93f68489690fc98c6f8cce73ad95ce8036ee158d29e9"
+   }
+  },
+  "parent": null,
+  "states_recorded_so_far": 0
+ },
+ "population": {
+  "merged_events": 33,
+  "rows_accounted": 191,
+  "owed_final_decisions": 31,
+  "unaffected_events_kept": 2,
+  "accepted_corrections_reused": 31,
+  "recovered_corrections_included": [
+   "0000006201-26-000032"
+  ],
+  "events_with_served_leads": 9,
+  "served_leads_total": 16,
+  "largest_script_bytes": 318452,
+  "open_issues_before_this_phase": 108
+ },
+ "events": [
+  {
+   "source_id": "0000006201-26-000031",
+   "rows": 7,
+   "open_issues": 3,
+   "merged_raw_sha256": "e544fd75e5327ea1c09605897c73de755a5d0f57f69d9e43b3acfbb5794d2b83",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "ce9e4cb13a77e20284a320a126cf7e66c24618976654e00a46ce71476ad52911",
+    "e544fd75e5327ea1c09605897c73de755a5d0f57f69d9e43b3acfbb5794d2b83"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "e43bc2f1c15d5bd94e11c6cc1531ce63ca11bd37c35d0446fbb8b7bce4cdac0e",
+   "script_sha256": "3b4f1c6d41ff0a0be3c3a6d471b7ca324a992817ff75f7e8f0960fd9b248536f",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 157072,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000006201-26-000031.attempt1.js",
+   "receipt_prompt_pin": "e43bc2f1c15d5bd94e11c6cc1531ce63ca11bd37c35d0446fbb8b7bce4cdac0e"
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "rows": 5,
+   "open_issues": 2,
+   "merged_raw_sha256": "3ffc791a49c0e989f5a0efa0ebb49acd86e3328e0b6e5ce57261301ca495b229",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "7b792da42e922f9a33c48f517d7472f02e0df87c50835a77966261babd651e6a",
+    "3ffc791a49c0e989f5a0efa0ebb49acd86e3328e0b6e5ce57261301ca495b229"
+   ],
+   "leads": 1,
+   "lead_rows": [
+    "0000006201-26-000032#010"
+   ],
+   "prompt_sha256": "e6a5e0d7b410008c7240306b394b812cc1dbbbb36be75560a8df36d720f3a170",
+   "script_sha256": "819dea29d11e935860d5c35dfef8bef3aa36024df1b8f2fcd7a95f3c3212dedc",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 157521,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000006201-26-000032.attempt1.js",
+   "receipt_prompt_pin": "e6a5e0d7b410008c7240306b394b812cc1dbbbb36be75560a8df36d720f3a170"
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "rows": 7,
+   "open_issues": 4,
+   "merged_raw_sha256": "8679ab96bc36b126af3b4a4f0861506b8b16a1cbdbc6949efbc74a69a3e3dff3",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "2f80a72d633a3220e9b0b412621c4c59ff6f7b6db4683cd824b86e0487b00eb2",
+    "8679ab96bc36b126af3b4a4f0861506b8b16a1cbdbc6949efbc74a69a3e3dff3"
+   ],
+   "leads": 2,
+   "lead_rows": [
+    "0000027904-26-000013#014",
+    "0000027904-26-000013#014"
+   ],
+   "prompt_sha256": "dbcc05fc4c18ce3017bc22388db39a9f136447cf450d8f03c35eedd9f61abf2b",
+   "script_sha256": "923b2485815d73a4ea821a7bc5e32c32b0b658f18e17d74f32f423976d0c09eb",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 313908,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000027904-26-000013.attempt1.js",
+   "receipt_prompt_pin": "dbcc05fc4c18ce3017bc22388db39a9f136447cf450d8f03c35eedd9f61abf2b"
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "rows": 9,
+   "open_issues": 2,
+   "merged_raw_sha256": "f5ef83ad74b51e9600cafc73a1639d04d01706cebc1c5274e5f1cc09a237b7aa",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "51a8a23951cc258fbf01d659af0c8cba8a62292d34fe70bc795960cac2107339",
+    "f5ef83ad74b51e9600cafc73a1639d04d01706cebc1c5274e5f1cc09a237b7aa"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "7f7c547225c371e57a577511cfba79a5e455b6a395c2481f78d77000b8291d47",
+   "script_sha256": "2527098a89d02db37db5164620380798687597257e09cb166697ae6ac15f476e",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 179305,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000027904-26-000020.attempt1.js",
+   "receipt_prompt_pin": "7f7c547225c371e57a577511cfba79a5e455b6a395c2481f78d77000b8291d47"
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "rows": 5,
+   "open_issues": 3,
+   "merged_raw_sha256": "3c102f378bb1008f976dc8e40981d7ee3826b6bb8fd0ad07b4d60fcff8277580",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "233950a0b35b8e591655d567497f00e87e8f3c81b7b304fb8fb09671d1d8575b",
+    "3c102f378bb1008f976dc8e40981d7ee3826b6bb8fd0ad07b4d60fcff8277580"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "9d4616276f0bdb9fd3031422186145030e09c6695742ebb0d80f6abbef243e31",
+   "script_sha256": "2e3e41b243b8988f40dddaf31a9b17ee7876e133391ca5b06ad8e6fedeedddec",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 137008,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000027904-26-000022.attempt1.js",
+   "receipt_prompt_pin": "9d4616276f0bdb9fd3031422186145030e09c6695742ebb0d80f6abbef243e31"
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "rows": 5,
+   "open_issues": 3,
+   "merged_raw_sha256": "186bc8cd2389eef1a2eeab2a4609e7ea3273cd663e140468ac72f2d647aa5038",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "75d7b166c794271b0a8a44f908e0e023ac1427d6f6927aa107e9517346fefebf",
+    "186bc8cd2389eef1a2eeab2a4609e7ea3273cd663e140468ac72f2d647aa5038"
+   ],
+   "leads": 1,
+   "lead_rows": [
+    "0000063908-26-000032#033"
+   ],
+   "prompt_sha256": "120588def1c238b7d9b371dc4538860aef439c73f5bcca39ecf59f3e56ee39e7",
+   "script_sha256": "723977d1dd8a8600916f055fc3a61787b735041333c5e95b2699b610364b0ebd",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 117074,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000063908-26-000032.attempt1.js",
+   "receipt_prompt_pin": "120588def1c238b7d9b371dc4538860aef439c73f5bcca39ecf59f3e56ee39e7"
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "rows": 7,
+   "open_issues": 7,
+   "merged_raw_sha256": "0ce6f6083fb965225b61eae517eb33204cc8d867768bef929b7992ae2c247736",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "0db2412014a4f2a7215c833039e21539613f2d11f86f9262737d3635896d6026",
+    "0ce6f6083fb965225b61eae517eb33204cc8d867768bef929b7992ae2c247736"
+   ],
+   "leads": 2,
+   "lead_rows": [
+    "0000092380-26-000044#042",
+    "0000092380-26-000044#039"
+   ],
+   "prompt_sha256": "cf566e307ae92f8fb5126d6dcfa6f3893d971853f670d570ee7979b08addfcbf",
+   "script_sha256": "64c0541873a479cdf9c759062d3c979e69dd84f63b70fc1d9b3a29ed83fbeed0",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 184939,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000092380-26-000044.attempt1.js",
+   "receipt_prompt_pin": "cf566e307ae92f8fb5126d6dcfa6f3893d971853f670d570ee7979b08addfcbf"
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "rows": 5,
+   "open_issues": 4,
+   "merged_raw_sha256": "0e9a2dacdb36baa8a950556713d34d1908f7dfce54e2af8dd6cadd9b973270d5",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "3fb132f5907436cffb3289ad426e25cfb08ea52d80b908504c5798633f2323ab",
+    "0e9a2dacdb36baa8a950556713d34d1908f7dfce54e2af8dd6cadd9b973270d5"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "1af1e6b9218adefa4c746fc72f5965b434f5703f2807d12d0d0c4ccb3168d657",
+   "script_sha256": "d06003adb575264db96b7d205b6adcb9d073090789b352aa4cd50ceca428ce4e",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 151868,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000764478-25-000057.attempt1.js",
+   "receipt_prompt_pin": "1af1e6b9218adefa4c746fc72f5965b434f5703f2807d12d0d0c4ccb3168d657"
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "rows": 6,
+   "open_issues": 4,
+   "merged_raw_sha256": "2a07de63a76599d841b0976cec0e123e3d4d6c0ac2c890291b1cc1407e2c6056",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "abf52d43bcea786600f143c8cb594a6d05a2ce5abafee5ad85ec728f5fdeccb2",
+    "2a07de63a76599d841b0976cec0e123e3d4d6c0ac2c890291b1cc1407e2c6056"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "500fc6c00b370713839b6eee9f55daed050d42add47c105746ad3e8325780beb",
+   "script_sha256": "e31afbf49b0cca5083075420b112784c04e1d87647862d51399259f7209ccaf1",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 148529,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000898173-26-000006.attempt1.js",
+   "receipt_prompt_pin": "500fc6c00b370713839b6eee9f55daed050d42add47c105746ad3e8325780beb"
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "rows": 4,
+   "open_issues": 2,
+   "merged_raw_sha256": "7c9e7437a0606d1f2e52a243d1814d1c57b303a6421564c11bdfbc4847d6e27b",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "7c63e18a89a1b5cd615acf8688309ba9ccd096664c4c7c36596c9311889729be",
+    "7c9e7437a0606d1f2e52a243d1814d1c57b303a6421564c11bdfbc4847d6e27b"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "6ffab9c743dd6e0968f54483b913fab8d8d3c5efc01cb3bc196632641eb63efa",
+   "script_sha256": "f154787ad159d4511f47be2c92ecdf62f2a19a3bf56e8a0d431a9fae88a82764",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 275140,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000940944-25-000038.attempt1.js",
+   "receipt_prompt_pin": "6ffab9c743dd6e0968f54483b913fab8d8d3c5efc01cb3bc196632641eb63efa"
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "rows": 6,
+   "open_issues": 4,
+   "merged_raw_sha256": "66ad104bd7ee33ac5bc2d8878140c12f100fbf0c555bf22ce0867bb77cfa4db2",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "6bd81f43566b89977d451909bbc3f4894bc5649f48dcaebaac98106e5fc62ac8",
+    "66ad104bd7ee33ac5bc2d8878140c12f100fbf0c555bf22ce0867bb77cfa4db2"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "92d7cd5d8b72b749dcdb151bc635d774fac9f41306bec5ebcb0bc24d1e28f3e4",
+   "script_sha256": "cc58f106839b8fe17119a2ba28ad6445d6a54318236385c690206b0c1b95485e",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 128087,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000940944-26-000005.attempt1.js",
+   "receipt_prompt_pin": "92d7cd5d8b72b749dcdb151bc635d774fac9f41306bec5ebcb0bc24d1e28f3e4"
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "rows": 6,
+   "open_issues": 1,
+   "merged_raw_sha256": "cbf4c08c21ef390d2d7c40d29aad22170748763e67e42d9cfafb7846e23d421f",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "1476557a6ffa8551089544f743faa19b9d60d1138f632ffe966f66d9c011f474",
+    "cbf4c08c21ef390d2d7c40d29aad22170748763e67e42d9cfafb7846e23d421f"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "0d86f5d18cfcab0c353bede11a4afe8bd6db0c8a2f47e49a11cd8da3daed11b6",
+   "script_sha256": "255271b6f43b95274b77aa6073242ed5205fab368acb4657be5510a93d26d08e",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 158076,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0000940944-26-000009.attempt1.js",
+   "receipt_prompt_pin": "0d86f5d18cfcab0c353bede11a4afe8bd6db0c8a2f47e49a11cd8da3daed11b6"
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "rows": 5,
+   "open_issues": 3,
+   "merged_raw_sha256": "5c6a302c431db465ea3cf1840ffc8e11a39d7b0292ed2e3581833cecce967139",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "ec2a0d12cbd0eb51e7c399b67cfbf0f55d2877456c6bfc200970bc17884af242",
+    "5c6a302c431db465ea3cf1840ffc8e11a39d7b0292ed2e3581833cecce967139"
+   ],
+   "leads": 1,
+   "lead_rows": [
+    "0001041061-25-000109#073"
+   ],
+   "prompt_sha256": "a1fb63a4125a9a9cc4258511758360cf78e8b8bd55d6eba3f2fc6de7436a12a3",
+   "script_sha256": "ae56929328402c8841fe2662dc881df51b3aa59ce18c9b822621fb9f97e05aef",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 165175,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001041061-25-000109.attempt1.js",
+   "receipt_prompt_pin": "a1fb63a4125a9a9cc4258511758360cf78e8b8bd55d6eba3f2fc6de7436a12a3"
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "rows": 5,
+   "open_issues": 3,
+   "merged_raw_sha256": "86bc5cbb50055ef105a5acd7f2faacfb59845e945011715645a8a04b74c9927c",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "15e809cdb8330771fb35e6c2174ef807d18458fbb45952c84c70779036503927",
+    "86bc5cbb50055ef105a5acd7f2faacfb59845e945011715645a8a04b74c9927c"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "c4b0d66f61eca0bc837f60a44038ea002dde653bdfbc22b82598b8a7aae62c33",
+   "script_sha256": "9da4ab45dc22eea4896f86627f08ee755cd7ffc11737513810377af9c04f1982",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 162242,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001041061-26-000003.attempt1.js",
+   "receipt_prompt_pin": "c4b0d66f61eca0bc837f60a44038ea002dde653bdfbc22b82598b8a7aae62c33"
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "rows": 6,
+   "open_issues": 3,
+   "merged_raw_sha256": "2259bf13045e5738dbdcc4b98b89a07c6672fd451ed31287a87a63235aa3c5f8",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "18d1e2539f2baf13c81fd04e9ed15ce904788cc504274991ed0fc8ddc9e507f6",
+    "2259bf13045e5738dbdcc4b98b89a07c6672fd451ed31287a87a63235aa3c5f8"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "f7608323283da9b2f243f4f198f3ab1f0a7e24c2493c47c072b3e80a38d83f9f",
+   "script_sha256": "120305dc52e7a4f7185dba889c6028b0114b06d7d915c7a0f634f912cb40bca8",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 318452,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001041061-26-000084.attempt1.js",
+   "receipt_prompt_pin": "f7608323283da9b2f243f4f198f3ab1f0a7e24c2493c47c072b3e80a38d83f9f"
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "rows": 6,
+   "open_issues": 5,
+   "merged_raw_sha256": "08c8d378b9f3d0587b8f3d161d3cb0d29d72bbc319a37c61eb7aa836fd317d95",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "070b1283dfa2d824d42a54509f19186b2d2c990f2867dfa0418c4ca69d7936d4",
+    "08c8d378b9f3d0587b8f3d161d3cb0d29d72bbc319a37c61eb7aa836fd317d95"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "2573acbd2f71643fbae8c1bf45bcef61e871db56b354de7f3728d976ea5d36d5",
+   "script_sha256": "0767b94e6f5e7c692b756c8c760980a463f25327dcc411648602dd8a8e2e83cd",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 141337,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001058090-26-000007.attempt1.js",
+   "receipt_prompt_pin": "2573acbd2f71643fbae8c1bf45bcef61e871db56b354de7f3728d976ea5d36d5"
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "rows": 6,
+   "open_issues": 4,
+   "merged_raw_sha256": "cd08bd09d2fb68a1733255272a1f9d474f8ca93451a39bb25085ee95b7863682",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "dfa6f0063b221faaf0f5772cf08c8111cbdabaa2685016bf45011290b8e447b3",
+    "cd08bd09d2fb68a1733255272a1f9d474f8ca93451a39bb25085ee95b7863682"
+   ],
+   "leads": 1,
+   "lead_rows": [
+    "0001104659-25-102611#098"
+   ],
+   "prompt_sha256": "c065a3ccf6d3e29a6dd032e6da971255ec0c3504c20c12cddb460cfc5a771ae3",
+   "script_sha256": "76fa9ff9eab9816c6d97cd2a81a939d3173fc8c1512612cdd1434e00c106ee1f",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 269096,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001104659-25-102611.attempt1.js",
+   "receipt_prompt_pin": "c065a3ccf6d3e29a6dd032e6da971255ec0c3504c20c12cddb460cfc5a771ae3"
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "rows": 5,
+   "open_issues": 4,
+   "merged_raw_sha256": "8d275c2902a828400d895457a52a1b67a7617acbcefa1d7bffb0f33c8b7e6f6b",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "7a4cb12df70b627f8c7d2ccf278b62f5f3f13d50f3d31107d2c2272a1188891c",
+    "8d275c2902a828400d895457a52a1b67a7617acbcefa1d7bffb0f33c8b7e6f6b"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "e5787a9774f4ab77e3c7b9bf17c5f65d79131fddab171115423b28b893fb0231",
+   "script_sha256": "a48a504724406bc4d33951ea450e37e9a51acd7193c4697cc2790fce6228ef5c",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 156318,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001104659-25-105631.attempt1.js",
+   "receipt_prompt_pin": "e5787a9774f4ab77e3c7b9bf17c5f65d79131fddab171115423b28b893fb0231"
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "rows": 7,
+   "open_issues": 4,
+   "merged_raw_sha256": "3dd124c034446f552b6f148134979c0945a4479b15ffc0091bb433b3e70ad64d",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "9dc33e015657549c809f04307234f8a6a5da170371731cdd0e8165f2706d709c",
+    "3dd124c034446f552b6f148134979c0945a4479b15ffc0091bb433b3e70ad64d"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "fb4cce4d4bb65c31a94b125e6dc0668f36319526eab9010b854786e561725cb8",
+   "script_sha256": "0b549aab6afd7b0d03ab43826d73a126d0f89ab969da888af0db05a0f126cf4b",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 154866,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001104659-25-118458.attempt1.js",
+   "receipt_prompt_pin": "fb4cce4d4bb65c31a94b125e6dc0668f36319526eab9010b854786e561725cb8"
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "rows": 6,
+   "open_issues": 4,
+   "merged_raw_sha256": "3bc7021ae9b13e0a3a4d3efc32fc8d81b2be2579fc8361395c9962809e7c49c5",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "ec3fedffbb321df3b89335e31b32411b72f056715b30695947f37d80ef828690",
+    "3bc7021ae9b13e0a3a4d3efc32fc8d81b2be2579fc8361395c9962809e7c49c5"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "f095be6e092f4649444655b01e73896930e9aa34ae874576a317e9ad5d204b18",
+   "script_sha256": "e1358eae2bf2169272ca53dc48f735b6cbb263689db89a94114455fce7c19587",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 132059,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001104659-26-017090.attempt1.js",
+   "receipt_prompt_pin": "f095be6e092f4649444655b01e73896930e9aa34ae874576a317e9ad5d204b18"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "rows": 5,
+   "open_issues": 1,
+   "merged_raw_sha256": "88bee1ec4b29216307c05439043f6b82faeb1942ba93df7e052994a5fd3f52f5",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "b2a8b47d956d842f318aad98f756f19856e0811468e4cda142ceeafb0104ef3b",
+    "88bee1ec4b29216307c05439043f6b82faeb1942ba93df7e052994a5fd3f52f5"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "faf8b70a034a94ee5270757ce0e9b63c6f5abc9188207288934d0517427e7cea",
+   "script_sha256": "88a8c7963d8aa6a3db3446c8984af5492e9e332da5b7cc2271ed662bf52c9da9",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 128517,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001104659-26-027061.attempt1.js",
+   "receipt_prompt_pin": "faf8b70a034a94ee5270757ce0e9b63c6f5abc9188207288934d0517427e7cea"
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "rows": 5,
+   "open_issues": 4,
+   "merged_raw_sha256": "135101c0c594f60346627aaa848ca75a37e79ac7dcef020413e64add4b58b085",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "eecc1437a8d90f2ddf0a3cee68bc3e3b8bd84389ead31672f98bd3b52ee56b5d",
+    "135101c0c594f60346627aaa848ca75a37e79ac7dcef020413e64add4b58b085"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "2c64a45d842589280329e3be8ac33e7733632f8f8adb7dcd3db9cf609d13eff5",
+   "script_sha256": "fd33e0ccb7995f3c2247f513932f84db7a90510bdde3740fcbb7c046307c7a76",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 152032,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001104659-26-032757.attempt1.js",
+   "receipt_prompt_pin": "2c64a45d842589280329e3be8ac33e7733632f8f8adb7dcd3db9cf609d13eff5"
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "rows": 4,
+   "open_issues": 3,
+   "merged_raw_sha256": "9b056f3995d975268002f561097173909a9802753431a189dce20deb8a46d494",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "41fd49d601cc6f73e16c9f307322cda98719de48072501c05dd2184365ee25b5",
+    "9b056f3995d975268002f561097173909a9802753431a189dce20deb8a46d494"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "3a07103f4d07dd6a9c98ea958f93e8b3bcbdc02db0b72d9178bb477cd30697a9",
+   "script_sha256": "7f23723579d68b168e729f8f9ae8ac167eed700b0d29a87b0f1eb2aa5a16d3a3",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 114343,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/0001171843-26-001288.attempt1.js",
+   "receipt_prompt_pin": "3a07103f4d07dd6a9c98ea958f93e8b3bcbdc02db0b72d9178bb477cd30697a9"
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "rows": 10,
+   "open_issues": 6,
+   "merged_raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "3cae3f4d4a238513362e337f75905c575219301dd8b094a2cd60b993d838817c",
+    "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b"
+   ],
+   "leads": 4,
+   "lead_rows": [
+    "AAL_2026-04-23T08.30#135",
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#133",
+    "AAL_2026-04-23T08.30#137"
+   ],
+   "prompt_sha256": "1b92bc27c92ce2b64122a577fdbc80abfd9895b5b0f27d044b62de834e47330b",
+   "script_sha256": "e09fe906c034f0e3cff4a312a492787253eb50caebf3c4355e171e1001424ac2",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 202853,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/AAL_2026-04-23T08.30.attempt1.js",
+   "receipt_prompt_pin": "1b92bc27c92ce2b64122a577fdbc80abfd9895b5b0f27d044b62de834e47330b"
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "rows": 8,
+   "open_issues": 2,
+   "merged_raw_sha256": "421c264840b28ee65ad954e193579e13df17fcc2d15144fa5e73dfba14f79b6d",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "bdf185c8073264c66397dade648a6dd47d7848570384299752d1581d9a5cdb17",
+    "421c264840b28ee65ad954e193579e13df17fcc2d15144fa5e73dfba14f79b6d"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "750fb9415ee7708a0eddc30a032e39e3701ab6c1ded09a708d191fd6991549de",
+   "script_sha256": "e8d7b18d0afffdddad3ba42830df4949514c74218a27b49f798ae70bae854958",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 183338,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/BBY_2026-03-03T08.00.attempt1.js",
+   "receipt_prompt_pin": "750fb9415ee7708a0eddc30a032e39e3701ab6c1ded09a708d191fd6991549de"
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "rows": 7,
+   "open_issues": 4,
+   "merged_raw_sha256": "d1f8f9242bca7f665ccc4e94a7631a7d6042b4f51f2b3608295085da0e2292b8",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "dbaa3bede0f762008fbe05823307d369836e98b903a199e90b329d6f5c39c1d7",
+    "d1f8f9242bca7f665ccc4e94a7631a7d6042b4f51f2b3608295085da0e2292b8"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "c8b2831e308911a5c71471ad295e45c0ca7a00f22c8bdadbc151a7ba0de2e195",
+   "script_sha256": "4f5019027f9a5db01013cb6edab06886a2669b338b065761a855be705aa818fc",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 173972,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/CMG_2026-02-03T16.30.attempt1.js",
+   "receipt_prompt_pin": "c8b2831e308911a5c71471ad295e45c0ca7a00f22c8bdadbc151a7ba0de2e195"
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "rows": 7,
+   "open_issues": 4,
+   "merged_raw_sha256": "48534fef46bc6742a9f78cf7ee6443bd3dcfbfb7c58ec913bd1c760a7ecb7fbf",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "3d981fc68d8f79268917e8321890eaa8ccb4a003ec150c55d3f56680c4e9ab15",
+    "48534fef46bc6742a9f78cf7ee6443bd3dcfbfb7c58ec913bd1c760a7ecb7fbf"
+   ],
+   "leads": 1,
+   "lead_rows": [
+    "DAL_2026-04-08T10.00#160"
+   ],
+   "prompt_sha256": "f3eb391ef7c142c72481e0f55493e87f47e0508bb1603860d288dde1c728b32a",
+   "script_sha256": "70c5dfa3a103bf1b6ce556124a882b2f1d44b38d89f538d14183538cf1355c8b",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 178453,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "receipt_prompt_pin": "f3eb391ef7c142c72481e0f55493e87f47e0508bb1603860d288dde1c728b32a"
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "rows": 5,
+   "open_issues": 4,
+   "merged_raw_sha256": "df4e0115f30a336f5482d53b4dd386f464d8db82ccd677fed25ddd938d2fe208",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "d86f077438b12ba465b8f387912f9e40d13bb00f0f76621c319035ee21f65204",
+    "df4e0115f30a336f5482d53b4dd386f464d8db82ccd677fed25ddd938d2fe208"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "5168e96e66cfc1c69b551c41601d830f6e1b7e84b6a555aebe5e0a38c6f975cc",
+   "script_sha256": "b7787a9a8f5ee54d4863a1e28a971fd5835a337cd95fffaa175f3cf1ba003481",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 190034,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/DRI_2026-03-19T08.30.attempt1.js",
+   "receipt_prompt_pin": "5168e96e66cfc1c69b551c41601d830f6e1b7e84b6a555aebe5e0a38c6f975cc"
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "rows": 6,
+   "open_issues": 4,
+   "merged_raw_sha256": "66deae48f6249f32a13ed19b15631cc80ed519ee3d156bfb50224a77bd461257",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "ae20003b1d235aae0eb09006076a99fb43a15d52a7755734e949ef1e919cf979",
+    "66deae48f6249f32a13ed19b15631cc80ed519ee3d156bfb50224a77bd461257"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "f9d66397d6dee0a578dc2e4df7bd8945e244c006a65844b2fc76e277ad522b1b",
+   "script_sha256": "ab0580dcc6180c679b49e1882f19e3e38a44d52d5a438a9f1ad7767e98fd51b5",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 181945,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/MCD_2026-02-11T16.30.attempt1.js",
+   "receipt_prompt_pin": "f9d66397d6dee0a578dc2e4df7bd8945e244c006a65844b2fc76e277ad522b1b"
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "rows": 7,
+   "open_issues": 4,
+   "merged_raw_sha256": "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "fd3758e058f63d6a27c3ac9eda98758085bf16acec050c862d80ad9af13247b2",
+    "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62"
+   ],
+   "leads": 3,
+   "lead_rows": [
+    "ULTA_2026-03-12T16.30#180",
+    "ULTA_2026-03-12T16.30#176",
+    "ULTA_2026-03-12T16.30#180"
+   ],
+   "prompt_sha256": "901a1f44ff0f0bf9e381e8d72809357b72e39e2b8cc270ecb864ecd4b0303b59",
+   "script_sha256": "93d3e308a38cb1138171714002adcaecd86df90955ce8158b917d48274f823cb",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 175410,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/ULTA_2026-03-12T16.30.attempt1.js",
+   "receipt_prompt_pin": "901a1f44ff0f0bf9e381e8d72809357b72e39e2b8cc270ecb864ecd4b0303b59"
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "rows": 7,
+   "open_issues": 3,
+   "merged_raw_sha256": "87272f448f046c235195ed35253325872f07e310a178e722b7c08795f23b450a",
+   "origin": "a4_final_v2_correction",
+   "prior_replies": [
+    "a4_final_v1_reply",
+    "a4_final_v2_correction_reply"
+   ],
+   "prior_reply_sha256": [
+    "b73e74c1738d6820c9d4cadc457e94ed7545c75072a4835a3e5bd8056860c3cd",
+    "87272f448f046c235195ed35253325872f07e310a178e722b7c08795f23b450a"
+   ],
+   "leads": 0,
+   "lead_rows": [],
+   "prompt_sha256": "9fdafd593dbf7a120b64bb3d50280dd3019ee355d9242b6fe13674181065cbff",
+   "script_sha256": "70bebf0904e5273b164ddd3946929e9232834bed6bd46d891629c4e49f37515d",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 176323,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision/scripts/YUM_2026-02-04T08.15.attempt1.js",
+   "receipt_prompt_pin": "9fdafd593dbf7a120b64bb3d50280dd3019ee355d9242b6fe13674181065cbff"
+  }
+ ],
+ "inputs": {
+  "correction_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2035_input_bound_resume/FINDINGS_BY_EVENT.json",
+  "correction_record_sha256": "b4493c02f69f4499e9559befc20360b0813d0fa4df6ec61d63c313c8902da322",
+  "decision_leads": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/DECISION_FINDINGS_2054.core_leads2054_a.json",
+  "decision_leads_sha256": "ed317e5eb0385c633318a055065b1abd912eb55d6da32633789e5f4c1ef3573c",
+  "recovery_binding": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/RECOVERY_BINDING.json",
+  "recovery_binding_sha256": "25fb31ffa588835a0b8ea9589c54fd30f253c59009c2b5e2af4b96a54a7ac59e",
+  "input_binding": "/tmp/a7_input_binding_2035.json",
+  "input_binding_sha256": "44bc6af5145d17ad82eb825e31798db0a0154aa982fb77337d2df90618030071",
+  "decision_owner_sha256": "d0e9b8dfdea1636f362a8b337032c895d676a945140f5e1049defe2932fe4b89",
+  "correction_owner_sha256": "6c76ecfd72e7ebd33d2cf6396456cf7b3e20f8cacae739fb65be636fdcc848b0",
+  "recovery_owner_sha256": "8fc587ef77d5553ef4895ddb74a060658bd4ea0f86417ff109503fc9678beb90",
+  "preparer_sha256": "135a8d60827e5b70beb28020cee61f2f9d4cd5e766352b3b01cfd15c39be7732"
+ },
+ "kind": "PREPARED ONLY. No model call, no signature, no lock, no grading, and NO call authorization.",
+ "model_calls": 0,
+ "launched": false,
+ "checks": [
+  "every durable decision phase found for THIS key is a prepared phase that never recorded a state and never finalized, so no completed call can be repeated",
+  "the ones that DID finalize belong to other keys, not this one",
+  "and this phase's own launcher never produced a native state",
+  "the merged source key is clean and complete",
+  "the owed population is exactly the events whose merged shard still carries an open issue",
+  "every unaffected event keeps its existing result and is NOT scheduled",
+  "the recovered correction is in the merged key it derives from",
+  "every served lead names an event of this key and one of its own prior replies",
+  "the existing preparer published the phase with no problems",
+  "the receipt exists BEFORE any call and declares this phase",
+  "the receipt pins the recovery run and its record as history",
+  "every published script IS the canonical renderer's own bytes",
+  "the receipt pins each event's own prompt, reproduced live",
+  "every prompt carries BOTH prior replies, original then recovered or corrected",
+  "every event with a served lead gets exactly its own",
+  "the budget describes THIS phase's own derived schedule",
+  "the two live counters agree before this phase",
+  "the existing budget owner reports no problem and the worst case stays under the global ceiling"
+ ]
+}

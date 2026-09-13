@@ -1,0 +1,509 @@
+{
+ "accounting": {
+  "ledger_before_call": 532,
+  "primaries_this_phase": 31,
+  "retry_law_owner": "build_kfields_final.RETRYABLE",
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "max_attempts": 2,
+  "invalid_only_retry_allowance": 31,
+  "after_clean": 563,
+  "worst_case_after": 594,
+  "global_ceiling": 6000
+ },
+ "role_and_transport": {
+  "transport": {
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "transport": "Claude Code Workflow agent(), subscription",
+   "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "bound_owners": {
+   "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+   "build_kfields_hard_review.py": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+   "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+   "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+   "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+   "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+   "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+   "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+   "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+   "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+   "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+   "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+   "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+   "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+   "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+   "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+   "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+   "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "review_composite_owner": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+   "clarified_review_manifest": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+  },
+  "door": "a4_source_only_key_1997",
+  "manifest_sha256": "ec8b702a0028030e5de4078fef9212fd02420db00e217cf067780e21fe3624b0",
+  "requested_key_role": {
+   "kind": "LIVE",
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000",
+   "transport": "Claude Code Workflow agent(), subscription"
+  },
+  "observed_key_role_proof": null,
+  "sonnet_role_untouched": {
+   "tested_transport": {
+    "model_alias": "sonnet",
+    "runtime_model_id": "claude-sonnet-5",
+    "effort": "high",
+    "agentType": "lean-probe",
+    "disallowedTools": [
+     "Read"
+    ],
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+    "transport": "Claude Code Workflow agent(), subscription",
+    "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+   },
+   "hard_review_model": "sonnet",
+   "hard_review_effort": "high",
+   "hard_review_agent_type": "lean-probe",
+   "hard_review_row_model": "claude-sonnet-5",
+   "hard_review_disallowed": [
+    "Read"
+   ],
+   "blinds_per_hard_task": [
+    1,
+    2
+   ]
+  }
+ },
+ "native_proof_dependencies": {
+  "v1_evidence": {
+   "receipt.json": "8fc9c91d56382ed71ea4414ee5a6e8cb452f9a2b8b342e801bc25c49973598b4",
+   "finalization.json": "76f6a35d161636a67360bbff4f7849959dfeb0a4bfeca5635e284cf5ea351112",
+   "raw_tree": {
+    "files": 66,
+    "sha256": "00d63014ed4ab3bbf7209072119fed42e58621805cfaf05439c0d9504d523636"
+   }
+  },
+  "parent": null,
+  "states_recorded_so_far": 0
+ },
+ "population": {
+  "derived_events": 31,
+  "events_with_findings": 20,
+  "findings_total": 31,
+  "decision_counts": {
+   "CHANGE": 20,
+   "PRESERVE": 7,
+   "REVIEW": 4
+  },
+  "original_events_preserved": 33,
+  "largest_script_bytes": 304618
+ },
+ "events": [
+  {
+   "source_id": "0000006201-26-000031",
+   "rows": 7,
+   "original_raw_sha256": "ce9e4cb13a77e20284a320a126cf7e66c24618976654e00a46ce71476ad52911",
+   "open_issues": 2,
+   "findings": 1,
+   "prompt_sha256": "53b16b44200c240f0d4d231546a5c5575c3322a7ca327a0034101940b42c9d68",
+   "script_sha256": "addbbdd5b1cb8acfb075260aedd09199f5155f7d896dbd54b4ad889e6c019816",
+   "script_bytes": 142668,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000006201-26-000031.attempt1.js",
+   "receipt_prompt_pin": "53b16b44200c240f0d4d231546a5c5575c3322a7ca327a0034101940b42c9d68"
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "rows": 5,
+   "original_raw_sha256": "7b792da42e922f9a33c48f517d7472f02e0df87c50835a77966261babd651e6a",
+   "open_issues": 2,
+   "findings": 0,
+   "prompt_sha256": "09983447ae1230f0dbc76a38966918c1ab3e7fff33d88b084bfb7e145bd4ebbd",
+   "script_sha256": "5c66866c03d49736a97b357696919ce85bd65b8489abff3a31ba054d1ac60006",
+   "script_bytes": 144767,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000006201-26-000032.attempt1.js",
+   "receipt_prompt_pin": "09983447ae1230f0dbc76a38966918c1ab3e7fff33d88b084bfb7e145bd4ebbd"
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "rows": 7,
+   "original_raw_sha256": "2f80a72d633a3220e9b0b412621c4c59ff6f7b6db4683cd824b86e0487b00eb2",
+   "open_issues": 3,
+   "findings": 2,
+   "prompt_sha256": "5772e76f252e1b7ce9423da11819b70320ceb53088f7b0bfb366b77ad32430aa",
+   "script_sha256": "5bca8ec2760c9737903c119b92adf5c3822178c8c07c2b9aa39a71b2bfe9b7a6",
+   "script_bytes": 294871,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000027904-26-000013.attempt1.js",
+   "receipt_prompt_pin": "5772e76f252e1b7ce9423da11819b70320ceb53088f7b0bfb366b77ad32430aa"
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "rows": 9,
+   "original_raw_sha256": "51a8a23951cc258fbf01d659af0c8cba8a62292d34fe70bc795960cac2107339",
+   "open_issues": 4,
+   "findings": 1,
+   "prompt_sha256": "f9f2c5bbe4cd8387efe4c098e6ecbe8bc230ac94b3cf5bfb9b3ef1cd6772b111",
+   "script_sha256": "e12a69dfc3f9c62069a0b413ba001470bd3679b753064a1ce7879d1c262fa604",
+   "script_bytes": 162438,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000027904-26-000020.attempt1.js",
+   "receipt_prompt_pin": "f9f2c5bbe4cd8387efe4c098e6ecbe8bc230ac94b3cf5bfb9b3ef1cd6772b111"
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "rows": 5,
+   "original_raw_sha256": "233950a0b35b8e591655d567497f00e87e8f3c81b7b304fb8fb09671d1d8575b",
+   "open_issues": 3,
+   "findings": 0,
+   "prompt_sha256": "47bd12f28893140db8fe95a8d0083bd5a8b3ab6263fa28d3305156e7bb4a0fce",
+   "script_sha256": "22518f29351d8c16ff06b36a3bd997d302b4f5b6a91cbc3f37e032528caa061a",
+   "script_bytes": 127892,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000027904-26-000022.attempt1.js",
+   "receipt_prompt_pin": "47bd12f28893140db8fe95a8d0083bd5a8b3ab6263fa28d3305156e7bb4a0fce"
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "rows": 5,
+   "original_raw_sha256": "75d7b166c794271b0a8a44f908e0e023ac1427d6f6927aa107e9517346fefebf",
+   "open_issues": 2,
+   "findings": 2,
+   "prompt_sha256": "a650eb7c97c9fe48dd7d8661c121638697a20260e8537bdb5dfc0e232f4e191a",
+   "script_sha256": "c3f27ce23640606c5c2538a672514a86e62ba62088dee407f70cbce6585fba49",
+   "script_bytes": 106469,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000063908-26-000032.attempt1.js",
+   "receipt_prompt_pin": "a650eb7c97c9fe48dd7d8661c121638697a20260e8537bdb5dfc0e232f4e191a"
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "rows": 7,
+   "original_raw_sha256": "0db2412014a4f2a7215c833039e21539613f2d11f86f9262737d3635896d6026",
+   "open_issues": 6,
+   "findings": 2,
+   "prompt_sha256": "5ec03fa7d43a1b244198b47df0cc4449b251c5d48f9f02851b5d9e1de8d9be11",
+   "script_sha256": "cfcd691fcab1a7f3f1219602f3fb0148879d9e13de15ad424318a6db3c7178ec",
+   "script_bytes": 161468,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000092380-26-000044.attempt1.js",
+   "receipt_prompt_pin": "5ec03fa7d43a1b244198b47df0cc4449b251c5d48f9f02851b5d9e1de8d9be11"
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "rows": 5,
+   "original_raw_sha256": "3fb132f5907436cffb3289ad426e25cfb08ea52d80b908504c5798633f2323ab",
+   "open_issues": 3,
+   "findings": 0,
+   "prompt_sha256": "4579258ae075b46708ecb253f97a719f3bd39221beee4de9a8b77188bbe84cd1",
+   "script_sha256": "2df0320f5d877edb3241ab7c772323cf9e3ecb01856e88f08c510e5307ed0e38",
+   "script_bytes": 140042,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000764478-25-000057.attempt1.js",
+   "receipt_prompt_pin": "4579258ae075b46708ecb253f97a719f3bd39221beee4de9a8b77188bbe84cd1"
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "rows": 6,
+   "original_raw_sha256": "abf52d43bcea786600f143c8cb594a6d05a2ce5abafee5ad85ec728f5fdeccb2",
+   "open_issues": 4,
+   "findings": 1,
+   "prompt_sha256": "d351998da6446991e594155569980da15b0d4f3c2195bf230b2ed8d665ec78b0",
+   "script_sha256": "38825689f6e087b09d20e4030580ca23a3f93ef655861128f0196df4f3945178",
+   "script_bytes": 136757,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000898173-26-000006.attempt1.js",
+   "receipt_prompt_pin": "d351998da6446991e594155569980da15b0d4f3c2195bf230b2ed8d665ec78b0"
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "rows": 4,
+   "original_raw_sha256": "7c63e18a89a1b5cd615acf8688309ba9ccd096664c4c7c36596c9311889729be",
+   "open_issues": 2,
+   "findings": 1,
+   "prompt_sha256": "2278e8220736b262b9deed009d4b9f2f7584589abbc9b76bf119ac471541ce85",
+   "script_sha256": "fb6b04992e8ce472394ef3e4e9e8500b4763e89c2b1ef0cb60e1767cb23eeadc",
+   "script_bytes": 267259,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000940944-25-000038.attempt1.js",
+   "receipt_prompt_pin": "2278e8220736b262b9deed009d4b9f2f7584589abbc9b76bf119ac471541ce85"
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "rows": 6,
+   "original_raw_sha256": "6bd81f43566b89977d451909bbc3f4894bc5649f48dcaebaac98106e5fc62ac8",
+   "open_issues": 3,
+   "findings": 1,
+   "prompt_sha256": "8fd70b19a2b1ba4e932e48bfbfaffd54f84aae56b456a26260e2ca4f54ebc463",
+   "script_sha256": "63c35e9744456868bf9dca1569a1d7b198a4ef8aa7480effda9a8932474f19c3",
+   "script_bytes": 117510,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000940944-26-000005.attempt1.js",
+   "receipt_prompt_pin": "8fd70b19a2b1ba4e932e48bfbfaffd54f84aae56b456a26260e2ca4f54ebc463"
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "rows": 6,
+   "original_raw_sha256": "1476557a6ffa8551089544f743faa19b9d60d1138f632ffe966f66d9c011f474",
+   "open_issues": 2,
+   "findings": 0,
+   "prompt_sha256": "c789c72bbfd7a8db845e2e828b9955c0a62e8a2c5caa11c7ce51560b6e834f20",
+   "script_sha256": "89ad131d28b96e0de201ae5d142375d6d4b4b0e44b49fe4eca8cd693dea58b38",
+   "script_bytes": 145761,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0000940944-26-000009.attempt1.js",
+   "receipt_prompt_pin": "c789c72bbfd7a8db845e2e828b9955c0a62e8a2c5caa11c7ce51560b6e834f20"
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "rows": 5,
+   "original_raw_sha256": "ec2a0d12cbd0eb51e7c399b67cfbf0f55d2877456c6bfc200970bc17884af242",
+   "open_issues": 2,
+   "findings": 1,
+   "prompt_sha256": "7a3101200482dcdf28a6758ed1eb3812a7721cbbd6d904114bec9b25a4cd82ad",
+   "script_sha256": "7f144a5cd4264867d9abb12be4b53c2b76e0436b0a6da94789bc974aa18ee9b6",
+   "script_bytes": 152690,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001041061-25-000109.attempt1.js",
+   "receipt_prompt_pin": "7a3101200482dcdf28a6758ed1eb3812a7721cbbd6d904114bec9b25a4cd82ad"
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "rows": 5,
+   "original_raw_sha256": "15e809cdb8330771fb35e6c2174ef807d18458fbb45952c84c70779036503927",
+   "open_issues": 2,
+   "findings": 0,
+   "prompt_sha256": "12c1e652304b2a046ce29ea2b9d5fa2bf6b84241056c790583cc17e43d6c45af",
+   "script_sha256": "2aeda5a13d25653b03544ea594eeef782d69a1a002595f37eadc57966931c387",
+   "script_bytes": 151600,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001041061-26-000003.attempt1.js",
+   "receipt_prompt_pin": "12c1e652304b2a046ce29ea2b9d5fa2bf6b84241056c790583cc17e43d6c45af"
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "rows": 6,
+   "original_raw_sha256": "18d1e2539f2baf13c81fd04e9ed15ce904788cc504274991ed0fc8ddc9e507f6",
+   "open_issues": 2,
+   "findings": 0,
+   "prompt_sha256": "16bb553a82c109b2fd0616ed1a57f8aaf9f4cb4e4c8f1261bfb62a2e881b1c56",
+   "script_sha256": "a4453b3850062b2e43db1e12ecf829f0e1b7c265b92dc0a6b5388ef4a5b0a3c2",
+   "script_bytes": 304618,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001041061-26-000084.attempt1.js",
+   "receipt_prompt_pin": "16bb553a82c109b2fd0616ed1a57f8aaf9f4cb4e4c8f1261bfb62a2e881b1c56"
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "rows": 6,
+   "original_raw_sha256": "070b1283dfa2d824d42a54509f19186b2d2c990f2867dfa0418c4ca69d7936d4",
+   "open_issues": 4,
+   "findings": 0,
+   "prompt_sha256": "e79c1de17d1f43b3668db22f32e9ac54cd282d2b0023ba5d3b717104028724ec",
+   "script_sha256": "6cf3b03690c11dacb06f9d5312a9f920172967627196f7230989880c6dc444ff",
+   "script_bytes": 129571,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001058090-26-000007.attempt1.js",
+   "receipt_prompt_pin": "e79c1de17d1f43b3668db22f32e9ac54cd282d2b0023ba5d3b717104028724ec"
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "rows": 6,
+   "original_raw_sha256": "dfa6f0063b221faaf0f5772cf08c8111cbdabaa2685016bf45011290b8e447b3",
+   "open_issues": 3,
+   "findings": 0,
+   "prompt_sha256": "34daa988a283d569f8df6f5f124698e9049fc63aa78d4d76e4e3ab9bce586065",
+   "script_sha256": "4cc905139444125e6700a8665476af08ae762b298a03ed82e43b410c131913ad",
+   "script_bytes": 254457,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001104659-25-102611.attempt1.js",
+   "receipt_prompt_pin": "34daa988a283d569f8df6f5f124698e9049fc63aa78d4d76e4e3ab9bce586065"
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "rows": 5,
+   "original_raw_sha256": "7a4cb12df70b627f8c7d2ccf278b62f5f3f13d50f3d31107d2c2272a1188891c",
+   "open_issues": 3,
+   "findings": 1,
+   "prompt_sha256": "674048a16077e2ef329e37d52467b11774b741a2774cc5f24891c2fe584a6ed3",
+   "script_sha256": "577e8545f32b1146db8e08a064037ec436c9f65c330acbbfb6d4a188615794b2",
+   "script_bytes": 147062,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001104659-25-105631.attempt1.js",
+   "receipt_prompt_pin": "674048a16077e2ef329e37d52467b11774b741a2774cc5f24891c2fe584a6ed3"
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "rows": 7,
+   "original_raw_sha256": "9dc33e015657549c809f04307234f8a6a5da170371731cdd0e8165f2706d709c",
+   "open_issues": 3,
+   "findings": 2,
+   "prompt_sha256": "8d5858793fc913ac893655f45270c282c172a305f965dfed6038c712e9ad80ac",
+   "script_sha256": "072a7e775774f858be23dc720fa733dc0d1156907f8dcecabf4da154072299d1",
+   "script_bytes": 143762,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001104659-25-118458.attempt1.js",
+   "receipt_prompt_pin": "8d5858793fc913ac893655f45270c282c172a305f965dfed6038c712e9ad80ac"
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "rows": 6,
+   "original_raw_sha256": "ec3fedffbb321df3b89335e31b32411b72f056715b30695947f37d80ef828690",
+   "open_issues": 3,
+   "findings": 1,
+   "prompt_sha256": "98348b67bc34923542c071f4344d516785227ad5f5d2df0dc2ddf1785737344a",
+   "script_sha256": "c675fba6cc8bcf86a309cf492d197b668f15ea24111a70dbc117e076e28c84f5",
+   "script_bytes": 120681,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001104659-26-017090.attempt1.js",
+   "receipt_prompt_pin": "98348b67bc34923542c071f4344d516785227ad5f5d2df0dc2ddf1785737344a"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "rows": 5,
+   "original_raw_sha256": "b2a8b47d956d842f318aad98f756f19856e0811468e4cda142ceeafb0104ef3b",
+   "open_issues": 1,
+   "findings": 0,
+   "prompt_sha256": "fc52cfe1a67b901af0d99801c55ab6510d4ad246b8f9461bce05d60f4204cb5f",
+   "script_sha256": "c6ab20a2df589c353a1569c5dc1249efab7722427e0b360dcf94fe0cb3ef9ecf",
+   "script_bytes": 118371,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001104659-26-027061.attempt1.js",
+   "receipt_prompt_pin": "fc52cfe1a67b901af0d99801c55ab6510d4ad246b8f9461bce05d60f4204cb5f"
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "rows": 5,
+   "original_raw_sha256": "eecc1437a8d90f2ddf0a3cee68bc3e3b8bd84389ead31672f98bd3b52ee56b5d",
+   "open_issues": 2,
+   "findings": 1,
+   "prompt_sha256": "c86f459f201397849ed37434798cc8412b752a636183d7560432a1f811652b18",
+   "script_sha256": "5b76885ac0c81f3e26d5eeff7701686a13ae29901af4f27b35429da2087e10b2",
+   "script_bytes": 141020,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001104659-26-032757.attempt1.js",
+   "receipt_prompt_pin": "c86f459f201397849ed37434798cc8412b752a636183d7560432a1f811652b18"
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "rows": 4,
+   "original_raw_sha256": "41fd49d601cc6f73e16c9f307322cda98719de48072501c05dd2184365ee25b5",
+   "open_issues": 3,
+   "findings": 1,
+   "prompt_sha256": "eb28d11df9064ec7770fa17857d4e2c001aeafa959f98e6e38f448ff2b77ef02",
+   "script_sha256": "39708eac6ae2ab5f64c242804ef3e7a9919f053291889aede3d01d225d3239c3",
+   "script_bytes": 106239,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/0001171843-26-001288.attempt1.js",
+   "receipt_prompt_pin": "eb28d11df9064ec7770fa17857d4e2c001aeafa959f98e6e38f448ff2b77ef02"
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "rows": 10,
+   "original_raw_sha256": "3cae3f4d4a238513362e337f75905c575219301dd8b094a2cd60b993d838817c",
+   "open_issues": 5,
+   "findings": 1,
+   "prompt_sha256": "49fb33d0335af118a49b4a4ac0d4e04ad083b2964c0f128b0d077eeb71f6916a",
+   "script_sha256": "081e8f6c85816c5b1d3161255b66f28bcb618b5f2fad124ad0c46c78a23c238c",
+   "script_bytes": 174810,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/AAL_2026-04-23T08.30.attempt1.js",
+   "receipt_prompt_pin": "49fb33d0335af118a49b4a4ac0d4e04ad083b2964c0f128b0d077eeb71f6916a"
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "rows": 8,
+   "original_raw_sha256": "bdf185c8073264c66397dade648a6dd47d7848570384299752d1581d9a5cdb17",
+   "open_issues": 2,
+   "findings": 0,
+   "prompt_sha256": "43e70652c91c7ea130eaec160fdcd0254e6036b7b05feb4a67538defcddc79e6",
+   "script_sha256": "27ece87823d5bb3e4f2dd7ae002fc513fbdb29bc7f9fa13c6abcd6f152544b49",
+   "script_bytes": 166432,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/BBY_2026-03-03T08.00.attempt1.js",
+   "receipt_prompt_pin": "43e70652c91c7ea130eaec160fdcd0254e6036b7b05feb4a67538defcddc79e6"
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "rows": 7,
+   "original_raw_sha256": "dbaa3bede0f762008fbe05823307d369836e98b903a199e90b329d6f5c39c1d7",
+   "open_issues": 3,
+   "findings": 1,
+   "prompt_sha256": "676291116d5b2c46f0e96cb227f914cca3a9dac2eb01ce42738a0142b34cfc70",
+   "script_sha256": "a0aadb9b8e48e22ae16da2a4d09791f7eb965e558be83233f9c40b0080037db2",
+   "script_bytes": 162020,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/CMG_2026-02-03T16.30.attempt1.js",
+   "receipt_prompt_pin": "676291116d5b2c46f0e96cb227f914cca3a9dac2eb01ce42738a0142b34cfc70"
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "rows": 7,
+   "original_raw_sha256": "3d981fc68d8f79268917e8321890eaa8ccb4a003ec150c55d3f56680c4e9ab15",
+   "open_issues": 3,
+   "findings": 1,
+   "prompt_sha256": "46ba0500fc0d24fb7f0c4c6305c4119c1073df24069d4bb7771faf44740c07c3",
+   "script_sha256": "81a6cab1a2673c415cb32d54af1c1f03686290313638850733390316a2ba41b6",
+   "script_bytes": 162668,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "receipt_prompt_pin": "46ba0500fc0d24fb7f0c4c6305c4119c1073df24069d4bb7771faf44740c07c3"
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "rows": 5,
+   "original_raw_sha256": "d86f077438b12ba465b8f387912f9e40d13bb00f0f76621c319035ee21f65204",
+   "open_issues": 4,
+   "findings": 0,
+   "prompt_sha256": "f8c547a0958fe52cc0d9323cf25b4a2b9a7f84f63d4ea26dcd3f0c06dfe6659e",
+   "script_sha256": "a81860cbc594c3b4b833496d13315a027587a67667dcf17d216448a333fba7aa",
+   "script_bytes": 178158,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/DRI_2026-03-19T08.30.attempt1.js",
+   "receipt_prompt_pin": "f8c547a0958fe52cc0d9323cf25b4a2b9a7f84f63d4ea26dcd3f0c06dfe6659e"
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "rows": 6,
+   "original_raw_sha256": "ae20003b1d235aae0eb09006076a99fb43a15d52a7755734e949ef1e919cf979",
+   "open_issues": 3,
+   "findings": 3,
+   "prompt_sha256": "5270bf690ca723958e57677fdeeab2297dc1beaee3a72c32cee7f346ac23e91b",
+   "script_sha256": "6707178fe7c62bce0b81bbe6d1131fbf2617b817c56e6958372e098d5aa91b40",
+   "script_bytes": 166455,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/MCD_2026-02-11T16.30.attempt1.js",
+   "receipt_prompt_pin": "5270bf690ca723958e57677fdeeab2297dc1beaee3a72c32cee7f346ac23e91b"
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "rows": 7,
+   "original_raw_sha256": "fd3758e058f63d6a27c3ac9eda98758085bf16acec050c862d80ad9af13247b2",
+   "open_issues": 3,
+   "findings": 3,
+   "prompt_sha256": "3d635494b5c7c1ac079834420c810a8ac7f6884ae335ff770d7878a4af326271",
+   "script_sha256": "ba3543c086a9db01033aa79eb44fb132c0e0c7f3909a2c54612694a2e03a3f63",
+   "script_bytes": 157682,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/ULTA_2026-03-12T16.30.attempt1.js",
+   "receipt_prompt_pin": "3d635494b5c7c1ac079834420c810a8ac7f6884ae335ff770d7878a4af326271"
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "rows": 7,
+   "original_raw_sha256": "b73e74c1738d6820c9d4cadc457e94ed7545c75072a4835a3e5bd8056860c3cd",
+   "open_issues": 3,
+   "findings": 4,
+   "prompt_sha256": "5a6d507a7d2ed947b1a8ce6536c5d24f4b5a841c2e2da94621a3aba3b220d9b9",
+   "script_sha256": "c4f5f85b4e760f40473d046065de0c71add583466422f86128dc7b4db3f33075",
+   "script_bytes": 163451,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2029_correction_packet/packet_core_pkt2029_a/corrections/scripts/YUM_2026-02-04T08.15.attempt1.js",
+   "receipt_prompt_pin": "5a6d507a7d2ed947b1a8ce6536c5d24f4b5a841c2e2da94621a3aba3b220d9b9"
+  }
+ ],
+ "kind": "PREPARED ONLY. No model call, no signature, no lock, no grading, and NO call authorization.",
+ "model_calls": 0,
+ "launched": false,
+ "checks": [
+  "the accepted original phase is clean and its population derives",
+  "every derived label is an accepted original event with open issues",
+  "every finding binds to its own event and original raw reply",
+  "every decision in the consolidated file reaches its event, none lost and none invented",
+  "the existing preparer published the phase with no problems",
+  "the receipt exists BEFORE any call and declares this phase",
+  "the receipt pins each event's own prompt, reproduced live",
+  "the worst case stays under the existing global ceiling",
+  "every prepared event matches Codex's independent input proof exactly",
+  "the population, findings and largest script agree with that proof"
+ ],
+ "input_proof_sha256": "6f4a1eb36e7505fa4a7473995f9d4d3c89eb4d84769b912b00e465aa7cf18c73"
+}

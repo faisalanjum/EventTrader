@@ -1,0 +1,2801 @@
+{
+ "evidence_origins": {
+  "a4_final_v1": 2,
+  "a4_final_v5_correction": 124,
+  "a4_final_v6_correction": 37
+ },
+ "final_role_free_values": 189,
+ "key_identity": {
+  "accepted_rows": 163,
+  "acted_rows": 0,
+  "approved_lock_sha256": "dc9192271da3af0c3a0bb2fc2590c151073076f2893ac21136aee30424022e52",
+  "approved_receipt_sha256": "a52323e2ee08be81714109d7f743036c553ebe28f15b529f21dc9ef5e4fad991",
+  "base_owner": "a7_g1_build.gold_by_event",
+  "events": 33,
+  "key_digest": "396be2d6ff680ff5e4080f08c722163f2dc249c5bf4f73b32f040026de5c8b71",
+  "schema": "a7-current-key/approved"
+ },
+ "ledger_added_rows": 0,
+ "override_rows": 0,
+ "rows": [
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "277f7fbb9394dcd336499692e20f93e164527555f8ec0a964ec5c39ee45dbf7c",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000031#000",
+   "quote_sha256": "d750a89014045425504331eb1802d4e6db1d324b570afae13619cfbc57f83482",
+   "raw_label": "Loss per common share: Basic and diluted",
+   "reference_name": "Loss per common share: Basic and diluted",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000031",
+   "values": [
+    "-0.58",
+    "-0.72"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "3ca2ebc681a047aaa83dad541f7a7f1c8b180e3b00a3c0a782ebadc9c85dda05",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000031#001",
+   "quote_sha256": "73c45fd2cbc12d9c4761f06cd77568924bec4ad63e30bac256707c1a72e45152",
+   "raw_label": "FY 2026E Adjusted earnings (loss) per diluted share3",
+   "reference_name": "Adjusted earnings (loss) per diluted share3",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000031",
+   "values": [
+    "-0.40",
+    "1.10"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "f9ade10d19e9c3077ac01ae6bed7fe727a3bb9d8c5e5025962e4b9e684f1ce08",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000031#002",
+   "quote_sha256": "594b0005c313441b7889e1f19662c93c3fd2d6b76f1c214956804a3d92bdb831",
+   "raw_label": "a greater than $4 billion increase in expense related to higher prices for jet fuel",
+   "reference_name": "increase in expense related to higher prices for jet fuel",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000031",
+   "values": [
+    4
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "1a1b7c1177f62419c88a229656fd6e33e679f378efad9474f6889941672c5bec",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000031#003",
+   "quote_sha256": "91b4167dc9e71b286f2f6bc64cf8b64231d04bded48377436114c9f2793b41aa",
+   "raw_label": "improving sequentially each month in the quarter",
+   "reference_name": "Total unit revenue",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000031",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "7905f7286eef7e892b373a93a933d2ef01de95c802a0784b7fa2896b228c03ab",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000031#004",
+   "quote_sha256": "6be90707d70604c2324d75e6d380ce29b25c649fe4c694b15a2df1a8fef42a59",
+   "raw_label": "Passenger revenue per ASM (cents)",
+   "reference_name": "Passenger revenue per ASM (cents) 18.57 17.41 6.6 %",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000031",
+   "values": [
+    "18.57",
+    "17.41"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "67b056db68d8f850e0e5799e217a619bfe3c03176ddad9dd6247c49bd7320122",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000031#005",
+   "quote_sha256": "d883de9c3ae4e9dec47603bcad8c3f11227c4b42978932e7bdb80d962d195a04",
+   "raw_label": "Regional (4)",
+   "reference_name": "Regional (4) 32,500 30,700 5.9 %",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000031",
+   "values": [
+    32500,
+    30700
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "2d1bec260c876d2684f3c6b6cb04658bbb5f811d2e26af46b5ec134be99ec0cf",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000032#007",
+   "quote_sha256": "e42366f8f2d595320f6518e5590117a5734798c1798d63dfc4544df92a9be53a",
+   "raw_label": "CASM excluding net special items, fuel and profit sharing",
+   "reference_name": "CASM excluding net special items, fuel and profit sharing",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000032",
+   "values": [
+    "15.29",
+    "14.54"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "e83f561882a007274f38a66e46bbf470152493d678fb62720bf77d766599c9f3",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000032#008",
+   "quote_sha256": "fd1b603a290471894ce45c367ef20d6e08aa638bfbcc91b5841cd284c7b101ee",
+   "raw_label": "Income tax benefit",
+   "reference_name": "Income tax benefit",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000032",
+   "values": [
+    -94,
+    -175
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "a0ea9515db79891d07ca0dcdf30f49f2542574840f47f21b179d3c5793b857a8",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000032#009",
+   "quote_sha256": "e140b36433db532bd98ce67563000b484b1bdac035887317f946a72640c0c2dd",
+   "raw_label": "Pre-tax loss excluding net special items",
+   "reference_name": "Pre-tax loss excluding net special items",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000032",
+   "values": [
+    -327,
+    -530
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "4491234a6791965f5bff4921e2f402886bc82234211540a01b154171626e8348",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000006201-26-000032#010",
+   "quote_sha256": "25640640ee9d7d12c4c5926af42dd12ded236033f290fe1fa06259ac72412200",
+   "raw_label": "mainline full-time equivalent employees",
+   "reference_name": "mainline full-time equivalent employees",
+   "semantic_provenance": null,
+   "source_id": "0000006201-26-000032",
+   "values": [
+    "3.9"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "5bbdf498bf01eb540bd2eaa2168b3c4f9d10563a069e11d3a9d531e5093d9bda",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000013#012",
+   "quote_sha256": "960828418a84e69af6fbed05fb372bdb1cb4dc71cdc4bcb7909ee5321122ab55",
+   "raw_label": "operating income, adjusted",
+   "reference_name": "operating income, adjusted",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000013",
+   "values": [
+    "5.8",
+    -212
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "37acd615f1f185781d0092b0684c1721ca9ebca0dc76dd3747d93c5f1bc71875",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000013#013",
+   "quote_sha256": "dd15eab89335df3848b1c41b394711dba306c922071a7aaa24033ec281b3138a",
+   "raw_label": "Loss on extinguishment of debt",
+   "reference_name": "Loss on extinguishment of debt",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000013",
+   "values": [
+    -26,
+    -39
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "32fe37e63ea5ad601ddb28a8ee0e2c1351100f67118bd85400bf7fa47b635c8f",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000013#014",
+   "quote_sha256": "3070b2beeda2269964b61f699efa8e9a5a9522c41f3471b027677d003db17c25",
+   "raw_label": "in line with our long-term target of low-single digit growth",
+   "reference_name": "Non-fuel unit costs",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000013",
+   "values": [
+    "2.4"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 1,
+   "fact_sha256": "e7c21937fa2fe1d5e3c4199bd2d99e380a1fdabcecea0b79cbd9841123d67387",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000013#014",
+   "quote_sha256": "3070b2beeda2269964b61f699efa8e9a5a9522c41f3471b027677d003db17c25",
+   "raw_label": "in line with our long-term target of low-single digit growth",
+   "reference_name": "in line with our long-term target of low-single digit growth",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000013",
+   "values": [
+    "2.4"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "e007ce573cf49e4ec2a61235f8715b26aeee8de4ec4b14523d459453faf4512e",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000013#015",
+   "quote_sha256": "e88ea92b1f513e5bfb81aeb46f09a9a94447642cc6818343ccd94eb377ce8aa0",
+   "raw_label": "annual effective tax rate to be between 23% and 25% for 2026",
+   "reference_name": "annual effective tax rate",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000013",
+   "values": [
+    23,
+    25
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "3e2c18d09e07fa2a2c9c54d88cb4a2436c0c716fd7cc91215a34b876ed06cc18",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000013#016",
+   "quote_sha256": "983edc1a3f2fd8c1caa6d09ad3e21e1a5e9a2250d93dbcec6c3842c0c1e0571e",
+   "raw_label": "19% equity stake in Grupo Aerom\u00e9xico",
+   "reference_name": "equity stake in Grupo Aerom\u00e9xico",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000013",
+   "values": [
+    19
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "6cac9b12a9b627c0fd142c2e6053a678638f342c4d400c8d5b96f802af40e279",
+   "gold_idx": 6,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000013#017",
+   "quote_sha256": "d9e9b7f47da3a5bf1b93ec991bbeda8b6f5ce3072ce97231e6ebe98a08f8457a",
+   "raw_label": "option to purchase up to an additional 30 of the same aircraft",
+   "reference_name": "option to purchase up to an additional 30 of the same aircraft",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000013",
+   "values": [
+    30
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "3abb2ed3cd10ceca0709447fffe33b4e06973416c47b83d98658d97947677188",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000020#019",
+   "quote_sha256": "2cdd488b0c0ef65ed961a1e3c3ad0a752a75564e6f5304cfb5984081956bd265",
+   "raw_label": "Pre-tax loss of $214 million",
+   "reference_name": "Pre-tax loss",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000020",
+   "values": [
+    -214
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "27a3814666808e668c86651d4a0a9598e25372a9f9bee2c3106be8b8a0f6974f",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000020#020",
+   "quote_sha256": "23344ec2b69a3bb9f691fed16b31cf13dd733b8691d3a0d67becdaf577ed79ca",
+   "raw_label": "Operating Margin 6% - 8%",
+   "reference_name": "Operating Margin",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000020",
+   "values": [
+    6,
+    8
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "e0b2b65bd8bb5122b372aff2c1904329ac9c7f21373605f3e7907738bc71bacd",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000020#021",
+   "quote_sha256": "cb93d9026c9cc7c68d8a5d8fe2618839d57199bc923fe321c6a0ef134649bebd",
+   "raw_label": "Earnings per share of $0.64",
+   "reference_name": "Earnings per share",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000020",
+   "values": [
+    "0.64"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "f78b223c7203e395c96218b7b1497c1183e72d072f9ad76ea21014443d7cbbaf",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000020#022",
+   "quote_sha256": "ca42d9e6ca681780cfa918295cb842406a2e80af58c3118d5cdcd4270229c3d3",
+   "raw_label": "earnings of $0.64 per share, within our initial guidance range",
+   "reference_name": "earnings of $0.64 per share, within our initial guidance range",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000020",
+   "values": [
+    "0.64"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "6a6a0c9f85e5cf5556d780378276577f533d4e7c8aa21dc86681c797f13bcdf6",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000020#023",
+   "quote_sha256": "f32bf0eac30f786750e06ef327abcbdd57757f1b431ad390afb56b5ff4c7768d",
+   "raw_label": "total revenue increased 9.4 percent over the same period last year to a record $14.2 billion",
+   "reference_name": "March quarter total revenue",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000020",
+   "values": [
+    "14.2",
+    "9.4"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "fb3603ee95b6c5932558a6e4fac40bb1ded8a6ded539058ecb53c82d2568f9e1",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000020#024",
+   "quote_sha256": "a5f751b03fc6a9c16400ea2a5ba3d975e8866f9995e8ce7cd431509117fbeb9b",
+   "raw_label": "growing several points above our initial outlook",
+   "reference_name": "growing several points above our initial outlook",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000020",
+   "values": [
+    "14.2"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "6cb624c7802051cde806f0ef45c5afc5a2ab884a6cd88ba746d614013d28fa2e",
+   "gold_idx": 6,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000020#027",
+   "quote_sha256": "1791c0a15fed4fbdc0a62efcaf663b3f2c3296995e99780c04244e0c16fbfbbf",
+   "raw_label": "Adjusted net debt",
+   "reference_name": "Adjusted net debt",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000020",
+   "values": [
+    13540,
+    14300
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "b841bd20f01418e3d02ba901040d57413d80097edeff545be0de4dba6f12564a",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000022#028",
+   "quote_sha256": "80571d5dafb4ebe7d3eb2a2b9b66f9b5f8ec1098f4ebcc97c0d6bca151c23369",
+   "raw_label": "refinery generated an operating loss",
+   "reference_name": "refinery generated an operating loss",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000022",
+   "values": [
+    -39,
+    -1
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "ea6b16ae2b78d5312c15bf03d7c678890022b50b6c6da50df524cd4c92ab8664",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000022#029",
+   "quote_sha256": "3aea0d128e91a2f9aab85e9f08fa7c8ae5594ee1ccdcadc87e3ced27f692daeb",
+   "raw_label": "Total revenue, adjusted",
+   "reference_name": "Total revenue, adjusted",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000022",
+   "values": [
+    "1.2"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "389f715b57a9609b677febfbd890a893aea5a8a851923da6cfb55a208e6d6449",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000027904-26-000022#030",
+   "quote_sha256": "2ee8b04fe89bafaa28df063a7ad732dd124188b19fcb8f5f2e1e26e09ef0585c",
+   "raw_label": "Atlantic",
+   "reference_name": "Atlantic",
+   "semantic_provenance": null,
+   "source_id": "0000027904-26-000022",
+   "values": [
+    11
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "09b6d0326268042bfc6dbeab1fec7c28732d5626f03c26fb0f641eec267f9e48",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000063908-26-000032#035",
+   "quote_sha256": "64f6067756c55331267845c406e86034ca25ec0a8d59b98c9d58aa462f1fdc43",
+   "raw_label": "U.S.",
+   "reference_name": "U.S. increased 6.8%",
+   "semantic_provenance": null,
+   "source_id": "0000063908-26-000032",
+   "values": [
+    "6.8"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "cb23bc53e13f4db2e3f0181867d0959a8eaa3d6904e3e47ee7c2ff310dcd83b4",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000063908-26-000032#037",
+   "quote_sha256": "d9fd8abcc3763749a3c13f95eaac4d72a06ecbee84cac51625a172bbdee69008",
+   "raw_label": "Approximately 95% of McDonald\u2019s restaurants worldwide are owned and operated by independent local business owners.",
+   "reference_name": "owned and operated by independent local business owners",
+   "semantic_provenance": null,
+   "source_id": "0000063908-26-000032",
+   "values": [
+    95
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "21b37c5cac143a48660ba87730c96838fcccc8ca9f8c7f05a871785994850474",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#038",
+   "quote_sha256": "9a964bcc069469280c6a053d2224920ca00abad7984289295bf5360435beaacb",
+   "raw_label": "$0.45 EPS, in line with guidance",
+   "reference_name": "$0.45 EPS",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": [
+    "0.45"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 1,
+   "fact_sha256": "72dd257aa16199509a6ce8c1beddad097a790e6e12acfcc0f9cbee221b932473",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#038",
+   "quote_sha256": "9a964bcc069469280c6a053d2224920ca00abad7984289295bf5360435beaacb",
+   "raw_label": "$0.45 EPS, in line with guidance",
+   "reference_name": "in line with guidance",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": [
+    "0.45"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "81faaa9fc5c81a32f0d5a0430dd20d110496885d3ace416396b26b028cb35232",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#039",
+   "quote_sha256": "19703f2457198b0eb09ae11529c6d6d346e953391c9073388da364c7b9dda82a",
+   "raw_label": "fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+   "reference_name": "fuel costs were $2.73 per gallon",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": [
+    "2.73"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 1,
+   "fact_sha256": "4cbbc098339ecddd258f5e35ecdd0abada1b067884d6b005040c55931d526c55",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#039",
+   "quote_sha256": "19703f2457198b0eb09ae11529c6d6d346e953391c9073388da364c7b9dda82a",
+   "raw_label": "fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+   "reference_name": "above prior guidance of approximately $2.40",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": [
+    "2.73"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "e1130452f6ab9d862464541bd962cf94977165fa68a58256170d09791fa4d741",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#040",
+   "quote_sha256": "b310fe490c6f966d81e74c7e02f1b6b81564378e2edb0de01d1e9059f5c3c0e5",
+   "raw_label": "Freight",
+   "reference_name": "Freight",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": [
+    44,
+    41
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "322f090d2b559f614587f4cba6b4b6f3298e3e0b108720021e5f70db866f03f4",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#041",
+   "quote_sha256": "be4cefa6911f53c80493dc4733b1944d77dcf406da3ab3fe64209b8005ae0df8",
+   "raw_label": "Announced planned deployment of Starlink ultra\u2011fast Wi\u2011Fi across the fleet, with initial aircraft expected to enter service in summer 2026 and at least 300 aircraft planned by year\u2011end 2026",
+   "reference_name": "Announced planned deployment of Starlink",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "b80f9598feb487ace0968b7f1be7b3a5f1b8aa81b8a94030b18d3a0402382b30",
+   "gold_idx": 6,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#042",
+   "quote_sha256": "5ae836564a68d4ee668f980555f9dc6bb6db838295428d1221d5d405de2df5d6",
+   "raw_label": "First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance",
+   "reference_name": "CASM-X increased 2.3 percent year-over-year",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": [
+    "2.3"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 1,
+   "fact_sha256": "2225d43830ab329dae5db4fabb29553e2f4e64576d81cbd00efbecba7746e156",
+   "gold_idx": 7,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#042",
+   "quote_sha256": "5ae836564a68d4ee668f980555f9dc6bb6db838295428d1221d5d405de2df5d6",
+   "raw_label": "First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance",
+   "reference_name": "below prior guidance",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "63dc0faee547c590e1f878e1d7a5f1c7b7e0628275458636f3263617fb210d37",
+   "gold_idx": 8,
+   "name_from_override": false,
+   "packet_id": "0000092380-26-000044#044",
+   "quote_sha256": "b698d58a9454c6f8049bde81800ddea1a5aa307a74b73e531b1b4794318c2b4d",
+   "raw_label": "NET INCOME (LOSS)",
+   "reference_name": "NET INCOME (LOSS)",
+   "semantic_provenance": null,
+   "source_id": "0000092380-26-000044",
+   "values": [
+    227,
+    -149
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "008edb0d836bfb06e1cc8656e7f5e34e5c541fe0ecaa23be950b267e4117f3ac",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000764478-25-000057#045",
+   "quote_sha256": "00a56836de9eb839c4ac7a2b9f3f49ddc4ef9aac2a2a75835fc60910c1e23f0d",
+   "raw_label": "Goodwill and intangible asset impairments",
+   "reference_name": "Goodwill and intangible asset impairments",
+   "semantic_provenance": null,
+   "source_id": "0000764478-25-000057",
+   "values": [
+    171
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "0d4a3b8a73192d887e529342accdf3b5b5705ae4093d9c49f63cc446ce417007",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000764478-25-000057#046",
+   "quote_sha256": "00ad5f7f61ebe23a25d8db9abc4c9f783630db72efbe32a869c4801ab554faff",
+   "raw_label": "The 7.6% comparable sales growth",
+   "reference_name": "The 7.6% comparable sales growth",
+   "semantic_provenance": null,
+   "source_id": "0000764478-25-000057",
+   "values": [
+    "7.6"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "73ce80b3817322110e3da0a6fa17b6761706e96b01f3bba619f37400edc64c80",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000764478-25-000057#047",
+   "quote_sha256": "e771b9c67f2d31d403b1307082b6843cfa3dc93884c50e97ae5baec42abb96e1",
+   "raw_label": "The 3.6% comparable sales growth",
+   "reference_name": "The 3.6% comparable sales growth",
+   "semantic_provenance": null,
+   "source_id": "0000764478-25-000057",
+   "values": [
+    "3.6"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "8bd5887f67484398e100a4fc99ded2a2e310a8a0dea710440b31bb536eca32e2",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000764478-25-000057#048",
+   "quote_sha256": "106e2d23c1c93cfebb5bcdf4aa21a48e7631128345a67a8d9e5223685c914618",
+   "raw_label": "Online revenue as a % of total segment revenue",
+   "reference_name": "Online revenue as a % of total segment revenue",
+   "semantic_provenance": null,
+   "source_id": "0000764478-25-000057",
+   "values": [
+    "31.8",
+    "31.4"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 1,
+   "fact_sha256": "f7a880340a895e43813fffc24c5c12e0a290d032c1b2adb130ffde41962c7313",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0000764478-25-000057#048",
+   "quote_sha256": "106e2d23c1c93cfebb5bcdf4aa21a48e7631128345a67a8d9e5223685c914618",
+   "raw_label": "Online revenue as a % of total segment revenue",
+   "reference_name": "Online revenue as a % of total segment revenue",
+   "semantic_provenance": null,
+   "source_id": "0000764478-25-000057",
+   "values": [
+    "32.1",
+    "31.2"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "52d0d285f51e1255e5ab9ed8dbcc88f69bbe4e348cc3646d261ad2494d10d23f",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000898173-26-000006#050",
+   "quote_sha256": "12344e2e3b508f343aa0b9827db4b4471d72f805cf38eda8f1975ed973428943",
+   "raw_label": "Diluted earnings per common share",
+   "reference_name": "Diluted earnings per common share",
+   "semantic_provenance": null,
+   "source_id": "0000898173-26-000006",
+   "values": [
+    "2.97",
+    "2.71"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "e97e83f1b0fe2d82ab42777c1e8910e48782905e3b6a7471d7e19cfd19ddcef8",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000898173-26-000006#051",
+   "quote_sha256": "e9e4a7aedd729aca377b33e4db4069b2147990735f7bd23f89e2d6f3b5b328fa",
+   "raw_label": "SG&A expenses again exceeded our expectations",
+   "reference_name": "SG&A expenses",
+   "semantic_provenance": null,
+   "source_id": "0000898173-26-000006",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "6e8b8cb4bd5a5b9617fab39323554e254344b2622e76ecdad1ca9bd1f589947f",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000898173-26-000006#051",
+   "quote_sha256": "e9e4a7aedd729aca377b33e4db4069b2147990735f7bd23f89e2d6f3b5b328fa",
+   "raw_label": "SG&A expenses again exceeded our expectations",
+   "reference_name": "SG&A expenses again exceeded our expectations",
+   "semantic_provenance": null,
+   "source_id": "0000898173-26-000006",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c951bd1326eecdc9b734cb808c4af919fd662c9f98a527e069560d6ccb3c4c39",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000898173-26-000006#052",
+   "quote_sha256": "1d1091943305001ace3c83672eb7c318e6b4178e74c2bb98fa8650008f0f58e1",
+   "raw_label": "Ending domestic store count",
+   "reference_name": "Ending domestic store count",
+   "semantic_provenance": null,
+   "source_id": "0000898173-26-000006",
+   "values": [
+    6447
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "a04384dc3296ce329a413be3fe1fd01117a14073487787d09931c84399376c61",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0000898173-26-000006#053",
+   "quote_sha256": "b7c7b6e65f4ee62bcd2f16f1b79ceec11da1cf5faf8b85f6a4aa6fa0926c6349",
+   "raw_label": "Total shareholders\u2019 deficit",
+   "reference_name": "Total shareholders\u2019 deficit",
+   "semantic_provenance": null,
+   "source_id": "0000898173-26-000006",
+   "values": [
+    -763352
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "a326dec3c96934605af9ae7bce2e0fe228aa0bbafea014ce359eb686de03b8fe",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000940944-25-000038#056",
+   "quote_sha256": "7482418f5a7065299f1751117146585851f3a099be54e01845b67a7f7ff3a548",
+   "raw_label": "LongHorn Steakhouse",
+   "reference_name": "LongHorn Steakhouse",
+   "semantic_provenance": null,
+   "source_id": "0000940944-25-000038",
+   "values": [
+    "19.3",
+    "18.4"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "ff7d3265b96fc632078d62624c448c09f9ef2f976d5cd6402c1635f61dc4dee0",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000940944-25-000038#057",
+   "quote_sha256": "99080fd4a3adc9a0fffde2f0f302e1b7351ce035b90623b882554f5faa4bec27",
+   "raw_label": "Olive Garden\u2019s eight Canadian restaurants",
+   "reference_name": "Olive Garden\u2019s eight Canadian restaurants",
+   "semantic_provenance": null,
+   "source_id": "0000940944-25-000038",
+   "values": [
+    8
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "ac3408c934d1c5429a5afece78141904ed0db3608346a702533a3072f3e9fe0a",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000940944-25-000038#059",
+   "quote_sha256": "768dedd4c7b89bb5612ab8da58f2045f131248d4af1ca6921d7350a77e58f0a2",
+   "raw_label": "adjusted debt to EBITDAR ratio",
+   "reference_name": "adjusted debt to EBITDAR ratio",
+   "semantic_provenance": null,
+   "source_id": "0000940944-25-000038",
+   "values": [
+    "2.1"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "5383a5ac77821f820b173ae6195c3c11efba8d6ff30f4d402f4fac9a36e0efc7",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000005#060",
+   "quote_sha256": "1855b14ecebf61bc5b13c9979426b430cb613f1bfdf29222f5765771e81126ee",
+   "raw_label": "blended same-restaurant sales1",
+   "reference_name": "blended same-restaurant sales1",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000005",
+   "values": [
+    "4.2"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "8c49b6c43641ce797ce5bd130422460af507c0e03b0834de08f93c5c3b9f5e14",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000005#061",
+   "quote_sha256": "65483e187611ceb00e1f91916d7287cc2f82081268bb3247c0997ba734bc7fca",
+   "raw_label": "adjusted diluted net earnings per share from continuing operations",
+   "reference_name": "adjusted diluted net earnings per share from continuing operations",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000005",
+   "values": [
+    "2.95",
+    "5.4"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "26186cc057bbb3536ba58c4f5077cfbd60cd4782f0478c965a4d26282684fb0a",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000005#062",
+   "quote_sha256": "d51bd312f67c0203ed35b5628b342f5cf9927744b175ccc78a71896095d2d2b2",
+   "raw_label": "Impairment due to restaurant closures3",
+   "reference_name": "Impairment due to restaurant closures3",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000005",
+   "values": [
+    "24.7"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "dfb07a81f50e485e6ed7f2ce6c0387918096777a6a4a2f1a785c04f8d840ab4a",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000005#063",
+   "quote_sha256": "9b0399bed3bcd4500614504f1c7982a63a6c1f830dbf1a45ec5cd96b15f8ae3c",
+   "raw_label": "Gain on Olive Garden Canada sale",
+   "reference_name": "Gain on Olive Garden Canada sale",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000005",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "5d77d483d987004f079097e1847b32bb3d5c8798feeca64b4337996a4cc4908a",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000009#066",
+   "quote_sha256": "593bf48cce7fb037502fb362f7bd2549053718df5cccc830c89d127e54538896",
+   "raw_label": "Losses from discontinued operations, net of tax",
+   "reference_name": "Losses from discontinued operations, net of tax",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000009",
+   "values": [
+    "-3.8",
+    "-0.3"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "e2fc39dcdaf96cf1361c51b0fcb855b51d527ec07ba0a22bf485074093745599",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000009#067",
+   "quote_sha256": "38a3acd21df73d81dc500d21b19e289413a57784f3fe66ce52d39547ed9e2432",
+   "raw_label": "Earnings from continuing operations",
+   "reference_name": "Earnings from continuing operations",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000009",
+   "values": [
+    "2.68",
+    "2.74"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "67777c7abb8f2040c682a52e682dc8666ea147839439948cdfac81171c708acb",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000009#068",
+   "quote_sha256": "f3e888a93e56be7f2b1ff2babcc0ce69fac9552670f24528d16cc9dcef13a5c3",
+   "raw_label": "Fine Dining",
+   "reference_name": "Fine Dining",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000009",
+   "values": [
+    "402.0",
+    "385.3"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "dc2bdf46ac4afad77619e26844ab32eb09d80515c576b530d4586b998772ac6e",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0000940944-26-000009#069",
+   "quote_sha256": "09eb182cc672d1f575da0109fb5472bfd9f0f8cf70267597069397a06f1353d1",
+   "raw_label": "87 franchised restaurants",
+   "reference_name": "87 franchised restaurants",
+   "semantic_provenance": null,
+   "source_id": "0000940944-26-000009",
+   "values": [
+    87
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "ebb9cb48ae65dd6ff41b461de4aacc62d9be00f3bebd85459d4c502a2e9a57b4",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001041061-25-000109#072",
+   "quote_sha256": "d0ba09eac7b3c9acc8b925b7fc06ac076ac3db076715574c3b7e38ebb8d9e4ca",
+   "raw_label": "sold our approximate 5% minority investment in Devyani International Limited (\"Devyani\")",
+   "reference_name": "minority investment in Devyani International Limited",
+   "semantic_provenance": null,
+   "source_id": "0001041061-25-000109",
+   "values": [
+    104
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "dbf540dc2d85d1d779335a58fc305692be9775b482a80c1ffc3ffb1f85a1fe7c",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001041061-25-000109#073",
+   "quote_sha256": "c48d3c0630b995cfcd0183f1232caf196e46808f3d057e345331996dceb470c7",
+   "raw_label": "pre-tax investment losses of $20 million",
+   "reference_name": "pre-tax investment losses",
+   "semantic_provenance": null,
+   "source_id": "0001041061-25-000109",
+   "values": [
+    -20
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "6891ca5b46e509bb5c8f9c4b6241369e6b641966522a9605cb7af6402eb77ed5",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001041061-25-000109#075",
+   "quote_sha256": "d7e57f8de4f2e70751699b790fd8b554899853124500eb0ae9c684b96ae89858",
+   "raw_label": "283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January",
+   "reference_name": "283 KFC",
+   "semantic_provenance": null,
+   "source_id": "0001041061-25-000109",
+   "values": [
+    283
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 1,
+   "fact_sha256": "6ff9d44a851d80475609cd4a1d747f9d7c7617461c44b52453cae59c3784ef8e",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001041061-25-000109#075",
+   "quote_sha256": "d7e57f8de4f2e70751699b790fd8b554899853124500eb0ae9c684b96ae89858",
+   "raw_label": "283 KFC and 254 Pizza Hut restaurants in Turkey were closed in January",
+   "reference_name": "254 Pizza Hut restaurants in Turkey",
+   "semantic_provenance": null,
+   "source_id": "0001041061-25-000109",
+   "values": [
+    254
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "09ec6f8b43e847939992123084ade3564e9e343346857769f23b4a45f9aa0f92",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0001041061-25-000109#076",
+   "quote_sha256": "2c2a1c36478d349ad5a39953684a3638b9e6dc20e7cef863bcc6b3a21418c8eb",
+   "raw_label": "benefit associated with the reversal of a reserve due to a favorable audit resolution",
+   "reference_name": "reversal of a reserve due to a favorable audit resolution",
+   "semantic_provenance": null,
+   "source_id": "0001041061-25-000109",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "5283b58745b247846205a9adc7249245c69661d401f7dc750806bea0ebecd30d",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000003#077",
+   "quote_sha256": "97361d4376b38e16dd1050208a3291883f3b5807811fdb32c9c96f7a49ec34ba",
+   "raw_label": "EPS excluding Special Items was $1.73",
+   "reference_name": "EPS excluding Special Items",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000003",
+   "values": [
+    "1.73"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "1cf4a9ffab0c1594e2bc83e6dbd8b691fa1e4c5de2a01928946339c3923ef886",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000003#078",
+   "quote_sha256": "bd01966ec2a0c37aa3ae9a77722fe50c954a81bb12a01e8945cd3cc20949278a",
+   "raw_label": "an acquisition of 128 Taco Bell U.S. restaurants from a franchisee for approximately $670 million",
+   "reference_name": "acquisition of 128 Taco Bell U.S. restaurants from a franchisee",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000003",
+   "values": [
+    670
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "918ac5e29994733014ef67626fa69377c3a95bec6f24e561512e4e9af7d15724",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000003#079",
+   "quote_sha256": "d4736ed716bfc0ca4e650312952574bf469804a0455bcd5619510b4af33d05d3",
+   "raw_label": "digital system sales exceeding $11 billion",
+   "reference_name": "digital system sales",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000003",
+   "values": [
+    11
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c390b3c71b7a596911625fb3607b49daf079800d824724bddc14b22150b84e05",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000003#080",
+   "quote_sha256": "d4736ed716bfc0ca4e650312952574bf469804a0455bcd5619510b4af33d05d3",
+   "raw_label": "digital mix nearly 60%",
+   "reference_name": "digital mix",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000003",
+   "values": [
+    60
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "7cc759d75dc2e47450424061183fc3518506987f7d0dee708de295713f4a659d",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000084#082",
+   "quote_sha256": "73f1a4e2862cbc3ac715fd44af1d4feadc512332bd7799a5495a2325a7857c2a",
+   "raw_label": "a quarterly dividend of $0.75 per share of Common Stock, a 6% increase from the quarterly dividend of $0.71 per share of Common Stock paid in 2025",
+   "reference_name": "quarterly dividend of $0.75 per share of Common Stock",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000084",
+   "values": [
+    "0.75",
+    "0.71"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "10c56bdcd8a3ae8c520126b5a4e3094de90621d0fa8fde16630018b39c9dee3a",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000084#083",
+   "quote_sha256": "ede866e404a57d7db92d5d117cd1110cca1c475a2c2d66bb81a512fe77169963",
+   "raw_label": "net Operating Loss of $11 million for the year ended December 31, 2023",
+   "reference_name": "net Operating Loss of $11 million",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000084",
+   "values": [
+    -11
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "ff7e336db5937bea96edc375fe200b9b97a4331e3f37f058f31937f9daf65865",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000084#084",
+   "quote_sha256": "7355461fc6dbefe9dd1001bcf34c169000c2d56aa4c1ce941f9d2f25591cd46a",
+   "raw_label": "Company same-store sales growth of 5%",
+   "reference_name": "Company same-store sales growth of 5%",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000084",
+   "values": [
+    5
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "f12fb91b00859135bad8c4b684aaef14518dbba2229aa994e7fe757b858f4eff",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000084#085",
+   "quote_sha256": "251cd65111939a64a6eca780595d6b6d7f093e1b66470a6dd29df3dd5f1e5989",
+   "raw_label": "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "reference_name": "$41 million of expense associated with a correction in the timing of capital loss utilization",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000084",
+   "values": [
+    41
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "ded9ca6e0915eec4698795a16628eb0849057410c1429ec67b49ffd411e34880",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0001041061-26-000084#086",
+   "quote_sha256": "4b4a6c3ebc4f18300216ec71568df5408400535fea4dab24233b441c93e60654",
+   "raw_label": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+   "reference_name": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+   "semantic_provenance": null,
+   "source_id": "0001041061-26-000084",
+   "values": [
+    79
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "00d03f5542db49dc58cca816ec497126b05198bae996331c0c4ced70b24f98d8",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001058090-26-000007#088",
+   "quote_sha256": "dab08bd4391ddd18a7dda4988cfab9758729e2b816f3cd2b618148015bcfa0e4",
+   "raw_label": "Adjusted diluted earnings per share",
+   "reference_name": "Adjusted diluted earnings per share",
+   "semantic_provenance": null,
+   "source_id": "0001058090-26-000007",
+   "values": [
+    "0.25"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "29946fdb98d5a41f72c583ffb08f353bae02b9854e2f10a699dd6c8ddea47d06",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001058090-26-000007#089",
+   "quote_sha256": "ab6c4686ec05b175d41067c8ecc7839e887308bc309204c96e09c658ada4c63d",
+   "raw_label": "Restaurant level operating margin",
+   "reference_name": "Restaurant level operating margin",
+   "semantic_provenance": null,
+   "source_id": "0001058090-26-000007",
+   "values": [
+    "23.4",
+    "24.8"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "70448a1479c24d6f23c8423d7a89a13eaf508e34ca1d6fa687e34508fd6d83e1",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001058090-26-000007#090",
+   "quote_sha256": "7d99cb2a25855284faf4a48bafac5d678a2a50417c91aaa0e912e8bb3b3f690b",
+   "raw_label": "Gain on restaurant lease termination",
+   "reference_name": "Gain on restaurant lease termination",
+   "semantic_provenance": null,
+   "source_id": "0001058090-26-000007",
+   "values": [
+    -1518
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "201ec0d045cb44f905e063dbc2e304f29da3a05fe30a31b16b04902429f026ee",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001058090-26-000007#091",
+   "quote_sha256": "67e4484e5e61500769f497ab83356f065bdab1d8388acfce1618ec9c36786fcc",
+   "raw_label": "350 to 370 new restaurant openings",
+   "reference_name": "350 to 370 new restaurant openings",
+   "semantic_provenance": null,
+   "source_id": "0001058090-26-000007",
+   "values": [
+    350,
+    370
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "fd3ec23546958c1e66e5ba527ecb20de766b62f42e5722868f96d472c57aa94c",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0001058090-26-000007#093",
+   "quote_sha256": "dcdf7befd521220acbdc3ad9b30135b63347981192453a7e769f9891918fc997",
+   "raw_label": "Chipotlanes continue to perform well",
+   "reference_name": "Chipotlanes continue to perform well",
+   "semantic_provenance": null,
+   "source_id": "0001058090-26-000007",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "aa2a00f35366f88ccd3e4a8fb0f8115bd1bae9a59694e3a5c376209b8c78c120",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-102611#094",
+   "quote_sha256": "01ae069c57018ab53858d66d48750145ea25c15be3c839553f646296d0f09568",
+   "raw_label": "$64.0 million charge in the current year versus $40.0 million benefit in the prior year",
+   "reference_name": "non-cash LIFO impact",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-102611",
+   "values": [
+    "64.0",
+    "-40.0"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "9ce20a04a3913f035bd1fd151bcd77ca16df87242e884214a31bf921cf9cc04f",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-102611#095",
+   "quote_sha256": "a19ca1b1d1ecc57c2157fd0cde1f8106092a834e062e33365037cdf292a9dcb0",
+   "raw_label": "one individual vendor provided 13 percent of our total purchases",
+   "reference_name": "one individual vendor",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-102611",
+   "values": [
+    13
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c09577db2c187f2b929a4cd94f90415313225f0beba7336772e8b5cd2f84f98f",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-102611#096",
+   "quote_sha256": "d146e63fe2edb921a1cd8a7ba07f8c401482f9a303af81b89e2ffa896eef546b",
+   "raw_label": "failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales",
+   "reference_name": "failure and maintenance related categories",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-102611",
+   "values": [
+    85
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "18c2382b3090e64c1b6de634d87011116af74f882265d14100fb5bb800f2cb4c",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-102611#097",
+   "quote_sha256": "cbdc6470533c6bbfc475ee4544adbf7cca336d46f2c37a903e0c182b71e74fbb",
+   "raw_label": "Domestic commercial sales increased $329.5 million, or 6.7%",
+   "reference_name": "Domestic commercial sales",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-102611",
+   "values": [
+    "329.5"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "9d1f0976aabd9c409fbfedd0590c0812ac38b1393b43e6d2df99bc6b05f1aa59",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-102611#098",
+   "quote_sha256": "aeaf311f236e04fd528d1f9f8567f371ca9ed0c29ae08cf91b1ca90ffc6cb840",
+   "raw_label": "represents 31.7% of our total Domestic sales",
+   "reference_name": "31.7% of our total Domestic sales",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-102611",
+   "values": [
+    "31.7"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "d5ca016755b021ee2cc76323511a2fa62184432cf106c9222dc0ab3caef93a66",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-105631#100",
+   "quote_sha256": "17e94f089bb6b134e19b430a9f1341cb8eac82ed8d7e018eeef2607abb39a1ef",
+   "raw_label": "North Italia sales",
+   "reference_name": "North Italia sales",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-105631",
+   "values": [
+    "83.5",
+    "71.9"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "225a3625efa7b37bf72cfd8dd2b792a696a4ae5471eb47ebc32275d973e2d874",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-105631#101",
+   "quote_sha256": "7eb3cf06982fe56b57cf8f1617962b4e006fb313e35ee23d7996e73c865c122b",
+   "raw_label": "loss on early debt extinguishment",
+   "reference_name": "loss on early debt extinguishment",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-105631",
+   "values": [
+    "-15.9"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "6871ae750c4cf8cf749f6d7264bdd24be32eaf50420fe88075310306b479ffeb",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-105631#102",
+   "quote_sha256": "e5342764537e508ef8e29eec4cbffff60d5e15961aad2b0e17955a20969b9606",
+   "raw_label": "366 restaurants",
+   "reference_name": "366 restaurants",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-105631",
+   "values": [
+    366
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "4093134c9c378b7c9d91529396400593a4ef536a6eaff3cad400970e071a5702",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-105631#104",
+   "quote_sha256": "7b90f8e58ac263e290e2900929b44d280445b63e124d6964644d2485f06e2618",
+   "raw_label": "The Loan Agreement amends and restates in its entirety our prior credit agreement",
+   "reference_name": "Fourth Amended and Restated Loan Agreement",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-105631",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "0af65deb34899fa72e95a5a0f380d9965b0d4e6e5bb34d89ba0c774d109195cf",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-118458#105",
+   "quote_sha256": "1ea4fafa2d0d8be8f29e3f09b256be55e429b8ec7f0969c2a471c96a6aad8f30",
+   "raw_label": "84 stores in the U.K. and Ireland operated by Space NK",
+   "reference_name": "84 stores in the U.K. and Ireland operated by Space NK",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-118458",
+   "values": [
+    84
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "1a3a8142716b8983a71dee589f10b979381d0118e551a7411dbf45bcd30adcc3",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-118458#107",
+   "quote_sha256": "56e374b8806de8857dbafa536030619ce98c044172fc7be66bce86d236bc022f",
+   "raw_label": "interest coverage ratio not less than 4.0 to 1.0",
+   "reference_name": "interest coverage ratio not less than 4.0 to 1.0",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-118458",
+   "values": [
+    "4.0"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "680fb2b6742e4dc271c8c53e66f1a3f2099142b569f3b03de5a38704df791c3b",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-118458#109",
+   "quote_sha256": "55a696158f7396a84fa248b563f3c0d8135a59fc740ab33b903ee3584df218dd",
+   "raw_label": "a base rate plus a margin of 0.5% to 1.0%",
+   "reference_name": "a base rate plus a margin of 0.5% to 1.0%",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-118458",
+   "values": [
+    "0.5",
+    "1.0"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "68da655f179a48bb29b3b3791c5ed759b32b3e212152a7c2eb4947ccdb740137",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-118458#110",
+   "quote_sha256": "90815ad138c773ff4e7974b5cffc456d7bb52d6132d29d769ee3385d77e899e6",
+   "raw_label": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "reference_name": "The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-118458",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "9a4d9e4cc0902cc7db33257041d0bbde3b13930919ce65d349ad672bfafa9b39",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0001104659-25-118458#111",
+   "quote_sha256": "55a696158f7396a84fa248b563f3c0d8135a59fc740ab33b903ee3584df218dd",
+   "raw_label": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+   "reference_name": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+   "semantic_provenance": null,
+   "source_id": "0001104659-25-118458",
+   "values": [
+    "1.5",
+    "2.0"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "2ada6d4fa7c731a6628d3484d36b634c7f6090125db30d56aa87a71045bbe7b7",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-017090#112",
+   "quote_sha256": "5efe11fc2883a8d24952addb98e2db8d2af4327d6f8384b205e17c130476074c",
+   "raw_label": "adjusted net income",
+   "reference_name": "adjusted net income",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-017090",
+   "values": [
+    "48.3"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "d837a37ad3d0acd28e30fcedf9600c906876341bcd21a82bb60c65e0728fd5f8",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-017090#114",
+   "quote_sha256": "197917096f4043f9553ae8150ac72e55b2f06e3ec92afbc1eff0bd6363956b3d",
+   "raw_label": "revenue for the quarter finished within our expected range",
+   "reference_name": "revenue for the quarter",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-017090",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "6f719455a5a2ad2c3dff938a8d0e17bb9446ff2b2c9c782a974f37aa23abe22b",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-017090#114",
+   "quote_sha256": "197917096f4043f9553ae8150ac72e55b2f06e3ec92afbc1eff0bd6363956b3d",
+   "raw_label": "revenue for the quarter finished within our expected range",
+   "reference_name": "revenue for the quarter finished within our expected range",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-017090",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "68dd5da3967ad99af03c3c44fdb6ced55b58941e73930fc48ae6e7acbf431bc1",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-017090#115",
+   "quote_sha256": "15baa5923ef63db6645697ce16ed64639d905091ea97aec84ebb9b5b7432a94b",
+   "raw_label": "North Italia operating information: Comparable restaurant sales vs. prior year",
+   "reference_name": "Comparable restaurant sales vs. prior year",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-017090",
+   "values": [
+    -4
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "0a90a4a95d74ac26feb4a873eca9495403ac9837fc9037319726115d8b043150",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-017090#115",
+   "quote_sha256": "15baa5923ef63db6645697ce16ed64639d905091ea97aec84ebb9b5b7432a94b",
+   "raw_label": "North Italia operating information: Comparable restaurant sales vs. prior year",
+   "reference_name": "Comparable restaurant sales vs. prior year",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-017090",
+   "values": [
+    -2
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "d2e5152494a0dbb43e643f2ec00fc56fbf5991a0abf4c7337deaf66de41f1560",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-017090#116",
+   "quote_sha256": "86d152b39509ec8c8f0554f6c338fd2a0206f970c57845b29132825afa283758",
+   "raw_label": "six to seven Flower Child locations",
+   "reference_name": "six to seven Flower Child locations",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-017090",
+   "values": [
+    6,
+    7
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "f61a9adb3a4472957719c89f08e3ee87ad6fa175e9e5501c5aaa5ec82b5727c9",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-027061#118",
+   "quote_sha256": "6d55863997476297fba0cad7b8c4ae79994ef9320b9550c4dd02c859920341a2",
+   "raw_label": "gross profit decreased to 38.1% compared to 38.2%",
+   "reference_name": "gross profit decreased to 38.1% compared to 38.2%",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-027061",
+   "values": [
+    "38.1",
+    "38.2"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "b7ad4f0d53d90fd5fabcb6081c87866f684521146b29474bf2ab161511370e10",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-027061#119",
+   "quote_sha256": "8490b47bb40a64365492ed349e7b98a45263b86dab3391e260fb41f13dd6f925",
+   "raw_label": "repurchased 2.0 million shares",
+   "reference_name": "repurchased 2.0 million shares",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-027061",
+   "values": [
+    "2.0"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "2d8582b2e4970f189ef90cc95c5d88af1057adc8bae1f9c3e46ac8aeba7affe2",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-027061#120",
+   "quote_sha256": "54f058d6d4c1a9b12ed08599623aa98476f713c5af0d4474b5efb773d4029bf0",
+   "raw_label": "Comparable sales growth",
+   "reference_name": "Comparable sales growth",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-027061",
+   "values": [
+    "2.5",
+    "3.5"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "46136e01a9909af58bcbc68e6a1f04134735634669d9f00d9ef3dd4412defbb8",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-027061#121",
+   "quote_sha256": "ab92b3c9e351dc5c94e35834f0e53a1ddf9d62f89ab650ba6f71a1ed3a4eb242",
+   "raw_label": "International (Company-operated)",
+   "reference_name": "International (Company-operated)",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-027061",
+   "values": [
+    86
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c2baf10a7ad6fd17995f00565ef02784eaa3d0c007fc8c548646efb71455553a",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-032757#123",
+   "quote_sha256": "981e378f7b5c8c7ac53e1a36bd7bf8c454efb2cf6bd8382dafefe08447c9b636",
+   "raw_label": "unfavorable non-cash LIFO charge",
+   "reference_name": "unfavorable non-cash LIFO charge",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-032757",
+   "values": [
+    "59.0"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "f13105de00322c5d7e69c1554f28bec36a0bc623e70467aa2b9b341f8be69aac",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-032757#124",
+   "quote_sha256": "4277e3e597c503c8f3e2e9a18bbc4a933fb64170bb39de8fd0e448ff18fcb896",
+   "raw_label": "failure and maintenance related categories",
+   "reference_name": "failure and maintenance related categories",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-032757",
+   "values": [
+    85,
+    86
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "8928ddd42cc2698ec64a0e62c8217fb2f44f91d7a0540c82afbdaca9d404b5cb",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-032757#125",
+   "quote_sha256": "c3d5ac44239dddb402b012b69aff378c1a09f3a9c13cccaff9b80e99011cf725",
+   "raw_label": "6,709 stores in the U.S.",
+   "reference_name": "6,709 stores in the U.S.",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-032757",
+   "values": [
+    6709
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "05e45889adec1be73351beed7e43dcc06a09abc1ed4fe3f9d32d016fc2fe78a6",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "0001104659-26-032757#126",
+   "quote_sha256": "4d008b1683a21e650e668dd188b44219fbe4fb3bf32a90f69849e71147ea690f",
+   "raw_label": "total company same store sales",
+   "reference_name": "total company same store sales",
+   "semantic_provenance": null,
+   "source_id": "0001104659-26-032757",
+   "values": [
+    "3.3"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "fc2b5f7e77704bf24fcf03cb223b8d5906f5a3f78d24b460165e432783fe147e",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "0001171843-26-001288#128",
+   "quote_sha256": "a822df1f94894e2a3cf8000d0bfe425526407ffa006e5ecb04d7842b2b86cba4",
+   "raw_label": "Domestic Same Store Sales Increase 3.4%",
+   "reference_name": "Domestic Same Store Sales",
+   "semantic_provenance": null,
+   "source_id": "0001171843-26-001288",
+   "values": [
+    "3.4"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "6e4da85e60fb0505d439b53bc104196922fbc7d783ba549cf8ea405f20d247b5",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "0001171843-26-001288#129",
+   "quote_sha256": "add6a2a903bba022e345d59ebdf9cb90fca9ac8093431bfbb483d3dbc048d15b",
+   "raw_label": "138 basis point non-cash LIFO charge",
+   "reference_name": "non-cash LIFO charge",
+   "semantic_provenance": null,
+   "source_id": "0001171843-26-001288",
+   "values": [
+    138
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "e7d2562a05f09ae7ce2a38a8996712bddbf65a054497e1741da950b2bb9c7a3d",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "0001171843-26-001288#130",
+   "quote_sha256": "09de7a860e1ede727f1d15ae9d236636a983f487d5f2a7e2b6837b9f6d222e79",
+   "raw_label": "in line with our expectations to open approximately 350-360 stores for the full fiscal year",
+   "reference_name": "approximately 350-360 stores for the full fiscal year",
+   "semantic_provenance": null,
+   "source_id": "0001171843-26-001288",
+   "values": [
+    350,
+    360
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "b8db85b941c1c03f73ece4dfaf77421dfe77ed4aba8eb09510109f6e3840a8fb",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#132",
+   "quote_sha256": "71f4feb4fdf8128ccb908ff7cd74b7eaa638265a9e38160f563ab2e6ed770231",
+   "raw_label": "Total revenue grew 10.8% year-over-year",
+   "reference_name": "Total revenue grew 10.8% year-over-year",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": [
+    "10.8"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "846092f06925491a41d5a7cfc651add41b27b961c7f87029e21516e90ef2340d",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#133",
+   "quote_sha256": "d783fbc27d17ac2ae4e909279ae185b39dd93bff363d7f79eb8af3960cc03267",
+   "raw_label": "exceeded our initial expectations",
+   "reference_name": "Revenue performance in the quarter",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "d2cda1fb35d44c7804b7f971e88099d57311981f89ef889db676d55ed5cafab2",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#133",
+   "quote_sha256": "d783fbc27d17ac2ae4e909279ae185b39dd93bff363d7f79eb8af3960cc03267",
+   "raw_label": "exceeded our initial expectations",
+   "reference_name": "exceeded our initial expectations",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "a585bb9cbf6ecea641b9c2256d82df4911df382d35c8611aef33e0f9a1c75089",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#134",
+   "quote_sha256": "999e6a7ddd89e06145b12bda8fdca0602d7cf2a4dbe8b8dcec4403a0a0ceda7c",
+   "raw_label": "adjusted loss per diluted share of 40 cents",
+   "reference_name": "adjusted loss per diluted share of 40 cents",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": [
+    -40
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "79f64fff446e540f8e705536aa2a374d4f4b16816d4038b3995ce018c9e8d30c",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#135",
+   "quote_sha256": "eb29969af916028b16e3d0c5449d777a02cfe8f75fc3cd0132e33e3c6da5aa6c",
+   "raw_label": "$320 million revenue impact from winter storms",
+   "reference_name": "$320 million revenue impact from winter storms",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": [
+    -320
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c0530b6bd3ad182461972bca50e2b30185f995aba7c51c0fcf20e58945be14f3",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#136",
+   "quote_sha256": "204fb42dc82b9ef2df72fc33e8feec59cbcee9b4e32518e7ce6a614714b6baec",
+   "raw_label": "London up 25%",
+   "reference_name": "London up 25%",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": [
+    25
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "a06125e7138d50eabb263f3c7a113dca62abe320f88452a31428db23262aaebc",
+   "gold_idx": 6,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#137",
+   "quote_sha256": "e947920d7fb709c6a98e2e8a8fd6e48c57ce3a839934043ac7b99d735be0c704",
+   "raw_label": "TMC performance is up 11%",
+   "reference_name": "TMC performance is up 11%",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": [
+    11
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "13456406724b3a78b477961df2975f2b31fd8dd39a37cd1a9c8ffa1f3b747406",
+   "gold_idx": 7,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#138",
+   "quote_sha256": "ced6cee9b76cb15ad07d8cbd3afdb24cc4057fc7a262e57310d08d0d7cf66a55",
+   "raw_label": "recapture rate would be in the 90s",
+   "reference_name": "recapture rate would be in the 90s",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "5702b370c3694f6deb03a2f1a42706e77cdef21c874aa4ce776fca4f286f187b",
+   "gold_idx": 8,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#140",
+   "quote_sha256": "5a33c5d30eab2c619f392b2144587277bc1d556d951935be207447d2c66d4c3f",
+   "raw_label": "just versus the fourth quarter was up you know something less than 10 percent",
+   "reference_name": "just versus the fourth quarter was up you know something less than 10 percent",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": [
+    10
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "a4c9afe29da0db82bcd5c46f7ed5ea86f6605df0592db3beea24ce7d15a62b2a",
+   "gold_idx": 9,
+   "name_from_override": false,
+   "packet_id": "AAL_2026-04-23T08.30#141",
+   "quote_sha256": "7d77bb21067aa9f5f65b61db154a28bb24c25e63a3ebeef5749febd6458b9334",
+   "raw_label": "we saw it increase sequentially up into March for double digits",
+   "reference_name": "we saw it increase sequentially up into March for double digits",
+   "semantic_provenance": null,
+   "source_id": "AAL_2026-04-23T08.30",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "0235e6cecd615a974a15681f143e15085d22e2b3de7d18c5784e2f6e2217d100",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "BBY_2026-03-03T08.00#142",
+   "quote_sha256": "1207c4284d8e07b84d0ac34a2f201e7399e69371438a87c3f9527a61471dc0fb",
+   "raw_label": "was better than planned",
+   "reference_name": "adjusted operating income rate of 5%",
+   "semantic_provenance": null,
+   "source_id": "BBY_2026-03-03T08.00",
+   "values": [
+    5
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "931eabfb84507b14460b2f709cce69e2b35ab6a2fdc1d9a685005b1642526b60",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "BBY_2026-03-03T08.00#142",
+   "quote_sha256": "1207c4284d8e07b84d0ac34a2f201e7399e69371438a87c3f9527a61471dc0fb",
+   "raw_label": "was better than planned",
+   "reference_name": "adjusted operating income rate of 5% was better than planned",
+   "semantic_provenance": null,
+   "source_id": "BBY_2026-03-03T08.00",
+   "values": [
+    5
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "d5ec2be8c98ff0e8c170842a735ae55e0e8532d0dae2910dfff7faa72f995033",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "BBY_2026-03-03T08.00#143",
+   "quote_sha256": "2714a65abba2a23c7c67eecaa4b6a301166f200c623fb48ed3710872a83ad028",
+   "raw_label": "down 0.8%",
+   "reference_name": "Q4 comparable sales were down 0.8% versus last year",
+   "semantic_provenance": null,
+   "source_id": "BBY_2026-03-03T08.00",
+   "values": [
+    "-0.8"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "80359158a81989cd05cd48bfe43b883dc86a05e38f28b2a19bd8f027891196c3",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "BBY_2026-03-03T08.00#144",
+   "quote_sha256": "2714a65abba2a23c7c67eecaa4b6a301166f200c623fb48ed3710872a83ad028",
+   "raw_label": "within our guidance range",
+   "reference_name": "within our guidance range",
+   "semantic_provenance": null,
+   "source_id": "BBY_2026-03-03T08.00",
+   "values": [
+    "-0.8"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "45434ffd10e5e3bc61c972cabbd2c64c7559cb15547daca730470901485819fc",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "BBY_2026-03-03T08.00#145",
+   "quote_sha256": "5fa24a639767d3ea16baa75a4e6a6842c67e0cfdeef69d25be4fb17e9d581ad4",
+   "raw_label": "Best Buy business team generated more than $1.1 billion",
+   "reference_name": "Best Buy business team generated more than $1.1 billion",
+   "semantic_provenance": null,
+   "source_id": "BBY_2026-03-03T08.00",
+   "values": [
+    "1.1"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "1f7f17fd1a2a5951aab1a21a775dc52df3bd2ffb0b0e2bab979c0ba3e140a95f",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "BBY_2026-03-03T08.00#146",
+   "quote_sha256": "b513d1ead9bbb2cc18a016aa3a458ebae3e09b66de8f4eda81d303bcc650e76e",
+   "raw_label": "International revenue of $1.2 billion increased 0.5%",
+   "reference_name": "International revenue of $1.2 billion increased 0.5%",
+   "semantic_provenance": null,
+   "source_id": "BBY_2026-03-03T08.00",
+   "values": [
+    "1.2",
+    "0.5"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "8158fa08feaaf1cf6045705396739d5a26c06b60b84d536021e42eaab454d1f3",
+   "gold_idx": 6,
+   "name_from_override": false,
+   "packet_id": "BBY_2026-03-03T08.00#148",
+   "quote_sha256": "c6f7e7043bd3af75fee00aa4c2fcf876c53dff2249e937c54a3b3e1b700b3c50",
+   "raw_label": "Revenue in the range of $41.2 to $42.1 billion",
+   "reference_name": "Revenue in the range of $41.2 to $42.1 billion",
+   "semantic_provenance": null,
+   "source_id": "BBY_2026-03-03T08.00",
+   "values": [
+    "41.2",
+    "42.1"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "20a5c0038421629e559891b612be1bb1de192e94a96db1d7b26892bf32a2b669",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "CMG_2026-02-03T16.30#150",
+   "quote_sha256": "d59f738160253f1b9a94cc626c91876435e6cd6f215d4b09fd0d6494bd04cc03",
+   "raw_label": "underlying effective tax rate will be in the 24% to 26% range",
+   "reference_name": "underlying effective tax rate",
+   "semantic_provenance": null,
+   "source_id": "CMG_2026-02-03T16.30",
+   "values": [
+    24,
+    26
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "48f777bb932be9dcf4b7e47a94f446720e7b61adc15be5f11850d76c7f9a5f69",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "CMG_2026-02-03T16.30#151",
+   "quote_sha256": "1f249011db3f615a96636eb1e2c54c9de967670352a447df1ff29dfa41f3a41f",
+   "raw_label": "21 openings in Canada, an increase of 38% year-over-year",
+   "reference_name": "openings in Canada",
+   "semantic_provenance": null,
+   "source_id": "CMG_2026-02-03T16.30",
+   "values": [
+    21,
+    38
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "6f69aaee68fad409382ef289497e29377e2a198f0eb0fd8d82f75d9686206898",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "CMG_2026-02-03T16.30#152",
+   "quote_sha256": "202d9f1594ca4b5ad4ee2072cc915674ed69d082c4053fa8616538d3b0faaccb",
+   "raw_label": "these two group occasions represent less than 3% of combined sales",
+   "reference_name": "these two group occasions represent less than 3% of combined sales",
+   "semantic_provenance": null,
+   "source_id": "CMG_2026-02-03T16.30",
+   "values": [
+    3
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "ceaf5b48e5994d05686dac86c0ac9c23dd73fd39daf1c90f2abfdfde237538b5",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "CMG_2026-02-03T16.30#153",
+   "quote_sha256": "202d9f1594ca4b5ad4ee2072cc915674ed69d082c4053fa8616538d3b0faaccb",
+   "raw_label": "could be double-digit percentage of sales longer term",
+   "reference_name": "could be double-digit percentage of sales longer term",
+   "semantic_provenance": null,
+   "source_id": "CMG_2026-02-03T16.30",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "67c6de72773e9bf67ccbae08edaea96f5e1ea6ea77d38f90d5b006a1b94f5ab6",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "CMG_2026-02-03T16.30#155",
+   "quote_sha256": "7b51d4c84b3d1b495e7951bd52a98b7c79da57d7949e9038b3b3cb2bdb1103ab",
+   "raw_label": "a $4 million reduction in legal contingencies",
+   "reference_name": "a $4 million reduction in legal contingencies",
+   "semantic_provenance": null,
+   "source_id": "CMG_2026-02-03T16.30",
+   "values": [
+    -4
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "746c0fb4376d81f38ce4e5a9890afe6cea69511bb46a56a1d29a34f09857dd9e",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "DAL_2026-04-08T10.00#157",
+   "quote_sha256": "9bf3998d7a098123918aa38de7eec73313f78793b172df66fb292e0a301000a9",
+   "raw_label": "earnings of 64 cents per share",
+   "reference_name": "earnings of 64 cents per share",
+   "semantic_provenance": null,
+   "source_id": "DAL_2026-04-08T10.00",
+   "values": [
+    64
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "2e3f69b0f9d67cdb4c968ae003e5be9bbbf685c2b306d0f3d172ced4aa5b5b6e",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "DAL_2026-04-08T10.00#158",
+   "quote_sha256": "7631fba48023e979e1c80cad4904e5ee0c608049f6748141157f3fba36d9f763",
+   "raw_label": "within our initial guidance range",
+   "reference_name": "within our initial guidance range",
+   "semantic_provenance": null,
+   "source_id": "DAL_2026-04-08T10.00",
+   "values": [
+    64
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "031713270b3646b91d8ec70eca70b8f556955a5d0ce0c628c0006d105eb3df43",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "DAL_2026-04-08T10.00#159",
+   "quote_sha256": "291af7c82807e3bf2b6ccc80b8f0ede1c21b2d965f46a2796ec6663e7146da28",
+   "raw_label": "the MRO revenue in the first quarter more than doubled over the prior year to $380 million",
+   "reference_name": "the MRO revenue in the first quarter",
+   "semantic_provenance": null,
+   "source_id": "DAL_2026-04-08T10.00",
+   "values": [
+    380
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "cbe5414ed82903ea58f5f09d732bc0d5eca553f09e37f6806c8b5c3facde7857",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "DAL_2026-04-08T10.00#160",
+   "quote_sha256": "399276c20a53856eef1ce06274028a8a1f38b5941e1c439d05e7ba28a66f7f6d",
+   "raw_label": "an estimated $300 million benefit from our refinery",
+   "reference_name": "an estimated $300 million benefit from our refinery",
+   "semantic_provenance": null,
+   "source_id": "DAL_2026-04-08T10.00",
+   "values": [
+    -300
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "a38b70f5ac1ec5fd81129d735f2dbb62e6bfc191ce992f4378dbc11255ed8353",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "DAL_2026-04-08T10.00#161",
+   "quote_sha256": "174c26e966a9294a601d0c6b85bb0bfc4f6fa13cae9a20015564350d20d9c0c3",
+   "raw_label": "sequential improvement from the fourth quarter in all regions",
+   "reference_name": "unit revenue growth",
+   "semantic_provenance": null,
+   "source_id": "DAL_2026-04-08T10.00",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v6_correction",
+   "fact_index": 0,
+   "fact_sha256": "b223a2361ecd05a7caad62dca251b0ff6a09693427ea83a6dacbf9172cc581ed",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "DAL_2026-04-08T10.00#162",
+   "quote_sha256": "09c7a3c70b2fb2978ea1f1b813c5c7d9130d5bc595f8671cbc6f3eab3cdd5a6a",
+   "raw_label": "earnings that were 40% higher than last year",
+   "reference_name": "earnings that were 40% higher than last year",
+   "semantic_provenance": null,
+   "source_id": "DAL_2026-04-08T10.00",
+   "values": [
+    40
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "e6ac9dff170297e7ad76a58a3d491a2daeaf4c0f569d8f0ed80c18b9701604a1",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "DRI_2026-03-19T08.30#164",
+   "quote_sha256": "f6a89d21920dbf569a86f6bdc1dd5bd569d76377305aa61ccb80e6770b76fe2b",
+   "raw_label": "same-restaurant sales growth of 4.2%",
+   "reference_name": "same-restaurant sales growth of 4.2%",
+   "semantic_provenance": null,
+   "source_id": "DRI_2026-03-19T08.30",
+   "values": [
+    "4.2"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "83de8a33935289d2c5793c8e54759cf3c1d06fb736b7d5148dc3ea2237923033",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "DRI_2026-03-19T08.30#165",
+   "quote_sha256": "73100ba7a91bd125fd219363a0a159b75d96d101012573db5c212940a4a17ff5",
+   "raw_label": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "reference_name": "adjusted diluted net earnings per share of $10.57 to $10.67",
+   "semantic_provenance": null,
+   "source_id": "DRI_2026-03-19T08.30",
+   "values": [
+    "10.57",
+    "10.67"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "4ff8754467bf08a83602f97bbdef84ddb5a2204f02559996d15593c6b64aa757",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "DRI_2026-03-19T08.30#166",
+   "quote_sha256": "5e8715fbe3ce52b6ae82133499d01e0a48e2b273cfa386fe7d910cfb7f824557",
+   "raw_label": "Olive Garden delivered a strong segment profit margin of 23%",
+   "reference_name": "segment profit margin of 23%",
+   "semantic_provenance": null,
+   "source_id": "DRI_2026-03-19T08.30",
+   "values": [
+    23,
+    -10
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "3b12a27a746d4589ab010f52e75260f9a2242741e7c3481e8c8dc51274b3ee03",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "DRI_2026-03-19T08.30#168",
+   "quote_sha256": "d15eb8369d5a5907a813c94ed3489fed44e33182d2a33a8e60937625cf729b89",
+   "raw_label": "14 locations will permanently close and the remaining 14 will be converted to other Darden brands",
+   "reference_name": "14 locations will permanently close",
+   "semantic_provenance": null,
+   "source_id": "DRI_2026-03-19T08.30",
+   "values": [
+    14
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "e9e33583dee79e6eba08e754c2d14e4776348163539439d45b19b0d65d141e30",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "DRI_2026-03-19T08.30#168",
+   "quote_sha256": "d15eb8369d5a5907a813c94ed3489fed44e33182d2a33a8e60937625cf729b89",
+   "raw_label": "14 locations will permanently close and the remaining 14 will be converted to other Darden brands",
+   "reference_name": "the remaining 14 will be converted to other Darden brands",
+   "semantic_provenance": null,
+   "source_id": "DRI_2026-03-19T08.30",
+   "values": [
+    14
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "0af3e77b9aa213313e65c78f75489f87a5b6bc7060d24b1b838d154128ce73e8",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "MCD_2026-02-11T16.30#169",
+   "quote_sha256": "76f3bfdb1ef9c0e5386660c21c5a002062ad00a6c373bf03ed52d05794797c34",
+   "raw_label": "system-wide sales of nearly $140 billion, up 5.5% in constant currency",
+   "reference_name": "system-wide sales",
+   "semantic_provenance": null,
+   "source_id": "MCD_2026-02-11T16.30",
+   "values": [
+    140,
+    "5.5"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "7170848e2a85eaac418c2294b501ac5250a0bbc027d9b531a750573a4ed00d4d",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "MCD_2026-02-11T16.30#170",
+   "quote_sha256": "fa1a8ee11d858fe7fe44da44d6b3dfea7700e2ab63c7401ac8b7a4255181236e",
+   "raw_label": "comp sales for the quarter were up 6.8%, which was above our expectations",
+   "reference_name": "comp sales",
+   "semantic_provenance": null,
+   "source_id": "MCD_2026-02-11T16.30",
+   "values": [
+    "6.8"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "487e6c90ca088d1bfba86542e662d760ff782bc07b15a120f509d2890a07d933",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "MCD_2026-02-11T16.30#170",
+   "quote_sha256": "fa1a8ee11d858fe7fe44da44d6b3dfea7700e2ab63c7401ac8b7a4255181236e",
+   "raw_label": "comp sales for the quarter were up 6.8%, which was above our expectations",
+   "reference_name": "above our expectations",
+   "semantic_provenance": null,
+   "source_id": "MCD_2026-02-11T16.30",
+   "values": [
+    "6.8"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "aa2aec130dedd8adcaa309bc14383ca75f03e01b421e29b435e0c0bb8aab5785",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "MCD_2026-02-11T16.30#171",
+   "quote_sha256": "e01f5d89db3bc99ca9f63dd2064fbf209924d4d49242129c79d12fc6f0ae96d8",
+   "raw_label": "total adjusted operating margin for the full year was 46.9% in line with our expectations",
+   "reference_name": "total adjusted operating margin",
+   "semantic_provenance": null,
+   "source_id": "MCD_2026-02-11T16.30",
+   "values": [
+    "46.9"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "9571b9dff22292bb975b065659fe426b07b5ba36571be1e67562ce2247f9fcda",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "MCD_2026-02-11T16.30#171",
+   "quote_sha256": "e01f5d89db3bc99ca9f63dd2064fbf209924d4d49242129c79d12fc6f0ae96d8",
+   "raw_label": "total adjusted operating margin for the full year was 46.9% in line with our expectations",
+   "reference_name": "in line with our expectations",
+   "semantic_provenance": null,
+   "source_id": "MCD_2026-02-11T16.30",
+   "values": [
+    "46.9"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c4d52f5d258fc42badad0a880c06167c45611f942ff5d95dbe5b9dfd71776be6",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "MCD_2026-02-11T16.30#172",
+   "quote_sha256": "567ca0649b459a03cdf49d925d6390a643b6a3c385533ad30ae57d505c551072",
+   "raw_label": "about 750 of these in our U.S. and IOM segments",
+   "reference_name": "about 750 of these in our U.S. and IOM segments",
+   "semantic_provenance": null,
+   "source_id": "MCD_2026-02-11T16.30",
+   "values": [
+    750
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "5b05ca0878649bc1ff43a14f59bc678e29ec228f03c1667463d9875f0dd41553",
+   "gold_idx": 6,
+   "name_from_override": false,
+   "packet_id": "MCD_2026-02-11T16.30#173",
+   "quote_sha256": "9e6ed3e473b75a81697bbb38adb7caff8f577cbd8efa4c154806b519c3809758",
+   "raw_label": "about 1,000 in China",
+   "reference_name": "about 1,000 in China",
+   "semantic_provenance": null,
+   "source_id": "MCD_2026-02-11T16.30",
+   "values": [
+    1000
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c6914a5313c8e863c1eb9b5967b5adf6735bba38cc0e57131001e70c85b30df0",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "ULTA_2026-03-12T16.30#175",
+   "quote_sha256": "03145f0a3acd5a2ea28e659dc6e492a455bde5e1e1daa58ebf7fbb089b3da330",
+   "raw_label": "diluted EPS will be between $28.05 and $28.55 per share",
+   "reference_name": "diluted EPS",
+   "semantic_provenance": null,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "values": [
+    "28.05",
+    "28.55"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "f784f107cf7652cda276a45b683c5c3f7ee58d23becfb9bbc4b3a5cda127a33a",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "ULTA_2026-03-12T16.30#176",
+   "quote_sha256": "701592cfeda58182523ad93d6b0287af43091e97c4bc00c507d93c8d769dccc1",
+   "raw_label": "Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%",
+   "reference_name": "SG&A growth for the quarter",
+   "semantic_provenance": null,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "values": [
+    17
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "c50195642ecab300752f9d5815fbab4f057568e4e246759408a46326a5d0d15e",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "ULTA_2026-03-12T16.30#177",
+   "quote_sha256": "7763170e1b4b36de14db1dd9748244f64e49a5e95045a26ea985df161dc890ec",
+   "raw_label": "46.7 million active members",
+   "reference_name": "active members",
+   "semantic_provenance": null,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "values": [
+    "46.7",
+    5
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "d2bb67457c58a2f68e993a832ffcc9e2067bbc96490d500d8c7cbb3b0d5f2d38",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "ULTA_2026-03-12T16.30#178",
+   "quote_sha256": "1503ffce5d515e46f5fed72f64f4f4492b99d8ca834f8b63897fe784cf8dcbeb",
+   "raw_label": "more than 80 stores in the UK and Ireland",
+   "reference_name": "stores in the UK and Ireland",
+   "semantic_provenance": null,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "values": [
+    80
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "0693f8efcfb898a1749fc47b6fabe0a7f65c3503f2a313131fba0149ac9224cf",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "ULTA_2026-03-12T16.30#180",
+   "quote_sha256": "2bb314ccbfc98b43c0a63fb89cf3bc3709c28db5bae909378f9928c9efc1891a",
+   "raw_label": "sales above the high end of our guidance by about 85 million",
+   "reference_name": "sales",
+   "semantic_provenance": null,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "bb0c39cc54a8748568604aebc382213218161c2ef6d5b9da4cfe9c2b38654aaf",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "ULTA_2026-03-12T16.30#180",
+   "quote_sha256": "2bb314ccbfc98b43c0a63fb89cf3bc3709c28db5bae909378f9928c9efc1891a",
+   "raw_label": "sales above the high end of our guidance by about 85 million",
+   "reference_name": "sales above the high end of our guidance by about 85 million",
+   "semantic_provenance": null,
+   "source_id": "ULTA_2026-03-12T16.30",
+   "values": [
+    85
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "4584a76ff45fca83570d7820c6ed000c3f05c6c2dc62c788a213921c6956bece",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "YUM_2026-02-04T08.15#182",
+   "quote_sha256": "88521b5e75f5c4693fc750d12a296d9af0f0c20f6883832e8bea64f1c3e3ed82",
+   "raw_label": "Taco Bell",
+   "reference_name": "Taco Bell",
+   "semantic_provenance": null,
+   "source_id": "YUM_2026-02-04T08.15",
+   "values": [
+    10
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "96a502cdf0b2b46a9514dbe24e6e9924041439f2fb70be3bc63d6cdecf601930",
+   "gold_idx": 1,
+   "name_from_override": false,
+   "packet_id": "YUM_2026-02-04T08.15#183",
+   "quote_sha256": "88521b5e75f5c4693fc750d12a296d9af0f0c20f6883832e8bea64f1c3e3ed82",
+   "raw_label": "KFC",
+   "reference_name": "KFC",
+   "semantic_provenance": null,
+   "source_id": "YUM_2026-02-04T08.15",
+   "values": [
+    10
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "bf622a5445c6a8ac9f5bb602e10ba12f3c3fc9b3f68810cd34d4a2c0aadd8c7e",
+   "gold_idx": 2,
+   "name_from_override": false,
+   "packet_id": "YUM_2026-02-04T08.15#185",
+   "quote_sha256": "9b7f17dbe40eb718258f6d3af08fced10de18fc976b40a8fde2b12458161b784",
+   "raw_label": "x special gna was in line with our guidance",
+   "reference_name": "x special gna",
+   "semantic_provenance": null,
+   "source_id": "YUM_2026-02-04T08.15",
+   "values": [
+    "1.15",
+    5
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 1,
+   "fact_sha256": "657b55a4805df4f6eec7fd335deac6c201e4a3c09519f9465128ef2313351236",
+   "gold_idx": 3,
+   "name_from_override": false,
+   "packet_id": "YUM_2026-02-04T08.15#185",
+   "quote_sha256": "9b7f17dbe40eb718258f6d3af08fced10de18fc976b40a8fde2b12458161b784",
+   "raw_label": "x special gna was in line with our guidance",
+   "reference_name": "in line with our guidance",
+   "semantic_provenance": null,
+   "source_id": "YUM_2026-02-04T08.15",
+   "values": [
+    "1.15"
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "301dd33f5ffb0335eb6aeced23c6bafa851028aba1d76f56cb79365e46e8adaf",
+   "gold_idx": 4,
+   "name_from_override": false,
+   "packet_id": "YUM_2026-02-04T08.15#186",
+   "quote_sha256": "8800f37ef306c4cc00f4893406285867d65edbce859b002275777b91565ca366",
+   "raw_label": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "reference_name": "Pizza Hut Q1 core operating profit to be down approximately 15%",
+   "semantic_provenance": null,
+   "source_id": "YUM_2026-02-04T08.15",
+   "values": [
+    -15
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v5_correction",
+   "fact_index": 0,
+   "fact_sha256": "851de4e76452f7bf8adc88b7ad88c30a396318a21fd3b9068a0383ef10ee7dd6",
+   "gold_idx": 5,
+   "name_from_override": false,
+   "packet_id": "YUM_2026-02-04T08.15#187",
+   "quote_sha256": "df7566be6a5665d9af49cba9a865c1e4c3e831baebfd2ccb12de39f75c7705db",
+   "raw_label": "approximately 250 targeted closures of underperforming units",
+   "reference_name": "approximately 250 targeted closures of underperforming units",
+   "semantic_provenance": null,
+   "source_id": "YUM_2026-02-04T08.15",
+   "values": [
+    250
+   ]
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v1",
+   "fact_index": 0,
+   "fact_sha256": "e6709bd30cd2766d42e35878badcb97bc0244a587230d394a3a80b39973e4413",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "bzNews_42014391#189",
+   "quote_sha256": "3d0d4317d1c2f1477ae3640b846c5214183d9df7e669d2138faec5302aac7e43",
+   "raw_label": "spooked diners away",
+   "reference_name": "spooked diners away",
+   "semantic_provenance": null,
+   "source_id": "bzNews_42014391",
+   "values": []
+  },
+  {
+   "added_by_ledger": false,
+   "evidence_origin": "a4_final_v1",
+   "fact_index": 0,
+   "fact_sha256": "7c9a467ef2d120b1858821b377f73f0cbe5dec67c96b94b99eed8e8a53d1b30f",
+   "gold_idx": 0,
+   "name_from_override": false,
+   "packet_id": "bzNews_50877032#190",
+   "quote_sha256": "2b733d8e9a1fb1e405828debee5e5fa932c6ac24986e83489ce2ccfa1a0f507b",
+   "raw_label": "boast 17 new gates",
+   "reference_name": "17 new gates",
+   "semantic_provenance": null,
+   "source_id": "bzNews_50877032",
+   "values": [
+    17
+   ]
+  }
+ ],
+ "rows_total": 163,
+ "schema": "a7_reference_inventory/1"
+}

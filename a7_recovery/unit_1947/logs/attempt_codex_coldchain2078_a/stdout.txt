@@ -1,0 +1,4 @@
+PASS packet and saved bindings name the same first round and phase None
+PASS the exact reviewed source leads are saved, not reconstructed answers None
+PASS every declared runtime module still matches its frozen bytes None
+PASS the current successor owner and boundary map match this packet None

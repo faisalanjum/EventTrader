@@ -1,0 +1,7 @@
+attempt	codex_lockcold2084_a
+payload	../../unit_2020_codex_check/lock_real_key_2084.py
+map	../unit_2020_codex_check/map_2084.tsv
+wrapper_pid	3507552
+payload_pid	3507556
+started_utc	2026-09-13T01:01:21Z
+state	finished exit 0

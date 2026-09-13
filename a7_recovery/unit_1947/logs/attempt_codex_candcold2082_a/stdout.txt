@@ -1,0 +1,40 @@
+PASS all frozen runtime dependencies match None
+PASS ordinary data retains the saved recovery reference None
+PASS cold ordinary bound is the actual final bound None
+PASS cold existing verifier reproduces every candidate byte None
+PASS actual key remains complete and clean []
+PASS every actual source origin and raw hash is exact None
+PASS every bound history artifact matches live bytes None
+PASS all recovered-stage evidence is explicitly bound None
+PASS signer has the exact complete ordered raw population None
+PASS signer counts all actual completed calls once None
+PASS signer declares the actual current approved input OrderedDict([('expected_input', {'record_index': 1, 'record_type': 'attachment', 'payload_field': 'attachment', 'payload_sha256': 'a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1'}), ('expected_input_source', OrderedDict([('path', '/tmp/a7_input_profile_2068.json'), ('sha256', '78b58fe7fd5ba60b9199ada86fe27d90101ceb57cd7617db158e2ea724e2da18')]))])
+PASS signer manifest record names the actual manifest None
+PASS dropping recovery at the real reader cannot reproduce the saved candidate ['key_identity.json', 'provenance.json', 'signer_prompt.txt', 'final_sign.attempt1.js', 'final_sign.attempt2.js', 'signer.manifest.json']
+PASS restoring the real reader reproduces every byte again None
+PASS all saved candidate bytes are unchanged None
+{
+ "build": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a",
+ "passed": 15,
+ "checks": [
+  "all frozen runtime dependencies match",
+  "ordinary data retains the saved recovery reference",
+  "cold ordinary bound is the actual final bound",
+  "cold existing verifier reproduces every candidate byte",
+  "actual key remains complete and clean",
+  "every actual source origin and raw hash is exact",
+  "every bound history artifact matches live bytes",
+  "all recovered-stage evidence is explicitly bound",
+  "signer has the exact complete ordered raw population",
+  "signer counts all actual completed calls once",
+  "signer declares the actual current approved input",
+  "signer manifest record names the actual manifest",
+  "dropping recovery at the real reader cannot reproduce the saved candidate",
+  "restoring the real reader reproduces every byte again",
+  "all saved candidate bytes are unchanged"
+ ],
+ "candidate_sha256": "e77684b2472f583cce116a1cadc845bcadcfd5b84a808ddbaec8139adaf13635",
+ "model_calls": 0,
+ "signature": false,
+ "lock": false
+}

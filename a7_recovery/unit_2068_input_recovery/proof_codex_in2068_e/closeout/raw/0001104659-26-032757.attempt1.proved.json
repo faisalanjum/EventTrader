@@ -1,0 +1,184 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "lifo_charge",
+              "driver_state": "increased",
+              "change_value": {"value": 59.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "change_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["non-cash"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact, and the frozen kind holds: the sentence states $59.0 million as the unfavorable impact on the second-quarter operating profit COMPARISON caused by the current-quarter non-cash LIFO charge, so the stated quantity is a year-over-year movement of the charge and is recorded in the change slot, never as a charge level the source never gives."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "decreased",
+              "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["product:failure and maintenance related categories"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact: the quote measures one combined product population's share of total sales at approximately 85% against approximately 86% in the prior-year quarter, a standing re-readable level, so the proposed kind and my outcome agree, with the population kept whole as one coined product part."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 6709, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6709, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:us"],
+              "period_start_date": "2026-02-14",
+              "period_end_date": "2026-02-14",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact: a dated point-in-time U.S. store count is a bare standing level readable again over time, so the frozen kind and my outcome agree."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_store_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "measurement_raw_spans": ["constant currency"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact: the quote states a 3.3% constant-currency increase in total company same store sales for the dated twelve-week period, a whole-company growth level, matching the frozen kind."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard filing boilerplate stating there have been no material changes in the risk factors already disclosed in the prior Form 10-K; it reports no driver state, change, surprise, guidance or action and names no specific current adverse threat, so the fact gate yields the single abstention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as a negative_control and confirmed as one: the no-material-changes risk-factor sentence correctly yields no fact under the gate."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "unfavorable non-cash LIFO charge",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source never states the LIFO charge's own size: both places it appears ($59.0 million on the operating profit comparison, 138 basis points on the gross margin decrease) state an impact on a year-over-year comparison, so I stored the amount as the charge's positive year-over-year movement and left every level slot empty rather than asserting an unstated level."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole", "measurement_wording"],
+      "reference_name": "failure and maintenance related categories",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The menu carries product:failure and product:maintenanceitems as separate values while the source measures only the two together, so reusing both would encode an intersection rather than the measured combined population; I coined the single source-grounded combined product part instead."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "6,709 stores in the U.S.",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "reference_name": "total company same store sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote gives no explicit year-ago wording, so the growth basis rests on the dated-period year-over-year default, which the event's own comparative same-store-sales table for the twelve weeks ended February 15, 2025 supports."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-021/b1",
+      "agrees": false,
+      "why": "It matches my lane, name, state and period on rows 3 and 4 and my abstention on row 5, but it stores the $59.0 million as the LIFO charge's LEVEL when the sentence states it only as the impact on the operating profit comparison, it splits the single measured failure-and-maintenance population into two separate product parts, it leaves unit_scale_evidence null on percentage slots whose own quotes contain the '%' marker, and it gives only period_end_date for the row 3 instant."
+    },
+    {
+      "lead_id": "sokc-021/b2",
+      "agrees": false,
+      "why": "It matches my lane, name, state, period and percent scale evidence on rows 2 to 4 and my abstention on row 5, but it likewise stores the $59.0 million as the charge LEVEL rather than the stated comparison impact, splits the combined failure-and-maintenance population into two product parts, drops the 'approximately' number modifier on row 2, and gives only period_end_date for the row 3 instant."
+    }
+  ],
+  "open_issues": []
+}
+```

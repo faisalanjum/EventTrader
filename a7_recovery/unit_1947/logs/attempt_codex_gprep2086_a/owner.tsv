@@ -1,0 +1,7 @@
+attempt	codex_gprep2086_a
+payload	../../unit_2020_codex_check/prepare_real_grading_2085.py
+map	../unit_2020_codex_check/map_real_grading_2086.tsv
+wrapper_pid	3542758
+payload_pid	3542762
+started_utc	2026-09-13T01:25:35Z
+state	finished exit 0

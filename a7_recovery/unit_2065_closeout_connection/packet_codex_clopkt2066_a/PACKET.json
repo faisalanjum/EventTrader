@@ -1,0 +1,2227 @@
+{
+ "reuse_search": {
+  "receipts": [
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/baseline_tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1849/view/candidate_tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1853/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1855/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1857/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/baseline_tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1859/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1860/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1862/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1864/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1866/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1867/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1869/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1871/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1872/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1874/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1876/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1877/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1879/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1880/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1881/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1882/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1884/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1885/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1886/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1887/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1888/view/tree/runs/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_gitonly/a5_recovery/unit_1758/view/runs_composed/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_module/a5_recovery/unit_1758/view/runs_composed/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_scorer/a5_recovery/unit_1758/view/runs_composed/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_sibling/a5_recovery/unit_1758/view/runs_composed/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_neg_missing_signer/a5_recovery/unit_1758/view/runs_composed/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1943/export_old/a5_recovery/unit_1758/view/runs_composed/kf-a4-v5corr-4-20260823T164833Z",
+    "is_test_fixture": false,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 4,
+    "states_recorded": 4,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 4,
+     "valid": 4,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "824099afb34bc42d0d338a0b14d2651c533f59897b32a482e72f6c0a12746d4a"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/TEST_codex_clocold2065_a/twice_invalid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "ae3d7e6583cee13a007999e29847c9d143f7acd719247cf18ee2eef11d124780"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/TEST_codex_clocold2065_a/twice_invalid/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "d6a3ea3d6d19d5c8407b1aa97177d5c708fc4b6f7b1aa88ef6833b03468f5b85"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_codex_clo2065_a/closeout",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "2623f7c6df3e103ddc061938c46e1559c7118ae41db449bba75fed94e92dd9b6"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_codex_clo2065_a/closeout_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "d52e3e0616f4ca322fe70460e5664d28ef8ed226939fe0c129d20a2203f447a2"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_codex_clo2065_a/closeout_invalid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "5e3c19224878c63ade3b550a0f92c7bb13c91b2307f0777a5143e8803dee41a5"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_codex_clo2065_a/closeout_invalid/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "42d1fd98130e1c1589c88106d4812471574a210870858271de4d080790a47dae"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_codex_clo2065_a/closeout_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "470aac521ec8ab57886d291c1368773d0b4cb7c8a94eb9c383c4024300ad4615"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_core_clo2065_c/closeout",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "c99f33f9eaf69bba1a9fb07589e18b5f027fa69278ba2070400011c111a9b083"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_core_clo2065_c/closeout_empty",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 1
+    },
+    "receipt_sha256": "d52e3e0616f4ca322fe70460e5664d28ef8ed226939fe0c129d20a2203f447a2"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_core_clo2065_c/closeout_invalid",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 0,
+     "invalid_response": 1,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "f09178e968042d4f296f1407d6d7fb113a8a00d0328b9bba8ac7bada233d0473"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_core_clo2065_c/closeout_invalid/retry",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 2,
+    "allowed": 1,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "a8ebbce6d11000fc61d7e814fd599db5a03bcab642a5f96abaae3c207455e996"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/TEST_core_clo2065_c/closeout_open",
+    "is_test_fixture": true,
+    "is_this_source_only_key": false,
+    "attempt": 1,
+    "allowed": 1,
+    "states_recorded": 1,
+    "finalized": true,
+    "ledger": {
+     "scheduled": 1,
+     "valid": 1,
+     "invalid_response": 0,
+     "transport_no_answer": 0,
+     "unproved": 0,
+     "missing": 0
+    },
+    "receipt_sha256": "5f6ac8e24283a26149ee1a3d99612be3740be91f2838898393bed8e3f8bc9ff8"
+   },
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2065_a/closeout",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "96c0b60fbcbb04f47b2537bb43f62bf255bae6cebd868c7f853b67f80409e457"
+   }
+  ],
+  "native": [],
+  "for_this_key": [
+   {
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2065_a/closeout",
+    "is_test_fixture": false,
+    "is_this_source_only_key": true,
+    "attempt": 1,
+    "allowed": 31,
+    "states_recorded": 0,
+    "finalized": false,
+    "ledger": null,
+    "receipt_sha256": "96c0b60fbcbb04f47b2537bb43f62bf255bae6cebd868c7f853b67f80409e457"
+   }
+  ],
+  "manifest_sha256": "65b393b2658611834b2f997648242f18e61397a72b76f0a897f04f106601627d"
+ },
+ "accounting": {
+  "ledger_before_call": 626,
+  "candidate_counter_agrees": 626,
+  "primaries_this_phase": 31,
+  "reserved_signer": 1,
+  "planned_total_including_the_reserved_signer": 32,
+  "after_planned": 658,
+  "retry_law_owner": "build_kfields_final.RETRYABLE",
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "max_attempts": 2,
+  "invalid_only_retry_allowance_for_the_closeouts": 31,
+  "invalid_only_retry_allowance_reserved_for_the_signer": 1,
+  "worst_case_after": 690,
+  "phase_ceiling": 690,
+  "global_ceiling": 6000,
+  "budget_problems": [],
+  "a_reserved_signer_slot_is_not_permission_to_sign": true
+ },
+ "role_and_transport": {
+  "transport": {
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "transport": "Claude Code Workflow agent(), subscription",
+   "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "bound_owners": {
+   "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+   "build_kfields_hard_review.py": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+   "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+   "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+   "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+   "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+   "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+   "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+   "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+   "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+   "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+   "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+   "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+   "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+   "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+   "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+   "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+   "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "review_composite_owner": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+   "clarified_review_manifest": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+  },
+  "door": "a4_source_only_key_1997",
+  "manifest_sha256": "65b393b2658611834b2f997648242f18e61397a72b76f0a897f04f106601627d",
+  "requested_key_role": {
+   "kind": "LIVE",
+   "model_alias": "opus",
+   "runtime_model_id": "claude-opus-5",
+   "workflow_row_model": "claude-opus-5[1m]",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "max_output_tokens": "128000",
+   "transport": "Claude Code Workflow agent(), subscription"
+  },
+  "observed_key_role_proof": null,
+  "sonnet_role_untouched": {
+   "tested_transport": {
+    "model_alias": "sonnet",
+    "runtime_model_id": "claude-sonnet-5",
+    "effort": "high",
+    "agentType": "lean-probe",
+    "disallowedTools": [
+     "Read"
+    ],
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+    "transport": "Claude Code Workflow agent(), subscription",
+    "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+   },
+   "hard_review_model": "sonnet",
+   "hard_review_effort": "high",
+   "hard_review_agent_type": "lean-probe",
+   "hard_review_row_model": "claude-sonnet-5",
+   "hard_review_disallowed": [
+    "Read"
+   ],
+   "blinds_per_hard_task": [
+    1,
+    2
+   ]
+  }
+ },
+ "native_proof_dependencies": {
+  "history_evidence": {
+   "v1": {
+    "receipt.json": "8fc9c91d56382ed71ea4414ee5a6e8cb452f9a2b8b342e801bc25c49973598b4",
+    "finalization.json": "76f6a35d161636a67360bbff4f7849959dfeb0a4bfeca5635e284cf5ea351112",
+    "raw_tree": {
+     "files": 66,
+     "sha256": "00d63014ed4ab3bbf7209072119fed42e58621805cfaf05439c0d9504d523636"
+    }
+   },
+   "v2": {
+    "receipt.json": "e085196ff5ca9e95b506cbffc6da80cdd3ae1818d2fcef57b388fb8573e876ed",
+    "finalization.json": "7ede599ea06a5d9ddf175020fc31e7e47ec60a683415a50917a63865b7cab78e",
+    "raw_tree": {
+     "files": 60,
+     "sha256": "bb7539dbbdbf98a824bd696bffb182bfadabfa2879235072dda0bc97f6cec33f"
+    }
+   },
+   "v3": {
+    "receipt.json": "881c95fffd5fd970060adb122a4f02c91c07922dff12f695b4810376f026e68a",
+    "finalization.json": "33a37daccdf0b7002209f05dacca0021c4c61c6312eec928f33e0f3bac8f22bf",
+    "raw_tree": {
+     "files": 62,
+     "sha256": "dd95cb0853f90f0270fcc2c21c9c5688820a9411c2da5a37dac650d5f0e5d41d"
+    }
+   },
+   "v4": {
+    "receipt.json": "bc3d6c21d2ad5db1700049f2f83341ca24b1876e34f3af3b56b097c64aefff42",
+    "finalization.json": "1f295b8a9cd3acd97a7f9bad900eda5f970188432e39b94126fefe265c8bce4e",
+    "raw_tree": {
+     "files": 62,
+     "sha256": "5b26f9937cfd9e6d7e12233f0eef34473ce6478f0ee6bd0675e4ae8ec5edd7c5"
+    }
+   },
+   "v2_recovery": {
+    "receipt.json": "702c540dda8cb79a67ae0bee94a43ef437a01a211bad7a8e516003f180a5a56f",
+    "finalization.json": "d0579c653e913545ef7369c0ed9dd2c60c0dca6e4e163d89cfcd03a58ac76334",
+    "raw_tree": {
+     "files": 2,
+     "sha256": "e31cf46a89aa81fb266cf0f814849d6ab6373f21b591b637794b45c6abf41c54"
+    },
+    "recovery.json": "18da812a2c748810222f93f68489690fc98c6f8cce73ad95ce8036ee158d29e9"
+   }
+  },
+  "parent": null,
+  "states_recorded_so_far": 0
+ },
+ "population": {
+  "merged_events": 33,
+  "rows_accounted": 191,
+  "owed_closeouts": 31,
+  "carried_events_kept": 2,
+  "carried_event_origins": {
+   "bzNews_42014391": "a4_final_v1",
+   "bzNews_50877032": "a4_final_v1"
+  },
+  "settlements_reused": 31,
+  "recovered_corrections_included": [
+   "0000006201-26-000032"
+  ],
+  "review_entries_total": 120,
+  "served_entries_total": 120,
+  "largest_script_bytes": 311528,
+  "open_issues_before_this_phase": 108
+ },
+ "events": [
+  {
+   "source_id": "0000006201-26-000031",
+   "rows": 7,
+   "open_issues": 2,
+   "settled_raw_sha256": "cd2436a823f4edcfed8036e7fee7db6f21ac75f893e3099b1d61e11af91feeb2",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "cd2436a823f4edcfed8036e7fee7db6f21ac75f893e3099b1d61e11af91feeb2",
+   "findings": 3,
+   "finding_rows": [
+    "0000006201-26-000031#005",
+    "0000006201-26-000031#002",
+    "0000006201-26-000031#003"
+   ],
+   "question_keys": [
+    "0000006201-26-000031#q1",
+    "0000006201-26-000031#q2",
+    "0000006201-26-000031#coverage003"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "7229eb8a693c89d700c65d920c3ebd0c6ebdb80420665fd6b04f0e6bfb50eea7",
+   "script_sha256": "cd70ebc96d6b3df4f9575433bef1ac2b6cff634089440fc1e58441ed73f5bf29",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 145546,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000006201-26-000031.attempt1.js",
+   "receipt_prompt_pin": "7229eb8a693c89d700c65d920c3ebd0c6ebdb80420665fd6b04f0e6bfb50eea7"
+  },
+  {
+   "source_id": "0000006201-26-000032",
+   "rows": 5,
+   "open_issues": 1,
+   "settled_raw_sha256": "9322e1a7a350a99320927d98df2887d9f3f54a6f5706cda2c4843ab75e3fcbf0",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "9322e1a7a350a99320927d98df2887d9f3f54a6f5706cda2c4843ab75e3fcbf0",
+   "findings": 1,
+   "finding_rows": [
+    "0000006201-26-000032#008"
+   ],
+   "question_keys": [
+    "0000006201-26-000032#q1"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "4dcf90747849b02b282933b474b2aaec9fc714f3a863eb8ab1e01aae99cff083",
+   "script_sha256": "c967f1cb74c8e3f357458ad9a06eda57e5bbb217e687acc234ecbff5bcfa198a",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 145939,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000006201-26-000032.attempt1.js",
+   "receipt_prompt_pin": "4dcf90747849b02b282933b474b2aaec9fc714f3a863eb8ab1e01aae99cff083"
+  },
+  {
+   "source_id": "0000027904-26-000013",
+   "rows": 7,
+   "open_issues": 3,
+   "settled_raw_sha256": "797e7e22808b4d55e999db59868b942d1df5488e46bf5ec3208cefd2f2cb351a",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "797e7e22808b4d55e999db59868b942d1df5488e46bf5ec3208cefd2f2cb351a",
+   "findings": 3,
+   "finding_rows": [
+    "0000027904-26-000013#014",
+    "0000027904-26-000013#014",
+    "0000027904-26-000013#016"
+   ],
+   "question_keys": [
+    "0000027904-26-000013#q1",
+    "0000027904-26-000013#q2",
+    "0000027904-26-000013#q3"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "0986777ac095efdbc9ef5eb3036551fbda6f5ffaad5d2745fedbe4cadb3566ac",
+   "script_sha256": "9afb7537d5411f31858328c8da82dc1b59948fa85dacd493a19a53c28ccff02d",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 296573,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000027904-26-000013.attempt1.js",
+   "receipt_prompt_pin": "0986777ac095efdbc9ef5eb3036551fbda6f5ffaad5d2745fedbe4cadb3566ac"
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "rows": 9,
+   "open_issues": 2,
+   "settled_raw_sha256": "b07f6ef58e69360952f0c17cabf6935960520257ae756b74fe1b9ebd2bd37b1f",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "b07f6ef58e69360952f0c17cabf6935960520257ae756b74fe1b9ebd2bd37b1f",
+   "findings": 3,
+   "finding_rows": [
+    "0000027904-26-000020#026",
+    "0000027904-26-000020#019",
+    "0000027904-26-000020#027"
+   ],
+   "question_keys": [
+    "0000027904-26-000020#q1",
+    "0000027904-26-000020#q2",
+    "0000027904-26-000020#coverage027"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "e7d72db22e4050836a6ed9cb9d67c5ec08b7099504eac3cc0f41df8fdb407889",
+   "script_sha256": "56cdc63904a92967621f8cf74024d8d005929c8daa27d334ab45f7e104485381",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 164737,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000027904-26-000020.attempt1.js",
+   "receipt_prompt_pin": "e7d72db22e4050836a6ed9cb9d67c5ec08b7099504eac3cc0f41df8fdb407889"
+  },
+  {
+   "source_id": "0000027904-26-000022",
+   "rows": 5,
+   "open_issues": 4,
+   "settled_raw_sha256": "4cacb59aa8f3d7b126aa1f3ece883b6ca2305735e8589dad610e9a1689cbe961",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "4cacb59aa8f3d7b126aa1f3ece883b6ca2305735e8589dad610e9a1689cbe961",
+   "findings": 4,
+   "finding_rows": [
+    "0000027904-26-000022#030",
+    "0000027904-26-000022#029",
+    "0000027904-26-000022#032",
+    "0000027904-26-000022#028"
+   ],
+   "question_keys": [
+    "0000027904-26-000022#q1",
+    "0000027904-26-000022#q2",
+    "0000027904-26-000022#q3",
+    "0000027904-26-000022#q4"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "0f4a0c2ae63ef4a4fafda2615943bb7071be1f06950bc35a3d775e83b600b2b6",
+   "script_sha256": "8722640022bfcd125b778d68d68d562928b77494e2b2ba062f806c89433202aa",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 133605,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000027904-26-000022.attempt1.js",
+   "receipt_prompt_pin": "0f4a0c2ae63ef4a4fafda2615943bb7071be1f06950bc35a3d775e83b600b2b6"
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "rows": 5,
+   "open_issues": 3,
+   "settled_raw_sha256": "3aaf282bf7a1f561134cbc16f414262842b361052cb040aa30201c54838cab25",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "3aaf282bf7a1f561134cbc16f414262842b361052cb040aa30201c54838cab25",
+   "findings": 4,
+   "finding_rows": [
+    "0000063908-26-000032#034",
+    "0000063908-26-000032#035",
+    "0000063908-26-000032#037",
+    "0000063908-26-000032#033"
+   ],
+   "question_keys": [
+    "0000063908-26-000032#q1",
+    "0000063908-26-000032#q2",
+    "0000063908-26-000032#q3",
+    "0000063908-26-000032#correct033"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "7fca3d1af6db7a61513922dffe054c75adecdac9dcbae4a8e546bce720337928",
+   "script_sha256": "224117654ce42ae205b9d0380992f1dd9c00b578814449b9af5a3056cf11c72d",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 111543,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000063908-26-000032.attempt1.js",
+   "receipt_prompt_pin": "7fca3d1af6db7a61513922dffe054c75adecdac9dcbae4a8e546bce720337928"
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "rows": 7,
+   "open_issues": 6,
+   "settled_raw_sha256": "659ccd214305207d5f125fc46fd74661e85085ab29c82d20cf8fbe16e2676575",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "659ccd214305207d5f125fc46fd74661e85085ab29c82d20cf8fbe16e2676575",
+   "findings": 6,
+   "finding_rows": [
+    "0000092380-26-000044#039",
+    "0000092380-26-000044#042",
+    "0000092380-26-000044#039",
+    "0000092380-26-000044#041",
+    "0000092380-26-000044#040",
+    "0000092380-26-000044#038"
+   ],
+   "question_keys": [
+    "0000092380-26-000044#q1",
+    "0000092380-26-000044#q2",
+    "0000092380-26-000044#q3",
+    "0000092380-26-000044#q4",
+    "0000092380-26-000044#q5",
+    "0000092380-26-000044#q6"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "76954698422302ec04a34a77babc37387c3a2c99838802c291a01a2d4a056e2e",
+   "script_sha256": "98c039f23ba2a9286a30c54684a8a6e5d594e2f9dc349757fc110368446fadd0",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 166802,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000092380-26-000044.attempt1.js",
+   "receipt_prompt_pin": "76954698422302ec04a34a77babc37387c3a2c99838802c291a01a2d4a056e2e"
+  },
+  {
+   "source_id": "0000764478-25-000057",
+   "rows": 5,
+   "open_issues": 5,
+   "settled_raw_sha256": "7dd35dac007e50e05a3d2f1ef28ec010a43e683d962eb21fe92dad3a070d79cb",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "7dd35dac007e50e05a3d2f1ef28ec010a43e683d962eb21fe92dad3a070d79cb",
+   "findings": 5,
+   "finding_rows": [
+    "0000764478-25-000057#045",
+    "0000764478-25-000057#046",
+    "0000764478-25-000057#046",
+    "0000764478-25-000057#045",
+    "0000764478-25-000057#045"
+   ],
+   "question_keys": [
+    "0000764478-25-000057#q1",
+    "0000764478-25-000057#q2",
+    "0000764478-25-000057#q3",
+    "0000764478-25-000057#q4",
+    "0000764478-25-000057#q5"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "a6ca7077a6bbf92b0d0aa05063c88e5e412b382f7f706ab6621ea0252801a1ec",
+   "script_sha256": "9c29a686640c10fb78b992a55832f0f6c921db2451c80535e06722d501d5716b",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 148118,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000764478-25-000057.attempt1.js",
+   "receipt_prompt_pin": "a6ca7077a6bbf92b0d0aa05063c88e5e412b382f7f706ab6621ea0252801a1ec"
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "rows": 6,
+   "open_issues": 4,
+   "settled_raw_sha256": "1dd4b42fbaa84b5aef2d5be9782cc83fb7f48464aec18ccd127aed27eb489d54",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "1dd4b42fbaa84b5aef2d5be9782cc83fb7f48464aec18ccd127aed27eb489d54",
+   "findings": 4,
+   "finding_rows": [
+    "0000898173-26-000006#051",
+    "0000898173-26-000006#052",
+    "0000898173-26-000006#053",
+    "0000898173-26-000006#055"
+   ],
+   "question_keys": [
+    "0000898173-26-000006#q1",
+    "0000898173-26-000006#q2",
+    "0000898173-26-000006#q3",
+    "0000898173-26-000006#q4"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "ac13182260b3e69830eb29b04b3cc3ee0914432a616fef3a9fede95af08aed99",
+   "script_sha256": "766c719d6cdd93c93c44fcd5d7152b5fb32e9026484b06267a6e70d4f3e51732",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 140151,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000898173-26-000006.attempt1.js",
+   "receipt_prompt_pin": "ac13182260b3e69830eb29b04b3cc3ee0914432a616fef3a9fede95af08aed99"
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "rows": 4,
+   "open_issues": 1,
+   "settled_raw_sha256": "599cad3315a8d40ecc5230c14ae12916a4f6ace658b3c96f7a24d1469d775ad0",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "599cad3315a8d40ecc5230c14ae12916a4f6ace658b3c96f7a24d1469d775ad0",
+   "findings": 1,
+   "finding_rows": [
+    "0000940944-25-000038#056"
+   ],
+   "question_keys": [
+    "0000940944-25-000038#q1"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "620ac2f158bf2edbf7bb60230e46cf7bb2744355217b6520375151fad3b4583b",
+   "script_sha256": "557cf79f7def6976d75763fff92b0e95503eb6f373818df2a50b9d3943c30af0",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 267369,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000940944-25-000038.attempt1.js",
+   "receipt_prompt_pin": "620ac2f158bf2edbf7bb60230e46cf7bb2744355217b6520375151fad3b4583b"
+  },
+  {
+   "source_id": "0000940944-26-000005",
+   "rows": 6,
+   "open_issues": 3,
+   "settled_raw_sha256": "34db06495c27297701e960147abd7a2464ab2f18fce0a5ee9614c8e82885da42",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "34db06495c27297701e960147abd7a2464ab2f18fce0a5ee9614c8e82885da42",
+   "findings": 3,
+   "finding_rows": [
+    "0000940944-26-000005#062",
+    "0000940944-26-000005#062",
+    "0000940944-26-000005#063"
+   ],
+   "question_keys": [
+    "0000940944-26-000005#q1",
+    "0000940944-26-000005#q2",
+    "0000940944-26-000005#q3"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "cc69b0b4b18fcdeb1545e517c77d153f69a59db642bac56cfa5b3d34a7ab81a2",
+   "script_sha256": "86aa2db5b6ee6255a87170aacb59a1d1c20168d544eb814fa9d2f8ebf5b8edb0",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 120862,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000940944-26-000005.attempt1.js",
+   "receipt_prompt_pin": "cc69b0b4b18fcdeb1545e517c77d153f69a59db642bac56cfa5b3d34a7ab81a2"
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "rows": 6,
+   "open_issues": 3,
+   "settled_raw_sha256": "d619cb7361bc9c6288321c23eace394af5257fb114ea8ceb32370754a3783560",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "d619cb7361bc9c6288321c23eace394af5257fb114ea8ceb32370754a3783560",
+   "findings": 3,
+   "finding_rows": [
+    "0000940944-26-000009#071",
+    "0000940944-26-000009#069",
+    "0000940944-26-000009#069"
+   ],
+   "question_keys": [
+    "0000940944-26-000009#q1",
+    "0000940944-26-000009#q2",
+    "0000940944-26-000009#q3"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "1eda637fa6de56d311d10f4650d990b6c3333b3cac107eeac1208df3fa712f19",
+   "script_sha256": "241146ba81337458cba9db046651dccc618b0edca1331f9ac4fe53d19364bef9",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 150669,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0000940944-26-000009.attempt1.js",
+   "receipt_prompt_pin": "1eda637fa6de56d311d10f4650d990b6c3333b3cac107eeac1208df3fa712f19"
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "rows": 5,
+   "open_issues": 4,
+   "settled_raw_sha256": "a388efc9b79d675ef33df281fc35be6d56b2df352b14817056a395d35e9ded37",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "a388efc9b79d675ef33df281fc35be6d56b2df352b14817056a395d35e9ded37",
+   "findings": 4,
+   "finding_rows": [
+    "0001041061-25-000109#072",
+    "0001041061-25-000109#073",
+    "0001041061-25-000109#075",
+    "0001041061-25-000109#075"
+   ],
+   "question_keys": [
+    "0001041061-25-000109#q1",
+    "0001041061-25-000109#q2",
+    "0001041061-25-000109#q3",
+    "0001041061-25-000109#q4"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "d10a272d8244dff2e08b6d49475faa22c62b7e51d7f3c07136dad6c0a5e4920c",
+   "script_sha256": "528dc463263625ffa19af4ecb4a621267ce45c1f4415eb27f94800751430c521",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 157638,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001041061-25-000109.attempt1.js",
+   "receipt_prompt_pin": "d10a272d8244dff2e08b6d49475faa22c62b7e51d7f3c07136dad6c0a5e4920c"
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "rows": 5,
+   "open_issues": 2,
+   "settled_raw_sha256": "751c129d285606fe41ac5cf4ff4055fbd15ec2a44be307e87b1fc840fa14375b",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "751c129d285606fe41ac5cf4ff4055fbd15ec2a44be307e87b1fc840fa14375b",
+   "findings": 2,
+   "finding_rows": [
+    "0001041061-26-000003#080",
+    "0001041061-26-000003#078"
+   ],
+   "question_keys": [
+    "0001041061-26-000003#q1",
+    "0001041061-26-000003#q2"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "b50f21ff0fc88beb846de8de2dedfcc20f900f8c820d7f0097420d0730218cc1",
+   "script_sha256": "644918b91f2e0b5d7c7b38467abc76f7525320e31fea1076dfb80fb5b9454880",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 154520,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001041061-26-000003.attempt1.js",
+   "receipt_prompt_pin": "b50f21ff0fc88beb846de8de2dedfcc20f900f8c820d7f0097420d0730218cc1"
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "rows": 6,
+   "open_issues": 4,
+   "settled_raw_sha256": "d02240f11e5cac37d8ae45cbd24ac300fec5a9cdf89e18c8e4f0b60cd5a8a722",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "d02240f11e5cac37d8ae45cbd24ac300fec5a9cdf89e18c8e4f0b60cd5a8a722",
+   "findings": 5,
+   "finding_rows": [
+    "0001041061-26-000084#086",
+    "0001041061-26-000084#082",
+    "0001041061-26-000084#083",
+    "0001041061-26-000084#086",
+    "0001041061-26-000084#085"
+   ],
+   "question_keys": [
+    "0001041061-26-000084#q1",
+    "0001041061-26-000084#q2",
+    "0001041061-26-000084#q3",
+    "0001041061-26-000084#q4",
+    "0001041061-26-000084#coverage085"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "e8d0a092137c9f230eeb7200a1ac6cda514b9c784a8d301a69600ebb231f7089",
+   "script_sha256": "7e72e2cf89fa879844a0c91bb9e67d164dd59ad6a3284a1b7fc7435fc7296bac",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 311528,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001041061-26-000084.attempt1.js",
+   "receipt_prompt_pin": "e8d0a092137c9f230eeb7200a1ac6cda514b9c784a8d301a69600ebb231f7089"
+  },
+  {
+   "source_id": "0001058090-26-000007",
+   "rows": 6,
+   "open_issues": 5,
+   "settled_raw_sha256": "69bd486e4c5142590c039e2b752ead9ebadb85897a1f62012eda06c964a9d804",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "69bd486e4c5142590c039e2b752ead9ebadb85897a1f62012eda06c964a9d804",
+   "findings": 5,
+   "finding_rows": [
+    "0001058090-26-000007#090",
+    "0001058090-26-000007#090",
+    "0001058090-26-000007#089",
+    "0001058090-26-000007#093",
+    "0001058090-26-000007#088"
+   ],
+   "question_keys": [
+    "0001058090-26-000007#q1",
+    "0001058090-26-000007#q2",
+    "0001058090-26-000007#q3",
+    "0001058090-26-000007#q4",
+    "0001058090-26-000007#q5"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "81f758f766ac74ac7f1cac24216084199cf1a5ebe91b6381197278d06a4847d6",
+   "script_sha256": "d19ddb0acc758e8ed34eef2dbde250212d592db06b9fc700f2674fd7c419ded3",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 135924,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001058090-26-000007.attempt1.js",
+   "receipt_prompt_pin": "81f758f766ac74ac7f1cac24216084199cf1a5ebe91b6381197278d06a4847d6"
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "rows": 6,
+   "open_issues": 4,
+   "settled_raw_sha256": "c59be33f0603e6a248a004e0ddbdd8133493db1544506476b18ebdb76de9ea0b",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "c59be33f0603e6a248a004e0ddbdd8133493db1544506476b18ebdb76de9ea0b",
+   "findings": 5,
+   "finding_rows": [
+    "0001104659-25-102611#098",
+    "0001104659-25-102611#097",
+    "0001104659-25-102611#097",
+    "0001104659-25-102611#095",
+    "0001104659-25-102611#096"
+   ],
+   "question_keys": [
+    "0001104659-25-102611#q1",
+    "0001104659-25-102611#q2",
+    "0001104659-25-102611#q3",
+    "0001104659-25-102611#q4",
+    "0001104659-25-102611#correct096"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "9b9d34f8ece073b795de4197394ed0aec37c28fa707910323bcff7521dff3ab6",
+   "script_sha256": "7a2bc5aac16ee59fbc172d617dd810816f8a887d308625b00821b6457085e079",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 261341,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001104659-25-102611.attempt1.js",
+   "receipt_prompt_pin": "9b9d34f8ece073b795de4197394ed0aec37c28fa707910323bcff7521dff3ab6"
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "rows": 5,
+   "open_issues": 4,
+   "settled_raw_sha256": "c8825c48c1f5b215c269b2af093c100eae467093a4e5bc41bb6ae942a042bccf",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "c8825c48c1f5b215c269b2af093c100eae467093a4e5bc41bb6ae942a042bccf",
+   "findings": 4,
+   "finding_rows": [
+    "0001104659-25-105631#102",
+    "0001104659-25-105631#101",
+    "0001104659-25-105631#102",
+    "0001104659-25-105631#104"
+   ],
+   "question_keys": [
+    "0001104659-25-105631#q1",
+    "0001104659-25-105631#q2",
+    "0001104659-25-105631#q3",
+    "0001104659-25-105631#q4"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "4ca31d17e82029db340a165a66b4da30b476bb24c99ff99537af2aead524646f",
+   "script_sha256": "82df78cc9297cedfd0178798ad9705a474e9bf13e432bdd757982cdd820d4ce7",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 151643,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001104659-25-105631.attempt1.js",
+   "receipt_prompt_pin": "4ca31d17e82029db340a165a66b4da30b476bb24c99ff99537af2aead524646f"
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "rows": 7,
+   "open_issues": 4,
+   "settled_raw_sha256": "36a1f334db5de450e955aa3789a878280774758881acc8c085a0962fe5c0f0aa",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "36a1f334db5de450e955aa3789a878280774758881acc8c085a0962fe5c0f0aa",
+   "findings": 4,
+   "finding_rows": [
+    "0001104659-25-118458#105",
+    "0001104659-25-118458#110",
+    "0001104659-25-118458#106",
+    "0001104659-25-118458#107"
+   ],
+   "question_keys": [
+    "0001104659-25-118458#q1",
+    "0001104659-25-118458#q2",
+    "0001104659-25-118458#q3",
+    "0001104659-25-118458#q4"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "d183f9c4146e2064f7cf698405f9d88e8ff88db20d0b2ac41ba595e0f17d46d3",
+   "script_sha256": "a69949bece957d586367f7e8194d502e974e56462d85cf70d8f1a7411e98ef49",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 146729,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001104659-25-118458.attempt1.js",
+   "receipt_prompt_pin": "d183f9c4146e2064f7cf698405f9d88e8ff88db20d0b2ac41ba595e0f17d46d3"
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "rows": 6,
+   "open_issues": 3,
+   "settled_raw_sha256": "b9b9ce1d37b9c1476f683e15ace3eeecb5f9692aa13f10e9370ab88c4396fa47",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "b9b9ce1d37b9c1476f683e15ace3eeecb5f9692aa13f10e9370ab88c4396fa47",
+   "findings": 4,
+   "finding_rows": [
+    "0001104659-26-017090#115",
+    "0001104659-26-017090#113",
+    "0001104659-26-017090#114",
+    "0001104659-26-017090#116"
+   ],
+   "question_keys": [
+    "0001104659-26-017090#q1",
+    "0001104659-26-017090#q2",
+    "0001104659-26-017090#q3",
+    "0001104659-26-017090#coverage116"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "be34c507dfdfe058de2ae7cb1a70f7c6f4c328bc294b6fd1b0888b26dacda19f",
+   "script_sha256": "e7a8e2db36ab78524845194f6454d972afcc17e235ddfde034d707d0c60fd44e",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 123717,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001104659-26-017090.attempt1.js",
+   "receipt_prompt_pin": "be34c507dfdfe058de2ae7cb1a70f7c6f4c328bc294b6fd1b0888b26dacda19f"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "rows": 5,
+   "open_issues": 1,
+   "settled_raw_sha256": "bdb44905e8b041c4c98c51ffeef3b9057ab9163387b6d264ebbaa2ba49f4a115",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "bdb44905e8b041c4c98c51ffeef3b9057ab9163387b6d264ebbaa2ba49f4a115",
+   "findings": 1,
+   "finding_rows": [
+    "0001104659-26-027061#121"
+   ],
+   "question_keys": [
+    "0001104659-26-027061#q1"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "920bfd4dd83a96ebe0c8c30ea40fe446f6ec62283b2f1cea08252ee0eb7af146",
+   "script_sha256": "2866802f37f0a6d232007e7b04210afa80427317afbf0b5235bc8619d8432b09",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 120326,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001104659-26-027061.attempt1.js",
+   "receipt_prompt_pin": "920bfd4dd83a96ebe0c8c30ea40fe446f6ec62283b2f1cea08252ee0eb7af146"
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "rows": 5,
+   "open_issues": 3,
+   "settled_raw_sha256": "68964d06d624ff34f20fad284d6a06fbc413a6c224a99e3ff753fdbec01d23ad",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "68964d06d624ff34f20fad284d6a06fbc413a6c224a99e3ff753fdbec01d23ad",
+   "findings": 3,
+   "finding_rows": [
+    "0001104659-26-032757#123",
+    "0001104659-26-032757#124",
+    "0001104659-26-032757#126"
+   ],
+   "question_keys": [
+    "0001104659-26-032757#q1",
+    "0001104659-26-032757#q2",
+    "0001104659-26-032757#q3"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "02158313248584393275a33136f2d82153d30dee0f816165705e4c26c1981666",
+   "script_sha256": "103c6eb599014a5e3fa48c9c27692259923deaff1703793bd4c0833bdb3b80e4",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 145559,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001104659-26-032757.attempt1.js",
+   "receipt_prompt_pin": "02158313248584393275a33136f2d82153d30dee0f816165705e4c26c1981666"
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "rows": 4,
+   "open_issues": 3,
+   "settled_raw_sha256": "0e105b606c3a1823254893511fea6d0744bdaba342ed88fefb1a8b0505f86fa5",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "0e105b606c3a1823254893511fea6d0744bdaba342ed88fefb1a8b0505f86fa5",
+   "findings": 3,
+   "finding_rows": [
+    "0001171843-26-001288#129",
+    "0001171843-26-001288#130",
+    "0001171843-26-001288#130"
+   ],
+   "question_keys": [
+    "0001171843-26-001288#q1",
+    "0001171843-26-001288#q2",
+    "0001171843-26-001288#q3"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "1ec1f1cb91d4f1d9543a073a2da0f01122031927e308ebf90a219e76385d1cb8",
+   "script_sha256": "4ed5e00cd569d471f0f539a33d7fd451e4246a0b04dad70e73c02658c21f556b",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 109302,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/0001171843-26-001288.attempt1.js",
+   "receipt_prompt_pin": "1ec1f1cb91d4f1d9543a073a2da0f01122031927e308ebf90a219e76385d1cb8"
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "rows": 10,
+   "open_issues": 5,
+   "settled_raw_sha256": "802bda56ede5daae64cc47be9e67785970ebe5eff8fb000f569e7eb3e3b9b6cf",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "802bda56ede5daae64cc47be9e67785970ebe5eff8fb000f569e7eb3e3b9b6cf",
+   "findings": 7,
+   "finding_rows": [
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#137",
+    "AAL_2026-04-23T08.30#141",
+    "AAL_2026-04-23T08.30#140",
+    "AAL_2026-04-23T08.30#141"
+   ],
+   "question_keys": [
+    "AAL_2026-04-23T08.30#q1",
+    "AAL_2026-04-23T08.30#q2",
+    "AAL_2026-04-23T08.30#q3",
+    "AAL_2026-04-23T08.30#q4",
+    "AAL_2026-04-23T08.30#q5",
+    "AAL_2026-04-23T08.30#coverage140",
+    "AAL_2026-04-23T08.30#coverage141"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "c39a8e6954968368c2566e7ea043fe4c4570cc863d2a63f6d7d54a7fd76ee784",
+   "script_sha256": "a3ec317bc16c344db0ec388de11805ffc9253dc1f20e94e5152c97a821c5c443",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 182045,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/AAL_2026-04-23T08.30.attempt1.js",
+   "receipt_prompt_pin": "c39a8e6954968368c2566e7ea043fe4c4570cc863d2a63f6d7d54a7fd76ee784"
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "rows": 8,
+   "open_issues": 2,
+   "settled_raw_sha256": "c4a3299685803a651747eb525eee3224dd84a08301d2f67116176022338cd7ee",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "c4a3299685803a651747eb525eee3224dd84a08301d2f67116176022338cd7ee",
+   "findings": 2,
+   "finding_rows": [
+    "BBY_2026-03-03T08.00#146",
+    "BBY_2026-03-03T08.00#145"
+   ],
+   "question_keys": [
+    "BBY_2026-03-03T08.00#q1",
+    "BBY_2026-03-03T08.00#q2"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "4341d4a542869118fda2d81a64a2ed812b3581517fb73efb06aabf1d5b01db96",
+   "script_sha256": "714e45af1cd1dd71ec4e2381d4f28e5e10ffc1bbebd5808d7f29123df3ebd494",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 169352,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/BBY_2026-03-03T08.00.attempt1.js",
+   "receipt_prompt_pin": "4341d4a542869118fda2d81a64a2ed812b3581517fb73efb06aabf1d5b01db96"
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "rows": 7,
+   "open_issues": 4,
+   "settled_raw_sha256": "ec2dc5866a29a65792803170c08dfdda5aaa5cd784da9b5d53da7d3bdc24a8a5",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "ec2dc5866a29a65792803170c08dfdda5aaa5cd784da9b5d53da7d3bdc24a8a5",
+   "findings": 4,
+   "finding_rows": [
+    "CMG_2026-02-03T16.30#152",
+    "CMG_2026-02-03T16.30#152",
+    "CMG_2026-02-03T16.30#153",
+    "CMG_2026-02-03T16.30#155"
+   ],
+   "question_keys": [
+    "CMG_2026-02-03T16.30#q1",
+    "CMG_2026-02-03T16.30#q2",
+    "CMG_2026-02-03T16.30#q3",
+    "CMG_2026-02-03T16.30#q4"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "ff81ba4174d1a2a2a9132f56639974658dcb2038ee73ed432318b672ea7464f8",
+   "script_sha256": "984bcd62fe0f7deb5986dd73e66d7a4d7b558bdcf6f3b42fcbb622d6f81f809e",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 165975,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/CMG_2026-02-03T16.30.attempt1.js",
+   "receipt_prompt_pin": "ff81ba4174d1a2a2a9132f56639974658dcb2038ee73ed432318b672ea7464f8"
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "rows": 7,
+   "open_issues": 4,
+   "settled_raw_sha256": "e7db98dd75ee12b3f03fb79a1961f83e2421ce0458067aa08eec1aa3ee076644",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "e7db98dd75ee12b3f03fb79a1961f83e2421ce0458067aa08eec1aa3ee076644",
+   "findings": 5,
+   "finding_rows": [
+    "DAL_2026-04-08T10.00#160",
+    "DAL_2026-04-08T10.00#160",
+    "DAL_2026-04-08T10.00#161",
+    "DAL_2026-04-08T10.00#157",
+    "DAL_2026-04-08T10.00#161"
+   ],
+   "question_keys": [
+    "DAL_2026-04-08T10.00#q1",
+    "DAL_2026-04-08T10.00#q2",
+    "DAL_2026-04-08T10.00#q3",
+    "DAL_2026-04-08T10.00#q4",
+    "DAL_2026-04-08T10.00#coverage161"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "ddd361cb42c419bd94efa41d5eac348f69428d2f8bc4448419fdf35c598d16d1",
+   "script_sha256": "205337ac6f38abbe84f97f83888bf9127082fd4d709d074e1e6d8cd71210932d",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 168901,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/DAL_2026-04-08T10.00.attempt1.js",
+   "receipt_prompt_pin": "ddd361cb42c419bd94efa41d5eac348f69428d2f8bc4448419fdf35c598d16d1"
+  },
+  {
+   "source_id": "DRI_2026-03-19T08.30",
+   "rows": 5,
+   "open_issues": 5,
+   "settled_raw_sha256": "16ed135561847f7180e4cf51dbd7c5e6b6daa063eb34640974b3d1923fc025a3",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "16ed135561847f7180e4cf51dbd7c5e6b6daa063eb34640974b3d1923fc025a3",
+   "findings": 6,
+   "finding_rows": [
+    "DRI_2026-03-19T08.30#168",
+    "DRI_2026-03-19T08.30#165",
+    "DRI_2026-03-19T08.30#166",
+    "DRI_2026-03-19T08.30#168",
+    "DRI_2026-03-19T08.30#164",
+    "DRI_2026-03-19T08.30#165"
+   ],
+   "question_keys": [
+    "DRI_2026-03-19T08.30#q1",
+    "DRI_2026-03-19T08.30#q2",
+    "DRI_2026-03-19T08.30#q3",
+    "DRI_2026-03-19T08.30#q4",
+    "DRI_2026-03-19T08.30#q5",
+    "DRI_2026-03-19T08.30#coverage165"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "a51358ef55f1c25c69a5f5e358b273dc6fe91550fa9045c97fda810a57143fce",
+   "script_sha256": "148725cac70ee203523c9f44daf0744991fb436db3c877bdc3d137543d866fa7",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 185288,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/DRI_2026-03-19T08.30.attempt1.js",
+   "receipt_prompt_pin": "a51358ef55f1c25c69a5f5e358b273dc6fe91550fa9045c97fda810a57143fce"
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "rows": 6,
+   "open_issues": 6,
+   "settled_raw_sha256": "352660122532b2b990f6862213f0e70e39804206ae6cf20203f072565d3efdab",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "352660122532b2b990f6862213f0e70e39804206ae6cf20203f072565d3efdab",
+   "findings": 6,
+   "finding_rows": [
+    "MCD_2026-02-11T16.30#170",
+    "MCD_2026-02-11T16.30#170",
+    "MCD_2026-02-11T16.30#169",
+    "MCD_2026-02-11T16.30#171",
+    "MCD_2026-02-11T16.30#172",
+    "MCD_2026-02-11T16.30#173"
+   ],
+   "question_keys": [
+    "MCD_2026-02-11T16.30#q1",
+    "MCD_2026-02-11T16.30#q2",
+    "MCD_2026-02-11T16.30#q3",
+    "MCD_2026-02-11T16.30#q4",
+    "MCD_2026-02-11T16.30#q5",
+    "MCD_2026-02-11T16.30#q6"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "e94ae79a5935a3804798b12cfe97f7f0d546a2b39f7ba04b5c64585322b17473",
+   "script_sha256": "b4f2ae29701768d78c7f5ee2d8594807794aa46ae479a9f1e4e0869de5c62f44",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 175110,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/MCD_2026-02-11T16.30.attempt1.js",
+   "receipt_prompt_pin": "e94ae79a5935a3804798b12cfe97f7f0d546a2b39f7ba04b5c64585322b17473"
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "rows": 7,
+   "open_issues": 4,
+   "settled_raw_sha256": "ba2b1ca9979ea06584a551796f5a0bed3b2f24d383e541c10841fb3ddba9dd2f",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "ba2b1ca9979ea06584a551796f5a0bed3b2f24d383e541c10841fb3ddba9dd2f",
+   "findings": 5,
+   "finding_rows": [
+    "ULTA_2026-03-12T16.30#177",
+    "ULTA_2026-03-12T16.30#178",
+    "ULTA_2026-03-12T16.30#178",
+    "ULTA_2026-03-12T16.30#180",
+    "ULTA_2026-03-12T16.30#175"
+   ],
+   "question_keys": [
+    "ULTA_2026-03-12T16.30#q1",
+    "ULTA_2026-03-12T16.30#q2",
+    "ULTA_2026-03-12T16.30#q3",
+    "ULTA_2026-03-12T16.30#q4",
+    "ULTA_2026-03-12T16.30#coverage175"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "69ef938f8761fe9732aa2639c3e610a41f9c19b3d4d4462350dd61b19efed6c7",
+   "script_sha256": "1c90b7215f8ed3f519c7377780082b3fc3bbd8521c5b747f3063de5b3317a281",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 163463,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/ULTA_2026-03-12T16.30.attempt1.js",
+   "receipt_prompt_pin": "69ef938f8761fe9732aa2639c3e610a41f9c19b3d4d4462350dd61b19efed6c7"
+  },
+  {
+   "source_id": "YUM_2026-02-04T08.15",
+   "rows": 7,
+   "open_issues": 4,
+   "settled_raw_sha256": "409f3a4568760294293f874c49a6599093a294f4a60669001e2c9fe2d4df8645",
+   "origin_before_this_phase": "a4_final_v4_correction",
+   "v4_shard_origin": "a4_final_v4_correction_reply",
+   "v4_shard_sha256": "409f3a4568760294293f874c49a6599093a294f4a60669001e2c9fe2d4df8645",
+   "findings": 5,
+   "finding_rows": [
+    "YUM_2026-02-04T08.15#184",
+    "YUM_2026-02-04T08.15#186",
+    "YUM_2026-02-04T08.15#185",
+    "YUM_2026-02-04T08.15#185",
+    "YUM_2026-02-04T08.15#186"
+   ],
+   "question_keys": [
+    "YUM_2026-02-04T08.15#q1",
+    "YUM_2026-02-04T08.15#q2",
+    "YUM_2026-02-04T08.15#q3",
+    "YUM_2026-02-04T08.15#q4",
+    "YUM_2026-02-04T08.15#coverage186"
+   ],
+   "declared_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v4_shard",
+    "reviewer_finding"
+   ],
+   "serves_the_repaired_task": true,
+   "prompt_sha256": "1554d2ffc26b70ffaf3d7d52771db91ac1839bcaa9b7968fdc733eb35c8df282",
+   "script_sha256": "7cafaac9c0c07b42b40a60e69d11b39189a114850b9769903f9a88071d8eddef",
+   "script_is_the_canonical_render": true,
+   "script_bytes": 166616,
+   "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2065_closeout_connection/packet_codex_clopkt2066_a/closeout/scripts/YUM_2026-02-04T08.15.attempt1.js",
+   "receipt_prompt_pin": "1554d2ffc26b70ffaf3d7d52771db91ac1839bcaa9b7968fdc733eb35c8df282"
+  }
+ ],
+ "inputs": {
+  "settlement_packet_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/FINDINGS_BY_EVENT.json",
+  "settlement_packet_record_sha256": "12df49d0dcc22a68336b588673d2c6ba9870635c7ff8201a5bac42b5e64ec470",
+  "closeout_review_data": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/SOURCE_FINDINGS_2063.json",
+  "closeout_review_data_sha256": "618c8d083fe8672f2ba952999c0a4016038494f6b3c745abcf9cd676cb9d3f0f",
+  "closeout_review_data_counts": {
+   "events": 31,
+   "current_questions": 108,
+   "observed_regression_leads": 2,
+   "explicit_coverage_leads": 10,
+   "entries": 120,
+   "model_calls": 0,
+   "raw_issues_cleared": 0
+  },
+  "recovery_binding": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/RECOVERY_BINDING.json",
+  "recovery_binding_sha256": "25fb31ffa588835a0b8ea9589c54fd30f253c59009c2b5e2af4b96a54a7ac59e",
+  "input_binding": "/tmp/a7_input_binding_2035.json",
+  "input_binding_sha256": "44bc6af5145d17ad82eb825e31798db0a0154aa982fb77337d2df90618030071",
+  "closeout_owner_sha256": "d05d7360d60187949758eee6e0c1479caa3e38817c792721f647d4ee5d84ed38",
+  "task_version": "a7-source-task/2063",
+  "task_owner_sha256": "748e87d327d63ca4afa94110a0f9ac82ae8024fae84eb4d1f8063aa6b5ce05a1",
+  "settlement_owner_sha256": "ffa8797e61d3e6d4d6eb6a5fac35178de67058474cf37b282e0bd834706ce33d",
+  "decision_owner_sha256": "d0e9b8dfdea1636f362a8b337032c895d676a945140f5e1049defe2932fe4b89",
+  "correction_owner_sha256": "6c76ecfd72e7ebd33d2cf6396456cf7b3e20f8cacae739fb65be636fdcc848b0",
+  "recovery_owner_sha256": "8fc587ef77d5553ef4895ddb74a060658bd4ea0f86417ff109503fc9678beb90",
+  "harness_owner_sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "preparer_sha256": "078cc949aa389cb78ba3fe2d7c6e15c4d66538e401396f11497074b448e01ce9"
+ },
+ "kind": "PREPARED ONLY. No model call, no signature, no lock, no grading, and NO call authorization.",
+ "model_calls": 0,
+ "launched": false,
+ "checks": [
+  "no durable closeout phase for THIS key has ever recorded a state or finalized, so no completed call can be repeated",
+  "and this phase's own launcher never produced a native state",
+  "the merged SETTLED key is clean and complete",
+  "the closeout population is exactly the settled events this phase's own review DATA names, in frozen order",
+  "the two carried originals are NOT scheduled and keep their own origin",
+  "the recovered correction is still in the key it derives from",
+  "every review entry names an event of this key and that event's own current settlement raw",
+  "the existing preparer published the phase with no problems",
+  "the receipt exists BEFORE any call and declares this phase",
+  "the receipt pins the recovery run and its record as history",
+  "every published script IS the canonical renderer's own bytes",
+  "the receipt pins each event's own prompt, reproduced live",
+  "EVERY served prompt carries the REPAIRED task text - the whole reason this phase exists",
+  "every body carries THIS event's accepted settlement as its one prior reply",
+  "every event gets exactly its own review entries, none other",
+  "every script declares the same key list, derived from its body",
+  "the settled key this phase starts from is complete and gated by its own owner, over the whole frozen inventory",
+  "the budget describes THIS phase's own derived schedule",
+  "the two live counters agree before this phase",
+  "the existing budget owner reports no problem and the worst case stays under the global ceiling",
+  "every review entry is served exactly once, none dropped",
+  "the entry and event totals are the ones the DATA declares"
+ ]
+}

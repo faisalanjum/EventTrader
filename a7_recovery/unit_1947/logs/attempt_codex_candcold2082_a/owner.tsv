@@ -1,0 +1,7 @@
+attempt	codex_candcold2082_a
+payload	../../unit_2020_codex_check/verify_real_candidate_2082.py
+map	../unit_2081_final_key_candidate/map_2081.tsv
+wrapper_pid	3469316
+payload_pid	3469320
+started_utc	2026-09-13T00:33:27Z
+state	finished exit 0

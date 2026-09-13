@@ -1,0 +1,79 @@
+{"prior_key_runs": 13, "prior_native_identity_counts": [285, 285, 284, 284], "signer_collisions": [0, 0, 0, 0]}
+  raw final_sign.attempt1.raw.json sha 46c0847c677657877b7a1a914404ec35be397023ba1394db039b3d79872a2ee3 (558 chars)
+  run wf_cf398299-777 | agent aded04e635e6e4aed | model opus | effort high | lean-probe | tools 0 | runtime ['claude-opus-5']
+  OUTCOME: signed=True blocked=[]
+  why: I recomputed every figure from the 33 raw shards and each matched exactly — 33 events, 191 rows, 163 accepted facts each carrying hard_classes, du_worthy and gold_extra (all du_worthy true), 34 controls, 10 exclusions, 44 abstentions, 11 record-kind conflicts all resolved in their record_kind_notes,
+a4_final_key_lock.json dc9192271da3af0c3a0bb2fc2590c151073076f2893ac21136aee30424022e52
+  signed=True blocked=[]  ledger 667 -> 668 of 6000
+  artifact:key_identity              refused
+  artifact:sidecar                   refused
+  artifact:validator_receipt         refused
+  artifact:provenance                refused
+  artifact:signer_prompt             refused
+  artifact:signer_launcher           refused
+  artifact:signer_manifest           refused
+  artifact:signer_raw                refused
+  artifact:signer_evidence           refused
+  artifact:signer_reply              refused
+  artifact:attempt1_record           refused
+  artifact:attempt1_launcher         refused
+  artifact:attempt1_raw              refused
+  artifact:attempt1_state            refused
+  artifact:attempt1_transcript       refused
+  signer:run_id                      refused
+  signer:agent_id                    refused
+  signer:raw_sha256                  refused
+  signer:transcript_sha256           refused
+  signer:state_sha256                refused
+  signer:parent_session_id           refused
+  signer:model                       refused
+  signer:effort                      refused
+  signer:agent_type                  refused
+  signer:prompt_sha256               refused
+  signer:script_sha256               refused
+  signer:signed                      refused
+  signer:blocked                     refused
+  block:counts                       refused
+  block:validator                    refused
+  block:call_accounting              refused
+  block:key                          refused
+  block:authority                    refused
+a4_final_key_lock_receipt.json a52323e2ee08be81714109d7f743036c553ebe28f15b529f21dc9ef5e4fad991
+RESULT EVERY BOUND VALUE REFUSES WHEN MUTATED
+{
+ "mode": "lock",
+ "model_calls": 0,
+ "lock": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/candidate/a4_final_key_lock.json",
+ "lock_sha256": "dc9192271da3af0c3a0bb2fc2590c151073076f2893ac21136aee30424022e52",
+ "receipt_sha256": "a52323e2ee08be81714109d7f743036c553ebe28f15b529f21dc9ef5e4fad991",
+ "candidate_sha256": "e77684b2472f583cce116a1cadc845bcadcfd5b84a808ddbaec8139adaf13635",
+ "mutations": 33,
+ "counts": {
+  "events_accounted": 33,
+  "rows_accounted": 191,
+  "accepted_facts": 163,
+  "du_worthy_facts": 163,
+  "controls": 34,
+  "exclusions": 10,
+  "abstentions": 44,
+  "record_kind_conflicts": 11,
+  "duplicate_gold_facts": 0,
+  "open_issues": 0,
+  "phase1_ambiguities": 0,
+  "tag_floor": 5,
+  "distinct_rows_per_tag": {
+   "point_range_floor_ceiling": 136,
+   "losses_and_sign": 27,
+   "sequential_comparison": 41,
+   "measurement_wording": 60,
+   "favourable_unfavourable_direction": 16,
+   "expectation_routing": 18,
+   "slices_and_unknown_axes": 67,
+   "portion_versus_whole": 38,
+   "ambiguous_menus": 35,
+   "corrections_and_amendments": 7
+  },
+  "tags_below_floor": [],
+  "sequential_rows": 41
+ }
+}

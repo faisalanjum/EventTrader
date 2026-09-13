@@ -1,0 +1,7 @@
+attempt	codex_regchain2078_a
+payload	../../unit_2020_codex_check/run_chain_regression_2078.py
+map	../unit_2076_latest_source_decisions/map_2076.tsv
+wrapper_pid	3383436
+payload_pid	3383440
+started_utc	2026-09-12T23:32:08Z
+state	finished exit 0

@@ -1,0 +1,2693 @@
+{
+ "kind": "the real source-only settlement packet; preparation only, no call authorization",
+ "review_run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2015",
+ "review_package": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/closure_2015",
+ "run": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017",
+ "package": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2035_input_bound_resume/key_package_2035",
+ "corrections": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2035_input_bound_resume/corrections",
+ "decision": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision",
+ "settlement": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement",
+ "input_binding": "/tmp/a7_input_binding_2035.json",
+ "recovery": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/RECOVERY_BINDING.json",
+ "by_event": {
+  "0000006201-26-000031": [
+   {
+    "source_id": "0000006201-26-000031",
+    "raw_sha256": "ce9e4cb13a77e20284a320a126cf7e66c24618976654e00a46ce71476ad52911",
+    "row": "0000006201-26-000031#002",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'a greater than $4 billion increase in expense related to higher prices for jet fuel'. The bound applies to a CHANGE, and change_value has no shape-hint slot - Rule 5.2's four shapes exist only for the level and comparison groups - so 'greater than' is captured by no slot at all.",
+    "owning_clause": "Rule 8 - 'Any number modifier not captured by name/period/unit/slice/basis stays here' - with OD-9's never-drop sink, 'When unsure, keep'."
+   }
+  ],
+  "0000006201-26-000032": [],
+  "0000027904-26-000013": [
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "2f80a72d633a3220e9b0b412621c4c59ff6f7b6db4683cd824b86e0487b00eb2",
+    "row": "0000027904-26-000013#014",
+    "fact_index": 1,
+    "field": "level_low / level_high / level_unit",
+    "decision": "CHANGE",
+    "source_evidence": "The quote reports BOTH the actual level and its growth: 'Non-fuel unit costs (\"CASM-Ex\") increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth'. The home (fact 0) stores the level 13.86 cents AND change 2.4 percent_yoy; the surprise stores level 2.4 percent_yoy, so the two value-bearing records disagree.",
+    "owning_clause": "Rule 9.6 - a grounded surprise 'must match its home fact's family, period, period scope, slice, measurement, and - when value-bearing - normalized value and unit'; Rule 5.8 - on a surprise the beat/miss size is stored ONLY when the source states a non-derivable delta; the target here is 'low-single digit growth', which Rule 5.4 makes a vague quantity and therefore not a number."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "2f80a72d633a3220e9b0b412621c4c59ff6f7b6db4683cd824b86e0487b00eb2",
+    "row": "0000027904-26-000013#016",
+    "fact_index": 0,
+    "field": "period fields",
+    "decision": "PRESERVE",
+    "source_evidence": "'we currently own an approximately 19% equity stake in Grupo Aeromexico'. The quote states no reporting period at all; 'currently' is not a date and the filing's own date is metadata, not a stated period for this fact.",
+    "owning_clause": "Rule 6 - 'Metric and surprise facts use a stated, clearly implied, or safely derived real period' and 'The abstain-on-unresolved rule applies ONLY to facts that REQUIRE a period (guidance always; metric/surprise when a real period is stated or clearly implied)'."
+   }
+  ],
+  "0000027904-26-000020": [
+   {
+    "source_id": "0000027904-26-000020",
+    "raw_sha256": "51a8a23951cc258fbf01d659af0c8cba8a62292d34fe70bc795960cac2107339",
+    "row": "0000027904-26-000020#027",
+    "fact_index": 0,
+    "field": "tags: sequential_comparison; comparison_baseline",
+    "decision": "PRESERVE",
+    "source_evidence": "(in millions) March 31, 2026 December 31, 2025 March 31, 2025 December 31, 2019 1Q26 vs 4Q25 $ Change Debt and finance lease obligations $ 14,164 $ 14,113 $ 15,823 $ 11,160 Plus: sale-leaseback financing liabilities 1,764 1,779 1,821 \u2014 Plus: unamortized discount/(premium) and debt issue cost, net and other (11) (6) 16 (115) Adjusted debt and finance lease obligations $ 15,916 $ 15,885 $ 17,660 $ 11,044 Plus: fleet operating lease liabilities 2,715 2,780 3,067 3,992 Plus: unfunded pension liabilities \u2014 \u2014 \u2014 5,353 Adjusted gross debt $ 18,631 $ 18,665 $ 20,728 $ 20,390 Less: cash and cash equivalents (5,053) (4,310) (3,711) (2,882) Less: LGA restricted cash (38) (56) (141) (636) Adjusted net debt $ 13,540 $ 14,300 $ 16,876 $ 16,871 $ (760)\nSource-only finding: The same quoted table explicitly headlines 1Q26 vs 4Q25 $ Change: current 13540 and prior 14300; a separate prior-year column does not erase this stated sequential headline.",
+    "owning_clause": "Rule 9.2 source headline precedes the prior-year tie-break; Step1 requires sequential comparisons, including a monetary comparison with an explicit sequential baseline."
+   }
+  ],
+  "0000027904-26-000022": [],
+  "0000063908-26-000032": [
+   {
+    "source_id": "0000063908-26-000032",
+    "raw_sha256": "75d7b166c794271b0a8a44f908e0e023ac1427d6f6927aa107e9517346fefebf",
+    "row": "0000063908-26-000032#037",
+    "fact_index": 0,
+    "field": "period fields",
+    "decision": "PRESERVE",
+    "source_evidence": "'Approximately 95% of McDonald's restaurants worldwide are owned and operated by independent local business owners.' A standing structural statement with no stated window or as-of date.",
+    "owning_clause": "Rule 6, same clauses as #016."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "raw_sha256": "75d7b166c794271b0a8a44f908e0e023ac1427d6f6927aa107e9517346fefebf",
+    "row": "0000063908-26-000032#033",
+    "fact_index": 0,
+    "field": "driver_name",
+    "decision": "CHANGE",
+    "source_evidence": "'Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.' Same shape as #184 - a stated aggregate whose cause is only PRIMARILY the named one - but unlike #184 this source names no base metric that the 80 million belongs to.",
+    "owning_clause": "Rule 1.4 explicitly permits abstention when a real target cannot lawfully be resolved. Rules 3.2, 3.6 and 3.10 prohibit allocating the whole aggregate to a primarily-related cause or inventing a forbidden bare category name."
+   }
+  ],
+  "0000092380-26-000044": [
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "0db2412014a4f2a7215c833039e21539613f2d11f86f9262737d3635896d6026",
+    "row": "0000092380-26-000044#042",
+    "fact_index": 1,
+    "field": "level_low / level_high / level_unit / level_shape_hint",
+    "decision": "CHANGE",
+    "source_evidence": "The quote is 'First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance'. It states a change and NO level, so the home (fact 0) is correctly level-numberless with change_value 2.3 percent_yoy. The surprise nevertheless carries level 2.3 percent_yoy, which is the actual restated, not a beat size - the quote states no delta at all.",
+    "owning_clause": "Rule 5.8 - 'On a surprise, the beat/miss size is stored ONLY when the source states a non-derivable delta whose arithmetic sign is determinable; otherwise null - the quote carries it'; Rule 9.6's numberless branch."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "0db2412014a4f2a7215c833039e21539613f2d11f86f9262737d3635896d6026",
+    "row": "0000092380-26-000044#039",
+    "fact_index": 1,
+    "field": "measurement_raw_spans; required home-pair measurement",
+    "decision": "CHANGE",
+    "source_evidence": "First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40\nSource-only finding: The comparison amount is approximately $2.40, while the actual $2.73 is exact. Both existing fact measurements are empty. The comparison's approximation has no other representation. Do not misread the modifier as changing the actual numeric value.",
+    "owning_clause": "Rules 8 and 9.6: retain uncaptured number modifiers and preserve the required same-measurement home/surprise pairing."
+   }
+  ],
+  "0000764478-25-000057": [],
+  "0000898173-26-000006": [
+   {
+    "source_id": "0000898173-26-000006",
+    "raw_sha256": "abf52d43bcea786600f143c8cb594a6d05a2ce5abafee5ad85ec728f5fdeccb2",
+    "row": "0000898173-26-000006#055",
+    "fact_index": 0,
+    "field": "the whole fact",
+    "decision": "CHANGE",
+    "source_evidence": "The frozen target is ONLY 'all share and per share data in current and comparable periods have been adjusted to reflect the split'. The stored fact is stock_split/occurred dated 2025-06-10, which is the OTHER clause of the sentence. The target itself is a retroactive restatement of presentation.",
+    "owning_clause": "The task text - each item's raw_label_or_claim 'names the one target meaning to interpret for that item' and the complete event is context, 'NOT a request to find other facts' - with Rule 3.8, 'OMIT elimination/consolidation artifacts - accounting constructs are not drivers', and Rule 1.4."
+   }
+  ],
+  "0000940944-25-000038": [
+   {
+    "source_id": "0000940944-25-000038",
+    "raw_sha256": "7c63e18a89a1b5cd615acf8688309ba9ccd096664c4c7c36596c9311889729be",
+    "row": "0000940944-25-000038#057",
+    "fact_index": 0,
+    "field": "period fields, with the latest action stage preserved",
+    "decision": "CHANGE",
+    "source_evidence": "This row's own quote states the AGREEMENT stage: 'During the fourth quarter of fiscal 2025, we entered into an agreement with Recipe Unlimited ... pursuant to which Recipe Unlimited WILL ACQUIRE Olive Garden's eight Canadian restaurants.' The served event states the completion in a different sentence outside this quote - 'Subsequent to the end of the quarter, on July 14, 2025, we successfully closed on the sale' - and the same event states 'Our fiscal year 2025 ended May 25, 2025', so the closing falls in FY2026, not the stored FY2025 Q4.",
+    "owning_clause": "Rule 4: latest action stage. Rule 6: the fact's own period. The complete served event is context for this same frozen target; immutable quote location does not restrict meaning review to the quote alone."
+   }
+  ],
+  "0000940944-26-000005": [
+   {
+    "source_id": "0000940944-26-000005",
+    "raw_sha256": "6bd81f43566b89977d451909bbc3f4894bc5649f48dcaebaac98106e5fc62ac8",
+    "row": "0000940944-26-000005#062",
+    "fact_index": 0,
+    "field": "driver_name and level",
+    "decision": "PRESERVE",
+    "source_evidence": "The located target IS the reconciliation line 'Impairment due to restaurant closures3' and the stored 24.7 million is that line's own pre-tax figure, so amount and cause match exactly with no 'primarily' in between. This is the control Codex named for no-over-attribution.",
+    "owning_clause": "Rule 3.2 - one name, one cause - satisfied on its face."
+   }
+  ],
+  "0000940944-26-000009": [],
+  "0001041061-25-000109": [
+   {
+    "source_id": "0001041061-25-000109",
+    "raw_sha256": "ec2a0d12cbd0eb51e7c399b67cfbf0f55d2877456c6bfc200970bc17884af242",
+    "row": "0001041061-25-000109#073",
+    "fact_index": 0,
+    "field": "fiscal_quarter",
+    "decision": "CHANGE",
+    "source_evidence": "The quote states the window explicitly: 'pre-tax investment losses of $20 million in the year to date ended September 30, 2024'. The served event states this company's fiscal year ends December 31 and its own tables are headed 'Third Quarter' and 'Year to date' for periods 'ended September 30'. The INTERNAL control is row #076 of this very source, whose quote says 'the quarter and year to date ended September 30, 2025' and which already stores fiscal_quarter 3.",
+    "owning_clause": "Rule 6 - period_scope ytd with the fiscal framing the source gives - and the production owner's own refusal text, 'ytd without fiscal_quarter - the cumulative window's anchor quarter is a semantic judgment, never defaulted - park', which asks the MODEL for exactly this judgment."
+   }
+  ],
+  "0001041061-26-000003": [],
+  "0001041061-26-000084": [],
+  "0001058090-26-000007": [],
+  "0001104659-25-102611": [],
+  "0001104659-25-105631": [
+   {
+    "source_id": "0001104659-25-105631",
+    "raw_sha256": "7a4cb12df70b627f8c7d2ccf278b62f5f3f13d50f3d31107d2c2272a1188891c",
+    "row": "0001104659-25-105631#104",
+    "fact_index": 0,
+    "field": "tags: corrections_and_amendments",
+    "decision": "CHANGE",
+    "source_evidence": "On October 6, 2022, we entered into a Fourth Amended and Restated Loan Agreement (the \u201cLoan Agreement\u201d and the revolving credit facility provided thereunder, the \u201cRevolver Facility\u201d). The Loan Agreement amends and restates in its entirety our prior credit agreement.\nSource-only finding: The target itself explicitly amends and restates the prior credit agreement, not just a name containing amended.",
+    "owning_clause": "The served tag authority includes amendments as new facts at public time; it is not limited to typo fixes."
+   }
+  ],
+  "0001104659-25-118458": [
+   {
+    "source_id": "0001104659-25-118458",
+    "raw_sha256": "9dc33e015657549c809f04307234f8a6a5da170371731cdd0e8165f2706d709c",
+    "row": "0001104659-25-118458#110",
+    "fact_index": 0,
+    "field": "slice_parts",
+    "decision": "CHANGE",
+    "source_evidence": "'The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.' The settled fact is share_repurchase_program/canceled and it carries the March 2024 program as a slice.",
+    "owning_clause": "Served prefix :496 - 'A real slice is a business population for which \"revenue/earnings from ___\" makes sense. Accounting labels are not slices.' - and :497 - 'Omitted slice = consolidated whole-company (metric/guidance/surprise) or no-applicable-part (action).'"
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "raw_sha256": "9dc33e015657549c809f04307234f8a6a5da170371731cdd0e8165f2706d709c",
+    "row": "0001104659-25-118458#110",
+    "fact_index": 0,
+    "field": "tags: corrections_and_amendments",
+    "decision": "REVIEW",
+    "source_evidence": "In October 2024, the Board of Directors authorized a share repurchase program (the October 2024 Share Repurchase Program) pursuant to which the Company may repurchase up to $3.0 billion of the Company\u2019s common stock. The October 2024 Share Repurchase Program authorization revoked the previously authorized but unused amounts from the March 2024 Share Repurchase Program.\nSource-only finding: The October authorization explicitly replaces/revokes the remaining March authorization. This is an identified changed board decision, not an arbitrary business action; neither a filing-only restriction nor automatic eligibility follows from the source.",
+    "owning_clause": "Complete source-precedence and guidance/correction tag authority; apply consistently with #104."
+   }
+  ],
+  "0001104659-26-017090": [
+   {
+    "source_id": "0001104659-26-017090",
+    "raw_sha256": "ec3fedffbb321df3b89335e31b32411b72f056715b30695947f37d80ef828690",
+    "row": "0001104659-26-017090#116",
+    "fact_index": 0,
+    "field": "tags: corrections_and_amendments",
+    "decision": "REVIEW",
+    "source_evidence": "The Company now expects to open as many as 26 new restaurants in fiscal 2026, including as many as six The Cheesecake Factory restaurants, six to seven North Italia locations, six to seven Flower Child locations and as many as eight FRC restaurants.\nSource-only finding: The Company now expects is the only update-like framing found for this target in the served event. No earlier numeric Flower Child guide appears. The target is the six-to-seven Flower Child count; other repurchase/dividend changes in the event are unrelated.",
+    "owning_clause": "Complete corrections/amendments tag authority and the one-target rule; bare guidance stores unknown."
+   }
+  ],
+  "0001104659-26-027061": [],
+  "0001104659-26-032757": [
+   {
+    "source_id": "0001104659-26-032757",
+    "raw_sha256": "eecc1437a8d90f2ddf0a3cee68bc3e3b8bd84389ead31672f98bd3b52ee56b5d",
+    "row": "0001104659-26-032757#124",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "PRESERVE",
+    "source_evidence": "Already stores ['approximately'] for 'at approximately 85% of total sales'. This is the positive control Codex named.",
+    "owning_clause": "Rule 8's sink."
+   }
+  ],
+  "0001171843-26-001288": [
+   {
+    "source_id": "0001171843-26-001288",
+    "raw_sha256": "41fd49d601cc6f73e16c9f307322cda98719de48072501c05dd2184365ee25b5",
+    "row": "0001171843-26-001288#130",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "PRESERVE",
+    "source_evidence": "Already stores ['approximately'] for 'approximately 350-360 stores'. The second positive control.",
+    "owning_clause": "Rule 8's sink."
+   }
+  ],
+  "AAL_2026-04-23T08.30": [
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "3cae3f4d4a238513362e337f75905c575219301dd8b094a2cd60b993d838817c",
+    "row": "AAL_2026-04-23T08.30#140",
+    "fact_index": 0,
+    "field": "level_shape_hint / level_unit / sequential comparison",
+    "decision": "REVIEW",
+    "source_evidence": "on the other revenue or the marketing component of it we did see an increase that's pretty meaningful year over year quarter over quarter just versus the fourth quarter was up you know something less than 10 percent\nSource-only finding: The selected target explicitly compares with the fourth quarter and says an increase less than 10 percent. The present key uses a one-sided ceiling and percent_sequential level unit; native component checks accept it. That alone does not decide meaning.",
+    "owning_clause": "Rules 5.2, 5a, 7.1 and source-headline/target discipline. Do not extend a clause explicitly about directional bps/pp to every open percentage-growth series without authority."
+   }
+  ],
+  "BBY_2026-03-03T08.00": [],
+  "CMG_2026-02-03T16.30": [
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "raw_sha256": "dbaa3bede0f762008fbe05823307d369836e98b903a199e90b329d6f5c39c1d7",
+    "row": "CMG_2026-02-03T16.30#152",
+    "fact_index": 0,
+    "field": "period fields",
+    "decision": "PRESERVE",
+    "source_evidence": "'Today, these two group occasions represent less than 3% of combined sales yet could be double-digit percentage of sales longer term.' 'Today' is not a date and no window is stated. The 'less than' bound is already captured losslessly by level_shape_hint ceiling with level_high only, so no modifier is dropped here.",
+    "owning_clause": "Rule 6 as above, with Rule 5.2 shapes."
+   }
+  ],
+  "DAL_2026-04-08T10.00": [
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "3d981fc68d8f79268917e8321890eaa8ccb4a003ec150c55d3f56680c4e9ab15",
+    "row": "DAL_2026-04-08T10.00#160",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "This includes an estimated $300 million benefit from our refinery.\nSource-only finding: The stored guidance is a point with empty measurement; estimated is not represented by another slot.",
+    "owning_clause": "Rule 8: uncaptured number modifier stays in measurement. Rule 5.1 explicitly signs a benefit negatively; the negative amount is not itself an error."
+   }
+  ],
+  "DRI_2026-03-19T08.30": [],
+  "MCD_2026-02-11T16.30": [
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "raw_sha256": "ae20003b1d235aae0eb09006076a99fb43a15d52a7755734e949ef1e919cf979",
+    "row": "MCD_2026-02-11T16.30#169",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'system-wide sales of nearly $140 billion, up 5.5% in constant currency for the full year'. The current point representation loses 'nearly'. Preserve the source's qualification under the existing shape/measurement rules; this does not establish a universal point-only rule or forbid a source-supported ceiling. The separate #080 ceiling is a valid preservation control.",
+    "owning_clause": "Rule 8's sink with OD-9's 'When unsure, keep'."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "raw_sha256": "ae20003b1d235aae0eb09006076a99fb43a15d52a7755734e949ef1e919cf979",
+    "row": "MCD_2026-02-11T16.30#172",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'we're targeting approximately 2,600 gross restaurant openings with about 750 of these in our U.S. and IOM segments'. The stored value is the 750; 'about' is captured nowhere.",
+    "owning_clause": "Rule 8's sink."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "raw_sha256": "ae20003b1d235aae0eb09006076a99fb43a15d52a7755734e949ef1e919cf979",
+    "row": "MCD_2026-02-11T16.30#173",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'We expect to open more than 1,800 restaurants in our IDL segment, including about 1,000 in China.' The stored value is the 1,000 and its 'about' is captured nowhere.",
+    "owning_clause": "Rule 8's sink."
+   }
+  ],
+  "ULTA_2026-03-12T16.30": [
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "fd3758e058f63d6a27c3ac9eda98758085bf16acec050c862d80ad9af13247b2",
+    "row": "ULTA_2026-03-12T16.30#180",
+    "fact_index": 0,
+    "field": "required companion fact (row-level) and measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'we over delivered sales above the high end of our guidance by about 85 million'. The 85 million IS a stated, non-derivable delta with a determinable sign, so change_value is right and must not be removed. No net-sales home exists anywhere in this event: the other settled rows are an EPS guide, an SG&A metric, a loyalty-member metric and a store count. Separately, 'about' is a number modifier the fact captures nowhere.",
+    "owning_clause": "Served prefix line 77 - 'Every grounded surprise needs its home sibling in the same event' - with Rule 9.6's numberless-home branch, and Rule 8's never-drop sink for the qualifier."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "fd3758e058f63d6a27c3ac9eda98758085bf16acec050c862d80ad9af13247b2",
+    "row": "ULTA_2026-03-12T16.30#176",
+    "fact_index": 0,
+    "field": "change_value.unit_scale_evidence and measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.' The percent marker is inside the quote, yet change_value carries unit_scale_evidence null; and 'about' is captured by no slot.",
+    "owning_clause": "Rule 5.6 - unit_scale_evidence is 'the SMALLEST span from INSIDE your quote that SUPPORTS YOUR MULTIPLIER ... a bare unit marker like `$` suffices ONLY when the multiplier is 1 ... Null ONLY when the multiplier is 1 AND no unit or scale marker exists' - here the multiplier is 1 but a unit marker DOES exist, so null is not available. Rule 8's sink for the qualifier."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "fd3758e058f63d6a27c3ac9eda98758085bf16acec050c862d80ad9af13247b2",
+    "row": "ULTA_2026-03-12T16.30#177",
+    "fact_index": 0,
+    "field": "change_value.unit_scale_evidence",
+    "decision": "CHANGE",
+    "source_evidence": "'We grew our loyalty program by 5% to a record 46.7 million active members'. level_low/high correctly cite 'million'; change_value cites nothing although the percent marker sits in the same quote.",
+    "owning_clause": "Rule 5.6, same clause as #176."
+   }
+  ],
+  "YUM_2026-02-04T08.15": [
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "raw_sha256": "b73e74c1738d6820c9d4cadc457e94ed7545c75072a4835a3e5bd8056860c3cd",
+    "row": "YUM_2026-02-04T08.15#186",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'We expect Pizza Hut Q1 core operating profit to be down approximately 15%'. The stored measurement is ['core'], which is the non-GAAP flavour and does NOT capture the separate 'approximately' qualifier.",
+    "owning_clause": "Rule 8's sink with Rule 3.6, which keeps 'core' in measurement rather than the name."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "raw_sha256": "b73e74c1738d6820c9d4cadc457e94ed7545c75072a4835a3e5bd8056860c3cd",
+    "row": "YUM_2026-02-04T08.15#187",
+    "fact_index": 0,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "'we expect approximately 250 targeted closures of underperforming units tied to the Hut Forward program'. 'approximately' is captured nowhere.",
+    "owning_clause": "Rule 8's sink."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "raw_sha256": "b73e74c1738d6820c9d4cadc457e94ed7545c75072a4835a3e5bd8056860c3cd",
+    "row": "YUM_2026-02-04T08.15#184",
+    "fact_index": 0,
+    "field": "driver_name and slice_parts",
+    "decision": "CHANGE",
+    "source_evidence": "'reported gna of 377 million included 40 million of special expenses primarily related to the pizza hut strategic options review'. The 40 million IS the special-expense total inside G&A; 'primarily' qualifies its CAUSE, so the review is an unstated subset of it. The stored fact names the whole 40 million strategic_review_costs AND slices it to segment:pizzahutglobaldivision, attributing all of it to that subset.",
+    "owning_clause": "Rule 3.2 - 'One name = one cause; split independent causes into separate facts' - with Rule 3.6, which routes a measurement flavour out of the name."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "raw_sha256": "b73e74c1738d6820c9d4cadc457e94ed7545c75072a4835a3e5bd8056860c3cd",
+    "row": "YUM_2026-02-04T08.15#186",
+    "fact_index": 0,
+    "field": "tags: corrections_and_amendments",
+    "decision": "REVIEW",
+    "source_evidence": "We expect Pizza Hut Q1 core operating profit to be down approximately 15%, driven by the Q1 impact of the one-time Hut Forward marketing support investments that will be recorded in franchise and property expenses, and G&A growth due to integration costs related to recently acquired stores in the UK.\nSource-only finding: No prior guide, correction or amendment for this target was established. However, the ACTUALLY SERVED tag text includes the whole OD-14 guidance paragraph, including a bare guide storing unknown rather than a read-derived introduced state. That is the distinction raised in the original source-key question. Decide whether it is a valid rule-distinction control, without pretending the source states an amendment. My earlier mandatory tag-removal proposal was not established by those served instructions.",
+    "owning_clause": "Served source-only prefix 88072ba140ab257b5f33fc55879383a30c3e7bdfbe567056bd7ea327a89fefc1, TAG RULES corrections_and_amendments and FINAL_DESIGN section 9; WorkOrder section 4 requires OD-14 coverage while step1 A4 names corrections/amendments. The older v6 correction task's narrower wording is not part of this served source-only task."
+   }
+  ]
+ },
+ "decision_by_event": {
+  "0000006201-26-000032": [
+   {
+    "row": "0000006201-26-000032#010",
+    "source_id": "0000006201-26-000032",
+    "raw_sha256": "3ffc791a49c0e989f5a0efa0ebb49acd86e3328e0b6e5ce57261301ca495b229",
+    "fact_index": null,
+    "field": "review[].hard_classes (row_index 4, fact_index 0)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'a 3.9% increase in mainline full-time equivalent employees subsequent to the first quarter of 2025' (mdna, row 0000006201-26-000032#010). RECOVERED-REPLY REVIEW: Codex SEQ 2054, RECOVERED_SOURCE_REVIEW_2053.md: the recovered reply labels this row `sequential_comparison` even though it sets `percent_yoy` and `prior_year`. The surrounding frozen MD&A compares the first quarter of 2026 with the first quarter of 2025; 'subsequent to' does not make this an immediately prior comparable quarter. It must not earn sequential coverage merely because of that word. This is a source/tag adjudication for the final key owner, not a new code rule, prompt example or quota waiver, and it approves no new coverage count.",
+    "owning_clause": "Codex SEQ 2054, RECOVERED_SOURCE_REVIEW_2053.md: the recovered reply labels this row `sequential_comparison` even though it sets `percent_yoy` and `prior_year`. The surrounding frozen MD&A compares the first quarter of 2026 with the first quarter of 2025; 'subsequent to' does not make this an immediately prior comparable quarter. It must not earn sequential coverage merely because of that word. This is a source/tag adjudication for the final key owner, not a new code rule, prompt example or quota waiver, and it approves no new coverage count."
+   }
+  ],
+  "0000027904-26-000013": [
+   {
+    "row": "0000027904-26-000013#014",
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "8679ab96bc36b126af3b4a4f0861506b8b16a1cbdbc6949efbc74a69a3e3dff3",
+    "fact_index": null,
+    "field": "level_low / level_high / level_unit (on the surprise)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.' (mdna, row 0000027904-26-000013#014). CURRENT REVIEW: Current: a compatible encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states both the actual level and its growth ('increased 2.4% to 13.86 cents'), so under the existing home-pair owner the source-stated 13.86-cent actual may stand on BOTH records while the vague expectation ('low-single digit growth') leaves the expectation numbers unknown; what that owner refuses is the value-absent surprise currently emitted beside a value-bearing home (independently checked by Codex SEQ 2038, check_disposition_claims_2038.py cases 3 and 4). The key owner encodes it. HISTORICAL question 6 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 3: a numberless surprise sitting against a value-bearing home fact. The stated expectation ('low-single digit growth') is a vague quantity and therefore not a number, so no comparison or delta value may lawfully be stored on the surprise; yet the home fact is value-bearing, and the home-sibling rule as written pairs a numberless surprise with a numberless home, so the two clauses cannot both be satisfied here.",
+    "owning_clause": "Current: a compatible encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states both the actual level and its growth ('increased 2.4% to 13.86 cents'), so under the existing home-pair owner the source-stated 13.86-cent actual may stand on BOTH records while the vague expectation ('low-single digit growth') leaves the expectation numbers unknown; what that owner refuses is the value-absent surprise currently emitted beside a value-bearing home (independently checked by Codex SEQ 2038, check_disposition_claims_2038.py cases 3 and 4). The key owner encodes it."
+   },
+   {
+    "row": "0000027904-26-000013#014",
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "8679ab96bc36b126af3b4a4f0861506b8b16a1cbdbc6949efbc74a69a3e3dff3",
+    "fact_index": null,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased 2.4% to 13.86 cents compared to 2024, which was in line with our long-term target of low-single digit growth, on higher employee costs and investments in the customer experience.' (mdna, row 0000027904-26-000013#014). CURRENT REVIEW: Current, unchanged and source-backed: in the exact quote 'Non-fuel' is separated from the later qualifiers by non-qualifier prose ('unit costs (\"CASM-Ex\",'), so the three spans are NOT punctuation-contiguous and must not be forced into one. The two later qualifier clauses may be considered together under the existing maximal-contiguous-span rule (OD-9). A generic rule, not an example-specific preference. HISTORICAL question 8 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 3: how many measurement entries the contiguous qualifier prose yields. 'a non-GAAP financial measure' and 'which excludes fuel, ... and other items' are separated only by punctuation, so they may be one span rather than two, and the split changes the normalized measurement tokens that form the fact identity.",
+    "owning_clause": "Current, unchanged and source-backed: in the exact quote 'Non-fuel' is separated from the later qualifiers by non-qualifier prose ('unit costs (\"CASM-Ex\",'), so the three spans are NOT punctuation-contiguous and must not be forced into one. The two later qualifier clauses may be considered together under the existing maximal-contiguous-span rule (OD-9). A generic rule, not an example-specific preference."
+   }
+  ],
+  "0000063908-26-000032": [
+   {
+    "row": "0000063908-26-000032#033",
+    "source_id": "0000063908-26-000032",
+    "raw_sha256": "186bc8cd2389eef1a2eeab2a4609e7ea3273cd663e140468ac72f2d647aa5038",
+    "fact_index": null,
+    "field": "driver_name and the row's outcome",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Results included pre-tax charges of $80 million primarily related to restructuring charges associated with Accelerating the Organization.' (exhibit_99_1, row 0000063908-26-000032#033). CURRENT REVIEW: Current, unchanged: the quote attributes the $80 million only 'primarily' to restructuring and names no base metric the aggregate belongs to, so emitting the whole stated amount under a restructuring cause name attributes an unstated remainder to that cause. The existing supported outcomes are the source's own aggregate line name or a reasoned abstention; no new naming preference and no whole-amount attribution. HISTORICAL question 17 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 1's $80 million is described as only 'primarily' restructuring, and the source names no base metric the aggregate belongs to. Emitting the full stated amount under a restructuring cause name attributes an unstated remainder to that cause; a reviewer could instead read this as unresolvable, so the residual attribution risk should be settled by a naming ruling rather than by me guessing again.",
+    "owning_clause": "Current, unchanged: the quote attributes the $80 million only 'primarily' to restructuring and names no base metric the aggregate belongs to, so emitting the whole stated amount under a restructuring cause name attributes an unstated remainder to that cause. The existing supported outcomes are the source's own aggregate line name or a reasoned abstention; no new naming preference and no whole-amount attribution."
+   }
+  ],
+  "0000092380-26-000044": [
+   {
+    "row": "0000092380-26-000044#042",
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "0ce6f6083fb965225b61eae517eb33204cc8d867768bef929b7992ae2c247736",
+    "fact_index": null,
+    "field": "level_low / level_high / level_unit (on the surprise)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'First quarter 2026 CASM-X increased 2.3 percent year-over-year, below prior guidance' (exhibit_99_1, row 0000092380-26-000044#042). CURRENT REVIEW: Current: a lawful encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states a change and NO level, so the home is correctly level-numberless with change 2.3 percent_yoy and the existing pair owner accepts a level-numberless surprise beside it (Codex SEQ 2038 cases 5 and 6). What it refuses is the 2.3 currently placed in the surprise's level slots, which restates the actual rather than a delta the source never states (Rule 5.8). HISTORICAL question 18 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 5: I disagree with the shown finding that the CASM-X surprise must carry no level numbers. The design derives beat size at read as level_low minus comparison_low, so the surprise's level slot is the compared actual, not a delta; emptying it would leave a numberless surprise whose home carries a stated 2.3% change, which the numberless-surprise clause forbids.",
+    "owning_clause": "Current: a lawful encoding EXISTS and my earlier claim that none does is WITHDRAWN. The quote states a change and NO level, so the home is correctly level-numberless with change 2.3 percent_yoy and the existing pair owner accepts a level-numberless surprise beside it (Codex SEQ 2038 cases 5 and 6). What it refuses is the 2.3 currently placed in the surprise's level slots, which restates the actual rather than a delta the source never states (Rule 5.8)."
+   },
+   {
+    "row": "0000092380-26-000044#039",
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "0ce6f6083fb965225b61eae517eb33204cc8d867768bef929b7992ae2c247736",
+    "fact_index": null,
+    "field": "measurement_raw_spans; required home-pair measurement",
+    "decision": "REVIEW",
+    "source_evidence": "Source: 'First quarter 2026 fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40' (exhibit_99_1, row 0000092380-26-000044#039). CURRENT REVIEW: Current, narrow: the quote reads 'fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40', so the approximation qualifies the EXPECTATION operand while the actual is exact. Keeping it on the surprise alone breaks the required home/surprise measurement match; keeping it on both would mark the exact $2.73 approximate. This asks for NO schema addition, invented range or deleted qualifier: the served Rule 1.4 reasoned abstention and the final task's recorded-ambiguity outcome are the already-supported safe answers if no source-faithful encoding exists. Do not generalize it to ULTA's ordinary 17% or its stated 85 million delta. HISTORICAL question 19 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 2: the hedge \"approximately\" on the $2.40 guide is not stored in measurement on either sibling. The never-drop sink argues for keeping it, but it modifies only the expectation operand, and attaching it to the surprise alone breaks the required home/surprise measurement match while attaching it to both would falsely mark the exact $2.73 actual as approximate.",
+    "owning_clause": "Current, narrow: the quote reads 'fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40', so the approximation qualifies the EXPECTATION operand while the actual is exact. Keeping it on the surprise alone breaks the required home/surprise measurement match; keeping it on both would mark the exact $2.73 approximate. This asks for NO schema addition, invented range or deleted qualifier: the served Rule 1.4 reasoned abstention and the final task's recorded-ambiguity outcome are the already-supported safe answers if no source-faithful encoding exists. Do not generalize it to ULTA's ordinary 17% or its stated 85 million delta."
+   }
+  ],
+  "0001041061-25-000109": [
+   {
+    "row": "0001041061-25-000109#073",
+    "source_id": "0001041061-25-000109",
+    "raw_sha256": "5c6a302c431db465ea3cf1840ffc8e11a39d7b0292ed2e3581833cecce967139",
+    "fact_index": null,
+    "field": "period fields",
+    "decision": "PRESERVE",
+    "source_evidence": "Source: 'Changes in the fair value of our ownership interest in Devyani prior to the date of sale resulted in pre-tax investment losses of $20 million in the year to date ended September 30, 2024.' (mdna, row 0001041061-25-000109#073). CURRENT REVIEW: Cleared at Core SEQ 2021 against the existing period owner and independently checked by Codex SEQ 2038 (cases 1 and 2): ensure_driver_period resolves a source-supported FY2024 Q3 year-to-date framing to 2024-01-01..2024-09-30 and keeps period_scope ytd, and it parks when the anchor quarter is absent. The anchor quarter may stand; no ruling and no code change is required. The historical question's doubt below is superseded by this conclusion. HISTORICAL question 41 of the source-only key review, quoted as history and superseded wherever the current review says so: Whether a ytd fact may carry the anchor fiscal_quarter (3) alongside fiscal_year and period_scope ytd, as I recorded on row 2. Rule 6 says a ytd window keeps its exact dates and is never collapsed to a quarter, yet only one endpoint is stated here; fiscal_year alone would describe the full year, so naming the anchor quarter is a semantic call, not a stated framing.",
+    "owning_clause": "Cleared at Core SEQ 2021 against the existing period owner and independently checked by Codex SEQ 2038 (cases 1 and 2): ensure_driver_period resolves a source-supported FY2024 Q3 year-to-date framing to 2024-01-01..2024-09-30 and keeps period_scope ytd, and it parks when the anchor quarter is absent. The anchor quarter may stand; no ruling and no code change is required. The historical question's doubt below is superseded by this conclusion."
+   }
+  ],
+  "0001104659-25-102611": [
+   {
+    "row": "0001104659-25-102611#098",
+    "source_id": "0001104659-25-102611",
+    "raw_sha256": "cd08bd09d2fb68a1733255272a1f9d474f8ca93451a39bb25085ee95b7863682",
+    "fact_index": null,
+    "field": "per_x / slice_parts and the row's outcome",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales .' (mdna, row 0001104659-25-102611#098). CURRENT REVIEW: Current: the stored fact is NOT lawful as it stands and my earlier 'lawful as is' conclusion is WITHDRAWN. The quote names its own denominator - 'Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales' - and the emitted share cannot record it, so it is indistinguishable from a share of total company sales. Preserve the actual domestic-sales denominator in a supported representation or count a lawful abstention; an exhibit does not approve a conflated identity and no new field or schema is authorized. This row was located by the exact quoted fragment recorded with the historical question, unique within this event. HISTORICAL question 57 of the source-only key review, quoted as history and superseded wherever the current review says so: A share whose denominator is a sub-population ('31.7% of our total Domestic sales') cannot record that denominator. per_x covers only stated per-something denominators, and the slice parts describe the numerator population, so nothing distinguishes this share from one taken against total company sales.",
+    "owning_clause": "Current: the stored fact is NOT lawful as it stands and my earlier 'lawful as is' conclusion is WITHDRAWN. The quote names its own denominator - 'Domestic commercial sales increased 6.7%, which represents 31.7% of our total Domestic sales' - and the emitted share cannot record it, so it is indistinguishable from a share of total company sales. Preserve the actual domestic-sales denominator in a supported representation or count a lawful abstention; an exhibit does not approve a conflated identity and no new field or schema is authorized. This row was located by the exact quoted fragment recorded with the historical question, unique within this event."
+   }
+  ],
+  "AAL_2026-04-23T08.30": [
+   {
+    "row": "AAL_2026-04-23T08.30#135",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "the signed value (level_low / level_high)",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'a $320 million revenue impact from winter storms' (prepared_remarks, row AAL_2026-04-23T08.30#135). CURRENT REVIEW: Current: the sign IS decidable and my earlier 'undecidable without another worked example' claim is WITHDRAWN. The served OD-12 expressly lists context as a sign signal, and the served paragraph calls this '$320 million revenue impact from winter storms' a challenge and then a headwind - an adverse revenue effect, not an expense charge - so the +320 currently stored under the charge convention is unsupported. The key owner applies the existing signed-axis meaning. HISTORICAL question 78 of the source-only key review, quoted as history and superseded wherever the current review says so: Sign convention for an adverse revenue magnitude stored on the causing event (row 4). The signed-axis worked examples cover a loss (negative) and a charge (positive) but not a revenue hit carried on an event driver, so +320 versus -320 is not decidable from the rules alone; I applied the charge convention.",
+    "owning_clause": "Current: the sign IS decidable and my earlier 'undecidable without another worked example' claim is WITHDRAWN. The served OD-12 expressly lists context as a sign signal, and the served paragraph calls this '$320 million revenue impact from winter storms' a challenge and then a headwind - an adverse revenue effect, not an expense charge - so the +320 currently stored under the charge convention is unsupported. The key owner applies the existing signed-axis meaning."
+   },
+   {
+    "row": "AAL_2026-04-23T08.30#140",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "level_shape_hint / the change slot",
+    "decision": "REVIEW",
+    "source_evidence": "Source: 'on the other revenue or the marketing component of it we did see an increase that's pretty meaningful year over year quarter over quarter just versus the fourth quarter was up you know something less than 10 percent' (qa, row AAL_2026-04-23T08.30#140). CURRENT REVIEW: Current, unchanged: a one-sided growth bound on a driver whose own level is absolute has no shape hint on the change slot, so the ceiling can only be expressed through the level slots with a growth unit, which sits against the clause that growth on an absolute-level driver belongs in the change slot. This stays an open encoding and shape review under the existing uncertainty rules; no quota-driven encoding and no automatic source substitution. HISTORICAL question 79 of the source-only key review, quoted as history and superseded wherever the current review says so: Slot placement for a one-sided growth bound on a driver whose own level is absolute (row 9). The change slot carries no shape hint, so a ceiling can only be expressed through the level slots with a growth unit, which sits against the clause that growth on an absolute-level driver belongs in the change slot; the source review of this same row also left the meaning undecided.",
+    "owning_clause": "Current, unchanged: a one-sided growth bound on a driver whose own level is absolute has no shape hint on the change slot, so the ceiling can only be expressed through the level slots with a growth unit, which sits against the clause that growth on an absolute-level driver belongs in the change slot. This stays an open encoding and shape review under the existing uncertainty rules; no quota-driven encoding and no automatic source substitution."
+   },
+   {
+    "row": "AAL_2026-04-23T08.30#133",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "required companion fact (row-level)",
+    "decision": "PRESERVE",
+    "source_evidence": "Source: 'Revenue performance in the quarter exceeded our initial expectations.' (prepared_remarks, row AAL_2026-04-23T08.30#133). CURRENT REVIEW: Codex SEQ 2043 and unit_2020_codex_check/AAL_HOME_REVIEW_2038.md: the selected revenue row states a CHANGE (10.8% year over year), not an absolute LEVEL, and the actual event route fuses the two revenue fragments before home validation, so the level-numberless home and its beat survive together. My 2021 slot question is WITHDRAWN; no new pairing rule and no runtime change is needed. The historical question's doubt below is superseded by this conclusion. HISTORICAL question 81 of the source-only key review, quoted as history and superseded wherever the current review says so: Possible collision between the numberless revenue home sibling (row 2) and the valued revenue fact (row 1). Both cover company-wide revenue for the same reported quarter; the rules require a numberless home for a numberless surprise while also forbidding one fact being written twice, and the located rows do not say which wins.",
+    "owning_clause": "Codex SEQ 2043 and unit_2020_codex_check/AAL_HOME_REVIEW_2038.md: the selected revenue row states a CHANGE (10.8% year over year), not an absolute LEVEL, and the actual event route fuses the two revenue fragments before home validation, so the level-numberless home and its beat survive together. My 2021 slot question is WITHDRAWN; no new pairing rule and no runtime change is needed. The historical question's doubt below is superseded by this conclusion."
+   },
+   {
+    "row": "AAL_2026-04-23T08.30#137",
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "c6d70c9695a77521e40c57809241106fdf00a281d70027666da9716fd8c7749b",
+    "fact_index": null,
+    "field": "driver_name and slice_parts",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American.' (qa, row AAL_2026-04-23T08.30#137). CURRENT REVIEW: Current, unchanged and source-backed: the located quote names no measured variable ('our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American'), so 'revenue' rests on neighbouring sentences, and travel-management partners are plausible under both channel and customer. The served T1-05 ladder's rung 4 requires the unknown kind when neither is clear; an actual unresolved two-kind choice must not be replaced by a guessed channel. HISTORICAL question 82 of the source-only key review, quoted as history and superseded wherever the current review says so: The measured variable behind 'TMC performance' and the slice kind for travel-management partners (row 6). The located quote names no metric, so 'revenue' rests on neighbouring sentences, and the partners are plausible under both channel and customer, which the ladder says should trigger an unknown kind if neither is clear.",
+    "owning_clause": "Current, unchanged and source-backed: the located quote names no measured variable ('our TMC performance is up 11% thanks to our partnerships with Amex, GBT, with BCD and their support of American'), so 'revenue' rests on neighbouring sentences, and travel-management partners are plausible under both channel and customer. The served T1-05 ladder's rung 4 requires the unknown kind when neither is clear; an actual unresolved two-kind choice must not be replaced by a guessed channel."
+   }
+  ],
+  "DAL_2026-04-08T10.00": [
+   {
+    "row": "DAL_2026-04-08T10.00#160",
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "48534fef46bc6742a9f78cf7ee6443bd3dcfbfb7c58ec913bd1c760a7ecb7fbf",
+    "fact_index": null,
+    "field": "driver_name only; the signed value stays negative",
+    "decision": "REVIEW",
+    "source_evidence": "Source: 'This includes an estimated $300 million benefit from our refinery.' (prepared_remarks, row DAL_2026-04-08T10.00#160). CURRENT REVIEW: Current, corrected: the served signed-axis rule REQUIRES a stated benefit to be negative, so the stored negative value STANDS and my double-negation claim is WITHDRAWN - nothing here asks for a sign change. What remains is a naming question alone: the served naming rule (Rule 3 item 10, 'NEVER in a name: state/direction/polarity words ... sentiment, metaphor, effect, or vague words') bears on the effect word inside this driver's name. I do NOT establish that as an error and force no replacement name or word deletion; it stays REVIEW for the qualified owner to settle from the source and the rule. HISTORICAL question 90 of the source-only key review, quoted as history and superseded wherever the current review says so: Sign of the $300 million refinery benefit (row 4). The signed-axis rule makes a stated benefit negative, yet the driver name itself contains 'benefit', so a literal reading stores a double negative; a wrong sign would invert the whole stored series and the rules do not disambiguate the axis the name sits on.",
+    "owning_clause": "Current, corrected: the served signed-axis rule REQUIRES a stated benefit to be negative, so the stored negative value STANDS and my double-negation claim is WITHDRAWN - nothing here asks for a sign change. What remains is a naming question alone: the served naming rule (Rule 3 item 10, 'NEVER in a name: state/direction/polarity words ... sentiment, metaphor, effect, or vague words') bears on the effect word inside this driver's name. I do NOT establish that as an error and force no replacement name or word deletion; it stays REVIEW for the qualified owner to settle from the source and the rule."
+   }
+  ],
+  "ULTA_2026-03-12T16.30": [
+   {
+    "row": "ULTA_2026-03-12T16.30#180",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62",
+    "fact_index": null,
+    "field": "required companion fact (row-level) only",
+    "decision": "PRESERVE",
+    "source_evidence": "Source: 'we over delivered sales above the high end of our guidance by about 85 million' (qa, row ULTA_2026-03-12T16.30#180). CURRENT REVIEW: Cleared at Core SEQ 2021 and accepted by Codex SEQ 2039, SCOPED to the home and selected-target aspect of this row and to nothing else: the other net-sales amount stands at an UNLOCATED sentence, which the served task does not settle, so the emitted level-numberless home is required rather than a duplicate of it. This clearance does NOT cover the rest of the row: #180 itself states 'about 85 million' and keeps its own measurement issue, carried as a separate lead on this same row. My earlier sentence moving that modifier to the other row is WITHDRAWN. HISTORICAL question 104 of the source-only key review, quoted as history and superseded wherever the current review says so: Row 6: the numberless net-sales home sibling I emitted may duplicate the event's own quarterly net-sales metric. The twin rule requires a home in the same event and no located row carries the actual level, but the event states 'net sales for the quarter increased 11.8% to $3.9 billion' at an unlocated sentence, so an assembler must merge or suppress one of the two homes.",
+    "owning_clause": "Cleared at Core SEQ 2021 and accepted by Codex SEQ 2039, SCOPED to the home and selected-target aspect of this row and to nothing else: the other net-sales amount stands at an UNLOCATED sentence, which the served task does not settle, so the emitted level-numberless home is required rather than a duplicate of it. This clearance does NOT cover the rest of the row: #180 itself states 'about 85 million' and keeps its own measurement issue, carried as a separate lead on this same row. My earlier sentence moving that modifier to the other row is WITHDRAWN."
+   },
+   {
+    "row": "ULTA_2026-03-12T16.30#176",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62",
+    "fact_index": null,
+    "field": "measurement_raw_spans",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.' (prepared_remarks, row ULTA_2026-03-12T16.30#176). CURRENT REVIEW: Current, split from a question that named TWO rows: this row's quote is 'Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.' It is an ORDINARY growth statement with no surprise pair at all, so the served Rule 8 never-drop sink simply keeps 'about' in measurement. The LUV expectation-operand conflict does NOT apply here, and my earlier shared reasoning that applied it is WITHDRAWN. HISTORICAL question 105 of the source-only key review, quoted as history and superseded wherever the current review says so: Rows 2 and 6: the approximation word 'about' is stored in no field. Rule 8's never-drop sink says to keep an uncaptured number modifier, but making it a measurement token would pollute the series identity and break the row-6 twin's measurement match, so I left it to the quote and record the conflict.",
+    "owning_clause": "Current, split from a question that named TWO rows: this row's quote is 'Excluding the impact of incentive compensation and SpaceNK, SG&A growth for the quarter was about 17%.' It is an ORDINARY growth statement with no surprise pair at all, so the served Rule 8 never-drop sink simply keeps 'about' in measurement. The LUV expectation-operand conflict does NOT apply here, and my earlier shared reasoning that applied it is WITHDRAWN."
+   },
+   {
+    "row": "ULTA_2026-03-12T16.30#180",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "b4c47e24c142b10a6e7fdbe98d549fd3200d5ed1c58000936b738d34c1cbef62",
+    "fact_index": null,
+    "field": "measurement_raw_spans; required home-pair measurement",
+    "decision": "CHANGE",
+    "source_evidence": "Source: 'we over delivered sales above the high end of our guidance by about 85 million' (qa, row ULTA_2026-03-12T16.30#180). CURRENT REVIEW: Current, the SECOND row the same question named and which my single-row binding had dropped: this row's quote is 'we over delivered sales above the high end of our guidance by about 85 million'. Here 'about' qualifies the STATED delta, so the never-drop sink keeps it and the required pair measurement match is satisfied by keeping the same modifier on its level-numberless home (Codex SEQ 2038 cases 7 and 8). This is not the LUV expectation-only case. HISTORICAL question 105 of the source-only key review, quoted as history and superseded wherever the current review says so: Rows 2 and 6: the approximation word 'about' is stored in no field. Rule 8's never-drop sink says to keep an uncaptured number modifier, but making it a measurement token would pollute the series identity and break the row-6 twin's measurement match, so I left it to the quote and record the conflict.",
+    "owning_clause": "Current, the SECOND row the same question named and which my single-row binding had dropped: this row's quote is 'we over delivered sales above the high end of our guidance by about 85 million'. Here 'about' qualifies the STATED delta, so the never-drop sink keeps it and the required pair measurement match is satisfied by keeping the same modifier on its level-numberless home (Codex SEQ 2038 cases 7 and 8). This is not the LUV expectation-only case."
+   }
+  ]
+ },
+ "settlement_by_event": {
+  "0000006201-26-000031": [
+   {
+    "source_id": "0000006201-26-000031",
+    "raw_sha256": "3842dfb507b509ba2365252872248d05bcd7d89535a8e12e76a1fe8984aaa34e",
+    "row": "0000006201-26-000031#005",
+    "affected_rows": [
+     "0000006201-26-000031#005"
+    ],
+    "question_key": "0000006201-26-000031#q1",
+    "prior_question_index": 1,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000006201-26-000031#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: WITHDRAWN from C. Footnote 4 of this source says Regional full-time equivalent employees include only wholly-owned regional subsidiaries, while the general definition reaches capacity-purchase carriers, so the label does not prove product:regionalcarrier is the same measured population; the source-bound unknown stands."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "raw_sha256": "3842dfb507b509ba2365252872248d05bcd7d89535a8e12e76a1fe8984aaa34e",
+    "row": "0000006201-26-000031#003",
+    "affected_rows": [
+     "0000006201-26-000031#003"
+    ],
+    "question_key": "0000006201-26-000031#q2",
+    "prior_question_index": 2,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000006201-26-000031#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.2 governs which baseline a stated comparison takes; an absent enum is judged against the rule and the full event, never forced to satisfy a coverage quota. CURRENT REVIEW LEAD: The SELECTED target is 'improving sequentially each month in the quarter'; its sequential baseline stands. The 7.6% year-over-year headline is context, not a competing selected target or a reason to manufacture an unresolved baseline choice."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "raw_sha256": "3842dfb507b509ba2365252872248d05bcd7d89535a8e12e76a1fe8984aaa34e",
+    "row": "0000006201-26-000031#002",
+    "affected_rows": [
+     "0000006201-26-000031#002"
+    ],
+    "question_key": "0000006201-26-000031#q3",
+    "prior_question_index": 3,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000006201-26-000031#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One change slot per record: where one movement is stated on two units the record carries one and the other survives in the quote; the growth-basis split covers bases, not dollar-versus-percent. CURRENT REVIEW LEAD: The change slot has no shape hint, but the CURRENT fact already preserves 'greater than' in measurement_raw_spans under the existing never-drop sink. It is not merely left in the quote. No new bound field is requested by this finding."
+   }
+  ],
+  "0000006201-26-000032": [
+   {
+    "source_id": "0000006201-26-000032",
+    "raw_sha256": "94b2e92b758628e1765094344916930c9d2c6f9f5c0a2cc8ee2dc73b0338cafc",
+    "row": "0000006201-26-000032#008",
+    "affected_rows": [
+     "0000006201-26-000032#008"
+    ],
+    "question_key": "0000006201-26-000032#q1",
+    "prior_question_index": 4,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000006201-26-000032#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 6.1 OD-12 with 4.3: a benefit is negative on its signed axis, so a shrinking benefit is an increase. CURRENT REVIEW LEAD: -94 sits above -175 on the signed tax axis, so 'increased' is correct."
+   },
+   {
+    "source_id": "0000006201-26-000032",
+    "raw_sha256": "94b2e92b758628e1765094344916930c9d2c6f9f5c0a2cc8ee2dc73b0338cafc",
+    "row": "0000006201-26-000032#010",
+    "affected_rows": [
+     "0000006201-26-000032#010"
+    ],
+    "question_key": "0000006201-26-000032#q2",
+    "prior_question_index": 5,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000006201-26-000032#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: product:mainline is the unique same-meaning menu entry for the stated part; this is a same-kind reuse, not a collapse across kinds."
+   }
+  ],
+  "0000027904-26-000013": [
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "6589ef89710d5e9b1b8b07284bfc874dd0a3a5430428c3edec96f641a65d11e0",
+    "row": "0000027904-26-000013#014",
+    "affected_rows": [
+     "0000027904-26-000013#014"
+    ],
+    "question_key": "0000027904-26-000013#q1",
+    "prior_question_index": 7,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000013#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.5: favourability wording means the source states a favourable or unfavourable direction; a neutral position statement does not. CURRENT REVIEW LEAD: 'in line with' states position, not a favourable or unfavourable direction, so the flag is correctly false."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "6589ef89710d5e9b1b8b07284bfc874dd0a3a5430428c3edec96f641a65d11e0",
+    "row": "0000027904-26-000013#014",
+    "affected_rows": [
+     "0000027904-26-000013#014"
+    ],
+    "question_key": "0000027904-26-000013#q2",
+    "prior_question_index": 8,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000013#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Field-scoped success already verified by Codex SEQ 2057; reused, not reopened. CURRENT REVIEW LEAD: Codex verified these measurement spans do not cross the intervening non-qualifier prose."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "6589ef89710d5e9b1b8b07284bfc874dd0a3a5430428c3edec96f641a65d11e0",
+    "row": "0000027904-26-000013#016",
+    "affected_rows": [
+     "0000027904-26-000013#016"
+    ],
+    "question_key": "0000027904-26-000013#q3",
+    "prior_question_index": 9,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000013#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: The full event states no window for a 'currently own' level, so none is derivable and carrying none is correct."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "6589ef89710d5e9b1b8b07284bfc874dd0a3a5430428c3edec96f641a65d11e0",
+    "row": "0000027904-26-000013#014",
+    "affected_rows": [
+     "0000027904-26-000013#014"
+    ],
+    "question_key": null,
+    "prior_question_index": 6,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "reviewed field scope of historical question 6",
+    "decision": "PRESERVE",
+    "source_evidence": "Field-scoped historical clearance, not a new current issue; exact source and current reply are in the event payload.",
+    "owning_clause": "Current row14 carries the source-stated 13.86-cent actual on BOTH home and surprise. This is exactly the compatible encoding in the accepted2046 review, unlike the old value-absent surprise. Its vague expectation remains numberless; no new home rule is required."
+   }
+  ],
+  "0000027904-26-000020": [
+   {
+    "source_id": "0000027904-26-000020",
+    "raw_sha256": "c6f02893b86039144d8df2f89b0836eed68be29f5e160c28053eea0529e9e540",
+    "row": "0000027904-26-000020#026",
+    "affected_rows": [
+     "0000027904-26-000020#026"
+    ],
+    "question_key": "0000027904-26-000020#q1",
+    "prior_question_index": 10,
+    "event_row_indexes": [
+     8
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000020#q1",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule2 plus the existing naming/measurement rules:85percent measures RESPONDENTS whose corporate-travel spending expectation is increase or stay the same in the June quarter; it is not85percent of travel spending. Preserve that meaning and period in supported fields, or use a counted lawful abstention. The conditions field is guidance-only: do not invent a metric conditions field or an example-specific name rule. The qualified owner chooses the name/encoding; keeping the number alone does not prove correct meaning."
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "raw_sha256": "c6f02893b86039144d8df2f89b0836eed68be29f5e160c28053eea0529e9e540",
+    "row": "0000027904-26-000020#019",
+    "affected_rows": [
+     "0000027904-26-000020#019",
+     "0000027904-26-000020#021",
+     "0000027904-26-000020#022",
+     "0000027904-26-000020#023",
+     "0000027904-26-000020#024"
+    ],
+    "question_key": "0000027904-26-000020#q2",
+    "prior_question_index": 11,
+    "event_row_indexes": [
+     1,
+     3,
+     4,
+     5,
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000020#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Measurement and scale evidence are quote-local: the abstention is scoped to the unscaled VALUE, and a row abstains whole only when nothing lawful remains. CURRENT REVIEW LEAD: Measurement qualifiers outside the located quotes are quote-local evidence and are correctly not carried; the values are unaffected."
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "raw_sha256": "c6f02893b86039144d8df2f89b0836eed68be29f5e160c28053eea0529e9e540",
+    "row": "0000027904-26-000020#027",
+    "affected_rows": [
+     "0000027904-26-000020#027"
+    ],
+    "question_key": "0000027904-26-000020#q3",
+    "prior_question_index": "NEW",
+    "event_row_indexes": [
+     9
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000020#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.2 governs which baseline a stated comparison takes; an absent enum is judged against the rule and the full event, never forced to satisfy a coverage quota. CURRENT REVIEW LEAD: This NEW question concerns Adjusted net debt, global27, not the respondent survey at global26. The table's headline is '1Q26 vs 4Q25 $ Change'; the selected 13,540 and 14,300 comparison follows that sequential headline. Other year columns do not override it."
+   }
+  ],
+  "0000027904-26-000022": [
+   {
+    "source_id": "0000027904-26-000022",
+    "raw_sha256": "de5201894314d83e16953c4121f7d685cb121fcc387cc3ff1eade96c6b138dde",
+    "row": "0000027904-26-000022#030",
+    "affected_rows": [
+     "0000027904-26-000022#030"
+    ],
+    "question_key": "0000027904-26-000022#q1",
+    "prior_question_index": 12,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000022#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Measurement and scale evidence are quote-local: the abstention is scoped to the unscaled VALUE, and a row abstains whole only when nothing lawful remains. CURRENT REVIEW LEAD: The quote is 'Atlantic 1,517 11 %': no currency or scale marker sits inside it, so dropping that value while carrying the self-marked 11% is the scoped abstention; the row is not voided."
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "raw_sha256": "de5201894314d83e16953c4121f7d685cb121fcc387cc3ff1eade96c6b138dde",
+    "row": "0000027904-26-000022#029",
+    "affected_rows": [
+     "0000027904-26-000022#029"
+    ],
+    "question_key": "0000027904-26-000022#q2",
+    "prior_question_index": 13,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000022#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One change slot per record: where one movement is stated on two units the record carries one and the other survives in the quote; the growth-basis split covers bases, not dollar-versus-percent. CURRENT REVIEW LEAD: $1.2 billion and 9.4% are one movement on two units."
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "raw_sha256": "de5201894314d83e16953c4121f7d685cb121fcc387cc3ff1eade96c6b138dde",
+    "row": "0000027904-26-000022#032",
+    "affected_rows": [
+     "0000027904-26-000022#032"
+    ],
+    "question_key": "0000027904-26-000022#q3",
+    "prior_question_index": 14,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000027904-26-000022#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The fact gate's own boundary: a statement naming no driver state, change, surprise, guidance or action yields nothing. CURRENT REVIEW LEAD: A non-GAAP presentation change names no driver; the exclusion is lawful and the boundary case is recorded."
+   }
+  ],
+  "0000063908-26-000032": [
+   {
+    "source_id": "0000063908-26-000032",
+    "raw_sha256": "a76d61dbc66c5c61ddaa047d56e8e19ca73f014840ee28ebd15a60f08beb8e94",
+    "row": "0000063908-26-000032#033",
+    "affected_rows": [
+     "0000063908-26-000032#033"
+    ],
+    "question_key": "0000063908-26-000032#q1",
+    "prior_question_index": 17,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000063908-26-000032#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One cause, one name: a netted figure spanning independent causes with no per-cause amount yields a named exclusion, and a proposed-real/final-exclusion disagreement is a truthful correction of a proposal. CURRENT REVIEW LEAD: The $80 million is only 'primarily' restructuring and the aggregate label reduces to a bare category word, so the named exclusion is right."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "raw_sha256": "a76d61dbc66c5c61ddaa047d56e8e19ca73f014840ee28ebd15a60f08beb8e94",
+    "row": "0000063908-26-000032#035",
+    "affected_rows": [
+     "0000063908-26-000032#035"
+    ],
+    "question_key": "0000063908-26-000032#q2",
+    "prior_question_index": 15,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000063908-26-000032#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: CORRECTED: the four US tokens span geography and segment KINDS, so they are not four spellings of one meaning and my 'presentational' reading was wrong; where the source cannot choose the kind, the recorded uncertainty stands."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "raw_sha256": "a76d61dbc66c5c61ddaa047d56e8e19ca73f014840ee28ebd15a60f08beb8e94",
+    "row": "0000063908-26-000032#037",
+    "affected_rows": [
+     "0000063908-26-000032#037"
+    ],
+    "question_key": "0000063908-26-000032#q3",
+    "prior_question_index": 16,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000063908-26-000032#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: Franchise share as a population-qualified name or a channel slice is a real scope question, not a free choice; both readings keep the source population, so it is recorded rather than corrected."
+   }
+  ],
+  "0000092380-26-000044": [
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+    "row": "0000092380-26-000044#039",
+    "affected_rows": [
+     "0000092380-26-000044#039"
+    ],
+    "question_key": "0000092380-26-000044#q1",
+    "prior_question_index": 19,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000092380-26-000044#q1",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 1.4 permits reasoned abstention when a real claim cannot be represented faithfully. Obey the existing facts/abstentions branches; this is not an operand-abstention schema or permission to discard safely expressible truth. CURRENT REVIEW LEAD: The approximate $2.40 expectation is emitted as an exact comparison point with its modifier dropped. The qualified owner must apply the existing ambiguity/abstention outcomes while preserving safely expressible truth, including the exact $2.73 actual where lawful. There is no new operand-abstention field: the served output forbids mixing facts and abstentions. Do not mark the actual approximate, invent a range, omit the qualifier, or force an empty open issue. Q019 remains an encoding review, not approval of an impossible mixed output or a mandatory new rule."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+    "row": "0000092380-26-000044#042",
+    "affected_rows": [
+     "0000092380-26-000044#042"
+    ],
+    "question_key": "0000092380-26-000044#q2",
+    "prior_question_index": 20,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000092380-26-000044#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: Where the '-X' exclusions belong once the acronym is spelled out is a real scope question; the exclusions survive in measurement."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+    "row": "0000092380-26-000044#039",
+    "affected_rows": [
+     "0000092380-26-000044#039",
+     "0000092380-26-000044#042"
+    ],
+    "question_key": "0000092380-26-000044#q3",
+    "prior_question_index": 21,
+    "event_row_indexes": [
+     2,
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000092380-26-000044#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The fact gate's own boundary: a statement naming no driver state, change, surprise, guidance or action yields nothing. CURRENT REVIEW LEAD: Both polarity proofs quote event text beyond the located fragment as evidence about the same sentence's framing; recorded."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+    "row": "0000092380-26-000044#041",
+    "affected_rows": [
+     "0000092380-26-000044#041"
+    ],
+    "question_key": "0000092380-26-000044#q4",
+    "prior_question_index": 22,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000092380-26-000044#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Several facts from one target only where the served split or sibling rules require it; another answer having done so is not authority. CURRENT REVIEW LEAD: WITHDRAWN from C. The raw target really does include the full Starlink sentence with the 300-aircraft plan, so the phrase is not outside it - but an extra guide needs the served split or sibling rules, and another answer emitting several facts is not authority. My blanket MULTI-FACT clause was invented and is deleted; the lane question stays recorded."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+    "row": "0000092380-26-000044#038",
+    "affected_rows": [
+     "0000092380-26-000044#038"
+    ],
+    "question_key": "0000092380-26-000044#q5",
+    "prior_question_index": 23,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000092380-26-000044#q5",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.5: favourability wording means the source states a favourable or unfavourable direction; a neutral position statement does not. CURRENT REVIEW LEAD: KEPT, with the right reason. The target says only '$0.45 EPS, in line with guidance' - a neutral position, no favourable or unfavourable direction - so has_favorability_wording must be false under Rule 9.5. The other seven answers agreeing is not the authority; the rule is. Keep the explicit in_line state."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+    "row": "0000092380-26-000044#040",
+    "affected_rows": [
+     "0000092380-26-000044#040"
+    ],
+    "question_key": "0000092380-26-000044#q6",
+    "prior_question_index": 24,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000092380-26-000044#q6",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: product:cargoandfreight is the same-kind same-meaning menu value for the Freight line."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "raw_sha256": "ddbf39da29805322924ab80dbedb979b112fead1db8f0b5f8825ccfe5c7a50c3",
+    "row": "0000092380-26-000044#042",
+    "affected_rows": [
+     "0000092380-26-000044#042"
+    ],
+    "question_key": null,
+    "prior_question_index": 18,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "reviewed field scope of historical question 18",
+    "decision": "PRESERVE",
+    "source_evidence": "Field-scoped historical clearance, not a new current issue; exact source and current reply are in the event payload.",
+    "owning_clause": "Current row42 keeps the source-stated 2.3% change on the home and does not restate it as a surprise level. The accepted2046 review and actual pair-owner proof support this level-numberless pair; the earlier no-compatible-encoding objection is withdrawn."
+   }
+  ],
+  "0000764478-25-000057": [
+   {
+    "source_id": "0000764478-25-000057",
+    "raw_sha256": "c52f881bbefa0a2632aa88e7ceacaebeb39abfd36c0ec76ee205dedeb4e1a425",
+    "row": "0000764478-25-000057#045",
+    "affected_rows": [
+     "0000764478-25-000057#045",
+     "0000764478-25-000057#048"
+    ],
+    "question_key": "0000764478-25-000057#q1",
+    "prior_question_index": 25,
+    "event_row_indexes": [
+     1,
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000764478-25-000057#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: Two windows sit in one quote and the event does not select one; settling the stated quarter is lawful and the choice is recorded."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "raw_sha256": "c52f881bbefa0a2632aa88e7ceacaebeb39abfd36c0ec76ee205dedeb4e1a425",
+    "row": "0000764478-25-000057#046",
+    "affected_rows": [
+     "0000764478-25-000057#046",
+     "0000764478-25-000057#047",
+     "0000764478-25-000057#048"
+    ],
+    "question_key": "0000764478-25-000057#q2",
+    "prior_question_index": 26,
+    "event_row_indexes": [
+     2,
+     3,
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000764478-25-000057#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: CORRECTED: 'domestic'/'international' carry candidates under more than one kind, so the filing's two-segment framing supports the reading but does not make the alternatives mere spellings; recorded."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "raw_sha256": "c52f881bbefa0a2632aa88e7ceacaebeb39abfd36c0ec76ee205dedeb4e1a425",
+    "row": "0000764478-25-000057#046",
+    "affected_rows": [
+     "0000764478-25-000057#046",
+     "0000764478-25-000057#047",
+     "0000764478-25-000057#048"
+    ],
+    "question_key": "0000764478-25-000057#q3",
+    "prior_question_index": 27,
+    "event_row_indexes": [
+     2,
+     3,
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000764478-25-000057#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Same ladder, later step: coining an off-menu part is lawful when the menu carries no same-meaning value. CURRENT REVIEW LEAD: channel:online has no menu counterpart, so coining it is lawful."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "raw_sha256": "c52f881bbefa0a2632aa88e7ceacaebeb39abfd36c0ec76ee205dedeb4e1a425",
+    "row": "0000764478-25-000057#045",
+    "affected_rows": [
+     "0000764478-25-000057#045"
+    ],
+    "question_key": "0000764478-25-000057#q4",
+    "prior_question_index": 28,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000764478-25-000057#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: One stated line with one amount joining two impairment causes; the name follows the source line, and the two-cause reading is recorded."
+   }
+  ],
+  "0000898173-26-000006": [
+   {
+    "source_id": "0000898173-26-000006",
+    "raw_sha256": "a0ec5ffd600f26f846e107d219a64739be289f2609d6fe1bef9195644bff661b",
+    "row": "0000898173-26-000006#051",
+    "affected_rows": [
+     "0000898173-26-000006#051"
+    ],
+    "question_key": "0000898173-26-000006#q1",
+    "prior_question_index": 29,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000898173-26-000006#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Expectation routing: a delivered actual measured against the company's own expectation writes the surprise plus its required home sibling. CURRENT REVIEW LEAD: 'our expectations' is the company's own expectation operand."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "raw_sha256": "a0ec5ffd600f26f846e107d219a64739be289f2609d6fe1bef9195644bff661b",
+    "row": "0000898173-26-000006#052",
+    "affected_rows": [
+     "0000898173-26-000006#052"
+    ],
+    "question_key": "0000898173-26-000006#q2",
+    "prior_question_index": 30,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000898173-26-000006#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: Whether 'domestic' is the same population as geography:us is a kind question the source does not settle; recorded."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "raw_sha256": "a0ec5ffd600f26f846e107d219a64739be289f2609d6fe1bef9195644bff661b",
+    "row": "0000898173-26-000006#053",
+    "affected_rows": [
+     "0000898173-26-000006#053"
+    ],
+    "question_key": "0000898173-26-000006#q3",
+    "prior_question_index": 31,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000898173-26-000006#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Measurement and scale evidence are quote-local: the abstention is scoped to the unscaled VALUE, and a row abstains whole only when nothing lawful remains. CURRENT REVIEW LEAD: The quote ends at the 2025 total, so nothing beyond it is carried."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "raw_sha256": "a0ec5ffd600f26f846e107d219a64739be289f2609d6fe1bef9195644bff661b",
+    "row": "0000898173-26-000006#055",
+    "affected_rows": [
+     "0000898173-26-000006#055"
+    ],
+    "question_key": "0000898173-26-000006#q4",
+    "prior_question_index": 32,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000898173-26-000006#q4",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The served ROLE selects ONE target and the event is its context, not a licence to settle an adjacent claim in its place. CURRENT REVIEW LEAD: CORRECTED from A. The selected target is 'all share and per share data in current and comparable periods have been adjusted to reflect the split' - a presentation statement. The answer settles the ADJACENT completed stock split in its place. My TARGET-BINDS rule contradicted the served ROLE and is deleted; restore the target-faithful exclusion."
+   }
+  ],
+  "0000940944-25-000038": [
+   {
+    "source_id": "0000940944-25-000038",
+    "raw_sha256": "b5d4f690a132bb7b6e4313c251b8b583ad8323d8e8bbf701da64a9326160798f",
+    "row": "0000940944-25-000038#056",
+    "affected_rows": [
+     "0000940944-25-000038#056",
+     "0000940944-25-000038#057"
+    ],
+    "question_key": "0000940944-25-000038#q1",
+    "prior_question_index": 33,
+    "event_row_indexes": [
+     1,
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-25-000038#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: Two same-kind same-meaning brand tokens; reusing the one matching the stated label is lawful and the duplicate is recorded."
+   },
+   {
+    "source_id": "0000940944-25-000038",
+    "raw_sha256": "b5d4f690a132bb7b6e4313c251b8b583ad8323d8e8bbf701da64a9326160798f",
+    "row": "0000940944-25-000038#057",
+    "affected_rows": [
+     "0000940944-25-000038#057"
+    ],
+    "question_key": "0000940944-25-000038#q2",
+    "prior_question_index": 34,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-25-000038#q2",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: CORRECTED from B. The same event paragraph states 'Subsequent to the end of the quarter, on July 14, 2025, we successfully closed on the sale'. The answer keeps 'occurred' but removes the already-supported 2025-07-14 instant. Rule 6 allows full-event period context, so the date must be restored; the quote itself is not extended."
+   }
+  ],
+  "0000940944-26-000005": [
+   {
+    "source_id": "0000940944-26-000005",
+    "raw_sha256": "3dc5f87702d557d4174ed483799aa8796995d6d79e54a1b41465fb36c34451c8",
+    "row": "0000940944-26-000005#060",
+    "affected_rows": [
+     "0000940944-26-000005#060"
+    ],
+    "question_key": "0000940944-26-000005#q1",
+    "prior_question_index": 35,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-26-000005#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: Which reconciliation column is canonical is not stated anywhere in the event; the quarter column is taken and the choice recorded."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "raw_sha256": "3dc5f87702d557d4174ed483799aa8796995d6d79e54a1b41465fb36c34451c8",
+    "row": "0000940944-26-000005#060",
+    "affected_rows": [
+     "0000940944-26-000005#060"
+    ],
+    "question_key": "0000940944-26-000005#q2",
+    "prior_question_index": 36,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-26-000005#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: Whether a brand slice may ride the impairment is a real scope question; leaving it off keeps the source-bounded value."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "raw_sha256": "3dc5f87702d557d4174ed483799aa8796995d6d79e54a1b41465fb36c34451c8",
+    "row": "0000940944-26-000005#061",
+    "affected_rows": [
+     "0000940944-26-000005#061"
+    ],
+    "question_key": "0000940944-26-000005#q3",
+    "prior_question_index": 37,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-26-000005#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: The only quantification is a per-share reconciliation effect, so not importing a per-share denominator into an action name is correct."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "raw_sha256": "3dc5f87702d557d4174ed483799aa8796995d6d79e54a1b41465fb36c34451c8",
+    "row": "0000940944-26-000005#061",
+    "affected_rows": [
+     "0000940944-26-000005#061"
+    ],
+    "question_key": "0000940944-26-000005#q4",
+    "prior_question_index": 38,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-26-000005#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: 'occurred' versus planned within the fiscal year is recorded; the event states the gain inside the year."
+   }
+  ],
+  "0000940944-26-000009": [
+   {
+    "source_id": "0000940944-26-000009",
+    "raw_sha256": "39ea47adc1477f49adf1a911e20965e59073f7c0e2fedfbf2e3e415f8041094b",
+    "row": "0000940944-26-000009#071",
+    "affected_rows": [
+     "0000940944-26-000009#071"
+    ],
+    "question_key": "0000940944-26-000009#q1",
+    "prior_question_index": 39,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-26-000009#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One cause, one name: a netted figure spanning independent causes with no per-cause amount yields a named exclusion, and a proposed-real/final-exclusion disagreement is a truthful correction of a proposal. CURRENT REVIEW LEAD: A reporting-basis recast is an accounting construct with no driver, so the named exclusion is correct."
+   },
+   {
+    "source_id": "0000940944-26-000009",
+    "raw_sha256": "39ea47adc1477f49adf1a911e20965e59073f7c0e2fedfbf2e3e415f8041094b",
+    "row": "0000940944-26-000009#069",
+    "affected_rows": [
+     "0000940944-26-000009#069"
+    ],
+    "question_key": "0000940944-26-000009#q2",
+    "prior_question_index": "NEW",
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0000940944-26-000009#q2",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: CORRECTED from B. The same Overview begins 'At February 22, 2026' immediately before the 87-franchised-restaurant statement. The answer drops that exact as-of instant only because it sits in the preceding sentence; Rule 6 permits full-event context, so restore it."
+   }
+  ],
+  "0001041061-25-000109": [
+   {
+    "source_id": "0001041061-25-000109",
+    "raw_sha256": "77889e62c4dc1e8967756d587699d4cd755305843fd631b0403aef740591084a",
+    "row": "0001041061-25-000109#072",
+    "affected_rows": [
+     "0001041061-25-000109#072",
+     "0001041061-25-000109#075",
+     "0001041061-25-000109#076"
+    ],
+    "question_key": "0001041061-25-000109#q1",
+    "prior_question_index": 40,
+    "event_row_indexes": [
+     1,
+     4,
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-25-000109#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: instant versus duration for a discrete action is argued from the served rules and does not change any stated value; recorded."
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "raw_sha256": "77889e62c4dc1e8967756d587699d4cd755305843fd631b0403aef740591084a",
+    "row": "0001041061-25-000109#075",
+    "affected_rows": [
+     "0001041061-25-000109#075"
+    ],
+    "question_key": "0001041061-25-000109#q2",
+    "prior_question_index": 42,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-25-000109#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: The fiscal year is safely derived from the surrounding event paragraph, which Rule 6 permits, and the stated month is carried."
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "raw_sha256": "77889e62c4dc1e8967756d587699d4cd755305843fd631b0403aef740591084a",
+    "row": "0001041061-25-000109#073",
+    "affected_rows": [
+     "0001041061-25-000109#073"
+    ],
+    "question_key": null,
+    "prior_question_index": 41,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "reviewed field scope of historical question 41",
+    "decision": "PRESERVE",
+    "source_evidence": "Field-scoped historical clearance, not a new current issue; exact source and current reply are in the event payload.",
+    "owning_clause": "The raw FY2024/Q3/ytd framing persists, but its alleged conflict was already cleared in the accepted2046 review and Codex2038 period-owner proof: that owner derives 2024-01-01 through 2024-09-30 and keeps ytd. Do not falsely claim those dates are stored in the current raw reply. This is a supported framing, not an unanswered rule question."
+   }
+  ],
+  "0001041061-26-000003": [
+   {
+    "source_id": "0001041061-26-000003",
+    "raw_sha256": "1fdb75e5fea6ca967f5452bf33b8766a4065f25cef8c6325953ece7159cdf715",
+    "row": "0001041061-26-000003#078",
+    "affected_rows": [
+     "0001041061-26-000003#078"
+    ],
+    "question_key": "0001041061-26-000003#q1",
+    "prior_question_index": 43,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-26-000003#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "An honest unknown kind is a supported outcome, not an unresolved identity decision. CURRENT REVIEW LEAD: The same normalized label sits under two kinds, so the honest unknown is the supported outcome."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "raw_sha256": "1fdb75e5fea6ca967f5452bf33b8766a4065f25cef8c6325953ece7159cdf715",
+    "row": "0001041061-26-000003#078",
+    "affected_rows": [
+     "0001041061-26-000003#078"
+    ],
+    "question_key": "0001041061-26-000003#q2",
+    "prior_question_index": "NEW",
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-26-000003#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: This NEW scope question is distinct from the two-number question. The CURRENT fact carries BOTH segment:tacobellglobaldivision and unknown:us. The US restriction is not absent or merely in the quote. Judge the combined population under the kind ladder; do not reject the division part alone as though its separate restriction vanished."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "raw_sha256": "1fdb75e5fea6ca967f5452bf33b8766a4065f25cef8c6325953ece7159cdf715",
+    "row": "0001041061-26-000003#078",
+    "affected_rows": [
+     "0001041061-26-000003#078"
+    ],
+    "question_key": "0001041061-26-000003#q3",
+    "prior_question_index": 45,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-26-000003#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One change slot per record: where one movement is stated on two units the record carries one and the other survives in the quote; the growth-basis split covers bases, not dollar-versus-percent. CURRENT REVIEW LEAD: 128 restaurants and about $670 million measure one action."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "raw_sha256": "1fdb75e5fea6ca967f5452bf33b8766a4065f25cef8c6325953ece7159cdf715",
+    "row": "0001041061-26-000003#079",
+    "affected_rows": [
+     "0001041061-26-000003#079"
+    ],
+    "question_key": "0001041061-26-000003#q4",
+    "prior_question_index": 44,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-26-000003#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Same ladder, later step: coining an off-menu part is lawful when the menu carries no same-meaning value. CURRENT REVIEW LEAD: 'digital' has no menu counterpart, so coining a channel part from the release's own definition is lawful."
+   }
+  ],
+  "0001041061-26-000084": [
+   {
+    "source_id": "0001041061-26-000084",
+    "raw_sha256": "b89d05fee5a7bce39a94afa0a1b73d18c797fd1ef9c672ebe1ea497e128acb0f",
+    "row": "0001041061-26-000084#086",
+    "affected_rows": [
+     "0001041061-26-000084#086"
+    ],
+    "question_key": "0001041061-26-000084#q1",
+    "prior_question_index": 46,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-26-000084#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: Two same-kind labels for the Habit segment; recorded."
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "raw_sha256": "b89d05fee5a7bce39a94afa0a1b73d18c797fd1ef9c672ebe1ea497e128acb0f",
+    "row": "0001041061-26-000084#082",
+    "affected_rows": [
+     "0001041061-26-000084#082"
+    ],
+    "question_key": "0001041061-26-000084#q2",
+    "prior_question_index": 47,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-26-000084#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.2 governs which baseline a stated comparison takes; an absent enum is judged against the rule and the full event, never forced to satisfy a coverage quota. CURRENT REVIEW LEAD: prior_year versus sequential for a quarterly dividend step is recorded; both preserve the two stated rates."
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "raw_sha256": "b89d05fee5a7bce39a94afa0a1b73d18c797fd1ef9c672ebe1ea497e128acb0f",
+    "row": "0001041061-26-000084#083",
+    "affected_rows": [
+     "0001041061-26-000084#083"
+    ],
+    "question_key": "0001041061-26-000084#q3",
+    "prior_question_index": 48,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001041061-26-000084#q3",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: CORRECTED from B. 'The resulting net Operating Loss of $11 million' concludes footnote (f) on the Russia operations, their disposal/exit costs and FX. The answer drops that scope and my review called whole-company safe because the quote omits the context. NAME-10/11 never permit widening a source-bounded population: keep the Russia scope, or take a justified abstention if that aggregate cannot be represented. The new exact 2023 dates are not the problem, and no particular slice spelling is demanded."
+   }
+  ],
+  "0001058090-26-000007": [
+   {
+    "source_id": "0001058090-26-000007",
+    "raw_sha256": "b1363cd863da8f4677ee6ad439c503ffc660223047ed90cd3bd89a9d1a6bdf71",
+    "row": "0001058090-26-000007#090",
+    "affected_rows": [
+     "0001058090-26-000007#090"
+    ],
+    "question_key": "0001058090-26-000007#q1",
+    "prior_question_index": 49,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001058090-26-000007#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: The same gain prints in two columns and the event does not select one; the quarter is taken and the duplication recorded."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "raw_sha256": "b1363cd863da8f4677ee6ad439c503ffc660223047ed90cd3bd89a9d1a6bdf71",
+    "row": "0001058090-26-000007#090",
+    "affected_rows": [
+     "0001058090-26-000007#090"
+    ],
+    "question_key": "0001058090-26-000007#q2",
+    "prior_question_index": 50,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001058090-26-000007#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Measurement and scale evidence are quote-local: the abstention is scoped to the unscaled VALUE, and a row abstains whole only when nothing lawful remains. CURRENT REVIEW LEAD: 'in thousands' is carried as the scale multiplier; the value stands."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "raw_sha256": "b1363cd863da8f4677ee6ad439c503ffc660223047ed90cd3bd89a9d1a6bdf71",
+    "row": "0001058090-26-000007#089",
+    "affected_rows": [
+     "0001058090-26-000007#089"
+    ],
+    "question_key": "0001058090-26-000007#q3",
+    "prior_question_index": 51,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001058090-26-000007#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: 'Restaurant level' as a measured population or a measurement token is a real scope question; the stated margin is unaffected."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "raw_sha256": "b1363cd863da8f4677ee6ad439c503ffc660223047ed90cd3bd89a9d1a6bdf71",
+    "row": "0001058090-26-000007#093",
+    "affected_rows": [
+     "0001058090-26-000007#093"
+    ],
+    "question_key": "0001058090-26-000007#q4",
+    "prior_question_index": 52,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001058090-26-000007#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: 'Chipotlanes' as a driver or a channel part is a real scope question; the numberless qualitative fact is lawful either way."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "raw_sha256": "b1363cd863da8f4677ee6ad439c503ffc660223047ed90cd3bd89a9d1a6bdf71",
+    "row": "0001058090-26-000007#088",
+    "affected_rows": [
+     "0001058090-26-000007#088"
+    ],
+    "question_key": "0001058090-26-000007#q5",
+    "prior_question_index": 53,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001058090-26-000007#q5",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Expectation routing: a delivered actual measured against the company's own expectation writes the surprise plus its required home sibling. CURRENT REVIEW LEAD: A prior-year baseline with null comparison numbers is supported when the source states the direction but not the prior value."
+   }
+  ],
+  "0001104659-25-102611": [
+   {
+    "source_id": "0001104659-25-102611",
+    "raw_sha256": "b4592a3f8456806e0b842fb43111bb18e2922385053d30f1dee3dafc931d095b",
+    "row": "0001104659-25-102611#098",
+    "affected_rows": [
+     "0001104659-25-102611#098"
+    ],
+    "question_key": "0001104659-25-102611#q1",
+    "prior_question_index": 57,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-102611#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Field-scoped success already verified by Codex SEQ 2057; reused, not reopened. CURRENT REVIEW LEAD: Codex verified this row now preserves the stated domestic denominator verbatim in measurement."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "raw_sha256": "b4592a3f8456806e0b842fb43111bb18e2922385053d30f1dee3dafc931d095b",
+    "row": "0001104659-25-102611#097",
+    "affected_rows": [
+     "0001104659-25-102611#097"
+    ],
+    "question_key": "0001104659-25-102611#q2",
+    "prior_question_index": 54,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-102611#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One change slot per record: where one movement is stated on two units the record carries one and the other survives in the quote; the growth-basis split covers bases, not dollar-versus-percent. CURRENT REVIEW LEAD: $329.5 million or 6.7% is one movement on two units."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "raw_sha256": "b4592a3f8456806e0b842fb43111bb18e2922385053d30f1dee3dafc931d095b",
+    "row": "0001104659-25-102611#098",
+    "affected_rows": [
+     "0001104659-25-102611#098"
+    ],
+    "question_key": "0001104659-25-102611#q3",
+    "prior_question_index": 55,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-102611#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "An honest unknown kind is a supported outcome, not an unresolved identity decision. CURRENT REVIEW LEAD: The commercial population's kind is genuinely uncertain; unknown is supported and Codex already accepted it."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "raw_sha256": "b4592a3f8456806e0b842fb43111bb18e2922385053d30f1dee3dafc931d095b",
+    "row": "0001104659-25-102611#095",
+    "affected_rows": [
+     "0001104659-25-102611#095"
+    ],
+    "question_key": "0001104659-25-102611#q4",
+    "prior_question_index": 56,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-102611#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2: a slice names a real business population. A financing or programme identity is not one, even when a token for it exists in the menu. CURRENT REVIEW LEAD: The CURRENT one-vendor concentration fact omits a vendor slice. The served naming/slice rule excludes vendor axes from business slices; a menu token is not permission to add one. Preserve the source-stated purchase share without inventing a business population."
+   }
+  ],
+  "0001104659-25-105631": [
+   {
+    "source_id": "0001104659-25-105631",
+    "raw_sha256": "fe833e65709f57a8aef04f02c395cf78ce7022b3cd9daaa7689d6d09f292cb11",
+    "row": "0001104659-25-105631#102",
+    "affected_rows": [
+     "0001104659-25-105631#102"
+    ],
+    "question_key": "0001104659-25-105631#q1",
+    "prior_question_index": 58,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-105631#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: The quote says only 'currently' and the event supplies no other window, so the filing date is the safest derivation; recorded."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "raw_sha256": "fe833e65709f57a8aef04f02c395cf78ce7022b3cd9daaa7689d6d09f292cb11",
+    "row": "0001104659-25-105631#101",
+    "affected_rows": [
+     "0001104659-25-105631#101"
+    ],
+    "question_key": "0001104659-25-105631#q2",
+    "prior_question_index": 59,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-105631#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 6.1 OD-12 with 4.3: a benefit is negative on its signed axis, so a shrinking benefit is an increase. CURRENT REVIEW LEAD: The stated noun 'loss' is the source's own polarity signal on a signed axis; no keyword rule is added and no rename is forced."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "raw_sha256": "fe833e65709f57a8aef04f02c395cf78ce7022b3cd9daaa7689d6d09f292cb11",
+    "row": "0001104659-25-105631#102",
+    "affected_rows": [
+     "0001104659-25-105631#102"
+    ],
+    "question_key": "0001104659-25-105631#q3",
+    "prior_question_index": 60,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-105631#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: 'throughout the United States and Canada' as a population description or a slice is a real scope question; the count is unaffected."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "raw_sha256": "fe833e65709f57a8aef04f02c395cf78ce7022b3cd9daaa7689d6d09f292cb11",
+    "row": "0001104659-25-105631#104",
+    "affected_rows": [
+     "0001104659-25-105631#104"
+    ],
+    "question_key": "0001104659-25-105631#q4",
+    "prior_question_index": 61,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-105631#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "A returned tag, a baseline enum and a unit are mechanical facts about the record; none of them is a source adjudication of coverage. CURRENT REVIEW LEAD: Whether the corrections_and_amendments tag reaches a contractual amendment is a tag question; the reviewed OD-14 crosswalk governs the guidance-state reading and is preserved unchanged."
+   }
+  ],
+  "0001104659-25-118458": [
+   {
+    "source_id": "0001104659-25-118458",
+    "raw_sha256": "20629692a9cd6189c08699e7af063bf1a6a6ca0fa66bc7c7477124fcb5586596",
+    "row": "0001104659-25-118458#105",
+    "affected_rows": [
+     "0001104659-25-118458#105"
+    ],
+    "question_key": "0001104659-25-118458#q1",
+    "prior_question_index": 62,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-118458#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "An honest unknown kind is a supported outcome, not an unresolved identity decision. CURRENT REVIEW LEAD: The menu carries Space NK only under an acquisition axis, so the unknown token is the honest outcome."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "raw_sha256": "20629692a9cd6189c08699e7af063bf1a6a6ca0fa66bc7c7477124fcb5586596",
+    "row": "0001104659-25-118458#110",
+    "affected_rows": [
+     "0001104659-25-118458#110"
+    ],
+    "question_key": "0001104659-25-118458#q2",
+    "prior_question_index": 63,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-118458#q2",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2: a slice names a real business population. A financing or programme identity is not one, even when a token for it exists in the menu. CURRENT REVIEW LEAD: CORRECTED from B. The target is the cancellation of the unused March 2024 repurchase authorization. The new part 'unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram' is a financing-programme identity, not a business population, and FINAL_DESIGN 5.2 requires a real business slice even where a menu token exists. Remove the slice and keep the cancellation and its source identity; no new driver and no programme registry."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "raw_sha256": "20629692a9cd6189c08699e7af063bf1a6a6ca0fa66bc7c7477124fcb5586596",
+    "row": "0001104659-25-118458#106",
+    "affected_rows": [
+     "0001104659-25-118458#106"
+    ],
+    "question_key": "0001104659-25-118458#q3",
+    "prior_question_index": 64,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-118458#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The fact gate's own boundary: a statement naming no driver state, change, surprise, guidance or action yields nothing. CURRENT REVIEW LEAD: A bare structural mention of an existing joint venture yields nothing; the boundary case is recorded."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "raw_sha256": "20629692a9cd6189c08699e7af063bf1a6a6ca0fa66bc7c7477124fcb5586596",
+    "row": "0001104659-25-118458#107",
+    "affected_rows": [
+     "0001104659-25-118458#107"
+    ],
+    "question_key": "0001104659-25-118458#q4",
+    "prior_question_index": 65,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-25-118458#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: The full event states no window for a standing covenant, so carrying none is correct."
+   }
+  ],
+  "0001104659-26-017090": [
+   {
+    "source_id": "0001104659-26-017090",
+    "raw_sha256": "cfa3f354f2355562f4773b1c375016a8c9f47778b5d4eeb8c26b979c88ba2a96",
+    "row": "0001104659-26-017090#115",
+    "affected_rows": [
+     "0001104659-26-017090#115"
+    ],
+    "question_key": "0001104659-26-017090#q1",
+    "prior_question_index": 66,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-017090#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: Four period columns in one line and no stated selection; the reported quarter is taken and the choice recorded."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "raw_sha256": "cfa3f354f2355562f4773b1c375016a8c9f47778b5d4eeb8c26b979c88ba2a96",
+    "row": "0001104659-26-017090#113",
+    "affected_rows": [
+     "0001104659-26-017090#113"
+    ],
+    "question_key": "0001104659-26-017090#q2",
+    "prior_question_index": 67,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-017090#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One cause, one name: a netted figure spanning independent causes with no per-cause amount yields a named exclusion, and a proposed-real/final-exclusion disagreement is a truthful correction of a proposal. CURRENT REVIEW LEAD: A $24.6 million net figure spanning four independent causes with no per-cause amount yields a named exclusion."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "raw_sha256": "cfa3f354f2355562f4773b1c375016a8c9f47778b5d4eeb8c26b979c88ba2a96",
+    "row": "0001104659-26-017090#114",
+    "affected_rows": [
+     "0001104659-26-017090#114"
+    ],
+    "question_key": "0001104659-26-017090#q3",
+    "prior_question_index": 68,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-017090#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Expectation routing: a delivered actual measured against the company's own expectation writes the surprise plus its required home sibling. CURRENT REVIEW LEAD: 'our expected range' is the company's own expectation operand."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "raw_sha256": "cfa3f354f2355562f4773b1c375016a8c9f47778b5d4eeb8c26b979c88ba2a96",
+    "row": "0001104659-26-017090#115",
+    "affected_rows": [
+     "0001104659-26-017090#115"
+    ],
+    "question_key": "0001104659-26-017090#q4",
+    "prior_question_index": 69,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-017090#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.2 governs which baseline a stated comparison takes; an absent enum is judged against the rule and the full event, never forced to satisfy a coverage quota. CURRENT REVIEW LEAD: Carrying comparison_baseline beside a percent_yoy unit is redundant but not wrong; recorded."
+   }
+  ],
+  "0001104659-26-027061": [
+   {
+    "source_id": "0001104659-26-027061",
+    "raw_sha256": "845de3b134e0eac88a1357ff93cff9c25da6e3ee78dcbe100ec39e0be4c33d47",
+    "row": "0001104659-26-027061#121",
+    "affected_rows": [
+     "0001104659-26-027061#121"
+    ],
+    "question_key": "0001104659-26-027061#q1",
+    "prior_question_index": 70,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-027061#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: 'Company-operated' as a measured population in the name or a measurement token is a real scope question; the count is unaffected."
+   }
+  ],
+  "0001104659-26-032757": [
+   {
+    "source_id": "0001104659-26-032757",
+    "raw_sha256": "7e722a74b80b30504448a01346bcc372ddf29fea4d0191879b8a145693652971",
+    "row": "0001104659-26-032757#123",
+    "affected_rows": [
+     "0001104659-26-032757#123"
+    ],
+    "question_key": "0001104659-26-032757#q1",
+    "prior_question_index": 71,
+    "event_row_indexes": [
+     1
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-032757#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The persistence/lane rule and exact source attribution govern this question. Current lifo_charge has level59million; the source says the operating-profit comparison was negatively impacted59million due to an unfavorable noncash LIFO charge. Decide whether the amount is the charge itself or its comparison effect; identical numbers do not make different meanings equivalent. No blanket charge-to-action or cost-to-metric rule is authorized. Record genuine uncertainty under the existing outcomes."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "raw_sha256": "7e722a74b80b30504448a01346bcc372ddf29fea4d0191879b8a145693652971",
+    "row": "0001104659-26-032757#124",
+    "affected_rows": [
+     "0001104659-26-032757#124"
+    ],
+    "question_key": "0001104659-26-032757#q2",
+    "prior_question_index": 72,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-032757#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 8 / OD-9 never-drop sink: a number modifier the TARGET states must appear in the record's own measurement field. The word surviving in the quote does not satisfy it, and a modifier belonging to a different number in the same quote may not be imported. CURRENT REVIEW LEAD: VERIFIED IN THE FIELD: 'approximately' is present in this record's own measurement_raw_spans, so the sink is genuinely satisfied here."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "raw_sha256": "7e722a74b80b30504448a01346bcc372ddf29fea4d0191879b8a145693652971",
+    "row": "0001104659-26-032757#126",
+    "affected_rows": [
+     "0001104659-26-032757#126"
+    ],
+    "question_key": "0001104659-26-032757#q3",
+    "prior_question_index": 73,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-032757#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: Whether the qualifier span includes the following noun is a span question that does not change the value."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "raw_sha256": "7e722a74b80b30504448a01346bcc372ddf29fea4d0191879b8a145693652971",
+    "row": "0001104659-26-032757#125",
+    "affected_rows": [
+     "0001104659-26-032757#125"
+    ],
+    "question_key": "0001104659-26-032757#q4",
+    "prior_question_index": 74,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-032757#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: Equal start and end dates for an instant are expressly blessed."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "raw_sha256": "7e722a74b80b30504448a01346bcc372ddf29fea4d0191879b8a145693652971",
+    "row": "0001104659-26-032757#124",
+    "affected_rows": [
+     "0001104659-26-032757#124"
+    ],
+    "question_key": "0001104659-26-032757#q5",
+    "prior_question_index": "NEW",
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001104659-26-032757#q5",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "This NEW question concerns global124's combined failure-and-maintenance product categories (approximately85% versus86%), not global126's separate qualifier-span question. Preserve the combined population and denominator under the existing slice/kind rules. Two parts must not silently turn an aggregate into the intersection of independent populations. No particular new label, slice engine or guessed menu identity is requested; decide from the source and supported representation."
+   }
+  ],
+  "0001171843-26-001288": [
+   {
+    "source_id": "0001171843-26-001288",
+    "raw_sha256": "1b5b6fb360cd6c10f3900a9206c8c18ed1ff31843458e6864de1de0fb14b6edb",
+    "row": "0001171843-26-001288#129",
+    "affected_rows": [
+     "0001171843-26-001288#129"
+    ],
+    "question_key": "0001171843-26-001288#q1",
+    "prior_question_index": 75,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001171843-26-001288#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The source attributes the gross-margin decrease to a138basis-point noncash LIFO charge. Apply the served persistence/lane definitions and value-slot rules to that meaning. Identical numeric amounts do not prove that metric and action encodings are interchangeable, nor authorize a new locked fuzzy boundary. Use the required ambiguity exhibit for a genuine fuzzy-middle case without accepting known wrong meaning or inventing a driver spelling."
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "raw_sha256": "1b5b6fb360cd6c10f3900a9206c8c18ed1ff31843458e6864de1de0fb14b6edb",
+    "row": "0001171843-26-001288#130",
+    "affected_rows": [
+     "0001171843-26-001288#130"
+    ],
+    "question_key": "0001171843-26-001288#q2",
+    "prior_question_index": 76,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001171843-26-001288#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Expectation routing: a delivered actual measured against the company's own expectation writes the surprise plus its required home sibling. CURRENT REVIEW LEAD: A 12-week actual against a full-year target has no home-matching period, so no surprise sibling exists and the guide alone is correct."
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "raw_sha256": "1b5b6fb360cd6c10f3900a9206c8c18ed1ff31843458e6864de1de0fb14b6edb",
+    "row": "0001171843-26-001288#130",
+    "affected_rows": [
+     "0001171843-26-001288#130"
+    ],
+    "question_key": "0001171843-26-001288#q3",
+    "prior_question_index": 77,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue 0001171843-26-001288#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 8 / OD-9 never-drop sink: a number modifier the TARGET states must appear in the record's own measurement field. The word surviving in the quote does not satisfy it, and a modifier belonging to a different number in the same quote may not be imported. CURRENT REVIEW LEAD: VERIFIED IN THE FIELD: 'approximately' is present in this record's own measurement_raw_spans."
+   }
+  ],
+  "AAL_2026-04-23T08.30": [
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+    "row": "AAL_2026-04-23T08.30#140",
+    "affected_rows": [
+     "AAL_2026-04-23T08.30#140"
+    ],
+    "question_key": "AAL_2026-04-23T08.30#q1",
+    "prior_question_index": 79,
+    "event_row_indexes": [
+     9
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue AAL_2026-04-23T08.30#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The existing value-shape, value-slot and never-drop rules own this question. The current answer puts a ceiling at10 in level_high with percent_sequential; the source describes a bounded increase in an otherwise absolute revenue line. This is a narrow encoding review, not proof that a new schema is required. Read the exact served change-flavored-unit clause, including its stated cases, before claiming it forbids a representation. Use supported slots and preserve the bound; do not turn it into an exact10% change. If no safe representation exists, use the existing honest ambiguity/abstention outcomes. No quota-driven encoding or forced empty issue."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+    "row": "AAL_2026-04-23T08.30#140",
+    "affected_rows": [
+     "AAL_2026-04-23T08.30#140"
+    ],
+    "question_key": "AAL_2026-04-23T08.30#q2",
+    "prior_question_index": 80,
+    "event_row_indexes": [
+     9
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue AAL_2026-04-23T08.30#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "The selected target attaches its bounded quantity to the fourth-quarter comparison. Its surrounding sentence also mentions a meaningful year-over-year increase, but the bounded number is tied to the sequential comparison. Apply Rule9.2 to the actual selected claim and full context, not by counting comparison words in the surrounding quote. This does not settle the separate value-slot or business-population questions."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+    "row": "AAL_2026-04-23T08.30#140",
+    "affected_rows": [
+     "AAL_2026-04-23T08.30#140"
+    ],
+    "question_key": "AAL_2026-04-23T08.30#q3",
+    "prior_question_index": "NEW",
+    "event_row_indexes": [
+     9
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue AAL_2026-04-23T08.30#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule3.4 and Rule7/FINAL_DESIGN5.2 require the actual measured business population. This NEW question concerns global140, not the cleared home at133. The analyst asks about the1.2billion other-revenue line and its run rate; the CFO answers 'on the other revenue or the marketing component of it' and discusses 'that line item'. Judge whole-line versus component scope from the full exchange. A surviving quote does not excuse an inaccurate stored population, and no unsupported narrower slice is imposed."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+    "row": "AAL_2026-04-23T08.30#137",
+    "affected_rows": [
+     "AAL_2026-04-23T08.30#137"
+    ],
+    "question_key": "AAL_2026-04-23T08.30#q4",
+    "prior_question_index": 82,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue AAL_2026-04-23T08.30#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Field-scoped success already verified by Codex SEQ 2057; reused, not reopened. CURRENT REVIEW LEAD: Codex verified the unknown TMC kind is now retained rather than manufactured."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+    "row": "AAL_2026-04-23T08.30#141",
+    "affected_rows": [
+     "AAL_2026-04-23T08.30#141"
+    ],
+    "question_key": "AAL_2026-04-23T08.30#q5",
+    "prior_question_index": 83,
+    "event_row_indexes": [
+     10
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue AAL_2026-04-23T08.30#q5",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule9.2 and the sparse output rule: retain the source-stated temporal comparison, not a default null in its place. The selected target says 'we saw it increase sequentially up into March for double digits'. In the full answer the speaker describes domestic unit-revenue growth accelerating month by month into March. The growth rate's unit and the baseline of its later increase are separate axes: this review does not establish that the current percent_yoy unit is wrong, but the explicit sequential comparison is absent from comparison_baseline. Preserve source-faithful growth framing, qualitative values and business scope; decide from the source, not a coverage quota. No unit flip or invented number is requested."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+    "row": "AAL_2026-04-23T08.30#135",
+    "affected_rows": [
+     "AAL_2026-04-23T08.30#135"
+    ],
+    "question_key": null,
+    "prior_question_index": 78,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "reviewed field scope of historical question 78",
+    "decision": "PRESERVE",
+    "source_evidence": "Field-scoped historical clearance, not a new current issue; exact source and current reply are in the event payload.",
+    "owning_clause": "Current row135 carries the adverse revenue impact negative. The source calls it a challenge and headwind; the accepted2046 review and Codex2057 check apply the existing context-based signed axis. The prior claim that another worked example is needed is withdrawn."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "raw_sha256": "01c1841ccc70882cc4b213f3dc689810637f835f35745442a3aa783435114dfc",
+    "row": "AAL_2026-04-23T08.30#133",
+    "affected_rows": [
+     "AAL_2026-04-23T08.30#133"
+    ],
+    "question_key": null,
+    "prior_question_index": 81,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "reviewed field scope of historical question 81",
+    "decision": "PRESERVE",
+    "source_evidence": "Field-scoped historical clearance, not a new current issue; exact source and current reply are in the event payload.",
+    "owning_clause": "Current row133's level-numberless home persists and remains supported by the actual event-fusion route proved in AAL_HOME_REVIEW_2038 and the accepted2046 review. The other selected revenue fact states a CHANGE, not a competing absolute LEVEL. The NEW other-revenue scope question belongs to row140; it is not this cleared home question."
+   }
+  ],
+  "BBY_2026-03-03T08.00": [
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "raw_sha256": "3aa3a87a04bfaeabd1b92f15e68d5a56e662cf30d46131885721422338b274b3",
+    "row": "BBY_2026-03-03T08.00#145",
+    "affected_rows": [
+     "BBY_2026-03-03T08.00#145"
+    ],
+    "question_key": "BBY_2026-03-03T08.00#q1",
+    "prior_question_index": 84,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue BBY_2026-03-03T08.00#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "An honest unknown kind is a supported outcome, not an unresolved identity decision. CURRENT REVIEW LEAD: An honest unknown kind for the International part is supported."
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "raw_sha256": "3aa3a87a04bfaeabd1b92f15e68d5a56e662cf30d46131885721422338b274b3",
+    "row": "BBY_2026-03-03T08.00#144",
+    "affected_rows": [
+     "BBY_2026-03-03T08.00#144"
+    ],
+    "question_key": "BBY_2026-03-03T08.00#q2",
+    "prior_question_index": 85,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue BBY_2026-03-03T08.00#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "An honest unknown kind is a supported outcome, not an unresolved identity decision. CURRENT REVIEW LEAD: Same for the Best Buy Business part."
+   }
+  ],
+  "CMG_2026-02-03T16.30": [
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "raw_sha256": "1ea980c93443675db01b74dcfbec4a023d1fbe57e24c4dcfcaf3a22bdf1d2080",
+    "row": "CMG_2026-02-03T16.30#152",
+    "affected_rows": [
+     "CMG_2026-02-03T16.30#152",
+     "CMG_2026-02-03T16.30#153"
+    ],
+    "question_key": "CMG_2026-02-03T16.30#q1",
+    "prior_question_index": 86,
+    "event_row_indexes": [
+     3,
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue CMG_2026-02-03T16.30#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "An honest unknown kind is a supported outcome, not an unresolved identity decision. CURRENT REVIEW LEAD: 'group occasions' has no menu kind; the unknown token is honest."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "raw_sha256": "1ea980c93443675db01b74dcfbec4a023d1fbe57e24c4dcfcaf3a22bdf1d2080",
+    "row": "CMG_2026-02-03T16.30#152",
+    "affected_rows": [
+     "CMG_2026-02-03T16.30#152"
+    ],
+    "question_key": "CMG_2026-02-03T16.30#q2",
+    "prior_question_index": 87,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue CMG_2026-02-03T16.30#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: The full event supplies no window for the present-tense share."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "raw_sha256": "1ea980c93443675db01b74dcfbec4a023d1fbe57e24c4dcfcaf3a22bdf1d2080",
+    "row": "CMG_2026-02-03T16.30#153",
+    "affected_rows": [
+     "CMG_2026-02-03T16.30#153"
+    ],
+    "question_key": "CMG_2026-02-03T16.30#q3",
+    "prior_question_index": 88,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue CMG_2026-02-03T16.30#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: Removing time_type beside an explicit long-term sentinel is what the served Rule 6 requires; Codex confirmed this is not a new error."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "raw_sha256": "1ea980c93443675db01b74dcfbec4a023d1fbe57e24c4dcfcaf3a22bdf1d2080",
+    "row": "CMG_2026-02-03T16.30#155",
+    "affected_rows": [
+     "CMG_2026-02-03T16.30#155"
+    ],
+    "question_key": "CMG_2026-02-03T16.30#q4",
+    "prior_question_index": 89,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue CMG_2026-02-03T16.30#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 2 persistence test: a re-readable standing value is a metric, a discrete completed transaction is an action. It settles the lane; it does not excuse a name that misstates what the number measures. CURRENT REVIEW LEAD: A reduction in legal contingencies reads as a metric change or an action; both keep the stated amount."
+   }
+  ],
+  "DAL_2026-04-08T10.00": [
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "52a0135dcc8f53449928ce7c695b9ab059d80fa3f9f14d5b3345a3a026beedbb",
+    "row": "DAL_2026-04-08T10.00#160",
+    "affected_rows": [
+     "DAL_2026-04-08T10.00#160"
+    ],
+    "question_key": "DAL_2026-04-08T10.00#q1",
+    "prior_question_index": 90,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DAL_2026-04-08T10.00#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: This continues the CURRENT2046 review of Q090, which withdrew the original sign objection and narrowed it to naming/role. The negative benefit stays; no forced renaming or word deletion follows merely from the historical effect-word concern."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "52a0135dcc8f53449928ce7c695b9ab059d80fa3f9f14d5b3345a3a026beedbb",
+    "row": "DAL_2026-04-08T10.00#160",
+    "affected_rows": [
+     "DAL_2026-04-08T10.00#160"
+    ],
+    "question_key": "DAL_2026-04-08T10.00#q2",
+    "prior_question_index": 91,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DAL_2026-04-08T10.00#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: 'our refinery' in the name or as the segment slice is a real scope question; recorded."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "52a0135dcc8f53449928ce7c695b9ab059d80fa3f9f14d5b3345a3a026beedbb",
+    "row": "DAL_2026-04-08T10.00#161",
+    "affected_rows": [
+     "DAL_2026-04-08T10.00#161"
+    ],
+    "question_key": "DAL_2026-04-08T10.00#q3",
+    "prior_question_index": 92,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DAL_2026-04-08T10.00#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.2 governs which baseline a stated comparison takes; an absent enum is judged against the rule and the full event, never forced to satisfy a coverage quota. CURRENT REVIEW LEAD: A numberless sequential improvement states its own basis; recorded."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "52a0135dcc8f53449928ce7c695b9ab059d80fa3f9f14d5b3345a3a026beedbb",
+    "row": "DAL_2026-04-08T10.00#157",
+    "affected_rows": [
+     "DAL_2026-04-08T10.00#157",
+     "DAL_2026-04-08T10.00#158"
+    ],
+    "question_key": "DAL_2026-04-08T10.00#q4",
+    "prior_question_index": 93,
+    "event_row_indexes": [
+     1,
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DAL_2026-04-08T10.00#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Expectation routing: a delivered actual measured against the company's own expectation writes the surprise plus its required home sibling. CURRENT REVIEW LEAD: The home sibling already exists at the earlier row, so not restating the same level twice is correct."
+   }
+  ],
+  "DRI_2026-03-19T08.30": [
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "raw_sha256": "d87d9908f3c18595c96417d4f463f8446879614baf77bd3edfafc7c2bf750590",
+    "row": "DRI_2026-03-19T08.30#168",
+    "affected_rows": [
+     "DRI_2026-03-19T08.30#168"
+    ],
+    "question_key": "DRI_2026-03-19T08.30#q1",
+    "prior_question_index": 94,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DRI_2026-03-19T08.30#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Several facts from one target only where the served split or sibling rules require it; another answer having done so is not authority. CURRENT REVIEW LEAD: Two independent announced causes, each with its own stated count, is exactly what the served split rules require."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "raw_sha256": "d87d9908f3c18595c96417d4f463f8446879614baf77bd3edfafc7c2bf750590",
+    "row": "DRI_2026-03-19T08.30#165",
+    "affected_rows": [
+     "DRI_2026-03-19T08.30#165"
+    ],
+    "question_key": "DRI_2026-03-19T08.30#q2",
+    "prior_question_index": 95,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DRI_2026-03-19T08.30#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Expectation routing: a delivered actual measured against the company's own expectation writes the surprise plus its required home sibling. CURRENT REVIEW LEAD: No movement wording is stated, so the guidance state stays unknown."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "raw_sha256": "d87d9908f3c18595c96417d4f463f8446879614baf77bd3edfafc7c2bf750590",
+    "row": "DRI_2026-03-19T08.30#166",
+    "affected_rows": [
+     "DRI_2026-03-19T08.30#166"
+    ],
+    "question_key": "DRI_2026-03-19T08.30#q3",
+    "prior_question_index": 96,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DRI_2026-03-19T08.30#q3",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: Two same-kind Olive Garden tokens; recorded."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "raw_sha256": "d87d9908f3c18595c96417d4f463f8446879614baf77bd3edfafc7c2bf750590",
+    "row": "DRI_2026-03-19T08.30#168",
+    "affected_rows": [
+     "DRI_2026-03-19T08.30#168"
+    ],
+    "question_key": "DRI_2026-03-19T08.30#q4",
+    "prior_question_index": 97,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue DRI_2026-03-19T08.30#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: 'over the next 12 to 18 months' has no lawful period encoding; carrying none is safe and recorded."
+   }
+  ],
+  "MCD_2026-02-11T16.30": [
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "raw_sha256": "cc4e8d20fcc063e384c27630cfd8b51157debb6a0326edb41316fc9b0a856889",
+    "row": "MCD_2026-02-11T16.30#170",
+    "affected_rows": [
+     "MCD_2026-02-11T16.30#170",
+     "MCD_2026-02-11T16.30#171"
+    ],
+    "question_key": "MCD_2026-02-11T16.30#q1",
+    "prior_question_index": 98,
+    "event_row_indexes": [
+     2,
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue MCD_2026-02-11T16.30#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Expectation routing: a delivered actual measured against the company's own expectation writes the surprise plus its required home sibling. CURRENT REVIEW LEAD: Both 'above' and 'in line with' our expectations are the company's own expectation operand."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "raw_sha256": "cc4e8d20fcc063e384c27630cfd8b51157debb6a0326edb41316fc9b0a856889",
+    "row": "MCD_2026-02-11T16.30#170",
+    "affected_rows": [
+     "MCD_2026-02-11T16.30#170"
+    ],
+    "question_key": "MCD_2026-02-11T16.30#q2",
+    "prior_question_index": 99,
+    "event_row_indexes": [
+     2
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue MCD_2026-02-11T16.30#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "FINAL_DESIGN 5.2 kind ladder: a menu value of the SAME meaning is reused before an off-menu kind is coined. It does NOT collapse different kinds: alternatives that span kinds are not a presentational choice, and where the source cannot choose the kind, unknown is permitted. CURRENT REVIEW LEAD: CORRECTED: the US alternatives span geography and segment KINDS, so they are not one meaning in several spellings; the choice is recorded, not declared presentational."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "raw_sha256": "cc4e8d20fcc063e384c27630cfd8b51157debb6a0326edb41316fc9b0a856889",
+    "row": "MCD_2026-02-11T16.30#169",
+    "affected_rows": [
+     "MCD_2026-02-11T16.30#169",
+     "MCD_2026-02-11T16.30#172",
+     "MCD_2026-02-11T16.30#173"
+    ],
+    "question_key": "MCD_2026-02-11T16.30#q3",
+    "prior_question_index": 100,
+    "event_row_indexes": [
+     1,
+     4,
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue MCD_2026-02-11T16.30#q3",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 8 / OD-9 never-drop sink: a number modifier the TARGET states must appear in the record's own measurement field. The word surviving in the quote does not satisfy it, and a modifier belonging to a different number in the same quote may not be imported. CURRENT REVIEW LEAD: CORRECTED from A - and my earlier conclusion asserted the sink was satisfied without reading the field. Measured: #169's target says 'nearly $140 billion' and the record carries only ['constant currency']; #172's target says 'about 750 of these' and #173's says 'about 1,000 in China', and both records carry measurement_raw_spans = None. Restore each target's own modifier, and do NOT import 'approximately' from the different 2,600 total or the >1,800 IDL total in the same quotes."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "raw_sha256": "cc4e8d20fcc063e384c27630cfd8b51157debb6a0326edb41316fc9b0a856889",
+    "row": "MCD_2026-02-11T16.30#171",
+    "affected_rows": [
+     "MCD_2026-02-11T16.30#171"
+    ],
+    "question_key": "MCD_2026-02-11T16.30#q4",
+    "prior_question_index": 101,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue MCD_2026-02-11T16.30#q4",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 9.5: favourability wording means the source states a favourable or unfavourable direction; a neutral position statement does not. CURRENT REVIEW LEAD: 'in line with our expectations' carries no favourable or unfavourable direction and this row correctly set the flag false."
+   }
+  ],
+  "ULTA_2026-03-12T16.30": [
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "c01db731d053685c2839cb3351f0b5831fea054604e8283c96e7828563bd496e",
+    "row": "ULTA_2026-03-12T16.30#177",
+    "affected_rows": [
+     "ULTA_2026-03-12T16.30#177"
+    ],
+    "question_key": "ULTA_2026-03-12T16.30#q1",
+    "prior_question_index": 102,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue ULTA_2026-03-12T16.30#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "NAME-10/11 distinguish the company's own measured business parts, portions and external causes. They do not grant a free choice between name and slice, and they never permit widening a source-bounded population. CURRENT REVIEW LEAD: 'loyalty program' in the name or as a customer part is a real scope question; the member count is unaffected."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "c01db731d053685c2839cb3351f0b5831fea054604e8283c96e7828563bd496e",
+    "row": "ULTA_2026-03-12T16.30#178",
+    "affected_rows": [
+     "ULTA_2026-03-12T16.30#178"
+    ],
+    "question_key": "ULTA_2026-03-12T16.30#q2",
+    "prior_question_index": 103,
+    "event_row_indexes": [
+     4
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue ULTA_2026-03-12T16.30#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 6: a period may be stated, clearly implied or safely derived from the FULL event context; only measurement and scale evidence are quote-local, so a supported date is not dropped for sitting in the neighbouring sentence. CURRENT REVIEW LEAD: The full event supplies no window for the Space NK store count."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "c01db731d053685c2839cb3351f0b5831fea054604e8283c96e7828563bd496e",
+    "row": "ULTA_2026-03-12T16.30#180",
+    "affected_rows": [
+     "ULTA_2026-03-12T16.30#180"
+    ],
+    "question_key": null,
+    "prior_question_index": 104,
+    "event_row_indexes": [
+     6
+    ],
+    "fact_index": null,
+    "field": "reviewed field scope of historical question 104",
+    "decision": "PRESERVE",
+    "source_evidence": "Field-scoped historical clearance, not a new current issue; exact source and current reply are in the event payload.",
+    "owning_clause": "The numberless home at row180 is required for its selected target. The unrelated value appears in an UNLOCATED sentence; the accepted 2046 review cleared only this home/selected-target issue. This does not erase the separate modifier review of rows176 and180."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "raw_sha256": "c01db731d053685c2839cb3351f0b5831fea054604e8283c96e7828563bd496e",
+    "row": "ULTA_2026-03-12T16.30#176",
+    "affected_rows": [
+     "ULTA_2026-03-12T16.30#176",
+     "ULTA_2026-03-12T16.30#180"
+    ],
+    "question_key": null,
+    "prior_question_index": 105,
+    "event_row_indexes": [
+     2,
+     6
+    ],
+    "fact_index": null,
+    "field": "reviewed field scope of historical question 105",
+    "decision": "PRESERVE",
+    "source_evidence": "Field-scoped historical clearance, not a new current issue; exact source and current reply are in the event payload.",
+    "owning_clause": "Current row176 retains its exclusion qualifier and 'about'; row180 retains 'about' on its own stated delta. These are the two distinct scopes in the accepted2046 review, independently checked in2057. The expectation-only qualifier conflict at LUV39 does not apply."
+   }
+  ],
+  "YUM_2026-02-04T08.15": [
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "raw_sha256": "05817fef2889c9b460907383e8a27d7fad821e80b3246dd7d82508bac7028c20",
+    "row": "YUM_2026-02-04T08.15#184",
+    "affected_rows": [
+     "YUM_2026-02-04T08.15#184"
+    ],
+    "question_key": "YUM_2026-02-04T08.15#q1",
+    "prior_question_index": 106,
+    "event_row_indexes": [
+     3
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue YUM_2026-02-04T08.15#q1",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Reported G&A of377million includes40million of special expenses, primarily related to the Pizza Hut strategic review. Distinguish the entire40million aggregate from the only partly stated cause. Do not attribute the whole amount to Pizza Hut or force a narrower restructuring/strategic-review driver. Apply the served lane/name rules to the source's aggregate; if no faithful representation is allowed, use the existing counted outcome rather than a guessed broader identity."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "raw_sha256": "05817fef2889c9b460907383e8a27d7fad821e80b3246dd7d82508bac7028c20",
+    "row": "YUM_2026-02-04T08.15#186",
+    "affected_rows": [
+     "YUM_2026-02-04T08.15#186"
+    ],
+    "question_key": "YUM_2026-02-04T08.15#q2",
+    "prior_question_index": 107,
+    "event_row_indexes": [
+     5
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue YUM_2026-02-04T08.15#q2",
+    "decision": "REVIEW",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "One change slot per record: where one movement is stated on two units the record carries one and the other survives in the quote; the growth-basis split covers bases, not dollar-versus-percent. CURRENT REVIEW LEAD: CORRECTION TO THE REVIEW, not the answer: the CURRENT guidance already uses level_low/high -15 with level_unit percent_yoy, as the percent-only guidance clause requires. It is not on the change axis. Preserve that placement; the missing 'approximately' modifier is separately bound to this same row by q3."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "raw_sha256": "05817fef2889c9b460907383e8a27d7fad821e80b3246dd7d82508bac7028c20",
+    "row": "YUM_2026-02-04T08.15#186",
+    "affected_rows": [
+     "YUM_2026-02-04T08.15#186",
+     "YUM_2026-02-04T08.15#187"
+    ],
+    "question_key": "YUM_2026-02-04T08.15#q3",
+    "prior_question_index": 108,
+    "event_row_indexes": [
+     5,
+     6
+    ],
+    "fact_index": null,
+    "field": "scope of current open issue YUM_2026-02-04T08.15#q3",
+    "decision": "CHANGE",
+    "source_evidence": "Exact targets and quotes are in the event payload; this question is in the pinned decision reply shown as v3_shard.",
+    "owning_clause": "Rule 8 / OD-9 never-drop sink: a number modifier the TARGET states must appear in the record's own measurement field. The word surviving in the quote does not satisfy it, and a modifier belonging to a different number in the same quote may not be imported. CURRENT REVIEW LEAD: CORRECTED from A - same failure as MCD#q3: I asserted the sink was satisfied without reading the field. Measured: #186's target says 'down approximately 15%' and the record carries only ['core']; #187's target says 'approximately 250 targeted closures' and the record carries measurement_raw_spans = None. Restore 'approximately' on both, keeping 'core' where it is already right."
+   }
+  ]
+ }
+}

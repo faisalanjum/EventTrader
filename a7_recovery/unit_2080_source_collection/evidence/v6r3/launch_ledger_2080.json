@@ -1,0 +1,58 @@
+{
+ "authority": "Codex SEQ 2080",
+ "launches": [
+  {
+   "attempt": 1,
+   "durationMs": 213138,
+   "label": "0000027904-26-000013",
+   "launched_utc": "2026-09-13T00:08:40Z",
+   "official_state_sha256": "8658134a6bb3d5f40223e1c7363c0186cc3033548b6b1099e7be4f99070f85f3",
+   "preserved_utc": "2026-09-13T00:12:35Z",
+   "returned_text_bytes": 14200,
+   "returned_text_sha256": "cade0230381801623f6b2c8ceafa8cc6f5525a98f722105ee12b125ad1e9ce1e",
+   "row_agent_type": "lean-probe",
+   "row_effort": null,
+   "row_label": "0000027904-26-000013",
+   "row_model": "claude-opus-5[1m]",
+   "row_tool_calls": 0,
+   "runId": "wf_c100b6e4-e40",
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/third_2080/0000027904-26-000013.attempt1.js",
+   "script_sha256": "ef0fede18fdc80f806ed039d76d2d58f9f7774bc1e4d423828cd4c40f20736a2",
+   "state": "preserved",
+   "state_script_sha256": "ef0fede18fdc80f806ed039d76d2d58f9f7774bc1e4d423828cd4c40f20736a2",
+   "state_status": "completed",
+   "totalTokens": 116896,
+   "transcript_models": [
+    "claude-opus-5"
+   ],
+   "transcript_sha256": "da944ac439fa3c330b01fb17420e2ae384928d6d750e8703745bb859961b2de9"
+  },
+  {
+   "attempt": 1,
+   "durationMs": 224086,
+   "label": "DAL_2026-04-08T10.00",
+   "launched_utc": "2026-09-13T00:08:40Z",
+   "official_state_sha256": "300406c593074b5391063db72cd2e3b281e762203b6e70b3ae32a2e308bd62e4",
+   "preserved_utc": "2026-09-13T00:12:35Z",
+   "returned_text_bytes": 12256,
+   "returned_text_sha256": "4d661c36cbb4922aef896a102f4e4553ac22a900f66e14ed182bce97984a9588",
+   "row_agent_type": "lean-probe",
+   "row_effort": null,
+   "row_label": "DAL_2026-04-08T10.00",
+   "row_model": "claude-opus-5[1m]",
+   "row_tool_calls": 0,
+   "runId": "wf_30437ec6-e96",
+   "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/third_2080/DAL_2026-04-08T10.00.attempt1.js",
+   "script_sha256": "1e10a7c3ddaebfbd6ec1d7e4dfeea539cc3c6b1e6d10583552b4798493f20947",
+   "state": "preserved",
+   "state_script_sha256": "1e10a7c3ddaebfbd6ec1d7e4dfeea539cc3c6b1e6d10583552b4798493f20947",
+   "state_status": "completed",
+   "totalTokens": 74255,
+   "transcript_models": [
+    "claude-opus-5"
+   ],
+   "transcript_sha256": "84109cae4154b5c56fbbe48978037ef627c07191bb9e03ef0224d0f0f5845b8d"
+  }
+ ],
+ "phase": "a7 source-only THIRD round of decision_correction_v6 (round 3, two events)"
+}

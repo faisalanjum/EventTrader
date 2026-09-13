@@ -1,0 +1,185 @@
+```json
+{
+  "source_id": "0001104659-26-027061",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "gross_margin",
+              "driver_state": "decreased",
+              "level_low": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 38.1, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 38.2, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2025,
+              "fiscal_quarter": 4,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: the quote states an actual measured level of gross profit as a percentage of net sales (38.1%) with an explicit direction word and an explicit 38.2% prior comparison, so it yields a genuine metric fact rather than nothing."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "share_repurchase",
+              "driver_state": "occurred",
+              "level_low": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 2.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "fiscal_year": 2025,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: a completed buyback of 2.0 million common shares during a stated fiscal-2025 window is a discrete transaction that already happened, so the row carries a real action_event fact."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "comparable_sales_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": 2.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.5, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "range",
+              "level_unit": "percent_yoy",
+              "fiscal_year": 2026,
+              "time_type": "duration",
+              "company_confirmed": true
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: the Fiscal 2026 Outlook table carries the Company's own forward comparable-sales growth range of 2.5% to 3.5%, which is a real guidance fact and not a control."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "company_operated_store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:international"],
+              "fiscal_year": 2025,
+              "period_end_date": "2026-01-31",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real item: the table states a standing, re-readable level of 86 company-operated international stores held at the end of fiscal 2025, so the row yields a real metric fact rather than none."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-027061",
+        "facts": [],
+        "abstentions": [
+          {"reason": "This line is one bullet of the forward-looking-statements risk list, naming macroeconomic conditions, inflation, elevated interest rates and possible future labor, transportation and shipping cost pressures as hypothetical things that could affect results; it states no level, direction, outlook, surprise or action for this company, so it is generic risk boilerplate and yields no fact."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: the quote is hypothetical risk-factor boilerplate with no stated state, change, surprise, guidance or action, so it correctly yields nothing."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "reference_name": "gross profit decreased to 38.1% compared to 38.2%",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "repurchased 2.0 million shares",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": null
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "reference_name": "Comparable sales growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The source states no movement word and shows no prior fiscal 2026 comparable-sales guide, so whether this is a first issuance or a revision cannot be settled from the source and the state stays unknown."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "portion_versus_whole", "ambiguous_menus", "measurement_wording"],
+      "reference_name": "International (Company-operated)",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "\"Company-operated\" is genuinely placeable either as a population qualifier inside the name, as a never-drop measurement span, or as a how-it-runs channel slice, and \"International\" is an off-menu label whose geography kind rests only on the table pairing it against United States."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-020/b1",
+      "agrees": false,
+      "why": "It matches my settlement on rows 1, 2 and 5, but it records the bare fiscal 2026 comparable-sales guide as introduced although the source states no movement (a bare guide is unknown), and on row 4 it uses a bare store_count while moving the company-operated population restriction into a measurement span instead of the name."
+    },
+    {
+      "lead_id": "sokc-020/b2",
+      "agrees": false,
+      "why": "It repeats the same introduced-versus-unknown departure on row 3 and the bare store_count name on row 4, and it additionally drops the company-operated restriction entirely, nulls the percent scale evidence that is present inside the row 1 and row 3 quotes, and omits the end-of-fiscal-2025 instant date on the store count."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Row 4: whether the source-bounded \"Company-operated\" population belongs inside the driver name (company_operated_store_count), as a measurement token beside a bare store_count, or as a channel slice.",
+      "why": "The population-qualifier rule, the never-drop measurement sink and the how-it-runs channel test all plausibly cover it; the qualifier appears only in the table's column header, the company also has franchised and joint-venture stores so the population is genuinely narrower than the whole, and the choice changes the fact's identity and its ongoing series."
+    }
+  ]
+}
+```

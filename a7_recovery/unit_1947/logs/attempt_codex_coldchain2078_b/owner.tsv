@@ -1,0 +1,7 @@
+attempt	codex_coldchain2078_b
+payload	../../unit_2020_codex_check/check_chain_packet_2078.py
+map	../unit_2076_latest_source_decisions/map_2076.tsv
+wrapper_pid	3380694
+payload_pid	3380698
+started_utc	2026-09-12T23:30:36Z
+state	finished exit 0

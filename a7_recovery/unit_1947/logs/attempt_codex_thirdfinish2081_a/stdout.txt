@@ -1,0 +1,205 @@
+{
+ "mode": "finish",
+ "pins": {
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/PACKET.json": "1cb495e033376dfa5b930d5ded3881564866f6d94889da08fa0aa96c30fbbef7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/FINDINGS_BY_EVENT.json": "83411d44871cb7dbfe296b8d08d2811cde28d4431a63e6a65b3c2a9f5c232e1f",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/LAUNCH_RECORD_2080.json": "9f710c69ee0826e5753b3effddde3a435d2b1dcded3107e68baeec714333e02a",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/evidence/v6r3/launch_ledger_2080.json": "664a7272f429b4d377f7870352369b04c6cc82b4ee07e0616a88f828279eaac1",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/a4_v6_successor_chain.py": "beed43091c4a5088f248122c3cf627ef82fd72cdbad7d9390863d1cb4ad558a7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/a4_phase_input.py": "cadb0367b28373bd602773bfe1257aa17cddab3cbb6dc1203a64120d459ebe2b",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py": "d96db730a9e2a54a6f2ac221e328649ad8babe9139b26365f13babe2db3ab7ee"
+ },
+ "expected": 2,
+ "rows": [
+  {
+   "source_id": "0000027904-26-000013",
+   "run_id": "wf_c100b6e4-e40",
+   "native_status": "completed",
+   "raw_sha256": "cade0230381801623f6b2c8ceafa8cc6f5525a98f722105ee12b125ad1e9ce1e",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "run_id": "wf_30437ec6-e96",
+   "native_status": "completed",
+   "raw_sha256": "4d661c36cbb4922aef896a102f4e4553ac22a900f66e14ed182bce97984a9588",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  }
+ ],
+ "native_problems": [],
+ "native_results": {
+  "0000027904-26-000013": [
+   "proved",
+   ""
+  ],
+  "DAL_2026-04-08T10.00": [
+   "proved",
+   ""
+  ]
+ }
+}
+{
+ "mode": "finish",
+ "pins": {
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/PACKET.json": "1cb495e033376dfa5b930d5ded3881564866f6d94889da08fa0aa96c30fbbef7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/FINDINGS_BY_EVENT.json": "83411d44871cb7dbfe296b8d08d2811cde28d4431a63e6a65b3c2a9f5c232e1f",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/LAUNCH_RECORD_2080.json": "9f710c69ee0826e5753b3effddde3a435d2b1dcded3107e68baeec714333e02a",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2080_source_collection/evidence/v6r3/launch_ledger_2080.json": "664a7272f429b4d377f7870352369b04c6cc82b4ee07e0616a88f828279eaac1",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/a4_v6_successor_chain.py": "beed43091c4a5088f248122c3cf627ef82fd72cdbad7d9390863d1cb4ad558a7",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/a4_phase_input.py": "cadb0367b28373bd602773bfe1257aa17cddab3cbb6dc1203a64120d459ebe2b",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2005/owner/build_final_key_candidate.py": "d96db730a9e2a54a6f2ac221e328649ad8babe9139b26365f13babe2db3ab7ee"
+ },
+ "expected": 2,
+ "rows": [
+  {
+   "source_id": "0000027904-26-000013",
+   "run_id": "wf_c100b6e4-e40",
+   "native_status": "completed",
+   "raw_sha256": "cade0230381801623f6b2c8ceafa8cc6f5525a98f722105ee12b125ad1e9ce1e",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "run_id": "wf_30437ec6-e96",
+   "native_status": "completed",
+   "raw_sha256": "4d661c36cbb4922aef896a102f4e4553ac22a900f66e14ed182bce97984a9588",
+   "schema_problems": [],
+   "rows": 7,
+   "row_outcomes": {
+    "fact": 6,
+    "control": 1
+   },
+   "open_issues": []
+  }
+ ],
+ "native_problems": [],
+ "native_results": {
+  "0000027904-26-000013": [
+   "proved",
+   ""
+  ],
+  "DAL_2026-04-08T10.00": [
+   "proved",
+   ""
+  ]
+ },
+ "record_problems": {
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_c100b6e4-e40.json": [],
+  "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_30437ec6-e96.json": []
+ },
+ "finalization": {
+  "door": "a4_source_only_key_1997",
+  "phase": "decision_correction_v6",
+  "attempt": 1,
+  "run_id": "v6r3",
+  "receipt_sha256": "1ae011e63691af74b1f663bff7decfa91a47567653cc30d8a61f71d72c968564",
+  "manifest_sha256": "a979a78cb5c1227f30b43d1645ef13270d60a85173f819d6ee12a6d35623b977",
+  "bound": {
+   "build_kfields_final.py": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+   "build_kfields_hard_review.py": "ceef0f20e090e0793320fe1def79d958189d715a2dda7ddb48039e9ed6d0cc1b",
+   "build_kfields_key.py": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+   "build_inventory_review.py": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+   "build_launch_manifest.py": "fb327705f5703d344c413dff6c9f3ba1138cd0e8107898e08de43bdc87577567",
+   "raw_transport.py": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+   "kf_lint.py": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+   "audit_worker_access.py": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+   "validate_benchmark_inventory.py": "2e7ad8f1da440c5c8c4c19da45746e1a24bfdc07fad907afdbd011a60f402165",
+   "a1_reader.py": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649",
+   "build_exp5_contract.py": "ffbcab3d7c7cc4c461d6828608aa59ddcc21d7d4b12b41f9ed6420f27dc5ed2c",
+   "launch_kfields_drafts.manifest.json": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce",
+   "source_only_key_owner": "fb2f53355a473fac782730e148a2db3ceb60f4dc86b77a110342cabe01ce4996",
+   "inventory": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+   "approved_source_lock": "5cfd6bf9209b8468c026cea48737c6b6fd734441ea312c3d7e2fadbfe2154801",
+   "source_only_closure_owner": "86c52b34f50784afe2db978fc15e3aa0bbaec2b642872a6247351671fcc1a15d",
+   "source_only_closure_findings": "6ad443a6a4ad7c23b6e5eb8cd20f61c2b2a67973797945c9683ed94b6d36804f",
+   "closure_review_manifest": "901ca0f113778cc62d5b673a09b2fa09db3a467c08317a3f77eb631d4665a689",
+   "review_composite_owner": "4a93689b5b7d7add223ee4d92c94b7b816871be9e8c10f8bbcf330bb4815aa64",
+   "clarified_review_manifest": "4fbee22e8843953cf7d55685c4b34b7d323df0e738aa3d14bccb2b9418cea083"
+  },
+  "harvested_raw": [
+   "wf_c100b6e4-e40.raw.json",
+   "wf_30437ec6-e96.raw.json"
+  ],
+  "phase_complete": true,
+  "problems": [],
+  "outcomes": [
+   [
+    "0000027904-26-000013",
+    "valid",
+    ""
+   ],
+   [
+    "DAL_2026-04-08T10.00",
+    "valid",
+    ""
+   ]
+  ],
+  "ledger": {
+   "scheduled": 2,
+   "valid": 2,
+   "invalid_response": 0,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "missing": 0
+  },
+  "retry": []
+ },
+ "merged": {
+  "ok": true,
+  "stops": [],
+  "counts": {
+   "events_accounted": 33,
+   "rows_accounted": 191,
+   "accepted_facts": 163,
+   "du_worthy_facts": 163,
+   "controls": 34,
+   "exclusions": 10,
+   "abstentions": 44,
+   "record_kind_conflicts": 11,
+   "duplicate_gold_facts": 0,
+   "open_issues": 0,
+   "phase1_ambiguities": 0,
+   "tag_floor": 5,
+   "distinct_rows_per_tag": {
+    "point_range_floor_ceiling": 136,
+    "losses_and_sign": 27,
+    "sequential_comparison": 41,
+    "measurement_wording": 60,
+    "favourable_unfavourable_direction": 16,
+    "expectation_routing": 18,
+    "slices_and_unknown_axes": 67,
+    "portion_versus_whole": 38,
+    "ambiguous_menus": 35,
+    "corrections_and_amendments": 7
+   },
+   "tags_below_floor": [],
+   "sequential_rows": 41
+  },
+  "open_issue_text": {},
+  "origins": {
+   "a4_final_v5_correction": 25,
+   "a4_final_v6_correction": 6,
+   "a4_final_v1": 2
+  }
+ },
+ "ledger_after": 667,
+ "limitation": "Native/schema/accounting only; source approval, signature and grading remain separate."
+}

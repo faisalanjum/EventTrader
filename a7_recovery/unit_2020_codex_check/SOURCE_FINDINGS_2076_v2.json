@@ -1,0 +1,38 @@
+{
+ "kind": "Source-only findings on the two latest returned decisions; untrusted review leads, not approved answers or new rules",
+ "source_ledger_sha256": "0a1a2b2e707764ae77a78d2bcab1f3d3655a7bdd224d0c4ceadd4ba44e26890e",
+ "findings": {
+  "0000027904-26-000013": [
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "ad22a00f596ae2787b07a5e9de2451b9b94af987c73676990f68121fb9235f6b",
+    "row": "0000027904-26-000013#014",
+    "field": "named target and required home quantity",
+    "finding": "The latest open issue starts from an absolute-cent home being mandatory. Check that premise against this row's ACTUAL named target and the served task scope before deciding that the contract is conflicted. The named target is the comparison 'in line with our long-term target of low-single digit growth', not a separate request to extract every quantity in the quote. The card says to interpret the named target only and add only splits required by the existing rules. The source compares delivered growth to a growth target; the absolute cent level is contextual evidence, not automatically another target. Independently settle the quantity the required home represents. The same cause can be stated with a growth-basis unit without adding a motion word to its name. A required home and its surprise must match the compared quantity's normalized level and unit; their required pairing is not an accidental duplicate. Do not store a non-delta in the surprise's change slot, force the contextual absolute amount into that comparison, invent a new cause, or emit the same growth twice on extra ordinary facts. Establish the answer from the source and existing ordered rules, not from this reviewer's preferred representation. Preserve every other target. A permitted counted ambiguity or abstention is complete when it genuinely settles a source the rules cannot resolve; do not retain an open issue on a premise the target scope itself does not require.",
+    "source_evidence": "The frozen raw_label_or_claim is 'in line with our long-term target of low-single digit growth'. Its complete quote states that non-fuel unit costs increased 2.4% to 13.86 cents compared to 2024 and that this was in line with the company's long-term growth target; all exact qualifiers and source context remain in the unchanged payload.",
+    "owning_clause": "Served target-only task; Rules1.5,2 TWINS,3,5a,9.6; FINAL_DESIGN5.1 home rule and7.1 quantity slots"
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "raw_sha256": "ad22a00f596ae2787b07a5e9de2451b9b94af987c73676990f68121fb9235f6b",
+    "row": "0000027904-26-000013#014",
+    "field": "measurement_raw_spans contiguous grouping",
+    "finding": "The latest reply splits the continuous measurement qualifier into 'a non-GAAP financial measure' and 'which excludes fuel, expenses related to refinery sales to third parties and other items'. The exact source gap between them is only '), ', with no intervening non-qualifier prose. The served measurement rule requires one entry for a contiguous qualifier span and permits splitting only across non-qualifier prose. This is not a spelling or order preference: the actual shared normalizer and identity constructor produce different measurement tokens and a different fact identity for this split, while merely permuting the unsplit entries leaves identity unchanged. Review the original quote and return its lawful contiguous measurement spans for the required target facts; do not alter the source, invent a normalization rule or treat the previous reply's grouping as authoritative. Non-fuel is separated from the later qualifier by the source's actual unit-cost/name wording, so that is a different boundary to judge. All fourteen newly returned rows were inspected; this is the only new punctuation-only split found among their twelve facts and eight supplied measurement spans.",
+    "source_evidence": "The full frozen quote begins: Non-fuel unit costs (\"CASM-Ex\", a non-GAAP financial measure), which excludes fuel, expenses related to refinery sales to third parties and other items, increased ... . Use the original quote in the payload, not this abbreviated excerpt, for exact span copying.",
+    "owning_clause": "Served Rule8; FINAL_DESIGN OD-9; FableExperimentWorkOrder EXP-5 field scoring: maximal contiguous spans are one token"
+   }
+  ],
+  "DAL_2026-04-08T10.00": [
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "raw_sha256": "38059f303d5beb96980fb36b424e6b45de861660e2afccf431588999b311079f",
+    "row": "DAL_2026-04-08T10.00#160",
+    "field": "returned name's meaning under the cause-only and effect-word rules",
+    "finding": "The latest reply uses refinery_fuel_cost_benefit_guidance. Its estimated signed amount and June-quarter target are source-grounded, but format validity does not establish the name's meaning. Independently determine whether the name contains excluded generic effect/polarity wording or actually falls within an existing specific reusable-force or stable financial-phrase rule; do not use a keyword blacklist and do not treat a previous reviewer's conclusion as an answer. The value's favorable direction alone does not justify putting the same direction in a name. Conversely, ownership of the refinery alone does not prove a measured refinery population: the own-MEASURED-part role test, its unclear-role branch and the qualified-portion rule still govern. It is not established that every neutral source-grounded name must mean the refinery's own fuel spending. Decide the actual reusable quantity and a lawful specific name from this source, without replacing the component with total consolidated fuel expense or claiming an unmeasured refinery spending population. If you cannot lawfully resolve the target, the existing explicit counted abstention/exclusion with its precise reason is a complete answer; no forced fact, global impossibility proof or new naming rule is required. A real still-unresolved required decision must remain visible. Do not treat any candidate name from a reviewer as an approved encoding.",
+    "source_evidence": "The target is 'an estimated $300 million benefit from our refinery'. The immediately preceding source frames the June-quarter consolidated fuel-price assumption, and the delivered-quarter remarks separately state a six-cent refinery benefit. Use those full unchanged source passages for role and period; never import another target's number as this one's value.",
+    "owning_clause": "Served Rules1.4,3.1/3.4/3.8/3.9/3.10/3.11,5 and final-outcome instructions; FINAL_DESIGN3 NAME-01/06/08/10/11/12/15/16 and OD-17"
+   }
+  ]
+ },
+ "supersedes_sha256": "0e122d52591f7ee64a14771fb359b49be88ff3479bc693cad3d26cd642be34cf"
+}

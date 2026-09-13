@@ -1,0 +1,269 @@
+```json
+{
+  "source_id": "DAL_2026-04-08T10.00",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings_per_share",
+              "driver_state": "reported",
+              "level_low": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: a bare delivered per-share earnings level of 64 cents for the reported March 2026 quarter is a non-boilerplate metric value, so proposal and outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "surprise",
+            "item": {
+              "driver_name": "earnings_per_share_surprise",
+              "driver_state": "in_line",
+              "level_low": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_high": {"value": 64, "scale_multiplier": 0.01, "unit_scale_evidence": "cents"},
+              "level_shape_hint": "point",
+              "level_unit": "usd",
+              "comparison_baseline": "previous_guidance",
+              "surprise_basis_hint": "actual",
+              "has_favorability_wording": false,
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            },
+            "per_x": "share"
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the target meaning here is the delivered actual placed inside the company's own initial guide, which is a surprise, and its required home metric sibling is the identical 64-cent level already settled at row 1 of this same event, so restating that level here would emit one fact twice."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue",
+              "driver_state": "increased",
+              "level_low": {"value": 380, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 380, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["product:productandserviceothermrobusiness"],
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: a stated first-quarter revenue level of $380 million for the company's own maintenance business with an explicit stated prior-year direction, so proposal and outcome agree."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "guidance",
+            "item": {
+              "driver_name": "refinery_fuel_benefit_guidance",
+              "driver_state": "unknown",
+              "level_low": {"value": -300, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": -300, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["estimated"],
+              "company_confirmed": true,
+              "fiscal_year": 2026,
+              "fiscal_quarter": 2,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the finance chief states this $300 million refinery offset as part of the June-quarter fuel assumption, making it a company forward outlook rather than a reported actual, and the benefit sign is carried negative on the signed axis."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "unit_revenue",
+              "driver_state": "increased",
+              "level_unit": "percent_sequential",
+              "comparison_baseline": "sequential_period",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: a numberless but real improvement in unit revenue stated explicitly against the immediately prior fourth quarter, and numberless qualitative facts still count."
+    },
+    {
+      "row_index": 6,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "earnings",
+              "driver_state": "increased",
+              "change_value": {"value": 40, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "change_unit": "percent_yoy",
+              "comparison_baseline": "prior_year",
+              "fiscal_year": 2026,
+              "fiscal_quarter": 1,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "MISMATCH FLAGGED: frozen as a lawful_abstention_control, but the quote carries a real, non-boilerplate, source-stated 40% year-over-year rise in earnings for a resolvable reported quarter, and 'earnings' is an allowed standard financial plural, so it settles as a fact and cannot pass silently as a control."
+    },
+    {
+      "row_index": 7,
+      "settled": {
+        "source_id": "DAL_2026-04-08T10.00",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Standard safe-harbor forward-looking-statements disclaimer: it names no driver state, change, surprise, guide or action and is generic risk boilerplate, so the gate drops it."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as a negative_control and it settles as one: the quote is pure safe-harbor risk boilerplate and yields exactly one lawful abstention with no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling"],
+      "reference_name": "earnings of 64 cents per share",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote itself does not say whether this per-share figure is the special-items-excluded measure, so no measurement span could lawfully be copied from inside it."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["expectation_routing", "favourable_unfavourable_direction", "point_range_floor_ceiling"],
+      "reference_name": "earnings per share of 64 cents within our initial guidance range",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": true},
+      "ambiguity_note": "The guide's own numbers are not inside the quote, so the comparison slots stay null and the in_line judgment rests entirely on the wordless 'within our initial guidance range' placement."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "the MRO revenue in the first quarter",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The maintenance business is the company's own measured part, so it was taken as the menu slice value rather than folded into the driver name, and 'more than doubled' is a vague quantity that cannot become a stated change value."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording", "slices_and_unknown_axes"],
+      "reference_name": "an estimated $300 million benefit from our refinery",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Two axes are recorded rather than guessed: whether the effect word 'benefit' may stand inside the name, and whether 'our refinery' is the measured population (a segment slice) or the cause of the fuel-price offset (kept in the name, as the unclear-role test directs)."
+    },
+    {
+      "row_index": 5,
+      "fact_index": 0,
+      "hard_classes": ["sequential_comparison"],
+      "reference_name": "unit revenue growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "'Sequential improvement from the fourth quarter' can mean the unit-revenue level improved sequentially or that the year-over-year growth rate improved versus the fourth quarter's, and the quote does not select one; the explicit in-document sequential wording was taken as the stated basis."
+    },
+    {
+      "row_index": 6,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison"],
+      "reference_name": "earnings that were 40% higher than last year",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The bare word 'earnings' does not say which measure is meant (pre-tax profit, net income or per-share), so the name was held at exactly the specificity this quote supports rather than resolved from elsewhere in the event."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-026/b1",
+      "agrees": false,
+      "why": "It reaches the same settlement as I did on rows 1, 3, 5, 6 and 7 and on the negative refinery sign, but it emits the row-1 per-share level a second time inside row 2, restating one fact as two records, and it names the row-4 item as a generic fuel-cost benefit while simultaneously slicing it to the refinery segment, which double-encodes the same population."
+    },
+    {
+      "lead_id": "sokc-026/b2",
+      "agrees": false,
+      "why": "It matches my surprise-only handling of row 2 and my settlements of rows 1, 5 and 7, but it puts the maintenance business into the driver name while also carrying the same maintenance slice, stores the refinery benefit as a positive number against the signed-axis rule, and renames the row-6 'earnings' claim to net income beyond what that quote states."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the effect word 'benefit' may remain inside the row-4 driver name refinery_fuel_benefit_guidance.",
+      "why": "The naming rule forbids effect and polarity words in a name, yet every alternative wording for a fuel-cost offset carries the same kind of word and no lawful replacement is derivable from the quote alone; the signed value itself is settled negative and is not in question."
+    },
+    {
+      "what": "Whether 'our refinery' belongs in the row-4 driver name or as the refinery segment slice.",
+      "why": "The refinery is the company's own reported segment and sits on the menu, but in this sentence it is the cause of an offset to the fuel price Delta pays rather than the measured population, and the unclear-role test keeps it in the name, so the stored identity of this fact is not safely settled."
+    },
+    {
+      "what": "Growth basis for the numberless row-5 unit-revenue improvement.",
+      "why": "The sentence supports both 'the level improved sequentially' (percent_sequential) and 'the year-over-year growth rate improved versus the fourth quarter' (percent_yoy with a sequential anchor); the two readings store different series units and the quote does not select one."
+    },
+    {
+      "what": "Home-sibling placement for the per-share surprise across rows 1 and 2.",
+      "why": "The surprise's required metric home is settled at row 1 of this same event and deliberately not restated at row 2; read in isolation row 2 would look ungrounded, so the two rows must be admitted together."
+    }
+  ]
+}
+```

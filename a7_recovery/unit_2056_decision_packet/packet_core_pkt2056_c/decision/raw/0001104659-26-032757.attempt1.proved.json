@@ -1,0 +1,206 @@
+```json
+{
+  "source_id": "0001104659-26-032757",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "lifo_charge",
+              "driver_state": "reported",
+              "level_low": {"value": 59.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_high": {"value": 59.0, "scale_multiplier": 1000000, "unit_scale_evidence": "million"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "measurement_raw_spans": ["non-cash"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact: the quote states a specific $59.0 million unfavorable non-cash LIFO charge in the current quarter, a re-readable cost level, so the proposed kind and my outcome agree."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "sales_mix",
+              "driver_state": "decreased",
+              "level_low": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 85, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 86, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "measurement_raw_spans": ["approximately"],
+              "slice_parts": ["product:failure", "product:maintenanceitems"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact: the quote states a measured share of total sales (about 85%) for the company's own failure and maintenance product categories against approximately 86% a year earlier, so the proposed kind holds."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "store_count",
+              "driver_state": "reported",
+              "level_low": {"value": 6709, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_high": {"value": 6709, "scale_multiplier": 1, "unit_scale_evidence": null},
+              "level_shape_hint": "point",
+              "level_unit": "count",
+              "slice_parts": ["geography:us"],
+              "period_start_date": "2026-02-14",
+              "period_end_date": "2026-02-14",
+              "time_type": "instant"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact: a dated point-in-time count of U.S. stores is a standing level re-readable over time, matching the proposed kind."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "same_store_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.3, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "measurement_raw_spans": ["constant currency"],
+              "fiscal_quarter": 2,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and settled as a real fact: the quote states a 3.3% increase in total company same store sales on a constant currency basis, a whole-company measured growth rate, so the proposed kind holds."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0001104659-26-032757",
+        "facts": [],
+        "abstentions": [
+          {"reason": "Generic filing boilerplate stating there have been no material changes to previously disclosed risk factors; it names no driver state, change, surprise, guidance or action, so the fact gate returns the single abstention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as a negative_control and confirmed as one: the sentence is a standard no-material-change risk-factor disclosure that correctly yields no fact under the gate."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign", "measurement_wording"],
+      "reference_name": "unfavorable non-cash LIFO charge",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The $59.0 million is attached to the operating profit COMPARISON rather than explicitly to the charge balance, so reading it as the charge level is a judgment I recorded; the charge sign stays positive per the charge/provision convention."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "measurement_wording"],
+      "reference_name": "failure and maintenance related categories",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote names one combined \"failure and maintenance\" population while the menu carries two separate product values, so I encoded two menu parts, and I kept the rounding hedge \"approximately\" in measurement under the never-drop sink even though it is not a measurement version."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes"],
+      "reference_name": "6,709 stores in the U.S.",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "Rule 6 blesses equal start/end dates only for an instant but never says whether a single-moment fact must carry both dates or the end date alone, so I stated the moment on both fields."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "measurement_wording"],
+      "reference_name": "total company same store sales",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote carries no explicit year-ago wording, so the growth basis rests on the dated-period percent_yoy default, and the qualifier span boundary (\"constant currency\" vs \"constant currency basis\") is not settled by the rules."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-021/b1",
+      "agrees": false,
+      "why": "It matches my lane, name, state, values, slices and periods on all five rows, but it left unit_scale_evidence null on the percentage slots of rows 2 and 4 even though a \"%\" marker sits inside those quotes, and it stated only period_end_date on the row 3 instant where I stated the moment on both date fields."
+    },
+    {
+      "lead_id": "sokc-021/b2",
+      "agrees": false,
+      "why": "It matches my lane, name, state, values, slices, periods and percent scale evidence, but it dropped the \"approximately\" number modifier on row 2, recorded row 4's measurement span as \"constant currency basis\" rather than the qualifier span \"constant currency\", and stated only period_end_date on the row 3 instant."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Whether the $59.0 million on row 1 is the LIFO charge level or only the year-over-year impact on the operating profit comparison.",
+      "why": "The sentence attaches the number to the comparison, not to a charge balance, so a level reading may overstate the charge while a change reading would need a change baseline the quote does not state."
+    },
+    {
+      "what": "Whether a rounding hedge such as \"approximately\" belongs in measurement_raw_spans (row 2).",
+      "why": "The never-drop sink says keep any uncaptured number modifier, but measurement tokens are part of stored identity, so keeping it can split one real series across quarters that word the same share differently; the rules do not settle which side wins."
+    },
+    {
+      "what": "Whether a measurement qualifier span includes the following prose noun (\"constant currency\" vs \"constant currency basis\", row 4).",
+      "why": "Rule 8 asks for the maximal contiguous qualifier span copied verbatim but does not say whether a trailing noun like \"basis\" is part of the qualifier, and the two choices normalize to different identity tokens."
+    },
+    {
+      "what": "Whether an instant fact should carry both equal exact dates or only period_end_date (row 3).",
+      "why": "Rule 6 permits equal start/end dates for an instant and separately requires exact duration windows to be all-or-nothing, but it never states which encoding a single-moment fact must use, so two lawful forms produce different stored periods."
+    },
+    {
+      "what": "Whether the combined \"failure and maintenance related categories\" population is correctly encoded as the two separate menu values product:failure and product:maintenanceitems (row 2).",
+      "why": "The source measures the two categories as one combined share, so splitting them into two menu parts may assert a per-category identity the source never measured, while coining a single combined off-menu value would bypass available menu reuse."
+    }
+  ]
+}
+```

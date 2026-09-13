@@ -1,0 +1,198 @@
+{
+  "source_id": "0000764478-25-000057",
+  "rows": [
+    {
+      "row_index": 1,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "action_event",
+            "item": {
+              "driver_name": "goodwill_and_intangible_asset_impairment",
+              "driver_state": "occurred",
+              "level_low": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_high": {"value": 171, "scale_multiplier": 1000000, "unit_scale_evidence": "millions"},
+              "level_shape_hint": "point",
+              "level_unit": "m_usd",
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the line states a discrete $171 million goodwill and intangible asset impairment recorded in the three months ended November 1, 2025, a completed one-off charge, so the proposed kind holds."
+    },
+    {
+      "row_index": 2,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 7.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:domestic", "product:computingandmobilephones"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: a stated 7.6% comparable sales growth for a named revenue category is a standing, re-readable metric level, so the proposed kind holds."
+    },
+    {
+      "row_index": 3,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "comparable_sales",
+              "driver_state": "increased",
+              "level_low": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 3.6, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent_yoy",
+              "slice_parts": ["segment:international", "product:consumerelectronics"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: the stated 3.6% comparable sales growth for the Consumer Electronics category is a real metric level, so the proposed kind holds."
+    },
+    {
+      "row_index": 4,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [
+          {
+            "fact_type": "metric",
+            "item": {
+              "driver_name": "revenue_mix",
+              "driver_state": "increased",
+              "level_low": {"value": 31.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_high": {"value": 31.8, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "level_shape_hint": "point",
+              "level_unit": "percent",
+              "comparison_low": {"value": 31.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_high": {"value": 31.4, "scale_multiplier": 1, "unit_scale_evidence": "%"},
+              "comparison_shape_hint": "point",
+              "comparison_baseline": "prior_year",
+              "slice_parts": ["segment:domestic", "channel:online"],
+              "fiscal_quarter": 3,
+              "fiscal_year": 2026,
+              "time_type": "duration"
+            }
+          }
+        ],
+        "abstentions": [],
+        "continuity_hints": []
+      },
+      "final_outcome": "fact",
+      "record_kind_note": "Frozen as real_item and it settles as a real fact: online revenue's share of total segment revenue is a standing ratio stated beside its prior-year value, so the proposed kind holds."
+    },
+    {
+      "row_index": 5,
+      "settled": {
+        "source_id": "0000764478-25-000057",
+        "facts": [],
+        "abstentions": [
+          {"reason": "The located sentence only defines the reporting term \"constant currency\" as results adjusted to exclude foreign currency impacts; it reports no driver state, change, surprise, guidance or action, so it fails the Rule 1 gate as a definitional methodology mention."}
+        ],
+        "continuity_hints": []
+      },
+      "final_outcome": "control",
+      "record_kind_note": "Frozen as negative_control and it behaves as one: the sentence is a methodology definition carrying no driver state, change, guidance, surprise or action, so it correctly yields no fact."
+    }
+  ],
+  "review": [
+    {
+      "row_index": 1,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "losses_and_sign"],
+      "reference_name": "Goodwill and intangible asset impairments",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote carries four columns for this line, so I settled the single third-quarter $171 million charge (the MD&A places the impairment in the third quarter, making the identical nine-month figure the same charge rather than a second one) and read the prior-period dash as no stated number, not a stated zero."
+    },
+    {
+      "row_index": 2,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "The 7.6% comparable sales growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote names only the revenue category, so the Domestic part is read from the surrounding table where 7.6% appears, and the menu carries \"domestic\" under both a geography and a segment kind (plus two segment spellings), which I resolved to segment:domestic on the filing's own two-reportable-segments framing."
+    },
+    {
+      "row_index": 3,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "sequential_comparison", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "The 3.6% comparable sales growth",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The identical bullet shape exists in both segment sections, so the International part is fixed only by the 3.6% value appearing solely in the International table, and the menu carries \"international\" under both a geography and a segment kind, which I resolved to segment:international on the filing's reportable-segment framing."
+    },
+    {
+      "row_index": 4,
+      "fact_index": 0,
+      "hard_classes": ["point_range_floor_ceiling", "slices_and_unknown_axes", "ambiguous_menus", "portion_versus_whole"],
+      "reference_name": "Online revenue as a % of total segment revenue",
+      "du_worthy": true,
+      "gold_extra": {"expectation_comparison_present": false},
+      "ambiguity_note": "The quote is four bare percentages whose column meanings come only from the surrounding table header, so I settled the third-quarter 31.8% against the prior-year 31.4% and left the nine-month pair unrecorded, and \"online\" has no menu value so its channel kind is coined from the filing's website/app/virtual-store selling description."
+    }
+  ],
+  "groups": [],
+  "lead_reconciliation": [
+    {
+      "lead_id": "sokc-007/b1",
+      "agrees": false,
+      "why": "It reaches the same lane, name, value and period as I did on rows 1, 2 and 3 and the same abstention on row 5, but it carries no segment part on rows 2, 3 and 4 (leaving the Domestic category fact indistinguishable from the International one) and on row 4 it names the driver `revenue`, which reads a share-of-revenue ratio as the dollar revenue level itself."
+    },
+    {
+      "lead_id": "sokc-007/b2",
+      "agrees": false,
+      "why": "It matches my rows 2, 3 and 5 and my `revenue_mix` reading on row 4, but it encodes the row 1 prior-period dash as a stated zero carrying a prior_year baseline when the source states no number there, and it omits the segment slice part on rows 2, 3 and 4."
+    }
+  ],
+  "open_issues": [
+    {
+      "what": "Rows 1 and 4 each hold two windows in one located quote (three-month and nine-month columns) and I settled only the three-month column.",
+      "why": "Each row names one target meaning and no rule here licenses a period split, so the nine-month values stay unrecorded rather than guessed into a second record; for row 1 the nine-month $171 million is also the same single charge, which a second record would double-count."
+    },
+    {
+      "what": "Menu-kind ambiguity for the \"domestic\" and \"international\" slice labels used in rows 2, 3 and 4.",
+      "why": "Each label sits on the menu under both a geography kind and a segment kind, and \"domestic\" also appears as two segment values (segment:domestic and segment:domesticsegment), so my pick rests on the filing's reportable-segment prose rather than an axis-confirmed match, and a wrong pick forks the slice identity."
+    },
+    {
+      "what": "The row 4 slice part channel:online is coined off-menu, and the segment part on rows 2, 3 and 4 comes from the surrounding table rather than the quote itself.",
+      "why": "The filing describes online revenue as sales initiated on a website, app or virtual store (how-it-sells), but no menu value confirms the kind; and the quotes name only the revenue category, so both parts are provisional readings of the located context."
+    },
+    {
+      "what": "The row 1 driver name joins two impairment causes (goodwill and intangible assets) in one name.",
+      "why": "One name should carry one cause, but the source states a single combined $171 million amount that cannot be allocated between goodwill and intangible assets, so splitting would require inventing numbers while joining keeps a glue word in the name."
+    }
+  ]
+}

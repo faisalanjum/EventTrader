@@ -1,0 +1,7 @@
+attempt	codex_thirdproof2081_a
+payload	../../unit_2020_codex_check/review_third_returned_2081.py
+map	../unit_2076_latest_source_decisions/map_2076.tsv
+wrapper_pid	3441686
+payload_pid	3441690
+started_utc	2026-09-13T00:14:38Z
+state	finished exit 0
