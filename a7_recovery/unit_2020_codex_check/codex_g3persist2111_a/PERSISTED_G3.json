@@ -1,0 +1,17 @@
+{
+ "actual_model_calls": 0,
+ "agreed": 110,
+ "completion_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/codex_g23partial2098_fit/G3/a7_g23_completion.json",
+ "completion_sha256": "ad57566129ff658d4fb7a1e1d2176105f2cd73ab24027ca8cb543f463547194f",
+ "questions": 117,
+ "review_sha256": "5a9479df1fb2abbd32a237a51ad673cc8ca57cf0b584f4adffc7af69ea3ab570",
+ "run_identity": {
+  "root_sha256": "56eeda65fd0863823531410aeb05b2a54486eda9c44663222e6af86941e44c6e",
+  "run_digest": "3862785d8b7798dc45b3c881ca45625e12a79ba7dd97e65b761f8d356c6768df",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G3/run",
+  "run_files": 147
+ },
+ "run_unchanged": true,
+ "scope": "verified real G3 completion saved; no G2 judgment or A7 score",
+ "unresolved": 7
+}

@@ -1,0 +1,36 @@
+{
+ "kind": "G2",
+ "segment": 10,
+ "workflow_id": "wf_04ed16fd-f1c",
+ "preserved_under": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G2/native/seg10/wf_04ed16fd-f1c",
+ "official_state_sha256": "f48735948051768cce23948b728d12569a57200e5f49dd939871d7cfdf075298",
+ "files": [
+  {
+   "name": "official_state.json",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_04ed16fd-f1c.json",
+   "sha256": "f48735948051768cce23948b728d12569a57200e5f49dd939871d7cfdf075298",
+   "bytes": 412194
+  },
+  {
+   "name": "transcripts/agent-addf53db9d28864ef.jsonl",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_04ed16fd-f1c/agent-addf53db9d28864ef.jsonl",
+   "sha256": "d68f9c36651f14c825aa68a9fb0bbd67873d7fc5ed5c4dd52a685facea93809a",
+   "bytes": 444568
+  },
+  {
+   "name": "transcripts/agent-addf53db9d28864ef.meta.json",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_04ed16fd-f1c/agent-addf53db9d28864ef.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11",
+   "bytes": 58
+  },
+  {
+   "name": "transcripts/journal.jsonl",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_04ed16fd-f1c/journal.jsonl",
+   "sha256": "353e4f44f10bc845e8daa10014d5114eae86487b2e81ee91e3ca04f01f19e7ff",
+   "bytes": 2003
+  }
+ ],
+ "file_count": 4,
+ "referenced_native_files": 0,
+ "native_records_altered": 0
+}

@@ -1,0 +1,7 @@
+attempt	codex_g2batch2111_a
+payload	../../unit_2020_codex_check/measure_g2_remaining_batches_2111.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	208584
+payload_pid	208588
+started_utc	2026-09-13T11:09:37Z
+state	finished exit 0

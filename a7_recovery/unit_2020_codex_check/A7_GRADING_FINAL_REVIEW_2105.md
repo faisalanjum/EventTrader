@@ -4,6 +4,30 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
+Post-publication status, 2026-09-13 07:04 Eastern: preparation is committed and
+normally pushed as b86c9052267bcee86b9ca9bae4dac0ce513c712e, tree
+e662a86844f3e4c6a6e9a956ad8aa7517af5d4a2. The remote commit was independently
+checked. Manifest G2_FORMAT_PUBLICATION_2110.json
+SHA68f53885427ca5b3eccd9b13a324462af11d51a6a21c6b377fdaa90c08511fe1
+freezes2813 files. The real zero-call closure passed; no existing run bytes
+changed. Codex2110 (95ab08348ecf9f093f15a4993017c3960658f1c536a27b0c5d046a02dde1687d)
+now authorizes remaining G2 collection through the verified format/retry
+connector. Core has completed the next primary;136 remain at this snapshot.
+G3 is already verified. Actual G2 evidence review and final scoring remain;
+no A7 score or PASS is implied. The pass log below preserves pre-publication
+proof history; its former closure/publication blockers are resolved.
+
+Collection review,08:54 Eastern: G2 segments6–32 independently replayed through
+the original native/parser checks (REVIEWs SHAbcbef7be,2f949a42,dd226d67,
+96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662), and all114
+durable native copies match their sources. The30 readings include11 original-
+valid and19 recovered; exact retry-filter replays preserve every negative
+judgment and require no retry. Two-reading segments17,24 and27 are verified.
+G3's reviewed completion
+is now saved through C.persist_g23 and reloaded: exact approved bytesad575661,
+110 agreed/7 unresolved,147-file run unchanged. PERSISTED_G3 report11ed9654.
+Neither this progress nor successful collection is a final score or PASS.
+
 ## Strategy and stopping rule
 
 1. Trace the live path, not just test names: original raw/native reply → frozen
@@ -99,5 +123,5 @@ Attempt_b passed the actual tier-scoring checks but reached its300-second
 limit while unnecessarily rerouting for negative controls. Attempt_c calls
 the already-exercised completion consumer directly for those two negative
 checks and passes without repeated routing. These are TEST-only setup/time
-results, not model failures. The unused-retry closure is still a named open
-work item, so this note does not claim all preparation or A7 is closed.
+results, not model failures. The unused-retry closure and preparation are now
+verified and pushed as recorded above; actual grading is not yet closed.

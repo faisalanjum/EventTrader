@@ -1,0 +1,7 @@
+attempt	codex_g2format2111_seg10
+payload	../../unit_2020_codex_check/meaning_retry_plan_2107.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	233729
+payload_pid	233734
+started_utc	2026-09-13T11:24:38Z
+state	finished exit 0

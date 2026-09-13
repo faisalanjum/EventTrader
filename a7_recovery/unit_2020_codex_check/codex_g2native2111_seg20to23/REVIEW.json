@@ -1,0 +1,172 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "e7e6b07e088a065021ee7ba720e76feebd4fc2998c9f73cfd963cfca005cd698",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "1b3f7d6b7c708cb345ee25192bbd499183db3854447b7f888b3b3d2353f84fcd",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M0c5dd9bbeece43b0": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mc428a88a58bd94f1": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-009/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "d3ef1bd8ed3bf72bfa813ea1cde3ce4a7a5c34ccc0ab656b91339a68cbb903c3"
+    }
+   ],
+   "segment": 20,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "6dd34600cfc78f6b57ec6a0b5bc0670e185a79ee89fbb812bc1c4c5511725d5c",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "575473916ee4da508cf5df2419be0ce1560aef90722f10eeb4f60502b88332ae",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M0c5dd9bbeece43b0": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mc428a88a58bd94f1": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-009/G1b",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "d3ef1bd8ed3bf72bfa813ea1cde3ce4a7a5c34ccc0ab656b91339a68cbb903c3"
+    }
+   ],
+   "segment": 21,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "23c9bc9d6a9c17a21d92c96123b8d42717f850a75e43f0a641dec4d38e389c4e",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "0a3f9b2acf20ec5917b248a886853a8fb87689e6fb7b835dfaf20f1424b9fd5a",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M7ff400be016d0141": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M94c0b5e28cf36305": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M95c73e1ef95ea6d0": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-010/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "45029b74ced1185ee07ea00b6012dba610abd9fad8f3eb0cf40d69f85e637f51"
+    }
+   ],
+   "segment": 22,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "ba75105c87374c921b702162716f0fbed460baa6a2aa611d58d4f93c19bebaf5",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "65b5418b23effe43b5553fd580f8bec0f6f30ac1aea1e7298d0e31c13a662ff4",
+   "retry": [
+    "G2-010/G1b"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-010/G1b",
+     "problems": [
+      "M7ff400be016d0141 carries a value that is not true, false or null",
+      "M95c73e1ef95ea6d0 carries a value that is not true, false or null",
+      "M94c0b5e28cf36305 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "3d0699f650aa91aadf4cd916d04d96d75d3ad134018e19f99443d7927fd04e47"
+    }
+   ],
+   "segment": 23,
+   "uncalled": []
+  }
+ ]
+}

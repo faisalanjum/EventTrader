@@ -1,0 +1,33 @@
+{
+ "accounting_sha256": "f39040346e57033f72723bb5042bb9b8bca07f9ed5e115cf7c9fedd8c3fcc0a5",
+ "attempt": 1,
+ "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+ "ledger": {
+  "invalid": 1,
+  "retry": 1,
+  "scheduled": 1,
+  "uncalled": 0,
+  "valid": 0
+ },
+ "problems": {
+  "G2-004/G1b": [
+   "M1aa19982f56a2a96 carries a value that is not true, false or null",
+   "Mf8e5b413ab229c35 carries a value that is not true, false or null",
+   "M6077f569317f1f81 carries a value that is not true, false or null"
+  ]
+ },
+ "receipt_sha256": "e7f3bd0945ff4491e181bfbd0f5fed9333fa5d2f8663b29c7500ded734b27963",
+ "retry": [
+  "G2-004/G1b"
+ ],
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 12,
+ "uncalled": [],
+ "validity": [
+  [
+   "G2-004/G1b",
+   false
+  ]
+ ]
+}

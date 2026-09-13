@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 86, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 97, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -44,7 +44,107 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT CHECKPOINT: Core2110 SHAbf09684e43684231ae5e1e27ecfc842dc9bbbb1eab5010c31b5eb25cba89471c
+LIVE STATUS, 2026-09-13 07:04 Eastern: preparation is VERIFIED, committed and
+normally pushed to recovery/a3-a7-verified. Local and freshly checked remote
+HEAD b86c9052267bcee86b9ca9bae4dac0ce513c712e; tree
+e662a86844f3e4c6a6e9a956ad8aa7517af5d4a2; parent
+fd4c9cba54ff1ccbcab2e7c1f2b7597fa5603056. Publication manifest
+unit_2020_codex_check/G2_FORMAT_PUBLICATION_2110.json
+SHA68f53885427ca5b3eccd9b13a324462af11d51a6a21c6b377fdaa90c08511fe1
+pins2813 reviewed files;2788 changed paths were committed. Main, the unrelated
+dirty build_inventory_review.py and unrelated untracked work were untouched.
+
+Codex2110 SHA95ab08348ecf9f093f15a4993017c3960658f1c536a27b0c5d046a02dde1687d
+answers Core2110 below and is byte-identically archived. Core is authorized
+ONLY to finish137 then-uncalled G2 primaries and each genuine invalid's one
+eligible retry after the pinned format filter; at most274 additional calls,
+never a repeated recovered success or a semantic reroll. Exactly one segment
+is active; Core reports once on completion or a genuine stop, then waits.
+G1/G3 collection and all382 producer answers are reused unchanged. No code,
+prompt, model, route, key, score, commit/push, main, DB or hook changes by Core.
+Required operator pins are in that exact mailbox; the connector is now enabled.
+
+Progress snapshot (not final acceptance): segment6's native workflow
+wf_338d9ded-f83 completed at11:03:12.998UTC in217252ms and is finalized;
+the original lane-state owner now reports136 uncalled G2 primaries. Original
+segment6 validity remains invalid; its format-recovery evidence must be checked
+separately. Segment7 is published for G2-002/G1a. Five preserved G2 workflows
+have measured durations128432–217252ms. Current educated end-to-end estimate
+is about8hours, range6–10hours from07:04Eastern, including final checks and
+subject to actual batching/retry rate. This is an estimate, not a PASS promise.
+Next: independently check finalized G2 evidence alongside collection, then
+use the existing completion/route/scorer owners to report all denominators,
+wrong accepts, misses, disagreements and exhausted invalids. No new framework.
+The active goal and one Codex watcher remain unchanged; no handover restart.
+
+INDEPENDENT PROGRESS, 08:54 Eastern: segments6–32 pass original native,
+whole-reply and parser replay; proof codex_g2native2111_seg6to7/REVIEW.json
+SHAbcbef7bef33af8e3e611bfa311dc228d931d9120bf174ffcb7c0adcdae5eb2c7.
+The second prefix proof is codex_g2native2111_seg8to9/REVIEW.json
+SHA2f949a42b8d02f654f904e962d3038eb2bed7d985ab8826f02af184b70eeac85.
+Later prefix proofs: codex_g2native2111_seg10to11/REVIEW.json
+SHAdd226d67bd0fe6071c1959a2beecbe160da1185a6427cdd6d6acb6beaf5ea483;
+codex_g2native2111_seg12to13/REVIEW.json
+SHA9669084732ac7d8b8d484e904537265149234af287fdbc2aa93215f5210f712b;
+codex_g2native2111_seg14to15/REVIEW.json
+SHAfb9869c9fa7cfa3c2703f3cded163330f7620f6384c277088075ea32250d568b;
+codex_g2native2111_seg16to17/REVIEW.json
+SHA4e99eb988ad3214015b9ded81c8830304971d9261d9ef448204e656a6555225c;
+codex_g2native2111_seg18to19/REVIEW.json
+SHAa66c8ac5b32f111655675642a9258ee55f330e3fa1c0145fdc97e48164d10e03;
+codex_g2native2111_seg20to23/REVIEW.json
+SHA12596534d7af6adb7187703f4d58e14b96332b5db8104ec4b83faf20630557cc;
+codex_g2native2111_seg24to26/REVIEW.json
+SHA8a798ecf1b0fdb800277047a06268f056a722d4941544a2fd5a5cd17cd1f0bfc;
+codex_g2native2111_seg27to28/REVIEW.json
+SHA843d333131995c0a29b97f9c0a7acd3d4b162eddacf7ab08be3611019f6075f9;
+codex_g2native2111_seg29to32/REVIEW.json
+SHAbaf1e66255d721d9b0cc0cb68847674abe4cea97a74e09ac4bd4c68e5c34ac0b.
+All114 copied native files match their original sources. Separate exact pinned
+retry-filter replays pass with empty stderr. The30 new primary readings across
+these27 segments include11 originally valid and19 recovered readings; all30
+require zero retry. Segments17,24 and27 each lawfully contain both readings of
+their frozen batch. All negative judgments remain unchanged.
+These are usable grading judgments, not claims that the tested answers were
+correct.
+Raw logs:unit_1947/logs/attempt_codex_g2format2111_seg6 (stdout121b2c4f)
+and attempt_codex_g2format2111_seg7 (stdout22aaffd1); seg8 stdoutcc2ff5a5
+and seg9 stdout65b346d5; seg10 stdoutafa03f96,11 stdout85145929,
+12 stdoutf5d01ad5,13 stdout63d36060,14 stdoutc3dd4fe9,15 stdout350fb09e,
+16 stdoutfdecf4e9,17 stdout4f9111d8,18 stdoutb508bbc6,19 stdouta03ba3f9,
+20 stdout974d9b9a,21 stdoutd86a176e,22 stdout2de1ac85,23 stdoutee13e61d,
+24 stdoutb0d974f8,25 stdout9ef9610a,26 stdout5374dc45,
+27 stdout71522222,28 stdout4f23931a,29 stdoutb8e28320,
+30 stdoutda0bcaae,31 stdout662db4ef,32 stdout115fdf83.
+All segment review payloads exit0 with empty stderr. The live lane-state owner
+last reported104 primaries remaining. Segments after32 are not yet included
+in this reviewed prefix. Counts are
+a timestamped snapshot only. The central target stays about15:00 Eastern
+(provisional13:00–17:00 range), measured from the07:04 estimate, not reset
+with each update. This is the checked grading report, not guaranteed A7 PASS.
+
+The exact existing renderer forecasts135 then-remaining primaries in125
+Workflow groups (116 single,8 double,1 triple), excluding retries. Evidence:
+codex_g2batch2111_a/BATCH_MEASUREMENT.json
+SHA62a24b18843737222e3d904c127f3500f4b0f9a4d3b3d5b24f15028341a106f3,
+payloadexit0/stderr0. This is an ETA input, never launch authority. It explains
+why the current input-size boundary prevents broad parallel collection.
+
+The existing C.persist_g23 owner has now saved the independently approved G3
+completion into codex_g23partial2098_fit/G3/a7_g23_completion.json,
+SHAad57566129ff658d4fb7a1e1d2176105f2cd73ab24027ca8cb543f463547194f.
+It is byte-identical to the reviewed candidate;110 agreed and7 unresolved
+questions remain unchanged. Pinned caller persist_verified_g3_2111.py
+SHA0e5c52fd5fbb83293923d1d11ae174f555c03c40d2ad745e6e04ba3931108597
+replayed actual evidence and native-copy hashes before saving, and reloaded
+the result afterward; payloadexit0/stderr0. Report:
+codex_g3persist2111_a/PERSISTED_G3.json
+SHA11ed9654a2fec1822ce91da058fc4b85dfafe90e3d9a6f594fc167f4c0af9036.
+The147-file G3 run is unchanged. Do NOT persist G3 again or rerun its AI calls.
+No final A7 score yet. These new review notes/artifacts await the next verified
+publication increment; the grading code remains at pushed b86c9052.
+
+PRE-PUBLICATION PREPARATION CHECKPOINT (history): Core2110 SHAbf09684e43684231ae5e1e27ecfc842dc9bbbb1eab5010c31b5eb25cba89471c
 answered Codex2109 SHAde52193585318c5a03b5685c20c6bd18225acb8162701952e65b76be1963acbc.
 Core's offline task is finished and it waits. Codex has VERIFIED its correction,
 applied the zero-call closure, and is freezing/committing/pushing this verified
@@ -202,7 +302,7 @@ No AI, code-owner edits, main, hooks or unrelated audit.
 Codex owns focused/mutation proof, real native scoring connection, work order
 and publication. One task/reply at a time; no duplicate work.
 
-LATEST VERIFIED/PUSHED HEAD:fd4c9cba54ff1ccbcab2e7c1f2b7597fa5603056,
+PREVIOUS VERIFIED/PUSHED HEAD:fd4c9cba54ff1ccbcab2e7c1f2b7597fa5603056,
 tree7f5c2c301111000d8eafdef776cb2d53d28bc6df,parent01ddc8e35d11bab58c6ad24fa053f6257188615b.
 This includes the partial policy, G2/G3 size fix, full affected regression and
 native TEST proof, and the supported2103 launch preparation. Exact publication
@@ -242,7 +342,7 @@ CURRENT CHECKLIST:
   Details/limitations:unit_2020_codex_check/PARTIAL_PREPARATION_REVIEW_2101.md.
   Core2101's full handoff was verified. No further grader audit is required
   before these unchanged calls. The tool-location correction is below.
-- NEXT: collect/check the actual G2/G3 reviews and report the honest full-
+- NEXT: finish/check actual G2 reviews, reuse verified G3 and report the honest full-
   denominator A7 result. Verified preparation is already committed/pushed.
   After reporting, investigate real failures through named targeted changes;
   never hide gaps, repeat successful calls, or relabel a partial score PASS.

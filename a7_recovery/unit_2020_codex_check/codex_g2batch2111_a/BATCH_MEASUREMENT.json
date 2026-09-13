@@ -1,0 +1,777 @@
+{
+ "actual_model_calls": 0,
+ "gate_sha256": "e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703",
+ "groups": [
+  {
+   "lanes": [
+    "G2-002/G1b"
+   ],
+   "script_bytes": 468393
+  },
+  {
+   "lanes": [
+    "G2-003/G1a"
+   ],
+   "script_bytes": 380070
+  },
+  {
+   "lanes": [
+    "G2-003/G1b"
+   ],
+   "script_bytes": 380070
+  },
+  {
+   "lanes": [
+    "G2-004/G1a"
+   ],
+   "script_bytes": 287547
+  },
+  {
+   "lanes": [
+    "G2-004/G1b"
+   ],
+   "script_bytes": 287547
+  },
+  {
+   "lanes": [
+    "G2-005/G1a"
+   ],
+   "script_bytes": 389655
+  },
+  {
+   "lanes": [
+    "G2-005/G1b"
+   ],
+   "script_bytes": 389655
+  },
+  {
+   "lanes": [
+    "G2-006/G1a"
+   ],
+   "script_bytes": 347622
+  },
+  {
+   "lanes": [
+    "G2-006/G1b"
+   ],
+   "script_bytes": 347622
+  },
+  {
+   "lanes": [
+    "G2-007/G1a",
+    "G2-007/G1b"
+   ],
+   "script_bytes": 516916
+  },
+  {
+   "lanes": [
+    "G2-008/G1a"
+   ],
+   "script_bytes": 411345
+  },
+  {
+   "lanes": [
+    "G2-008/G1b"
+   ],
+   "script_bytes": 411345
+  },
+  {
+   "lanes": [
+    "G2-009/G1a"
+   ],
+   "script_bytes": 309188
+  },
+  {
+   "lanes": [
+    "G2-009/G1b"
+   ],
+   "script_bytes": 309188
+  },
+  {
+   "lanes": [
+    "G2-010/G1a"
+   ],
+   "script_bytes": 295391
+  },
+  {
+   "lanes": [
+    "G2-010/G1b"
+   ],
+   "script_bytes": 295391
+  },
+  {
+   "lanes": [
+    "G2-011/G1a",
+    "G2-011/G1b"
+   ],
+   "script_bytes": 483200
+  },
+  {
+   "lanes": [
+    "G2-012/G1a"
+   ],
+   "script_bytes": 397913
+  },
+  {
+   "lanes": [
+    "G2-012/G1b"
+   ],
+   "script_bytes": 397913
+  },
+  {
+   "lanes": [
+    "G2-013/G1a",
+    "G2-013/G1b"
+   ],
+   "script_bytes": 427474
+  },
+  {
+   "lanes": [
+    "G2-014/G1a"
+   ],
+   "script_bytes": 402583
+  },
+  {
+   "lanes": [
+    "G2-014/G1b"
+   ],
+   "script_bytes": 402583
+  },
+  {
+   "lanes": [
+    "G2-015/G1a"
+   ],
+   "script_bytes": 421648
+  },
+  {
+   "lanes": [
+    "G2-015/G1b"
+   ],
+   "script_bytes": 421648
+  },
+  {
+   "lanes": [
+    "G2-016/G1a"
+   ],
+   "script_bytes": 309072
+  },
+  {
+   "lanes": [
+    "G2-016/G1b"
+   ],
+   "script_bytes": 309072
+  },
+  {
+   "lanes": [
+    "G2-017/G1a"
+   ],
+   "script_bytes": 295391
+  },
+  {
+   "lanes": [
+    "G2-017/G1b"
+   ],
+   "script_bytes": 295391
+  },
+  {
+   "lanes": [
+    "G2-018/G1a",
+    "G2-018/G1b"
+   ],
+   "script_bytes": 483130
+  },
+  {
+   "lanes": [
+    "G2-019/G1a"
+   ],
+   "script_bytes": 397844
+  },
+  {
+   "lanes": [
+    "G2-019/G1b"
+   ],
+   "script_bytes": 397844
+  },
+  {
+   "lanes": [
+    "G2-020/G1a"
+   ],
+   "script_bytes": 401274
+  },
+  {
+   "lanes": [
+    "G2-020/G1b"
+   ],
+   "script_bytes": 401274
+  },
+  {
+   "lanes": [
+    "G2-021/G1a"
+   ],
+   "script_bytes": 276785
+  },
+  {
+   "lanes": [
+    "G2-021/G1b"
+   ],
+   "script_bytes": 276785
+  },
+  {
+   "lanes": [
+    "G2-022/G1a"
+   ],
+   "script_bytes": 438562
+  },
+  {
+   "lanes": [
+    "G2-022/G1b"
+   ],
+   "script_bytes": 438562
+  },
+  {
+   "lanes": [
+    "G2-023/G1a"
+   ],
+   "script_bytes": 280601
+  },
+  {
+   "lanes": [
+    "G2-023/G1b"
+   ],
+   "script_bytes": 280601
+  },
+  {
+   "lanes": [
+    "G2-024/G1a"
+   ],
+   "script_bytes": 304152
+  },
+  {
+   "lanes": [
+    "G2-024/G1b"
+   ],
+   "script_bytes": 304152
+  },
+  {
+   "lanes": [
+    "G2-025/G1a",
+    "G2-025/G1b"
+   ],
+   "script_bytes": 482618
+  },
+  {
+   "lanes": [
+    "G2-026/G1a"
+   ],
+   "script_bytes": 397668
+  },
+  {
+   "lanes": [
+    "G2-026/G1b"
+   ],
+   "script_bytes": 397668
+  },
+  {
+   "lanes": [
+    "G2-027/G1a"
+   ],
+   "script_bytes": 450155
+  },
+  {
+   "lanes": [
+    "G2-027/G1b"
+   ],
+   "script_bytes": 450155
+  },
+  {
+   "lanes": [
+    "G2-028/G1a"
+   ],
+   "script_bytes": 406344
+  },
+  {
+   "lanes": [
+    "G2-028/G1b"
+   ],
+   "script_bytes": 406344
+  },
+  {
+   "lanes": [
+    "G2-029/G1a"
+   ],
+   "script_bytes": 466375
+  },
+  {
+   "lanes": [
+    "G2-029/G1b"
+   ],
+   "script_bytes": 466375
+  },
+  {
+   "lanes": [
+    "G2-030/G1a"
+   ],
+   "script_bytes": 363623
+  },
+  {
+   "lanes": [
+    "G2-030/G1b"
+   ],
+   "script_bytes": 363623
+  },
+  {
+   "lanes": [
+    "G2-031/G1a"
+   ],
+   "script_bytes": 321274
+  },
+  {
+   "lanes": [
+    "G2-031/G1b"
+   ],
+   "script_bytes": 321274
+  },
+  {
+   "lanes": [
+    "G2-032/G1a"
+   ],
+   "script_bytes": 377758
+  },
+  {
+   "lanes": [
+    "G2-032/G1b"
+   ],
+   "script_bytes": 377758
+  },
+  {
+   "lanes": [
+    "G2-033/G1a"
+   ],
+   "script_bytes": 432694
+  },
+  {
+   "lanes": [
+    "G2-033/G1b"
+   ],
+   "script_bytes": 432694
+  },
+  {
+   "lanes": [
+    "G2-034/G1a",
+    "G2-034/G1b"
+   ],
+   "script_bytes": 475176
+  },
+  {
+   "lanes": [
+    "G2-035/G1a"
+   ],
+   "script_bytes": 352060
+  },
+  {
+   "lanes": [
+    "G2-035/G1b"
+   ],
+   "script_bytes": 352060
+  },
+  {
+   "lanes": [
+    "G2-036/G1a"
+   ],
+   "script_bytes": 378911
+  },
+  {
+   "lanes": [
+    "G2-036/G1b"
+   ],
+   "script_bytes": 378911
+  },
+  {
+   "lanes": [
+    "G2-037/G1a"
+   ],
+   "script_bytes": 398356
+  },
+  {
+   "lanes": [
+    "G2-037/G1b"
+   ],
+   "script_bytes": 398356
+  },
+  {
+   "lanes": [
+    "G2-038/G1a"
+   ],
+   "script_bytes": 461817
+  },
+  {
+   "lanes": [
+    "G2-038/G1b"
+   ],
+   "script_bytes": 461817
+  },
+  {
+   "lanes": [
+    "G2-039/G1a"
+   ],
+   "script_bytes": 285320
+  },
+  {
+   "lanes": [
+    "G2-039/G1b"
+   ],
+   "script_bytes": 285320
+  },
+  {
+   "lanes": [
+    "G2-040/G1a"
+   ],
+   "script_bytes": 439319
+  },
+  {
+   "lanes": [
+    "G2-040/G1b"
+   ],
+   "script_bytes": 439319
+  },
+  {
+   "lanes": [
+    "G2-041/G1a"
+   ],
+   "script_bytes": 281286
+  },
+  {
+   "lanes": [
+    "G2-041/G1b"
+   ],
+   "script_bytes": 281286
+  },
+  {
+   "lanes": [
+    "G2-042/G1a"
+   ],
+   "script_bytes": 305362
+  },
+  {
+   "lanes": [
+    "G2-042/G1b"
+   ],
+   "script_bytes": 305362
+  },
+  {
+   "lanes": [
+    "G2-043/G1a",
+    "G2-043/G1b"
+   ],
+   "script_bytes": 480978
+  },
+  {
+   "lanes": [
+    "G2-044/G1a"
+   ],
+   "script_bytes": 397643
+  },
+  {
+   "lanes": [
+    "G2-044/G1b"
+   ],
+   "script_bytes": 397643
+  },
+  {
+   "lanes": [
+    "G2-045/G1a"
+   ],
+   "script_bytes": 453853
+  },
+  {
+   "lanes": [
+    "G2-045/G1b"
+   ],
+   "script_bytes": 453853
+  },
+  {
+   "lanes": [
+    "G2-046/G1a"
+   ],
+   "script_bytes": 399408
+  },
+  {
+   "lanes": [
+    "G2-046/G1b"
+   ],
+   "script_bytes": 399408
+  },
+  {
+   "lanes": [
+    "G2-047/G1a"
+   ],
+   "script_bytes": 477955
+  },
+  {
+   "lanes": [
+    "G2-047/G1b"
+   ],
+   "script_bytes": 477955
+  },
+  {
+   "lanes": [
+    "G2-048/G1a"
+   ],
+   "script_bytes": 378689
+  },
+  {
+   "lanes": [
+    "G2-048/G1b"
+   ],
+   "script_bytes": 378689
+  },
+  {
+   "lanes": [
+    "G2-049/G1a"
+   ],
+   "script_bytes": 356192
+  },
+  {
+   "lanes": [
+    "G2-049/G1b"
+   ],
+   "script_bytes": 356192
+  },
+  {
+   "lanes": [
+    "G2-050/G1a"
+   ],
+   "script_bytes": 469251
+  },
+  {
+   "lanes": [
+    "G2-050/G1b"
+   ],
+   "script_bytes": 469251
+  },
+  {
+   "lanes": [
+    "G2-051/G1a"
+   ],
+   "script_bytes": 308786
+  },
+  {
+   "lanes": [
+    "G2-051/G1b"
+   ],
+   "script_bytes": 308786
+  },
+  {
+   "lanes": [
+    "G2-052/G1a"
+   ],
+   "script_bytes": 295389
+  },
+  {
+   "lanes": [
+    "G2-052/G1b"
+   ],
+   "script_bytes": 295389
+  },
+  {
+   "lanes": [
+    "G2-053/G1a"
+   ],
+   "script_bytes": 396188
+  },
+  {
+   "lanes": [
+    "G2-053/G1b"
+   ],
+   "script_bytes": 396188
+  },
+  {
+   "lanes": [
+    "G2-054/G1a"
+   ],
+   "script_bytes": 441020
+  },
+  {
+   "lanes": [
+    "G2-054/G1b"
+   ],
+   "script_bytes": 441020
+  },
+  {
+   "lanes": [
+    "G2-055/G1a"
+   ],
+   "script_bytes": 466100
+  },
+  {
+   "lanes": [
+    "G2-055/G1b"
+   ],
+   "script_bytes": 466100
+  },
+  {
+   "lanes": [
+    "G2-056/G1a"
+   ],
+   "script_bytes": 353183
+  },
+  {
+   "lanes": [
+    "G2-056/G1b"
+   ],
+   "script_bytes": 353183
+  },
+  {
+   "lanes": [
+    "G2-057/G1a"
+   ],
+   "script_bytes": 380638
+  },
+  {
+   "lanes": [
+    "G2-057/G1b"
+   ],
+   "script_bytes": 380638
+  },
+  {
+   "lanes": [
+    "G2-058/G1a"
+   ],
+   "script_bytes": 446865
+  },
+  {
+   "lanes": [
+    "G2-058/G1b"
+   ],
+   "script_bytes": 446865
+  },
+  {
+   "lanes": [
+    "G2-059/G1a"
+   ],
+   "script_bytes": 466114
+  },
+  {
+   "lanes": [
+    "G2-059/G1b"
+   ],
+   "script_bytes": 466114
+  },
+  {
+   "lanes": [
+    "G2-060/G1a"
+   ],
+   "script_bytes": 364110
+  },
+  {
+   "lanes": [
+    "G2-060/G1b"
+   ],
+   "script_bytes": 364110
+  },
+  {
+   "lanes": [
+    "G2-061/G1a"
+   ],
+   "script_bytes": 386430
+  },
+  {
+   "lanes": [
+    "G2-061/G1b"
+   ],
+   "script_bytes": 386430
+  },
+  {
+   "lanes": [
+    "G2-062/G1a"
+   ],
+   "script_bytes": 470166
+  },
+  {
+   "lanes": [
+    "G2-062/G1b"
+   ],
+   "script_bytes": 470166
+  },
+  {
+   "lanes": [
+    "G2-063/G1a"
+   ],
+   "script_bytes": 509303
+  },
+  {
+   "lanes": [
+    "G2-063/G1b"
+   ],
+   "script_bytes": 509303
+  },
+  {
+   "lanes": [
+    "G2-064/G1a"
+   ],
+   "script_bytes": 409453
+  },
+  {
+   "lanes": [
+    "G2-064/G1b"
+   ],
+   "script_bytes": 409453
+  },
+  {
+   "lanes": [
+    "G2-065/G1a"
+   ],
+   "script_bytes": 516367
+  },
+  {
+   "lanes": [
+    "G2-065/G1b"
+   ],
+   "script_bytes": 516367
+  },
+  {
+   "lanes": [
+    "G2-066/G1a"
+   ],
+   "script_bytes": 360125
+  },
+  {
+   "lanes": [
+    "G2-066/G1b"
+   ],
+   "script_bytes": 360125
+  },
+  {
+   "lanes": [
+    "G2-067/G1a"
+   ],
+   "script_bytes": 286595
+  },
+  {
+   "lanes": [
+    "G2-067/G1b",
+    "G2-068/G1a",
+    "G2-068/G1b"
+   ],
+   "script_bytes": 450583
+  },
+  {
+   "lanes": [
+    "G2-069/G1a",
+    "G2-069/G1b"
+   ],
+   "script_bytes": 173102
+  }
+ ],
+ "remaining_primaries": 135,
+ "remaining_workflow_groups_without_retries": 125,
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "scope": "read-only primary-size forecast at one state snapshot; no launch authority or score",
+ "state_snapshot": {
+  "G2-000/G1a": "called",
+  "G2-000/G1b": "called",
+  "G2-001/G1a": "called",
+  "G2-001/G1b": "called",
+  "G2-002/G1a": "called"
+ }
+}
