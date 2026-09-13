@@ -1,0 +1,62 @@
+{
+ "kind": "Verified blocked dispatch evidence; no grading score",
+ "base_head": "467c5de71e0a4e362c26927a8984c97cf713dee3",
+ "workflow": "wf_61f6147b-947",
+ "scheduled": 52,
+ "pre_worker_refusals": 1,
+ "never_attempted": 51,
+ "model_answers": 0,
+ "full_g1_readings_still_unanswered": 192,
+ "files": [
+  {
+   "path": "a7_recovery/A7_PREGRADING_WORK_ORDER.md",
+   "bytes": 66605,
+   "sha256": "89f09f608c396d7d9e4587dd8600c3293c18fbc979feb5b651422ca9fdd31a31"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_g1seg01_2088_a/exit",
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_g1seg01_2088_a/owner.tsv",
+   "bytes": 234,
+   "sha256": "428a09dcccd02a5e2180cceb6edaf5b7e2afe5a568e0cf0a1ec50b6f4f7f07de"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_g1seg01_2088_a/stderr.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_g1seg01_2088_a/stdout.txt",
+   "bytes": 20712,
+   "sha256": "e852224924b26614cf9cb5ee9565a0d7bbdda28d334221a26e761747bb6b58d2"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/REFUSAL_REVIEW_2088.md",
+   "bytes": 3669,
+   "sha256": "82f3a0bb42c76f9b10c0e6f65fcc8d0f64faaf9e84b1428c7995f25b8a16327d"
+  },
+  {
+   "path": "a7_recovery/unit_2088_real_grading/LAUNCHED_SEG01.json",
+   "bytes": 4207,
+   "sha256": "dce013f89460ee3b504a1f4f9c62b7910fc10f9b970ca2713b9d75073edfb275"
+  },
+  {
+   "path": "a7_recovery/unit_2088_real_grading/LAUNCH_RECORD_SEG01.json",
+   "bytes": 3248,
+   "sha256": "83f65e2ea37e97c86fe709da90a7254397745f5f9c3248f830fce4d5154d2465"
+  },
+  {
+   "path": "a7_recovery/unit_2088_real_grading/native/seg01/wf_61f6147b-947.journal.jsonl",
+   "bytes": 107,
+   "sha256": "5715f040444576404ec7f07e719ac810a9c7424cd0026cdf46d7d78f3ec10b42"
+  },
+  {
+   "path": "a7_recovery/unit_2088_real_grading/native/seg01/wf_61f6147b-947.state.json",
+   "bytes": 602930,
+   "sha256": "e9c9c848c8c5828d68710250ca3e998f4120407b19529fdd8cfdcdc0183f6add"
+  }
+ ]
+}

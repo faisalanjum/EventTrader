@@ -1,0 +1,85 @@
+{
+ "kind": "the ONE authorized Workflow call for segment 1, and its transport refusal",
+ "authority": "Codex SEQ 2088",
+ "authority_sha256": "8c3554135454995e0d89d64c74953a796397abaf06832eaf2bf2c61b52db3e93",
+ "launch_record": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/LAUNCH_RECORD_SEG01.json",
+ "launch_record_sha256": "83f65e2ea37e97c86fe709da90a7254397745f5f9c3248f830fce4d5154d2465",
+ "workflow_run_id": "wf_61f6147b-947",
+ "task_id": "wcjymtx2d",
+ "script_path_called": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1/grade_batch.seg01.js",
+ "official_state_source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_61f6147b-947.json",
+ "journal_source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_61f6147b-947/journal.jsonl",
+ "recorded_utc": "2026-09-13T02:37:23Z",
+ "recorded_utc_note": "recording time, not the call start; the official state startTime 1789266698916 is the truth",
+
+ "outcome": "TRANSPORT REFUSAL at the harness safety classifier, before any worker existed",
+ "state_status": "completed",
+ "state_duration_ms": 30433,
+ "state_agent_count": 1,
+ "state_logs": ["graded 1 of 52 launcher rows"],
+ "state_total_tokens": 0,
+ "state_total_tool_calls": 0,
+ "state_default_model": "claude-opus-5[1m]",
+ "state_default_model_note": "this is the PARENT chat model recorded by the harness, not the worker identity; reported, never amended",
+ "refused_lane": "G1-000/G1a",
+ "refused_lane_state": "error",
+ "refused_lane_blocked": true,
+ "refused_lane_error": "[G1-000/G1a] blocked by safety classifier: Blocked by classifier",
+ "journal_line": "{\"type\":\"failed\",\"key\":\"v2:532e3fbba8cf1bfa1b458925a4784f1faa23bf8e7cf1cd2ec2434ff07d364e04\",\"agentId\":\"\"}",
+ "journal_agent_id": "",
+ "no_worker_spawned": true,
+ "worker_transcripts_found": 0,
+
+ "counts": {
+  "scheduled": 52,
+  "attempted": 1,
+  "answered_with_text": 0,
+  "refused_pre_agent": 1,
+  "never_attempted": 51,
+  "captured_raw_replies": 0,
+  "valid": 0,
+  "invalid": 0,
+  "retry_authorized": 0
+ },
+ "never_attempted_lane_ids": [
+  "G1-000/G1b", "G1-001/G1a", "G1-001/G1b", "G1-002/G1a", "G1-002/G1b",
+  "G1-003/G1a", "G1-003/G1b", "G1-004/G1a", "G1-004/G1b", "G1-005/G1a",
+  "G1-005/G1b", "G1-006/G1a", "G1-006/G1b", "G1-007/G1a", "G1-007/G1b",
+  "G1-008/G1a", "G1-008/G1b", "G1-009/G1a", "G1-009/G1b", "G1-010/G1a",
+  "G1-010/G1b", "G1-011/G1a", "G1-011/G1b", "G1-012/G1a", "G1-012/G1b",
+  "G1-013/G1a", "G1-013/G1b", "G1-014/G1a", "G1-014/G1b", "G1-015/G1a",
+  "G1-015/G1b", "G1-016/G1a", "G1-016/G1b", "G1-017/G1a", "G1-017/G1b",
+  "G1-018/G1a", "G1-018/G1b", "G1-019/G1a", "G1-019/G1b", "G1-020/G1a",
+  "G1-020/G1b", "G1-021/G1a", "G1-021/G1b", "G1-022/G1a", "G1-022/G1b",
+  "G1-023/G1a", "G1-023/G1b", "G1-024/G1a", "G1-024/G1b", "G1-025/G1a",
+  "G1-025/G1b"
+ ],
+
+ "ledger_before": 668,
+ "ledger_after": 668,
+ "ledger_after_reason": "no worker was spawned and the state records 0 tokens and 0 tool calls, so no A7 call was consumed",
+
+ "preserved": [
+  {
+   "path": "a7_recovery/unit_2088_real_grading/native/seg01/wf_61f6147b-947.state.json",
+   "sha256": "e9c9c848c8c5828d68710250ca3e998f4120407b19529fdd8cfdcdc0183f6add",
+   "bytes": 602930,
+   "source_unmodified": true
+  },
+  {
+   "path": "a7_recovery/unit_2088_real_grading/native/seg01/wf_61f6147b-947.journal.jsonl",
+   "sha256": "5715f040444576404ec7f07e719ac810a9c7424cd0026cdf46d7d78f3ec10b42",
+   "bytes": 107,
+   "source_unmodified": true
+  }
+ ],
+
+ "not_done_and_why": {
+  "ingest": "NOT run. Zero text-bearing replies exist. The finalizer's law treats a non-answer as terminal, so ingesting a pre-agent transport refusal would permanently record 52 lanes as no-answer for a call no model ever saw. Held un-ingested for Codex to rule.",
+  "retry": "NOT attempted. No retry is authorized by SEQ 2088.",
+  "second_workflow": "NOT started. Repeating the same publication in another Workflow is forbidden.",
+  "next_segment": "NOT attempted."
+ },
+ "second_workflow_not_authorized": true,
+ "state_of_run_dir_unchanged": true
+}

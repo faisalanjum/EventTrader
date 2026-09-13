@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 62, 2026-09-12 Eastern. Maintainer: Codex.
+Revision 64, 2026-09-12 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -39,16 +39,50 @@ plan tree. The amendment changes reuse/key timing, not coverage or pass bars.
 
 ## 2. Current checkpoint — read this before history
 
-LAST TASK: Codex2087, SHA256
-72b7b2b0bc04e641023c2f9ce89ea1c2abffdbc464392c2c670f1d1f4ff4c276.
+LAST TASK: Codex2088, SHA256
+8c3554135454995e0d89d64c74953a796397abaf06832eaf2bf2c61b52db3e93.
+The exact task and its byte-identical archive authorize ONLY the new first52
+primary G1 calls, durable native/raw capture and existing finalization; then
+one Core reply and wait. No next segment or retry is authorized by that task.
+Core has received the watcher notification and the bound session is unchanged.
+
+CURRENT STOP: Core2089 message/archive482e0d22ead929eec6488467b0f294e528546b53f64965acd7ad29de26d5749f
+reports Workflow wf_61f6147b-947. Codex independently verified the original
+state, journal, actual published path/script/52 arguments and durable copies.
+At10:31:38 p.m. Eastern the first worker was refused by Claude Code's auto-mode
+permission classifier before any agent existed:0 grading-worker tokens,
+0 answers,1 pre-worker refusal,51 never attempted. All192 required G1 readings
+remain unanswered. Prior668 calls and original382 replies remain unchanged.
+No second Workflow or retry is authorized. The normal permission/approval
+path must resolve that specific refusal; do not disable checks or change the
+prompt/model/route to evade it. No answer-key, grader or production repair is
+indicated. Exact evidence and correction of Core's unsupported ingestion
+explanation: unit_2020_codex_check/REFUSAL_REVIEW_2088.md. First blocked audit
+in this goal turn; keep existing watcher/goal, no duplicate or premature close.
+
+PUBLICATION COMPLETE: commit467c5de71e0a4e362c26927a8984c97cf713dee3,
+treee6081be7c6c3753ab403e2a9ebdda68672ce6860, single parent8f1fcd7f3532fb1a9f85b3fc6487f25830753dda.
+Normal push and independent fresh ls-remote both prove this commit on
+recovery/a3-a7-verified. Main remains2dc0ad39f30dba4756078573f5e80038465939cc.
+Final publication manifesteb16f5537191bac241f363623b8eb8f8fb01c8c069a174d170ebe0b5405929cd
+has1411 file identities;1364 exact staged blobs including the manifest were
+independently checked.96 named raw proof-log files required an exact-path
+gitignore override, not a broad add. Unrelated user changes remain untouched.
+The committed Revision62 is the preparation checkpoint; this revision records
+the subsequent live task and does not alter frozen grading inputs.
+
 Core2088/current archive5563b0d796314bc42e29bb464e684f5da9ad66e2d8a5860950dd787860f9c57a
 completed the narrow peer review. Preparation checks agree, but its proposed
 same-byte execution copy would NOT bind: the G1 auditor requires the actual
 published path or the same OS file. Codex corrected only the caller's launch
 location through the existing publisher and boundary; no grader owner change.
-Core is waiting for the next exact task; no AI grading has started. Codex owns
-the verified publication and this work order. The next bounded task, only
-after publication, is the new first52-row launch below. Never launch the old
+Core is executing the exact2088 task. Its actual preflight core_g1seg01_2088_a
+exited0 with empty stderr and stdout e852224924b26614cf9cb5ee9565a0d7bbdda28d334221a26e761747bb6b58d2,
+identical to Codex's final preflight. The launch record and actual regular-file
+execution copy independently match every new pin. The one Workflow launch is
+now confirmed above, but produced no model answer; its completed workflow
+status is NOT a completed grading result.
+Codex owns independent review and this work order. Never launch the old
 unit_2086 root. The stopped Core2084 preparation is also not approved.
 
 Core2087's publication proposal omitted unpublished mapped-tree members and
@@ -95,8 +129,8 @@ is the exact old map plus one durable RW run binding. Same root, answers,
 prompts, ordered arguments,192-lane population, owners and rules. Only the
 invocation path and its derived hash/script/receipt change. No call repeated.
 
-Remaining before grading: publish the minimal verified preparation, then
-actual receipted grading. No further
+Preparation is now published. NEXT: actual receipted grading under2088;
+independently verify the first segment before the next bounded task. No further
 source review, signature, blanket regression or grading framework is needed.
 The real signature is proved, canonically harvested and LOCKED:667+1=668
 actual calls, no retry. Source closure and signature need no further AI call.
