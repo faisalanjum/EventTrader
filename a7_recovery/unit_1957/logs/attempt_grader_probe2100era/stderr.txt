@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/ledger/../../unit_2100_partial_regression/probe_receipt_2100.py", line 40, in <module>
+    ctx = HR._default(bound.evidence)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 102, in _default
+    return {"items": _items(), "tasks": tasks(evidence_dir), "suffix": "",
+                     ^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_hard_review.py", line 74, in _items
+    return {i["packet_id"]: i for i in K.phase1_items()}
+                                       ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_key.py", line 652, in phase1_items
+    raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+RuntimeError: A3 evidence is not proved: ['primary audit: wf_TEST1909a_000.json: not an official state under /home/faisal/.claude/projects', 'primary audit: wf_TEST1909a_001.json: not an official state under /home/faisal/.claude/projects', 'primary audit: wf_TEST1909a_002.json: not an official state under /home/faisal/.claude/projects']

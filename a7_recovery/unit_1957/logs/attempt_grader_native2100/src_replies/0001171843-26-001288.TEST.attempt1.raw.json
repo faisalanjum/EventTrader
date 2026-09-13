@@ -1,0 +1,87 @@
+```json
+{
+ "source_id": "0001171843-26-001288",
+ "verdicts": [
+  {
+   "proposal_id": "0001171843-26-001288#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001171843-26-001288#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001171843-26-001288#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001171843-26-001288#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001171843-26-001288#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001171843-26-001288",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Trailing 4 Quarters ending February 15, 2025 include an additional week of sales of approximately $359.1 million for Total AutoZone Stores with $95.7 million for Domestic Commercial.",
+    "raw_label_or_claim": "an additional week of sales of approximately $359.1 million for Total AutoZone Stores with $95.7 million for Domestic Commercial",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001171843-26-001288",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Operating profit decreased 1.2% to $698.5 million.",
+    "raw_label_or_claim": "Operating profit",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001171843-26-001288",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Net inventory (net of payables) (813,494 ) (1,196,131 )",
+    "raw_label_or_claim": "Net inventory (net of payables)",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

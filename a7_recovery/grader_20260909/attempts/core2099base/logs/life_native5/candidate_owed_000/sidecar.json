@@ -1,0 +1,2687 @@
+{
+ "schema": "a4-final-key-candidate/1511/sidecar",
+ "sidecar": {
+  "door": "a4_final_key_lock",
+  "packet_to_gold": [
+   {
+    "packet_id": "0000006201-26-000031#000",
+    "source_id": "0000006201-26-000031",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#001",
+    "source_id": "0000006201-26-000031",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#002",
+    "source_id": "0000006201-26-000031",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000031#003",
+    "source_id": "0000006201-26-000031",
+    "row_index": 4,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#004",
+    "source_id": "0000006201-26-000032",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#005",
+    "source_id": "0000006201-26-000032",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000006201-26-000032#006",
+    "source_id": "0000006201-26-000032",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#007",
+    "source_id": "0000027904-26-000013",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#008",
+    "source_id": "0000027904-26-000013",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000013#009",
+    "source_id": "0000027904-26-000013",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#010",
+    "source_id": "0000027904-26-000020",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#011",
+    "source_id": "0000027904-26-000020",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000020#012",
+    "source_id": "0000027904-26-000020",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#013",
+    "source_id": "0000027904-26-000022",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#014",
+    "source_id": "0000027904-26-000022",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000027904-26-000022#015",
+    "source_id": "0000027904-26-000022",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000063908-26-000032#016",
+    "source_id": "0000063908-26-000032",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000063908-26-000032#017",
+    "source_id": "0000063908-26-000032",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000063908-26-000032#018",
+    "source_id": "0000063908-26-000032",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#019",
+    "source_id": "0000092380-26-000044",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#020",
+    "source_id": "0000092380-26-000044",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000092380-26-000044#021",
+    "source_id": "0000092380-26-000044",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#022",
+    "source_id": "0000764478-25-000057",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#023",
+    "source_id": "0000764478-25-000057",
+    "row_index": 2,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-25-000057#024",
+    "source_id": "0000764478-25-000057",
+    "row_index": 3,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000764478-26-000005#025",
+    "source_id": "0000764478-26-000005",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#026",
+    "source_id": "0000898173-26-000006",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#027",
+    "source_id": "0000898173-26-000006",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000898173-26-000006#028",
+    "source_id": "0000898173-26-000006",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-25-000038#029",
+    "source_id": "0000940944-25-000038",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-25-000038#030",
+    "source_id": "0000940944-25-000038",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-25-000038#031",
+    "source_id": "0000940944-25-000038",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#032",
+    "source_id": "0000940944-26-000005",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#033",
+    "source_id": "0000940944-26-000005",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000005#034",
+    "source_id": "0000940944-26-000005",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#035",
+    "source_id": "0000940944-26-000009",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#036",
+    "source_id": "0000940944-26-000009",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0000940944-26-000009#037",
+    "source_id": "0000940944-26-000009",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-25-000109#038",
+    "source_id": "0001041061-25-000109",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-25-000109#039",
+    "source_id": "0001041061-25-000109",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-25-000109#040",
+    "source_id": "0001041061-25-000109",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#041",
+    "source_id": "0001041061-26-000003",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#042",
+    "source_id": "0001041061-26-000003",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000003#043",
+    "source_id": "0001041061-26-000003",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#044",
+    "source_id": "0001041061-26-000084",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#045",
+    "source_id": "0001041061-26-000084",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001041061-26-000084#046",
+    "source_id": "0001041061-26-000084",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#047",
+    "source_id": "0001058090-26-000007",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#048",
+    "source_id": "0001058090-26-000007",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001058090-26-000007#049",
+    "source_id": "0001058090-26-000007",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#050",
+    "source_id": "0001104659-25-102611",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#051",
+    "source_id": "0001104659-25-102611",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-102611#052",
+    "source_id": "0001104659-25-102611",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#053",
+    "source_id": "0001104659-25-105631",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#054",
+    "source_id": "0001104659-25-105631",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-105631#055",
+    "source_id": "0001104659-25-105631",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#056",
+    "source_id": "0001104659-25-118458",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#057",
+    "source_id": "0001104659-25-118458",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-25-118458#058",
+    "source_id": "0001104659-25-118458",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#059",
+    "source_id": "0001104659-26-017090",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#060",
+    "source_id": "0001104659-26-017090",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-017090#061",
+    "source_id": "0001104659-26-017090",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#062",
+    "source_id": "0001104659-26-027061",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#063",
+    "source_id": "0001104659-26-027061",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-027061#064",
+    "source_id": "0001104659-26-027061",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#065",
+    "source_id": "0001104659-26-032757",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#066",
+    "source_id": "0001104659-26-032757",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001104659-26-032757#067",
+    "source_id": "0001104659-26-032757",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001171843-26-001288#068",
+    "source_id": "0001171843-26-001288",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001171843-26-001288#069",
+    "source_id": "0001171843-26-001288",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "0001171843-26-001288#070",
+    "source_id": "0001171843-26-001288",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#071",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#072",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#073",
+    "source_id": "AAL_2026-04-23T08.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#074",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#075",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#076",
+    "source_id": "BBY_2026-03-03T08.00",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#077",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#078",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#079",
+    "source_id": "CMG_2026-02-03T16.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#080",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#081",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#082",
+    "source_id": "DAL_2026-04-08T10.00",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#083",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#084",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#085",
+    "source_id": "DRI_2026-03-19T08.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#086",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#087",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#088",
+    "source_id": "MCD_2026-02-11T16.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#089",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#090",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#091",
+    "source_id": "ULTA_2026-03-12T16.30",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#092",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#093",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#094",
+    "source_id": "YUM_2026-02-04T08.15",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_42014391#095",
+    "source_id": "bzNews_42014391",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_42014391#096",
+    "source_id": "bzNews_42014391",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_49256211#097",
+    "source_id": "bzNews_49256211",
+    "row_index": 1,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_50877032#098",
+    "source_id": "bzNews_50877032",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_50877032#099",
+    "source_id": "bzNews_50877032",
+    "row_index": 2,
+    "proposed_record_kind": "negative_control",
+    "final_outcome": "exclusion",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_50877032#100",
+    "source_id": "bzNews_50877032",
+    "row_index": 3,
+    "proposed_record_kind": "real_item",
+    "final_outcome": "fact",
+    "accepted_facts": 1,
+    "record_kind_conflict": false
+   },
+   {
+    "packet_id": "bzNews_51962983#101",
+    "source_id": "bzNews_51962983",
+    "row_index": 1,
+    "proposed_record_kind": "lawful_abstention_control",
+    "final_outcome": "control",
+    "accepted_facts": 0,
+    "record_kind_conflict": false
+   }
+  ],
+  "record_kind_conflicts": [],
+  "controls": [
+   {
+    "packet_id": "0000006201-26-000031#001",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000006201-26-000032#005",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000027904-26-000013#008",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000027904-26-000020#011",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000027904-26-000022#014",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000063908-26-000032#017",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000092380-26-000044#020",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000764478-25-000057#023",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000898173-26-000006#026",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000940944-25-000038#029",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000940944-26-000005#032",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0000940944-26-000009#035",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001041061-25-000109#038",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001041061-26-000003#041",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001041061-26-000084#044",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001058090-26-000007#047",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001104659-25-102611#050",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001104659-25-105631#053",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001104659-25-118458#056",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001104659-26-017090#059",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001104659-26-027061#062",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001104659-26-032757#065",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "0001171843-26-001288#068",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#071",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#074",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#077",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#080",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#083",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#086",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#089",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#092",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "bzNews_42014391#095",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "bzNews_50877032#098",
+    "proposed_record_kind": "lawful_abstention_control"
+   },
+   {
+    "packet_id": "bzNews_51962983#101",
+    "proposed_record_kind": "lawful_abstention_control"
+   }
+  ],
+  "exclusions": [
+   {
+    "packet_id": "0000006201-26-000031#002",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000006201-26-000032#006",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000027904-26-000013#009",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000027904-26-000020#012",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000027904-26-000022#015",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000063908-26-000032#018",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000092380-26-000044#021",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000764478-25-000057#024",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000898173-26-000006#027",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000940944-25-000038#030",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000940944-26-000005#033",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0000940944-26-000009#036",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001041061-25-000109#039",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001041061-26-000003#042",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001041061-26-000084#045",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001058090-26-000007#048",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-25-102611#051",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-25-105631#054",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-25-118458#057",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-26-017090#060",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-26-027061#063",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001104659-26-032757#066",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "0001171843-26-001288#069",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#072",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#075",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#078",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#081",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#084",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#087",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#090",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#093",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "bzNews_42014391#096",
+    "proposed_record_kind": "negative_control"
+   },
+   {
+    "packet_id": "bzNews_50877032#099",
+    "proposed_record_kind": "negative_control"
+   }
+  ],
+  "abstentions": [
+   {
+    "packet_id": "0000006201-26-000031#001",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000006201-26-000031#002",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000006201-26-000032#005",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000006201-26-000032#006",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000027904-26-000013#008",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000027904-26-000013#009",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000027904-26-000020#011",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000027904-26-000020#012",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000027904-26-000022#014",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000027904-26-000022#015",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000063908-26-000032#017",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000063908-26-000032#018",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000092380-26-000044#020",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000092380-26-000044#021",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000764478-25-000057#023",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000764478-25-000057#024",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000898173-26-000006#026",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000898173-26-000006#027",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000940944-25-000038#029",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000940944-25-000038#030",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000940944-26-000005#032",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000940944-26-000005#033",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000940944-26-000009#035",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0000940944-26-000009#036",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001041061-25-000109#038",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001041061-25-000109#039",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001041061-26-000003#041",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001041061-26-000003#042",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001041061-26-000084#044",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001041061-26-000084#045",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001058090-26-000007#047",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001058090-26-000007#048",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-25-102611#050",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-25-102611#051",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-25-105631#053",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-25-105631#054",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-25-118458#056",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-25-118458#057",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-26-017090#059",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-26-017090#060",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-26-027061#062",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-26-027061#063",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-26-032757#065",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001104659-26-032757#066",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001171843-26-001288#068",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "0001171843-26-001288#069",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#071",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#072",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#074",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#075",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#077",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#078",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#080",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#081",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#083",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#084",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#086",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#087",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#089",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#090",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#092",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#093",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "bzNews_42014391#095",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "bzNews_42014391#096",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "bzNews_50877032#098",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "bzNews_50877032#099",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   },
+   {
+    "packet_id": "bzNews_51962983#101",
+    "reason": "TEST only: mechanical no-fact response; not a source-truth judgment."
+   }
+  ],
+  "group_collapses": [
+   {
+    "source_id": "0000006201-26-000031",
+    "members": [
+     "0000006201-26-000031#000",
+     "0000006201-26-000031#003"
+    ],
+    "member_row_indexes": [
+     1,
+     4
+    ],
+    "members_are_one_fact": false,
+    "reason": "TEST only: read from the frozen rows' own claims.",
+    "accepted_facts": 2
+   }
+  ],
+  "review_rows": [
+   {
+    "packet_id": "0000006201-26-000031#000",
+    "fact_index": 0,
+    "reference_name": "total revenue growth",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000031#003",
+    "fact_index": 0,
+    "reference_name": "second quarter",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000006201-26-000032#004",
+    "fact_index": 0,
+    "reference_name": "Pre-tax loss",
+    "hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000013#007",
+    "fact_index": 0,
+    "reference_name": "Fuel costs",
+    "hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000020#010",
+    "fact_index": 0,
+    "reference_name": "low-teens revenue growth in the June quarter",
+    "hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000027904-26-000022#013",
+    "fact_index": 0,
+    "reference_name": "Cost per available seat mile (\"CASM\")",
+    "hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000063908-26-000032#016",
+    "fact_index": 0,
+    "reference_name": "Diluted earnings per share",
+    "hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000092380-26-000044#019",
+    "fact_index": 0,
+    "reference_name": "full-year adjusted EPS guidance of $4.00",
+    "hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000764478-25-000057#022",
+    "fact_index": 0,
+    "reference_name": "Comparable online sales % change",
+    "hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000764478-26-000005#025",
+    "fact_index": 0,
+    "reference_name": "Item 2.02: Results of Operations and Financial Condition",
+    "hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000898173-26-000006#028",
+    "fact_index": 0,
+    "reference_name": "Gross profit",
+    "hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-25-000038#031",
+    "fact_index": 0,
+    "reference_name": "average check per person",
+    "hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000005#034",
+    "fact_index": 0,
+    "reference_name": "changed its reporting of segment profit to exclude pre-opening costs",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0000940944-26-000009#037",
+    "fact_index": 0,
+    "reference_name": "current liabilities",
+    "hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-25-000109#040",
+    "fact_index": 0,
+    "reference_name": "Operating Profit (Loss)",
+    "hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000003#043",
+    "fact_index": 0,
+    "reference_name": "Foreign currency translation favorably impacted operating profit",
+    "hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001041061-26-000084#046",
+    "fact_index": 0,
+    "reference_name": "The KFC Division has 33,897 units",
+    "hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001058090-26-000007#049",
+    "fact_index": 0,
+    "reference_name": "Digital sales",
+    "hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-102611#052",
+    "fact_index": 0,
+    "reference_name": "The fourth quarter of fiscal year 2025",
+    "hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-105631#055",
+    "fact_index": 0,
+    "reference_name": "commitment increase feature",
+    "hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-25-118458#058",
+    "fact_index": 0,
+    "reference_name": "minimum fixed charge coverage ratio of 1.0",
+    "hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-017090#061",
+    "fact_index": 0,
+    "reference_name": "adjusted diluted net income per share",
+    "hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-027061#064",
+    "fact_index": 0,
+    "reference_name": "Diluted earnings per share",
+    "hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001104659-26-032757#067",
+    "fact_index": 0,
+    "reference_name": "Effective tax rate",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "0001171843-26-001288#070",
+    "fact_index": 0,
+    "reference_name": "Net inventory (net of payables)",
+    "hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ],
+    "proposed_tags": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "AAL_2026-04-23T08.30#073",
+    "fact_index": 0,
+    "reference_name": "total debt",
+    "hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "proposed_tags": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "BBY_2026-03-03T08.00#076",
+    "fact_index": 0,
+    "reference_name": "computing",
+    "hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "CMG_2026-02-03T16.30#079",
+    "fact_index": 0,
+    "reference_name": "full-year comparable restaurant sales to be about flat",
+    "hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "proposed_tags": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DAL_2026-04-08T10.00#082",
+    "fact_index": 0,
+    "reference_name": "adjusted net debt of 13.5 billion down 20% from last year",
+    "hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "proposed_tags": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "DRI_2026-03-19T08.30#085",
+    "fact_index": 0,
+    "reference_name": "total sales",
+    "hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "proposed_tags": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "MCD_2026-02-11T16.30#088",
+    "fact_index": 0,
+    "reference_name": "about 4.5 percent unit growth",
+    "hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "ULTA_2026-03-12T16.30#091",
+    "fact_index": 0,
+    "reference_name": "reducing inventory shrink",
+    "hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "proposed_tags": [
+     "sequential_comparison",
+     "measurement_wording"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "YUM_2026-02-04T08.15#094",
+    "fact_index": 0,
+    "reference_name": "Taco Bell",
+    "hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ],
+    "proposed_tags": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "bzNews_49256211#097",
+    "fact_index": 0,
+    "reference_name": "Authorizes Additional $1.8B For Share Repurchases",
+    "hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "proposed_tags": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   },
+   {
+    "packet_id": "bzNews_50877032#100",
+    "fact_index": 0,
+    "reference_name": "Jet fuel costs are one of the most volatile expenses for the airline",
+    "hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "proposed_tags": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ],
+    "tags_added_by_final": [],
+    "tags_dropped_by_final": [],
+    "du_worthy": true
+   }
+  ],
+  "phase1_ambiguities": [],
+  "open_issues": [],
+  "lead_reconciliation": [
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "phase1/0000006201-26-000031#000",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "hr-000/b1/row1",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "hr-000/b2/row1",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "phase1/0000006201-26-000031#001",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "phase1/0000006201-26-000031#002",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "phase1/0000006201-26-000031#003",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "hr-000/b1/row4",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000031",
+    "lead_id": "hr-000/b2/row4",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000032",
+    "lead_id": "phase1/0000006201-26-000032#004",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000032",
+    "lead_id": "phase1/0000006201-26-000032#005",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000006201-26-000032",
+    "lead_id": "phase1/0000006201-26-000032#006",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "lead_id": "phase1/0000027904-26-000013#007",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "lead_id": "phase1/0000027904-26-000013#008",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000013",
+    "lead_id": "phase1/0000027904-26-000013#009",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "lead_id": "phase1/0000027904-26-000020#010",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "lead_id": "phase1/0000027904-26-000020#011",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000020",
+    "lead_id": "phase1/0000027904-26-000020#012",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "lead_id": "phase1/0000027904-26-000022#013",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "lead_id": "phase1/0000027904-26-000022#014",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000027904-26-000022",
+    "lead_id": "phase1/0000027904-26-000022#015",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "lead_id": "phase1/0000063908-26-000032#016",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "lead_id": "phase1/0000063908-26-000032#017",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000063908-26-000032",
+    "lead_id": "phase1/0000063908-26-000032#018",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "lead_id": "phase1/0000092380-26-000044#019",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "lead_id": "phase1/0000092380-26-000044#020",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000092380-26-000044",
+    "lead_id": "phase1/0000092380-26-000044#021",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "lead_id": "phase1/0000764478-25-000057#022",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "lead_id": "phase1/0000764478-25-000057#023",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000764478-25-000057",
+    "lead_id": "phase1/0000764478-25-000057#024",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000764478-26-000005",
+    "lead_id": "phase1/0000764478-26-000005#025",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "lead_id": "phase1/0000898173-26-000006#026",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "lead_id": "phase1/0000898173-26-000006#027",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000898173-26-000006",
+    "lead_id": "phase1/0000898173-26-000006#028",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-25-000038",
+    "lead_id": "phase1/0000940944-25-000038#029",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-25-000038",
+    "lead_id": "phase1/0000940944-25-000038#030",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-25-000038",
+    "lead_id": "phase1/0000940944-25-000038#031",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "lead_id": "phase1/0000940944-26-000005#032",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "lead_id": "phase1/0000940944-26-000005#033",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-26-000005",
+    "lead_id": "phase1/0000940944-26-000005#034",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-26-000009",
+    "lead_id": "phase1/0000940944-26-000009#035",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-26-000009",
+    "lead_id": "phase1/0000940944-26-000009#036",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0000940944-26-000009",
+    "lead_id": "phase1/0000940944-26-000009#037",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "lead_id": "phase1/0001041061-25-000109#038",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "lead_id": "phase1/0001041061-25-000109#039",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-25-000109",
+    "lead_id": "phase1/0001041061-25-000109#040",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "lead_id": "phase1/0001041061-26-000003#041",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "lead_id": "phase1/0001041061-26-000003#042",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-26-000003",
+    "lead_id": "phase1/0001041061-26-000003#043",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "lead_id": "phase1/0001041061-26-000084#044",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "lead_id": "phase1/0001041061-26-000084#045",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001041061-26-000084",
+    "lead_id": "phase1/0001041061-26-000084#046",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "lead_id": "phase1/0001058090-26-000007#047",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "lead_id": "phase1/0001058090-26-000007#048",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001058090-26-000007",
+    "lead_id": "phase1/0001058090-26-000007#049",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "lead_id": "phase1/0001104659-25-102611#050",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "lead_id": "phase1/0001104659-25-102611#051",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-102611",
+    "lead_id": "phase1/0001104659-25-102611#052",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "lead_id": "phase1/0001104659-25-105631#053",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "lead_id": "phase1/0001104659-25-105631#054",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-105631",
+    "lead_id": "phase1/0001104659-25-105631#055",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "lead_id": "phase1/0001104659-25-118458#056",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "lead_id": "phase1/0001104659-25-118458#057",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-25-118458",
+    "lead_id": "phase1/0001104659-25-118458#058",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "lead_id": "phase1/0001104659-26-017090#059",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "lead_id": "phase1/0001104659-26-017090#060",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-017090",
+    "lead_id": "phase1/0001104659-26-017090#061",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-027061",
+    "lead_id": "phase1/0001104659-26-027061#062",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-027061",
+    "lead_id": "phase1/0001104659-26-027061#063",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-027061",
+    "lead_id": "phase1/0001104659-26-027061#064",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "lead_id": "phase1/0001104659-26-032757#065",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "lead_id": "phase1/0001104659-26-032757#066",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001104659-26-032757",
+    "lead_id": "phase1/0001104659-26-032757#067",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "lead_id": "phase1/0001171843-26-001288#068",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "lead_id": "phase1/0001171843-26-001288#069",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "0001171843-26-001288",
+    "lead_id": "phase1/0001171843-26-001288#070",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "lead_id": "phase1/AAL_2026-04-23T08.30#071",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "lead_id": "phase1/AAL_2026-04-23T08.30#072",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "AAL_2026-04-23T08.30",
+    "lead_id": "phase1/AAL_2026-04-23T08.30#073",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "lead_id": "phase1/BBY_2026-03-03T08.00#074",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "lead_id": "phase1/BBY_2026-03-03T08.00#075",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "BBY_2026-03-03T08.00",
+    "lead_id": "phase1/BBY_2026-03-03T08.00#076",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "lead_id": "phase1/CMG_2026-02-03T16.30#077",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "lead_id": "phase1/CMG_2026-02-03T16.30#078",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "CMG_2026-02-03T16.30",
+    "lead_id": "phase1/CMG_2026-02-03T16.30#079",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "lead_id": "phase1/DAL_2026-04-08T10.00#080",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "lead_id": "phase1/DAL_2026-04-08T10.00#081",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "DAL_2026-04-08T10.00",
+    "lead_id": "phase1/DAL_2026-04-08T10.00#082",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "lead_id": "phase1/DRI_2026-03-19T08.30#083",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "lead_id": "phase1/DRI_2026-03-19T08.30#084",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "DRI_2026-03-19T08.30",
+    "lead_id": "phase1/DRI_2026-03-19T08.30#085",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "lead_id": "phase1/MCD_2026-02-11T16.30#086",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "lead_id": "phase1/MCD_2026-02-11T16.30#087",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "MCD_2026-02-11T16.30",
+    "lead_id": "phase1/MCD_2026-02-11T16.30#088",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "lead_id": "phase1/ULTA_2026-03-12T16.30#089",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "lead_id": "phase1/ULTA_2026-03-12T16.30#090",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "lead_id": "phase1/ULTA_2026-03-12T16.30#091",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "lead_id": "phase1/YUM_2026-02-04T08.15#092",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "lead_id": "phase1/YUM_2026-02-04T08.15#093",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "YUM_2026-02-04T08.15",
+    "lead_id": "phase1/YUM_2026-02-04T08.15#094",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "bzNews_42014391",
+    "lead_id": "phase1/bzNews_42014391#095",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "bzNews_42014391",
+    "lead_id": "phase1/bzNews_42014391#096",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "bzNews_49256211",
+    "lead_id": "phase1/bzNews_49256211#097",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "bzNews_50877032",
+    "lead_id": "phase1/bzNews_50877032#098",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "bzNews_50877032",
+    "lead_id": "phase1/bzNews_50877032#099",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "bzNews_50877032",
+    "lead_id": "phase1/bzNews_50877032#100",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   },
+   {
+    "source_id": "bzNews_51962983",
+    "lead_id": "phase1/bzNews_51962983#101",
+    "agrees": true,
+    "why": "TEST only: the shown lead is not disputed."
+   }
+  ]
+ }
+}

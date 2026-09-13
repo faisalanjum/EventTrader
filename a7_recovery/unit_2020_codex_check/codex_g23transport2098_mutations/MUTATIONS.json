@@ -1,0 +1,13 @@
+{
+ "mutations": {
+  "exact_boundary_refused": "killed",
+  "ignored_size_limit": "killed",
+  "lost_second_half": "killed",
+  "repeated_first_half": "killed",
+  "stale_batch_counts": "killed",
+  "stale_largest_batch": "killed"
+ },
+ "restored_control": "passed",
+ "source_sha256": "e7e3012229945480ba2b86a4eb00dccee0e3152af86d98ff738329f8cba7063d",
+ "source_unchanged": true
+}

@@ -1,0 +1,81 @@
+```json
+{
+ "source_id": "DAL_2026-04-08T10.00",
+ "verdicts": [
+  {
+   "proposal_id": "DAL_2026-04-08T10.00#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "DAL_2026-04-08T10.00#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "DAL_2026-04-08T10.00#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "DAL_2026-04-08T10.00#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "DAL_2026-04-08T10.00",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "we expect to deliver a 6% to 8% operating margin with a pre-tax profit of $1 billion.",
+    "raw_label_or_claim": "6% to 8% operating margin",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "DAL_2026-04-08T10.00",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "we expect second quarter total revenue growth of low teens on flat capacity growth, reflecting double-digit passenger unit revenue growth. This is meaningful acceleration from mid-single-digit unit revenue growth in the March quarter.",
+    "raw_label_or_claim": "meaningful acceleration from mid-single-digit unit revenue growth in the March quarter",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "DAL_2026-04-08T10.00",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "we ended the quarter with adjusted net debt of 13.5 billion down 20% from last year and gross leverage of 2.4 times.",
+    "raw_label_or_claim": "adjusted net debt of 13.5 billion down 20% from last year",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

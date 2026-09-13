@@ -1,0 +1,20 @@
+{
+ "scope": "TEST-only completions to reuse after fixing a test count; never A7 model evidence",
+ "test_root": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only",
+ "sources": {
+  "G2": {
+   "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/candidate_G2",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/run_G2",
+   "root_sha256": "c3afd924ddc20a96b0c8206f5e2574d91d35f147c2263f01d30469cc2fd8bcaa",
+   "completion_sha256": "c7f8e27b866b46d18c8cab8e714185bf5d06c14a5b697cca43a6801546244495",
+   "lanes": 140
+  },
+  "G3": {
+   "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/candidate_G3",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/run_G3",
+   "root_sha256": "3c636804aadc07c90957b760cc29316f67421e3fff2c6553c2b544a7856a8f7b",
+   "completion_sha256": "865c83738c5d66135d61271962aad097d17a4f3bca421d6cd2c3a6fc47262ec0",
+   "lanes": 32
+  }
+ }
+}

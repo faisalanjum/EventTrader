@@ -1,0 +1,45 @@
+{
+ "kind": "private CURRENT harness incl. the one G2/G3 transport overlay",
+ "base_source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3",
+ "base_tree_sha256": "baf41258cbd8b4a3c95049d9d3d185568f4af8426267bc60549de5334ce0b7c8",
+ "base_tree_matches_the_live_map": true,
+ "override_count": 5,
+ "overrides": [
+  {
+   "name": "a6_launch_freeze.py",
+   "source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3/a6_launch_freeze.py",
+   "sha256": "f0de3ab5f5ed7472007319b1bfd20e109e4dcd3cd6e8e9140649494c26b0bf4c"
+  },
+  {
+   "name": "a7_prepared_run.py",
+   "source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_warm/a7_prepared_run.py",
+   "sha256": "93d93fbb2a420dd74c4144e993f10e1d8f8a24751c2f687b7379379af1dc6357"
+  },
+  {
+   "name": "a7_g1_build.py",
+   "source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3/a7_g1_build.py",
+   "sha256": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439"
+  },
+  {
+   "name": "a7_g23_build.py",
+   "source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3/a7_g23_build.py",
+   "sha256": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e"
+  },
+  {
+   "name": "a7_g23_run.py",
+   "source": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2098_g23_transport/a7_g23_run.py",
+   "sha256": "e7e3012229945480ba2b86a4eb00dccee0e3152af86d98ff738329f8cba7063d"
+  }
+ ],
+ "private_harness": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2099_partial_regression/harness_g1v3",
+ "private_tree_sha256": "bb3be133507c7ba60d12208613ff58052b35b231d452b81209712704b3e8a0aa",
+ "dirty_file_check": {
+  "name": "build_inventory_review.py",
+  "served_copy_git_status": "clean",
+  "served_copy_matches_its_own_commit": true,
+  "grader_working_copy_sha256": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+  "served_copy_sha256": "2ec3bd338f7dce181ff6794790cf634c6f68e73217daef88a25e365731ee4ed2",
+  "note": "the two copies hold the same bytes; the served one is committed and clean, the grader one is the tracked-modified file. Provenance, not bytes, is what distinguishes them."
+ },
+ "model_calls": 0
+}

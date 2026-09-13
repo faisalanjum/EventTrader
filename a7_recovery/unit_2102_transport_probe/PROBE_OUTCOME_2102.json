@@ -1,0 +1,24 @@
+{
+ "kind": "one zero-agent Workflow transport probe, not retried",
+ "invocations": 1,
+ "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2102_transport_probe/transport_path_probe_2102.js",
+ "script_sha256": "60ef77990fa8ed7dc7088bac23ed4e2b271b6552fe543d0210ff174ab2145021",
+ "result_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2102_transport_probe/PROBE_RESULT_2102.txt",
+ "result_sha256": "b36bca2451ce7d0d8413e3f45ba0bbc8d5d37614f016d72f0600e1417c8de52e",
+ "platform_read_or_executed_the_file": false,
+ "refusal_names_the_scriptpath": true,
+ "refusal_mentions_syntax_or_runtime": false,
+ "workflows_created_after_the_probe": 0,
+ "workers_spawned": 0,
+ "model_calls": 0,
+ "the_exact_requirement_the_platform_states": [
+  "a script path this tool returned",
+  "or a file you can already read (the working directory or a directory you have added)"
+ ],
+ "recovery_tree_is_neither": true,
+ "not_attempted_here": [
+  "no second route, no retry, no link, no copy",
+  "no settings, hook or permission change to add the directory",
+  "the script content is therefore unvalidated by the platform"
+ ]
+}

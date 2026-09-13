@@ -1,0 +1,1004 @@
+VIEW /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+AFFECTED_MODULES 19
+ENVIRONMENT {"A7_APPROVED_KEY_DIR": "/tmp/a7_logs_1781/life_native5/candidate_owed_002", "A7_DRIVER_VALIDATORS_SHA": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5", "A7_FIXTURE_PROJECTS": "/tmp/a7_logs_1781/life_native5/TEST_projects", "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json", "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_core2100era2.tsv", "A7_TRACE_FIXTURE": "/tmp/a7_logs_1781/attempt_grader_path7", "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"}
+
+===== MODULE test_a6_fixture_isolation_1768.py exit=0 =====
+----- stdout -----
+...                                                                      [100%]
+3 passed in 2.50s
+
+----- stderr -----
+
+
+===== MODULE test_a6_fixture_isolation_after_1768.py exit=0 =====
+----- stdout -----
+.                                                                        [100%]
+1 passed in 0.55s
+
+----- stderr -----
+
+
+===== MODULE test_a7_closeout_integrity_1482.py exit=1 =====
+----- stdout -----
+.FFF....F......                                                          [100%]
+=================================== FAILURES ===================================
+______ test_a_private_plan_transcript_equal_to_its_plan_render_is_served _______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_private_plan_transcript0')
+
+    @TG._needs_node
+    def test_a_private_plan_transcript_equal_to_its_plan_render_is_served(
+            tmp_path):
+        """THE DEFECT. The plan pins prompts the default door does NOT render;
+        a transcript equal to the plan's pin must audit `served`."""
+        fix = A5R._a5_run(tmp_path)
+        plan = fix["plan"]
+        default = TG._mirror_prompts(fix["work"], tmp_path)        # the default door
+        first = plan["packets"][0]
+        assert _sha_text(default[first["packet_id"]]) != first["prompt_sha256"], \
+            "this plan does not differ from the default door; the proof is vacuous"
+        problems, outcomes = _outcomes(_audit_in(fix))
+>       assert problems == [], problems[:5]
+E       AssertionError: ["wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the one input this lane ...son: ('0000006201-26-000031#002', '0000006201-26-000031#002/L1'): the one input this lane declares is not at record 1"]
+E       assert ['wf_a5_00000...ecord 1', ...] == []
+E         
+E         Left contains 408 more items, first extra item: "wf_a5_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the one input this lane declares is not at record 1"
+E         Use -v to get more diff
+
+test_a7_closeout_integrity_1482.py:173: AssertionError
+_______________ test_the_default_kfields_run_still_audits_clean ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_the_default_kfields_run_s0')
+
+    @TG._needs_node
+    def test_the_default_kfields_run_still_audits_clean(tmp_path):
+        """THE LAWFUL DEFAULT CONTROL: a run with no private plan is unchanged."""
+        fix = TG._a1_official_run(tmp_path)
+        problems, outcomes = _outcomes(_audit_in(fix))
+>       assert problems == [], problems[:5]
+E       AssertionError: ["wf_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the one input this lane dec...son: ('0000006201-26-000031#002', '0000006201-26-000031#002/L1'): the one input this lane declares is not at record 1"]
+E       assert ['wf_00000062...ecord 1', ...] == []
+E         
+E         Left contains 408 more items, first extra item: "wf_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the one input this lane declares is not at record 1"
+E         Use -v to get more diff
+
+test_a7_closeout_integrity_1482.py:184: AssertionError
+____ test_one_changed_prompt_byte_in_one_transcript_REFUSES_that_call_only _____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_one_changed_prompt_byte_i0')
+
+    @TG._needs_node
+    def test_one_changed_prompt_byte_in_one_transcript_REFUSES_that_call_only(
+            tmp_path):
+        fix = A5R._a5_run(tmp_path)
+        st = next(_states(fix))
+        pr = [p for p in st["workflowProgress"]
+              if p.get("type") == "workflow_agent"][0]
+        path = _transcript_path(fix, st, pr["agentId"])
+        with io.open(path, encoding="utf-8") as fh:
+            recs = [json.loads(l) for l in fh if l.strip()]
+        recs[0]["message"]["content"] += " "
+        with io.open(path, "w", encoding="utf-8") as fh:
+            for r in recs:
+                fh.write(json.dumps(r) + "\n")
+        problems, outcomes = _outcomes(_audit_in(fix))
+        lanes = {(k[1]): v for k, v in outcomes.items()}
+        assert lanes[pr["label"]][0] == "integrity_refusal", lanes[pr["label"]]
+        assert any("pinned bytes" in p for p in problems), problems[:3]
+        others = {l: v for l, v in lanes.items() if l != pr["label"]}
+>       assert others and all(v[0] == "served" for v in others.values())
+E       AssertionError: assert ({'0000006201-26-000031#000/L2': ('integrity_refusal', 'the one input this lane declares is not at record 1'), '0000006... 1'), '0000006201-26-000031#002/L1': ('integrity_refusal', 'the one input this lane declares is not at record 1'), ...} and False)
+E        +  where False = all(<generator object test_one_changed_prompt_byte_in_one_transcript_REFUSES_that_call_only.<locals>.<genexpr> at 0x7f75f4d15700>)
+
+test_a7_closeout_integrity_1482.py:208: AssertionError
+_____________ test_a_second_finalization_cannot_replace_the_first ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-1/test_a_second_finalization_can0')
+
+    @TG._needs_node
+    def test_a_second_finalization_cannot_replace_the_first(tmp_path):
+        """A clean closeout, then a second attempt on the same run: the second
+        can only refuse - its raw preservation already refuses - and must leave
+        the first document and the raw tree byte for byte."""
+        fix = TG._a1_public_run(tmp_path)
+        first = TG._finalize(fix)
+>       assert first["audit_problems"] == [], first["audit_problems"][:3]
+E       AssertionError: ["wf_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the one input this lane dec...son: ('0000006201-26-000031#001', '0000006201-26-000031#001/L1'): the one input this lane declares is not at record 1"]
+E       assert ['wf_00000062...ecord 1', ...] == []
+E         
+E         Left contains 408 more items, first extra item: "wf_000000620126000031.json: ('0000006201-26-000031#000', '0000006201-26-000031#000/L1'): the one input this lane declares is not at record 1"
+E         Use -v to get more diff
+
+test_a7_closeout_integrity_1482.py:247: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_closeout_integrity_1482.py::test_a_private_plan_transcript_equal_to_its_plan_render_is_served
+FAILED test_a7_closeout_integrity_1482.py::test_the_default_kfields_run_still_audits_clean
+FAILED test_a7_closeout_integrity_1482.py::test_one_changed_prompt_byte_in_one_transcript_REFUSES_that_call_only
+FAILED test_a7_closeout_integrity_1482.py::test_a_second_finalization_cannot_replace_the_first
+4 failed, 11 passed in 26.24s
+
+----- stderr -----
+
+
+===== MODULE test_a7_corrections_1454.py exit=0 =====
+----- stdout -----
+...............................................                          [100%]
+47 passed in 33.60s
+
+----- stderr -----
+/home/faisal/EventMarketDB/venv/lib/python3.11/site-packages/neo4j/_sync/driver.py:547: DeprecationWarning: Relying on Driver's destructor to close the session is deprecated. Please make sure to close the session. Use it as a context (`with` statement) or make sure to call `.close()` explicitly. Future versions of the driver will not close drivers automatically.
+
+
+===== MODULE test_a7_current_1473.py exit=0 =====
+----- stdout -----
+..............                                                           [100%]
+14 passed in 9.16s
+
+----- stderr -----
+
+
+===== MODULE test_a7_current_postrun.py exit=0 =====
+----- stdout -----
+....                                                                     [100%]
+4 passed in 14.40s
+
+----- stderr -----
+
+
+===== MODULE test_a7_g1_precall_freeze_1525.py exit=0 =====
+----- stdout -----
+.......                                                                  [100%]
+7 passed in 12.91s
+
+----- stderr -----
+
+
+===== MODULE test_a7_g23_lifecycle_1464.py exit=0 =====
+----- stdout -----
+........................................................................ [ 91%]
+.......                                                                  [100%]
+79 passed in 8.73s
+
+----- stderr -----
+
+
+===== MODULE test_a7_identity_relations.py exit=0 =====
+----- stdout -----
+........................................................................ [ 26%]
+........................................................................ [ 52%]
+........................................................................ [ 78%]
+..........................................................               [100%]
+274 passed in 0.22s
+
+----- stderr -----
+
+
+===== MODULE test_a7_input_binding.py exit=0 =====
+----- stdout -----
+..........                                                               [100%]
+10 passed in 36.77s
+
+----- stderr -----
+
+
+===== MODULE test_a7_interrupted_capture.py exit=0 =====
+----- stdout -----
+.......                                                                  [100%]
+7 passed in 5.83s
+
+----- stderr -----
+
+
+===== MODULE test_a7_postrun_identity_1521.py exit=1 =====
+----- stdout -----
+F....F......FF                                                           [100%]
+=================================== FAILURES ===================================
+_______ test_completed_run_freeze_budget_counts_once_not_as_future_plan ________
+
+    @_needs_run
+    def test_completed_run_freeze_budget_counts_once_not_as_future_plan():
+        """`freeze()` on a completed run must not re-add the returned calls as a
+        plan: producer_primary_after is 5612, under the ceiling - never 6004."""
+        b = G._a6().freeze(COMPLETED_RUN)["budget"]
+>       assert b["producer_primary_after"] == AFTER
+E       assert 739 == 5612
+
+test_a7_postrun_identity_1521.py:88: AssertionError
+___________ test_a_fresh_zero_call_run_loads_against_its_own_freeze ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-8/test_a_fresh_zero_call_run_loa0')
+
+    def test_a_fresh_zero_call_run_loads_against_its_own_freeze(tmp_path):
+        """The accepted zero-call control still holds: a prepared, unexecuted run
+        loads against its own freeze hash, and its budget is baseline + full plan."""
+        run = _fresh(tmp_path)
+        ident = PR.current(run, _freeze_sha(run))
+>       assert ident["scheduled_calls"] == PRODUCER and ident["executed"] is None
+E       assert (204 == 392)
+
+test_a7_postrun_identity_1521.py:154: AssertionError
+__ test_a_genuinely_derived_over_ceiling_future_budget_is_under_ceiling_false __
+
+    def test_a_genuinely_derived_over_ceiling_future_budget_is_under_ceiling_false():
+        """A GENUINE plan past the ceiling is derived as under_ceiling=False by the
+        owner itself - not by hand-setting a field (Codex SEQ 1522 item 3)."""
+        b = G._a6().budget(CEILING, None)               # baseline + a genuine 6000 plan
+>       assert b["producer_primary_after"] == BASELINE + CEILING
+E       assert 6347 == (5220 + 6000)
+
+test_a7_postrun_identity_1521.py:235: AssertionError
+____ test_re_adding_the_completed_392_yields_6004_and_breaches_the_ceiling _____
+
+    @_needs_run
+    def test_re_adding_the_completed_392_yields_6004_and_breaches_the_ceiling():
+        """Re-adding the completed producer calls as a fresh plan is exactly the
+        class bug: it yields 6004 and is rejected FOR THAT CONDITION - the ceiling
+        breach - not because some unrelated field differs (Codex SEQ 1522 item 3)."""
+        b = G._a6().budget(PRODUCER, COMPLETED_RUN)     # 5612 completed + 392 re-added
+>       assert b["completed_actual"] == AFTER
+E       assert 739 == 5612
+
+test_a7_postrun_identity_1521.py:246: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_postrun_identity_1521.py::test_completed_run_freeze_budget_counts_once_not_as_future_plan
+FAILED test_a7_postrun_identity_1521.py::test_a_fresh_zero_call_run_loads_against_its_own_freeze
+FAILED test_a7_postrun_identity_1521.py::test_a_genuinely_derived_over_ceiling_future_budget_is_under_ceiling_false
+FAILED test_a7_postrun_identity_1521.py::test_re_adding_the_completed_392_yields_6004_and_breaches_the_ceiling
+4 failed, 10 passed in 3.74s
+
+----- stderr -----
+
+
+===== MODULE test_a7_publication.py exit=0 =====
+----- stdout -----
+............                                                             [100%]
+12 passed in 25.66s
+
+----- stderr -----
+
+
+===== MODULE test_a7_raw_binding_1483.py exit=0 =====
+----- stdout -----
+............                                                             [100%]
+12 passed in 1.06s
+
+----- stderr -----
+
+
+===== MODULE test_a7_runstates_1470.py exit=0 =====
+----- stdout -----
+...........................                                              [100%]
+27 passed in 6.85s
+
+----- stderr -----
+
+
+===== MODULE test_a7_score_boundaries.py exit=0 =====
+----- stdout -----
+........................................................................ [ 76%]
+......................                                                   [100%]
+94 passed in 1.34s
+
+----- stderr -----
+
+
+===== MODULE test_a7_source_correction_1487.py exit=1 =====
+----- stdout -----
+FEEEEEEEFFFFFFFFF.ss                                                     [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_an_unsupported_patch_REFUSES[stale target-<lambda>-stale] _
+
+    @pytest.fixture(scope="module")
+    def base():
+        """The v1 derivation: rows exactly equal to the frozen records."""
+>       rows, sidecar, raws, locator, problems = L2.base_rows()
+                                                 ^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def base_rows():
+        """The v1 derivation, which must reproduce the frozen records exactly:
+        nothing may be rebound on a base that has moved."""
+>       recon = json.load(io.open(L.RECON, encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'
+
+build_final_lock_v2.py:63: FileNotFoundError
+_ ERROR at setup of test_an_unsupported_patch_REFUSES[stale hash-<lambda>-stale] _
+
+    @pytest.fixture(scope="module")
+    def base():
+        """The v1 derivation: rows exactly equal to the frozen records."""
+>       rows, sidecar, raws, locator, problems = L2.base_rows()
+                                                 ^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def base_rows():
+        """The v1 derivation, which must reproduce the frozen records exactly:
+        nothing may be rebound on a base that has moved."""
+>       recon = json.load(io.open(L.RECON, encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'
+
+build_final_lock_v2.py:63: FileNotFoundError
+_ ERROR at setup of test_an_unsupported_patch_REFUSES[extra field-<lambda>-field] _
+
+    @pytest.fixture(scope="module")
+    def base():
+        """The v1 derivation: rows exactly equal to the frozen records."""
+>       rows, sidecar, raws, locator, problems = L2.base_rows()
+                                                 ^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def base_rows():
+        """The v1 derivation, which must reproduce the frozen records exactly:
+        nothing may be rebound on a base that has moved."""
+>       recon = json.load(io.open(L.RECON, encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'
+
+build_final_lock_v2.py:63: FileNotFoundError
+_ ERROR at setup of test_an_unsupported_patch_REFUSES[missing source bytes-<lambda>-occur] _
+
+    @pytest.fixture(scope="module")
+    def base():
+        """The v1 derivation: rows exactly equal to the frozen records."""
+>       rows, sidecar, raws, locator, problems = L2.base_rows()
+                                                 ^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def base_rows():
+        """The v1 derivation, which must reproduce the frozen records exactly:
+        nothing may be rebound on a base that has moved."""
+>       recon = json.load(io.open(L.RECON, encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'
+
+build_final_lock_v2.py:63: FileNotFoundError
+_ ERROR at setup of test_an_unsupported_patch_REFUSES[invalid location (not unique)-<lambda>-occur] _
+
+    @pytest.fixture(scope="module")
+    def base():
+        """The v1 derivation: rows exactly equal to the frozen records."""
+>       rows, sidecar, raws, locator, problems = L2.base_rows()
+                                                 ^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def base_rows():
+        """The v1 derivation, which must reproduce the frozen records exactly:
+        nothing may be rebound on a base that has moved."""
+>       recon = json.load(io.open(L.RECON, encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'
+
+build_final_lock_v2.py:63: FileNotFoundError
+_ ERROR at setup of test_an_unsupported_patch_REFUSES[claim outside the new quote-<lambda>-claim] _
+
+    @pytest.fixture(scope="module")
+    def base():
+        """The v1 derivation: rows exactly equal to the frozen records."""
+>       rows, sidecar, raws, locator, problems = L2.base_rows()
+                                                 ^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def base_rows():
+        """The v1 derivation, which must reproduce the frozen records exactly:
+        nothing may be rebound on a base that has moved."""
+>       recon = json.load(io.open(L.RECON, encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'
+
+build_final_lock_v2.py:63: FileNotFoundError
+_____________ ERROR at setup of test_an_unowned_difference_REFUSES _____________
+
+    @pytest.fixture(scope="module")
+    def base():
+        """The v1 derivation: rows exactly equal to the frozen records."""
+>       rows, sidecar, raws, locator, problems = L2.base_rows()
+                                                 ^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def base_rows():
+        """The v1 derivation, which must reproduce the frozen records exactly:
+        nothing may be rebound on a base that has moved."""
+>       recon = json.load(io.open(L.RECON, encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/invrev_run4/reconciliation_final.json'
+
+build_final_lock_v2.py:63: FileNotFoundError
+=================================== FAILURES ===================================
+___________ test_rebind_changes_are_bound_to_the_complete_old_record ___________
+
+frozen = {'base_commit': 'cd961e51d55bf13aa9311b79c5d7eca20e9b11cc', 'counts': {'events_covered': 36, 'proposed_lawful_abstenti..._unfavourable_direction', 'expectation_routing'], 'proposed_record_kind': 'lawful_abstention_control', ...}, ...], ...}
+receipt = {'a6_freeze_sha256': '5d3503ff92a64c3bee457f3728eaedc2920b211096bbebd761320b0a8961ddea', 'baseline_matches': True, 'cl...08', '#029', '#042', '#065', ...], 'codex_baseline_eleven': ['#001', '#006', '#008', '#029', '#042', '#065', ...], ...}
+
+    @_needs_receipt
+    def test_rebind_changes_are_bound_to_the_complete_old_record(frozen, receipt):
+>       changes = L2.rebind_changes(receipt, frozen)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+receipt = {'a6_freeze_sha256': '5d3503ff92a64c3bee457f3728eaedc2920b211096bbebd761320b0a8961ddea', 'baseline_matches': True, 'cl...08', '#029', '#042', '#065', ...], 'codex_baseline_eleven': ['#001', '#006', '#008', '#029', '#042', '#065', ...], ...}
+frozen = {'base_commit': 'cd961e51d55bf13aa9311b79c5d7eca20e9b11cc', 'counts': {'events_covered': 36, 'proposed_lawful_abstenti..._unfavourable_direction', 'expectation_routing'], 'proposed_record_kind': 'lawful_abstention_control', ...}, ...], ...}
+
+    def rebind_changes(receipt, frozen):
+        """The receipt's EXTENDABLE rows as rebind changes, each bound to the
+        complete frozen record it names. A receipt row that does not name the
+        frozen record exactly is refused here, before anything is applied."""
+        owner = "Codex SEQ 1486 receipt %s" % receipt["receipt_sha256"]
+        records = frozen["records"]
+        out = []
+        for r in receipt["rows"]:
+            if r.get("outcome") != "EXTENDABLE":
+                continue
+            n = int(r["packet_id"].rsplit("#", 1)[1])
+            rec = records[n]
+            span = r["proposed_span"]
+            if rec["source_id"] != r["source_id"] or \
+                    rec["quote"] != r["old_locator"]["quote"] or \
+                    rec["raw_label_or_claim"] != span["raw_label_or_claim"]:
+>               raise ValueError("%s: the receipt does not name the frozen record"
+                                 % r["packet_id"])
+E               ValueError: 0000006201-26-000031#006: the receipt does not name the frozen record
+
+build_final_lock_v2.py:90: ValueError
+________________ test_the_materialization_is_exactly_the_eleven ________________
+
+frozen = {'base_commit': 'cd961e51d55bf13aa9311b79c5d7eca20e9b11cc', 'counts': {'events_covered': 36, 'proposed_lawful_abstenti..._unfavourable_direction', 'expectation_routing'], 'proposed_record_kind': 'lawful_abstention_control', ...}, ...], ...}
+receipt = {'a6_freeze_sha256': '5d3503ff92a64c3bee457f3728eaedc2920b211096bbebd761320b0a8961ddea', 'baseline_matches': True, 'cl...08', '#029', '#042', '#065', ...], 'codex_baseline_eleven': ['#001', '#006', '#008', '#029', '#042', '#065', ...], ...}
+
+    @_needs_receipt
+    def test_the_materialization_is_exactly_the_eleven(frozen, receipt):
+>       out = L2.materialize(receipt)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_final_lock_v2.py:186: in materialize
+    order = _order()
+            ^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _order():
+>       return [e["source_id"] for e in json.load(io.open(
+            L.X + "/inventory_review/package.manifest.json", encoding="utf-8"))["events"]]
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'
+
+build_final_lock_v2.py:44: FileNotFoundError
+_________ test_double_build_is_deterministic_and_history_is_untouched __________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-13/test_double_build_is_determini0')
+receipt = {'a6_freeze_sha256': '5d3503ff92a64c3bee457f3728eaedc2920b211096bbebd761320b0a8961ddea', 'baseline_matches': True, 'cl...08', '#029', '#042', '#065', ...], 'codex_baseline_eleven': ['#001', '#006', '#008', '#029', '#042', '#065', ...], ...}
+
+    @_needs_receipt
+    def test_double_build_is_deterministic_and_history_is_untouched(tmp_path,
+                                                                    receipt):
+        before = {p: _sha(p) for p in (INV.INV, KC.LEDGER_PATH, STOPPED_FIN,
+                                       RECEIPT) if os.path.isfile(p)}
+>       a = L2.build(str(tmp_path / "one"), receipt)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:175: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_final_lock_v2.py:279: in build
+    out = materialize(receipt)
+          ^^^^^^^^^^^^^^^^^^^^
+build_final_lock_v2.py:186: in materialize
+    order = _order()
+            ^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _order():
+>       return [e["source_id"] for e in json.load(io.open(
+            L.X + "/inventory_review/package.manifest.json", encoding="utf-8"))["events"]]
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/inventory_review/package.manifest.json'
+
+build_final_lock_v2.py:44: FileNotFoundError
+_____________ test_targets_are_the_exact_frozen_to_corrected_diff ______________
+
+frozen = {'base_commit': 'cd961e51d55bf13aa9311b79c5d7eca20e9b11cc', 'counts': {'events_covered': 36, 'proposed_lawful_abstenti..._unfavourable_direction', 'expectation_routing'], 'proposed_record_kind': 'lawful_abstention_control', ...}, ...], ...}
+receipt = {'a6_freeze_sha256': '5d3503ff92a64c3bee457f3728eaedc2920b211096bbebd761320b0a8961ddea', 'baseline_matches': True, 'cl...08', '#029', '#042', '#065', ...], 'codex_baseline_eleven': ['#001', '#006', '#008', '#029', '#042', '#065', ...], ...}
+
+    @_needs_v2
+    def test_targets_are_the_exact_frozen_to_corrected_diff(frozen, receipt):
+>       targets = T.targets(V2)
+                  ^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:186: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_kfields_key_targeted.py:89: in targets
+    return [pid for _n, pid, _c in diff(corrected_path)]
+                                   ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+corrected_path = '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json'
+
+    def diff(corrected_path=CORRECTED_INVENTORY):
+        """-> [(index, packet_id, changed_fields)] against the frozen inventory.
+        Refuses any identity, order or field the correction may not touch."""
+        frozen = _load(INV.INV)["records"]
+        corrected = _load(corrected_path)["records"]
+        if len(frozen) != len(corrected):
+>           raise ValueError("the corrected inventory carries %d records, the "
+                             "frozen one %d" % (len(corrected), len(frozen)))
+E           ValueError: the corrected inventory carries 196 records, the frozen one 102
+
+build_kfields_key_targeted.py:70: ValueError
+_______ test_a_corrected_inventory_with_an_unapproved_difference_REFUSES _______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-13/test_a_corrected_inventory_wit0')
+
+    @_needs_v2
+    def test_a_corrected_inventory_with_an_unapproved_difference_REFUSES(tmp_path):
+        doc = _load(V2)
+        doc["records"][5]["proposed_record_kind"] = "negative_control"
+        bad = str(tmp_path / "bad.json")
+        with io.open(bad, "w", encoding="utf-8") as fh:
+            json.dump(doc, fh)
+        with pytest.raises(ValueError) as exc:
+            T.targets(bad)
+>       assert "only" in str(exc.value)
+E       AssertionError: assert 'only' in 'the corrected inventory carries 196 records, the frozen one 102'
+E        +  where 'the corrected inventory carries 196 records, the frozen one 102' = str(ValueError('the corrected inventory carries 196 records, the frozen one 102'))
+E        +    where ValueError('the corrected inventory carries 196 records, the frozen one 102') = <ExceptionInfo ValueError('the corrected inventory carries 196 records, the frozen one 102') tblen=3>.value
+
+test_a7_source_correction_1487.py:202: AssertionError
+_____ test_targeted_items_carry_the_corrected_binding_and_the_same_drafts ______
+
+    @_needs_v2
+    def test_targeted_items_carry_the_corrected_binding_and_the_same_drafts():
+        corrected = {n: r for n, r in enumerate(_load(V2)["records"])}
+>       items = T.targeted_items(V2)
+                ^^^^^^^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_kfields_key_targeted.py:96: in targeted_items
+    want = {pid: n for n, pid, _c in diff(corrected_path)}
+                                     ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+corrected_path = '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json'
+
+    def diff(corrected_path=CORRECTED_INVENTORY):
+        """-> [(index, packet_id, changed_fields)] against the frozen inventory.
+        Refuses any identity, order or field the correction may not touch."""
+        frozen = _load(INV.INV)["records"]
+        corrected = _load(corrected_path)["records"]
+        if len(frozen) != len(corrected):
+>           raise ValueError("the corrected inventory carries %d records, the "
+                             "frozen one %d" % (len(corrected), len(frozen)))
+E           ValueError: the corrected inventory carries 196 records, the frozen one 102
+
+build_kfields_key_targeted.py:70: ValueError
+___ test_targeted_prompts_differ_from_the_frozen_ones_only_in_the_item_block ___
+
+    @_needs_v2
+    def test_targeted_prompts_differ_from_the_frozen_ones_only_in_the_item_block():
+>       frozen_items = {i["packet_id"]: i for i in K.phase1_items()}
+                                                   ^^^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:223: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def phase1_items():
+        """The ordered denominator: one call per frozen item, in plan order.
+    
+        Refuses outright if the A3 evidence is not proved: a lead whose provenance
+        is unproved is worse than no lead at all.
+        """
+        ev = a3_evidence()
+        if ev["problems"]:
+>           raise RuntimeError("A3 evidence is not proved: %s" % ev["problems"][:3])
+E           RuntimeError: A3 evidence is not proved: ['primary audit: wf_TEST1909a_000.json: not an official state under /home/faisal/.claude/projects', 'primary audit: wf_TEST1909a_001.json: not an official state under /home/faisal/.claude/projects', 'primary audit: wf_TEST1909a_002.json: not an official state under /home/faisal/.claude/projects']
+
+build_kfields_key.py:652: RuntimeError
+____ test_the_targeted_package_is_the_phase1_shape_with_only_approved_bytes ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-13/test_the_targeted_package_is_t0')
+
+    @_needs_v2
+    def test_the_targeted_package_is_the_phase1_shape_with_only_approved_bytes(
+            tmp_path):
+>       doc = T.build_targeted(str(tmp_path / "pkg"), V2)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_source_correction_1487.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_kfields_key_targeted.py:228: in build_targeted
+    doc = manifest_document(corrected_path)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_key_targeted.py:166: in manifest_document
+    items = targeted_items(corrected_path)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_key_targeted.py:96: in targeted_items
+    want = {pid: n for n, pid, _c in diff(corrected_path)}
+                                     ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+corrected_path = '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json'
+
+    def diff(corrected_path=CORRECTED_INVENTORY):
+        """-> [(index, packet_id, changed_fields)] against the frozen inventory.
+        Refuses any identity, order or field the correction may not touch."""
+        frozen = _load(INV.INV)["records"]
+        corrected = _load(corrected_path)["records"]
+        if len(frozen) != len(corrected):
+>           raise ValueError("the corrected inventory carries %d records, the "
+                             "frozen one %d" % (len(corrected), len(frozen)))
+E           ValueError: the corrected inventory carries 196 records, the frozen one 102
+
+build_kfields_key_targeted.py:70: ValueError
+___ test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets ____
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-13/test_prepare_run_writes_a_writ0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f55a89d6c50>
+
+    @_needs_v2
+    def test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets(
+            tmp_path, monkeypatch):
+        pkg = str(tmp_path / "pkg")
+>       T.build_targeted(pkg, V2)
+
+test_a7_source_correction_1487.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_kfields_key_targeted.py:228: in build_targeted
+    doc = manifest_document(corrected_path)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_key_targeted.py:166: in manifest_document
+    items = targeted_items(corrected_path)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_key_targeted.py:96: in targeted_items
+    want = {pid: n for n, pid, _c in diff(corrected_path)}
+                                     ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+corrected_path = '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json'
+
+    def diff(corrected_path=CORRECTED_INVENTORY):
+        """-> [(index, packet_id, changed_fields)] against the frozen inventory.
+        Refuses any identity, order or field the correction may not touch."""
+        frozen = _load(INV.INV)["records"]
+        corrected = _load(corrected_path)["records"]
+        if len(frozen) != len(corrected):
+>           raise ValueError("the corrected inventory carries %d records, the "
+                             "frozen one %d" % (len(corrected), len(frozen)))
+E           ValueError: the corrected inventory carries 196 records, the frozen one 102
+
+build_kfields_key_targeted.py:70: ValueError
+__ test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today ___
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-13/test_prepare_run_is_gated_by_t0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f55a84a7c50>
+
+    @_needs_v2
+    def test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today(
+            tmp_path, monkeypatch):
+        """An old unapproved package cannot prepare a current targeted run.
+    
+        The current source-approval gate refuses before writing any run artifact.
+        The native key lifecycle provides the corresponding approved control.
+        """
+        pkg = str(tmp_path / "pkg")
+>       T.build_targeted(pkg, V2)
+
+test_a7_source_correction_1487.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+build_kfields_key_targeted.py:228: in build_targeted
+    doc = manifest_document(corrected_path)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_key_targeted.py:166: in manifest_document
+    items = targeted_items(corrected_path)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+build_kfields_key_targeted.py:96: in targeted_items
+    want = {pid: n for n, pid, _c in diff(corrected_path)}
+                                     ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+corrected_path = '/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/one_item_benchmark_inventory.v2_1487.json'
+
+    def diff(corrected_path=CORRECTED_INVENTORY):
+        """-> [(index, packet_id, changed_fields)] against the frozen inventory.
+        Refuses any identity, order or field the correction may not touch."""
+        frozen = _load(INV.INV)["records"]
+        corrected = _load(corrected_path)["records"]
+        if len(frozen) != len(corrected):
+>           raise ValueError("the corrected inventory carries %d records, the "
+                             "frozen one %d" % (len(corrected), len(frozen)))
+E           ValueError: the corrected inventory carries 196 records, the frozen one 102
+
+build_kfields_key_targeted.py:70: ValueError
+=========================== short test summary info ============================
+SKIPPED [1] test_a7_source_correction_1487.py:332: v10 shell not prepared
+SKIPPED [1] test_a7_source_correction_1487.py:346: budget not derived
+ERROR test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[stale target-<lambda>-stale]
+ERROR test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[stale hash-<lambda>-stale]
+ERROR test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[extra field-<lambda>-field]
+ERROR test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[missing source bytes-<lambda>-occur]
+ERROR test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[invalid location (not unique)-<lambda>-occur]
+ERROR test_a7_source_correction_1487.py::test_an_unsupported_patch_REFUSES[claim outside the new quote-<lambda>-claim]
+ERROR test_a7_source_correction_1487.py::test_an_unowned_difference_REFUSES
+FAILED test_a7_source_correction_1487.py::test_rebind_changes_are_bound_to_the_complete_old_record
+FAILED test_a7_source_correction_1487.py::test_the_materialization_is_exactly_the_eleven
+FAILED test_a7_source_correction_1487.py::test_double_build_is_deterministic_and_history_is_untouched
+FAILED test_a7_source_correction_1487.py::test_targets_are_the_exact_frozen_to_corrected_diff
+FAILED test_a7_source_correction_1487.py::test_a_corrected_inventory_with_an_unapproved_difference_REFUSES
+FAILED test_a7_source_correction_1487.py::test_targeted_items_carry_the_corrected_binding_and_the_same_drafts
+FAILED test_a7_source_correction_1487.py::test_targeted_prompts_differ_from_the_frozen_ones_only_in_the_item_block
+FAILED test_a7_source_correction_1487.py::test_the_targeted_package_is_the_phase1_shape_with_only_approved_bytes
+FAILED test_a7_source_correction_1487.py::test_prepare_run_writes_a_write_once_receipt_naming_exactly_the_targets
+FAILED test_a7_source_correction_1487.py::test_prepare_run_is_gated_by_the_lock_bound_preflight_which_refuses_today
+10 failed, 1 passed, 2 skipped, 7 errors in 0.55s
+
+----- stderr -----
+
+
+===== MODULE test_a7_trace_1471.py exit=1 =====
+----- stdout -----
+..........F                                                              [100%]
+=================================== FAILURES ===================================
+_______ test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts _______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-14/test_real_invalid_primary_and_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f2a8f516f10>
+
+    def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, monkeypatch):
+        import build_a5_exp5_kit as A5
+        import raw_transport as RT
+        import audit_worker_access as AUD
+        import g1_fake_state as FAKE
+        import test_harness_guards as TG
+        from pathlib import Path
+    
+        projects = os.environ["A7_FIXTURE_PROJECTS"]
+        monkeypatch.setattr(AUD, "PROJECTS_ROOT", projects)
+        native = FAKE.declared_input_record()
+        assert native
+        original = TG._a1_transcript
+    
+        def transcript(prompt, answer, model, uuid0="u0", uuid1="u1", agent_id="a01", session_id="sess"):
+            records = original(prompt, answer, model, uuid0, uuid1, agent_id, session_id)
+            records.insert(native["record_index"], {
+                "type": native["record_type"], "uuid": "input-" + uuid0,
+                "agentId": agent_id, "sessionId": session_id,
+                native["payload_field"]: copy.deepcopy(native["payload"])})
+            for before, after in zip(records, records[1:]):
+                after["parentUuid"] = before["uuid"]
+            return records
+    
+        monkeypatch.setattr(TG, "_a1_transcript", transcript)
+        producer = str(tmp_path / "producer")
+        prep = A5.prepare(producer)
+        assert prep["ok"], prep.get("problems")
+        plan = RT.a1_plan_for_run(producer)
+        replies = {p["prompt_sha256"]: json.dumps({
+            "source_id": p["source_id"], "facts": [],
+            "abstentions": [{"reason": "TEST abstention"}], "continuity_hints": []})
+            for p in plan["packets"]}
+        bad = dict(replies)
+        bad[plan["packets"][0]["prompt_sha256"]] = "{bad json"
+        first = tmp_path / "primary_transport"
+        first.mkdir()
+>       TG._a1_execute(Path(_HERE), first, prep, plan, projects, bad, "trace_primary")
+
+test_a7_trace_1471.py:365: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+work = PosixPath('/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3')
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-14/test_real_invalid_primary_and_0/primary_transport')
+prep = {'a5_manifest_sha256': '6ce88409e37f21603db2b1c5b89b56a253fdef4beed19a0100942d804760c35d', 'allowed': [['0000006201-26...-faisal/pytest-14/test_real_invalid_primary_and_0/producer/launch/exp5_a5_0000027904-26-000020.attempt1.js', ...}, ...}
+plan = {'a2_runtime_freeze': {'CLAUDE_CODE_MAX_OUTPUT_TOKENS': '128000', 'agentType': 'lean-probe', 'disallowedTools': ['Read...'high', 'role': 'sonnet_run1', ...}, {'active': True, 'arm': 'P2', 'effort': 'high', 'role': 'sonnet_run2', ...}], ...}
+projects = '/tmp/a7_logs_1781/life_native5/TEST_projects'
+replies = {'013cb246f3c0a055bc792575a4a3fd05b182044989c0c06ef1d24c1add79234f': '{"source_id": "0000764478-26-000005", "facts": [...d": "DAL_2026-04-08T10.00", "facts": [], "abstentions": [{"reason": "TEST abstention"}], "continuity_hints": []}', ...}
+tag = 'trace_primary', start = 0
+
+    def _a1_execute(work, tmp_path, prep, plan, projects, replies, tag, start=0):
+        """Launch a prepared run's OWN returned invocations and record its states."""
+        res = _replay(tmp_path, prep["invocations"], replies=replies)
+        assert res["errors"] == [], res["errors"][:3]
+        observed, seen = [], set()
+        for row in res["rows"]:
+            if row["source_id"] not in seen:
+                seen.add(row["source_id"])
+                observed.append(row["source_id"])
+        assert observed == [inv["source_id"] for inv in prep["invocations"]], \
+            "the retry did not replay the returned invocation order"
+        prompts = _mirror_prompts(work, tmp_path, plan)
+        runtime = "claude-sonnet-5"
+        by_source = collections.OrderedDict()
+        for row in res["rows"]:
+            by_source.setdefault(row["source_id"], []).append(row)
+        n = start
+        run_dir = os.path.dirname(prep["invocations"][0]["scriptPath"])
+        run_dir = os.path.dirname(run_dir)
+        for inv in prep["invocations"]:
+            sid = inv["source_id"]
+            rows = by_source[sid]
+            rid = "wf_%s_%s" % (tag, sid.replace("-", ""))
+            wf_dir = pathlib.Path(projects) / "proj" / "sess" / "workflows"
+            tx_dir = (pathlib.Path(projects) / "proj" / "sess" / "subagents"
+                      / "workflows" / rid)
+            # A TARGET THAT ALREADY EXISTS IS ANOTHER RUN'S. The tag names the
+            # workflow and its agents, so a caller that reuses one silently
+            # replaced an earlier run's state and transcripts and left that run
+            # pointing at bytes it never produced (Codex SEQ 1939). The caller
+            # must pass a tag unique to the whole attempt/run identity; this
+            # refuses rather than overwrite.
+            if (wf_dir / ("%s.json" % rid)).exists() or tx_dir.exists():
+>               raise AssertionError(
+                    "tag %r already owns %s; pass a tag unique to this run rather "
+                    "than reusing another run's workflow target" % (tag, rid))
+E               AssertionError: tag 'trace_primary' already owns wf_trace_primary_000000620126000031; pass a tag unique to this run rather than reusing another run's workflow target
+
+test_harness_guards.py:7625: AssertionError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts
+1 failed, 10 passed in 17.68s
+
+----- stderr -----
+
+
+===== MODULE test_g1_cached_resume_1781.py exit=0 =====
+----- stdout -----
+.................................................                        [100%]
+49 passed in 1.10s
+
+----- stderr -----
+
+
+RESULT {
+ "kind": "baseline regression of the affected grading modules, current TEST view",
+ "exercises_partial_scope": false,
+ "module_count": 19,
+ "modules_green": 15,
+ "per_module": [
+  {
+   "module": "test_a6_fixture_isolation_1768.py",
+   "exit": 0,
+   "summary": "3 passed in 2.50s",
+   "stdout_bytes": 98,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a6_fixture_isolation_after_1768.py",
+   "exit": 0,
+   "summary": "1 passed in 0.55s",
+   "stdout_bytes": 98,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_closeout_integrity_1482.py",
+   "exit": 1,
+   "summary": "4 failed, 11 passed in 26.24s",
+   "stdout_bytes": 6252,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_corrections_1454.py",
+   "exit": 0,
+   "summary": "47 passed in 33.60s",
+   "stdout_bytes": 100,
+   "stderr_bytes": 365
+  },
+  {
+   "module": "test_a7_current_1473.py",
+   "exit": 0,
+   "summary": "14 passed in 9.16s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_current_postrun.py",
+   "exit": 0,
+   "summary": "4 passed in 14.40s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_g1_precall_freeze_1525.py",
+   "exit": 0,
+   "summary": "7 passed in 12.91s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_g23_lifecycle_1464.py",
+   "exit": 0,
+   "summary": "79 passed in 8.73s",
+   "stdout_bytes": 179,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_identity_relations.py",
+   "exit": 0,
+   "summary": "274 passed in 0.22s",
+   "stdout_bytes": 340,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_input_binding.py",
+   "exit": 0,
+   "summary": "10 passed in 36.77s",
+   "stdout_bytes": 100,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_interrupted_capture.py",
+   "exit": 0,
+   "summary": "7 passed in 5.83s",
+   "stdout_bytes": 98,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_postrun_identity_1521.py",
+   "exit": 1,
+   "summary": "4 failed, 10 passed in 3.74s",
+   "stdout_bytes": 3097,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_publication.py",
+   "exit": 0,
+   "summary": "12 passed in 25.66s",
+   "stdout_bytes": 100,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_raw_binding_1483.py",
+   "exit": 0,
+   "summary": "12 passed in 1.06s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_runstates_1470.py",
+   "exit": 0,
+   "summary": "27 passed in 6.85s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_score_boundaries.py",
+   "exit": 0,
+   "summary": "94 passed in 1.34s",
+   "stdout_bytes": 179,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_source_correction_1487.py",
+   "exit": 1,
+   "summary": "10 failed, 1 passed, 2 skipped, 7 errors in 0.55s",
+   "stdout_bytes": 26846,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_trace_1471.py",
+   "exit": 1,
+   "summary": "1 failed, 10 passed in 17.68s",
+   "stdout_bytes": 6023,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_g1_cached_resume_1781.py",
+   "exit": 0,
+   "summary": "49 passed in 1.10s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  }
+ ]
+}

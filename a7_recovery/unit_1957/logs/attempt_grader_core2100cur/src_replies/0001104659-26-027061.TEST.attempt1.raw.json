@@ -1,0 +1,123 @@
+```json
+{
+ "source_id": "0001104659-26-027061",
+ "verdicts": [
+  {
+   "proposal_id": "0001104659-26-027061#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P006",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P007",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P008",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P009",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-027061#P010",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-26-027061",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Comparable sales increased 5.8%, driven by a 4.2% increase in average ticket and a 1.6% increase in transactions.",
+    "raw_label_or_claim": "Comparable sales",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-26-027061",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Interest expense (income), net \u200b \u200b 2,624 \u200b 0.1% \u200b \u200b (1,994) \u200b (0.1%)",
+    "raw_label_or_claim": "Interest expense (income), net",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-26-027061",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Diluted earnings per share increased 1.2% to $25.64.",
+    "raw_label_or_claim": "Diluted earnings per share",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

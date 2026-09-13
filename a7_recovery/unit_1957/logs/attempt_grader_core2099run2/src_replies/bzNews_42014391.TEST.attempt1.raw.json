@@ -1,0 +1,54 @@
+```json
+{
+ "source_id": "bzNews_42014391",
+ "verdicts": [
+  {
+   "proposal_id": "bzNews_42014391#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "bzNews_42014391#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "bzNews_42014391",
+    "part_ref": "body",
+    "occurrence_in_part": null,
+    "quote": "McDonald's Corp. is spending $100 million in an effort to revive sales and support franchisees",
+    "raw_label_or_claim": "spending $100 million in an effort to revive sales and support franchisees",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "bzNews_42014391",
+    "part_ref": "title",
+    "occurrence_in_part": null,
+    "quote": "More Than 100 In 14 States Were Sickened By The Outbreak",
+    "raw_label_or_claim": "More Than 100 In 14 States Were Sickened By The Outbreak",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

@@ -1,0 +1,1 @@
+{"G2":{"next":["G2-000/G1a"],"oversized_lanes":0,"problems":[],"root_sha256":"8cd74106159e44dc96c4050ec9d2b37059bd5ce0f03e5b29d2f2a01de76fd801","script_bytes":432989},"G3":{"next":["G3-000/G1a","G3-000/G1b","G3-001/G1a"],"oversized_lanes":0,"problems":[],"root_sha256":"75181af04f65c7a9075a26eebe9cef9f0ffd3b1b9740151a1c63235c2a93f7fa","script_bytes":449768}}

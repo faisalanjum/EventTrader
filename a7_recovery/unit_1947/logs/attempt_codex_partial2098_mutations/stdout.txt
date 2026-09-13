@@ -1,0 +1,122 @@
+.............FFFF.......                                                 [100%]
+=================================== FAILURES ===================================
+__ test_policy_and_rule_pins_are_required[None-partial_grading_policy_sha256] __
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:83: in test_policy_and_rule_pins_are_required
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+___ test_policy_and_rule_pins_are_required[None-partial_grading_rule_sha256] ___
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:83: in test_policy_and_rule_pins_are_required
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_policy_and_rule_pins_are_required[unapproved-partial_grading_policy_sha256] _
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:83: in test_policy_and_rule_pins_are_required
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_policy_and_rule_pins_are_required[unapproved-partial_grading_rule_sha256] _
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:83: in test_policy_and_rule_pins_are_required
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_policy_and_rule_pins_are_required[None-partial_grading_policy_sha256]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_policy_and_rule_pins_are_required[None-partial_grading_rule_sha256]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_policy_and_rule_pins_are_required[unapproved-partial_grading_policy_sha256]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_policy_and_rule_pins_are_required[unapproved-partial_grading_rule_sha256]
+4 failed, 20 passed in 0.10s
+.......FFFFFF...........                                                 [100%]
+=================================== FAILURES ===================================
+_____ test_no_evidence_or_identity_problem_is_waived[native reply missing] _____
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:71: in test_no_evidence_or_identity_problem_is_waived
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____ test_no_evidence_or_identity_problem_is_waived[wrong request identity] ____
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:71: in test_no_evidence_or_identity_problem_is_waived
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+______ test_no_evidence_or_identity_problem_is_waived[root hash changed] _______
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:71: in test_no_evidence_or_identity_problem_is_waived
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____ test_no_evidence_or_identity_problem_is_waived[candidate hash changed] ____
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:71: in test_no_evidence_or_identity_problem_is_waived
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+______ test_no_evidence_or_identity_problem_is_waived[owner hash changed] ______
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:71: in test_no_evidence_or_identity_problem_is_waived
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_____ test_no_evidence_or_identity_problem_is_waived[unfinalized segment] ______
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:71: in test_no_evidence_or_identity_problem_is_waived
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_no_evidence_or_identity_problem_is_waived[native reply missing]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_no_evidence_or_identity_problem_is_waived[wrong request identity]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_no_evidence_or_identity_problem_is_waived[root hash changed]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_no_evidence_or_identity_problem_is_waived[candidate hash changed]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_no_evidence_or_identity_problem_is_waived[owner hash changed]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_no_evidence_or_identity_problem_is_waived[unfinalized segment]
+6 failed, 18 passed in 0.06s
+..FFFFF.................                                                 [100%]
+=================================== FAILURES ===================================
+_ test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts0] _
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:63: in test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts1] _
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:63: in test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts2] _
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:63: in test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts3] _
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:63: in test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts4] _
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:63: in test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts0]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts1]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts2]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts3]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_unstarted_unused_retry_missing_raw_or_inconsistent_attempts_still_refuse[attempts4]
+5 failed, 19 passed in 0.06s
+.......................F                                                 [100%]
+=================================== FAILURES ===================================
+_____________ test_a_changed_retry_limit_is_not_partial_reporting ______________
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:170: in test_a_changed_retry_limit_is_not_partial_reporting
+    with pytest.raises(ValueError, match='retry limit'):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_a_changed_retry_limit_is_not_partial_reporting
+1 failed, 23 passed in 0.05s
+....................FF..                                                 [100%]
+=================================== FAILURES ===================================
+____ test_partial_identity_exception_never_accepts_another_grading_task[G2] ____
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:155: in test_partial_identity_exception_never_accepts_another_grading_task
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____ test_partial_identity_exception_never_accepts_another_grading_task[G3] ____
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:155: in test_partial_identity_exception_never_accepts_another_grading_task
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_partial_identity_exception_never_accepts_another_grading_task[G2]
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_partial_identity_exception_never_accepts_another_grading_task[G3]
+2 failed, 22 passed in 0.05s
+.................F......                                                 [100%]
+=================================== FAILURES ===================================
+_____ test_no_state_no_policy_hash_and_original_strict_entry_still_refuse ______
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:93: in test_no_state_no_policy_hash_and_original_strict_entry_still_refuse
+    raise AssertionError('a wrong policy hash opened the scope')
+E   AssertionError: a wrong policy hash opened the scope
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_no_state_no_policy_hash_and_original_strict_entry_still_refuse
+1 failed, 23 passed in 0.05s
+........................                                                 [100%]
+24 passed in 0.05s
+ALL_POLICY_MUTATIONS_KILLED 6

@@ -1,0 +1,87 @@
+```json
+{
+ "source_id": "0000940944-26-000009",
+ "verdicts": [
+  {
+   "proposal_id": "0000940944-26-000009#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-26-000009#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-26-000009#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-26-000009#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-26-000009#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000940944-26-000009",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM",
+    "raw_label_or_claim": "Impairments and (gain) loss on disposal of assets, net",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000940944-26-000009",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026 was primarily driven by same-restaurant sales increases, as well as revenue from new restaurants. The increase in same-restaurant sales for the third quarter of fiscal 2026 resulted from a 3.9 percent increase in average check combined with a 3.3 percent increase in same-restaurant guest counts.",
+    "raw_label_or_claim": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000940944-26-000009",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Our current liabilities totaled $2.61 billion as of February 22, 2026, compared to $2.25 billion as of May 25, 2025.",
+    "raw_label_or_claim": "current liabilities",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

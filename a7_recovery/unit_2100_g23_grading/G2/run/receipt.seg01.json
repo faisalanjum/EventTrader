@@ -1,0 +1,23 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+ "invocation_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_g23_grading/G2/run/invocation.seg01.json",
+ "invocation_sha256": "52ce9ea01dc791dccc63642539dad3f4137fe07f211d8ecfe5bfdefc89ccafc3",
+ "parent": null,
+ "reservation_sha256": "9c4e10609bd3453f9588144a3b3e88c8b4448bce31205a00380163d406263783",
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "rows": [
+  {
+   "batch_id": "G2-000",
+   "lane_id": "G2-000/G1a",
+   "ordinal": 0,
+   "prompt_sha256": "aceb467cc7e79f4603b71c4747fc232bb2a11672f173375af4c82587c963bd72"
+  }
+ ],
+ "run_id": "run",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_g23_grading/G2/run/grade_batch.seg01.js",
+ "script_sha256": "6b5af0d57a429526363c2874401ab0504bdd0461b3c768c4ad3707235b6a4a75",
+ "segment": 1,
+ "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_g23_grading/G2/run/state.seg01.json"
+}

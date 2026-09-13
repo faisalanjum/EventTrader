@@ -1,0 +1,9 @@
+attempt	grader_native2100
+payload	../../grader_20260909/attempts/core2100nat/payload_2100.py
+map	map_codex_grader_core2100nat.tsv
+command	run_1957.sh map_codex_grader_core2100nat.tsv ../../grader_20260909/attempts/core2100nat/payload_2100.py grader_native2100 5400
+wrapper_pid	4067055
+payload_pid	4067059
+payload_pgid	4067055
+started_utc	2026-09-13T07:25:02Z
+state	finished exit 0

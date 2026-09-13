@@ -1,0 +1,9 @@
+attempt	grader_core2099ctrl
+payload	../../grader_20260909/attempts/core2099ctrl/payload_2099.py
+map	map_codex_grader_core2099ctrl.tsv
+command	run_1957.sh map_codex_grader_core2099ctrl.tsv ../../grader_20260909/attempts/core2099ctrl/payload_2099.py grader_core2099ctrl 5400
+wrapper_pid	3972035
+payload_pid	3972039
+payload_pgid	3972035
+started_utc	2026-09-13T06:36:13Z
+state	finished exit 0

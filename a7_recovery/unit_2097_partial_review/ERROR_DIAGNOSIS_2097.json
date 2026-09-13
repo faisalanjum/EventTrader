@@ -1,0 +1,9 @@
+{
+ "module": "test_a7_trace_1471.py",
+ "exit_code": 1,
+ "summary": [
+  "2 failed, 2 passed, 7 errors in 3.58s"
+ ],
+ "first_error_text": "ERROR at setup of test_the_REAL_downstream_paths_consume_only_the_trace ____\n\n    @pytest.fixture(scope=\"module\")\n    def run():\n>       assert FIXTURE, \"serve a complete current TEST path via A7_TRACE_FIXTURE\"\nE       AssertionError: serve a complete current TEST path via A7_TRACE_FIXTURE\nE       assert None\n\ntest_a7_trace_1471.py:32: AssertionError\n_______ ERROR at setup of test_raw_drift_after_identity_capture_refuses ________\n\n    @pytest.fixture(scope=\"module\")\n    def run():\n>       assert FIXTURE, \"serve a complete current TEST path via A7_TRACE_FIXTURE\"\nE       AssertionError: serve a complete current TEST path via A7_TRACE_FIXTURE\nE       assert None\n\ntest_a7_trace_1471.py:32: Asser",
+ "policy_imported_by_this_module": false
+}

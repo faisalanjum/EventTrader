@@ -1,0 +1,7 @@
+attempt	codex_g3prepare2100_a
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_g23_transport_2098.tsv
+wrapper_pid	4045786
+payload_pid	4045790
+started_utc	2026-09-13T07:12:52Z
+state	finished exit 0

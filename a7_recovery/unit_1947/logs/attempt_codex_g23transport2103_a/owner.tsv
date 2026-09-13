@@ -1,0 +1,7 @@
+attempt	codex_g23transport2103_a
+payload	../../unit_2020_codex_check/freeze_g23_transport_2103.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	4122899
+payload_pid	4122903
+started_utc	2026-09-13T08:06:01Z
+state	finished exit 0

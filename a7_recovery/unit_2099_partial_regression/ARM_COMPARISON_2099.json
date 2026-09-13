@@ -1,0 +1,291 @@
+{
+ "kind": "controlled comparison isolating the new G2/G3 grouping owner",
+ "only_difference_between_arms": "a7_g23_run.py",
+ "treatment_log": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attempt_grader_core2099run2/stdout.txt",
+ "control_log": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/logs/attempt_grader_core2099ctrl/stdout.txt",
+ "modules": 19,
+ "modules_differing_between_arms": [],
+ "overlay_changes_any_affected_module": false,
+ "modules_green_both_arms": [
+  "test_a6_fixture_isolation_1768.py",
+  "test_a6_fixture_isolation_after_1768.py",
+  "test_a7_identity_relations.py",
+  "test_a7_raw_binding_1483.py",
+  "test_a7_runstates_1470.py",
+  "test_a7_score_boundaries.py",
+  "test_g1_cached_resume_1781.py"
+ ],
+ "modules_failing_both_arms": [
+  "test_a7_closeout_integrity_1482.py",
+  "test_a7_corrections_1454.py",
+  "test_a7_current_1473.py",
+  "test_a7_current_postrun.py",
+  "test_a7_g1_precall_freeze_1525.py",
+  "test_a7_g23_lifecycle_1464.py",
+  "test_a7_input_binding.py",
+  "test_a7_interrupted_capture.py",
+  "test_a7_postrun_identity_1521.py",
+  "test_a7_publication.py",
+  "test_a7_source_correction_1487.py",
+  "test_a7_trace_1471.py"
+ ],
+ "saved_native_final5": {
+  "summary": "559 passed in 195.92s (0:03:15)",
+  "union_modules": [
+   "test_a7_trace_1471.py",
+   "test_a7_input_binding.py",
+   "test_a7_publication.py",
+   "test_a7_interrupted_capture.py",
+   "test_a7_score_boundaries.py",
+   "test_a7_g23_lifecycle_1464.py",
+   "test_a7_g1_precall_freeze_1525.py",
+   "test_a7_current_postrun.py",
+   "test_a7_corrections_1454.py",
+   "test_a7_current_1473.py",
+   "test_a7_identity_relations.py"
+  ],
+  "of_those_now_failing": [
+   "test_a7_corrections_1454.py",
+   "test_a7_current_1473.py",
+   "test_a7_current_postrun.py",
+   "test_a7_g1_precall_freeze_1525.py",
+   "test_a7_g23_lifecycle_1464.py",
+   "test_a7_input_binding.py",
+   "test_a7_interrupted_capture.py",
+   "test_a7_publication.py",
+   "test_a7_trace_1471.py"
+  ],
+  "caveat": "that run served the OLD baseline harness; this run serves the CURRENT one. The harness version is NOT isolated here, so this difference is reported, not attributed."
+ },
+ "per_module": {
+  "test_a6_fixture_isolation_1768.py": {
+   "new": {
+    "exit": 0,
+    "summary": "3 passed in 2.43s",
+    "named_failures": 0
+   },
+   "old": {
+    "exit": 0,
+    "summary": "3 passed in 2.47s",
+    "named_failures": 0
+   }
+  },
+  "test_a6_fixture_isolation_after_1768.py": {
+   "new": {
+    "exit": 0,
+    "summary": "1 passed in 0.52s",
+    "named_failures": 0
+   },
+   "old": {
+    "exit": 0,
+    "summary": "1 passed in 0.54s",
+    "named_failures": 0
+   }
+  },
+  "test_a7_closeout_integrity_1482.py": {
+   "new": {
+    "exit": 1,
+    "summary": "4 failed, 11 passed in 26.08s",
+    "named_failures": 4
+   },
+   "old": {
+    "exit": 1,
+    "summary": "4 failed, 11 passed in 26.02s",
+    "named_failures": 4
+   }
+  },
+  "test_a7_corrections_1454.py": {
+   "new": {
+    "exit": 1,
+    "summary": "18 failed, 29 passed in 11.87s",
+    "named_failures": 18
+   },
+   "old": {
+    "exit": 1,
+    "summary": "18 failed, 29 passed in 11.95s",
+    "named_failures": 18
+   }
+  },
+  "test_a7_current_1473.py": {
+   "new": {
+    "exit": 1,
+    "summary": "3 failed, 11 passed in 6.74s",
+    "named_failures": 3
+   },
+   "old": {
+    "exit": 1,
+    "summary": "3 failed, 11 passed in 6.68s",
+    "named_failures": 3
+   }
+  },
+  "test_a7_current_postrun.py": {
+   "new": {
+    "exit": 1,
+    "summary": "2 failed, 1 passed, 1 error in 1.99s",
+    "named_failures": 3
+   },
+   "old": {
+    "exit": 1,
+    "summary": "2 failed, 1 passed, 1 error in 1.97s",
+    "named_failures": 3
+   }
+  },
+  "test_a7_g1_precall_freeze_1525.py": {
+   "new": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 7
+   },
+   "old": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 7
+   }
+  },
+  "test_a7_g23_lifecycle_1464.py": {
+   "new": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 79
+   },
+   "old": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 79
+   }
+  },
+  "test_a7_identity_relations.py": {
+   "new": {
+    "exit": 0,
+    "summary": "274 passed in 0.23s",
+    "named_failures": 0
+   },
+   "old": {
+    "exit": 0,
+    "summary": "274 passed in 0.22s",
+    "named_failures": 0
+   }
+  },
+  "test_a7_input_binding.py": {
+   "new": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 10
+   },
+   "old": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 10
+   }
+  },
+  "test_a7_interrupted_capture.py": {
+   "new": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 7
+   },
+   "old": {
+    "exit": 1,
+    "summary": "",
+    "named_failures": 7
+   }
+  },
+  "test_a7_postrun_identity_1521.py": {
+   "new": {
+    "exit": 1,
+    "summary": "4 failed, 10 passed in 3.79s",
+    "named_failures": 4
+   },
+   "old": {
+    "exit": 1,
+    "summary": "4 failed, 10 passed in 3.81s",
+    "named_failures": 4
+   }
+  },
+  "test_a7_publication.py": {
+   "new": {
+    "exit": 1,
+    "summary": "2 passed, 10 errors in 2.18s",
+    "named_failures": 10
+   },
+   "old": {
+    "exit": 1,
+    "summary": "2 passed, 10 errors in 2.15s",
+    "named_failures": 10
+   }
+  },
+  "test_a7_raw_binding_1483.py": {
+   "new": {
+    "exit": 0,
+    "summary": "12 passed in 1.01s",
+    "named_failures": 0
+   },
+   "old": {
+    "exit": 0,
+    "summary": "12 passed in 1.02s",
+    "named_failures": 0
+   }
+  },
+  "test_a7_runstates_1470.py": {
+   "new": {
+    "exit": 0,
+    "summary": "27 passed in 6.73s",
+    "named_failures": 0
+   },
+   "old": {
+    "exit": 0,
+    "summary": "27 passed in 6.65s",
+    "named_failures": 0
+   }
+  },
+  "test_a7_score_boundaries.py": {
+   "new": {
+    "exit": 0,
+    "summary": "94 passed in 1.35s",
+    "named_failures": 0
+   },
+   "old": {
+    "exit": 0,
+    "summary": "94 passed in 1.42s",
+    "named_failures": 0
+   }
+  },
+  "test_a7_source_correction_1487.py": {
+   "new": {
+    "exit": 1,
+    "summary": "10 failed, 1 passed, 2 skipped, 7 errors in 0.57s",
+    "named_failures": 17
+   },
+   "old": {
+    "exit": 1,
+    "summary": "10 failed, 1 passed, 2 skipped, 7 errors in 0.55s",
+    "named_failures": 17
+   }
+  },
+  "test_a7_trace_1471.py": {
+   "new": {
+    "exit": 1,
+    "summary": "7 failed, 3 passed, 1 error in 9.18s",
+    "named_failures": 8
+   },
+   "old": {
+    "exit": 1,
+    "summary": "7 failed, 3 passed, 1 error in 9.17s",
+    "named_failures": 8
+   }
+  },
+  "test_g1_cached_resume_1781.py": {
+   "new": {
+    "exit": 0,
+    "summary": "49 passed in 1.04s",
+    "named_failures": 0
+   },
+   "old": {
+    "exit": 0,
+    "summary": "49 passed in 1.03s",
+    "named_failures": 0
+   }
+  }
+ },
+ "model_calls": 0
+}

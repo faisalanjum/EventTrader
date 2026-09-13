@@ -1,0 +1,93 @@
+```json
+{
+ "source_id": "0000006201-26-000032",
+ "verdicts": [
+  {
+   "proposal_id": "0000006201-26-000032#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000032#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000032#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000032#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000032#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000032#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000006201-26-000032",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Pre-tax loss and net loss were $476 million and $382 million, respectively, in the first quarter of 2026. This compares to first quarter of 2025 pre-tax loss and net loss of $648 million and $473 million, respectively.",
+    "raw_label_or_claim": "Pre-tax loss",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000006201-26-000032",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025.",
+    "raw_label_or_claim": "total operating cost per available seat mile (CASM)",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000006201-26-000032",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "In the first quarter of 2026, we reported total operating revenues of $13.9 billion, an increase of $1.4 billion, or 10.8%, from the first quarter of 2025.",
+    "raw_label_or_claim": "total operating revenues",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

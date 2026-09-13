@@ -1,0 +1,87 @@
+```json
+{
+ "source_id": "0001104659-26-017090",
+ "verdicts": [
+  {
+   "proposal_id": "0001104659-26-017090#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-017090#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-017090#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-017090#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-26-017090#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-26-017090",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Gift card adjustment, net(3) (9,396 ) - (9,396 ) -",
+    "raw_label_or_claim": "Gift card adjustment, net(3)",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-26-017090",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Comparable restaurant sales at The Cheesecake Factory restaurants declined 2.2% year-over-year in the fourth quarter of fiscal 2025.",
+    "raw_label_or_claim": "Comparable restaurant sales",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-26-017090",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "adjusted diluted net income per share finished toward the higher end of our expectations",
+    "raw_label_or_claim": "adjusted diluted net income per share",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

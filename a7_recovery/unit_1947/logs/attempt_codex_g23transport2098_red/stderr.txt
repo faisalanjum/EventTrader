@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/review_g23_transport_2098.py", line 44, in <module>
+    assert all(not row['problems'] and not row['oversized'] for row in result['kinds'].values()), \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: the candidate cannot execute through the unchanged transport gate

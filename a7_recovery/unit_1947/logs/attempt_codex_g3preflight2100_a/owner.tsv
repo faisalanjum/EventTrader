@@ -1,0 +1,7 @@
+attempt	codex_g3preflight2100_a
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_g23_transport_2098.tsv
+wrapper_pid	4055738
+payload_pid	4055742
+started_utc	2026-09-13T07:18:21Z
+state	finished exit 0

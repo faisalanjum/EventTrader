@@ -1,0 +1,497 @@
+VIEW /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+AFFECTED_MODULES 1
+ENVIRONMENT {"A7_APPROVED_KEY_DIR": "/tmp/a7_logs_1781/life_native5/candidate_owed_002", "A7_DRIVER_VALIDATORS_SHA": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5", "A7_FIXTURE_PROJECTS": "/tmp/a7_logs_1781/life_native5/TEST_projects", "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json", "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_core2100era.tsv", "A7_TRACE_FIXTURE": "/tmp/a7_logs_1781/attempt_grader_path7", "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"}
+
+===== MODULE test_a7_trace_1471.py exit=1 =====
+----- stdout -----
+E..FF.FFFFF                                                              [100%]
+==================================== ERRORS ====================================
+___ ERROR at setup of test_the_REAL_downstream_paths_consume_only_the_trace ____
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7fa364738fd0>, _basetemp=PosixPath('/tmp/pytest-of-faisal/pytest-0'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def current_g1(run, tmp_path_factory):
+        """Current owner pins over a TEST G1 lifecycle, never recycled old pins."""
+        import g1_fake_state as FAKE
+        import audit_worker_access as AUD
+        out = tmp_path_factory.mktemp("current_g1")
+        candidate = out / "candidate"
+>       path, problems = G.write(str(candidate), run)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:2461: in write
+    doc, prompts, problems = freeze(run)
+                             ^^^^^^^^^^^
+a7_g1_build.py:2359: in freeze
+    items, legs, totals, meta, problems = questions(run)
+                                          ^^^^^^^^^^^^^^
+a7_g1_build.py:749: in questions
+    legs, totals, meta, arms, gold, problems = inventory(run)
+                                               ^^^^^^^^^^^^^^
+a7_g1_build.py:652: in inventory
+    arms, meta, problems = materialize(run)
+                           ^^^^^^^^^^^^^^^^
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+=================================== FAILURES ===================================
+______ test_public_accounting_keeps_the_real_mixed_split_and_all_origins _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_public_accounting_keeps_t0')
+
+    def test_public_accounting_keeps_the_real_mixed_split_and_all_origins(run, tmp_path):
+        import raw_transport as RT
+>       arms, meta, problems = G.materialize(run)
+                               ^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:202: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+______________ test_a_real_never_called_run_keeps_both_full_arms _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_a_real_never_called_run_k0')
+
+    def test_a_real_never_called_run_keeps_both_full_arms(tmp_path):
+        import build_a5_exp5_kit as A5
+        import raw_transport as RT
+        producer = str(tmp_path / "uncalled")
+        prep = A5.prepare(producer)
+        assert prep["ok"], prep.get("problems")
+        run = PR.load(producer)
+        schedule = RT.a1_schedule(RT.a1_plan_for_run(producer))
+>       doc, problems = C.terminals(run, str(tmp_path / "audit"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:101: in terminals
+    rows, arms, problems = contributions(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_conservation.py:28: in contributions
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+________ test_public_route_loss_is_named_and_never_gets_credit[missing] ________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_public_route_loss_is_name0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa360e17b90>
+loss = 'missing'
+
+    @pytest.mark.parametrize("loss", ["missing", "unknown"])
+    def test_public_route_loss_is_named_and_never_gets_credit(run, tmp_path, monkeypatch, loss):
+        from scorers import score_exp5 as SCO
+>       control, problems = C.terminals(run, str(tmp_path / "positive"))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:268: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:101: in terminals
+    rows, arms, problems = contributions(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_conservation.py:28: in contributions
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+________ test_public_route_loss_is_named_and_never_gets_credit[unknown] ________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_public_route_loss_is_name1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa360db3dd0>
+loss = 'unknown'
+
+    @pytest.mark.parametrize("loss", ["missing", "unknown"])
+    def test_public_route_loss_is_named_and_never_gets_credit(run, tmp_path, monkeypatch, loss):
+        from scorers import score_exp5 as SCO
+>       control, problems = C.terminals(run, str(tmp_path / "positive"))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:268: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:101: in terminals
+    rows, arms, problems = contributions(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_conservation.py:28: in contributions
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+_______ test_one_wholly_uncalled_arm_is_not_removed_from_the_denominator _______
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_one_wholly_uncalled_arm_i0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa360c18450>
+
+    def test_one_wholly_uncalled_arm_is_not_removed_from_the_denominator(run, tmp_path, monkeypatch):
+>       arms, meta, problems = G.materialize(run)
+                               ^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:294: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+__________ test_dropped_trace_arm_still_owes_the_full_frozen_schedule __________
+
+run = {'a4_lock_receipt_sha256': '25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7', 'a4_lock_sha256': 'f1d8...98a8a96de4e51a19325150', 'a5_manifest_sha256': 'fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac', ...}
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_dropped_trace_arm_still_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa361493550>
+
+    def test_dropped_trace_arm_still_owes_the_full_frozen_schedule(run, tmp_path, monkeypatch):
+        import raw_transport as RT
+        expected = len(RT.a1_schedule(RT.a1_plan_for_run(run["run_dir"])))
+>       control, problems = C.terminals(run, str(tmp_path / "control"))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:314: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:101: in terminals
+    rows, arms, problems = contributions(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_conservation.py:28: in contributions
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+_______ test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts _______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_real_invalid_primary_and_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa360d22790>
+
+    def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, monkeypatch):
+        import build_a5_exp5_kit as A5
+        import raw_transport as RT
+        import audit_worker_access as AUD
+        import g1_fake_state as FAKE
+        import test_harness_guards as TG
+        from pathlib import Path
+    
+        projects = os.environ["A7_FIXTURE_PROJECTS"]
+        monkeypatch.setattr(AUD, "PROJECTS_ROOT", projects)
+        native = FAKE.declared_input_record()
+        assert native
+        original = TG._a1_transcript
+    
+        def transcript(prompt, answer, model, uuid0="u0", uuid1="u1", agent_id="a01", session_id="sess"):
+            records = original(prompt, answer, model, uuid0, uuid1, agent_id, session_id)
+            records.insert(native["record_index"], {
+                "type": native["record_type"], "uuid": "input-" + uuid0,
+                "agentId": agent_id, "sessionId": session_id,
+                native["payload_field"]: copy.deepcopy(native["payload"])})
+            for before, after in zip(records, records[1:]):
+                after["parentUuid"] = before["uuid"]
+            return records
+    
+        monkeypatch.setattr(TG, "_a1_transcript", transcript)
+        producer = str(tmp_path / "producer")
+        prep = A5.prepare(producer)
+        assert prep["ok"], prep.get("problems")
+        plan = RT.a1_plan_for_run(producer)
+        replies = {p["prompt_sha256"]: json.dumps({
+            "source_id": p["source_id"], "facts": [],
+            "abstentions": [{"reason": "TEST abstention"}], "continuity_hints": []})
+            for p in plan["packets"]}
+        bad = dict(replies)
+        bad[plan["packets"][0]["prompt_sha256"]] = "{bad json"
+        first = tmp_path / "primary_transport"
+        first.mkdir()
+        TG._a1_execute(Path(_HERE), first, prep, plan, projects, bad, "trace_primary")
+        final = RT.a1_finalize(producer)
+        expected = {(plan["packets"][0]["packet_id"], lane["lane_id"])
+                    for lane in plan["packets"][0]["lanes"]}
+        assert {tuple(k) for k in final["retry"]} == expected
+        retry = RT.a1_prepare_retry(producer)
+        assert retry["ok"], retry.get("problems")
+        second = tmp_path / "retry_transport"
+        second.mkdir()
+        TG._a1_execute(Path(_HERE), second, retry, plan, projects, replies, "trace_retry")
+        final_retry = RT.a1_finalize(os.path.join(producer, RT.RETRY_DIRNAME))
+        assert not final_retry["retry"]
+>       doc, problems = C.terminals(PR.load(producer), str(tmp_path / "audit"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:377: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:101: in terminals
+    rows, arms, problems = contributions(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_conservation.py:28: in contributions
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ["the hard-review reading hr-000/b1 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value", "the hard-review reading hr-000/b2 is unproved: the receipt is not the owner's: receipt.prompts is not the expected value"]
+
+a7_g1_build.py:364: ValueError
+=========================== short test summary info ============================
+ERROR test_a7_trace_1471.py::test_the_REAL_downstream_paths_consume_only_the_trace
+FAILED test_a7_trace_1471.py::test_public_accounting_keeps_the_real_mixed_split_and_all_origins
+FAILED test_a7_trace_1471.py::test_a_real_never_called_run_keeps_both_full_arms
+FAILED test_a7_trace_1471.py::test_public_route_loss_is_named_and_never_gets_credit[missing]
+FAILED test_a7_trace_1471.py::test_public_route_loss_is_named_and_never_gets_credit[unknown]
+FAILED test_a7_trace_1471.py::test_one_wholly_uncalled_arm_is_not_removed_from_the_denominator
+FAILED test_a7_trace_1471.py::test_dropped_trace_arm_still_owes_the_full_frozen_schedule
+FAILED test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts
+7 failed, 3 passed, 1 error in 9.14s
+
+----- stderr -----
+
+
+RESULT {
+ "kind": "baseline regression of the affected grading modules, current TEST view",
+ "exercises_partial_scope": false,
+ "module_count": 1,
+ "modules_green": 0,
+ "per_module": [
+  {
+   "module": "test_a7_trace_1471.py",
+   "exit": 1,
+   "summary": "7 failed, 3 passed, 1 error in 9.14s",
+   "stdout_bytes": 27691,
+   "stderr_bytes": 0
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "run_id": "retry",
+ "door": "a4_phase1_one_item_key",
+ "attempt": 2,
+ "allowed": [
+  "0000006201-26-000031#001"
+ ],
+ "parent": {
+  "run_id": "owed_a4",
+  "finalization_sha256": "35b0e2d5a7a235bd11bb7f56a828fbd830febb3e01d7a0e6f1ebe9dfc10bc546"
+ },
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "manifest_sha256": "fd6c28cf785abd6f9775cffdb005281930b4441665e630fcce25789ad4e48cec",
+ "a3_binding": {
+  "primary_receipt": "1411669acb0bb8477047f714ac0cdfd5f2f3615cdc10c1a09c01b24f1e766153",
+  "primary_finalization": "a8b8c8ba2fbb37ea7017c3ba770ba246af144939472e3ab3efc84537f44d4c15"
+ },
+ "prompts": {
+  "0000006201-26-000031#001": "01d341cb8630b35df7ce07937f7e42b0fda56fd8ee4588047b2774b54eb53538"
+ },
+ "states": [
+  "/tmp/a7_logs_1781/life_native5/TEST_projects/TESTproj1909/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_TEST1909e_000.json"
+ ]
+}

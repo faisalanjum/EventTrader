@@ -1,0 +1,105 @@
+```json
+{
+ "source_id": "ULTA_2026-03-12T16.30",
+ "verdicts": [
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P006",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "ULTA_2026-03-12T16.30#P007",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "Gross margin increased 30 basis points to 39.1% of sales",
+    "raw_label_or_claim": "Gross margin increased 30 basis points to 39.1% of sales",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "delivered operating income of $1.5 billion, or 12.4% of sales",
+    "raw_label_or_claim": "operating income of $1.5 billion",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "ULTA_2026-03-12T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "Our team's relentless focus on reducing inventory shrink has delivered meaningful benefits every quarter this year. Our investments in fixtures and process improvements, targeted efforts in high-risk markets, and focused associate training have resulted in shrink reductions across every category.",
+    "raw_label_or_claim": "reducing inventory shrink",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

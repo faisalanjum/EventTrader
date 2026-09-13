@@ -1,0 +1,7 @@
+attempt	codex_partial2098_nolaunch_green
+payload	../../unit_2020_codex_check/test_partial_grading_2095.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3939446
+payload_pid	3939450
+started_utc	2026-09-13T06:15:51Z
+state	finished exit 0

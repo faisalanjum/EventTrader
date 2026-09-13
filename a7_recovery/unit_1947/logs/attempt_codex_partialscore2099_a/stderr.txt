@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/test_partial_scoring_native_2099.py", line 107, in <module>
+    E.with_prepared_inputs(run)
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 81, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/prepare_g23_partial_2097.py", line 92, in with_prepared_inputs
+    result = action(producer, inputs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/test_partial_scoring_native_2099.py", line 63, in run
+    sources[kind] = FAKE.complete_test_run(kind, target, test_path,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/g1_fake_state.py", line 73, in complete_test_run
+    check(problems)
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/g1_fake_state.py", line 21, in check
+    assert not problems, problems[:5]
+           ^^^^^^^^^^^^
+AssertionError: ['G2-000/G1a: the one input this lane declares is not at record 1', 'G2-000/G1b: the one input this lane declares is not at record 1', 'G2-001/G1a: the one input this lane declares is not at record 1', 'G2-001/G1b: the one input this lane declares is not at record 1', 'G2-002/G1a: the one input this lane declares is not at record 1']

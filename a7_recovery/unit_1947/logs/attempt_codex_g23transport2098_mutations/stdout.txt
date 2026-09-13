@@ -1,0 +1,148 @@
+.......                                                                  [100%]
+7 passed in 0.07s
+.FFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G2] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G2-000'), ('items', 10), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1', 'un...', 'a05075251d279216d4390fe307615c9fd31131d3e1ac93dac903e83586d1e7f6'), ('prompt_path', 'prompts/G2-000.prompt.txt')])])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G3] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G3-000'), ('items', 10), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1', 'un...', 'a05075251d279216d4390fe307615c9fd31131d3e1ac93dac903e83586d1e7f6'), ('prompt_path', 'prompts/G3-000.prompt.txt')])])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G2] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G2-000'), ('items', 10), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1', 'un...', '1b1703337b2e5f91b212f7853b637807fab70fcc04b0c2e5ac98c873024cbbf6'), ('prompt_path', 'prompts/G2-000.prompt.txt')])])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G3] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G3-000'), ('items', 10), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1', 'un...', '1b1703337b2e5f91b212f7853b637807fab70fcc04b0c2e5ac98c873024cbbf6'), ('prompt_path', 'prompts/G3-000.prompt.txt')])])
+____________ test_one_oversized_question_refuses_without_truncation ____________
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:70: in test_one_oversized_question_refuses_without_truncation
+    with pytest.raises(ValueError, match='transport'):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_____________ test_final_candidate_counts_the_actual_split_batches _____________
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:96: in test_final_candidate_counts_the_actual_split_batches
+    assert len(selected) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G2-000'), ('items', 10), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1', 'un...', 'cc2f1e3e26ab48d6bb5e3032b93d5056162af4bb52bb87b6430f9c6750a444be'), ('prompt_path', 'prompts/G2-000.prompt.txt')])])
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G2]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G3]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G2]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G3]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_one_oversized_question_refuses_without_truncation
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_final_candidate_counts_the_actual_split_batches
+6 failed, 1 passed in 0.06s
+.FFFF.F                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G2] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G2-000'), ('items', 2), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1']), ('...', '4aeb850216b5e4af1c56043ecefec5dabc12e726001c0a86634546f13a71d4a7'), ('prompt_path', 'prompts/G2-000.prompt.txt')])])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G3] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G3-000'), ('items', 2), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1']), ('...', '4aeb850216b5e4af1c56043ecefec5dabc12e726001c0a86634546f13a71d4a7'), ('prompt_path', 'prompts/G3-000.prompt.txt')])])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G2] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G2-000'), ('items', 2), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1']), ('...', '19c9db60cbe95412dd1f5812a4c7964597b0ac4c20b7ddb9db287148b46c0b96'), ('prompt_path', 'prompts/G2-000.prompt.txt')])])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G3] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:53: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert len(result) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G3-000'), ('items', 2), ('source_ids', ['unfamiliar-source-0', 'unfamiliar-source-1']), ('...', '19c9db60cbe95412dd1f5812a4c7964597b0ac4c20b7ddb9db287148b46c0b96'), ('prompt_path', 'prompts/G3-000.prompt.txt')])])
+_____________ test_final_candidate_counts_the_actual_split_batches _____________
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:96: in test_final_candidate_counts_the_actual_split_batches
+    assert len(selected) > 1
+E   AssertionError: assert 1 > 1
+E    +  where 1 = len([OrderedDict([('batch_id', 'G2-000'), ('items', 1), ('source_ids', ['unfamiliar-source-0']), ('question_ids', ['questi...', '341c808540c36121246688cd760dfcd5a77043ad7239579d51b10f3dd9125f5e'), ('prompt_path', 'prompts/G2-000.prompt.txt')])])
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G2]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G3]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G2]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G3]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_final_candidate_counts_the_actual_split_batches
+5 failed, 2 passed in 0.04s
+.FFFF.F                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G2] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:55: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert sum(row['items'] for row in result) == len(original)
+E   AssertionError: assert 8 == 10
+E    +  where 8 = sum(<generator object test_oversized_batch_is_split_without_dropping_or_changing_any_question.<locals>.<genexpr> at 0x7f9c98295ff0>)
+E    +  and   10 = len([('unfamiliar-source-0', {'id': 'question-0', 'source': 'unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfami...unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar '}), ...])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G3] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:55: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert sum(row['items'] for row in result) == len(original)
+E   AssertionError: assert 8 == 10
+E    +  where 8 = sum(<generator object test_oversized_batch_is_split_without_dropping_or_changing_any_question.<locals>.<genexpr> at 0x7f9c9818a0c0>)
+E    +  and   10 = len([('unfamiliar-source-0', {'id': 'question-0', 'source': 'unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfami...unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar unfamiliar '}), ...])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G2] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:55: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert sum(row['items'] for row in result) == len(original)
+E   assert 8 == 10
+E    +  where 8 = sum(<generator object test_oversized_batch_is_split_without_dropping_or_changing_any_question.<locals>.<genexpr> at 0x7f9c981fa810>)
+E    +  and   10 = len([('unfamiliar-source-0', {'id': 'question-0', 'source': '"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t...漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂'}), ...])
+_ test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G3] _
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:55: in test_oversized_batch_is_split_without_dropping_or_changing_any_question
+    assert sum(row['items'] for row in result) == len(original)
+E   assert 8 == 10
+E    +  where 8 = sum(<generator object test_oversized_batch_is_split_without_dropping_or_changing_any_question.<locals>.<genexpr> at 0x7f9c980406c0>)
+E    +  and   10 = len([('unfamiliar-source-0', {'id': 'question-0', 'source': '"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t...漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂"\\\n\t漢🙂'}), ...])
+_____________ test_final_candidate_counts_the_actual_split_batches _____________
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:97: in test_final_candidate_counts_the_actual_split_batches
+    assert doc[kind.lower()]['questions'] == sum(r['items'] for r in selected) == 10
+E   assert 10 == 8
+E    +  where 8 = sum(<generator object test_final_candidate_counts_the_actual_split_batches.<locals>.<genexpr> at 0x7f9c98043ed0>)
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G2]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[plain-G3]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G2]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_oversized_batch_is_split_without_dropping_or_changing_any_question[escaped_unicode-G3]
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_final_candidate_counts_the_actual_split_batches
+5 failed, 2 passed in 0.05s
+.....F.                                                                  [100%]
+=================================== FAILURES ===================================
+____________ test_one_oversized_question_refuses_without_truncation ____________
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:74: in test_one_oversized_question_refuses_without_truncation
+    result, prompts, _ = GR._rows_and_prompts('G2', [original], packet)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_run.py:22: in _rows_and_prompts
+    import sys
+E   ValueError: G2-000 has one item over the transport limit; source evidence cannot be truncated
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_one_oversized_question_refuses_without_truncation
+1 failed, 6 passed in 0.05s
+......F                                                                  [100%]
+=================================== FAILURES ===================================
+_____________ test_final_candidate_counts_the_actual_split_batches _____________
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:98: in test_final_candidate_counts_the_actual_split_batches
+    assert doc[kind.lower()]['batches'] == len(selected)
+E   AssertionError: assert 1 == 10
+E    +  where 10 = len([OrderedDict([('batch_id', 'G2-000'), ('items', 1), ('source_ids', ['unfamiliar-source-0']), ('question_ids', ['questi...c955c399afc3f4c75df76f129e64a7d0e286515af50814a6176808eda1a7045'), ('prompt_path', 'prompts/G2-005.prompt.txt')]), ...])
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_final_candidate_counts_the_actual_split_batches
+1 failed, 6 passed in 0.05s
+......F                                                                  [100%]
+=================================== FAILURES ===================================
+_____________ test_final_candidate_counts_the_actual_split_batches _____________
+a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py:99: in test_final_candidate_counts_the_actual_split_batches
+    assert doc[kind.lower()]['largest_batch'] == max(r['items'] for r in selected)
+E   assert 10 == 1
+E    +  where 1 = max(<generator object test_final_candidate_counts_the_actual_split_batches.<locals>.<genexpr> at 0x7f9c981fb780>)
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_g23_transport_2098.py::test_final_candidate_counts_the_actual_split_batches
+1 failed, 6 passed in 0.05s
+.......                                                                  [100%]
+7 passed in 0.04s
+ALL_TRANSPORT_MUTATIONS_KILLED 6

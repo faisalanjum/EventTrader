@@ -1,0 +1,52 @@
+{
+ "kind": "controlled ladder isolating the shared TEST fixture mismatch",
+ "representative_module": "test_a7_trace_1471.py",
+ "verifier_used": "build_kfields_hard_review._receipt_problems, unpatched",
+ "expectation_source": "build_kfields_hard_review._expected_for, unpatched",
+ "rungs": {
+  "current": {
+   "served_from_the_sealing_era": [],
+   "served_view": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/attempts/core2100cur/view/harness_g1v3",
+   "module_summary": "7 failed, 3 passed, 1 error in 9.12s",
+   "receipt_faults_the_module_hit": [
+    "receipt.derived_from"
+   ],
+   "probe_problems_by_origin": null
+  },
+  "era": {
+   "served_from_the_sealing_era": [
+    "build_kfields_key.py"
+   ],
+   "served_view": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/attempts/core2100era/view/harness_g1v3",
+   "module_summary": "7 failed, 3 passed, 1 error in 9.14s",
+   "receipt_faults_the_module_hit": [
+    "receipt.prompts"
+   ],
+   "probe_problems_by_origin": {
+    "hard_review_primary": [
+     "receipt.prompts is not the expected value"
+    ],
+    "hard_review_child": [
+     "receipt.prompts is not the expected value"
+    ]
+   }
+  },
+  "era2": {
+   "served_from_the_sealing_era": [
+    "build_kfields_hard_review.py",
+    "build_kfields_key.py"
+   ],
+   "served_view": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/attempts/core2100era2/view/harness_g1v3",
+   "module_summary": "11 passed in 21.75s",
+   "receipt_faults_the_module_hit": [
+    "none"
+   ],
+   "probe_problems_by_origin": {
+    "hard_review_primary": [],
+    "hard_review_child": []
+   }
+  }
+ },
+ "conclusion": "the preserved TEST lineage is sealed against a harness ERA, not against one file: derived_from pins the key owner BYTES and prompts pins the LIVE render of the hard-review prompt. Both changed lawfully since the seal.",
+ "model_calls": 0
+}

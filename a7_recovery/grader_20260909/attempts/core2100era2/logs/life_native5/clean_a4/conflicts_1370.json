@@ -1,0 +1,18 @@
+{
+ "door": "a4_phase1_one_item_key",
+ "kind": "conflict_inventory",
+ "authority": "Codex SEQ 1370",
+ "governing_rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "valid_envelopes_read": 102,
+ "selected_usable": 102,
+ "counts": {
+  "model_reported_ambiguities": 0,
+  "items_both_drafts_rejected": 0,
+  "conflicting_locator_groups": 0
+ },
+ "model_reported_ambiguities": [],
+ "items_both_drafts_rejected": [],
+ "conflicting_locator_groups": [],
+ "number_rendering": "exact decimal literals as JSON strings",
+ "regrade_sha256": "31c04af4726d0bb1db6eb9e92a9533675b567a6ece3cf7ca260c1915f39c253a"
+}

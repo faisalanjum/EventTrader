@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 71, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 77, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -34,17 +34,127 @@ This note is NOT product law. Authorities, in precedence for their own scope:
 AGENTS.md; live FINAL_DESIGN.md and its field owners; LeftOverSteps/Steps.md,
 step1.md; FableExperimentPlan.md §2 A7 evidence-reuse amendment;
 FableExperimentWorkOrder.md K-fields/EXP-5; promptStandard.md for prompts;
-Orchestration.md for communication. All are under the main project's Driver
-plan tree. The amendment changes reuse/key timing, not coverage or pass bars.
+Orchestration.md for communication. The main Driver plan tree remains the
+baseline. For the owner's expressly approved partial-report change, the
+recovery FableExperimentPlan.md §2 amendment point 6 is the single rule owner
+(05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b).
+It is already committed/pushed on recovery and must accompany publication to
+main; main is not edited during this task. This does not waive coverage, pass
+bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT TASK: Codex2097 SHA0c381cfb872e02b768a56aa1884022b7dd163e9e4c1b3d0a021b34634b76c34b
-answers Core2097 SHA4aceadcf447110c80b62d3aa41972f9b42056cd42b99d9385501804c689c042c.
-Core independently reviews the new partial-reporting policy and runs directly
-affected grading tests only; no AI, code-owner or original-evidence edits.
-New Core test artifacts stay in unit_2097_partial_review. Codex owns the real
-G2/G3 preparation/connection and publication; no duplicate work.
+CURRENT TASK: Codex2103 SHAea7a8392759c21d0102c35e73f895cd44e82262f1b8838500b5e65fe1f726b2e
+answers Core2103 SHAe2de423a7187be5cdafe6d7ed0f44a853d359399d8541cb75c5b3bf1a168ca06.
+The affected regression and grading connection are VERIFIED. One inert
+Workflow probe proved the tool cannot execute a direct recovery path;
+zero workers or model calls. Codex independently read the original tool
+request/result, not just Core's report. The correction uses the SAME2088
+supported execution-path arrangement with durable recovery backing.
+Both newly published2103 roots equal2100 exactly, with identical ordered
+arguments, questions, inputs and owners. Only the execution path and its
+derived invocation/script/receipt identities change. Old2100 is unrun history.
+Core's ONE current task is to materialize the two new first scripts at their
+already-published supported paths and report the exact direct-owner-request
+rule for Workflow, including whether existing grading authorization satisfies
+it. No AI or probe, new preparation, settings change or further code audit.
+One readiness report, then WAIT. Codex owns exact commit/push on recovery.
+
+Previous resolved task: Codex2100 SHAf39d72ed230392c2ea85aef0185142c41569bede40f2e81494192621d8d24934
+answers Core2100 SHAd540864fc52f3bdd2b11e8bedcf13b03bd6c0be749f89c5d02f3c34713b41f62.
+Core resolves the SHARED TEST fixture mismatch blocking affected regression,
+not twelve separate audits. Its old/new grouping comparison had7 green and12
+failing modules in BOTH arms: not a clean regression, and identical failures
+can occur before the changed behavior is reached. Start with one trace fixture
+and its saved native_final5 positive control. Derive the historical source-key
+receipt context instead of rewriting receipts or relaxing validators. Explain
+196-versus102 from actual inputs; serve exact missing historical controls via
+the existing preparer's historical option. Never edit real key/raw/owner files.
+Core may resolve required deterministic TEST bindings without another routine
+approval, using unit_2100_partial_regression and uniquely tagged preparer output.
+No AI, code-owner edits, main, hooks or unrelated audit.
+Codex owns focused/mutation proof, real native scoring connection, work order
+and publication. One task/reply at a time; no duplicate work.
+
+LATEST VERIFIED/PUSHED HEAD:01ddc8e35d11bab58c6ad24fa053f6257188615b,
+treeba22a7ca595accbe2b00741ee136540412283bd4,parentf8f618a0fb7f7c2686fe0ae36c24660e09339cfc.
+This includes ALL completed G1 collection through segment7 and its retry fix.
+New partial policy, G2/G3 size fix and current TEST proof are not yet committed.
+
+CURRENT CHECKLIST:
+- VERIFIED: all G1 native evidence/accounting, exact single exhausted gap,
+  immutable382 producer answers and signed163-fact key.
+- VERIFIED focused: partial policy24tests and6 killed mutants, including
+  shell-independent final-gate test. Core's independent code review agrees.
+- VERIFIED: old G2 transport failure (60/68 lanes oversized) reproduced by
+  W.next_admissible; first lane797421bytes versus524288. Minimal fix stays in
+  the existing grouping owner: split oversized batches, never truncate an
+  item, count resulting rows, use existing renderer and sole W size limit.
+- VERIFIED focused: grouping7tests and6 killed mutants. The original owner
+  gave5 intended failures/1positive control in unit_red2. Earlier unit_red
+  was an import-setup error and is not counted as a behavioral failure.
+- VERIFIED whole population: all423 questions, source cards, event contexts,
+  produced records, rules, producer and G1 identity unchanged by regrouping.
+  G2 now306questions/70batches/140calls; G3 unchanged117/16/32. All172 planned
+  lanes fit the actual size gate. There have been ZERO G2/G3 model calls.
+- VERIFIED: full native partial-to-tier-scoring TEST, reusing completed TEST
+  G2/G3 responses with the REAL signed key, saved producer and194 G1 calls.
+  All99 required event/leg identities run exactly once;163 facts remain in
+  each denominator; the one5-question gap gets no credit; original strict
+  entry still refuses it; missing judgments cannot PASS. This is NOT a score.
+- VERIFIED from live raw outputs: affected regression698passes/2 named old-
+  artifact skips across all19 unchanged modules. Native11/ordinary8 fixture
+  families use current grading owners; only historical TEST source-key
+  verification uses its sealing-era owners. No validator or receipt edit.
+  Details/limitations:unit_2020_codex_check/PARTIAL_PREPARATION_REVIEW_2101.md.
+  Core2101's full handoff was verified. No further grader audit is required
+  before these unchanged calls. The tool-location correction is below.
+- NEXT: freeze/commit/push the verified preparation; then collect/check the
+  actual G2/G3 reviews and report the honest full-denominator A7 result.
+  After reporting, investigate real failures through named targeted changes;
+  never hide gaps, repeat successful calls, or relabel a partial score PASS.
+
+CURRENT GROUPING OWNER:unit_2098_g23_transport/a7_g23_run.py,
+SHAe7e3012229945480ba2b86a4eb00dccee0e3152af86d98ff738329f8cba7063d.
+map:unit_2020_codex_check/map_g23_transport_2098.tsv,
+SHAa4c947d94acb9bec384b81e8eeea7f80d72ffcdb43ef7853a648c69a3c9c14ac.
+This map adds ONLY that read-only file overlay to map_real_grading_2088;
+every original G1 collection owner and its historical map remain unchanged.
+Frozen actual preparation:unit_2020_codex_check/codex_g23partial2098_fit/PREPARATION.json,
+SHAa57a90fff7c2f77fa6ba5e34b7b285d6ef8793b55d4d30c472bf6643108bc718.
+G2 candidatecc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb;
+G3 candidatea3fe069aaea2e5c847af09b0938547871d7ee02746b05a2aa4acc12bc92ed641.
+Comparison question/context digestf208d3c8adadc0e89ce24f754bcc9832d6ed8ae79402c28105c5c071091060f7.
+Proof tags:codex_g23compare2099_a,codex_g23transport2099_green.
+Fresh derivation:codex_g23partial2099_cold/PREPARATION.json,
+SHAab93cf3f7581ada92699310573c55578f8280244027735fc1c8d9d0b4af0e17c,exit0.
+Native connection:codex_partialscore2099_c/SCORING_CONNECTION.json,
+SHA30ae7917ec623986bd9d411e5fb907097d256cbdb4a74d3ac63bdfc5192e05cf,exit0.
+It reuses the completed native TEST G2/G3 sources from codex_partialscore2099_b;
+zero actual AI calls. The initial _a omitted the required attachment in TEST
+transcripts; the existing fixture parameter fixed that without a validator
+change. The _b scorer finished but my assertion wrongly expected108 routes.
+Full trace proves382 question replies cover33 sources, exactly the key's33;
+36 is the original selection count, not the answered-source count. _c checks
+every99 distinct (source,leg) identity and saves results before assertions.
+This explicitly corrects earlier108-route reports; no source or fact was dropped.
+
+REAL G2/G3 LAUNCH PREPARATION IS NOW2103, NO CALL AUTHORIZED YET.
+unit_2100_g23_grading is SUPERSEDED UNRUN history: its Python preflights
+passed, but the platform refuses direct recovery execution. Native probe:
+unit_2102_transport_probe/PROBE_OUTCOME_2102.json,
+SHA4146005170711874275c35930226ef6df6b3fca7d3532eecf065ebc8dbcac100.
+unit_2103_g23_grading/G2 andG3 each has an IDENTICAL root and ALREADY
+published first segment at the supported session scratchpad path, backed
+by recovery through the existing boundary. This is the proved2088 procedure,
+not a same-byte substitute for an old published path. All preserved files
+stay durable; there is no temporary-only result. The new map adds only two
+RW rows; no owner changes. Full identities/checks:
+unit_2020_codex_check/G23_TRANSPORT_REVIEW_2103.md. Do not prepare segment1 again.
+140+32 new primary calls; prior862, after primaries1034, all-retry maximum1206.
+No successful call repeats. Native preservation remains byte-exact copying;
+the existing lifecycle owns validity. No additional runner/framework is needed.
+Core's current2103 task is execution-file readiness, not these calls.
 
 G1 COLLECTION CLOSED: all192 primaries attempted,194 completed G1 calls,
 191valid,3invalid,zero uncalled. Total668+194=862. Both retries used; no
@@ -54,7 +164,8 @@ G1-069/G1b retry succeeded. Independent native/evidence replay exit0,stderr0,
 194whole replies; unit_2020_codex_check/G1_RETRY_REVIEW_2097.md records proof.
 Whole run445files/1b0f4e36c989cc3cee81d827dbc72a5de1a3118e9ad12018b149f49f67ca7a8c.
 
-REPORTING CONNECTION: partial policy has24 focused passes and6 killed
+Earlier connection detail (the checkpoint above supersedes its pending state):
+partial policy has24 focused passes and6 killed
 mutations, not yet full readiness. New actual prepare_g23_partial_2097.py
 uses the existing signed-key/source scopes, producer reuse and G2/G3 owners.
 First real attempt refused because the producer evaluation was frozen BEFORE
@@ -64,8 +175,19 @@ code.grading_scorer differs (unbound versus the already approved scorer hash).
 No raw, source, key, owner-byte or budget drift. Small setup-order correction:
 validate/materialize the original producer first, then bind the grading scorer
 and let the original single-trace and independent G1 owner checks run.
-codex_g23partial2097_c is the current live proof; do not claim its result
-before reading exit/output. No guard or historical identity is weakened.
+codex_g23partial2097_c passed. Cold comparison initially compared Python
+objects instead of their serialized JSON; both comparisons now use the
+existing G._plain canonical owner, with NO field omitted. The fresh
+codex_g23partial2098_cold2 passed and all50 old prompts matched exactly.
+Its result46a12f16edb8f7f4ce08d65d250658b9ba3b396e49ff2558df200e8588a75a93
+also reports UNION findings, which the first summary omitted (the questions
+always included UNION). Four guidance-period warnings remain recorded; the
+actual99 write-disabled event/leg routes completed with0unroutable (the earlier
+108 report was the selection/answered-source count error corrected above). Scoring determines
+their real effect; do not call warning-free or silently fix production code.
+G1 currently finds2 confirmed duplicate groups inP2,54 inUNION, and one
+disputed group each inP1/UNION. These are not a final score or an excuse to
+change the key. Keep them visible, then investigate the scored failures.
 
 ### Previous checkpoint detail — not a current authorization
 

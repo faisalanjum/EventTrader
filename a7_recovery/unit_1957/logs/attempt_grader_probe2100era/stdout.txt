@@ -1,0 +1,8 @@
+BOUND {
+ "package": "/tmp/a7_logs_1781/life_native5/final_pkg",
+ "evidence": "/tmp/a7_logs_1781/life_native5/owed_a4",
+ "hr": "/tmp/a7_logs_1781/life_native5/hr_run",
+ "hr_package": "/tmp/a7_logs_1781/life_native5/hr_pkg",
+ "events": "/tmp/a7_logs_1781/life_native5/final_events_000"
+}
+KEY_OWNER_SERVED 91862afd796cccb523f518ed75ab79383244aef6147ac1072068aa816e916000

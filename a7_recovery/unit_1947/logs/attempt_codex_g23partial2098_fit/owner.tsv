@@ -1,0 +1,7 @@
+attempt	codex_g23partial2098_fit
+payload	../../unit_2020_codex_check/prepare_g23_partial_2097.py
+map	../unit_2020_codex_check/map_g23_transport_2098.tsv
+wrapper_pid	3958463
+payload_pid	3958467
+started_utc	2026-09-13T06:28:11Z
+state	finished exit 0

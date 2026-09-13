@@ -1,0 +1,81 @@
+```json
+{
+ "source_id": "0000027904-26-000022",
+ "verdicts": [
+  {
+   "proposal_id": "0000027904-26-000022#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000022#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000022#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000022#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000022",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Cost per available seat mile (\"CASM\") 22.20 \u00a2 19.69 \u00a2 13 %",
+    "raw_label_or_claim": "Cost per available seat mile (\"CASM\")",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000022",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Gain/(loss) on investments, net (550) (40) (510)",
+    "raw_label_or_claim": "Gain/(loss) on investments, net",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000022",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Domestic passenger revenue increased 8% in the March 2026 quarter compared to the March 2025 quarter on a 1% increase in capacity.",
+    "raw_label_or_claim": "Domestic passenger revenue",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

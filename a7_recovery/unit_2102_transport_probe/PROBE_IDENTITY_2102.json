@@ -1,0 +1,27 @@
+{
+ "kind": "frozen zero-agent Workflow transport probe",
+ "question": "will the platform read and execute a workflow script that lives under EventMarketDB-driver-recovery",
+ "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2102_transport_probe/transport_path_probe_2102.js",
+ "script_tree": "recovery",
+ "script_sha256": "60ef77990fa8ed7dc7088bac23ed4e2b271b6552fe543d0210ff174ab2145021",
+ "script_bytes": 614,
+ "forbidden_constructs_in_code": {},
+ "checked_for": [
+  "agent(",
+  "phase(",
+  "pipeline(",
+  "parallel(",
+  "require(",
+  "import ",
+  "fetch(",
+  "XMLHttpRequest",
+  "readFile",
+  "writeFile",
+  "child_process",
+  "spawn(",
+  "execSync",
+  "process.env"
+ ],
+ "agents_it_can_spawn": 0,
+ "model_calls": 0
+}

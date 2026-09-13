@@ -1,0 +1,7 @@
+attempt	codex_g23partial2097_b
+payload	../../unit_2020_codex_check/prepare_g23_partial_2097.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3906858
+payload_pid	3906862
+started_utc	2026-09-13T05:54:44Z
+state	finished exit 1

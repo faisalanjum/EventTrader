@@ -1,0 +1,1418 @@
+{
+ "actual_model_calls": 0,
+ "counters": {
+  "completion_loads": 2,
+  "g1_validation": 1,
+  "route_calls": 99
+ },
+ "decisions": {
+  "P1": false,
+  "P2": false
+ },
+ "full_gold_per_leg": 163,
+ "real_g1_unchanged": true,
+ "results": {
+  "P1": {
+   "PASS": false,
+   "ambiguities_unresolved": 0,
+   "ambiguous_rows": [
+    {
+     "produced_idx": 0,
+     "reason": "extras_verdict_missing",
+     "sid": "0000063908-26-000032"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    }
+   ],
+   "confirmed_wrong_accepted": 0,
+   "duplicate_violations": 0,
+   "error_table": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 41,
+    "extras:extras_verdict_missing": 4,
+    "mismatch:change_unit": 8,
+    "mismatch:comparison_baseline": 8,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 2,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 9,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 28,
+    "mismatch:period_start_date": 15,
+    "mismatch:slice": 21,
+    "mismatch:time_type": 10,
+    "mismatch:value:change_value": 7,
+    "mismatch:value:comparison_high": 8,
+    "mismatch:value:comparison_low": 8,
+    "mismatch:value:level_high": 18,
+    "mismatch:value:level_low": 20,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:PERIOD_UNRESOLVED": 19,
+    "rejected:CONFLICTING_DRIVER_NAME": 44,
+    "rejected:UNIT": 2,
+    "wrong_lane:matched": 2,
+    "wrong_lane:missing_gold_twin": 14
+   },
+   "error_table_by_rule": {
+    "ISS-16": 24,
+    "OD-11": 0,
+    "OD-12": 61,
+    "OD-13": 0,
+    "OD-14": 1,
+    "OD-21": 3,
+    "OD-9": 21,
+    "other": 202,
+    "shapes": 10,
+    "slices": 21
+   },
+   "extras": {
+    "duplicate": 0,
+    "key_miss": 0,
+    "unsupported": 0
+   },
+   "gold_n": 163,
+   "matched": 121,
+   "name_spelling_differences": 46,
+   "open_identity_findings": 1,
+   "other_meaning_acc": 1.0,
+   "recall": 0.7423,
+   "reliability": {
+    "applicable": true,
+    "bar": 0.02,
+    "invalid": 0,
+    "over_bar": false,
+    "rate": 0.0,
+    "total": 191,
+    "upper95": 0.015706806282722512
+   },
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "required_grading_unfinished": true,
+   "route_codes": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 41,
+    "extras:extras_verdict_missing": 4,
+    "mismatch:change_unit": 8,
+    "mismatch:comparison_baseline": 8,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 2,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 9,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 28,
+    "mismatch:period_start_date": 15,
+    "mismatch:slice": 21,
+    "mismatch:time_type": 10,
+    "mismatch:value:change_value": 7,
+    "mismatch:value:comparison_high": 8,
+    "mismatch:value:comparison_low": 8,
+    "mismatch:value:level_high": 18,
+    "mismatch:value:level_low": 20,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:PERIOD_UNRESOLVED": 19,
+    "rejected:CONFLICTING_DRIVER_NAME": 44,
+    "rejected:UNIT": 2,
+    "wrong_lane:matched": 2,
+    "wrong_lane:missing_gold_twin": 14
+   },
+   "safety_result": "INCONCLUSIVE",
+   "state_acc": 1.0,
+   "value_shape_acc": 0.8727,
+   "verdicts_missing": 0,
+   "would_park": 0.1371,
+   "wrong_lane": 16
+  },
+  "P2": {
+   "PASS": false,
+   "ambiguities_unresolved": 0,
+   "ambiguous_rows": [
+    {
+     "produced_idx": 8,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000020"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000022"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000022"
+    },
+    {
+     "produced_idx": 0,
+     "reason": "extras_verdict_missing",
+     "sid": "0000063908-26-000032"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    },
+    {
+     "gold_idx": 0,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 1,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 2,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 3,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 4,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 0,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-017090"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-017090"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    }
+   ],
+   "confirmed_wrong_accepted": 0,
+   "duplicate_violations": 2,
+   "error_table": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 40,
+    "extras:extras_verdict_missing": 14,
+    "grader_ruling:ruling_missing": 5,
+    "mismatch:change_unit": 10,
+    "mismatch:comparison_baseline": 10,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 3,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 7,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:month": 2,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 21,
+    "mismatch:period_start_date": 17,
+    "mismatch:sentinel_class": 2,
+    "mismatch:slice": 19,
+    "mismatch:time_type": 6,
+    "mismatch:value:change_value": 11,
+    "mismatch:value:comparison_high": 7,
+    "mismatch:value:comparison_low": 7,
+    "mismatch:value:level_high": 16,
+    "mismatch:value:level_low": 15,
+    "mismatch:value_text": 2,
+    "park:PERIOD_UNRESOLVED": 13,
+    "rejected:CONFLICTING_DRIVER_NAME": 48,
+    "rejected:UNIT": 3,
+    "wrong_lane:matched": 3,
+    "wrong_lane:missing_gold_twin": 16
+   },
+   "error_table_by_rule": {
+    "ISS-16": 29,
+    "OD-11": 0,
+    "OD-12": 56,
+    "OD-13": 0,
+    "OD-14": 2,
+    "OD-21": 0,
+    "OD-9": 21,
+    "other": 213,
+    "shapes": 8,
+    "slices": 19
+   },
+   "extras": {
+    "duplicate": 0,
+    "key_miss": 0,
+    "unsupported": 0
+   },
+   "gold_n": 163,
+   "matched": 114,
+   "name_spelling_differences": 40,
+   "open_identity_findings": 1,
+   "other_meaning_acc": 1.0,
+   "recall": 0.6994,
+   "reliability": {
+    "applicable": true,
+    "bar": 0.02,
+    "invalid": 0,
+    "over_bar": false,
+    "rate": 0.0,
+    "total": 191,
+    "upper95": 0.015706806282722512
+   },
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "required_grading_unfinished": true,
+   "route_codes": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 40,
+    "extras:extras_verdict_missing": 14,
+    "grader_ruling:ruling_missing": 5,
+    "mismatch:change_unit": 10,
+    "mismatch:comparison_baseline": 10,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 3,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 7,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:month": 2,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 21,
+    "mismatch:period_start_date": 17,
+    "mismatch:sentinel_class": 2,
+    "mismatch:slice": 19,
+    "mismatch:time_type": 6,
+    "mismatch:value:change_value": 11,
+    "mismatch:value:comparison_high": 7,
+    "mismatch:value:comparison_low": 7,
+    "mismatch:value:level_high": 16,
+    "mismatch:value:level_low": 15,
+    "mismatch:value_text": 2,
+    "park:PERIOD_UNRESOLVED": 13,
+    "rejected:CONFLICTING_DRIVER_NAME": 48,
+    "rejected:UNIT": 3,
+    "wrong_lane:matched": 3,
+    "wrong_lane:missing_gold_twin": 16
+   },
+   "safety_result": "FAIL",
+   "state_acc": 1.0,
+   "value_shape_acc": 0.8704,
+   "verdicts_missing": 0,
+   "would_park": 0.0843,
+   "wrong_lane": 19
+  },
+  "UNION": {
+   "PASS": false,
+   "ambiguities_unresolved": 0,
+   "ambiguous_rows": [
+    {
+     "produced_idx": 0,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000031"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000031"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000031"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000031"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000031"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000013"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000013"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000013"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000013"
+    },
+    {
+     "produced_idx": 8,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000013"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000020"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000020"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000020"
+    },
+    {
+     "produced_idx": 0,
+     "reason": "extras_verdict_missing",
+     "sid": "0000063908-26-000032"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0000063908-26-000032"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000063908-26-000032"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0000092380-26-000044"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0000092380-26-000044"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000764478-25-000057"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0000764478-25-000057"
+    },
+    {
+     "produced_idx": 9,
+     "reason": "extras_verdict_missing",
+     "sid": "0000764478-25-000057"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000898173-26-000006"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0000898173-26-000006"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0000898173-26-000006"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000898173-26-000006"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0000898173-26-000006"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-25-000038"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-25-000038"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000005"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000005"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000005"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000005"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000009"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000009"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000009"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000009"
+    },
+    {
+     "produced_idx": 8,
+     "reason": "extras_verdict_missing",
+     "sid": "0000940944-26-000009"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-25-000109"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-25-000109"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-25-000109"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-25-000109"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-25-000109"
+    },
+    {
+     "produced_idx": 8,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-25-000109"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-26-000003"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-26-000084"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-26-000084"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-26-000084"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-26-000084"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0001041061-26-000084"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001058090-26-000007"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0001058090-26-000007"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    },
+    {
+     "produced_idx": 8,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    },
+    {
+     "produced_idx": 0,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 8,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 9,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-017090"
+    },
+    {
+     "produced_idx": 8,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-017090"
+    },
+    {
+     "produced_idx": 9,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-017090"
+    },
+    {
+     "produced_idx": 10,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-017090"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-027061"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-027061"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-027061"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-027061"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-027061"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-027061"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-032757"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-032757"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-26-032757"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0001171843-26-001288"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001171843-26-001288"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "DAL_2026-04-08T10.00"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "DAL_2026-04-08T10.00"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "DAL_2026-04-08T10.00"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "DRI_2026-03-19T08.30"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "DRI_2026-03-19T08.30"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "ULTA_2026-03-12T16.30"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "ULTA_2026-03-12T16.30"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    },
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    },
+    {
+     "produced_idx": 6,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    },
+    {
+     "produced_idx": 7,
+     "reason": "extras_verdict_missing",
+     "sid": "YUM_2026-02-04T08.15"
+    },
+    {
+     "produced_idx": 0,
+     "reason": "extras_verdict_missing",
+     "sid": "bzNews_50877032"
+    },
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "bzNews_50877032"
+    }
+   ],
+   "confirmed_wrong_accepted": 0,
+   "duplicate_violations": 54,
+   "error_table": {
+    "extras:extras_verdict_missing": 99,
+    "mismatch:change_unit": 5,
+    "mismatch:comparison_baseline": 4,
+    "mismatch:fiscal_quarter": 3,
+    "mismatch:fiscal_year": 3,
+    "mismatch:level_shape_hint": 6,
+    "mismatch:level_unit": 7,
+    "mismatch:measurement-OD-9": 8,
+    "mismatch:period_end_date": 11,
+    "mismatch:period_start_date": 9,
+    "mismatch:slice": 7,
+    "mismatch:time_type": 2,
+    "mismatch:value:change_value": 6,
+    "mismatch:value:comparison_high": 2,
+    "mismatch:value:comparison_low": 2,
+    "mismatch:value:level_high": 9,
+    "mismatch:value:level_low": 7,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:FUSION_AMBIGUOUS": 6,
+    "park:PERIOD_UNRESOLVED": 28,
+    "park:UNFUSED_PAIR": 2,
+    "rejected:CONFLICTING_DRIVER_NAME": 2,
+    "rejected:UNIT": 4,
+    "rejected:VALUE_TEXT": 2,
+    "wrong_lane:missing_gold_twin": 15
+   },
+   "error_table_by_rule": {
+    "ISS-16": 19,
+    "OD-11": 0,
+    "OD-12": 26,
+    "OD-13": 0,
+    "OD-14": 3,
+    "OD-21": 3,
+    "OD-9": 8,
+    "other": 181,
+    "shapes": 6,
+    "slices": 7
+   },
+   "extras": {
+    "duplicate": 0,
+    "key_miss": 0,
+    "unsupported": 0
+   },
+   "gold_n": 163,
+   "matched": 71,
+   "name_spelling_differences": 21,
+   "open_identity_findings": 1,
+   "other_meaning_acc": 1.0,
+   "recall": 0.4356,
+   "reliability": {
+    "applicable": false,
+    "over_bar": null,
+    "rate": null,
+    "upper95": null,
+    "why": "no responses observed \u2014 Step 3 makes no model call"
+   },
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "required_grading_unfinished": true,
+   "route_codes": {
+    "extras:extras_verdict_missing": 99,
+    "mismatch:change_unit": 5,
+    "mismatch:comparison_baseline": 4,
+    "mismatch:fiscal_quarter": 3,
+    "mismatch:fiscal_year": 3,
+    "mismatch:level_shape_hint": 6,
+    "mismatch:level_unit": 7,
+    "mismatch:measurement-OD-9": 8,
+    "mismatch:period_end_date": 11,
+    "mismatch:period_start_date": 9,
+    "mismatch:slice": 7,
+    "mismatch:time_type": 2,
+    "mismatch:value:change_value": 6,
+    "mismatch:value:comparison_high": 2,
+    "mismatch:value:comparison_low": 2,
+    "mismatch:value:level_high": 9,
+    "mismatch:value:level_low": 7,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:FUSION_AMBIGUOUS": 6,
+    "park:PERIOD_UNRESOLVED": 28,
+    "park:UNFUSED_PAIR": 2,
+    "rejected:CONFLICTING_DRIVER_NAME": 2,
+    "rejected:UNIT": 4,
+    "rejected:VALUE_TEXT": 2,
+    "wrong_lane:missing_gold_twin": 15
+   },
+   "safety_result": "FAIL",
+   "state_acc": 1.0,
+   "value_shape_acc": 0.9062,
+   "verdicts_missing": 0,
+   "would_park": 0.1848,
+   "wrong_lane": 15
+  }
+ },
+ "route_inventory": {
+  "calls": [
+   [
+    "P1",
+    "0000006201-26-000031"
+   ],
+   [
+    "P1",
+    "0000006201-26-000032"
+   ],
+   [
+    "P1",
+    "0000027904-26-000013"
+   ],
+   [
+    "P1",
+    "0000027904-26-000020"
+   ],
+   [
+    "P1",
+    "0000027904-26-000022"
+   ],
+   [
+    "P1",
+    "0000063908-26-000032"
+   ],
+   [
+    "P1",
+    "0000092380-26-000044"
+   ],
+   [
+    "P1",
+    "0000764478-25-000057"
+   ],
+   [
+    "P1",
+    "0000898173-26-000006"
+   ],
+   [
+    "P1",
+    "0000940944-25-000038"
+   ],
+   [
+    "P1",
+    "0000940944-26-000005"
+   ],
+   [
+    "P1",
+    "0000940944-26-000009"
+   ],
+   [
+    "P1",
+    "0001041061-25-000109"
+   ],
+   [
+    "P1",
+    "0001041061-26-000003"
+   ],
+   [
+    "P1",
+    "0001041061-26-000084"
+   ],
+   [
+    "P1",
+    "0001058090-26-000007"
+   ],
+   [
+    "P1",
+    "0001104659-25-102611"
+   ],
+   [
+    "P1",
+    "0001104659-25-105631"
+   ],
+   [
+    "P1",
+    "0001104659-25-118458"
+   ],
+   [
+    "P1",
+    "0001104659-26-017090"
+   ],
+   [
+    "P1",
+    "0001104659-26-027061"
+   ],
+   [
+    "P1",
+    "0001104659-26-032757"
+   ],
+   [
+    "P1",
+    "0001171843-26-001288"
+   ],
+   [
+    "P1",
+    "AAL_2026-04-23T08.30"
+   ],
+   [
+    "P1",
+    "BBY_2026-03-03T08.00"
+   ],
+   [
+    "P1",
+    "CMG_2026-02-03T16.30"
+   ],
+   [
+    "P1",
+    "DAL_2026-04-08T10.00"
+   ],
+   [
+    "P1",
+    "DRI_2026-03-19T08.30"
+   ],
+   [
+    "P1",
+    "MCD_2026-02-11T16.30"
+   ],
+   [
+    "P1",
+    "ULTA_2026-03-12T16.30"
+   ],
+   [
+    "P1",
+    "YUM_2026-02-04T08.15"
+   ],
+   [
+    "P1",
+    "bzNews_42014391"
+   ],
+   [
+    "P1",
+    "bzNews_50877032"
+   ],
+   [
+    "P2",
+    "0000006201-26-000031"
+   ],
+   [
+    "P2",
+    "0000006201-26-000032"
+   ],
+   [
+    "P2",
+    "0000027904-26-000013"
+   ],
+   [
+    "P2",
+    "0000027904-26-000020"
+   ],
+   [
+    "P2",
+    "0000027904-26-000022"
+   ],
+   [
+    "P2",
+    "0000063908-26-000032"
+   ],
+   [
+    "P2",
+    "0000092380-26-000044"
+   ],
+   [
+    "P2",
+    "0000764478-25-000057"
+   ],
+   [
+    "P2",
+    "0000898173-26-000006"
+   ],
+   [
+    "P2",
+    "0000940944-25-000038"
+   ],
+   [
+    "P2",
+    "0000940944-26-000005"
+   ],
+   [
+    "P2",
+    "0000940944-26-000009"
+   ],
+   [
+    "P2",
+    "0001041061-25-000109"
+   ],
+   [
+    "P2",
+    "0001041061-26-000003"
+   ],
+   [
+    "P2",
+    "0001041061-26-000084"
+   ],
+   [
+    "P2",
+    "0001058090-26-000007"
+   ],
+   [
+    "P2",
+    "0001104659-25-102611"
+   ],
+   [
+    "P2",
+    "0001104659-25-105631"
+   ],
+   [
+    "P2",
+    "0001104659-25-118458"
+   ],
+   [
+    "P2",
+    "0001104659-26-017090"
+   ],
+   [
+    "P2",
+    "0001104659-26-027061"
+   ],
+   [
+    "P2",
+    "0001104659-26-032757"
+   ],
+   [
+    "P2",
+    "0001171843-26-001288"
+   ],
+   [
+    "P2",
+    "AAL_2026-04-23T08.30"
+   ],
+   [
+    "P2",
+    "BBY_2026-03-03T08.00"
+   ],
+   [
+    "P2",
+    "CMG_2026-02-03T16.30"
+   ],
+   [
+    "P2",
+    "DAL_2026-04-08T10.00"
+   ],
+   [
+    "P2",
+    "DRI_2026-03-19T08.30"
+   ],
+   [
+    "P2",
+    "MCD_2026-02-11T16.30"
+   ],
+   [
+    "P2",
+    "ULTA_2026-03-12T16.30"
+   ],
+   [
+    "P2",
+    "YUM_2026-02-04T08.15"
+   ],
+   [
+    "P2",
+    "bzNews_42014391"
+   ],
+   [
+    "P2",
+    "bzNews_50877032"
+   ],
+   [
+    "UNION",
+    "0000006201-26-000031"
+   ],
+   [
+    "UNION",
+    "0000006201-26-000032"
+   ],
+   [
+    "UNION",
+    "0000027904-26-000013"
+   ],
+   [
+    "UNION",
+    "0000027904-26-000020"
+   ],
+   [
+    "UNION",
+    "0000027904-26-000022"
+   ],
+   [
+    "UNION",
+    "0000063908-26-000032"
+   ],
+   [
+    "UNION",
+    "0000092380-26-000044"
+   ],
+   [
+    "UNION",
+    "0000764478-25-000057"
+   ],
+   [
+    "UNION",
+    "0000898173-26-000006"
+   ],
+   [
+    "UNION",
+    "0000940944-25-000038"
+   ],
+   [
+    "UNION",
+    "0000940944-26-000005"
+   ],
+   [
+    "UNION",
+    "0000940944-26-000009"
+   ],
+   [
+    "UNION",
+    "0001041061-25-000109"
+   ],
+   [
+    "UNION",
+    "0001041061-26-000003"
+   ],
+   [
+    "UNION",
+    "0001041061-26-000084"
+   ],
+   [
+    "UNION",
+    "0001058090-26-000007"
+   ],
+   [
+    "UNION",
+    "0001104659-25-102611"
+   ],
+   [
+    "UNION",
+    "0001104659-25-105631"
+   ],
+   [
+    "UNION",
+    "0001104659-25-118458"
+   ],
+   [
+    "UNION",
+    "0001104659-26-017090"
+   ],
+   [
+    "UNION",
+    "0001104659-26-027061"
+   ],
+   [
+    "UNION",
+    "0001104659-26-032757"
+   ],
+   [
+    "UNION",
+    "0001171843-26-001288"
+   ],
+   [
+    "UNION",
+    "AAL_2026-04-23T08.30"
+   ],
+   [
+    "UNION",
+    "BBY_2026-03-03T08.00"
+   ],
+   [
+    "UNION",
+    "CMG_2026-02-03T16.30"
+   ],
+   [
+    "UNION",
+    "DAL_2026-04-08T10.00"
+   ],
+   [
+    "UNION",
+    "DRI_2026-03-19T08.30"
+   ],
+   [
+    "UNION",
+    "MCD_2026-02-11T16.30"
+   ],
+   [
+    "UNION",
+    "ULTA_2026-03-12T16.30"
+   ],
+   [
+    "UNION",
+    "YUM_2026-02-04T08.15"
+   ],
+   [
+    "UNION",
+    "bzNews_42014391"
+   ],
+   [
+    "UNION",
+    "bzNews_50877032"
+   ]
+  ],
+  "scheduled_sources": [
+   "0000006201-26-000031",
+   "0000006201-26-000032",
+   "0000027904-26-000013",
+   "0000027904-26-000020",
+   "0000027904-26-000022",
+   "0000063908-26-000032",
+   "0000092380-26-000044",
+   "0000764478-25-000057",
+   "0000898173-26-000006",
+   "0000940944-25-000038",
+   "0000940944-26-000005",
+   "0000940944-26-000009",
+   "0001041061-25-000109",
+   "0001041061-26-000003",
+   "0001041061-26-000084",
+   "0001058090-26-000007",
+   "0001104659-25-102611",
+   "0001104659-25-105631",
+   "0001104659-25-118458",
+   "0001104659-26-017090",
+   "0001104659-26-027061",
+   "0001104659-26-032757",
+   "0001171843-26-001288",
+   "AAL_2026-04-23T08.30",
+   "BBY_2026-03-03T08.00",
+   "CMG_2026-02-03T16.30",
+   "DAL_2026-04-08T10.00",
+   "DRI_2026-03-19T08.30",
+   "MCD_2026-02-11T16.30",
+   "ULTA_2026-03-12T16.30",
+   "YUM_2026-02-04T08.15",
+   "bzNews_42014391",
+   "bzNews_50877032"
+  ],
+  "unique_event_legs": 99
+ },
+ "scope": "TEST G2/G3 verdicts; real saved key, producer and G1; NOT an A7 score",
+ "sources": {
+  "G2": {
+   "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/candidate_G2",
+   "completion_sha256": "c7f8e27b866b46d18c8cab8e714185bf5d06c14a5b697cca43a6801546244495",
+   "lanes": 140,
+   "root_sha256": "c3afd924ddc20a96b0c8206f5e2574d91d35f147c2263f01d30469cc2fd8bcaa",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/run_G2"
+  },
+  "G3": {
+   "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/candidate_G3",
+   "completion_sha256": "865c83738c5d66135d61271962aad097d17a4f3bca421d6cd2c3a6fc47262ec0",
+   "lanes": 32,
+   "root_sha256": "3c636804aadc07c90957b760cc29316f67421e3fff2c6553c2b544a7856a8f7b",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/run_G3"
+  }
+ },
+ "strict_control": "the approved G1 lifecycle does not hold: ['G1-050/G1a has no selected valid attempt']",
+ "uncredited_gap": [
+  {
+   "leg": "P2",
+   "of": 5,
+   "ruled": 0,
+   "sid": "0001104659-25-118458",
+   "why": "a blind lane produced no valid answer"
+  }
+ ]
+}

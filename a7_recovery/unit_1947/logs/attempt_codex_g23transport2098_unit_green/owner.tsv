@@ -1,0 +1,7 @@
+attempt	codex_g23transport2098_unit_green
+payload	../../unit_2020_codex_check/test_g23_transport_2098.py
+map	../unit_2020_codex_check/map_g23_transport_2098.tsv
+wrapper_pid	3955472
+payload_pid	3955476
+started_utc	2026-09-13T06:26:04Z
+state	finished exit 0

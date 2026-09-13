@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/run_grading_2086.py", line 45, in <module>
+    assert not bad, bad
+           ^^^^^^^
+AssertionError: ["segment 1's receipt hashes 569802e2d971c0cb11d2a5fa0d35feb556f29feb228ebe53031d09d5591e5e80, not the approved 0000000000000000000000000000000000000000000000000000000000000000"]

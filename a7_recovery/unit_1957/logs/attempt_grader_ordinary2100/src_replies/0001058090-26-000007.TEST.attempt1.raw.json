@@ -1,0 +1,81 @@
+```json
+{
+ "source_id": "0001058090-26-000007",
+ "verdicts": [
+  {
+   "proposal_id": "0001058090-26-000007#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001058090-26-000007#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001058090-26-000007#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001058090-26-000007#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001058090-26-000007",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Full year comparable restaurant sales to be about flat",
+    "raw_label_or_claim": "Full year comparable restaurant sales",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001058090-26-000007",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Operating margin was 16.2%, a decrease from 16.9%",
+    "raw_label_or_claim": "Operating margin",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001058090-26-000007",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Digital sales represented 37.2% of total food and beverage revenue.",
+    "raw_label_or_claim": "Digital sales",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

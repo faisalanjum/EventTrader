@@ -1,0 +1,33 @@
+```json
+{
+ "source_id": "bzNews_49256211",
+ "verdicts": [
+  {
+   "proposal_id": "bzNews_49256211#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "bzNews_49256211",
+    "part_ref": "title",
+    "occurrence_in_part": null,
+    "quote": "Chipotle Mexican Grill Authorizes Additional $1.8B For Share Repurchases",
+    "raw_label_or_claim": "Authorizes Additional $1.8B For Share Repurchases",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

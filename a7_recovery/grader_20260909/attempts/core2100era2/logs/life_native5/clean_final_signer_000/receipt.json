@@ -1,0 +1,53 @@
+{
+ "run_id": "clean_final_signer_000",
+ "door": "a4_final_key_lock",
+ "phase": "signer",
+ "attempt": 1,
+ "allowed": [
+  "a4-final-signer"
+ ],
+ "parent": null,
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "manifest_sha256": "3220aece67f0633d0de7dc537827a5e14d963d15af01cb04c264bbb3391dc294",
+ "bound": {
+  "a4_key_owner": "91862afd796cccb523f518ed75ab79383244aef6147ac1072068aa816e916000",
+  "hard_review_owner": "7c5ac0ecac07b3f85f25cae9982f7921ee313405215bea42342a88def861c09e",
+  "correction_owner": "d4a0323a43ddd8e68487347652986dedf16a9ec2a277ca41d82a55db3d248ed4",
+  "final_owner_loader": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05",
+  "raw_parser": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "gold_door": "920742cf099fc56ed5773aee6d75e7e7ae180de949a96e2af420faa2f6135c2b",
+  "official_evidence": "dda9db0440a764711739fb533c8af65bce2a854da967b197b05067dd68026314",
+  "inventory_review_owner": "ee03028747c662c319b238b05ed976d42427089ee1096c334b11d8b974f46825",
+  "owner_rulings": "a925ba6ffce6ae14a47c942f5c660c626d13c1060910c2e79055680c7632dbca",
+  "decision_rules": "d5830182899461c7a34f3eed3f3cc374a40412618f9c80e2047f029c6a933fb2",
+  "v4_findings": "0b669decd55e430fb86271378db177a0b1c2525eaa6ec6455dfbb22d7fdce6e0",
+  "v5_findings": "11a086123f4081be6561839527625ed42773faa800226520f6b7e01d6d98a1d1",
+  "v6_findings": "b9842d7db6d3454587fc6bda25ec9bec41c3183832010b2a3f6d5189dda43ef3",
+  "inventory": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+  "regrade": "31c04af4726d0bb1db6eb9e92a9533675b567a6ece3cf7ca260c1915f39c253a",
+  "conflicts": "1e6d99e425dea79994fd4bc9de0b5785c6facb6ebff158644978ee21877d25f7",
+  "phase1_finalization": "2f91adc363c74eb1273165906114375ba24d5a88c7db1e2974a1def659bc50a6",
+  "hard_review_finalization": null,
+  "hard_review_child_finalization": null,
+  "correction_finalization": null
+ },
+ "v1_evidence": {},
+ "prompts": {
+  "a4-final-signer": "95e388c4086b5a6f9d1967003a8faf10ca5f1d910dc1f932a8c06065feec9af7"
+ },
+ "states": [
+  "/tmp/a7_logs_1781/life_native5/TEST_projects/TESTproj1909/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_TESTclean_final_signer_000_000.json"
+ ]
+}

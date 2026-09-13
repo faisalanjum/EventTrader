@@ -1,0 +1,39 @@
+{
+ "kind": "exact refusal of the existing TEST preparation, and its smallest fix",
+ "template": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_1957_test.tsv",
+ "template_rows": 108,
+ "rows_not_pinned_so_not_checked": 8,
+ "refusal_before": [
+  "REFUSE sha mismatch: /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign want b966cdb6b23038f0 got 150583f417565f07"
+ ],
+ "drifted_rows": [
+  {
+   "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/FinalDesign",
+   "source": "/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign",
+   "template_pin": "b966cdb6b23038f04e972f607a34e298e3bde1b317a17dc47b2ff6483d4993bd",
+   "measured_now": "150583f417565f072119fe0c2c3dc1746ae22f2b8c4369c765997be17840d8dc"
+  }
+ ],
+ "cause_from_git": {
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/FinalDesign": {
+   "repo": "/home/faisal/EventMarketDB",
+   "tracked_modified": [],
+   "untracked_additions": [
+    ".claude/plans/Drivers/FinalDesign/FINAL_DESIGN_Aug_6th.md",
+    ".claude/plans/Drivers/FinalDesign/LeftOverSteps/CoreSessionPrompt.md",
+    ".claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md",
+    ".claude/plans/Drivers/FinalDesign/NewsChannel.md",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/LOCAL_QWEN_HANDOFF.md",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/README.md",
+    ".claude/plans/Drivers/FinalDesign/QwenTests/table_evidence/",
+    ".claude/plans/Drivers/FinalDesign/ReasoningTraceQuestions.md"
+   ]
+  }
+ },
+ "positive_control_repin_only_those_rows": {
+  "problems_after": [],
+  "clears_the_refusal": true
+ },
+ "smallest_rule_owner_fix": "no tracked governing document changed; the template pins the whole main FinalDesign DIRECTORY, so untracked additions to it break TEST preparation. Re-pin that single row in unit_1957/map_1957_test.tsv to its measured tree sha, or narrow it to the files the tests actually read. Not mine to edit.",
+ "model_calls": 0
+}

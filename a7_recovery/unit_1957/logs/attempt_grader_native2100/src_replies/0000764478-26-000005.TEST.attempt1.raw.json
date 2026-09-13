@@ -1,0 +1,33 @@
+```json
+{
+ "source_id": "0000764478-26-000005",
+ "verdicts": [
+  {
+   "proposal_id": "0000764478-26-000005#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000764478-26-000005",
+    "part_ref": "items",
+    "occurrence_in_part": null,
+    "quote": "ITEMS: [\"Item 2.02: Results of Operations and Financial Condition\", \"Item 9.01: Financial Statements and Exhibits\"]",
+    "raw_label_or_claim": "Item 2.02: Results of Operations and Financial Condition",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

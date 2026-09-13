@@ -1,0 +1,7 @@
+attempt	core_probe2097_a
+payload	/tmp/probe2097.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3919038
+payload_pid	3919042
+started_utc	2026-09-13T06:01:28Z
+state	finished exit 2

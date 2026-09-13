@@ -1,0 +1,75 @@
+```json
+{
+ "source_id": "bzNews_50877032",
+ "verdicts": [
+  {
+   "proposal_id": "bzNews_50877032#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "bzNews_50877032#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "bzNews_50877032#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "bzNews_50877032",
+    "part_ref": "teaser",
+    "occurrence_in_part": null,
+    "quote": "American Airlines will invest $1 billion in Miami International Airport to build a new concourse D, with the project starting in 2027.",
+    "raw_label_or_claim": "invest $1 billion in Miami International Airport to build a new concourse D, with the project starting in 2027.",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "bzNews_50877032",
+    "part_ref": "body",
+    "occurrence_in_part": null,
+    "quote": "Benzinga Edge Rankings show that American Airlines scores poorly on the Momentum and Growth metrics, but offers a positive price trend in the Long term.",
+    "raw_label_or_claim": "scores poorly on the Momentum and Growth metrics, but offers a positive price trend in the Long term.",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "bzNews_50877032",
+    "part_ref": "body",
+    "occurrence_in_part": null,
+    "quote": "Jet fuel costs are one of the most volatile expenses for the airline as uncertainty over crude oil prices continues to loom amid rising tensions between Washington and Tehran.",
+    "raw_label_or_claim": "Jet fuel costs are one of the most volatile expenses for the airline",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

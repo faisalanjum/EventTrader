@@ -1,0 +1,21 @@
+1. 0000006201-26-000032 — distinct dollar and percent change bases were collapsed; split bases and emit the compatible shared level once.
+2. 0000027904-26-000013 — accepted SkyMiles amendment lacks the correction tag; Aeromexico is a partner, not company ownership.
+3. 0000063908-26-000032 — independent reported/constant-currency values were hidden in measurement spans; split values/bases, and keep number/period text out of Driver names.
+4. 0000092380-26-000044 — the Boeing product number was embedded in the Driver name; re-express the meaning lawfully without a number in the name.
+5. 0000764478-25-000057 — an accounting DebtInstrumentAxis was used as a business-population slice; remove it.
+6. 0000940944-25-000038 — the accepted Amendment No. 1 covenant fact lacks the correction tag; U.S.+Canada is one source-stated aggregate, not inferred North America.
+7. 0000940944-26-000009 — overlapping representations of one table evidence occurrence must reconcile canonically; this is not an authority conflict.
+8. 0001041061-25-000109 — heterogeneous special items were combined into one unsupported cause; ratio/share meaning must remain distinct from the underlying amount/count.
+9. 0001058090-26-000007 — digital sales as a share of revenue must preserve mix/share meaning and the source-stated digital sales channel.
+10. 0001104659-25-102611 — the amended contract term must be represented from its source meaning rather than as an ordinary reported metric; it carries the correction tag; Mexico+Brazil is one source-stated aggregate, not two intersected geographies.
+11. 0001104659-25-105631 — a Driver name embeds the commitment-increase motion; keep the standing capacity/ceiling meaning or abstain if it cannot be represented lawfully.
+12. 0001104659-26-017090 — bare `margin` has no supported specific meaning; abstain unless the event itself supplies it.
+13. 0001104659-26-027061 — keep the separately supported one-time authorization action and standing remaining-authorization metric, but remove the accounting/program axis slice and clear both settled open issues.
+14. 0001104659-26-032757 — 24-week cumulative is YTD, not half; distinct tariff actions/causes and distinct dollar/percent change bases must not be collapsed.
+15. 0001171843-26-001288 — comparison against the company's own expectations routes to previous_guidance, not consensus.
+16. AAL_2026-04-23T08.30 — unexpanded CASMx/RASM per-X acronyms abstain.
+17. BBY_2026-03-03T08.00 — the accepted `Just to be clear` correction fact carries the correction tag.
+18. DAL_2026-04-08T10.00 — keep the earliest canonical low-teens guide once; include the separately quoted mid-single-digit unit-revenue fact; abstain on the open-ended/unallocated fuel delta; clear all three settled issues.
+19. DRI_2026-03-19T08.30 — the source-grounded off-menu resolution plus ambiguous-menu tag is final; clear the settled issue and independently re-audit any explicit changed-judgment tag.
+20. MCD_2026-02-11T16.30 — the explicitly reaffirmed target is a changed judgment and carries the correction tag.
+21. bzNews_42014391 — title-only advertising meaning and allocation of the whole unallocated amount are unsupported; abstain if the source offers no lawful aggregate fact.

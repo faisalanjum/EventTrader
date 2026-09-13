@@ -1,0 +1,509 @@
+{
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g23partial2097_c/G2",
+ "candidate_sha256": "57a8cebf22fe9082863dcdc354860206aa8ae596302a19034eede7cc9802c6fd",
+ "lane": {
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "max_attempts": 2,
+ "max_output_tokens": "128000",
+ "owners": {
+  "a7_g1_build": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439",
+  "a7_g1_complete_v2": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+  "a7_g23_build": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "audit_worker_access": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "prompt_tree_sha256": "fdaed8ff9239a99c43b90e44cd85dcc5db6c5e0a6d0b2a120480c77515427ba1",
+ "rows": [
+  {
+   "batch_id": "G2-000",
+   "expected_input": null,
+   "lane_id": "G2-000/G1a",
+   "ordinal": 0,
+   "prompt_sha256": "f9f6dee92c25a3a0a2c77ecc5fbcd57a085e824113ce510cbea8f033b326ab5b"
+  },
+  {
+   "batch_id": "G2-000",
+   "expected_input": null,
+   "lane_id": "G2-000/G1b",
+   "ordinal": 1,
+   "prompt_sha256": "f9f6dee92c25a3a0a2c77ecc5fbcd57a085e824113ce510cbea8f033b326ab5b"
+  },
+  {
+   "batch_id": "G2-001",
+   "expected_input": null,
+   "lane_id": "G2-001/G1a",
+   "ordinal": 2,
+   "prompt_sha256": "3e0b74e529d5f0553c2a7b551824e65620d5a08ec3303e9310a6a9e4052ec4ad"
+  },
+  {
+   "batch_id": "G2-001",
+   "expected_input": null,
+   "lane_id": "G2-001/G1b",
+   "ordinal": 3,
+   "prompt_sha256": "3e0b74e529d5f0553c2a7b551824e65620d5a08ec3303e9310a6a9e4052ec4ad"
+  },
+  {
+   "batch_id": "G2-002",
+   "expected_input": null,
+   "lane_id": "G2-002/G1a",
+   "ordinal": 4,
+   "prompt_sha256": "3541fb5feb5099fd097c9b8910cfe962910154b7d96ff817082eee689a3316ec"
+  },
+  {
+   "batch_id": "G2-002",
+   "expected_input": null,
+   "lane_id": "G2-002/G1b",
+   "ordinal": 5,
+   "prompt_sha256": "3541fb5feb5099fd097c9b8910cfe962910154b7d96ff817082eee689a3316ec"
+  },
+  {
+   "batch_id": "G2-003",
+   "expected_input": null,
+   "lane_id": "G2-003/G1a",
+   "ordinal": 6,
+   "prompt_sha256": "c2e1639aadb03a3ccad9292be75ac54257234707c97d6c5b15253817d1b35215"
+  },
+  {
+   "batch_id": "G2-003",
+   "expected_input": null,
+   "lane_id": "G2-003/G1b",
+   "ordinal": 7,
+   "prompt_sha256": "c2e1639aadb03a3ccad9292be75ac54257234707c97d6c5b15253817d1b35215"
+  },
+  {
+   "batch_id": "G2-004",
+   "expected_input": null,
+   "lane_id": "G2-004/G1a",
+   "ordinal": 8,
+   "prompt_sha256": "f803304ae67923f74c631efb976c7d246e61a3e229c11688b0878249849d67ac"
+  },
+  {
+   "batch_id": "G2-004",
+   "expected_input": null,
+   "lane_id": "G2-004/G1b",
+   "ordinal": 9,
+   "prompt_sha256": "f803304ae67923f74c631efb976c7d246e61a3e229c11688b0878249849d67ac"
+  },
+  {
+   "batch_id": "G2-005",
+   "expected_input": null,
+   "lane_id": "G2-005/G1a",
+   "ordinal": 10,
+   "prompt_sha256": "e7057d58be7786e0083d61784dc37706175ff031d4ecb7aa648c24231383ade1"
+  },
+  {
+   "batch_id": "G2-005",
+   "expected_input": null,
+   "lane_id": "G2-005/G1b",
+   "ordinal": 11,
+   "prompt_sha256": "e7057d58be7786e0083d61784dc37706175ff031d4ecb7aa648c24231383ade1"
+  },
+  {
+   "batch_id": "G2-006",
+   "expected_input": null,
+   "lane_id": "G2-006/G1a",
+   "ordinal": 12,
+   "prompt_sha256": "dcb24af30b6fe5d88eba5e6d9ea9980f2b0f49979d205bbaa543a85932f4892b"
+  },
+  {
+   "batch_id": "G2-006",
+   "expected_input": null,
+   "lane_id": "G2-006/G1b",
+   "ordinal": 13,
+   "prompt_sha256": "dcb24af30b6fe5d88eba5e6d9ea9980f2b0f49979d205bbaa543a85932f4892b"
+  },
+  {
+   "batch_id": "G2-007",
+   "expected_input": null,
+   "lane_id": "G2-007/G1a",
+   "ordinal": 14,
+   "prompt_sha256": "913bbee2eb843dbe68116466ad2bc51470690783df4a22bb82406b6f5fecd440"
+  },
+  {
+   "batch_id": "G2-007",
+   "expected_input": null,
+   "lane_id": "G2-007/G1b",
+   "ordinal": 15,
+   "prompt_sha256": "913bbee2eb843dbe68116466ad2bc51470690783df4a22bb82406b6f5fecd440"
+  },
+  {
+   "batch_id": "G2-008",
+   "expected_input": null,
+   "lane_id": "G2-008/G1a",
+   "ordinal": 16,
+   "prompt_sha256": "002797843d9f70ee140e90d83ed7bbe5de4f2c5b68e88fa79e08805e716ba69f"
+  },
+  {
+   "batch_id": "G2-008",
+   "expected_input": null,
+   "lane_id": "G2-008/G1b",
+   "ordinal": 17,
+   "prompt_sha256": "002797843d9f70ee140e90d83ed7bbe5de4f2c5b68e88fa79e08805e716ba69f"
+  },
+  {
+   "batch_id": "G2-009",
+   "expected_input": null,
+   "lane_id": "G2-009/G1a",
+   "ordinal": 18,
+   "prompt_sha256": "4c896114462b9e62de0bb2d37e6fe4ef3030ced7245bca30730ea728846d6752"
+  },
+  {
+   "batch_id": "G2-009",
+   "expected_input": null,
+   "lane_id": "G2-009/G1b",
+   "ordinal": 19,
+   "prompt_sha256": "4c896114462b9e62de0bb2d37e6fe4ef3030ced7245bca30730ea728846d6752"
+  },
+  {
+   "batch_id": "G2-010",
+   "expected_input": null,
+   "lane_id": "G2-010/G1a",
+   "ordinal": 20,
+   "prompt_sha256": "e1062010674350edd37d638c3ab5acb87e01f2c43a769a1474bbfa8c4756c6ee"
+  },
+  {
+   "batch_id": "G2-010",
+   "expected_input": null,
+   "lane_id": "G2-010/G1b",
+   "ordinal": 21,
+   "prompt_sha256": "e1062010674350edd37d638c3ab5acb87e01f2c43a769a1474bbfa8c4756c6ee"
+  },
+  {
+   "batch_id": "G2-011",
+   "expected_input": null,
+   "lane_id": "G2-011/G1a",
+   "ordinal": 22,
+   "prompt_sha256": "783664bd3480de5c438fc3ff6186b2a39c88b5fa152e57ad95dad578a7c39d9e"
+  },
+  {
+   "batch_id": "G2-011",
+   "expected_input": null,
+   "lane_id": "G2-011/G1b",
+   "ordinal": 23,
+   "prompt_sha256": "783664bd3480de5c438fc3ff6186b2a39c88b5fa152e57ad95dad578a7c39d9e"
+  },
+  {
+   "batch_id": "G2-012",
+   "expected_input": null,
+   "lane_id": "G2-012/G1a",
+   "ordinal": 24,
+   "prompt_sha256": "f93176d41953d03a46c5d6c15b7f30b6514a1e08c60544f40c073f26f78abf50"
+  },
+  {
+   "batch_id": "G2-012",
+   "expected_input": null,
+   "lane_id": "G2-012/G1b",
+   "ordinal": 25,
+   "prompt_sha256": "f93176d41953d03a46c5d6c15b7f30b6514a1e08c60544f40c073f26f78abf50"
+  },
+  {
+   "batch_id": "G2-013",
+   "expected_input": null,
+   "lane_id": "G2-013/G1a",
+   "ordinal": 26,
+   "prompt_sha256": "d41a1fa4a84df9e3df20f84a804c08ce3d48dfe5cac74478780ddb1a31dade7c"
+  },
+  {
+   "batch_id": "G2-013",
+   "expected_input": null,
+   "lane_id": "G2-013/G1b",
+   "ordinal": 27,
+   "prompt_sha256": "d41a1fa4a84df9e3df20f84a804c08ce3d48dfe5cac74478780ddb1a31dade7c"
+  },
+  {
+   "batch_id": "G2-014",
+   "expected_input": null,
+   "lane_id": "G2-014/G1a",
+   "ordinal": 28,
+   "prompt_sha256": "a29f226ddca95aeda79861749ce734367ffb419ac29a08bcdcb1ecc1cfd9f315"
+  },
+  {
+   "batch_id": "G2-014",
+   "expected_input": null,
+   "lane_id": "G2-014/G1b",
+   "ordinal": 29,
+   "prompt_sha256": "a29f226ddca95aeda79861749ce734367ffb419ac29a08bcdcb1ecc1cfd9f315"
+  },
+  {
+   "batch_id": "G2-015",
+   "expected_input": null,
+   "lane_id": "G2-015/G1a",
+   "ordinal": 30,
+   "prompt_sha256": "bf3ca6bd872c165ef6e930d0112c3a83eddf979d20fa9cff59955a3787156e0c"
+  },
+  {
+   "batch_id": "G2-015",
+   "expected_input": null,
+   "lane_id": "G2-015/G1b",
+   "ordinal": 31,
+   "prompt_sha256": "bf3ca6bd872c165ef6e930d0112c3a83eddf979d20fa9cff59955a3787156e0c"
+  },
+  {
+   "batch_id": "G2-016",
+   "expected_input": null,
+   "lane_id": "G2-016/G1a",
+   "ordinal": 32,
+   "prompt_sha256": "1cbd941986e33474abccd6142816552549099c306d2e54491865f90f75602a29"
+  },
+  {
+   "batch_id": "G2-016",
+   "expected_input": null,
+   "lane_id": "G2-016/G1b",
+   "ordinal": 33,
+   "prompt_sha256": "1cbd941986e33474abccd6142816552549099c306d2e54491865f90f75602a29"
+  },
+  {
+   "batch_id": "G2-017",
+   "expected_input": null,
+   "lane_id": "G2-017/G1a",
+   "ordinal": 34,
+   "prompt_sha256": "59a6479d06c26ff537fef37ce188fd383717c5cec67a393f1177a9059df36cbc"
+  },
+  {
+   "batch_id": "G2-017",
+   "expected_input": null,
+   "lane_id": "G2-017/G1b",
+   "ordinal": 35,
+   "prompt_sha256": "59a6479d06c26ff537fef37ce188fd383717c5cec67a393f1177a9059df36cbc"
+  },
+  {
+   "batch_id": "G2-018",
+   "expected_input": null,
+   "lane_id": "G2-018/G1a",
+   "ordinal": 36,
+   "prompt_sha256": "911475ef65c2d011ae670dcadceca630e2277bfca61af5c4da4dcc7845355b21"
+  },
+  {
+   "batch_id": "G2-018",
+   "expected_input": null,
+   "lane_id": "G2-018/G1b",
+   "ordinal": 37,
+   "prompt_sha256": "911475ef65c2d011ae670dcadceca630e2277bfca61af5c4da4dcc7845355b21"
+  },
+  {
+   "batch_id": "G2-019",
+   "expected_input": null,
+   "lane_id": "G2-019/G1a",
+   "ordinal": 38,
+   "prompt_sha256": "ad56b4917190bb831ef936ed5fa5c5cf4038c2353347040c1ed1116eef786027"
+  },
+  {
+   "batch_id": "G2-019",
+   "expected_input": null,
+   "lane_id": "G2-019/G1b",
+   "ordinal": 39,
+   "prompt_sha256": "ad56b4917190bb831ef936ed5fa5c5cf4038c2353347040c1ed1116eef786027"
+  },
+  {
+   "batch_id": "G2-020",
+   "expected_input": null,
+   "lane_id": "G2-020/G1a",
+   "ordinal": 40,
+   "prompt_sha256": "d48dd41651593f28ed03d4bc8e5e13c0b6d22ac057ea805dcb637490af197533"
+  },
+  {
+   "batch_id": "G2-020",
+   "expected_input": null,
+   "lane_id": "G2-020/G1b",
+   "ordinal": 41,
+   "prompt_sha256": "d48dd41651593f28ed03d4bc8e5e13c0b6d22ac057ea805dcb637490af197533"
+  },
+  {
+   "batch_id": "G2-021",
+   "expected_input": null,
+   "lane_id": "G2-021/G1a",
+   "ordinal": 42,
+   "prompt_sha256": "5186a8d3f5ba19e58097658960aeec37b114a96b125f2532c10dc282fdfdc7ca"
+  },
+  {
+   "batch_id": "G2-021",
+   "expected_input": null,
+   "lane_id": "G2-021/G1b",
+   "ordinal": 43,
+   "prompt_sha256": "5186a8d3f5ba19e58097658960aeec37b114a96b125f2532c10dc282fdfdc7ca"
+  },
+  {
+   "batch_id": "G2-022",
+   "expected_input": null,
+   "lane_id": "G2-022/G1a",
+   "ordinal": 44,
+   "prompt_sha256": "0a006906726b9588823ed768fa73d0b6d6163287812a503e53af1a14419c0d99"
+  },
+  {
+   "batch_id": "G2-022",
+   "expected_input": null,
+   "lane_id": "G2-022/G1b",
+   "ordinal": 45,
+   "prompt_sha256": "0a006906726b9588823ed768fa73d0b6d6163287812a503e53af1a14419c0d99"
+  },
+  {
+   "batch_id": "G2-023",
+   "expected_input": null,
+   "lane_id": "G2-023/G1a",
+   "ordinal": 46,
+   "prompt_sha256": "1b20590d38da1589b18e6a3cc9a3d3072e5ed05e5e76e7683569141ea679539f"
+  },
+  {
+   "batch_id": "G2-023",
+   "expected_input": null,
+   "lane_id": "G2-023/G1b",
+   "ordinal": 47,
+   "prompt_sha256": "1b20590d38da1589b18e6a3cc9a3d3072e5ed05e5e76e7683569141ea679539f"
+  },
+  {
+   "batch_id": "G2-024",
+   "expected_input": null,
+   "lane_id": "G2-024/G1a",
+   "ordinal": 48,
+   "prompt_sha256": "ddc3e363718c614f0906376ea047b2974770db164a53a9916bcdf85b4d7ed453"
+  },
+  {
+   "batch_id": "G2-024",
+   "expected_input": null,
+   "lane_id": "G2-024/G1b",
+   "ordinal": 49,
+   "prompt_sha256": "ddc3e363718c614f0906376ea047b2974770db164a53a9916bcdf85b4d7ed453"
+  },
+  {
+   "batch_id": "G2-025",
+   "expected_input": null,
+   "lane_id": "G2-025/G1a",
+   "ordinal": 50,
+   "prompt_sha256": "46c0e4614bf56364979f9f95a5c567b22cc50699c3210facf3c668392acd21af"
+  },
+  {
+   "batch_id": "G2-025",
+   "expected_input": null,
+   "lane_id": "G2-025/G1b",
+   "ordinal": 51,
+   "prompt_sha256": "46c0e4614bf56364979f9f95a5c567b22cc50699c3210facf3c668392acd21af"
+  },
+  {
+   "batch_id": "G2-026",
+   "expected_input": null,
+   "lane_id": "G2-026/G1a",
+   "ordinal": 52,
+   "prompt_sha256": "7ecc5d986120e075067350b6b8518f6ff574e6948a15fa7abf8f9797b3115b09"
+  },
+  {
+   "batch_id": "G2-026",
+   "expected_input": null,
+   "lane_id": "G2-026/G1b",
+   "ordinal": 53,
+   "prompt_sha256": "7ecc5d986120e075067350b6b8518f6ff574e6948a15fa7abf8f9797b3115b09"
+  },
+  {
+   "batch_id": "G2-027",
+   "expected_input": null,
+   "lane_id": "G2-027/G1a",
+   "ordinal": 54,
+   "prompt_sha256": "133c22cb7ea59393d2c677b2023e981f6666e3db5c8613da2e6f12ecba87451c"
+  },
+  {
+   "batch_id": "G2-027",
+   "expected_input": null,
+   "lane_id": "G2-027/G1b",
+   "ordinal": 55,
+   "prompt_sha256": "133c22cb7ea59393d2c677b2023e981f6666e3db5c8613da2e6f12ecba87451c"
+  },
+  {
+   "batch_id": "G2-028",
+   "expected_input": null,
+   "lane_id": "G2-028/G1a",
+   "ordinal": 56,
+   "prompt_sha256": "cbc02deb1b78617e7cab6f7f74cd91b836273f4a2981e98b9708e816c15cc2f1"
+  },
+  {
+   "batch_id": "G2-028",
+   "expected_input": null,
+   "lane_id": "G2-028/G1b",
+   "ordinal": 57,
+   "prompt_sha256": "cbc02deb1b78617e7cab6f7f74cd91b836273f4a2981e98b9708e816c15cc2f1"
+  },
+  {
+   "batch_id": "G2-029",
+   "expected_input": null,
+   "lane_id": "G2-029/G1a",
+   "ordinal": 58,
+   "prompt_sha256": "8de999bcd1e9af0fb0a6689bd4e956fa7e1a62c7f0cd10863a6423e0c3378a9e"
+  },
+  {
+   "batch_id": "G2-029",
+   "expected_input": null,
+   "lane_id": "G2-029/G1b",
+   "ordinal": 59,
+   "prompt_sha256": "8de999bcd1e9af0fb0a6689bd4e956fa7e1a62c7f0cd10863a6423e0c3378a9e"
+  },
+  {
+   "batch_id": "G2-030",
+   "expected_input": null,
+   "lane_id": "G2-030/G1a",
+   "ordinal": 60,
+   "prompt_sha256": "beb89417af4a6f323af2e4248319a1be2a315576c27b8df0eca58bd5abdd29a8"
+  },
+  {
+   "batch_id": "G2-030",
+   "expected_input": null,
+   "lane_id": "G2-030/G1b",
+   "ordinal": 61,
+   "prompt_sha256": "beb89417af4a6f323af2e4248319a1be2a315576c27b8df0eca58bd5abdd29a8"
+  },
+  {
+   "batch_id": "G2-031",
+   "expected_input": null,
+   "lane_id": "G2-031/G1a",
+   "ordinal": 62,
+   "prompt_sha256": "17aeec34ac50b7888de4954dc5b277cbc2cf85b07c8524a159bb9b4f15b32f2a"
+  },
+  {
+   "batch_id": "G2-031",
+   "expected_input": null,
+   "lane_id": "G2-031/G1b",
+   "ordinal": 63,
+   "prompt_sha256": "17aeec34ac50b7888de4954dc5b277cbc2cf85b07c8524a159bb9b4f15b32f2a"
+  },
+  {
+   "batch_id": "G2-032",
+   "expected_input": null,
+   "lane_id": "G2-032/G1a",
+   "ordinal": 64,
+   "prompt_sha256": "264477344f9d5d703d50a4646a09af8de1bdfa4ba594b776aec7d1f03cf0720d"
+  },
+  {
+   "batch_id": "G2-032",
+   "expected_input": null,
+   "lane_id": "G2-032/G1b",
+   "ordinal": 65,
+   "prompt_sha256": "264477344f9d5d703d50a4646a09af8de1bdfa4ba594b776aec7d1f03cf0720d"
+  },
+  {
+   "batch_id": "G2-033",
+   "expected_input": null,
+   "lane_id": "G2-033/G1a",
+   "ordinal": 66,
+   "prompt_sha256": "220b2259aa77546aaaa76cd15b121ba6b309e26dfa6ab0ba967bbe5b4494e0df"
+  },
+  {
+   "batch_id": "G2-033",
+   "expected_input": null,
+   "lane_id": "G2-033/G1b",
+   "ordinal": 67,
+   "prompt_sha256": "220b2259aa77546aaaa76cd15b121ba6b309e26dfa6ab0ba967bbe5b4494e0df"
+  }
+ ],
+ "rules_block_sha256": "17e700d162188c464d8279de06c06632923a42dc3b8ea9f3647a69fefbdf48ac",
+ "run_id": "TEST_G2",
+ "schema": "a7_g1_event_candidate/3"
+}

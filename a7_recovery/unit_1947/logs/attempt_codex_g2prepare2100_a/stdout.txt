@@ -1,0 +1,8 @@
+SEGMENT     : 1
+LANES       : 1 predicted_bytes 432989
+ROOT_SHA    : 1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18
+RECEIPT_SHA : 569802e2d971c0cb11d2a5fa0d35feb556f29feb228ebe53031d09d5591e5e80
+SCRIPT_PATH : /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_g23_grading/G2/run/grade_batch.seg01.js
+SCRIPT_BYTES: 432989
+ARGS_FILE   : /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_g23_grading/G2/g1_args_seg01.json rows 1
+PREPARE_OK

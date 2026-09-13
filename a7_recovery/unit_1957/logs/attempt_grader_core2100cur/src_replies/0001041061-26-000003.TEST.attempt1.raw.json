@@ -1,0 +1,87 @@
+```json
+{
+ "source_id": "0001041061-26-000003",
+ "verdicts": [
+  {
+   "proposal_id": "0001041061-26-000003#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000003#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000003#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000003#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000003#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001041061-26-000003",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "For the quarter, company-owned restaurant margins were 12.7%, up 40 basis points year-over-year.",
+    "raw_label_or_claim": "company-owned restaurant margins",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001041061-26-000003",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "The impact of lapping the 53rd week negatively impacted the change in company-owned restaurant margins by 40 basis points in the quarter and by 10 basis points for the year.",
+    "raw_label_or_claim": "company-owned restaurant margins",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001041061-26-000003",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Foreign currency translation favorably impacted operating profit by $10 million for the quarter and $12 million for the year.",
+    "raw_label_or_claim": "Foreign currency translation favorably impacted operating profit",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

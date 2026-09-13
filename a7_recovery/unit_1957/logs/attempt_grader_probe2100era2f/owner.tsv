@@ -1,0 +1,9 @@
+attempt	grader_probe2100era2f
+payload	../../unit_2100_partial_regression/probe_receipt_2100.py
+map	map_codex_grader_core2100era2.tsv
+command	run_1957.sh map_codex_grader_core2100era2.tsv ../../unit_2100_partial_regression/probe_receipt_2100.py grader_probe2100era2f 900
+wrapper_pid	4056674
+payload_pid	4056678
+payload_pgid	4056674
+started_utc	2026-09-13T07:18:30Z
+state	finished exit 0

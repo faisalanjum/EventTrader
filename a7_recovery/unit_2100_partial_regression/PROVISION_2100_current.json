@@ -1,0 +1,43 @@
+{
+ "kind": "CURRENT TEST view provisioned through the existing preparer",
+ "preparer": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/prepare.py",
+ "preparer_sha256": "50cfddfcf3e7a34c0956db900d109296b0ff0785e4619d81a0c93030095e98ea",
+ "arm": "current",
+ "historical": true,
+ "key_owner_served": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+ "era_owner_swap": null,
+ "bound_harness": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_partial_regression/harness_current",
+ "bound_harness_tree_sha256_before_handback": "3beb63b8fdd0352db0e0192baf45eab3633e7ff59a7980547c6341bef262f5fb",
+ "served_snapshot_tree_sha256": "bb3be133507c7ba60d12208613ff58052b35b231d452b81209712704b3e8a0aa",
+ "served_snapshot_equals_complete_tree": true,
+ "harness_overlays": [
+  "a6_launch_freeze.py",
+  "a7_prepared_run.py",
+  "a7_g1_build.py",
+  "a7_g23_build.py",
+  "a7_g23_run.py"
+ ],
+ "original_template": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_1957_test.tsv",
+ "original_template_sha256": "badc8ba6d148c39f89ee7c08a7851e4c07640d4aa4737245d9eb3728191a1a6a",
+ "private_template": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_partial_regression/template_2100_test.tsv",
+ "private_template_sha256": "8732ccbf1511da0a4c1fa5d6df08f4d1fc5e4942c208b634a88a313ace640ff5",
+ "the_one_changed_pin": null,
+ "differing_line_index": null,
+ "template_redirects_used": 2,
+ "validation_left_enabled": true,
+ "reuse_attempt": "path7",
+ "result": {
+  "map": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_core2100cur.tsv",
+  "rows": 113,
+  "output": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/attempts/core2100cur",
+  "command": [
+   "bash",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/ledger/run_1957.sh",
+   "map_codex_grader_core2100cur.tsv",
+   "../../grader_20260909/attempts/core2100cur/payload_2100.py",
+   "grader_core2100cur",
+   "5400"
+  ]
+ },
+ "model_calls": 0
+}

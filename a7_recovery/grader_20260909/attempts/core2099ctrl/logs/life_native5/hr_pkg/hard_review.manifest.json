@@ -1,0 +1,96 @@
+{
+ "door": "a4_hard_review_double_blind",
+ "authority": "Codex SEQ 1372",
+ "step": "live Step 1 A4 - the hard-disagreement review",
+ "derived_from": {
+  "owner_sha256": "91862afd796cccb523f518ed75ab79383244aef6147ac1072068aa816e916000",
+  "regrade_sha256": "81054b557d35f2989191742f61051e3b130b85cd9813231be5a60e289fb60b17",
+  "conflicts_sha256": "d26e8c54566ee0a60a98b4b256722500f070b0bc4b4b0b2f3ed2a167e6960962",
+  "a4_receipt_sha256": "005b41c7fe2079ef1cb6f8a56981fcba3e17f2c06b7765c34d1004ee9d3b1eec",
+  "a4_finalization_sha256": "35b0e2d5a7a235bd11bb7f56a828fbd830febb3e01d7a0e6f1ebe9dfc10bc546"
+ },
+ "item_role_sha256": "05c386b2a68e7eed84bb84f88c1a8706d95ec2fd7dd50568eafa63bafa175ccd",
+ "semantic_rules_sha256": "1be5eeb3dfebb6914eac05d721dadd5d673ee0645c549237d63b695f3894bbf7",
+ "output_card_sha256": "94c3e6e5d6470f558a0faaf4f471f9891de52bf075c805f7954b226dcbcb3723",
+ "boundary_sha256": "1f5c876a21c08ef92a08ba62201408494b6bda9f88779fd1e374b7b2869fd178",
+ "injection_control_sha256": "a8586510dfafa6a02245e51c5f14bbe3e9919171df3a431aaaf265f61997ad82",
+ "prefix_item_sha256": "8b6e0952ea4ae88e51acc118dc8416567dbc2d96caca8b64f0a5b00285273437",
+ "prefix_group_sha256": "ed4778c0e595d36574a49b306153ec58c35f4ef23205882bd5f064602437a800",
+ "transport": {
+  "model_alias": "sonnet",
+  "runtime_model_id": "claude-sonnet-5",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+ },
+ "budget": {
+  "before": 307,
+  "primaries": 2,
+  "after_primaries": 309,
+  "max_attempts_per_call": 2,
+  "worst_case_total": 4,
+  "worst_case_after": 311,
+  "global_ceiling": 4382
+ },
+ "counts": {
+  "tasks": 1,
+  "item_tasks": 0,
+  "group_tasks": 1,
+  "reviewed_packets": 2,
+  "primary_calls": 2
+ },
+ "capacity": {
+  "unit": "UTF-8 bytes of the serialized launcher script the runtime actually runs; never summed",
+  "transport_limit_bytes": 524288,
+  "largest_script_bytes": 74495,
+  "smallest_script_bytes": 74495,
+  "largest_prompt_bytes": 72021,
+  "at_or_over_transport_limit": []
+ },
+ "sources": [
+  {
+   "source_id": "0000006201-26-000031",
+   "source_sha256": "43c5fdedfbb3822d7b5d800c0ad18437bcb37e379d4e3cb2e11ad9594ac79af5",
+   "menu_display_sha256": "72aabdd11c6dbb505ea27e370f9cc2ce1d95a8dec18460fb9e916ba07baa0430",
+   "menu_back_sha256": "ee22e2eae27967bdf719deba1153aab20b15683b8ae43432d4f7b930f477ce08"
+  }
+ ],
+ "tasks": [
+  {
+   "task_id": "hr-000",
+   "kind": "group",
+   "origin": "locator_conflict",
+   "members": [
+    "0000006201-26-000031#000",
+    "0000006201-26-000031#003"
+   ],
+   "source_id": "0000006201-26-000031",
+   "payload_sha256": "18f1878577892438d968e502f8f2344fcfd7687472f260a8ccf5ecdcc3c874b4",
+   "prompt_sha256": "804ee0ad71b3d9256c48838caf0c7822c5dc45552fb18edb66bef80b0e2366af",
+   "prompt_bytes": 72021,
+   "blind1_script_sha256": "29d225ac59371338b303f73a3cb9911141b6ff38ac3251c3e2542750ce1fc07a",
+   "blind2_script_sha256": "7f32bebf659fe0a6584124f94582d0f9370df2243aeadf0b8829b691e6f7325b",
+   "largest_script_bytes": 74495
+  }
+ ],
+ "call_order": [
+  "hr-000/b1",
+  "hr-000/b2"
+ ],
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "25394a531146690a27fd4db50c37758af8ac9e4f71e307e143fab2fe7bc3abc1"
+ },
+ "expected_input_source": {
+  "path": "/tmp/a7_lane_input_profiles.json",
+  "sha256": "1220662f00c3ba865b1620569ae42f78c773b0bf5b9d054f8d4b4e7d83f8bff6"
+ }
+}

@@ -1,0 +1,32 @@
+{
+ "door": "a4_phase1_one_item_key",
+ "attempt": 2,
+ "run_id": "retry",
+ "receipt_sha256": "6f9393abc807676b5e15f64e82f010bcb6c056068863d2be9f6ee08d9af58c4b",
+ "rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "a3_binding": {
+  "primary_receipt": "1411669acb0bb8477047f714ac0cdfd5f2f3615cdc10c1a09c01b24f1e766153",
+  "primary_finalization": "a8b8c8ba2fbb37ea7017c3ba770ba246af144939472e3ab3efc84537f44d4c15"
+ },
+ "harvested_raw": [
+  "wf_TEST1909e_000.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "0000006201-26-000031#001",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 1,
+  "valid": 1,
+  "invalid_response": 0,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "retry": []
+}

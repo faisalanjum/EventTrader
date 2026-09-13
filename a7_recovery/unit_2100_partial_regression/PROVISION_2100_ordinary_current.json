@@ -1,0 +1,51 @@
+{
+ "kind": "CURRENT TEST view provisioned through the existing preparer",
+ "preparer": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/prepare.py",
+ "preparer_sha256": "50cfddfcf3e7a34c0956db900d109296b0ff0785e4619d81a0c93030095e98ea",
+ "arm": "current",
+ "family": "ordinary",
+ "native": false,
+ "key_fixture": false,
+ "historical": true,
+ "key_owner_served": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+ "era_owner_swap": null,
+ "bound_harness": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_partial_regression/harness_current",
+ "bound_harness_tree_sha256_before_handback": "3beb63b8fdd0352db0e0192baf45eab3633e7ff59a7980547c6341bef262f5fb",
+ "served_snapshot_tree_sha256": "bb3be133507c7ba60d12208613ff58052b35b231d452b81209712704b3e8a0aa",
+ "served_snapshot_equals_complete_tree": true,
+ "harness_overlays": [
+  "a6_launch_freeze.py",
+  "a7_prepared_run.py",
+  "a7_g1_build.py",
+  "a7_g23_build.py",
+  "a7_g23_run.py"
+ ],
+ "original_template": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_1957_cand.tsv",
+ "original_template_sha256": "3cbf79369cc713c16d5ec95386ae9cee340c860d10725125fd27b7051ca0f3bf",
+ "private_template": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_partial_regression/template_2100_cand.tsv",
+ "private_template_sha256": "f3ec1eaa3bc93d75364f9f9fcc1d44858e32735729a5edbad6fad8f64299d7a7",
+ "the_one_changed_pin": {
+  "logical": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/FinalDesign",
+  "source": "/home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign",
+  "was": "b966cdb6b23038f04e972f607a34e298e3bde1b317a17dc47b2ff6483d4993bd",
+  "now": "150583f417565f072119fe0c2c3dc1746ae22f2b8c4369c765997be17840d8dc"
+ },
+ "differing_line_index": 93,
+ "template_redirects_used": 1,
+ "validation_left_enabled": true,
+ "reuse_attempt": null,
+ "result": {
+  "map": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_core2100ord.tsv",
+  "rows": 115,
+  "output": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/attempts/core2100ord",
+  "command": [
+   "bash",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/ledger/run_1957.sh",
+   "map_codex_grader_core2100ord.tsv",
+   "../../grader_20260909/attempts/core2100ord/payload_2100.py",
+   "grader_core2100ord",
+   "5400"
+  ]
+ },
+ "model_calls": 0
+}

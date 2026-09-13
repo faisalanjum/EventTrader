@@ -1,0 +1,116 @@
+{
+ "door": "a4_phase1_one_item_key",
+ "kind": "conflict_inventory",
+ "authority": "Codex SEQ 1370",
+ "governing_rules_sha256": "dae73ae098abeb7de4e2844a19398898714d0d1a89166d798486aa170c3a8b9a",
+ "valid_envelopes_read": 102,
+ "selected_usable": 102,
+ "counts": {
+  "model_reported_ambiguities": 0,
+  "items_both_drafts_rejected": 1,
+  "conflicting_locator_groups": 1
+ },
+ "model_reported_ambiguities": [],
+ "items_both_drafts_rejected": [
+  {
+   "packet_id": "0000006201-26-000031#000",
+   "attempt": 1,
+   "locator": {
+    "source_id": "0000006201-26-000031",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter"
+   },
+   "lane_reasons": [
+    {
+     "lane_id": "0000006201-26-000031#000/L1",
+     "why": "TEST only: the shown draft does not state the settled reply."
+    },
+    {
+     "lane_id": "0000006201-26-000031#000/L2",
+     "why": "TEST only: the shown draft does not state the settled reply."
+    }
+   ],
+   "settled": {
+    "source_id": "0000006201-26-000031",
+    "facts": [],
+    "abstentions": [
+     {
+      "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+      "reason": "TEST only: mechanical no-fact response; not a source-truth judgment.",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null
+     }
+    ],
+    "continuity_hints": [
+     {
+      "kind": "driver",
+      "old": "TEST old name",
+      "new": "TEST new name",
+      "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+      "part_ref": "exhibit_99_1",
+      "occurrence_in_part": null
+     }
+    ]
+   }
+  }
+ ],
+ "conflicting_locator_groups": [
+  {
+   "locator": {
+    "source_id": "0000006201-26-000031",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter"
+   },
+   "members": [
+    {
+     "packet_id": "0000006201-26-000031#000",
+     "attempt": 1,
+     "settled": {
+      "source_id": "0000006201-26-000031",
+      "facts": [],
+      "abstentions": [
+       {
+        "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+        "reason": "TEST only: mechanical no-fact response; not a source-truth judgment.",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null
+       }
+      ],
+      "continuity_hints": [
+       {
+        "kind": "driver",
+        "old": "TEST old name",
+        "new": "TEST new name",
+        "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null
+       }
+      ]
+     }
+    },
+    {
+     "packet_id": "0000006201-26-000031#003",
+     "attempt": 1,
+     "settled": {
+      "source_id": "0000006201-26-000031",
+      "facts": [],
+      "abstentions": [
+       {
+        "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+        "reason": "TEST only: mechanical no-fact response; not a source-truth judgment.",
+        "part_ref": "exhibit_99_1",
+        "occurrence_in_part": null
+       }
+      ],
+      "continuity_hints": []
+     }
+    }
+   ],
+   "distinct_answers": 2
+  }
+ ],
+ "number_rendering": "exact decimal literals as JSON strings",
+ "regrade_sha256": "81054b557d35f2989191742f61051e3b130b85cd9813231be5a60e289fb60b17"
+}

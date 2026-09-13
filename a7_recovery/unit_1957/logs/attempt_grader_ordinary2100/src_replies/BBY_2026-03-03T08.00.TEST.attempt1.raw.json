@@ -1,0 +1,93 @@
+```json
+{
+ "source_id": "BBY_2026-03-03T08.00",
+ "verdicts": [
+  {
+   "proposal_id": "BBY_2026-03-03T08.00#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "BBY_2026-03-03T08.00#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "BBY_2026-03-03T08.00#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "BBY_2026-03-03T08.00#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "BBY_2026-03-03T08.00#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "BBY_2026-03-03T08.00#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "adjusted diluted earnings per share of $6.30 to $6.60",
+    "raw_label_or_claim": "adjusted diluted earnings per share",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "In fiscal 26, our gross advertising collections were just over $900 million. This is up more than 7% versus last year. Today, these collections show up mostly as an offset to our cost of goods sold, with a small amount flowing through revenue. In fiscal 27, we anticipate growth of approximately 10%.",
+    "raw_label_or_claim": "gross advertising collections",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "BBY_2026-03-03T08.00",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "we delivered our eighth consecutive quarter of positive comparable sales in computing driven by laptops, desktops, and accessories.",
+    "raw_label_or_claim": "computing",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

@@ -1,0 +1,5 @@
+{
+ "signed": true,
+ "blocked": [],
+ "why": "TEST only: every scheduled row settled through its owners and the candidate re-derives; this signs the plumbing, never source truth."
+}

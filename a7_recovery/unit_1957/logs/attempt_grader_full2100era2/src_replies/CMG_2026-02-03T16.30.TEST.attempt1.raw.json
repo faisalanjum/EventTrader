@@ -1,0 +1,99 @@
+```json
+{
+ "source_id": "CMG_2026-02-03T16.30",
+ "verdicts": [
+  {
+   "proposal_id": "CMG_2026-02-03T16.30#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "CMG_2026-02-03T16.30#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "CMG_2026-02-03T16.30#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "CMG_2026-02-03T16.30#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "CMG_2026-02-03T16.30#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "CMG_2026-02-03T16.30#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "CMG_2026-02-03T16.30#P006",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "For the fourth quarter, sales grew 4.9% to reach $3 billion, with a comp decline of 2.5%.",
+    "raw_label_or_claim": "sales grew 4.9% to reach $3 billion",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "Marketing costs were 3.5% of sales in Q4, an increase of about 50 basis points from last year.",
+    "raw_label_or_claim": "Marketing costs were 3.5% of sales in Q4",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "CMG_2026-02-03T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "we anticipate our full-year comparable restaurant sales to be about flat.",
+    "raw_label_or_claim": "full-year comparable restaurant sales to be about flat",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

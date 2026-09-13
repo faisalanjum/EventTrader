@@ -1,0 +1,31 @@
+{
+ "g2": {
+  "batches": 70,
+  "largest_batch": 5,
+  "questions": 306
+ },
+ "g3": {
+  "batches": 16,
+  "largest_batch": 10,
+  "legs_scored": [
+   "P1",
+   "P2",
+   "UNION"
+  ],
+  "questions": 117,
+  "unroutable": [],
+  "unroutable_event_legs": 0
+ },
+ "new_preparation": "a57a90fff7c2f77fa6ba5e34b7b285d6ef8793b55d4d30c472bf6643108bc718",
+ "old_preparation": "c1a857abc3a1441ab941fa446ec80f29a8b82df2a46ff52914ff98d3a4862f47",
+ "question_context_digest": "f208d3c8adadc0e89ce24f754bcc9832d6ed8ae79402c28105c5c071091060f7",
+ "questions": 423,
+ "remaining_calls": {
+  "g2": 140,
+  "g3": 32,
+  "note": "the launcher rows for work that has NOT run. Completed producer and G1 spending keeps its own historical ledgers and is not restated here.",
+  "total": 172
+ },
+ "scope": "every frozen G2/G3 question compared; zero model calls",
+ "unchanged_population_inputs_and_rules": true
+}

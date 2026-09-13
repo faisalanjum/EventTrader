@@ -1,0 +1,1187 @@
+{
+ "batches": 16,
+ "credited": {},
+ "credited_questions": 0,
+ "questions": 117,
+ "run_identity": {
+  "root_sha256": "3c636804aadc07c90957b760cc29316f67421e3fff2c6553c2b544a7856a8f7b",
+  "run_digest": "f2e9ab971c973a422009da048d2e0e544975994166945997f81f3bd8bde24f7e",
+  "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_b/TEST_only/run_G3",
+  "run_files": 73
+ },
+ "schema": "a7_g23_whole_run_completion/1",
+ "task_kind": "G3",
+ "unresolved": [
+  {
+   "batch_id": "G3-000",
+   "question_id": "Xfcd052498cda6edb",
+   "reasons": [
+    {
+     "question_id": "Xfcd052498cda6edb",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "Xa3708e607c7ea5c9",
+   "reasons": [
+    {
+     "question_id": "Xa3708e607c7ea5c9",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "X3d7ea88f66d74904",
+   "reasons": [
+    {
+     "question_id": "X3d7ea88f66d74904",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "X56415b76439cd6be",
+   "reasons": [
+    {
+     "question_id": "X56415b76439cd6be",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "X29a22d2243f2f310",
+   "reasons": [
+    {
+     "question_id": "X29a22d2243f2f310",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "X1117c3fded7423fa",
+   "reasons": [
+    {
+     "question_id": "X1117c3fded7423fa",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "X405ab7257c1568f6",
+   "reasons": [
+    {
+     "question_id": "X405ab7257c1568f6",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "X07c571059d14f2d6",
+   "reasons": [
+    {
+     "question_id": "X07c571059d14f2d6",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "X71b9db6a75a5f63a",
+   "reasons": [
+    {
+     "question_id": "X71b9db6a75a5f63a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-000",
+   "question_id": "Xe71679de4dec96b9",
+   "reasons": [
+    {
+     "question_id": "Xe71679de4dec96b9",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "X6eea70137b9a2e63",
+   "reasons": [
+    {
+     "question_id": "X6eea70137b9a2e63",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "X028e7ca1db790ea8",
+   "reasons": [
+    {
+     "question_id": "X028e7ca1db790ea8",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "Xf6cbcbd375607d09",
+   "reasons": [
+    {
+     "question_id": "Xf6cbcbd375607d09",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "Xa0f9de09f3c55112",
+   "reasons": [
+    {
+     "question_id": "Xa0f9de09f3c55112",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "Xc1c8f8411ee75a20",
+   "reasons": [
+    {
+     "question_id": "Xc1c8f8411ee75a20",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "X777fcfffdedc3229",
+   "reasons": [
+    {
+     "question_id": "X777fcfffdedc3229",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "X56e2d89be46d9a61",
+   "reasons": [
+    {
+     "question_id": "X56e2d89be46d9a61",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "X95aa6d36cce8922a",
+   "reasons": [
+    {
+     "question_id": "X95aa6d36cce8922a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "Xb4199b551afdffcd",
+   "reasons": [
+    {
+     "question_id": "Xb4199b551afdffcd",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "X112a630f8fef687e",
+   "reasons": [
+    {
+     "question_id": "X112a630f8fef687e",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "Xe53ce648226c9f64",
+   "reasons": [
+    {
+     "question_id": "Xe53ce648226c9f64",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "X3a53a382d26adad5",
+   "reasons": [
+    {
+     "question_id": "X3a53a382d26adad5",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "Xb7d74730695127ef",
+   "reasons": [
+    {
+     "question_id": "Xb7d74730695127ef",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "X5ea3b7457e8aa160",
+   "reasons": [
+    {
+     "question_id": "X5ea3b7457e8aa160",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "Xe2020b8d13e3d8dc",
+   "reasons": [
+    {
+     "question_id": "Xe2020b8d13e3d8dc",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "Xc41c0e28ba4f1e05",
+   "reasons": [
+    {
+     "question_id": "Xc41c0e28ba4f1e05",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "X75819bfe50a39683",
+   "reasons": [
+    {
+     "question_id": "X75819bfe50a39683",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "X263e008c6143e6f7",
+   "reasons": [
+    {
+     "question_id": "X263e008c6143e6f7",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "Xa9539f6f9f30a4c6",
+   "reasons": [
+    {
+     "question_id": "Xa9539f6f9f30a4c6",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "X1e64778c5aec89f3",
+   "reasons": [
+    {
+     "question_id": "X1e64778c5aec89f3",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "Xb649417e45cad2de",
+   "reasons": [
+    {
+     "question_id": "Xb649417e45cad2de",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X625f7c75cc570b04",
+   "reasons": [
+    {
+     "question_id": "X625f7c75cc570b04",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X427bb1a95bab02aa",
+   "reasons": [
+    {
+     "question_id": "X427bb1a95bab02aa",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X5603a0beaadd5e3c",
+   "reasons": [
+    {
+     "question_id": "X5603a0beaadd5e3c",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X6e22977f210d9c10",
+   "reasons": [
+    {
+     "question_id": "X6e22977f210d9c10",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X75b11760e0633d83",
+   "reasons": [
+    {
+     "question_id": "X75b11760e0633d83",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X12cb0c151404674d",
+   "reasons": [
+    {
+     "question_id": "X12cb0c151404674d",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X80e6aaa45575930a",
+   "reasons": [
+    {
+     "question_id": "X80e6aaa45575930a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X86feb54326687022",
+   "reasons": [
+    {
+     "question_id": "X86feb54326687022",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X0cca68dc69dcd11b",
+   "reasons": [
+    {
+     "question_id": "X0cca68dc69dcd11b",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "Xa4deadc9031eb381",
+   "reasons": [
+    {
+     "question_id": "Xa4deadc9031eb381",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X1324b492faa2981e",
+   "reasons": [
+    {
+     "question_id": "X1324b492faa2981e",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X126166ff9554cd21",
+   "reasons": [
+    {
+     "question_id": "X126166ff9554cd21",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "Xb100f34c67a98cff",
+   "reasons": [
+    {
+     "question_id": "Xb100f34c67a98cff",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X3084ebf401c9eb68",
+   "reasons": [
+    {
+     "question_id": "X3084ebf401c9eb68",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X6f9c048ff25601a9",
+   "reasons": [
+    {
+     "question_id": "X6f9c048ff25601a9",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X18645f55a6091ad6",
+   "reasons": [
+    {
+     "question_id": "X18645f55a6091ad6",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "Xa2480c79b460e114",
+   "reasons": [
+    {
+     "question_id": "Xa2480c79b460e114",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X8e7ae846d72a4dfe",
+   "reasons": [
+    {
+     "question_id": "X8e7ae846d72a4dfe",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X64d9845a89cc6734",
+   "reasons": [
+    {
+     "question_id": "X64d9845a89cc6734",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "X3e2d2692bb7e8e6a",
+   "reasons": [
+    {
+     "question_id": "X3e2d2692bb7e8e6a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "Xcf1d14b2028b62d2",
+   "reasons": [
+    {
+     "question_id": "Xcf1d14b2028b62d2",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "Xdeba718a668874a1",
+   "reasons": [
+    {
+     "question_id": "Xdeba718a668874a1",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "Xc6e8defff53e5743",
+   "reasons": [
+    {
+     "question_id": "Xc6e8defff53e5743",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "X169a9a6e92c88dc7",
+   "reasons": [
+    {
+     "question_id": "X169a9a6e92c88dc7",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "X7c01f022765630af",
+   "reasons": [
+    {
+     "question_id": "X7c01f022765630af",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "Xbd0db500ca169c0a",
+   "reasons": [
+    {
+     "question_id": "Xbd0db500ca169c0a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "X63efe3da7b1e5477",
+   "reasons": [
+    {
+     "question_id": "X63efe3da7b1e5477",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "X59b3cb047c8dd0d9",
+   "reasons": [
+    {
+     "question_id": "X59b3cb047c8dd0d9",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-005",
+   "question_id": "X560cfed511c85204",
+   "reasons": [
+    {
+     "question_id": "X560cfed511c85204",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "Xb59980347da41ea2",
+   "reasons": [
+    {
+     "question_id": "Xb59980347da41ea2",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "X41cc5300ffab2d8b",
+   "reasons": [
+    {
+     "question_id": "X41cc5300ffab2d8b",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "Xa8876ee91bdb4b67",
+   "reasons": [
+    {
+     "question_id": "Xa8876ee91bdb4b67",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "X65382a6064d6c960",
+   "reasons": [
+    {
+     "question_id": "X65382a6064d6c960",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "X1c86be8ce30e3b3c",
+   "reasons": [
+    {
+     "question_id": "X1c86be8ce30e3b3c",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "Xc918d203e3a77f17",
+   "reasons": [
+    {
+     "question_id": "Xc918d203e3a77f17",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "Xce1efa269060a6fb",
+   "reasons": [
+    {
+     "question_id": "Xce1efa269060a6fb",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "X99d7bc16850a9dde",
+   "reasons": [
+    {
+     "question_id": "X99d7bc16850a9dde",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "X73357410ba2d97a2",
+   "reasons": [
+    {
+     "question_id": "X73357410ba2d97a2",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-006",
+   "question_id": "Xa08160168595ca26",
+   "reasons": [
+    {
+     "question_id": "Xa08160168595ca26",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "X14637de8bbc0ab1b",
+   "reasons": [
+    {
+     "question_id": "X14637de8bbc0ab1b",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "Xa6096f3fa348cdd9",
+   "reasons": [
+    {
+     "question_id": "Xa6096f3fa348cdd9",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "X24756096af610d6d",
+   "reasons": [
+    {
+     "question_id": "X24756096af610d6d",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "Xbb48c40216961570",
+   "reasons": [
+    {
+     "question_id": "Xbb48c40216961570",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "X301482d0236debbc",
+   "reasons": [
+    {
+     "question_id": "X301482d0236debbc",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "Xe241261548339f09",
+   "reasons": [
+    {
+     "question_id": "Xe241261548339f09",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "X7fd8ca3f891aae84",
+   "reasons": [
+    {
+     "question_id": "X7fd8ca3f891aae84",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "X3b3a3eb17452fbcd",
+   "reasons": [
+    {
+     "question_id": "X3b3a3eb17452fbcd",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "X8e198589cfc2917f",
+   "reasons": [
+    {
+     "question_id": "X8e198589cfc2917f",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-007",
+   "question_id": "Xa7bfdf2b6ab0c842",
+   "reasons": [
+    {
+     "question_id": "Xa7bfdf2b6ab0c842",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "Xbfdce791095ec14e",
+   "reasons": [
+    {
+     "question_id": "Xbfdce791095ec14e",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X77c244b1640ebb8c",
+   "reasons": [
+    {
+     "question_id": "X77c244b1640ebb8c",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "Xc0176db34612ea2c",
+   "reasons": [
+    {
+     "question_id": "Xc0176db34612ea2c",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X13e66778b6585c9a",
+   "reasons": [
+    {
+     "question_id": "X13e66778b6585c9a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X36efe9f676dedb12",
+   "reasons": [
+    {
+     "question_id": "X36efe9f676dedb12",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "Xc60ccdea49a8ca1a",
+   "reasons": [
+    {
+     "question_id": "Xc60ccdea49a8ca1a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X11cf711eee0371d7",
+   "reasons": [
+    {
+     "question_id": "X11cf711eee0371d7",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "Xe7dd22baabb1c77b",
+   "reasons": [
+    {
+     "question_id": "Xe7dd22baabb1c77b",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X4c3aaf2cf2f4bcee",
+   "reasons": [
+    {
+     "question_id": "X4c3aaf2cf2f4bcee",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X4ebf8857741ae6a8",
+   "reasons": [
+    {
+     "question_id": "X4ebf8857741ae6a8",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "Xbd1a43bdf9debd46",
+   "reasons": [
+    {
+     "question_id": "Xbd1a43bdf9debd46",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "X31eb45d686e84883",
+   "reasons": [
+    {
+     "question_id": "X31eb45d686e84883",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "X8d2159e496d61cc6",
+   "reasons": [
+    {
+     "question_id": "X8d2159e496d61cc6",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "X06c4d4988b938d1c",
+   "reasons": [
+    {
+     "question_id": "X06c4d4988b938d1c",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "X38b3c845d88429f0",
+   "reasons": [
+    {
+     "question_id": "X38b3c845d88429f0",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "X6a8a1479099fcb9a",
+   "reasons": [
+    {
+     "question_id": "X6a8a1479099fcb9a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "Xa2b729c37573e3b6",
+   "reasons": [
+    {
+     "question_id": "Xa2b729c37573e3b6",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "Xf6928f184a847e9e",
+   "reasons": [
+    {
+     "question_id": "Xf6928f184a847e9e",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "Xb8d3efab26630ed1",
+   "reasons": [
+    {
+     "question_id": "Xb8d3efab26630ed1",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-009",
+   "question_id": "Xe10aa94910fc4e7a",
+   "reasons": [
+    {
+     "question_id": "Xe10aa94910fc4e7a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "X6f84a382ffbc0004",
+   "reasons": [
+    {
+     "question_id": "X6f84a382ffbc0004",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "X1126d58e06d1223b",
+   "reasons": [
+    {
+     "question_id": "X1126d58e06d1223b",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "X4e081a7d171dba07",
+   "reasons": [
+    {
+     "question_id": "X4e081a7d171dba07",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "X5e80f0a222be7eb2",
+   "reasons": [
+    {
+     "question_id": "X5e80f0a222be7eb2",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "X1ef69564dbb27ac2",
+   "reasons": [
+    {
+     "question_id": "X1ef69564dbb27ac2",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "X1642c8fd4f67b764",
+   "reasons": [
+    {
+     "question_id": "X1642c8fd4f67b764",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "Xf2bdb18bab1c8ab8",
+   "reasons": [
+    {
+     "question_id": "Xf2bdb18bab1c8ab8",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-010",
+   "question_id": "X7bfc69ea73a9d1ae",
+   "reasons": [
+    {
+     "question_id": "X7bfc69ea73a9d1ae",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-011",
+   "question_id": "Xbae787103e785e11",
+   "reasons": [
+    {
+     "question_id": "Xbae787103e785e11",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-011",
+   "question_id": "Xa89529fe646aaa72",
+   "reasons": [
+    {
+     "question_id": "Xa89529fe646aaa72",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-011",
+   "question_id": "X0df833dc3d20e76e",
+   "reasons": [
+    {
+     "question_id": "X0df833dc3d20e76e",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-011",
+   "question_id": "Xb3a3351bca3b64eb",
+   "reasons": [
+    {
+     "question_id": "Xb3a3351bca3b64eb",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-012",
+   "question_id": "X9cdae8b168c23a2a",
+   "reasons": [
+    {
+     "question_id": "X9cdae8b168c23a2a",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-012",
+   "question_id": "X9b6e4dcf1d43f68e",
+   "reasons": [
+    {
+     "question_id": "X9b6e4dcf1d43f68e",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-013",
+   "question_id": "Xeb9efe850afaa8e3",
+   "reasons": [
+    {
+     "question_id": "Xeb9efe850afaa8e3",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-014",
+   "question_id": "Xba92891f45109f52",
+   "reasons": [
+    {
+     "question_id": "Xba92891f45109f52",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-015",
+   "question_id": "X1cdb0213363706c7",
+   "reasons": [
+    {
+     "question_id": "X1cdb0213363706c7",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  }
+ ],
+ "unresolved_questions": 117
+}

@@ -1,0 +1,135 @@
+{
+ "kind": "grading tests directly affected by the new partial-report policy",
+ "derivation": "served test modules importing any of a7_g23_build, a7_g1_build, a7_g23_run, a7_g1_complete_v2",
+ "why_not_the_aligned_harness": "grader_20260909/regression.py compares a CHANGED owner tree with its predecessor; no frozen owner changed this round, so it has no second side to align and does not apply here",
+ "policy_imported_by_any_affected_module": false,
+ "module_count": 19,
+ "modules_green": 8,
+ "modules_needing_an_unserved_TEST_fixture": [
+  {
+   "module": "test_a7_g23_lifecycle_1464.py",
+   "demands": "A7_DRIVER_VALIDATORS_SHA"
+  },
+  {
+   "module": "test_a7_trace_1471.py",
+   "demands": "A7_TRACE_FIXTURE"
+  }
+ ],
+ "per_module": [
+  {
+   "module": "test_a6_fixture_isolation_1768.py",
+   "exit": 0,
+   "summary": "3 passed in 3.22s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a6_fixture_isolation_after_1768.py",
+   "exit": 0,
+   "summary": "1 passed in 0.52s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_closeout_integrity_1482.py",
+   "exit": 1,
+   "summary": "4 failed, 11 passed in 29.69s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_corrections_1454.py",
+   "exit": 1,
+   "summary": "47 errors in 1.24s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_current_1473.py",
+   "exit": 1,
+   "summary": "10 passed, 4 errors in 3.86s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_current_postrun.py",
+   "exit": 1,
+   "summary": "4 errors in 0.31s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_g1_precall_freeze_1525.py",
+   "exit": 1,
+   "summary": "7 errors in 0.34s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_g23_lifecycle_1464.py",
+   "exit": 1,
+   "summary": "79 errors in 0.86s",
+   "fixture_env_its_own_assertion_names": "A7_DRIVER_VALIDATORS_SHA"
+  },
+  {
+   "module": "test_a7_identity_relations.py",
+   "exit": 0,
+   "summary": "274 passed in 0.21s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_input_binding.py",
+   "exit": 1,
+   "summary": "10 errors in 0.35s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_interrupted_capture.py",
+   "exit": 1,
+   "summary": "7 errors in 0.33s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_postrun_identity_1521.py",
+   "exit": 0,
+   "summary": "14 passed in 6.08s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_publication.py",
+   "exit": 1,
+   "summary": "2 passed, 10 errors in 0.35s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_raw_binding_1483.py",
+   "exit": 0,
+   "summary": "12 passed in 1.02s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_runstates_1470.py",
+   "exit": 0,
+   "summary": "27 passed in 7.61s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_score_boundaries.py",
+   "exit": 0,
+   "summary": "94 passed in 1.43s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_source_correction_1487.py",
+   "exit": 1,
+   "summary": "10 failed, 1 passed, 2 skipped, 7 errors in 0.83s",
+   "fixture_env_its_own_assertion_names": null
+  },
+  {
+   "module": "test_a7_trace_1471.py",
+   "exit": 1,
+   "summary": "2 failed, 2 passed, 7 errors in 3.69s",
+   "fixture_env_its_own_assertion_names": "A7_TRACE_FIXTURE"
+  },
+  {
+   "module": "test_g1_cached_resume_1781.py",
+   "exit": 0,
+   "summary": "49 passed in 1.07s",
+   "fixture_env_its_own_assertion_names": null
+  }
+ ],
+ "model_calls": 0
+}

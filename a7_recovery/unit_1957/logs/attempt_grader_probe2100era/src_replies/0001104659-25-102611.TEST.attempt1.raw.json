@@ -1,0 +1,93 @@
+```json
+{
+ "source_id": "0001104659-25-102611",
+ "verdicts": [
+  {
+   "proposal_id": "0001104659-25-102611#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-102611#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-102611#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-102611#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-102611#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-102611#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-25-102611",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "As amended, the Revolving Credit Agreement will terminate, and all amounts borrowed will be due and payable, on November 15, 2028 .",
+    "raw_label_or_claim": "Revolving Credit Agreement",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-25-102611",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Each of the first three quarters of our fiscal year consists of 12 weeks, and the fourth quarter consisted of 16 weeks in 2025, 17 weeks in 2024 and 16 weeks in 2023.",
+    "raw_label_or_claim": "the fourth quarter consisted of 16 weeks in 2025, 17 weeks in 2024 and 16 weeks in 2023",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-25-102611",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "The fourth quarter of fiscal year 2025 represented 33.0% of annual sales and 33.5% of net income",
+    "raw_label_or_claim": "The fourth quarter of fiscal year 2025",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

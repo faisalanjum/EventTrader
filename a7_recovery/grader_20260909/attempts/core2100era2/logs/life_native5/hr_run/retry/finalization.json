@@ -1,0 +1,45 @@
+{
+ "door": "a4_hard_review_double_blind",
+ "attempt": 2,
+ "run_id": "retry",
+ "receipt_sha256": "dc5ddb738f7cd2d87eef1747115fa673feac7b071c9a3de559a4c04bb480c6ed",
+ "manifest_sha256": "196f1512ef25b3eb9d512c0ea70efcd194fe1bdb5d41f4722453511ecb841789",
+ "derived_from": {
+  "owner_sha256": "91862afd796cccb523f518ed75ab79383244aef6147ac1072068aa816e916000",
+  "regrade_sha256": "81054b557d35f2989191742f61051e3b130b85cd9813231be5a60e289fb60b17",
+  "conflicts_sha256": "d26e8c54566ee0a60a98b4b256722500f070b0bc4b4b0b2f3ed2a167e6960962",
+  "a4_receipt_sha256": "005b41c7fe2079ef1cb6f8a56981fcba3e17f2c06b7765c34d1004ee9d3b1eec",
+  "a4_finalization_sha256": "35b0e2d5a7a235bd11bb7f56a828fbd830febb3e01d7a0e6f1ebe9dfc10bc546"
+ },
+ "harvested_raw": [
+  "wf_TEST1909g_000.000.raw.json"
+ ],
+ "primary_complete": true,
+ "problems": [],
+ "outcomes": [
+  [
+   "hr-000/b2",
+   "valid",
+   ""
+  ]
+ ],
+ "ledger": {
+  "scheduled": 1,
+  "valid": 1,
+  "invalid_response": 0,
+  "transport_no_answer": 0,
+  "unproved": 0,
+  "missing": 0
+ },
+ "budget": {
+  "ledger_before": 307,
+  "this_attempt": 1,
+  "spent_so_far": 3,
+  "ledger_after": 310,
+  "frozen_primaries": 2,
+  "worst_case_total": 4,
+  "global_ceiling": 4382,
+  "within_ceiling": true
+ },
+ "retry": []
+}

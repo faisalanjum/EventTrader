@@ -1,0 +1,21 @@
+...................F....                                                 [100%]
+=================================== FAILURES ===================================
+_____ test_unchanged_final_gate_keeps_unknowns_and_known_failures_separate _____
+
+    def test_unchanged_final_gate_keeps_unknowns_and_known_failures_separate():
+>       launch = G._read(os.environ['A7_GRADING_LAUNCH'])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py:136: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = environ({'SHELL': '/bin/bash', 'CODEX_MANAGED_PACKAGE_ROOT': '/home/faisal/.npm-global/lib/node_modules/@openai/codex'...odex_check/test_partial_grading_2095.py::test_unchanged_final_gate_keeps_unknowns_and_known_failures_separate (call)'})
+key = 'A7_GRADING_LAUNCH'
+
+>   ???
+E   KeyError: 'A7_GRADING_LAUNCH'
+
+<frozen os>:679: KeyError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_partial_grading_2095.py::test_unchanged_final_gate_keeps_unknowns_and_known_failures_separate
+1 failed, 23 passed in 0.09s

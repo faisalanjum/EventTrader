@@ -1,0 +1,140 @@
+{
+ "schema": "a4-final-key-lock/1511",
+ "state": "LOCKED",
+ "authority": {
+  "instruction": "archive_CODEX_1957.md",
+  "instruction_sha256": "cea17ddb3c61e45daf5b969b4241583d21572ad0e07bfcc8dbf288dddbcb3f14"
+ },
+ "artifacts": {
+  "key_identity": "a3aa99a11063a7b876b1a69759cb5bccf8e2dedd3dab12af0dc8b7d0dbccd814",
+  "sidecar": "086204ccfee632a650d21a1a2298b293064c532bf627c283fb122b57e228ae2b",
+  "validator_receipt": "c23af837e207a6beacd871b47be8d8c84042942f921e6c8c9c143e7389821ae7",
+  "provenance": "1b7ffd9e8d0c591e2f2af6bcbd24273bc905be2e91a6d57d721788dd59c38641",
+  "signer_prompt": "17230cad5a248010d11c792d848c779dcb240cee733a31ab20240c4a2df6ace8",
+  "signer_launcher": "7ca84825b2814882ef657768819c66ccb43dbcdccc4303d7f158e0fc8175bb0b",
+  "signer_manifest": "0416071a8caa54e881ce7595e147806558a76ceaef4a693c28adaf2d41439b82",
+  "signer_raw": "e4e312bbb12bf9c0b60d3bcf339fa69b629cf93db7264dac5f16f8689b32a1f1",
+  "signer_evidence": "c9adef5aeeeef9606f64feb55c8adf793c9fc43298c3d269931742bd47a7799a",
+  "signer_reply": "3543833149fff9d1a8861bf920a8ddd8c2a18cbed3fbbeb68c4233710aa6a932",
+  "attempt1_record": "c9adef5aeeeef9606f64feb55c8adf793c9fc43298c3d269931742bd47a7799a",
+  "attempt1_launcher": "7ca84825b2814882ef657768819c66ccb43dbcdccc4303d7f158e0fc8175bb0b",
+  "attempt1_raw": "e4e312bbb12bf9c0b60d3bcf339fa69b629cf93db7264dac5f16f8689b32a1f1",
+  "attempt1_state": "2dea4cb468549d63b720da3752f1c38e25dedf6ece84ee084c8508237818da50",
+  "attempt1_transcript": "9a6c1e88eff1f1b5eee591264975fe6f9503da20d0d27ca6abb2e890de099aad"
+ },
+ "key": {
+  "identity": "key_identity.json: the ordered exact raw component shards, the four bindings and the pinned loader",
+  "loader": {
+   "module": "build_kfields_final",
+   "entry": "signing_gate",
+   "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+  },
+  "materializer": {
+   "module": "build_kfields_final",
+   "entry": "materialize",
+   "sha256": "a0ab1138792ce2a7bfeded5b94f4b37f99c6562b003eace4494aa92098e68c05"
+  },
+  "bindings": {
+   "final_package": "b859ac281710cb4b316c0f4a03ff0263bbd2b8ba6786e8b43b91cebfd53efe98",
+   "phase1_finalization": "35b0e2d5a7a235bd11bb7f56a828fbd830febb3e01d7a0e6f1ebe9dfc10bc546",
+   "event_finalization": "25ed797c606071ac554270344378174255c5148aa0a726d467e4897e76a55887",
+   "hard_review_finalization": "1a1ac7d520770f10cd9b9210e135d32191888b457674dad9a93042f2c0f42952"
+  },
+  "events": 36,
+  "composed_events": 0
+ },
+ "counts": {
+  "events_accounted": 36,
+  "rows_accounted": 102,
+  "accepted_facts": 35,
+  "du_worthy_facts": 35,
+  "controls": 34,
+  "exclusions": 33,
+  "abstentions": 67,
+  "record_kind_conflicts": 0,
+  "duplicate_gold_facts": 0,
+  "open_issues": 0,
+  "phase1_ambiguities": 0,
+  "tag_floor": 5,
+  "distinct_rows_per_tag": {
+   "point_range_floor_ceiling": 8,
+   "losses_and_sign": 8,
+   "sequential_comparison": 12,
+   "measurement_wording": 6,
+   "favourable_unfavourable_direction": 6,
+   "expectation_routing": 6,
+   "slices_and_unknown_axes": 6,
+   "portion_versus_whole": 6,
+   "ambiguous_menus": 6,
+   "corrections_and_amendments": 6
+  },
+  "tags_below_floor": [],
+  "sequential_rows": 12
+ },
+ "validator": {
+  "problems": [],
+  "open_issues": 0,
+  "tags_below_floor": [],
+  "rows_accounted": 102,
+  "class_floor": 5
+ },
+ "signer": {
+  "signed": true,
+  "blocked": [],
+  "run_id": "wf_TESTsign_owed_000",
+  "agent_id": "TESTsign_owed_000",
+  "attempt": 1,
+  "state_sha256": "2dea4cb468549d63b720da3752f1c38e25dedf6ece84ee084c8508237818da50",
+  "transcript_sha256": "9a6c1e88eff1f1b5eee591264975fe6f9503da20d0d27ca6abb2e890de099aad",
+  "raw_sha256": "e4e312bbb12bf9c0b60d3bcf339fa69b629cf93db7264dac5f16f8689b32a1f1",
+  "prompt_sha256": "17230cad5a248010d11c792d848c779dcb240cee733a31ab20240c4a2df6ace8",
+  "script_sha256": "7ca84825b2814882ef657768819c66ccb43dbcdccc4303d7f158e0fc8175bb0b",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "model": "sonnet",
+  "effort": "high",
+  "agent_type": "lean-probe",
+  "runtime_model_ids": [
+   "claude-sonnet-5"
+  ],
+  "transport": {
+   "model_alias": "sonnet",
+   "runtime_model_id": "claude-sonnet-5",
+   "effort": "high",
+   "agentType": "lean-probe",
+   "disallowedTools": [
+    "Read"
+   ],
+   "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+   "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+   "transport": "Claude Code Workflow agent(), subscription",
+   "runtime_freeze_sha256": "c534022d391e409f48ae65a0ded6bbf7eb428d4a92a00407646cad77f8ef794a"
+  },
+  "tool_calls": 0,
+  "parser": "build_kfields_final.read_signature"
+ },
+ "call_accounting": {
+  "ledger_before": 346,
+  "signer_calls": 1,
+  "retries": 0,
+  "ledger_after": 347,
+  "ceiling": 6000,
+  "retry_law": {
+   "owner": "build_kfields_final.RETRYABLE",
+   "retryable": [
+    "invalid_response"
+   ]
+  },
+  "lawful_attempts": [
+   1,
+   2
+  ],
+  "attempts": [
+   {
+    "attempt": 1,
+    "kind": "evidence",
+    "outcome": "signed",
+    "record_sha256": "c9adef5aeeeef9606f64feb55c8adf793c9fc43298c3d269931742bd47a7799a"
+   }
+  ]
+ }
+}

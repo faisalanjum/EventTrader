@@ -1,0 +1,7 @@
+attempt	codex_g23transport2098_red
+payload	../../unit_2020_codex_check/review_g23_transport_2098.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3944192
+payload_pid	3944196
+started_utc	2026-09-13T06:18:44Z
+state	finished exit 1

@@ -1,0 +1,87 @@
+```json
+{
+ "source_id": "0000092380-26-000044",
+ "verdicts": [
+  {
+   "proposal_id": "0000092380-26-000044#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000092380-26-000044#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000092380-26-000044#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000092380-26-000044#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000092380-26-000044#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000092380-26-000044",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Given the ongoing macroeconomic uncertainty, updating the Company's full-year adjusted EPS guidance of $4.00 would not be productive at this time.",
+    "raw_label_or_claim": "full-year adjusted EPS guidance of $4.00",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000092380-26-000044",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Expect 66 Boeing 737-8 aircraft deliveries and plan to retire approximately 60 aircraft in 2026",
+    "raw_label_or_claim": "66 Boeing 737-8 aircraft deliveries",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000092380-26-000044",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "First quarter 2026 operating expenses increased 4.0 percent year-over-year, to $6.9 billion",
+    "raw_label_or_claim": "operating expenses",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

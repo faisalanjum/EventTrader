@@ -1,0 +1,7 @@
+attempt	codex_g3wrongreceipt2100_a
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_g23_transport_2098.tsv
+wrapper_pid	4058753
+payload_pid	4058757
+started_utc	2026-09-13T07:19:41Z
+state	finished exit 1

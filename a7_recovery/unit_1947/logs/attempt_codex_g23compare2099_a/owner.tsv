@@ -1,0 +1,7 @@
+attempt	codex_g23compare2099_a
+payload	../../unit_2020_codex_check/compare_g23_preparation_2099.py
+map	../unit_2020_codex_check/map_g23_transport_2098.tsv
+wrapper_pid	3971266
+payload_pid	3971271
+started_utc	2026-09-13T06:36:07Z
+state	finished exit 0

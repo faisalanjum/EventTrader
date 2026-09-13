@@ -1,0 +1,93 @@
+```json
+{
+ "source_id": "0000940944-25-000038",
+ "verdicts": [
+  {
+   "proposal_id": "0000940944-25-000038#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-25-000038#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-25-000038#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-25-000038#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-25-000038#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000940944-25-000038#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000940944-25-000038",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Fine Dining 18.6% 19.0% (40) BP",
+    "raw_label_or_claim": "Fine Dining",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000940944-25-000038",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "On September 16, 2024, we entered into Amendment No. 1 (Amendment) to the Revolving Credit Agreement, which replaced the prior financial covenant (which provided for a maximum consolidated total debt to total capitalization ratio) with a new financial covenant requiring us to maintain, measured as of the end of each fiscal quarter, a maximum consolidated leverage ratio of 3.50 to 1.00 (which may be temporarily increased to 4.00 to 1.00 upon the election as a result of a covered acquisition, subject to customary limitations set forth in the Revolving Credit Agreement).",
+    "raw_label_or_claim": "maximum consolidated leverage ratio",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000940944-25-000038",
+    "part_ref": "business",
+    "occurrence_in_part": null,
+    "quote": "During fiscal 2025, the average check per person (defined as total sales divided by number of entr\u00e9es sold) was approximately $24.00, with alcoholic beverages accounting for 4.7 percent of Olive Garden\u2019s sales.",
+    "raw_label_or_claim": "average check per person",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

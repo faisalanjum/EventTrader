@@ -1,0 +1,33 @@
+{
+ "kind": "is the era key owner behaviourally the same as the current one",
+ "era_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/attempts/native_final5/view/harness_g1v3/build_kfields_key.py",
+ "era_sha256": "91862afd796cccb523f518ed75ab79383244aef6147ac1072068aa816e916000",
+ "current_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2008/harness_g1v3/build_kfields_key.py",
+ "current_sha256": "5ceca944859bdda8dbaf6f0671a06cb15b243dba42790fd654386eb2fa2e858d",
+ "top_level_functions": 68,
+ "present_only_in_current": [],
+ "present_only_in_era": [],
+ "functions_whose_code_differs": [
+  "_official_proof"
+ ],
+ "constants_added_by_current": {
+  "ROW_MODEL_ID": "RUNTIME_MODEL_ID"
+ },
+ "constants_dropped_by_current": {},
+ "constants_retargeted": {},
+ "every_added_constant_is_an_alias_of_an_existing_one": true,
+ "model_calls": 0,
+ "the_one_function_that_moved": {
+  "name": "_official_proof",
+  "rebinding_lines_for_ROW_MODEL_ID": [
+   "ROW_MODEL_ID = RUNTIME_MODEL_ID"
+  ],
+  "bound_once_to": "RUNTIME_MODEL_ID",
+  "lines_that_mention_the_constant": [
+   "+#: checked BOTH against RUNTIME_MODEL_ID. A seat whose two official records",
+   "+ROW_MODEL_ID = RUNTIME_MODEL_ID",
+   "-    if row.get(\"model\") != RUNTIME_MODEL_ID:",
+   "+    if row.get(\"model\") != ROW_MODEL_ID:"
+  ]
+ }
+}

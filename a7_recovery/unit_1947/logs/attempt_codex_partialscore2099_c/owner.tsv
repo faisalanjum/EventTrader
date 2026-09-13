@@ -1,0 +1,7 @@
+attempt	codex_partialscore2099_c
+payload	../../unit_2020_codex_check/test_partial_scoring_native_2099.py
+map	../unit_2020_codex_check/map_g23_transport_2098.tsv
+wrapper_pid	3999478
+payload_pid	3999482
+started_utc	2026-09-13T06:54:09Z
+state	finished exit 0

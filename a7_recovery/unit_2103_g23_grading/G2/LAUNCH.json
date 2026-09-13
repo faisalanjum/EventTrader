@@ -1,0 +1,65 @@
+{
+ "budget": {
+  "after_initial": 1034,
+  "after_max": 1206,
+  "ceiling": 6000,
+  "initial_calls": 172,
+  "max_attempts_per_row": 2,
+  "spent_before": 862
+ },
+ "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/codex_g23partial2098_fit/G2",
+ "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+ "cold_proof": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g23partial2099_cold/PREPARATION.json",
+ "cold_proof_sha256": "ab93cf3f7581ada92699310573c55578f8280244027735fc1c8d9d0b4af0e17c",
+ "durable_run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G2/run",
+ "first_receipt_sha256": "6973a8a82bbefbb780ef32a4157fafbb9ac0ed0b9775d0943b9b8c08486ef62f",
+ "first_script_sha256": "6fd6be0f64c73d4e9762998600e40166507142502d65ea1af8c9aff6e4fab5f5",
+ "first_segment": 1,
+ "g1_launch": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/LAUNCH.json",
+ "g1_launch_sha256": "ef8095d796b59b36e6fd8e4039a99f26ca24a012b9692560b0fb3060cf9bb327",
+ "grouping_owner_sha256": "e7e3012229945480ba2b86a4eb00dccee0e3152af86d98ff738329f8cba7063d",
+ "input_profile": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/input_profile_2068.json",
+ "input_profile_sha256": "78b58fe7fd5ba60b9199ada86fe27d90101ceb57cd7617db158e2ea724e2da18",
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run/invocation.seg01.json",
+ "invocation_sha256": "3ad2c0af5a1f360f67626da1cd2bc8f51be3d6b49319939cba5a093d68bd6123",
+ "kind": "G2",
+ "lane": {
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "map": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/map_g23_transport_2103.tsv",
+ "map_sha256": "54e8501050dae0b7e6cd211bbe2164c5e205cd308c2409412b08b8431e8fefa5",
+ "model_calls": 0,
+ "next_prefix_lanes": [
+  "G2-000/G1a"
+ ],
+ "next_prefix_script_bytes": 432989,
+ "owners": {
+  "a7_g1_build": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439",
+  "a7_g1_complete_v2": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+  "a7_g23_build": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "audit_worker_access": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "preparation": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g23partial2098_fit/PREPARATION.json",
+ "preparation_sha256": "a57a90fff7c2f77fa6ba5e34b7b285d6ef8793b55d4d30c472bf6643108bc718",
+ "previous_unrun_launch": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2100_g23_grading/G2/LAUNCH.json",
+ "previous_unrun_launch_sha256": "7e47f8017c011d1fc4eeb093aa632d621a353d0c96f5973eb9948e83156ab764",
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run",
+ "scope": "REAL unrun grading; supported path published; no model call",
+ "scoring_connection": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_partialscore2099_c/SCORING_CONNECTION.json",
+ "scoring_connection_sha256": "30ae7917ec623986bd9d411e5fb907097d256cbdb4a74d3ac63bdfc5192e05cf",
+ "total_primary_lanes": 140,
+ "workflow_gate_sha256": "e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703"
+}

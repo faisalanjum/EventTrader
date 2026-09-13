@@ -1,0 +1,719 @@
+{
+ "kinds": {
+  "G2": {
+   "measured": [
+    {
+     "lane": "G2-000/G1a",
+     "script_bytes": 432989
+    },
+    {
+     "lane": "G2-000/G1b",
+     "script_bytes": 432989
+    },
+    {
+     "lane": "G2-001/G1a",
+     "script_bytes": 386176
+    },
+    {
+     "lane": "G2-001/G1b",
+     "script_bytes": 386176
+    },
+    {
+     "lane": "G2-002/G1a",
+     "script_bytes": 468393
+    },
+    {
+     "lane": "G2-002/G1b",
+     "script_bytes": 468393
+    },
+    {
+     "lane": "G2-003/G1a",
+     "script_bytes": 380070
+    },
+    {
+     "lane": "G2-003/G1b",
+     "script_bytes": 380070
+    },
+    {
+     "lane": "G2-004/G1a",
+     "script_bytes": 287547
+    },
+    {
+     "lane": "G2-004/G1b",
+     "script_bytes": 287547
+    },
+    {
+     "lane": "G2-005/G1a",
+     "script_bytes": 389655
+    },
+    {
+     "lane": "G2-005/G1b",
+     "script_bytes": 389655
+    },
+    {
+     "lane": "G2-006/G1a",
+     "script_bytes": 347622
+    },
+    {
+     "lane": "G2-006/G1b",
+     "script_bytes": 347622
+    },
+    {
+     "lane": "G2-007/G1a",
+     "script_bytes": 262636
+    },
+    {
+     "lane": "G2-007/G1b",
+     "script_bytes": 262636
+    },
+    {
+     "lane": "G2-008/G1a",
+     "script_bytes": 411345
+    },
+    {
+     "lane": "G2-008/G1b",
+     "script_bytes": 411345
+    },
+    {
+     "lane": "G2-009/G1a",
+     "script_bytes": 309188
+    },
+    {
+     "lane": "G2-009/G1b",
+     "script_bytes": 309188
+    },
+    {
+     "lane": "G2-010/G1a",
+     "script_bytes": 295391
+    },
+    {
+     "lane": "G2-010/G1b",
+     "script_bytes": 295391
+    },
+    {
+     "lane": "G2-011/G1a",
+     "script_bytes": 245778
+    },
+    {
+     "lane": "G2-011/G1b",
+     "script_bytes": 245778
+    },
+    {
+     "lane": "G2-012/G1a",
+     "script_bytes": 397913
+    },
+    {
+     "lane": "G2-012/G1b",
+     "script_bytes": 397913
+    },
+    {
+     "lane": "G2-013/G1a",
+     "script_bytes": 217915
+    },
+    {
+     "lane": "G2-013/G1b",
+     "script_bytes": 217915
+    },
+    {
+     "lane": "G2-014/G1a",
+     "script_bytes": 402583
+    },
+    {
+     "lane": "G2-014/G1b",
+     "script_bytes": 402583
+    },
+    {
+     "lane": "G2-015/G1a",
+     "script_bytes": 421648
+    },
+    {
+     "lane": "G2-015/G1b",
+     "script_bytes": 421648
+    },
+    {
+     "lane": "G2-016/G1a",
+     "script_bytes": 309072
+    },
+    {
+     "lane": "G2-016/G1b",
+     "script_bytes": 309072
+    },
+    {
+     "lane": "G2-017/G1a",
+     "script_bytes": 295391
+    },
+    {
+     "lane": "G2-017/G1b",
+     "script_bytes": 295391
+    },
+    {
+     "lane": "G2-018/G1a",
+     "script_bytes": 245743
+    },
+    {
+     "lane": "G2-018/G1b",
+     "script_bytes": 245743
+    },
+    {
+     "lane": "G2-019/G1a",
+     "script_bytes": 397844
+    },
+    {
+     "lane": "G2-019/G1b",
+     "script_bytes": 397844
+    },
+    {
+     "lane": "G2-020/G1a",
+     "script_bytes": 401274
+    },
+    {
+     "lane": "G2-020/G1b",
+     "script_bytes": 401274
+    },
+    {
+     "lane": "G2-021/G1a",
+     "script_bytes": 276785
+    },
+    {
+     "lane": "G2-021/G1b",
+     "script_bytes": 276785
+    },
+    {
+     "lane": "G2-022/G1a",
+     "script_bytes": 438562
+    },
+    {
+     "lane": "G2-022/G1b",
+     "script_bytes": 438562
+    },
+    {
+     "lane": "G2-023/G1a",
+     "script_bytes": 280601
+    },
+    {
+     "lane": "G2-023/G1b",
+     "script_bytes": 280601
+    },
+    {
+     "lane": "G2-024/G1a",
+     "script_bytes": 304152
+    },
+    {
+     "lane": "G2-024/G1b",
+     "script_bytes": 304152
+    },
+    {
+     "lane": "G2-025/G1a",
+     "script_bytes": 245487
+    },
+    {
+     "lane": "G2-025/G1b",
+     "script_bytes": 245487
+    },
+    {
+     "lane": "G2-026/G1a",
+     "script_bytes": 397668
+    },
+    {
+     "lane": "G2-026/G1b",
+     "script_bytes": 397668
+    },
+    {
+     "lane": "G2-027/G1a",
+     "script_bytes": 450155
+    },
+    {
+     "lane": "G2-027/G1b",
+     "script_bytes": 450155
+    },
+    {
+     "lane": "G2-028/G1a",
+     "script_bytes": 406344
+    },
+    {
+     "lane": "G2-028/G1b",
+     "script_bytes": 406344
+    },
+    {
+     "lane": "G2-029/G1a",
+     "script_bytes": 466375
+    },
+    {
+     "lane": "G2-029/G1b",
+     "script_bytes": 466375
+    },
+    {
+     "lane": "G2-030/G1a",
+     "script_bytes": 363623
+    },
+    {
+     "lane": "G2-030/G1b",
+     "script_bytes": 363623
+    },
+    {
+     "lane": "G2-031/G1a",
+     "script_bytes": 321274
+    },
+    {
+     "lane": "G2-031/G1b",
+     "script_bytes": 321274
+    },
+    {
+     "lane": "G2-032/G1a",
+     "script_bytes": 377758
+    },
+    {
+     "lane": "G2-032/G1b",
+     "script_bytes": 377758
+    },
+    {
+     "lane": "G2-033/G1a",
+     "script_bytes": 432694
+    },
+    {
+     "lane": "G2-033/G1b",
+     "script_bytes": 432694
+    },
+    {
+     "lane": "G2-034/G1a",
+     "script_bytes": 241766
+    },
+    {
+     "lane": "G2-034/G1b",
+     "script_bytes": 241766
+    },
+    {
+     "lane": "G2-035/G1a",
+     "script_bytes": 352060
+    },
+    {
+     "lane": "G2-035/G1b",
+     "script_bytes": 352060
+    },
+    {
+     "lane": "G2-036/G1a",
+     "script_bytes": 378911
+    },
+    {
+     "lane": "G2-036/G1b",
+     "script_bytes": 378911
+    },
+    {
+     "lane": "G2-037/G1a",
+     "script_bytes": 398356
+    },
+    {
+     "lane": "G2-037/G1b",
+     "script_bytes": 398356
+    },
+    {
+     "lane": "G2-038/G1a",
+     "script_bytes": 461817
+    },
+    {
+     "lane": "G2-038/G1b",
+     "script_bytes": 461817
+    },
+    {
+     "lane": "G2-039/G1a",
+     "script_bytes": 285320
+    },
+    {
+     "lane": "G2-039/G1b",
+     "script_bytes": 285320
+    },
+    {
+     "lane": "G2-040/G1a",
+     "script_bytes": 439319
+    },
+    {
+     "lane": "G2-040/G1b",
+     "script_bytes": 439319
+    },
+    {
+     "lane": "G2-041/G1a",
+     "script_bytes": 281286
+    },
+    {
+     "lane": "G2-041/G1b",
+     "script_bytes": 281286
+    },
+    {
+     "lane": "G2-042/G1a",
+     "script_bytes": 305362
+    },
+    {
+     "lane": "G2-042/G1b",
+     "script_bytes": 305362
+    },
+    {
+     "lane": "G2-043/G1a",
+     "script_bytes": 244667
+    },
+    {
+     "lane": "G2-043/G1b",
+     "script_bytes": 244667
+    },
+    {
+     "lane": "G2-044/G1a",
+     "script_bytes": 397643
+    },
+    {
+     "lane": "G2-044/G1b",
+     "script_bytes": 397643
+    },
+    {
+     "lane": "G2-045/G1a",
+     "script_bytes": 453853
+    },
+    {
+     "lane": "G2-045/G1b",
+     "script_bytes": 453853
+    },
+    {
+     "lane": "G2-046/G1a",
+     "script_bytes": 399408
+    },
+    {
+     "lane": "G2-046/G1b",
+     "script_bytes": 399408
+    },
+    {
+     "lane": "G2-047/G1a",
+     "script_bytes": 477955
+    },
+    {
+     "lane": "G2-047/G1b",
+     "script_bytes": 477955
+    },
+    {
+     "lane": "G2-048/G1a",
+     "script_bytes": 378689
+    },
+    {
+     "lane": "G2-048/G1b",
+     "script_bytes": 378689
+    },
+    {
+     "lane": "G2-049/G1a",
+     "script_bytes": 356192
+    },
+    {
+     "lane": "G2-049/G1b",
+     "script_bytes": 356192
+    },
+    {
+     "lane": "G2-050/G1a",
+     "script_bytes": 469251
+    },
+    {
+     "lane": "G2-050/G1b",
+     "script_bytes": 469251
+    },
+    {
+     "lane": "G2-051/G1a",
+     "script_bytes": 308786
+    },
+    {
+     "lane": "G2-051/G1b",
+     "script_bytes": 308786
+    },
+    {
+     "lane": "G2-052/G1a",
+     "script_bytes": 295389
+    },
+    {
+     "lane": "G2-052/G1b",
+     "script_bytes": 295389
+    },
+    {
+     "lane": "G2-053/G1a",
+     "script_bytes": 396188
+    },
+    {
+     "lane": "G2-053/G1b",
+     "script_bytes": 396188
+    },
+    {
+     "lane": "G2-054/G1a",
+     "script_bytes": 441020
+    },
+    {
+     "lane": "G2-054/G1b",
+     "script_bytes": 441020
+    },
+    {
+     "lane": "G2-055/G1a",
+     "script_bytes": 466100
+    },
+    {
+     "lane": "G2-055/G1b",
+     "script_bytes": 466100
+    },
+    {
+     "lane": "G2-056/G1a",
+     "script_bytes": 353183
+    },
+    {
+     "lane": "G2-056/G1b",
+     "script_bytes": 353183
+    },
+    {
+     "lane": "G2-057/G1a",
+     "script_bytes": 380638
+    },
+    {
+     "lane": "G2-057/G1b",
+     "script_bytes": 380638
+    },
+    {
+     "lane": "G2-058/G1a",
+     "script_bytes": 446865
+    },
+    {
+     "lane": "G2-058/G1b",
+     "script_bytes": 446865
+    },
+    {
+     "lane": "G2-059/G1a",
+     "script_bytes": 466114
+    },
+    {
+     "lane": "G2-059/G1b",
+     "script_bytes": 466114
+    },
+    {
+     "lane": "G2-060/G1a",
+     "script_bytes": 364110
+    },
+    {
+     "lane": "G2-060/G1b",
+     "script_bytes": 364110
+    },
+    {
+     "lane": "G2-061/G1a",
+     "script_bytes": 386430
+    },
+    {
+     "lane": "G2-061/G1b",
+     "script_bytes": 386430
+    },
+    {
+     "lane": "G2-062/G1a",
+     "script_bytes": 470166
+    },
+    {
+     "lane": "G2-062/G1b",
+     "script_bytes": 470166
+    },
+    {
+     "lane": "G2-063/G1a",
+     "script_bytes": 509303
+    },
+    {
+     "lane": "G2-063/G1b",
+     "script_bytes": 509303
+    },
+    {
+     "lane": "G2-064/G1a",
+     "script_bytes": 409453
+    },
+    {
+     "lane": "G2-064/G1b",
+     "script_bytes": 409453
+    },
+    {
+     "lane": "G2-065/G1a",
+     "script_bytes": 516367
+    },
+    {
+     "lane": "G2-065/G1b",
+     "script_bytes": 516367
+    },
+    {
+     "lane": "G2-066/G1a",
+     "script_bytes": 360125
+    },
+    {
+     "lane": "G2-066/G1b",
+     "script_bytes": 360125
+    },
+    {
+     "lane": "G2-067/G1a",
+     "script_bytes": 286595
+    },
+    {
+     "lane": "G2-067/G1b",
+     "script_bytes": 286595
+    },
+    {
+     "lane": "G2-068/G1a",
+     "script_bytes": 90350
+    },
+    {
+     "lane": "G2-068/G1b",
+     "script_bytes": 90350
+    },
+    {
+     "lane": "G2-069/G1a",
+     "script_bytes": 90729
+    },
+    {
+     "lane": "G2-069/G1b",
+     "script_bytes": 90729
+    }
+   ],
+   "next": [
+    "G2-000/G1a"
+   ],
+   "oversized": [],
+   "problems": [],
+   "root_sha256": "8cd74106159e44dc96c4050ec9d2b37059bd5ce0f03e5b29d2f2a01de76fd801",
+   "script_bytes": 432989
+  },
+  "G3": {
+   "measured": [
+    {
+     "lane": "G3-000/G1a",
+     "script_bytes": 149849
+    },
+    {
+     "lane": "G3-000/G1b",
+     "script_bytes": 149849
+    },
+    {
+     "lane": "G3-001/G1a",
+     "script_bytes": 166782
+    },
+    {
+     "lane": "G3-001/G1b",
+     "script_bytes": 166782
+    },
+    {
+     "lane": "G3-002/G1a",
+     "script_bytes": 162362
+    },
+    {
+     "lane": "G3-002/G1b",
+     "script_bytes": 162362
+    },
+    {
+     "lane": "G3-003/G1a",
+     "script_bytes": 127445
+    },
+    {
+     "lane": "G3-003/G1b",
+     "script_bytes": 127445
+    },
+    {
+     "lane": "G3-004/G1a",
+     "script_bytes": 176019
+    },
+    {
+     "lane": "G3-004/G1b",
+     "script_bytes": 176019
+    },
+    {
+     "lane": "G3-005/G1a",
+     "script_bytes": 162363
+    },
+    {
+     "lane": "G3-005/G1b",
+     "script_bytes": 162363
+    },
+    {
+     "lane": "G3-006/G1a",
+     "script_bytes": 141179
+    },
+    {
+     "lane": "G3-006/G1b",
+     "script_bytes": 141179
+    },
+    {
+     "lane": "G3-007/G1a",
+     "script_bytes": 207821
+    },
+    {
+     "lane": "G3-007/G1b",
+     "script_bytes": 207821
+    },
+    {
+     "lane": "G3-008/G1a",
+     "script_bytes": 167234
+    },
+    {
+     "lane": "G3-008/G1b",
+     "script_bytes": 167234
+    },
+    {
+     "lane": "G3-009/G1a",
+     "script_bytes": 197518
+    },
+    {
+     "lane": "G3-009/G1b",
+     "script_bytes": 197518
+    },
+    {
+     "lane": "G3-010/G1a",
+     "script_bytes": 167661
+    },
+    {
+     "lane": "G3-010/G1b",
+     "script_bytes": 167661
+    },
+    {
+     "lane": "G3-011/G1a",
+     "script_bytes": 71868
+    },
+    {
+     "lane": "G3-011/G1b",
+     "script_bytes": 71868
+    },
+    {
+     "lane": "G3-012/G1a",
+     "script_bytes": 47777
+    },
+    {
+     "lane": "G3-012/G1b",
+     "script_bytes": 47777
+    },
+    {
+     "lane": "G3-013/G1a",
+     "script_bytes": 31852
+    },
+    {
+     "lane": "G3-013/G1b",
+     "script_bytes": 31852
+    },
+    {
+     "lane": "G3-014/G1a",
+     "script_bytes": 31852
+    },
+    {
+     "lane": "G3-014/G1b",
+     "script_bytes": 31852
+    },
+    {
+     "lane": "G3-015/G1a",
+     "script_bytes": 31852
+    },
+    {
+     "lane": "G3-015/G1b",
+     "script_bytes": 31852
+    }
+   ],
+   "next": [
+    "G3-000/G1a",
+    "G3-000/G1b",
+    "G3-001/G1a"
+   ],
+   "oversized": [],
+   "problems": [],
+   "root_sha256": "75181af04f65c7a9075a26eebe9cef9f0ffd3b1b9740151a1c63235c2a93f7fa",
+   "script_bytes": 449768
+  }
+ },
+ "limit": 524288,
+ "preparation": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g23partial2098_fit/PREPARATION.json",
+ "scope": "TEST of exact candidate transport size; zero model calls or publications"
+}

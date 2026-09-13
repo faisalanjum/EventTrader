@@ -1,0 +1,7 @@
+attempt	core_affected2097_b
+payload	../../unit_2097_partial_review/run_affected_regression_2097.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3921636
+payload_pid	3921640
+started_utc	2026-09-13T06:02:53Z
+state	finished exit 0

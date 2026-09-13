@@ -1,0 +1,12 @@
+{
+  "mutations": {
+    "missing_policy_or_rule_pin": "killed",
+    "ignored_evidence_problem": "killed",
+    "unused_or_missing_attempt_accepted": "killed",
+    "third_attempt_permitted": "killed",
+    "wrong_task_kind_accepted": "killed",
+    "unapproved_policy_scope": "killed"
+  },
+  "restored_control": "passed",
+  "code_bytes_unchanged": true
+}

@@ -1,0 +1,42 @@
+{
+ "agent_type": "lean-probe",
+ "capacity": {
+  "output_setting_tokens": 128000,
+  "runtime_input_token_count": null,
+  "runtime_input_token_note": "the runtime exposes no exact pre-call input count; no tokenizer estimate is invented",
+  "same_36_sources_already_carried": "the independent pre-A2 inventory review sent the same 36 complete source inputs through a LARGER per-call prompt and all 36 succeeded; that is the capacity evidence, not a probe call"
+ },
+ "effort": "high",
+ "frozen_by": "Codex SEQ 1348 item 3",
+ "live_proof": {
+  "agent_definition_sha256": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "agent_definition_tools": [
+   "Read"
+  ],
+  "anthropic_api_key_present_in_core_env": false,
+  "boundary_note": "the lean-probe agent definition grants exactly Read, and every one of the 36 rendered launchers now passes disallowedTools=[\"Read\"] to agent(), proved by an official one-call transport run that completed on claude-sonnet-5 at high effort with zero tool blocks and terminal end_turn",
+  "checked_without_reading_secret_values": true,
+  "core_process_max_output_tokens": "128000",
+  "corrected_claim": "CORRECTION (Codex SEQ 1348): the previous revision of this file asserted that every launcher disallowed Read while NO launcher passed disallowedTools at all. The 42 pre-A2 calls recorded zero tool use because build_inventory_review.py renders its own REVIEW_DISALLOWED deny, not because the A1 reader launchers did. One A3 lane then called Read.",
+  "dotenv_anthropic_api_key_lines": 0,
+  "entrypoint": "cli",
+  "entrypoint_meaning": "cli = interactive Claude Code, the subscription path; sdk-cli would be the separately metered pool",
+  "launcher_disallowed_tools": [
+   "Read"
+  ],
+  "launcher_disallowed_tools_owner": "build_launch_manifest.A1_DISALLOWED",
+  "launchers_passing_the_deny": 36,
+  "launchers_total": 36,
+  "oauth_credentials_present": true,
+  "oauth_inference_scope": true,
+  "oauth_rate_limit_tier": "default_claude_max_5x",
+  "oauth_subscription_type": "max",
+  "observed_tool_calls_over_42_paid_calls": 0
+ },
+ "max_output_tokens": 128000,
+ "model_alias": "sonnet",
+ "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "runtime_model_id": "claude-sonnet-5",
+ "schema": "a1-a2-runtime-freeze-v1",
+ "transport": "Claude Code Workflow agent(), subscription"
+}

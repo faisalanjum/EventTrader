@@ -1,0 +1,1187 @@
+{
+ "bundle": "K-fields A1 one-item launcher set",
+ "largest_launcher_bytes": 248011,
+ "manifest_sha256": "78b39f0438e0ee2bc8a6f1159fe1650b339c6c8f44de6263e1946e06d02d18a2",
+ "n_calls": 204,
+ "n_packets": 102,
+ "n_slices": 36,
+ "slices": [
+  {
+   "bytes": 81738,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000031.json",
+   "input_sha256": "43c5fdedfbb3822d7b5d800c0ad18437bcb37e379d4e3cb2e11ad9594ac79af5",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000006201-26-000031.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000006201-26-000031#000/L1",
+      "0000006201-26-000031#000/L2"
+     ],
+     "packet_id": "0000006201-26-000031#000",
+     "prompt_sha256": "f2d436a1ce51cb4d0b42ad4c5ad528165457a336af5c9a80c57f4d81097493ac"
+    },
+    {
+     "lanes": [
+      "0000006201-26-000031#001/L1",
+      "0000006201-26-000031#001/L2"
+     ],
+     "packet_id": "0000006201-26-000031#001",
+     "prompt_sha256": "c571ddd7850e4ffeabe29bf7a99ef48907f6901bbb1cd5514fd5cb4c22162b1d"
+    },
+    {
+     "lanes": [
+      "0000006201-26-000031#002/L1",
+      "0000006201-26-000031#002/L2"
+     ],
+     "packet_id": "0000006201-26-000031#002",
+     "prompt_sha256": "dd3dc6bc9ff705d1fd95aa1e1037d617d6a59351580b06511fdce7d19a312b6c"
+    },
+    {
+     "lanes": [
+      "0000006201-26-000031#003/L1",
+      "0000006201-26-000031#003/L2"
+     ],
+     "packet_id": "0000006201-26-000031#003",
+     "prompt_sha256": "48102ffeebc1e567975c262e9b14f9aeedfdd889fd84431d9281dff9782161c5"
+    }
+   ],
+   "sha256": "d27ebad294df552210e3e5a25b8edb6c0698fefee00ff3d8a06ea52017e6781c",
+   "source_id": "0000006201-26-000031"
+  },
+  {
+   "bytes": 91804,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000006201-26-000032.json",
+   "input_sha256": "d3419e9d12c51d4fd1409fb90a00482e711a1392ffe393e87a77d907b00e1031",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000006201-26-000032.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000006201-26-000032#004/L1",
+      "0000006201-26-000032#004/L2"
+     ],
+     "packet_id": "0000006201-26-000032#004",
+     "prompt_sha256": "73c7c149285e8c5d6bd57d1d06f5a9a34a1541ead19b0125bcb9be7b34aaff92"
+    },
+    {
+     "lanes": [
+      "0000006201-26-000032#005/L1",
+      "0000006201-26-000032#005/L2"
+     ],
+     "packet_id": "0000006201-26-000032#005",
+     "prompt_sha256": "42a947524eb0c6b311f5cfeb224c6ae0d04b4238dfdb4bef908a4bcdf575aa2d"
+    },
+    {
+     "lanes": [
+      "0000006201-26-000032#006/L1",
+      "0000006201-26-000032#006/L2"
+     ],
+     "packet_id": "0000006201-26-000032#006",
+     "prompt_sha256": "2120e55158e24ce6be8be22961754b8e384b88d8b91328e84c3c7c8a70275b69"
+    }
+   ],
+   "sha256": "1faaeee1ab2a1e76ba7a1ff2724fe45025aefdcb2123dbc43d26b1d9b427b428",
+   "source_id": "0000006201-26-000032"
+  },
+  {
+   "bytes": 228299,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000013.json",
+   "input_sha256": "03e28d879ba51a59b2be2bf1f750e52db10377b43e7393cb8178c7937944708d",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000027904-26-000013.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000027904-26-000013#007/L1",
+      "0000027904-26-000013#007/L2"
+     ],
+     "packet_id": "0000027904-26-000013#007",
+     "prompt_sha256": "147944668c3d53af1f055cc7433b8fe6f81e8a667010023ac156934ba00dec0b"
+    },
+    {
+     "lanes": [
+      "0000027904-26-000013#008/L1",
+      "0000027904-26-000013#008/L2"
+     ],
+     "packet_id": "0000027904-26-000013#008",
+     "prompt_sha256": "3cd06576115d397c8fe850c255abf6df8645b32362a4aa2607e976dc48be357c"
+    },
+    {
+     "lanes": [
+      "0000027904-26-000013#009/L1",
+      "0000027904-26-000013#009/L2"
+     ],
+     "packet_id": "0000027904-26-000013#009",
+     "prompt_sha256": "375311de210bbcf3bcc29bf5b9b7e79af412dcc11d89285fe2b4b54eb3a32739"
+    }
+   ],
+   "sha256": "7bd273b6fc76676f3c6b66be3b8782b7edf5a4398863ec4e79bbce81c71ef271",
+   "source_id": "0000027904-26-000013"
+  },
+  {
+   "bytes": 90732,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000020.json",
+   "input_sha256": "bf821a3a0180d4ee2b42fef5200da85fc325c55c349cd71d900af33baf2079e4",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000027904-26-000020.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000027904-26-000020#010/L1",
+      "0000027904-26-000020#010/L2"
+     ],
+     "packet_id": "0000027904-26-000020#010",
+     "prompt_sha256": "bcd41b3c42a46140747ba5a24be0828317261c95bda4ca94c6d225b4e445301c"
+    },
+    {
+     "lanes": [
+      "0000027904-26-000020#011/L1",
+      "0000027904-26-000020#011/L2"
+     ],
+     "packet_id": "0000027904-26-000020#011",
+     "prompt_sha256": "b78293fd2bfbfcabf376dde19e089cb71707ecc9c6f1057b0e044121b8eef040"
+    },
+    {
+     "lanes": [
+      "0000027904-26-000020#012/L1",
+      "0000027904-26-000020#012/L2"
+     ],
+     "packet_id": "0000027904-26-000020#012",
+     "prompt_sha256": "d247d2e70b288ff5eeebc70adfb1dbfd7eea64e5b559f4d64c0f765d4d15994e"
+    }
+   ],
+   "sha256": "d4dffc7f3af8198c78fa339c3e1214f4d68874b121abb88f93a560bcf22f9e91",
+   "source_id": "0000027904-26-000020"
+  },
+  {
+   "bytes": 80322,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000027904-26-000022.json",
+   "input_sha256": "b00c4251483fa1b0fd89130022b123980249c5c798091bfbbd6f7a0e7afb29e7",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000027904-26-000022.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000027904-26-000022#013/L1",
+      "0000027904-26-000022#013/L2"
+     ],
+     "packet_id": "0000027904-26-000022#013",
+     "prompt_sha256": "a4cabc9df142aca312dafe4d2a061c0a8f38939bf283235e8922d483fd46a7f0"
+    },
+    {
+     "lanes": [
+      "0000027904-26-000022#014/L1",
+      "0000027904-26-000022#014/L2"
+     ],
+     "packet_id": "0000027904-26-000022#014",
+     "prompt_sha256": "862b076e01d99c4697b8a0271cf9df319f75e718912053fdca48df55b0e35465"
+    },
+    {
+     "lanes": [
+      "0000027904-26-000022#015/L1",
+      "0000027904-26-000022#015/L2"
+     ],
+     "packet_id": "0000027904-26-000022#015",
+     "prompt_sha256": "90e03be1d097b906585a25d388d7cdc20a696bcaf1dc417d5cf4cee6adf2b0d8"
+    }
+   ],
+   "sha256": "7fe1cf6b6f9617c47c46e7a50a78b3c0e5975e20eca4e0a60526e202146e10fa",
+   "source_id": "0000027904-26-000022"
+  },
+  {
+   "bytes": 58560,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000063908-26-000032.json",
+   "input_sha256": "cd2d7660e31042c45a7a6f2ea90d75ff546a224331cb1a9ef8423ae869eab6f6",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000063908-26-000032.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000063908-26-000032#016/L1",
+      "0000063908-26-000032#016/L2"
+     ],
+     "packet_id": "0000063908-26-000032#016",
+     "prompt_sha256": "b941e2b7821b79b414caafe25867aa026e41aaa9a5c41bed799f7b27190faa6c"
+    },
+    {
+     "lanes": [
+      "0000063908-26-000032#017/L1",
+      "0000063908-26-000032#017/L2"
+     ],
+     "packet_id": "0000063908-26-000032#017",
+     "prompt_sha256": "5974a66ff29d1adfa52abacda8773ce3507c688748ed83c01d1661c0c71d819d"
+    },
+    {
+     "lanes": [
+      "0000063908-26-000032#018/L1",
+      "0000063908-26-000032#018/L2"
+     ],
+     "packet_id": "0000063908-26-000032#018",
+     "prompt_sha256": "a0c079faa2a127a2ca16308fdf3825bdd6cd493e132fa9b43f9a407048271e18"
+    }
+   ],
+   "sha256": "03a18832c8906d93a0fbfddfa95dff20a5ad6a6ff0ce44512b36355732bb8ff7",
+   "source_id": "0000063908-26-000032"
+  },
+  {
+   "bytes": 84011,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000092380-26-000044.json",
+   "input_sha256": "97085fd9139810967c3bf155d921c166ccc47190a35313a558b744e68a15bff3",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000092380-26-000044.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000092380-26-000044#019/L1",
+      "0000092380-26-000044#019/L2"
+     ],
+     "packet_id": "0000092380-26-000044#019",
+     "prompt_sha256": "4cc080678d24d71d734a9430123c7cfe7dd66a542334bc5578d59c308ad63513"
+    },
+    {
+     "lanes": [
+      "0000092380-26-000044#020/L1",
+      "0000092380-26-000044#020/L2"
+     ],
+     "packet_id": "0000092380-26-000044#020",
+     "prompt_sha256": "738f27ad037fef1cc30951bc25145f661dd27b233c1c18706937178029e02f68"
+    },
+    {
+     "lanes": [
+      "0000092380-26-000044#021/L1",
+      "0000092380-26-000044#021/L2"
+     ],
+     "packet_id": "0000092380-26-000044#021",
+     "prompt_sha256": "2fdb9e03e914151fdcbd7ac63b6606699eaf0549fce043e9ee17b999e6d1a949"
+    }
+   ],
+   "sha256": "63895c7ba2260d1cf63dab61a58194c44ad0783643a1c45416f652c928fc98c4",
+   "source_id": "0000092380-26-000044"
+  },
+  {
+   "bytes": 87448,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000764478-25-000057.json",
+   "input_sha256": "63c16c3603f98a2b9f095d4fb6e18ab8e3c0691a208dde749f1c236a49d8525f",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000764478-25-000057.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000764478-25-000057#022/L1",
+      "0000764478-25-000057#022/L2"
+     ],
+     "packet_id": "0000764478-25-000057#022",
+     "prompt_sha256": "e561a9bd6e63310ed07d13e79486509df5cecefb134696f08d51d90a78ad0d3c"
+    },
+    {
+     "lanes": [
+      "0000764478-25-000057#023/L1",
+      "0000764478-25-000057#023/L2"
+     ],
+     "packet_id": "0000764478-25-000057#023",
+     "prompt_sha256": "047846e8116e2f57af7e923c3bf87ed13ed369ea36f93d1b0b78e195e43bdedb"
+    },
+    {
+     "lanes": [
+      "0000764478-25-000057#024/L1",
+      "0000764478-25-000057#024/L2"
+     ],
+     "packet_id": "0000764478-25-000057#024",
+     "prompt_sha256": "514596e54f5bfca9ffa842cb49609a3cd67489772c353b4e9e28789f3bf91f36"
+    }
+   ],
+   "sha256": "f06cdcec80d6be7780f81647968ec3552ad24ad70132591e8822749ea45053cb",
+   "source_id": "0000764478-25-000057"
+  },
+  {
+   "bytes": 41137,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000764478-26-000005.json",
+   "input_sha256": "4c11045b3124146f30ee9cf50876a864628e1c958b91076a5da5a7410e5b5a19",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000764478-26-000005.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000764478-26-000005#025/L1",
+      "0000764478-26-000005#025/L2"
+     ],
+     "packet_id": "0000764478-26-000005#025",
+     "prompt_sha256": "9c62d043b268b31a62fe6b98addaac962c4c7e6a7c396396d8ea75c1d851a1ee"
+    }
+   ],
+   "sha256": "42cf3e0ec6754510a3d84602436c5307d36bf36f20d5f702f4afcdb35de9cfde",
+   "source_id": "0000764478-26-000005"
+  },
+  {
+   "bytes": 74669,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000898173-26-000006.json",
+   "input_sha256": "2bfa6415283eb67a43d72661bcffe50414e82ac1d284ff544073f87ec6e53bd7",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000898173-26-000006.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000898173-26-000006#026/L1",
+      "0000898173-26-000006#026/L2"
+     ],
+     "packet_id": "0000898173-26-000006#026",
+     "prompt_sha256": "c3d437b91f1f7f65d580d0ca7ced28abcb226baafb6fa78ea09a16c3b6c6eb2c"
+    },
+    {
+     "lanes": [
+      "0000898173-26-000006#027/L1",
+      "0000898173-26-000006#027/L2"
+     ],
+     "packet_id": "0000898173-26-000006#027",
+     "prompt_sha256": "5860161dcee07e332206f953f9fbb916dd069f23e630cc2678b014fe8fbbca83"
+    },
+    {
+     "lanes": [
+      "0000898173-26-000006#028/L1",
+      "0000898173-26-000006#028/L2"
+     ],
+     "packet_id": "0000898173-26-000006#028",
+     "prompt_sha256": "4c26858dcc4c63f4fe84a7f7525b2836668ab6faa6121a58105be30768d81eae"
+    }
+   ],
+   "sha256": "6545962e1eb1c29bb783290e338fbcba29fff14a95c684fe74c4f21d3770498f",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "bytes": 220641,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-25-000038.json",
+   "input_sha256": "3adc88b55af128ffec2e68ae08752923a1b9fe95f4b1b7179f26e8b742d9e4ad",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000940944-25-000038.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000940944-25-000038#029/L1",
+      "0000940944-25-000038#029/L2"
+     ],
+     "packet_id": "0000940944-25-000038#029",
+     "prompt_sha256": "45dc7948b63f24a4b5886cee8f5a17024472d71e80056416fd2db772c6ac7ee5"
+    },
+    {
+     "lanes": [
+      "0000940944-25-000038#030/L1",
+      "0000940944-25-000038#030/L2"
+     ],
+     "packet_id": "0000940944-25-000038#030",
+     "prompt_sha256": "316dca77b867b8920943fc6d0c74930148bd09ed916ead24ba6e61c2082aac2f"
+    },
+    {
+     "lanes": [
+      "0000940944-25-000038#031/L1",
+      "0000940944-25-000038#031/L2"
+     ],
+     "packet_id": "0000940944-25-000038#031",
+     "prompt_sha256": "474a8cd11a568bdeaabced45a601c7e24ac5b57f52990897b5ee14c53fc26129"
+    }
+   ],
+   "sha256": "7cee6c4259430df9ca92f5cb93c9e4754a4854acad1e3ddfdc6a966f9503c25c",
+   "source_id": "0000940944-25-000038"
+  },
+  {
+   "bytes": 64262,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-26-000005.json",
+   "input_sha256": "c023ae44c895a602d8bc7e1218b7eb2e54d253154a4793116d38cd343786d3e7",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000940944-26-000005.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000940944-26-000005#032/L1",
+      "0000940944-26-000005#032/L2"
+     ],
+     "packet_id": "0000940944-26-000005#032",
+     "prompt_sha256": "256dd8417a864c263ae441b09a0edcd463a04c0c00d160956d8736e88c744fa9"
+    },
+    {
+     "lanes": [
+      "0000940944-26-000005#033/L1",
+      "0000940944-26-000005#033/L2"
+     ],
+     "packet_id": "0000940944-26-000005#033",
+     "prompt_sha256": "f2e9e987604abd15397a8d442c167fdaeadc903fb0ccc23c172547ea23d3247b"
+    },
+    {
+     "lanes": [
+      "0000940944-26-000005#034/L1",
+      "0000940944-26-000005#034/L2"
+     ],
+     "packet_id": "0000940944-26-000005#034",
+     "prompt_sha256": "41cf816be22438bf8266ffb63dde8b9bdceed79dcd55c31b69d261e5f7772767"
+    }
+   ],
+   "sha256": "17b370d236122d24adb92f2afe526aeabacf975612023535971b0a966d728bcc",
+   "source_id": "0000940944-26-000005"
+  },
+  {
+   "bytes": 88437,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0000940944-26-000009.json",
+   "input_sha256": "2ec8c45061ef2ce17e0d903d3ec9a8043e602cf10be2133f65fd387ebf0e8cc6",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0000940944-26-000009.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0000940944-26-000009#035/L1",
+      "0000940944-26-000009#035/L2"
+     ],
+     "packet_id": "0000940944-26-000009#035",
+     "prompt_sha256": "fae981b8748dfa0513e3f9acfd85b80fafdb6b420a11a6bd57caf9544d28e99e"
+    },
+    {
+     "lanes": [
+      "0000940944-26-000009#036/L1",
+      "0000940944-26-000009#036/L2"
+     ],
+     "packet_id": "0000940944-26-000009#036",
+     "prompt_sha256": "de0523b9e5e6d6e61dadf97bcc6b31a6804e8403e4734e11f838d1a3fe27a06c"
+    },
+    {
+     "lanes": [
+      "0000940944-26-000009#037/L1",
+      "0000940944-26-000009#037/L2"
+     ],
+     "packet_id": "0000940944-26-000009#037",
+     "prompt_sha256": "46c7a01f64e317077a0e80af67b228d4dd7cba3d0458aec768ef1c6b7c5a37c4"
+    }
+   ],
+   "sha256": "01c3e2a51f906422db6d9c70c4e14ebe6de63103558e42e325dfeb3b7fe12050",
+   "source_id": "0000940944-26-000009"
+  },
+  {
+   "bytes": 101307,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-25-000109.json",
+   "input_sha256": "fd73532e42f82a2787f86ec11f9777d2ac57c835fa04cc85571b0bc89db91f8b",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001041061-25-000109.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001041061-25-000109#038/L1",
+      "0001041061-25-000109#038/L2"
+     ],
+     "packet_id": "0001041061-25-000109#038",
+     "prompt_sha256": "c32cb95c86f12bd2e4b2d670d4295cad4de4615154f371748729ff034dbafe46"
+    },
+    {
+     "lanes": [
+      "0001041061-25-000109#039/L1",
+      "0001041061-25-000109#039/L2"
+     ],
+     "packet_id": "0001041061-25-000109#039",
+     "prompt_sha256": "23050e28899129527222fe7ad7bd2473c5372678bfb6e2cc29323f5dc2a5a551"
+    },
+    {
+     "lanes": [
+      "0001041061-25-000109#040/L1",
+      "0001041061-25-000109#040/L2"
+     ],
+     "packet_id": "0001041061-25-000109#040",
+     "prompt_sha256": "c30ad0aed6575b284e99f02c5453455144b0fbafaabcb2438eb7c76c03b66613"
+    }
+   ],
+   "sha256": "5b0a3e79b99bd0642a7fdbec906820a568ee475c5faf67589e2fe181dfcc6077",
+   "source_id": "0001041061-25-000109"
+  },
+  {
+   "bytes": 103592,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-26-000003.json",
+   "input_sha256": "e798a6fe730da70551a96f364066f589628e8b2534aa2222de6de2ae676c3000",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001041061-26-000003.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001041061-26-000003#041/L1",
+      "0001041061-26-000003#041/L2"
+     ],
+     "packet_id": "0001041061-26-000003#041",
+     "prompt_sha256": "45ee7f0e49ec49423e4200c25c981d877550eadc53043a76855a76ea262b59f3"
+    },
+    {
+     "lanes": [
+      "0001041061-26-000003#042/L1",
+      "0001041061-26-000003#042/L2"
+     ],
+     "packet_id": "0001041061-26-000003#042",
+     "prompt_sha256": "d16366d47e13ba99b49dd5d6093e358adac0ae7aacc2c726e7630a192316d560"
+    },
+    {
+     "lanes": [
+      "0001041061-26-000003#043/L1",
+      "0001041061-26-000003#043/L2"
+     ],
+     "packet_id": "0001041061-26-000003#043",
+     "prompt_sha256": "7c0ddc319a33c28e3c6132bcb176dff5c9a69892a2966092901e6b150be78b42"
+    }
+   ],
+   "sha256": "a82aebff578255b2aec4742c47afdc510a7b4565ff876e8b1e64247c130ed33a",
+   "source_id": "0001041061-26-000003"
+  },
+  {
+   "bytes": 248011,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001041061-26-000084.json",
+   "input_sha256": "10bd696ff8a19c7b3fa83d0e474dccb44bd6326b4c3a2ce1b1383c3678f42f40",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001041061-26-000084.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001041061-26-000084#044/L1",
+      "0001041061-26-000084#044/L2"
+     ],
+     "packet_id": "0001041061-26-000084#044",
+     "prompt_sha256": "613e414f7fd0932914bb0eb5839874d9754f79f4a92cf16c51fa383d01fe613e"
+    },
+    {
+     "lanes": [
+      "0001041061-26-000084#045/L1",
+      "0001041061-26-000084#045/L2"
+     ],
+     "packet_id": "0001041061-26-000084#045",
+     "prompt_sha256": "3f6b3c1f53290b2b4aa6244694ece60a4a7c385f077cf68f6db8ef0a9aa7dbbb"
+    },
+    {
+     "lanes": [
+      "0001041061-26-000084#046/L1",
+      "0001041061-26-000084#046/L2"
+     ],
+     "packet_id": "0001041061-26-000084#046",
+     "prompt_sha256": "1c5c621e1a31cb47bc0a29f21c4b2c8dfb78d999aa00100ee2fe8c6e3d9724ca"
+    }
+   ],
+   "sha256": "25ee9e7fef6c1627d8c9d3180beab9effcc7183dc763817c71f2f38d0ebc1648",
+   "source_id": "0001041061-26-000084"
+  },
+  {
+   "bytes": 75353,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001058090-26-000007.json",
+   "input_sha256": "e30f1e059c2e96bea1a5a517dac9aead35d1d335e1c184caab24ed4f3ee249db",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001058090-26-000007.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001058090-26-000007#047/L1",
+      "0001058090-26-000007#047/L2"
+     ],
+     "packet_id": "0001058090-26-000007#047",
+     "prompt_sha256": "79bc81de14b0b7d48d881d23c70efb6f8e74c4248218aeaddcb96bb662cc1189"
+    },
+    {
+     "lanes": [
+      "0001058090-26-000007#048/L1",
+      "0001058090-26-000007#048/L2"
+     ],
+     "packet_id": "0001058090-26-000007#048",
+     "prompt_sha256": "af885fdc010c0a6c5d19355c520532a14e8926a715f06fba23372ea8e56001a5"
+    },
+    {
+     "lanes": [
+      "0001058090-26-000007#049/L1",
+      "0001058090-26-000007#049/L2"
+     ],
+     "packet_id": "0001058090-26-000007#049",
+     "prompt_sha256": "f0c0e1cb76127555ef8311be541c014f6b9dd5e93f529731c9b547a752319635"
+    }
+   ],
+   "sha256": "0b8946450eaf75aca0349676e1481dfcea5b8edb76c39cf223e00e757298e738",
+   "source_id": "0001058090-26-000007"
+  },
+  {
+   "bytes": 198510,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-102611.json",
+   "input_sha256": "2e5e141b4c0a53a939cdb057676f70990071ee299784bba9e548b7de39fd6aab",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001104659-25-102611.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001104659-25-102611#050/L1",
+      "0001104659-25-102611#050/L2"
+     ],
+     "packet_id": "0001104659-25-102611#050",
+     "prompt_sha256": "81f85fd1ed180cf35dee2cfbaf5856fab7f3c962c82d246626859a9d6088d246"
+    },
+    {
+     "lanes": [
+      "0001104659-25-102611#051/L1",
+      "0001104659-25-102611#051/L2"
+     ],
+     "packet_id": "0001104659-25-102611#051",
+     "prompt_sha256": "ffe5ed3901776a2f5c293d8aed397d5251519e6c79741a304df5a15c85b5f0fd"
+    },
+    {
+     "lanes": [
+      "0001104659-25-102611#052/L1",
+      "0001104659-25-102611#052/L2"
+     ],
+     "packet_id": "0001104659-25-102611#052",
+     "prompt_sha256": "ccdb8d4e352b4462ef8266354e5afcaeef8031681ccfc20fc8d541b9c433f3ff"
+    }
+   ],
+   "sha256": "8413b4e8483d15faa755e547807ec376dac962127eb6639e4bd7673f8d25555b",
+   "source_id": "0001104659-25-102611"
+  },
+  {
+   "bytes": 96793,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-105631.json",
+   "input_sha256": "cc12af33fd346dcbfd56f3167bf79ca642057ac2d8c340181bce591666675482",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001104659-25-105631.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001104659-25-105631#053/L1",
+      "0001104659-25-105631#053/L2"
+     ],
+     "packet_id": "0001104659-25-105631#053",
+     "prompt_sha256": "b5a1d356fc17cc5651a684f1e8da8b8397665773615f72d2c2cb0fb909f39586"
+    },
+    {
+     "lanes": [
+      "0001104659-25-105631#054/L1",
+      "0001104659-25-105631#054/L2"
+     ],
+     "packet_id": "0001104659-25-105631#054",
+     "prompt_sha256": "a3d38bad5c3565bdf2074885bae0f20da552eb61c897e9ced02adb2f6b61a576"
+    },
+    {
+     "lanes": [
+      "0001104659-25-105631#055/L1",
+      "0001104659-25-105631#055/L2"
+     ],
+     "packet_id": "0001104659-25-105631#055",
+     "prompt_sha256": "67c7aeef12a43eb418c46f2dbd7a6f71cb1f3e9a4ad785767ee24170a1d5a013"
+    }
+   ],
+   "sha256": "0ae9b11352f3fb48e54ecaa74dbffe0111907ba325a110df41e2286169d5fc31",
+   "source_id": "0001104659-25-105631"
+  },
+  {
+   "bytes": 85393,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-25-118458.json",
+   "input_sha256": "04b098a12812a829ffbcd5c5a278b5c9c222ee9cf81b1a4ffa9cb553624c110b",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001104659-25-118458.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001104659-25-118458#056/L1",
+      "0001104659-25-118458#056/L2"
+     ],
+     "packet_id": "0001104659-25-118458#056",
+     "prompt_sha256": "1b443f00ac9cb7052f0ec59e36ffa028776c461b559b80a42b454763eb4128c1"
+    },
+    {
+     "lanes": [
+      "0001104659-25-118458#057/L1",
+      "0001104659-25-118458#057/L2"
+     ],
+     "packet_id": "0001104659-25-118458#057",
+     "prompt_sha256": "d2a47b3ff3b883c7ed1e3d614f3ced10b66b5cf3e01d4755dfe06f1276fd57b9"
+    },
+    {
+     "lanes": [
+      "0001104659-25-118458#058/L1",
+      "0001104659-25-118458#058/L2"
+     ],
+     "packet_id": "0001104659-25-118458#058",
+     "prompt_sha256": "57ee5f297b73505d474e3261e380fed8e1683f02f0df18b35c1a332f666339a8"
+    }
+   ],
+   "sha256": "18bc8f2644d80b090bed38878747809dacc0e190debc17a79730122abc6d0bf6",
+   "source_id": "0001104659-25-118458"
+  },
+  {
+   "bytes": 64155,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-017090.json",
+   "input_sha256": "40d2babcdafd8b3b58b767656bad9a706d34250f07138ca5203e6355fac45e79",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001104659-26-017090.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001104659-26-017090#059/L1",
+      "0001104659-26-017090#059/L2"
+     ],
+     "packet_id": "0001104659-26-017090#059",
+     "prompt_sha256": "120d266d3811e5d64d89fcacd30db8a8e0b9347e634c9d29f79711e0081ae6bf"
+    },
+    {
+     "lanes": [
+      "0001104659-26-017090#060/L1",
+      "0001104659-26-017090#060/L2"
+     ],
+     "packet_id": "0001104659-26-017090#060",
+     "prompt_sha256": "c6d002ede9a5e80d849910974e3266fa9aa922d8c4c96ee2e986111b50424374"
+    },
+    {
+     "lanes": [
+      "0001104659-26-017090#061/L1",
+      "0001104659-26-017090#061/L2"
+     ],
+     "packet_id": "0001104659-26-017090#061",
+     "prompt_sha256": "11106b9d1d15e715fd8d3e42b8f21e88f1a1c55129e9e226867a5243beed0c27"
+    }
+   ],
+   "sha256": "077ff0484e8c5c3bdebed842989e880a58f393cec5f5300322e8b1a9fc3bc4a2",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "bytes": 69693,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-027061.json",
+   "input_sha256": "9621a03f10e98e72c47d9b24553df47cacf13d943e771afbf386c231dc9fd628",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001104659-26-027061.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001104659-26-027061#062/L1",
+      "0001104659-26-027061#062/L2"
+     ],
+     "packet_id": "0001104659-26-027061#062",
+     "prompt_sha256": "d7d89bdb48a1fd88b6c172e7d3a7aeaadb0d4820ed8119208a3eebaab081399d"
+    },
+    {
+     "lanes": [
+      "0001104659-26-027061#063/L1",
+      "0001104659-26-027061#063/L2"
+     ],
+     "packet_id": "0001104659-26-027061#063",
+     "prompt_sha256": "b051b92fad4ad81ebec4b43dca9358627c23c97f476b158365952c8e6633b94d"
+    },
+    {
+     "lanes": [
+      "0001104659-26-027061#064/L1",
+      "0001104659-26-027061#064/L2"
+     ],
+     "packet_id": "0001104659-26-027061#064",
+     "prompt_sha256": "02caafda2687e327f502a34ad8f5ca27c60f34d9961cf93c15daa94086286c69"
+    }
+   ],
+   "sha256": "b047df8d3a541e2232b3750bd3293f0d947ae60e97228588d64c5f1b2dd8f634",
+   "source_id": "0001104659-26-027061"
+  },
+  {
+   "bytes": 90848,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001104659-26-032757.json",
+   "input_sha256": "8c62714b71800cabf77158d30b30f174f142e9b508b08052388a648f47d33f87",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001104659-26-032757.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001104659-26-032757#065/L1",
+      "0001104659-26-032757#065/L2"
+     ],
+     "packet_id": "0001104659-26-032757#065",
+     "prompt_sha256": "5fff4142bec6d4094baf58bbafb38025ec48115a22393850575c45225ba7980c"
+    },
+    {
+     "lanes": [
+      "0001104659-26-032757#066/L1",
+      "0001104659-26-032757#066/L2"
+     ],
+     "packet_id": "0001104659-26-032757#066",
+     "prompt_sha256": "d1ebbbbd70ab344abd1ea3c5bfa26bba88e412b84332037fed16b61dd6718a13"
+    },
+    {
+     "lanes": [
+      "0001104659-26-032757#067/L1",
+      "0001104659-26-032757#067/L2"
+     ],
+     "packet_id": "0001104659-26-032757#067",
+     "prompt_sha256": "bf62b3e92d558ae3c4855f751b6f807e9c6c329a5f15a5c918e66e248f0d2bb9"
+    }
+   ],
+   "sha256": "46b338c59462e45cac50f7559f7ab821b9b2964735c1afe12dc3e27111518f0b",
+   "source_id": "0001104659-26-032757"
+  },
+  {
+   "bytes": 60148,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/0001171843-26-001288.json",
+   "input_sha256": "6954ee19dff1bb0bbc26425539c32bccd0a8bfc61bdce530607e4c62fe69aca8",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_0001171843-26-001288.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "0001171843-26-001288#068/L1",
+      "0001171843-26-001288#068/L2"
+     ],
+     "packet_id": "0001171843-26-001288#068",
+     "prompt_sha256": "577778b767f886362efa646d03cff6014f32ac2b13a3028fd0b48e328d2ccd4c"
+    },
+    {
+     "lanes": [
+      "0001171843-26-001288#069/L1",
+      "0001171843-26-001288#069/L2"
+     ],
+     "packet_id": "0001171843-26-001288#069",
+     "prompt_sha256": "32a477ab5258211f77c3b574f5adf3a7524c31aedb814a822a73e3b27bafdc88"
+    },
+    {
+     "lanes": [
+      "0001171843-26-001288#070/L1",
+      "0001171843-26-001288#070/L2"
+     ],
+     "packet_id": "0001171843-26-001288#070",
+     "prompt_sha256": "f8e991c0d60262896978896b04e6f2629ead4c9588e7c8b78f073473555ed071"
+    }
+   ],
+   "sha256": "d62fb5e98b12c8b1f06173c7c84e224369e20bfef21a86a20a8caab465ffdb06",
+   "source_id": "0001171843-26-001288"
+  },
+  {
+   "bytes": 101227,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/AAL_2026-04-23T08.30.json",
+   "input_sha256": "3e071a611d043c8b9588736d3bb9d16884d2b51e6db17bc54f0c1854757bb7d8",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_AAL_2026-04-23T08.30.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "AAL_2026-04-23T08.30#071/L1",
+      "AAL_2026-04-23T08.30#071/L2"
+     ],
+     "packet_id": "AAL_2026-04-23T08.30#071",
+     "prompt_sha256": "a0b0ff13720fdec9dc8846ab56ef4e31ad386cbe332b8f2687cebb2eb9bc32c2"
+    },
+    {
+     "lanes": [
+      "AAL_2026-04-23T08.30#072/L1",
+      "AAL_2026-04-23T08.30#072/L2"
+     ],
+     "packet_id": "AAL_2026-04-23T08.30#072",
+     "prompt_sha256": "9b7dd7b6db72c65f610b282c1c3382b88404e8f5aaa2e4e0b2c7e62ff4a0ccc5"
+    },
+    {
+     "lanes": [
+      "AAL_2026-04-23T08.30#073/L1",
+      "AAL_2026-04-23T08.30#073/L2"
+     ],
+     "packet_id": "AAL_2026-04-23T08.30#073",
+     "prompt_sha256": "7ce77461a6825ab0a8cffb4264ceab07437cc5d82cb43fc52e737012c7b51d1e"
+    }
+   ],
+   "sha256": "6fda6f301ebbfd83ead6905103ba0a18065d6d72e7ebcc645ca198ffedbc171c",
+   "source_id": "AAL_2026-04-23T08.30"
+  },
+  {
+   "bytes": 102766,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/BBY_2026-03-03T08.00.json",
+   "input_sha256": "02470e26765aa9a3a68358d87af6fa4bf2f8bcc6cd9d0795029be1d202ee439d",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_BBY_2026-03-03T08.00.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "BBY_2026-03-03T08.00#074/L1",
+      "BBY_2026-03-03T08.00#074/L2"
+     ],
+     "packet_id": "BBY_2026-03-03T08.00#074",
+     "prompt_sha256": "8a0856988b5f9e6cb0f99e24512beab7668dff5ad08b0b448d1aad2c41b65bca"
+    },
+    {
+     "lanes": [
+      "BBY_2026-03-03T08.00#075/L1",
+      "BBY_2026-03-03T08.00#075/L2"
+     ],
+     "packet_id": "BBY_2026-03-03T08.00#075",
+     "prompt_sha256": "7168af3b9c630050496f9d676d18da7f8fc646f6b61cde9259a84d904eaa2de7"
+    },
+    {
+     "lanes": [
+      "BBY_2026-03-03T08.00#076/L1",
+      "BBY_2026-03-03T08.00#076/L2"
+     ],
+     "packet_id": "BBY_2026-03-03T08.00#076",
+     "prompt_sha256": "bc5e7bd05d7dfecef48ee1326a07fdf13953fb0b160c5cbee01177c06f453d1c"
+    }
+   ],
+   "sha256": "c77b68f829de5169cef99f5a8fe7ebd8ca960d2adcbe2007f34e360d73912532",
+   "source_id": "BBY_2026-03-03T08.00"
+  },
+  {
+   "bytes": 106034,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/CMG_2026-02-03T16.30.json",
+   "input_sha256": "6079fe9cfc7cabea4ef5fc36d471f55022d7b25f21a7f6878cf58f4b5e33b705",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_CMG_2026-02-03T16.30.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "CMG_2026-02-03T16.30#077/L1",
+      "CMG_2026-02-03T16.30#077/L2"
+     ],
+     "packet_id": "CMG_2026-02-03T16.30#077",
+     "prompt_sha256": "44c8dba59f2057680b20b08fa648f06f0edd738dd50245c2108f0d496e8a4609"
+    },
+    {
+     "lanes": [
+      "CMG_2026-02-03T16.30#078/L1",
+      "CMG_2026-02-03T16.30#078/L2"
+     ],
+     "packet_id": "CMG_2026-02-03T16.30#078",
+     "prompt_sha256": "87d3cdc0b9ebf5de05eb5fc69859de66030a3e8f8f825281982c1fdb00a58edb"
+    },
+    {
+     "lanes": [
+      "CMG_2026-02-03T16.30#079/L1",
+      "CMG_2026-02-03T16.30#079/L2"
+     ],
+     "packet_id": "CMG_2026-02-03T16.30#079",
+     "prompt_sha256": "bff7924f532400e1f833b827cd976d4eae754c4977776d1c7ec3b68931ae92a2"
+    }
+   ],
+   "sha256": "e7ccb6636d5b955a8606f10fa8cd934294bab82424972aa9cf579b0140c3ef07",
+   "source_id": "CMG_2026-02-03T16.30"
+  },
+  {
+   "bytes": 103696,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/DAL_2026-04-08T10.00.json",
+   "input_sha256": "6d71edec78ef0271817646b47b93193ef2c86fc41908c4b155362ae472864fb5",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_DAL_2026-04-08T10.00.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "DAL_2026-04-08T10.00#080/L1",
+      "DAL_2026-04-08T10.00#080/L2"
+     ],
+     "packet_id": "DAL_2026-04-08T10.00#080",
+     "prompt_sha256": "560b275871316869b915c07cb8a41183f648df13d4ada4e66d7fd41c10c4db23"
+    },
+    {
+     "lanes": [
+      "DAL_2026-04-08T10.00#081/L1",
+      "DAL_2026-04-08T10.00#081/L2"
+     ],
+     "packet_id": "DAL_2026-04-08T10.00#081",
+     "prompt_sha256": "12ba6fc75c96fdd2c24720b4277564bb99712b3020ee0502b953628883aad35d"
+    },
+    {
+     "lanes": [
+      "DAL_2026-04-08T10.00#082/L1",
+      "DAL_2026-04-08T10.00#082/L2"
+     ],
+     "packet_id": "DAL_2026-04-08T10.00#082",
+     "prompt_sha256": "9a4949ac503e01a3291fa118357891edd87984574fc68d9d36224d39e6e8ffd7"
+    }
+   ],
+   "sha256": "a63ad0c3109f024dd677e8c13a2145ce9f00c0f1c4c29c9ee51b8b3586c79caf",
+   "source_id": "DAL_2026-04-08T10.00"
+  },
+  {
+   "bytes": 125821,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/DRI_2026-03-19T08.30.json",
+   "input_sha256": "d564b2f08e71196a7d90041d9cb351b3c0bfa82cac91d99fd413a0c98b874d17",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_DRI_2026-03-19T08.30.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "DRI_2026-03-19T08.30#083/L1",
+      "DRI_2026-03-19T08.30#083/L2"
+     ],
+     "packet_id": "DRI_2026-03-19T08.30#083",
+     "prompt_sha256": "8743d81a1541a6ec479ed1995ba05787039b6bc913f7a0c5ceb79b0ca1faa5ae"
+    },
+    {
+     "lanes": [
+      "DRI_2026-03-19T08.30#084/L1",
+      "DRI_2026-03-19T08.30#084/L2"
+     ],
+     "packet_id": "DRI_2026-03-19T08.30#084",
+     "prompt_sha256": "efb183ca0dc2131b93a970e778c62273bb37a40d867388292934a70aba8cea4a"
+    },
+    {
+     "lanes": [
+      "DRI_2026-03-19T08.30#085/L1",
+      "DRI_2026-03-19T08.30#085/L2"
+     ],
+     "packet_id": "DRI_2026-03-19T08.30#085",
+     "prompt_sha256": "92738280299de8af30ea2bc0c7707df209f72ce85808e1c60f99d907d9654452"
+    }
+   ],
+   "sha256": "e4bd3f6e3e81b7be43642524cecf2a72635b4ba0e4c4b139fb2be935752df63c",
+   "source_id": "DRI_2026-03-19T08.30"
+  },
+  {
+   "bytes": 102604,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/MCD_2026-02-11T16.30.json",
+   "input_sha256": "db101e6221d3b43d9e1cb33a27bc5924d039632666fcacded309823b92e10fcf",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_MCD_2026-02-11T16.30.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "MCD_2026-02-11T16.30#086/L1",
+      "MCD_2026-02-11T16.30#086/L2"
+     ],
+     "packet_id": "MCD_2026-02-11T16.30#086",
+     "prompt_sha256": "bb061f5f0c8dc82b41a31fa5d82bb014d0fc8dd9d12bc4c01f92d0816aa51125"
+    },
+    {
+     "lanes": [
+      "MCD_2026-02-11T16.30#087/L1",
+      "MCD_2026-02-11T16.30#087/L2"
+     ],
+     "packet_id": "MCD_2026-02-11T16.30#087",
+     "prompt_sha256": "943d2505c9bee4fc8749dc35306c00bfeba4a20f5b0f9fd24a87ffacd632274f"
+    },
+    {
+     "lanes": [
+      "MCD_2026-02-11T16.30#088/L1",
+      "MCD_2026-02-11T16.30#088/L2"
+     ],
+     "packet_id": "MCD_2026-02-11T16.30#088",
+     "prompt_sha256": "b363b439bdec0ae69b6c9eb8d157c4da873600c6e507e2d00b631522bf776f9e"
+    }
+   ],
+   "sha256": "dc4d999898d411bc89e794d4c84c655d8b42a8fbb687ffa3390f5afddc5762b3",
+   "source_id": "MCD_2026-02-11T16.30"
+  },
+  {
+   "bytes": 100237,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/ULTA_2026-03-12T16.30.json",
+   "input_sha256": "f3f13f61b444dde44de238b36110d2681941df80207eccce65116faf3e92825a",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_ULTA_2026-03-12T16.30.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "ULTA_2026-03-12T16.30#089/L1",
+      "ULTA_2026-03-12T16.30#089/L2"
+     ],
+     "packet_id": "ULTA_2026-03-12T16.30#089",
+     "prompt_sha256": "b21e93ca5cfd60acca90d9bac36790f1bba7ac6d5b096323e3e40d3ceb47c7e0"
+    },
+    {
+     "lanes": [
+      "ULTA_2026-03-12T16.30#090/L1",
+      "ULTA_2026-03-12T16.30#090/L2"
+     ],
+     "packet_id": "ULTA_2026-03-12T16.30#090",
+     "prompt_sha256": "48d630d19cf73402be19eda8e0c7acd20b0e83d63830f044b6041fa538a27bbe"
+    },
+    {
+     "lanes": [
+      "ULTA_2026-03-12T16.30#091/L1",
+      "ULTA_2026-03-12T16.30#091/L2"
+     ],
+     "packet_id": "ULTA_2026-03-12T16.30#091",
+     "prompt_sha256": "baf9d455f9616559e1fbc0655a35c092b05f863d786243e707fde3764109473f"
+    }
+   ],
+   "sha256": "7d9ed3ec1ed3b607a20d45b2ff28ba2afa3b509d3a9a0c26bc99941170aae437",
+   "source_id": "ULTA_2026-03-12T16.30"
+  },
+  {
+   "bytes": 97701,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/YUM_2026-02-04T08.15.json",
+   "input_sha256": "60e70e7e667c480511d8c5f3eed748af27fcd628486b3f38fc30e058dda5e7e7",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_YUM_2026-02-04T08.15.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "YUM_2026-02-04T08.15#092/L1",
+      "YUM_2026-02-04T08.15#092/L2"
+     ],
+     "packet_id": "YUM_2026-02-04T08.15#092",
+     "prompt_sha256": "37a831190ecea6089f7f1bdfee1f520da3f3d62be7c37b61d1782a22dd20ee5c"
+    },
+    {
+     "lanes": [
+      "YUM_2026-02-04T08.15#093/L1",
+      "YUM_2026-02-04T08.15#093/L2"
+     ],
+     "packet_id": "YUM_2026-02-04T08.15#093",
+     "prompt_sha256": "43ccba15c46c685f73930f48649b5a038e0627261dc903120dfd2728afe853ba"
+    },
+    {
+     "lanes": [
+      "YUM_2026-02-04T08.15#094/L1",
+      "YUM_2026-02-04T08.15#094/L2"
+     ],
+     "packet_id": "YUM_2026-02-04T08.15#094",
+     "prompt_sha256": "94efafa5e4416b0e63e61ce83e2697e74b540c30b96dacc0f801b09dee9f9bf9"
+    }
+   ],
+   "sha256": "1b48aa97a3e8b4e48e4856114f3a5ad6e65b587ca7bde1d71d01816c61b2a6b8",
+   "source_id": "YUM_2026-02-04T08.15"
+  },
+  {
+   "bytes": 41416,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_42014391.json",
+   "input_sha256": "f51c6b723d933a960deb1f2f52fe7ba6cda82c967bb06d5a392a4dc69fdd92d3",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_bzNews_42014391.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "bzNews_42014391#095/L1",
+      "bzNews_42014391#095/L2"
+     ],
+     "packet_id": "bzNews_42014391#095",
+     "prompt_sha256": "41ca1f3d0da82212ae08c96d9b8ca6636b6bfcb55dbfba97839e6682e337c038"
+    },
+    {
+     "lanes": [
+      "bzNews_42014391#096/L1",
+      "bzNews_42014391#096/L2"
+     ],
+     "packet_id": "bzNews_42014391#096",
+     "prompt_sha256": "a5ca63bb3350974166e6ea8750be2d3af623de75a637af62c9f42989cc428474"
+    }
+   ],
+   "sha256": "4e8ae9a8c9f837e046bf62e412da5b69d74d5d4f74c4267fecac603665f01789",
+   "source_id": "bzNews_42014391"
+  },
+  {
+   "bytes": 40211,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_49256211.json",
+   "input_sha256": "55540c168d53e871c6895fd4ead4de8bb213889dd9764319ed747542cfd8eafc",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_bzNews_49256211.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "bzNews_49256211#097/L1",
+      "bzNews_49256211#097/L2"
+     ],
+     "packet_id": "bzNews_49256211#097",
+     "prompt_sha256": "fa86dddebeaf19ca54acfb5d76c5995de2c04456e832088340261a780e6248d2"
+    }
+   ],
+   "sha256": "56793081a6d4d70e090b8ce3563c2ec01218175fb3b4798f58e29a919fd0ca88",
+   "source_id": "bzNews_49256211"
+  },
+  {
+   "bytes": 44760,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_50877032.json",
+   "input_sha256": "c4d99d2547d10814459fd7612773622554fea9f61868f47d55323433b5712ca9",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_bzNews_50877032.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "bzNews_50877032#098/L1",
+      "bzNews_50877032#098/L2"
+     ],
+     "packet_id": "bzNews_50877032#098",
+     "prompt_sha256": "a25ed18e99c63a2434be3fb214c9404071aea3dce3ad83779d6718dfa275075b"
+    },
+    {
+     "lanes": [
+      "bzNews_50877032#099/L1",
+      "bzNews_50877032#099/L2"
+     ],
+     "packet_id": "bzNews_50877032#099",
+     "prompt_sha256": "60335d896376d97626a0ae16d71aacb7d0ba464a3c2e47c05556e9bd89a85b65"
+    },
+    {
+     "lanes": [
+      "bzNews_50877032#100/L1",
+      "bzNews_50877032#100/L2"
+     ],
+     "packet_id": "bzNews_50877032#100",
+     "prompt_sha256": "d34b2cd4a5620602755f1bccbf31c548779e1e4077ff772d9ac5a1d71106110d"
+    }
+   ],
+   "sha256": "025a5ae9307398ddb7cafe05ccfc6683fe0c5ceec5aaaf392fd3dc96f03ec2b4",
+   "source_id": "bzNews_50877032"
+  },
+  {
+   "bytes": 41772,
+   "input_path": ".claude/plans/Drivers/experiments/keys/K-fields/draft_inputs/bzNews_51962983.json",
+   "input_sha256": "3d3f7642fd7d8d84f9246ff0c36f9d3e529b713554fbf5f39101b356097aafca",
+   "launcher": ".claude/plans/Drivers/experiments/harness/launchers_a1/kfields_a1_bzNews_51962983.workflow.js",
+   "packets": [
+    {
+     "lanes": [
+      "bzNews_51962983#101/L1",
+      "bzNews_51962983#101/L2"
+     ],
+     "packet_id": "bzNews_51962983#101",
+     "prompt_sha256": "806cf73fe8570c04fc3f8a4fbb4f0c45006f7806c81378a8da25f1bffecf10b0"
+    }
+   ],
+   "sha256": "2bc8177e6132ed04a500ed8c6e7171fa8e73dea5dd929e0bbdfc7456ef135a2d",
+   "source_id": "bzNews_51962983"
+  }
+ ],
+ "workflow_max_bytes": 524288
+}
