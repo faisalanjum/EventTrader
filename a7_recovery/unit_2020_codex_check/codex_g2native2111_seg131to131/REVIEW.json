@@ -1,0 +1,78 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "fda525158cbabc3e0c6da81cda7ad760365df5d3b5460b5a577f7d739b7c4143",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 3,
+    "uncalled": 0,
+    "valid": 2
+   },
+   "receipt_sha256": "6f9979bdeda864198dbf9003f48c338ef3b6d1602ba44afb0110c71f16664812",
+   "retry": [
+    "G2-068/G1b"
+   ],
+   "rows": [
+    {
+     "answer": {
+      "M43e87509e5cc819b": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "Mf91a92c59065852f": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-067/G1b",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "5e33fa08f5648cbdbfbb3348976a42078b67f568e252c86121ec8c116f676aee"
+    },
+    {
+     "answer": {
+      "Me36640ff3213b7f2": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-068/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "7f59ce16a14a598ef67b307bb8c753abb652d629534d3145e4da8814a79a1c3e"
+    },
+    {
+     "answer": null,
+     "lane": "G2-068/G1b",
+     "problems": [
+      "Me36640ff3213b7f2 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "4c2729604b99156b88db8ca3e70889259968f3c7702793fd23c9b9a36fb79870"
+    }
+   ],
+   "segment": 131,
+   "uncalled": []
+  }
+ ]
+}

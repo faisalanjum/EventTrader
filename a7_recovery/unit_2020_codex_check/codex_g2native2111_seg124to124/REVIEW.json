@@ -1,0 +1,38 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "bc15accf1d5737775886b0d5acda84216f09b9db242b2ce1d34247558d8409dc",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "d1e686ab52b59411898bc3c5600e45de5df545d74d18d508c442f0900db388c8",
+   "retry": [
+    "G2-064/G1a"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-064/G1a",
+     "problems": [
+      "M16c32ef759346e0a carries a value that is not true, false or null",
+      "Mabd80961830fa09a carries a value that is not true, false or null",
+      "M9ac184b07624a590 carries a value that is not true, false or null",
+      "M49ccb6aa2eb4a6c5 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "436e8d60548a6a08b1a93ecb38ee7a95c7a260729fdc0e3542375f2e3a046521"
+    }
+   ],
+   "segment": 124,
+   "uncalled": []
+  }
+ ]
+}

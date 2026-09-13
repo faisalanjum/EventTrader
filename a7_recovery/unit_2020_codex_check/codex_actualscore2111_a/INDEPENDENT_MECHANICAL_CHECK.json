@@ -1,0 +1,816 @@
+{
+  "scope": "Mechanical baseline verification only; source/test cause attribution remains open",
+  "baseline_sha256": "98a7a6ad3a346e5417dcc2120568c5ab1461ba41a160a0f800256102a2a5e19d",
+  "route_files": [
+    {
+      "leg": "P1",
+      "source_id": "0000006201-26-000031",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194131207071_7f991695bd88.json",
+      "sha256": "1c7521210ae85e8d1fa3665b1a58f8243677e718514bd63912522d6f47676f4e",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000006201-26-000032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194132172913_df7ea7a7d830.json",
+      "sha256": "71ab7e28f864b02baaef71fdca0107cda01126972a7a000ccb3ef86a3bb03cce",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000027904-26-000013",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194132634114_677abf636204.json",
+      "sha256": "20b391bc96bc6b37d87f8c2c1b2a25eebadb34a2c552f93fb0c5283b0e74b51d",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000027904-26-000020",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194134470929_e67abb527fac.json",
+      "sha256": "18af9299b412924cf28f534e23f7a87c329bf0b68069df2b60967af30e5e188c",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000027904-26-000022",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194134936608_cdc9a5b4f313.json",
+      "sha256": "b327c6076eaa1aed7482bd17d72cd52909c0531d4da124ebed466d4780f3c7a4",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000063908-26-000032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194135394805_99fb8fd0b162.json",
+      "sha256": "f658e5e0455aa6da6edabab0eaaa042d15396e842e9406ab5bf2b0b2805f28bb",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000092380-26-000044",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194136310618_65a8f79f9713.json",
+      "sha256": "17db41e3739665115c3131856260bd4909344693e134e8ba6414687f2eb15aa1",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000764478-25-000057",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194136326586_04fc453d2c85.json",
+      "sha256": "4486cdfc4262c52216300cf8e50185af088010178de3736212965d64cc699ea9",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000898173-26-000006",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194137232857_82a4942ccab5.json",
+      "sha256": "fc9112004da5396e48d9d0a3675ee9c09b91a47cb643385099d8d042c4e090de",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000940944-25-000038",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194137244801_89698e914e73.json",
+      "sha256": "86cb61f9ec028388874e4ea2b6414f632f21e0644af438ab3c82186e9b1b4b83",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000940944-26-000005",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194137718303_c07dc61dcc2b.json",
+      "sha256": "a20dbba8b4067d97ba50f6e58546b88c8f939460822bed894ebbb6fa4769cfeb",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0000940944-26-000009",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194138620569_dd81a08171ed.json",
+      "sha256": "1548fe8c8ec356a7769b59f7e990fee48b408f77a01dd237ecbbe2d6ce704efc",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001041061-25-000109",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194139079451_4fe5b3b6e9fc.json",
+      "sha256": "28f02653a04774053bb910e84d03a2e4071bfa9c22fd671d96fabfd26e326469",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001041061-26-000003",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194139091609_2cfa10c17415.json",
+      "sha256": "a0a20b4c586d8a596260b8ef1f9b3adfe1baf5521b149dad18b489a9372102ec",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001041061-26-000084",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194140443030_733b1c5591b4.json",
+      "sha256": "8cb87a18a7698010cd717c1dac0b7ee65858b82744ca303b723f7ada5b3c199a",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001058090-26-000007",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194141824960_5a8cfe70c2d5.json",
+      "sha256": "6adfa82bf6dba95b3c96ca6b54864c6b0d59a98997d04d02a6bb6504ee14dbbe",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-25-102611",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194143654283_42be59851d94.json",
+      "sha256": "aaa6a8aa7be26535937ee3844764bc535e6a4483c49290cf05b00282eea9cf45",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-25-105631",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194146402806_4a4ad9394806.json",
+      "sha256": "47581b5a6c85c2af93e2feef17aeeccc981fa73d16a42b6d200b0ec45d32161c",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-25-118458",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194146863117_4abb2b5d9087.json",
+      "sha256": "4e36eda84b7aeccab4590a7bfa842d06e55320c8dd3ec820c8f258a747daf612",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-26-017090",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194146876311_5b26d20870ad.json",
+      "sha256": "08549bb3d77afc441960afd30a6976abc5b3d784fd463bc9bbaa69608adadeee",
+      "result_rows": 8,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-26-027061",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194147345296_85dce7415054.json",
+      "sha256": "8763f0b754072e6aa348212e861da44f3c9e382badfb9580c8095254e92b4ca4",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-26-032757",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194148709294_608705aebbff.json",
+      "sha256": "7894388a65e23e3bf788c315d90f1aee3e139858185fd93b9b09355ac8f966a3",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001171843-26-001288",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194150060867_40f51063372b.json",
+      "sha256": "aca155494516c6d4cedeeaf45343d60b235b4a50b6086b22af34226e9aef3541",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "AAL_2026-04-23T08.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194150533063_4db83b618530.json",
+      "sha256": "e9464192dc64945ecf4d5e05f84672d46895fbaea7665abb613c4a56291a2145",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "BBY_2026-03-03T08.00",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194152334990_4385658096d1.json",
+      "sha256": "5dc6c41cea893d20a91fabb0f9a34575ac9d44899dcb7359a0be29e6242719b5",
+      "result_rows": 1,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "CMG_2026-02-03T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194152346327_02264ffc7003.json",
+      "sha256": "a2f71e172a86b393dd27cbca386f4801848560c6e0b98f3d8568b4345eaf67f9",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "DAL_2026-04-08T10.00",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194153719040_321d20bb05ca.json",
+      "sha256": "1a96d8d156d6380082f0954c9bcf965ba214906589c0b25e8ad07815a6c120cc",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "DRI_2026-03-19T08.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194155517685_5645b800aeae.json",
+      "sha256": "ba90992382cff5072e30b6b269774ec361b4dcb40bd777b8e116ae3a46ea4c83",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "MCD_2026-02-11T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194156872508_b7337def642b.json",
+      "sha256": "47dc01f6c102465feb817ef2d230024b5e50ca4c122eb4022faa10d7b9877e4d",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "ULTA_2026-03-12T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194158245968_cd9ae3ae89f6.json",
+      "sha256": "e5b02dc47ef9fd7b4f750a6794dc183d8470bc39d7d269719891195ea5caa922",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "YUM_2026-02-04T08.15",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194159608163_c6f99f1026f2.json",
+      "sha256": "1d79a812ada4293ff7ac707655b8566a46dc84066e028800449c814da83dacbd",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "bzNews_42014391",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194201553687_3dfbf50e225d.json",
+      "sha256": "c7f5d4089a0844e4ea395aa69c5433ab4f2df3d7546defa9d920b380cfb83f59",
+      "result_rows": 1,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P1",
+      "source_id": "bzNews_50877032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P1/2026-09-13T194201561159_bbfc4675e0e2.json",
+      "sha256": "82d92f5fc5275e64090debbe7427e72b01b8719760d9b91e3dffec222ab790b1",
+      "result_rows": 1,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000006201-26-000031",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194201593902_7f991695bd88.json",
+      "sha256": "b4332a09e63ed2165f1a565db18ecd80e3840ef91cd2ca39c9b6ffa5940f266d",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000006201-26-000032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194202080067_df7ea7a7d830.json",
+      "sha256": "d2d2de6c61d2e16b2e980946627e6c190339a437210b20c5e1c3b94b7205be1a",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000027904-26-000013",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194202982185_a018c20f0313.json",
+      "sha256": "0bb4c9066eb8e68fefe07ff5000959ed739950a4fb1715cd189deaa3075c5cbb",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000027904-26-000020",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194204378178_7f0763992f24.json",
+      "sha256": "302aac3461b4f191589003fa51a6cc83686cff76e06d7409c37d3766930ef13e",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000027904-26-000022",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194205282947_cdc9a5b4f313.json",
+      "sha256": "b1f15e601812da7cabecf945279b3713f743fa94e9ccd273bbb81bd6acc68292",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000063908-26-000032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194205294311_99fb8fd0b162.json",
+      "sha256": "4d888712c5a3027e5d43d80cf29778315bbee04d76e994c561b3f6f7518b5b4f",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000092380-26-000044",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194206204383_65a8f79f9713.json",
+      "sha256": "788e7526ab599fe941e041aabba7271e7d0d1de2b010d5070463c8fd3895df69",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000764478-25-000057",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194206219228_04fc453d2c85.json",
+      "sha256": "3f28f646ab8c4f90fb196a31c0319dae358748dcfae84cb403b47a06cca1b6d2",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000898173-26-000006",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194207562666_f6c182a75b0a.json",
+      "sha256": "a32e7e71509c8914101e961941c54223202ae6a5ba0b7b89c18e722d132e215c",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000940944-25-000038",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194207573902_89698e914e73.json",
+      "sha256": "07f756ffcb9816dedc999ed2b206f2a51a7cd180fc42d8834e4e0f0366031d36",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000940944-26-000005",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194208046172_c07dc61dcc2b.json",
+      "sha256": "e63bf8447345594736be3052ce601c272f6aa23a9ed7dca1317c443948171d83",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0000940944-26-000009",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194208951013_dd81a08171ed.json",
+      "sha256": "88bacec53860004a9a9f9c244a2977e9941e044f1a864aa39d8a5c31a2b92897",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001041061-25-000109",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194210304778_4fe5b3b6e9fc.json",
+      "sha256": "b6b7e9665267eda001f393b7724314d9c0aab2b72b6890e7c4034d7d5090bec3",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001041061-26-000003",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194210320517_2cfa10c17415.json",
+      "sha256": "d55bedc7b686f15bd7ecf64450f89c0fcd65cd781873097026b6467417f86a50",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001041061-26-000084",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194211669807_733b1c5591b4.json",
+      "sha256": "da71dc618454fa673eb9dc2606942b27bef2729991655d548599bbed584dbd2a",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001058090-26-000007",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194213493610_5e6718e228bc.json",
+      "sha256": "625e81716aec6666160b26cc035b0cb92d02c9b6c06f82a3d48a6666fcb2e590",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-102611",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194215299740_42be59851d94.json",
+      "sha256": "5ab05e536a4f42925abc30ce4a45d1b24be9ba2d51cc25468cc4f86877278ae1",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-105631",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194218054643_7336c5220547.json",
+      "sha256": "b31d9f52706506cc26a7f6184385a9fc7909ca8ab76b56ec925fcbce966e1a60",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-118458",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194218514784_4abb2b5d9087.json",
+      "sha256": "7d26833582f3d3a529bcd663b3276e15367554a10e30faa09ccb73af882d83a2",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-26-017090",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194218528731_5b26d20870ad.json",
+      "sha256": "f2f8b06e3e8ac12465c7f18b6903ef1ef0c6dc1f017317c10bf380679e18d149",
+      "result_rows": 8,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-26-027061",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194221238004_85dce7415054.json",
+      "sha256": "81721373de8d124525b9de33b35036894f7f6d1e8180b24ce84ec1d2b09757fb",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-26-032757",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194222609057_608705aebbff.json",
+      "sha256": "ace6fbc2eaceeb81ab4198c6beeb315c189cedb97f1dd6dae4f3347788c788f7",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001171843-26-001288",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194223516928_40f51063372b.json",
+      "sha256": "187f71bfac0ac0ac2c2c523596f8dfff809d49cad2af276b384af4a06f982892",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "AAL_2026-04-23T08.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194224018380_64393fed69ce.json",
+      "sha256": "ffef887fb37769ab408aeb35558babc2f54b0ea27f601c2d3076c3e75991290b",
+      "result_rows": 8,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "BBY_2026-03-03T08.00",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194227155713_4385658096d1.json",
+      "sha256": "bd1688dca872c9bd93ba58f85b9a9276b36cb3bce1da74add5dbbae5d8f448a4",
+      "result_rows": 1,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "CMG_2026-02-03T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194227167263_ea170ea1efdb.json",
+      "sha256": "7ee3361f88a60821348428356f4b9597ba68991fa59735736597fd8dfad52cb3",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "DAL_2026-04-08T10.00",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194228535782_321d20bb05ca.json",
+      "sha256": "c46fd96a01f47481d7ee335e1018df7a644b03c0e6a0782aa4468b17ce956466",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "DRI_2026-03-19T08.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194230333816_5645b800aeae.json",
+      "sha256": "411675f07164d83624a31be8e30bfffb098dbf2377cdc647699c216f856a4fc1",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "MCD_2026-02-11T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194231690267_b7337def642b.json",
+      "sha256": "5f99fbe393c90e878b97713ce0794dbba9b79d18d220cc58396173e65ab572fc",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "ULTA_2026-03-12T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194233069735_3761bcf09504.json",
+      "sha256": "7b120d20fe5566ac819d34075b726f8c9e4061410e4961ad796f39bac72dd3f4",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "YUM_2026-02-04T08.15",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194233984970_33c7335c0292.json",
+      "sha256": "0c1972f433492d4ebc5aeca016288c9033796a8eb81283e313a055928c888efa",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "bzNews_42014391",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194234903219_3dfbf50e225d.json",
+      "sha256": "89d6e8b71390825bc57cc02e3a7bfea0e6226b095cbbd5f16b74211a0a678785",
+      "result_rows": 1,
+      "state": "dry_run"
+    },
+    {
+      "leg": "P2",
+      "source_id": "bzNews_50877032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/P2/2026-09-13T194234911325_bbfc4675e0e2.json",
+      "sha256": "b31b4aa7a91e31967dd7177646944b7bfaef1cdcf7ae2f638ed38c6cd0a50654",
+      "result_rows": 1,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000006201-26-000031",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194234968440_28eb7fddc23a.json",
+      "sha256": "0efb065ea1c8ecc93da2e01722b743285954a23e904a862ee90d082e02ca3539",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000006201-26-000032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194235891598_f0f558762e0a.json",
+      "sha256": "cf952db68670dd518cd9aa992a64e1b57c92de76480f5749e16c726087a95ed7",
+      "result_rows": 8,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000027904-26-000013",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194237246217_62114f56d02d.json",
+      "sha256": "b29de051e78d2101d66e52aa5aba590611cec082fb5f73b2e0e335d416ece9e1",
+      "result_rows": 9,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000027904-26-000020",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194239543062_e3d2ec49062d.json",
+      "sha256": "787392bddcc4d0cea6d01ccf075442e2b20f5cb2bcf57fbea43b4ff5fedbb822",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000027904-26-000022",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194240469721_9a3c8721af0b.json",
+      "sha256": "2dd44125b823286559b9c13e7cf9a53746a610671876db3420cc7938ff888842",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000063908-26-000032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194240933230_92ce89ef4539.json",
+      "sha256": "5aa6bb9af5c38cea877e9ea5943801ce37b7b47f58a06c00d5fd316806e0c124",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000092380-26-000044",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194242729325_f242cbc45803.json",
+      "sha256": "2a3e907e9a68aab05b1474d6bf804675f3825aaf9e7cbfadd46b7df3398ce0d1",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000764478-25-000057",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194242746852_33e9127eaf3a.json",
+      "sha256": "c0ffd5e41eed947ba2b0aed930f282a4f438811f140683b8105a3492b56ccd78",
+      "result_rows": 10,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000898173-26-000006",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194244983075_a85251519cc4.json",
+      "sha256": "0ce028f3c2c51af60f718860dd92175130015a71dc15e3700b75745892073af3",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000940944-25-000038",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194244998148_c6fa4b6be576.json",
+      "sha256": "c96e02b701be34f00dbe247adb1126f6b7445541c8f363fccafe7f88fb7fd084",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000940944-26-000005",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194245475269_5a57c333e1df.json",
+      "sha256": "07698a7fb69dc9133fa3d8b8f538c52c108145bba64e283bfedd84d4ab8fc264",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000940944-26-000009",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194247277849_e103bf7477f6.json",
+      "sha256": "3665e40fa55e50686e9066205caf517679a68f49b9b65fe98557ea537d0c698c",
+      "result_rows": 9,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001041061-25-000109",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194249071895_bac6ce2fdbc0.json",
+      "sha256": "958638fce561a4691a092dd1b67fd6f24d81ab9d4e045371b8aadbed65a57ed4",
+      "result_rows": 10,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001041061-26-000003",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194249084636_19a2ed6efb7a.json",
+      "sha256": "ff98c3c615002bd7c8b54778f0d376935ef733715a47d82ac622e3efe56682b3",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001041061-26-000084",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194250623377_5ecacbbe1f1d.json",
+      "sha256": "807a0413d08b6a74d92a2c03359e37fb9f5bdb90bd38b6e2b23f228f50c6e8dc",
+      "result_rows": 8,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001058090-26-000007",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194252899928_0d30a3cd3e9d.json",
+      "sha256": "7aebcc0b00363fd7e7ad8292f8b0a99ec782166a74d0a5e9c954d869e48ba326",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-102611",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194255343450_5f50f3f021f5.json",
+      "sha256": "5f9dafdc5471611ea164bd6d00d59b75111f959edb4c7a203b3fdf2390fdaa14",
+      "result_rows": 9,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-105631",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194259758672_ea14eff70d80.json",
+      "sha256": "1d36808bfa6400db1697b2ece08d1294581056dfd7f87f53c2f74e1b6de61e3e",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194300218286_6eddbf428ec4.json",
+      "sha256": "1ff11d3fe350bf72bc517c19d85a04b5e3aa9f72c8f4d2815466da1eb2966959",
+      "result_rows": 10,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-26-017090",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194300232828_8733576c4cc8.json",
+      "sha256": "86befbe74322e4cae97f090a78d6733892389b234c0beedcb10fb446b7f2f12f",
+      "result_rows": 11,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-26-027061",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194302947155_e40bb3d7ebd8.json",
+      "sha256": "da2025ee6f1654109e70846fa77346cd17b9ee60aa37e5d6291f80cc55f89f63",
+      "result_rows": 8,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-26-032757",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194305676105_0f5be8587ea0.json",
+      "sha256": "d7ecc47624d2c178843091badeeedbd4d5a238dd475f9b5f89160d82d74adafa",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001171843-26-001288",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194307471907_ab60dff828e0.json",
+      "sha256": "1a0d463a530c709ed961c3b94b2fbfa0a7f8de0101c1aeb2c0b9c3bd2b89b9a0",
+      "result_rows": 3,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "AAL_2026-04-23T08.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194308402650_4402ab5b3e9c.json",
+      "sha256": "de0c86d7e6c2708ae12db9b773eea6c63279141caf76a00a8e162e0abe5b45ea",
+      "result_rows": 9,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "BBY_2026-03-03T08.00",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194311990281_b2d00b5f3b32.json",
+      "sha256": "1e9e9a392ab528148e6f251843dcb2626efa3a8a8416f2fe91c6cb2d652b3ed6",
+      "result_rows": 0,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "CMG_2026-02-03T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194311999924_daef738ec33b.json",
+      "sha256": "f784ed4aaa160553ff9b6371ba601be5583e52fd75f12d74452ffa793a4e08d9",
+      "result_rows": 5,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "DAL_2026-04-08T10.00",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194313369100_87453a57498a.json",
+      "sha256": "0911fb930c2b0fa46f653b5bd92fe5a969493bf57803c4d59ac411015adbd0bb",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "DRI_2026-03-19T08.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194316065332_41e6694f314c.json",
+      "sha256": "87023df4f61575c4b612875887e42afe2a3b3368256888a730a8bf742b6f40a5",
+      "result_rows": 7,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "MCD_2026-02-11T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194317429074_8e08bb656d48.json",
+      "sha256": "a86f2680efd17e7e7a60110b4ec272c6ea1bc200321c8ef1cb6e2debdc2595a6",
+      "result_rows": 4,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "ULTA_2026-03-12T16.30",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194319266563_eb3dd19aab77.json",
+      "sha256": "c24fe3351a20115e407dc098e51cc91f80536c1a0b91d8e2b67a33cbfbd7a879",
+      "result_rows": 6,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "YUM_2026-02-04T08.15",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194320635029_58cff1eea3de.json",
+      "sha256": "3631b7022b63c6a0303b157701604f18b07494f62fbbffd9cb6172822376aa8b",
+      "result_rows": 8,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "bzNews_42014391",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194323358387_3dfbf50e225d.json",
+      "sha256": "060745b53ab4e528c38bdcf00c3668b23a99d5f4828aadb58f2b8a7357c3c5f5",
+      "result_rows": 1,
+      "state": "dry_run"
+    },
+    {
+      "leg": "UNION",
+      "source_id": "bzNews_50877032",
+      "path": "a7_recovery/unit_2020_codex_check/codex_actualscore2111_a/route/UNION/2026-09-13T194323371463_f587d65d48fa.json",
+      "sha256": "d071a664b1109ee007d51755e09106fe666b891e6051d7093ffd5584f86aeada",
+      "result_rows": 2,
+      "state": "dry_run"
+    }
+  ],
+  "distinct_event_leg_routes": 99,
+  "events_per_leg": 33,
+  "gold_per_leg": 163,
+  "decisions": {
+    "P1": false,
+    "P2": false
+  },
+  "checks": [
+    "Every actual public route reports dry_run; all expected event-leg identities are unique and complete.",
+    "Both real completion hashes match their independently reviewed candidates.",
+    "Recall fractions and original-response zero-invalid upper bounds recompute exactly.",
+    "Existing safety-first gate returns FAIL despite remaining unknown judgments; no missing judgment was promoted to PASS."
+  ],
+  "limitations": [
+    "Scorer-reported wrong accepts/duplicates/key misses still require source/test cause review.",
+    "Value/shape and meaning findings have not yet been independently attributed per source.",
+    "The 128 G2 unresolved questions,7 G3 unresolved questions and earlier G1 incomplete event remain visible."
+  ]
+}

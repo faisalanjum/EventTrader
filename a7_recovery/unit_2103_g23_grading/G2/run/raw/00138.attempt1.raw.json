@@ -1,0 +1,14 @@
+```json
+[{
+  "question_id": "M02d957fa99800507",
+  "verdicts": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": false,
+    "slice_vs_menu": false
+  }
+}]
+```

@@ -1,0 +1,7 @@
+attempt	core2111_g2manifest_153627
+payload	../../unit_2111_g2_completion/build_completion_manifest_2111.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1052217
+payload_pid	1052221
+started_utc	2026-09-13T19:36:27Z
+state	finished exit 1

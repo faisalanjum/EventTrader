@@ -1,0 +1,35 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run/invocation.seg131.json",
+ "invocation_sha256": "daeb99ca6ddcb9f202b3c5e00185ecfacffc698cb6e0f0f49adb8f374cc2906b",
+ "parent": null,
+ "reservation_sha256": "2fcb13267cef28d5279d95a90a8f090be845c53d7807517e2008a9670a58666a",
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "rows": [
+  {
+   "batch_id": "G2-067",
+   "lane_id": "G2-067/G1b",
+   "ordinal": 135,
+   "prompt_sha256": "17aeec34ac50b7888de4954dc5b277cbc2cf85b07c8524a159bb9b4f15b32f2a"
+  },
+  {
+   "batch_id": "G2-068",
+   "lane_id": "G2-068/G1a",
+   "ordinal": 136,
+   "prompt_sha256": "264477344f9d5d703d50a4646a09af8de1bdfa4ba594b776aec7d1f03cf0720d"
+  },
+  {
+   "batch_id": "G2-068",
+   "lane_id": "G2-068/G1b",
+   "ordinal": 137,
+   "prompt_sha256": "264477344f9d5d703d50a4646a09af8de1bdfa4ba594b776aec7d1f03cf0720d"
+  }
+ ],
+ "run_id": "run",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run/grade_batch.seg131.js",
+ "script_sha256": "756508deffd1ffe0553a71894b1bd0b59f38d893f948f139630d329716f35e27",
+ "segment": 131,
+ "state_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run/state.seg131.json"
+}

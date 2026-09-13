@@ -1,0 +1,68 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "5cb064e942644d1f067bfe01bad6a84377b2c57ce08142d2100690ff021bf273",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "4b45b2ea870f5db180e63f4764879da01c02b8decebce75d9091068797c24800",
+   "retry": [
+    "G2-065/G1b"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-065/G1b",
+     "problems": [
+      "M884c4845393d55ce carries a value that is not true, false or null",
+      "Mb65ece4291c4b307 carries a value that is not true, false or null",
+      "M1190a2305161d201 carries a value that is not true, false or null",
+      "M35b5be11f3dac0be carries a value that is not true, false or null",
+      "Mcb1fb316d377bb0a carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "5273cdb24ab1ce7128e0c87385751aa819c34ad839bed2aa461b92cdd6de5cb9"
+    }
+   ],
+   "segment": 127,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "e8bba32116fa2b6f14d5e78d948920e635fab4a81aa8366634ebc26d9e0358bd",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "a957d9f0e4827bc90d0cd71cb0629e3a3783dc38768595b345ed7d8a73f498dc",
+   "retry": [
+    "G2-066/G1a"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-066/G1a",
+     "problems": [
+      "M992cde76841a593a carries a value that is not true, false or null",
+      "Me9adff0c6d62ed44 carries a value that is not true, false or null",
+      "Mfea65de589d06fec carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "b50fae09d77504c8d52c050285792a33000695baab303da01081a79eb5fdabdc"
+    }
+   ],
+   "segment": 128,
+   "uncalled": []
+  }
+ ]
+}

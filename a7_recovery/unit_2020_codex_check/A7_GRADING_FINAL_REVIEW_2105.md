@@ -4,7 +4,46 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Newest evidence checkpoint, verified14:29 Eastern: normally committed/pushed
+Current pass,15:41 Eastern: the COMPLETE G2 collection is independently
+verified:140 required readings,141 actual calls,48 original-valid and93
+explicitly recovered attempts,0 missing usable readings or exhausted invalids.
+The one unused retry reservation remains a zero-call closure.131 workflows,
+141 distinct native agents and544 durable copies are checked. Whole run:
+1339 files,ab1acad507c6a97fb870b42ace6ca4e25df463303b0e63d865d679947ba62007.
+Input manifest59d54d97 binds2487 evidence files. The actual completion replay
+exits0,stderr0; reportafdc8bd2 and candidate d29d8538. Every question/aspect
+also matches an independent calculation from the native reply literals:
+178 fully agreed,128 unresolved of306,42 agreed error FLAGS (not yet
+source-confirmed errors). No new model call, grading-rule or raw-answer change.
+The real baseline scorer codex_actualscore2111_a completed at15:43 in the
+original G1 context with all TEST settings removed: exit0, four existing
+gp_UNDEF guidance warnings, no traceback. Baseline98a7a6ad has99 exact dry-run
+event-leg routes,2 completion loads and163 gold facts per leg. Both tier
+decisions are FAIL with all missing judgments retained. Recall recomputes as
+121/163,114/163 and71/163 for P1/P2/UNION; wrong accepts11/14/8 and duplicate
+violations1/3/144 are scorer findings still awaiting source/test attribution.
+Mechanical check is saved beside the baseline; publication remains open.
+Core2111's collection report is independently verified; its manifest's
+actual_calls=142 is the published-row count, not the141 actual calls correctly
+reported in its mailbox. Raw history is preserved, not silently relabeled.
+Codex2111 is sent/archived and assigns Core the disjoint UNION cause review;
+the work order owns its exact limits and the remaining whole-finding review.
+The two small operational callers reuse the existing owners; they do not
+replace parser, selection, agreement, accounting or scoring rules. Their
+syntax checks pass; the review caller passed the real complete population,
+and the scoring caller reached the actual existing scorer with the exact
+reviewed completions. The full cause review and any justified corrections
+are still open; these results do not claim a fault-free test or A7 PASS.
+
+Newest evidence checkpoint, verified14:55 Eastern: normally committed/pushed
+e3964bd06f902eb6218215560afe35ba28a9023a, tree40444ee6466fdc4054fe30e937c112aa20e9f52a;
+fresh remote matches. G2_PROGRESS_PUBLICATION_2111_G.json SHA475e1e5c pins2849
+reviewed files through G2 segment121 plus unchanged G3 completion and the
+owner's latest local-setup-only/end-of-task limit.185 changed paths; all2850
+selected committed files were read from Git and byte-hash verified. Index
+empty; main and unrelated work preserved. Core's collection is unchanged.
+
+Earlier evidence checkpoint, verified14:29 Eastern: normally committed/pushed
 56bdb12c70e547d3801b23a1f5622a0d255f58d0, treefb5381ef460b675c1340c3a9d3a00ca35f5beae3;
 fresh remote matches. G2_PROGRESS_PUBLICATION_2111_F.json SHAb6196960 pins2667
 reviewed files through G2 segment114 plus unchanged G3 completion and the
@@ -64,11 +103,12 @@ G3 is already verified. Actual G2 evidence review and final scoring remain;
 no A7 score or PASS is implied. The pass log below preserves pre-publication
 proof history; its former closure/publication blockers are resolved.
 
-Collection review,14:50 Eastern: G2 segments6–121 independently replayed through
+Collection review,15:24 Eastern: G2 segments6–130 independently replayed through
 the original native/parser checks (REVIEWs SHAbcbef7be,2f949a42,dd226d67,
-96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5,73241d30,a6f6f669,c91f1246,39f87cf4,193b01c2,c0b9aa67,1ac95c61,8a14957a,686ee614,cceb3064,9a1f5ba3,3e3b16e9,6ac467b5,97850833,75a8c4ed,cbe023f2,5336fce1,2d1b40ac,997683e0,9e83285c,5c6cf2ff,9cfa5c9d,d96ae913,5112b21b,cf0fc51c,19c2aa2a,4076a34e,284aca3d,a597bc46,394b95fb), and all478
-durable native copies match their sources. The123 readings include43 original-
-valid and80 recovered; exact retry-filter replays preserve every negative
+96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5,73241d30,a6f6f669,c91f1246,39f87cf4,193b01c2,c0b9aa67,1ac95c61,8a14957a,686ee614,cceb3064,9a1f5ba3,3e3b16e9,6ac467b5,97850833,75a8c4ed,cbe023f2,5336fce1,2d1b40ac,997683e0,9e83285c,5c6cf2ff,9cfa5c9d,d96ae913,5112b21b,cf0fc51c,19c2aa2a,4076a34e,284aca3d,a597bc46,394b95fb,96776316,f5eb4bb3), and all486
+durable native copies in the earlier prefix match their sources. The latest
+124–130 proofs efc9d00b,9291ad7b,db5641aa,f916240a,ed477194 extend this to514
+copies and132 readings:44 original-valid and88 recovered. Exact retry-filter replays preserve every negative
 judgment and require no retry. Two-reading segments17,24,27,36,49,66 and83 are verified.
 G3's reviewed completion
 is now saved through C.persist_g23 and reloaded: exact approved bytesad575661,

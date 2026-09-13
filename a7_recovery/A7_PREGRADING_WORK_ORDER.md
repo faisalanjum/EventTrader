@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 146, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 150, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,80 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-NEWEST PUBLICATION, verified14:29 Eastern: G2 prefix6–114, unchanged G3
+CURRENT,15:41 Eastern: G2 COLLECTION IS INDEPENDENTLY VERIFIED COMPLETE.
+All140 required primary readings are usable;141 actual calls retain48
+original-valid and93 original-invalid/recovered attempts. Exactly one earlier
+retry was spent; the separate unused reservation remains zero-call closed.
+No missing primary, exhausted invalid, pending segment or observed identity
+reuse.131 workflows,141 distinct recorded agents,544 durable native copies
+all match their sources. All132 published segments are closed. The1339-file
+run digest is ab1acad507c6a97fb870b42ace6ca4e25df463303b0e63d865d679947ba62007.
+G2_WHOLE_REVIEW_INPUT_2111.json SHA59d54d9744dc43f922b8571322b238897f3c8f8aaa17ff6a4a25ef8d6ef39d16
+pins2487 evidence files and every original/recovered selected reading.
+The actual completion-owner replay passes with exit0 and empty stderr:
+codex_g2completion2111_a/REVIEW.json SHAafdc8bd2bee60f877f79cc0dc2924e949b675a82d02f03ba0f003464fdff0f26;
+COMPLETION_CANDIDATE.json SHAd29d85386313068d1ba14ebd748e68d289aed2e340faf5d82fc88025e11a5a60.
+Independent per-aspect comparison of every native literal reply accounts for
+all306 questions:178 fully agreed,128 unresolved;42 have an agreed false
+aspect, including some otherwise unresolved questions. These are judgments,
+not source-confirmed model errors or a final A7 score.
+
+The actual baseline is SAVED under codex_actualscore2111_a, exit0 at15:43.
+A7_BASELINE.json SHA98a7a6ad3a346e5417dcc2120568c5ab1461ba41a160a0f800256102a2a5e19d.
+All99 actual route records are dry_run,33 unique source events per leg;2 real
+completion loads,163 gold facts per leg. P1 matched121/163 (74.23%), P2
+114/163 (69.94%), UNION71/163 (43.56%). Scorer-reported wrong accepts are
+11/14/8 and duplicate violations1/3/144 respectively. Both tier decisions
+are FAIL; required-grading-unfinished is preserved on every leg. These are
+baseline counts, not completed source attribution. The independent mechanical
+check is beside the baseline; per-source/test cause review remains open.
+ACTUAL_SCORE_RUN_2111.json SHAf1b85980f55f60971f441867be001fe80c2955bcd93b4e093c6d838a625d3102
+records the exact completed execution. Never overwrite or blindly rerun it.
+This is a safe independent checkpoint: no collection segment remains open,
+Core's task forbids changes to the candidate/scorer, and all run/native bytes
+are externally pinned. Core may finish its report in parallel; its eventual
+claims still require review. Do not wait for that report to repeat any call.
+review_g2_completion_2111.py SHA2f5bc0a93f6e9bc402edbed10aa247f5b73b6613a318eb4faa35b7e2974fbadc
+only calls the existing evidence/selection/completion owners and saves a review
+candidate. score_actual_grading_2111.py SHAe2f1a039fbb847d169611efc3fc919c09612f1dbb211569b842583c0a3f88b94
+uses the ORIGINAL G1 context, no TEST inputs, the same map2103 and pinned
+format scope; it saves/reuses the approved G2 completion, reuses saved G3 and
+calls the existing official tier scorer once. These are operational callers,
+not new grader rules. Exact G2 completion already saved by a partial scoring
+attempt must be reloaded, never overwritten. Source-cause checks and
+publication of this increment remain owed; no A7 PASS is claimed.
+
+Core2111 SHA4ea8566b6aac310289a688b69d66ce907e1c809f558d2b5f1e129e4f0a156169
+is verified against its archive and all132 segment pins/full recovery audit.
+Its manifest5923f357 labels142 published invocation rows as actual_calls;
+the correct actual count is141, as Core's mailbox and the independent Codex
+input state. Preserve that raw manifest as history; its label is not the
+authoritative actual-call count.862 is the prior total before G2/G3, not a
+G1-only count. No separate cleanup is needed.
+Codex2111 SHA5c0a0b4d8202e99c1402ab44f62530793ef4bb1bd36333ae5992ccea74ba4883
+was atomically sent and byte-identically archived at15:50. ONE Core task:
+independent read-only diagnosis of the COMPLETE UNION matching/duplicate
+population, including whether54 G1 plus90 extras findings are correctly
+attributed/counted and why combined recall is lower. No presumed bug, code
+or key change, new model call or production task. Diagnosis artifacts only
+under unit_2112_union_diagnosis, one final reply then wait. Codex verifies
+and publishes the baseline and handles the other findings alongside Core.
+The latest manual scope remains §1/§6: correct TEST faults only; local setup
+check at the END without engine/client/server changes or live calls; then
+STOP AND WAIT. No A8 or later-step task.
+
+NEWEST PUBLICATION, verified14:55 Eastern: G2 prefix6–121, unchanged G3
+completion and the latest local-setup-only/end-of-task limit are committed and
+normally pushed ase3964bd06f902eb6218215560afe35ba28a9023a,
+tree40444ee6466fdc4054fe30e937c112aa20e9f52a, sole parent56bdb12c70e547d3801b23a1f5622a0d255f58d0.
+Fresh remote read matches. G2_PROGRESS_PUBLICATION_2111_G.json
+SHA475e1e5c702bf3befd402b82f91de7418a8e19f55432866a8c86e48883f84710
+pins2849 reviewed files;185 changed paths. All2850 selected committed files,
+including the manifest, were read from Git and byte-hash verified. Index empty;
+main and unrelated work unchanged. Core continues its unchanged2110 task.
+Later segments are outside this checkpoint. No final score or PASS is claimed.
+
+EARLIER PUBLICATION, verified14:29 Eastern: G2 prefix6–114, unchanged G3
 completion and the owner's bounded test-correction/model-reuse/stop instruction
 are committed and normally pushed as56bdb12c70e547d3801b23a1f5622a0d255f58d0,
 treefb5381ef460b675c1340c3a9d3a00ca35f5beae3, sole parent353a7f2182992abb36291fef5f538acdd12ba4fe.
@@ -164,7 +237,7 @@ use the existing completion/route/scorer owners to report all denominators,
 wrong accepts, misses, disagreements and exhausted invalids. No new framework.
 The active goal and one Codex watcher remain unchanged; no handover restart.
 
-INDEPENDENT PROGRESS, 14:50 Eastern: segments6–121 pass original native,
+INDEPENDENT PROGRESS, 15:24 Eastern: segments6–130 pass original native,
 whole-reply and parser replay; proof codex_g2native2111_seg6to7/REVIEW.json
 SHAbcbef7bef33af8e3e611bfa311dc228d931d9120bf174ffcb7c0adcdae5eb2c7.
 The second prefix proof is codex_g2native2111_seg8to9/REVIEW.json
@@ -312,10 +385,24 @@ SHA284aca3dae1f55dee509e92f6e72c79c43c00066cbe9aa083808aa4bdcb95a4b;
 codex_g2native2111_seg120to120/REVIEW.json
 SHAa597bc46d1a515e0dbf7cb17b572b5d51efb2d1011746ca4780c03cf91beb048;
 codex_g2native2111_seg121to121/REVIEW.json
-SHA394b95fb975d5c0c3e09dfa44274ea33ba27e16645fecd4a3261832b0ccc3209.
-All478 copied native files match their original sources. Separate exact pinned
-retry-filter replays pass with empty stderr. The123 new primary readings across
-these116 segments include43 originally valid and80 recovered readings; all123
+SHA394b95fb975d5c0c3e09dfa44274ea33ba27e16645fecd4a3261832b0ccc3209;
+codex_g2native2111_seg122to122/REVIEW.json
+SHA96776316ee6fbe79f78a219610a82d3d08b1c77265ff578dad0984eee9f83aa3;
+codex_g2native2111_seg123to123/REVIEW.json
+SHAf5eb4bb38707e603f9aa7c2b0c81c460fa20b0b063ede7b69e4d879e823e70a9;
+codex_g2native2111_seg124to124/REVIEW.json
+SHAefc9d00bc6bb64452c93949f0a20bb216ed36a4fec23179031c5fa43fc2b447d;
+codex_g2native2111_seg125to125/REVIEW.json
+SHA9291ad7bfdadc85d5b5f1252396dfbcfb99dc5e86144bfcd2b4f4e088409c60d;
+codex_g2native2111_seg126to126/REVIEW.json
+SHAdb5641aaad63ef3925f4a081c02f086fc05077e44e8fad15a9ae542a192917a6;
+codex_g2native2111_seg127to128/REVIEW.json
+SHAf916240abe2b7e186c7c2c4259397946918180fac22d95d4c8686f0dca4d20e3;
+codex_g2native2111_seg129to130/REVIEW.json
+SHAed477194d597717da8ba9f10ab984a8b3e64dfe062ee551bd49d3653c16706ac.
+All514 copied native files match their original sources. Separate exact pinned
+retry-filter replays pass with empty stderr. The132 new primary readings across
+these125 segments include44 originally valid and88 recovered readings; all132
 require zero retry. Segments17,24,27,36,49,66 and83 each lawfully contain both readings of
 their frozen batch. All negative judgments remain unchanged.
 These are usable grading judgments, not claims that the tested answers were
@@ -361,9 +448,11 @@ and seg9 stdout65b346d5; seg10 stdoutafa03f96,11 stdout85145929,
 110 stdoutc0f32242,111 stdoutedfe8ef8,112 stdout11e1e6c1,
 113 stdout36fa709e,114 stdoutac1c9588,115 stdout87f50f40,116 stdoutab7af8cd,
 117 stdout74738fae,118 stdout2843b453,119 stdout7738c081,
-120 stdout54736d9d,121 stdoutb2ac6990.
+120 stdout54736d9d,121 stdoutb2ac6990,122 stdout37fdc493,123 stdout714c7e06,
+124 stdoutecf7941e,125 stdout82c0f4e1,126 stdoutf427f0de,
+127 stdout550542b5,128 stdout9162e99d,129 stdoutddf4767e,130 stdout5d7e1017.
 All segment review payloads exit0 with empty stderr. The live lane-state owner
-last reported14 primaries remaining at14:50:45. Segments after121 are not yet included
+last reported5 primaries remaining at15:20. Segments after130 are not yet included
 in this reviewed prefix. Counts are
 a timestamped snapshot only. ETA updated10:23: best estimate17:00 Eastern,
 provisional16:00–19:00 range. The most recent12 preserved workflows (42–53)

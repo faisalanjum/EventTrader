@@ -1,0 +1,28 @@
+```json
+[
+  {
+    "question_id": "M43e87509e5cc819b",
+    "verdicts": {
+      "driver_name_meaning": "true",
+      "driver_state": "true",
+      "favorability": "true",
+      "growth_basis": "true",
+      "lane_routing": "true",
+      "record_matches_source": "true",
+      "slice_vs_menu": "true"
+    }
+  },
+  {
+    "question_id": "Mf91a92c59065852f",
+    "verdicts": {
+      "driver_name_meaning": "true",
+      "driver_state": "true",
+      "favorability": "true",
+      "growth_basis": "true",
+      "lane_routing": "true",
+      "record_matches_source": "false",
+      "slice_vs_menu": "true"
+    }
+  }
+]
+```

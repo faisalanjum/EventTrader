@@ -1,0 +1,64 @@
+```json
+[
+  {
+    "question_id": "Meae5deb8e54cd4dc",
+    "verdicts": {
+      "driver_name_meaning": true,
+      "driver_state": true,
+      "favorability": true,
+      "growth_basis": true,
+      "lane_routing": true,
+      "record_matches_source": true,
+      "slice_vs_menu": true
+    }
+  },
+  {
+    "question_id": "Mb440e706885e6f10",
+    "verdicts": {
+      "driver_name_meaning": true,
+      "driver_state": true,
+      "favorability": true,
+      "growth_basis": true,
+      "lane_routing": true,
+      "record_matches_source": true,
+      "slice_vs_menu": true
+    }
+  },
+  {
+    "question_id": "Mc0fee81b5ffc9975",
+    "verdicts": {
+      "driver_name_meaning": false,
+      "driver_state": true,
+      "favorability": true,
+      "growth_basis": true,
+      "lane_routing": true,
+      "record_matches_source": false,
+      "slice_vs_menu": true
+    }
+  },
+  {
+    "question_id": "M4e236380221db347",
+    "verdicts": {
+      "driver_name_meaning": true,
+      "driver_state": true,
+      "favorability": true,
+      "growth_basis": true,
+      "lane_routing": true,
+      "record_matches_source": true,
+      "slice_vs_menu": true
+    }
+  },
+  {
+    "question_id": "M8d392b03ceaf4b7a",
+    "verdicts": {
+      "driver_name_meaning": true,
+      "driver_state": true,
+      "favorability": true,
+      "growth_basis": true,
+      "lane_routing": true,
+      "record_matches_source": true,
+      "slice_vs_menu": true
+    }
+  }
+]
+```

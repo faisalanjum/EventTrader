@@ -1,0 +1,15 @@
+{
+ "lanes": {
+  "G2-069/G1a": {
+   "chars": 275,
+   "sha256": "27a371aa5851ad256a2a0d9c9228b8b9b450b02b077934df2365abc194a3bb60",
+   "text": "```json\n[{\n  \"question_id\": \"M02d957fa99800507\",\n  \"verdicts\": {\n    \"driver_name_meaning\": true,\n    \"driver_state\": true,\n    \"favorability\": true,\n    \"growth_basis\": true,\n    \"lane_routing\": true,\n    \"record_matches_source\": false,\n    \"slice_vs_menu\": false\n  }\n}]\n```"
+  },
+  "G2-069/G1b": {
+   "chars": 281,
+   "sha256": "eabbcda43bae471ce33ff4597f2a562b48627af9cf90ae7a7ef2b2dd35e4514f",
+   "text": "```json\n[{\n  \"question_id\": \"M02d957fa99800507\",\n  \"verdicts\": {\n   \"driver_name_meaning\": \"true\",\n   \"driver_state\": \"true\",\n   \"favorability\": \"true\",\n   \"growth_basis\": \"true\",\n   \"lane_routing\": \"true\",\n   \"record_matches_source\": \"false\",\n   \"slice_vs_menu\": \"true\"\n  }\n}]\n```"
+  }
+ },
+ "segment": 132
+}

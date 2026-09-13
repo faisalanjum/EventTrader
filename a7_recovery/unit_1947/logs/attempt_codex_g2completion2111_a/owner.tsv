@@ -1,0 +1,7 @@
+attempt	codex_g2completion2111_a
+payload	../../unit_2020_codex_check/review_g2_completion_2111.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1055837
+payload_pid	1055841
+started_utc	2026-09-13T19:38:02Z
+state	finished exit 0

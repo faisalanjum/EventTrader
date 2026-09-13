@@ -1,0 +1,17 @@
+{
+  "scope": "actual G2 completion independently checked against all literal native answers and per-aspect agreement; no source-truth approval or A7 score",
+  "review_sha256": "afdc8bd2bee60f877f79cc0dc2924e949b675a82d02f03ba0f003464fdff0f26",
+  "completion_sha256": "d29d85386313068d1ba14ebd748e68d289aed2e340faf5d82fc88025e11a5a60",
+  "input_sha256": "59d54d9744dc43f922b8571322b238897f3c8f8aaa17ff6a4a25ef8d6ef39d16",
+  "run_sha256": "ab1acad507c6a97fb870b42ace6ca4e25df463303b0e63d865d679947ba62007",
+  "run_files": 1339,
+  "questions": 306,
+  "fully_agreed": 178,
+  "unresolved": 128,
+  "agreed_error_flags": 42,
+  "selected_primary_readings": 140,
+  "selected_attempt_2": 1,
+  "payload_exit": 0,
+  "stderr_bytes": 0,
+  "new_model_calls": 0
+}
