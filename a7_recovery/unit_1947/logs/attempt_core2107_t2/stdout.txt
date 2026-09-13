@@ -1,0 +1,12 @@
+  the pending segment 5 blocks the next publication              PASS ['segment 5 is still pending; one publication at a time']
+  inspect accepts it from the REAL saved reply, no report supplied PASS []
+  the prior reading is derived, recovered, and still originally invalid PASS 
+  the scanned-state count is transient, not part of the identity PASS 
+  close writes the finalization                                  PASS []
+  zero credited, every lane uncalled, no verdict invented        PASS 
+  G.publish_run actually publishes the next never-called primary PASS []
+  an already-called primary is still refused                     PASS ['segment 6 is still pending; one publication at a time']
+  the consumed reservation cannot be re-reserved                 PASS ['segment 6 is still pending; one publication at a time']
+  closure applied to the connection copy                         PASS []
+  C.evidence under F.scope selects the prior recovered attempt   PASS []
+  the identity carries the recovery audit with original-invalid flags PASS [{'raw_sha256': 'e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee', 'origi

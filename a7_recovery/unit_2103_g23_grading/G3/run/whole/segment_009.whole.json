@@ -1,0 +1,20 @@
+{
+ "lanes": {
+  "G3-009/G1b": {
+   "chars": 643,
+   "sha256": "da3503ae787623737353157ca52c4dd9613b3241cbaec989257a8c8699ec4467",
+   "text": "```json\n[\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xbd1a43bdf9debd46\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X31eb45d686e84883\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X8d2159e496d61cc6\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X06c4d4988b938d1c\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X38b3c845d88429f0\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X6a8a1479099fcb9a\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xa2b729c37573e3b6\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xf6928f184a847e9e\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"Xb8d3efab26630ed1\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xe10aa94910fc4e7a\"}\n]\n```"
+  },
+  "G3-010/G1a": {
+   "chars": 510,
+   "sha256": "f42b6648c35eaa49b262c9f9eb353ab0e59937c87050c54c49f5e29e43ce3410",
+   "text": "```json\n[\n {\"bucket\": \"duplicate\", \"question_id\": \"X6f84a382ffbc0004\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X1126d58e06d1223b\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X4e081a7d171dba07\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X5e80f0a222be7eb2\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X1ef69564dbb27ac2\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X1642c8fd4f67b764\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"Xf2bdb18bab1c8ab8\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X7bfc69ea73a9d1ae\"}\n]\n```"
+  },
+  "G3-010/G1b": {
+   "chars": 518,
+   "sha256": "21b322d1c2ca42cf06606c21e6880d9111e8a2d32e6d88b4969f91e3e529591d",
+   "text": "```json\n[\n  {\"bucket\": \"duplicate\", \"question_id\": \"X6f84a382ffbc0004\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X1126d58e06d1223b\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X4e081a7d171dba07\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X5e80f0a222be7eb2\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X1ef69564dbb27ac2\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X1642c8fd4f67b764\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xf2bdb18bab1c8ab8\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X7bfc69ea73a9d1ae\"}\n]\n```"
+  }
+ },
+ "segment": 9
+}

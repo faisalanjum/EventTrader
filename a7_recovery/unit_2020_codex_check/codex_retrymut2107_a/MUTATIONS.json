@@ -1,0 +1,45 @@
+{
+ "actual_model_calls": 0,
+ "code_sha256": "127bd6c0d41a961476cffb8a7731f6c9dc2355b385dee7de06332347e17c7f94",
+ "mutations": [
+  {
+   "exit": 1,
+   "mutant_sha256": "29de9fa2b22187ac8bc8b126ad9c6555853aa7701e82b86eab954a9e7a6e2aef",
+   "name": "repeat_recovered_success",
+   "test": "test_complete_supported_population_keeps_only_genuinely_invalid_retry"
+  },
+  {
+   "exit": 1,
+   "mutant_sha256": "3cf605fb58e83bfba964041514f57a0f36d2eb325316070a9d2b88e8649c194a",
+   "name": "accept_changed_finalization",
+   "test": "test_changed_finalization_refuses_without_overwrite"
+  },
+  {
+   "exit": 1,
+   "mutant_sha256": "dc9708a1b2fbbbc1715696f0b2323ada7b6657bf49fca9b5f4ecfe4be3fb09d7",
+   "name": "ignore_original_validity",
+   "test": "test_original_validity_must_match_the_actual_parser"
+  },
+  {
+   "exit": 1,
+   "mutant_sha256": "ffd6a71df523b9ca8453a51f97c535de365717081adaacbf77e35b3070218ddd",
+   "name": "accept_other_kind",
+   "test": "test_each_early_boundary_refuses_after_real_positive[other_kind]"
+  },
+  {
+   "exit": 1,
+   "mutant_sha256": "7b5e8ba15e884dbd6f8523547329847e50540a6c72e5094189dc84b74d75cf97",
+   "name": "accept_unfinalized",
+   "test": "test_each_early_boundary_refuses_after_real_positive[unfinalized]"
+  },
+  {
+   "exit": 1,
+   "mutant_sha256": "520c57d55b1a5d166dbcfd2a305f10e0057a033f542d0a139fd658b07c69c4cc",
+   "name": "credit_native_error",
+   "test": "test_original_finalizer_errors_stop_retry_selection_with_positive_control[native refusal]"
+  }
+ ],
+ "real_run_writes": 0,
+ "restored_control_exit": 0,
+ "test_sha256": "ae9392d0b7e9c4feb97ddd3931a49f53da35f8ce092c41bd026fd80d525cf83e"
+}

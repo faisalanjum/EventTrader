@@ -1,0 +1,9 @@
+attempt	grader_formatnative2106_fixed
+payload	../../grader_20260909/attempts/core2100nat/payload_2100.py
+map	../unit_2020_codex_check/map_formatreg_trace_2106.tsv
+command	run_1957.sh ../unit_2020_codex_check/map_formatreg_trace_2106.tsv ../../grader_20260909/attempts/core2100nat/payload_2100.py grader_formatnative2106_fixed 900
+wrapper_pid	92450
+payload_pid	92454
+payload_pgid	92450
+started_utc	2026-09-13T09:51:54Z
+state	finished exit 0

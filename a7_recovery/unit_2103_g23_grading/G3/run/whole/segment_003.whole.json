@@ -1,0 +1,20 @@
+{
+ "lanes": {
+  "G3-003/G1a": {
+   "chars": 639,
+   "sha256": "1cf00dcb6298623c1ba71803ce99a2d05287e8fcd4b3167de97c6e03903bccf0",
+   "text": "```json\n[\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xb649417e45cad2de\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X625f7c75cc570b04\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X427bb1a95bab02aa\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"X5603a0beaadd5e3c\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"X6e22977f210d9c10\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"X75b11760e0633d83\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"X12cb0c151404674d\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"X80e6aaa45575930a\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X86feb54326687022\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X0cca68dc69dcd11b\"}\n]\n```"
+  },
+  "G3-003/G1b": {
+   "chars": 633,
+   "sha256": "557d6d4a69b18c0e9636b4e1fe56a17cd67203ee9ed8316222ca92859b123f60",
+   "text": "```json\n[\n {\"bucket\": \"duplicate\", \"question_id\": \"Xb649417e45cad2de\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X625f7c75cc570b04\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X427bb1a95bab02aa\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X5603a0beaadd5e3c\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X6e22977f210d9c10\"},\n {\"bucket\": \"key_miss\", \"question_id\": \"X75b11760e0633d83\"},\n {\"bucket\": \"key_miss\", \"question_id\": \"X12cb0c151404674d\"},\n {\"bucket\": \"key_miss\", \"question_id\": \"X80e6aaa45575930a\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X86feb54326687022\"},\n {\"bucket\": \"unsupported\", \"question_id\": \"X0cca68dc69dcd11b\"}\n]\n```"
+  },
+  "G3-004/G1a": {
+   "chars": 582,
+   "sha256": "23a02625a63d2c7fbb31bf00f767b5c9b3021f2d6b5888678f562231527f07b8",
+   "text": "```json\n[\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xa4deadc9031eb381\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"X1324b492faa2981e\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X126166ff9554cd21\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xb100f34c67a98cff\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X3084ebf401c9eb68\"},\n  {\"bucket\": \"unsupported\", \"question_id\": \"X6f9c048ff25601a9\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X18645f55a6091ad6\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xa2480c79b460e114\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X64d9845a89cc6734\"}\n]\n```"
+  }
+ },
+ "segment": 3
+}

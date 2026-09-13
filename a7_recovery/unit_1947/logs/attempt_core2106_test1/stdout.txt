@@ -1,0 +1,18 @@
+  the pending segment 5 blocks the next publication          PASS ['segment 5 is still pending; one publication at a time']
+  segment 5 is published, not finalized                      PASS 
+  the ACTUAL recovery report is refused on format-code drift FAIL ['owner grading_scorer changed since publication: 6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e -> unbound']
+  inspect accepts a never-launched, fully recovered retry    FAIL ['owner grading_scorer changed since publication: 6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e -> unbound']
+  evidence records zero uses, zero states, zero calls        FAIL 
+  close writes the finalization                              FAIL ['owner grading_scorer changed since publication: 6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e -> unbound']
+  the ledger credits nothing and marks every lane uncalled   FAIL 
+  the closure is named and claims no state audit             FAIL 
+  it records no verdict for a lane that was never read       FAIL 
+  segment 5 is now finalized                                 FAIL 
+  the next never-called primary is admitted                  FAIL ['segment 5 is still pending; one publication at a time']
+  an already-called primary is still refused                 PASS ['segment 5 is still pending; one publication at a time']
+  the consumed reservation cannot be re-reserved             PASS ['segment 5 is still pending; one publication at a time']
+  segment 4 still records its original invalid verdict       PASS 
+  a segment with raw output is refused                       FAIL ['owner grading_scorer changed since publication: 6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e -> unbound']
+  positive control: the real sidecar really is empty         PASS 
+  a second close of the same segment is refused              FAIL 
+  an interrupted closure resumes from its exact staged evidence FAIL ['owner grading_scorer changed since publication: 6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e -> unbound']

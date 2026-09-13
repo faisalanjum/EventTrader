@@ -1,0 +1,48 @@
+{
+ "kind": "G3",
+ "segment": 8,
+ "workflow_id": "wf_64f4e15d-7db",
+ "preserved_under": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db",
+ "official_state_sha256": "a7e053e46487fc787f93b04bd5e50e74e4dacd3b05012e9aac596e026176b3d0",
+ "files": [
+  {
+   "name": "official_state.json",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_64f4e15d-7db.json",
+   "sha256": "a7e053e46487fc787f93b04bd5e50e74e4dacd3b05012e9aac596e026176b3d0",
+   "bytes": 414551
+  },
+  {
+   "name": "transcripts/agent-a30ef8410770a6b8f.jsonl",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_64f4e15d-7db/agent-a30ef8410770a6b8f.jsonl",
+   "sha256": "fb2849c3ec8e19ea547fc25dd19cc4b9626e4dcf99a09bb084a6b1bb4f526ac0",
+   "bytes": 226530
+  },
+  {
+   "name": "transcripts/agent-a30ef8410770a6b8f.meta.json",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_64f4e15d-7db/agent-a30ef8410770a6b8f.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11",
+   "bytes": 58
+  },
+  {
+   "name": "transcripts/agent-ab7a6d5a015cbdb50.jsonl",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_64f4e15d-7db/agent-ab7a6d5a015cbdb50.jsonl",
+   "sha256": "9853be756d84549a8737dda5162b8418b44358820e6ea4073f3eb2a70dd5d313",
+   "bytes": 216737
+  },
+  {
+   "name": "transcripts/agent-ab7a6d5a015cbdb50.meta.json",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_64f4e15d-7db/agent-ab7a6d5a015cbdb50.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11",
+   "bytes": 58
+  },
+  {
+   "name": "transcripts/journal.jsonl",
+   "source": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_64f4e15d-7db/journal.jsonl",
+   "sha256": "2eb34e6c4f7fdd993003f1af9b88f520a833dfa42bd4b7324b1455768cd5b4a2",
+   "bytes": 1983
+  }
+ ],
+ "file_count": 6,
+ "referenced_native_files": 0,
+ "native_records_altered": 0
+}

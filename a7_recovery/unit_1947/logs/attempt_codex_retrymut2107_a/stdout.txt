@@ -1,0 +1,130 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_complete_supported_population_keeps_only_genuinely_invalid_retry _____
+
+saved = (('candidate-dir', 'run-dir', 7, 'root', 'receipt', '7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8'...isal/pytest-0/test_complete_supported_popula0/finalization.json', [('candidate-dir', 'run-dir', 7, 'root', 'receipt')])
+
+    def test_complete_supported_population_keeps_only_genuinely_invalid_retry(saved):
+        args, final, path, calls = saved
+        original_write = G._write_new
+        before = Path(path).read_bytes()
+        result = M.plan(*args)
+>       assert result['retry_lanes'] == ['wrong_case']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py:56: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py::test_complete_supported_population_keeps_only_genuinely_invalid_retry
+1 failed in 0.07s
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________ test_changed_finalization_refuses_without_overwrite ______________
+
+saved = (('candidate-dir', 'run-dir', 7, 'root', 'receipt', '7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8'...zation.json', [('candidate-dir', 'run-dir', 7, 'root', 'receipt'), ('candidate-dir', 'run-dir', 7, 'root', 'receipt')])
+
+    def test_changed_finalization_refuses_without_overwrite(saved):
+        args, final, path, _ = saved
+        assert M.plan(*args)['retry_lanes'] == ['wrong_case']
+        original = Path(path).read_bytes()
+        Path(path).write_text(G._pretty(dict(final, retry=[])) + '\n')
+        changed = Path(path).read_bytes()
+>       with pytest.raises(ValueError, match='does not reproduce'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py:86: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py::test_changed_finalization_refuses_without_overwrite
+1 failed in 0.03s
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________ test_original_validity_must_match_the_actual_parser ______________
+
+saved = (('candidate-dir', 'run-dir', 7, 'root', 'receipt', '7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8'...zation.json', [('candidate-dir', 'run-dir', 7, 'root', 'receipt'), ('candidate-dir', 'run-dir', 7, 'root', 'receipt')])
+
+    def test_original_validity_must_match_the_actual_parser(saved):
+        args, final, path, _ = saved
+        assert M.plan(*args)['retry_lanes'] == ['wrong_case']
+        final['validity'][0][1] = False
+        Path(path).write_text(G._pretty(final) + '\n')
+>       with pytest.raises(ValueError, match='original validity drifted'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py:98: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py::test_original_validity_must_match_the_actual_parser
+1 failed in 0.03s
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_each_early_boundary_refuses_after_real_positive[other_kind] _______
+
+saved = (('candidate-dir', 'run-dir', 7, 'root', 'receipt', '7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8'...zation.json', [('candidate-dir', 'run-dir', 7, 'root', 'receipt'), ('candidate-dir', 'run-dir', 7, 'root', 'receipt')])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f8416ad6750>
+boundary = 'other_kind'
+
+    @pytest.mark.parametrize('boundary', ['unfinalized', 'other_kind', 'whole_missing'])
+    def test_each_early_boundary_refuses_after_real_positive(saved, monkeypatch, boundary):
+        args, *_ = saved
+        assert M.plan(*args)['retry_lanes'] == ['wrong_case']
+        if boundary == 'unfinalized':
+            monkeypatch.setattr(G, 'segment_state', lambda *_: 'published')
+        elif boundary == 'other_kind':
+            monkeypatch.setattr(G, 'load_frozen', lambda *_: ({'task_kind': 'G3'}, 'candidate'))
+        else:
+            monkeypatch.setattr(G, 'whole_answers', lambda *_: (None, ['missing whole']))
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py:112: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py::test_each_early_boundary_refuses_after_real_positive[other_kind]
+1 failed in 0.03s
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_each_early_boundary_refuses_after_real_positive[unfinalized] _______
+
+saved = (('candidate-dir', 'run-dir', 7, 'root', 'receipt', '7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8'...zation.json', [('candidate-dir', 'run-dir', 7, 'root', 'receipt'), ('candidate-dir', 'run-dir', 7, 'root', 'receipt')])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f8414af0e50>
+boundary = 'unfinalized'
+
+    @pytest.mark.parametrize('boundary', ['unfinalized', 'other_kind', 'whole_missing'])
+    def test_each_early_boundary_refuses_after_real_positive(saved, monkeypatch, boundary):
+        args, *_ = saved
+        assert M.plan(*args)['retry_lanes'] == ['wrong_case']
+        if boundary == 'unfinalized':
+            monkeypatch.setattr(G, 'segment_state', lambda *_: 'published')
+        elif boundary == 'other_kind':
+            monkeypatch.setattr(G, 'load_frozen', lambda *_: ({'task_kind': 'G3'}, 'candidate'))
+        else:
+            monkeypatch.setattr(G, 'whole_answers', lambda *_: (None, ['missing whole']))
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py:112: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py::test_each_early_boundary_refuses_after_real_positive[unfinalized]
+1 failed in 0.03s
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_original_finalizer_errors_stop_retry_selection_with_positive_control[native refusal] _
+
+saved = (('candidate-dir', 'run-dir', 7, 'root', 'receipt', '7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8'...isal/pytest-5/test_original_finalizer_errors0/finalization.json', [('candidate-dir', 'run-dir', 7, 'root', 'receipt')])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f8414c46d90>
+failure = 'native refusal'
+
+    @pytest.mark.parametrize('failure', ['native refusal', 'accounting mismatch', 'receipt mismatch'])
+    def test_original_finalizer_errors_stop_retry_selection_with_positive_control(saved, monkeypatch, failure):
+        args, *_ = saved
+        original = G.finalize_segment
+        assert M.plan(*args)['retry_lanes'] == ['wrong_case']
+        monkeypatch.setattr(G, 'finalize_segment', lambda *_: (None, {}, [failure]))
+>       with pytest.raises(ValueError, match='original finalization refused'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py:74: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_retry_plan_2107.py::test_original_finalizer_errors_stop_retry_selection_with_positive_control[native refusal]
+1 failed in 0.03s
+..............                                                           [100%]
+14 passed in 0.12s
+VERIFIED:6 meaningful retry-filter mutations caught; restored14-test control passed

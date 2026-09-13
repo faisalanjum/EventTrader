@@ -1,0 +1,7 @@
+attempt	codex_appliedclosure2110_a
+payload	../../unit_2020_codex_check/verify_applied_closure_2110.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	175596
+payload_pid	175600
+started_utc	2026-09-13T10:46:37Z
+state	finished exit 0

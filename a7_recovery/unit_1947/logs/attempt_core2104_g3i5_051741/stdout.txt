@@ -1,0 +1,6 @@
+SEGMENT     : 5 state_file wf_1f887f98-317.json
+OFFICIAL_ROWS: 3
+LEDGER      : {"invalid":0,"retry":0,"scheduled":3,"uncalled":0,"valid":3}
+RETRY       : [] UNCALLED []
+NONVALID    : [] why {}
+SEGMENT_CLEAN: True

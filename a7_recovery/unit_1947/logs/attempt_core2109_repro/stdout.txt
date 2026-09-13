@@ -1,0 +1,12 @@
+  G2: connector reports the actual remaining count                 PASS 137 (want 137)
+  G2: the original owner agrees on the real run                    PASS 137
+  G3: connector reports the actual remaining count                 PASS 0 (want 0)
+  G3: the original owner agrees on the real run                    PASS 0
+  positive control: both agree before the refusal-shaped closure   PASS 137 / 137
+  positive control: a real never-called primary was published      PASS []
+  positive control: the lane really is still uncalled per the owner PASS uncalled
+    connector says 136 remaining; the owner says 137
+  REPRODUCED: the connector counts a finalized UNCALLED primary as done PASS 136 vs 137
+  and the original owner still counts it as remaining              PASS 137
+
+9/9 checks passed

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2106_unused_retry/test_unused_retry_2106.py", line 153, in <module>
+    result, cp = C.complete_g23(doc2, lanes2, ident)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g1_complete_v2.py", line 296, in complete_g23
+    agreed, blocked = reconciler(first, second)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/a7_g23_build.py", line 1409, in reconcile_meaning
+    va, vb = a.get(field), b.get(field)
+             ^^^^^
+AttributeError: 'str' object has no attribute 'get'

@@ -1,0 +1,7 @@
+attempt	codex_actualclosure2110
+payload	../../unit_2106_unused_retry/close_g2_seg05_caller_2108.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	170482
+payload_pid	170486
+started_utc	2026-09-13T10:42:21Z
+state	finished exit 0

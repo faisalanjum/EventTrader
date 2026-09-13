@@ -1,0 +1,7 @@
+attempt	codex_formatreal2107_a
+payload	../../unit_2020_codex_check/review_meaning_format_2105.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	106738
+payload_pid	106742
+started_utc	2026-09-13T10:01:36Z
+state	finished exit 0

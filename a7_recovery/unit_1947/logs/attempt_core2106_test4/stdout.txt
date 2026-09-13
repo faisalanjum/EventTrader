@@ -1,0 +1,28 @@
+  the pending segment 5 blocks the next publication          PASS ['segment 5 is still pending; one publication at a time']
+  segment 5 is published, not finalized                      PASS 
+  the ACTUAL recovery report is refused on format-code drift PASS ['the recovery report was produced by format code b060dcbb59eaee8b0ce5298f7a1651a7d9de1fb244c366876c267ecf8aac116f, not the approved 7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8']
+  inspect accepts a never-launched, fully recovered retry    PASS []
+  evidence records zero uses, zero states, zero calls        PASS 
+  close writes the finalization                              PASS []
+  the ledger credits nothing and marks every lane uncalled   PASS 
+  the closure is named and claims no state audit             PASS 
+  it records no verdict for a lane that was never read       PASS 
+  segment 5 is now finalized                                 PASS 
+  the next never-called primary is admitted                  PASS []
+  an already-called primary is still refused                 PASS ['G2-000/G1a has already produced a captured attempt-1 result; it can never be a primary again']
+  the consumed reservation cannot be re-reserved             PASS ['G2-001/G1a was already reserved at attempt 2 by segment 5']
+  segment 4 still records its original invalid verdict       PASS 
+  a segment with raw output is refused                       PASS ['segment 5 already has raw replies']
+  positive control: the real sidecar really is empty         PASS 
+  a second close of the same segment is refused              PASS 
+  staging precondition: evidence available for the interrupted case PASS []
+  an interrupted closure resumes from its exact staged evidence PASS []
+  staging precondition: inspect produced evidence to tamper with PASS []
+  staged evidence that differs is refused, never overwritten PASS ['the staged closure evidence for segment 5 is not the evidence this run derives']
+  a lane with no recovered prior reading is refused          PASS ['the approved recovery does not carry a complete reading for G2-001/G1a']
+  a wrong externally supplied gate hash is refused           PASS ['the workflow gate is e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703, not the reviewed ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff']
+  staging precondition: clean before the injected activity   PASS []
+  output appearing after staging is refused at the last look PASS ['segment 5 already has errors']
+  a segment carrying refusal-closure evidence is refused     PASS ['segment 5 already has refusal evidence']
+
+26/26 checks passed

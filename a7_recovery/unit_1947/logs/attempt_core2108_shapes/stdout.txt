@@ -1,0 +1,12 @@
+candidate doc keys: ['batch_rows', 'batching', 'g1_identity', 'key_identity', 'launchers', 'made_calls', 'population', 'population_counts', 'producer_identity', 'questions', 'rules_block_sha256', 'schema', 'task_kind']
+completion problems: []
+result keys: ['batches', 'credited', 'credited_questions', 'questions', 'run_identity', 'schema', 'task_kind', 'unresolved', 'unresolved_questions']
+   batches                70
+   credited               0
+   credited_questions     0
+   questions              306
+   run_identity           5
+   schema                 a7_g23_whole_run_completion/1
+   task_kind              G2
+   unresolved             306
+   unresolved_questions   306

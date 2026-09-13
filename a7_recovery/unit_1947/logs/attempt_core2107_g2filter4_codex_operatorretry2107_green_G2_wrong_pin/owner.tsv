@@ -1,0 +1,7 @@
+attempt	core2107_g2filter4_codex_operatorretry2107_green_G2_wrong_pin
+payload	../../unit_2020_codex_check/meaning_retry_plan_2107.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	143841
+payload_pid	143845
+started_utc	2026-09-13T10:25:17Z
+state	finished exit 1

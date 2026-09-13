@@ -1,0 +1,9 @@
+attempt	grader_traceisolation2106_b
+payload	../../grader_20260909/attempts/core2100nat/payload_2100.py
+map	../unit_2020_codex_check/map_formatreg_trace_2106.tsv
+command	run_1957.sh ../unit_2020_codex_check/map_formatreg_trace_2106.tsv ../../grader_20260909/attempts/core2100nat/payload_2100.py grader_traceisolation2106_b 240
+wrapper_pid	88567
+payload_pid	88571
+payload_pgid	88567
+started_utc	2026-09-13T09:50:03Z
+state	finished exit 0

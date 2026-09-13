@@ -1,0 +1,7 @@
+attempt	core2104_statprobe
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	4164642
+payload_pid	4164646
+started_utc	2026-09-13T08:33:30Z
+state	finished exit 0

@@ -1,0 +1,23 @@
+{
+ "kind": "G2",
+ "segment": 2,
+ "authority": {
+  "codex_message_seq": 2104,
+  "codex_message_sha256": "5baf52cc098e7dd54ec2f03607c1856323c1e7f6d3b709fbf451a139c9e1fe6d",
+  "recovery_commit": "fd4c9cba54ff1ccbcab2e7c1f2b7597fa5603056",
+  "owner_workflow_optin": "Run the workflow for all remaining G2 and G3 A7 grading calls and the permitted invalid-only retries, following Codex's instructions"
+ },
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "receipt_sha256": "72802a4c0439966a92664a52f7a96ed462a3968d4ef36f309ca2503395430dc2",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run/grade_batch.seg02.js",
+ "script_sha256": "f23b9404694ba29b1d22ad891df87a8087d2d170f89ac02160e3e2ef09e68fa4",
+ "invocation_sha256": "fa956258ba207f8689d3783686fdcc134c41b0cde8afd8be38547a8398556e63",
+ "ordered_lanes": [
+  "G2-000/G1b"
+ ],
+ "attempts": [
+  1
+ ],
+ "called_at_utc": "2026-09-13T08:27:32Z",
+ "workflow_id": "wf_05029155-654"
+}

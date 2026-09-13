@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 77, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 86, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -44,21 +44,147 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT TASK: Codex2103 SHAea7a8392759c21d0102c35e73f895cd44e82262f1b8838500b5e65fe1f726b2e
-answers Core2103 SHAe2de423a7187be5cdafe6d7ed0f44a853d359399d8541cb75c5b3bf1a168ca06.
-The affected regression and grading connection are VERIFIED. One inert
-Workflow probe proved the tool cannot execute a direct recovery path;
-zero workers or model calls. Codex independently read the original tool
-request/result, not just Core's report. The correction uses the SAME2088
-supported execution-path arrangement with durable recovery backing.
-Both newly published2103 roots equal2100 exactly, with identical ordered
-arguments, questions, inputs and owners. Only the execution path and its
-derived invocation/script/receipt identities change. Old2100 is unrun history.
-Core's ONE current task is to materialize the two new first scripts at their
-already-published supported paths and report the exact direct-owner-request
-rule for Workflow, including whether existing grading authorization satisfies
-it. No AI or probe, new preparation, settings change or further code audit.
-One readiness report, then WAIT. Codex owns exact commit/push on recovery.
+CURRENT CHECKPOINT: Core2110 SHAbf09684e43684231ae5e1e27ecfc842dc9bbbb1eab5010c31b5eb25cba89471c
+answered Codex2109 SHAde52193585318c5a03b5685c20c6bd18225acb8162701952e65b76be1963acbc.
+Core's offline task is finished and it waits. Codex has VERIFIED its correction,
+applied the zero-call closure, and is freezing/committing/pushing this verified
+preparation before the next exact mailbox task authorizes G2 collection.
+G3 collection independently VERIFIED:32 usable primary readings from33 calls,
+one missing-question original invalid followed by its valid retry;10 finalized
+segments. All86 native copies match their sources. Whole completion derives
+110 agreed/7 disputed questions from117; all disputes remain unresolved.
+Review codex_g3completion2106_a/REVIEW.json SHA5a9479df1fb2abbd32a237a51ad673cc8ca57cf0b584f4adffc7af69ea3ab570.
+G3 run frozen for review:147 files, digest3862785d8b7798dc45b3c881ca45625e12a79ba7dd97e65b761f8d356c6768df.
+No G2 or G3 AI call is authorized by the completed offline task. Core independently
+verified the retry filter and reproduced the counter's uncalled-as-finished bug.
+It now calls G.lane_states; Codex corrected the two-character path so it imports
+the EXACT served2006 G5523c5b6, not2008 G6b55ae7f. Helperc3aa3a99 passes the real
+host command and14-check boundary replay;137G2/0G3 remain. No original owner was
+changed. Core must wait for the explicit post-publication G2 task.
+Codex retains format/scorer/mutation/regression review and the work order.
+The first closure trusted a caller report; the next version removed that but
+still accepted a rehashed altered whole reply without checking native evidence.
+Both were independently reproduced, not hypothetical new requirements. Core
+added the existing native auditor comparison and corrected its TEST call to
+C.complete_g23(doc, C.relations_from_run(lanes), identity). That exact call
+already succeeds independently on Core's same partial population; the reported
+crash was a TEST caller-shape error, not a grader defect. Proof:
+unit_2020_codex_check/codex_unusedreview2108_a/REVIEW.json
+SHA5fe13e690da3e6637dacb1f854b8a9ffdbd708432fcb2f2a8f2c5028aba489aa.
+The corrected closuree72647b3/test71b98132 now pass Codex's own51-check rerun.
+Codex also independently exercised the native mapping/failure and sidecar
+controls and caught three in-memory mutations: each broken boundary wrongly
+accepted the negative, and every restored boundary refused it. Correct
+completion carries all306 exact question/batch identities once, with all306
+currently unresolved and all original invalids retained; no A7 score implied.
+Proof: unit_2020_codex_check/codex_unusedfinal2109_a/REVIEW.json.
+The real closure was applied by Codex through pinned callerc2cd24be with
+payloadexit0/stderr0. Exactly three files were added; all46 pre-existing G2
+run files are byte-identical. No AI call, raw reply, original validity flag,
+reservation or native state changed. The applied-closing manifest is
+unit_2020_codex_check/ACTUAL_UNUSED_RETRY_CLOSURE_2110.json
+SHA9954bb59a9da2cfee458c2203bb4f2b89090b32119aa35d9af7632e46ee32c38.
+Independent original-evidence/recovery/next-owner replay:
+codex_appliedclosure2110_a/REVIEW.json SHA6703734b3099796bb0e96ae52f3c78e8026e65716837531aaf025a31f6aa214c.
+All four actual readings are reused (one original-valid, three recovered);
+the unused attempt2 produces no judgment/call. The existing scheduler admits
+G2-001/G1b next,386176 script bytes. Segment6 is NOT yet published.
+Codex owns the small G2 post-finalization retry filter and operator connection:
+the original finalizer is replayed read-only, and only still-unusable members
+of its eligible retry list remain. False/null/disagreement never trigger a
+reroll. Native TEST proof excluded139 recoverable readings from retries; the
+actual segment4 CLI returns no required retry, preserving its false judgments.
+Filter127bd6c0 passes82 focused tests (14new+68format) and six caught behavior
+mutations with restored14-test control. Native TEST replay of the simplified
+original-finalizer reuse passes: codex_retryplan2107_owner_replay/RETRY_PLAN_PROOF.json
+SHA63e134121a2556b62e6aca69335704678333b5827a5f9b280a99d53d3088ca48.
+The operator connection is implemented but NOT enabled for real collection:
+exact setup/selection blocks call the real boundary runner and filter CLI;
+recoveredG2 chooses prepare, G3 is unchanged, wrong rule pin stops. Proof:
+codex_operatorretry2107_green/OPERATOR_CONNECTION.json
+SHA96c084dc765e6956fd9289ae21dfc24f46ded0f0d26b07f3ea268435bdad421d.
+Core independently verified this connector. It avoids repeating future
+successfully recovered answers; no semantic retry or second rule engine.
+
+Latest format code7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8:
+68 focused tests pass, including named zero-call closures. Actual four-reply
+recovery passed and was refreshed against this code in
+codex_formatreal2107_a/RECOVERY.json SHA7b1307320e2c7528a101d78c3217962066025ade98af8176b1f844851f379f26.
+The earlier2105 report binds an earlier code revision and stays historical;
+never edit its code hash field. Native TEST whole-completion/actual-scorer proof passed,
+SCORING_CONNECTION.json in codex_formatnative2105_c,
+SHAbe7ddc2123c5722c8fd9c8272c8afc24636e220606119b1cc4448c8a7fba8c06.
+141 original-invalid TEST attempts remain invalid history;139 recover,7
+questions remain unresolved,99 exact routes retain163 gold per leg. Wrong
+judgments, unknowns, disagreements and additional invalidity survive correctly;
+wrong completion hash and no-recovery controls refuse. These are TEST verdicts,
+NOT the A7 score.12 meaningful mutations were caught; restored68-test control
+passes. Full affected baseline now698pass/2named skips/0fail. Its exposed
+fixed TEST workflow-name collision is fixed at that test's caller with a unique
+run tag; focused11-test and repeat full-native runs pass. Original grading
+owners and real evidence remain unchanged. Format duplication/simplicity pass
+is complete. Verified publication/resumption,137 missing
+G2 primary readings and final scoring still remain. No new successful call
+has been repeated. Actual cumulative calls899=862+4G2+33G3.
+
+PREVIOUS COLLECTION TASK: Codex2105 SHAf4fae4f3ddab53055d1d94d41685e4e3b992a54b0704a29253e4bdfa22971af5
+answers Core2105 SHA6910ceb3c513ee130495b05c708bbbac47b1b35aeeed40abd41f941c3f011ce6.
+Verified preparation is COMMITTED/PUSHED. Core has ONE bounded task: collect
+the32 unchanged G3 primary readings and their one invalid-only retry where
+needed, serially under the frozen2103 root. Preserve and finalize every native
+result, report once on completion or a genuine stop, then WAIT. No Core code,
+prompt, owner, key, scope, scoring, commit or push changes. Codex owns G2's
+targeted formatting diagnosis while Core does the independent G3 collection.
+
+G2 PAUSED after4 real calls:1 valid,3 invalid;3 distinct primaries attempted,
+137 never called. All3 invalid replies encode the seven verdicts as quoted
+"true"/"false"/"null" strings, which the original strict parser rejects.
+G2-000/G1b exhausted its one invalid-only retry. G2-001/G1a attempt2 is
+was published as segment5 and remained uncalled; its VERIFIED explicit
+zero-call closure is now applied as recorded above. Never call/delete its
+reservation. No result is silently
+converted and no original validity flag, raw byte, frozen owner or denominator
+may change. Codex independently read the native replies and strict parser;
+full original saved-segment replay passed (all4 calls,16 native copies). The prompt's
+quoted type-placeholder example is a plausible cause, not yet causal proof.
+Original-invalid history remains invalid even if a later separately reviewed
+correction can recover usable information under the live reuse rules.
+
+OWNER DECISION: in response to the specific format-only recovery proposal,
+the owner said "do whatever is best". Codex selects lossless decoding of only
+the exact JSON boolean/null strings in G2's declared verdict fields, with
+original failure accounting and no passing-threshold change. The single
+record of this narrow decision is
+unit_2020_codex_check/A7_MEANING_FORMAT_RULE_2105.md. Implementation/testing is
+offline only until its original-evidence and real-consumer connection pass.
+No frozen collection owner or native record is edited. Core's G3 task is
+unchanged. No further owner action is needed for this bounded correction.
+The owner's latest request for a rigorous final review is bounded and tracked
+in unit_2020_codex_check/A7_GRADING_FINAL_REVIEW_2105.md. It covers the complete
+affected reply-to-score path, focused recovery/native/resume proof, regression,
+mutations and a separate simplicity pass. See the current checkpoint above
+for the newer68-test, real-reply and native consumer proof; real resume remains
+pending the explicit unused-retry closure.
+
+The pre-G3 running call checkpoint was866=862+4. Codex verified899 after33
+G3 calls. The preserved wrong-ordinal workflow
+wf_b04f383d-3b0 launched zero agents and is not a model call. G3's named-bucket
+contract is distinct from G2's booleans. Its collection can proceed without
+changing G2 evidence; this is task ordering, not a roadmap bypass. The earlier
+2-4-hour completion estimate is withdrawn: first G2 calls took128-176seconds
+each plus collection overhead, and the approved format recovery is still
+undergoing connection/resume verification.
+
+The direct-recovery path failure is resolved by the SAME2088 supported-path
+arrangement with durable backing. Both2103 roots equal2100 exactly; ordered
+arguments, questions, inputs and owners are unchanged. Only execution-path
+identities changed. Core placed both first scripts; Codex independently
+verified regular files, single links and exact published bytes. Old2100 is
+superseded unrun history. First2103 segments are ALREADY published.
+The owner has now explicitly told Core to run the workflow for all remaining
+G2/G3 calls and permitted invalid-only retries, following Codex instructions.
+Core checks that direct opt-in in its own session; no permission bypass.
+Do not repeat the inert probe or any successful call.
 
 Previous resolved task: Codex2100 SHAf39d72ed230392c2ea85aef0185142c41569bede40f2e81494192621d8d24934
 answers Core2100 SHAd540864fc52f3bdd2b11e8bedcf13b03bd6c0be749f89c5d02f3c34713b41f62.
@@ -76,10 +202,16 @@ No AI, code-owner edits, main, hooks or unrelated audit.
 Codex owns focused/mutation proof, real native scoring connection, work order
 and publication. One task/reply at a time; no duplicate work.
 
-LATEST VERIFIED/PUSHED HEAD:01ddc8e35d11bab58c6ad24fa053f6257188615b,
-treeba22a7ca595accbe2b00741ee136540412283bd4,parentf8f618a0fb7f7c2686fe0ae36c24660e09339cfc.
-This includes ALL completed G1 collection through segment7 and its retry fix.
-New partial policy, G2/G3 size fix and current TEST proof are not yet committed.
+LATEST VERIFIED/PUSHED HEAD:fd4c9cba54ff1ccbcab2e7c1f2b7597fa5603056,
+tree7f5c2c301111000d8eafdef776cb2d53d28bc6df,parent01ddc8e35d11bab58c6ad24fa053f6257188615b.
+This includes the partial policy, G2/G3 size fix, full affected regression and
+native TEST proof, and the supported2103 launch preparation. Exact publication
+manifest:unit_2020_codex_check/PARTIAL_PUBLICATION_2103.json,
+SHA75bbd89805e306e306da167e97ad3b8df6a1f1e3afeb730119cf6b2a0c00ed5b.
+All24687 staged blobs matched; normal push and fresh remote HEAD verified.
+The parent already preserved ALL completed G1 collection and its retry fix.
+This work-order revision records the post-publication active task; no result
+or final A7 score is implied by publication.
 
 CURRENT CHECKLIST:
 - VERIFIED: all G1 native evidence/accounting, exact single exhausted gap,
@@ -96,7 +228,8 @@ CURRENT CHECKLIST:
 - VERIFIED whole population: all423 questions, source cards, event contexts,
   produced records, rules, producer and G1 identity unchanged by regrouping.
   G2 now306questions/70batches/140calls; G3 unchanged117/16/32. All172 planned
-  lanes fit the actual size gate. There have been ZERO G2/G3 model calls.
+  lanes fit the actual size gate. This preparation proof preceded collection;
+  current actual call counts are in the checkpoint above.
 - VERIFIED: full native partial-to-tier-scoring TEST, reusing completed TEST
   G2/G3 responses with the REAL signed key, saved producer and194 G1 calls.
   All99 required event/leg identities run exactly once;163 facts remain in
@@ -109,8 +242,8 @@ CURRENT CHECKLIST:
   Details/limitations:unit_2020_codex_check/PARTIAL_PREPARATION_REVIEW_2101.md.
   Core2101's full handoff was verified. No further grader audit is required
   before these unchanged calls. The tool-location correction is below.
-- NEXT: freeze/commit/push the verified preparation; then collect/check the
-  actual G2/G3 reviews and report the honest full-denominator A7 result.
+- NEXT: collect/check the actual G2/G3 reviews and report the honest full-
+  denominator A7 result. Verified preparation is already committed/pushed.
   After reporting, investigate real failures through named targeted changes;
   never hide gaps, repeat successful calls, or relabel a partial score PASS.
 
@@ -139,7 +272,7 @@ Full trace proves382 question replies cover33 sources, exactly the key's33;
 every99 distinct (source,leg) identity and saves results before assertions.
 This explicitly corrects earlier108-route reports; no source or fact was dropped.
 
-REAL G2/G3 LAUNCH PREPARATION IS NOW2103, NO CALL AUTHORIZED YET.
+REAL G2/G3 LAUNCH PREPARATION IS2103; CURRENT CALL TASK IS CODEX2105 (G3 ONLY).
 unit_2100_g23_grading is SUPERSEDED UNRUN history: its Python preflights
 passed, but the platform refuses direct recovery execution. Native probe:
 unit_2102_transport_probe/PROBE_OUTCOME_2102.json,
@@ -154,7 +287,7 @@ unit_2020_codex_check/G23_TRANSPORT_REVIEW_2103.md. Do not prepare segment1 agai
 140+32 new primary calls; prior862, after primaries1034, all-retry maximum1206.
 No successful call repeats. Native preservation remains byte-exact copying;
 the existing lifecycle owns validity. No additional runner/framework is needed.
-Core's current2103 task is execution-file readiness, not these calls.
+The original2104 whole-collection task is superseded by2105 as stated above.
 
 G1 COLLECTION CLOSED: all192 primaries attempted,194 completed G1 calls,
 191valid,3invalid,zero uncalled. Total668+194=862. Both retries used; no

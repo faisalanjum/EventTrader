@@ -1,0 +1,168 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "be7793359f5f87f95746938c629d1879d69d0b5be335512c92cbf0e37385e0f5",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "6973a8a82bbefbb780ef32a4157fafbb9ac0ed0b9775d0943b9b8c08486ef62f",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M1d96bbbc9fdd6147": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M341ed3bdf05f28cf": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M35df46a5d2795d66": {
+       "driver_name_meaning": true,
+       "driver_state": false,
+       "favorability": true,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "M726673b0f7719042": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M786fc3fe140b5899": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-000/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "ca2137bd4347cd35e2ff36c4f9b31f4003c67e7e2554f0a632b80d18d28e9746"
+    }
+   ],
+   "segment": 1,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "949cc38827039ec0e075f50f4c04f61adac4a180f33c8c43e80b7dbde8b59454",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "72802a4c0439966a92664a52f7a96ed462a3968d4ef36f309ca2503395430dc2",
+   "retry": [
+    "G2-000/G1b"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-000/G1b",
+     "problems": [
+      "M35df46a5d2795d66 carries a value that is not true, false or null",
+      "M341ed3bdf05f28cf carries a value that is not true, false or null",
+      "M1d96bbbc9fdd6147 carries a value that is not true, false or null",
+      "M786fc3fe140b5899 carries a value that is not true, false or null",
+      "M726673b0f7719042 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "91e1dda317566a16c2b319f45f9b2c6ae765d6fb870a86fed8e67771bd1b48db"
+    }
+   ],
+   "segment": 2,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "121a5cd345be3677dabb75be52c40e38d3da78f9fd05f4dbd5b8ab5d91679ff0",
+   "ledger": {
+    "invalid": 1,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "3ae2c87c73d6fab7afbcd8ba21aebdf34c8e30796864189f31aa1579d34f3595",
+   "retry": [],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-000/G1b",
+     "problems": [
+      "M35df46a5d2795d66 carries a value that is not true, false or null",
+      "M341ed3bdf05f28cf carries a value that is not true, false or null",
+      "M1d96bbbc9fdd6147 carries a value that is not true, false or null",
+      "M786fc3fe140b5899 carries a value that is not true, false or null",
+      "M726673b0f7719042 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "9c3d038f8ee4b51219f8b9077522f36887c8c108b3e270fa5d71269fa498ca42"
+    }
+   ],
+   "segment": 3,
+   "uncalled": []
+  },
+  {
+   "finalization_sha256": "ebd72c561287552bc549b548288b13ba40a80f170bcec6c5a8242f23b25464e1",
+   "ledger": {
+    "invalid": 1,
+    "retry": 1,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 0
+   },
+   "receipt_sha256": "1a4d7796bfe01850d22dc3d2c6f3a4f17115d1b8a9a58c70d92029c50a621bfe",
+   "retry": [
+    "G2-001/G1a"
+   ],
+   "rows": [
+    {
+     "answer": null,
+     "lane": "G2-001/G1a",
+     "problems": [
+      "Mf21bd5959134fc54 carries a value that is not true, false or null",
+      "M85b17ecaa1bc123d carries a value that is not true, false or null",
+      "M6c722b0ca333185b carries a value that is not true, false or null",
+      "M7a5e4a77f0c4c495 carries a value that is not true, false or null",
+      "Mece90a618a058690 carries a value that is not true, false or null"
+     ],
+     "valid": false,
+     "whole_sha256": "e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee"
+    }
+   ],
+   "segment": 4,
+   "uncalled": []
+  }
+ ]
+}

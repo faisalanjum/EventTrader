@@ -1,0 +1,556 @@
+{
+ "batches": 16,
+ "credited": {
+  "X028e7ca1db790ea8": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "X06c4d4988b938d1c": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "X07c571059d14f2d6": {
+   "batch_id": "G3-000",
+   "verdict": "duplicate"
+  },
+  "X0df833dc3d20e76e": {
+   "batch_id": "G3-011",
+   "verdict": "duplicate"
+  },
+  "X1117c3fded7423fa": {
+   "batch_id": "G3-000",
+   "verdict": "key_miss"
+  },
+  "X1126d58e06d1223b": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "X112a630f8fef687e": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "X126166ff9554cd21": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "X12cb0c151404674d": {
+   "batch_id": "G3-003",
+   "verdict": "key_miss"
+  },
+  "X1324b492faa2981e": {
+   "batch_id": "G3-004",
+   "verdict": "key_miss"
+  },
+  "X13e66778b6585c9a": {
+   "batch_id": "G3-008",
+   "verdict": "key_miss"
+  },
+  "X14637de8bbc0ab1b": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "X1642c8fd4f67b764": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "X169a9a6e92c88dc7": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "X18645f55a6091ad6": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "X1c86be8ce30e3b3c": {
+   "batch_id": "G3-006",
+   "verdict": "key_miss"
+  },
+  "X1cdb0213363706c7": {
+   "batch_id": "G3-015",
+   "verdict": "duplicate"
+  },
+  "X1e64778c5aec89f3": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "X1ef69564dbb27ac2": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "X24756096af610d6d": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "X263e008c6143e6f7": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "X29a22d2243f2f310": {
+   "batch_id": "G3-000",
+   "verdict": "duplicate"
+  },
+  "X301482d0236debbc": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "X3084ebf401c9eb68": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "X31eb45d686e84883": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "X36efe9f676dedb12": {
+   "batch_id": "G3-008",
+   "verdict": "key_miss"
+  },
+  "X38b3c845d88429f0": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "X3a53a382d26adad5": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "X3b3a3eb17452fbcd": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "X3d7ea88f66d74904": {
+   "batch_id": "G3-000",
+   "verdict": "key_miss"
+  },
+  "X3e2d2692bb7e8e6a": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "X405ab7257c1568f6": {
+   "batch_id": "G3-000",
+   "verdict": "key_miss"
+  },
+  "X41cc5300ffab2d8b": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "X427bb1a95bab02aa": {
+   "batch_id": "G3-003",
+   "verdict": "duplicate"
+  },
+  "X4e081a7d171dba07": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "X4ebf8857741ae6a8": {
+   "batch_id": "G3-008",
+   "verdict": "duplicate"
+  },
+  "X560cfed511c85204": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "X56415b76439cd6be": {
+   "batch_id": "G3-000",
+   "verdict": "key_miss"
+  },
+  "X56e2d89be46d9a61": {
+   "batch_id": "G3-001",
+   "verdict": "unsupported"
+  },
+  "X59b3cb047c8dd0d9": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "X5e80f0a222be7eb2": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "X5ea3b7457e8aa160": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "X625f7c75cc570b04": {
+   "batch_id": "G3-003",
+   "verdict": "duplicate"
+  },
+  "X63efe3da7b1e5477": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "X64d9845a89cc6734": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "X65382a6064d6c960": {
+   "batch_id": "G3-006",
+   "verdict": "key_miss"
+  },
+  "X6a8a1479099fcb9a": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "X6eea70137b9a2e63": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "X6f84a382ffbc0004": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "X73357410ba2d97a2": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "X75819bfe50a39683": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "X75b11760e0633d83": {
+   "batch_id": "G3-003",
+   "verdict": "key_miss"
+  },
+  "X777fcfffdedc3229": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "X77c244b1640ebb8c": {
+   "batch_id": "G3-008",
+   "verdict": "duplicate"
+  },
+  "X7bfc69ea73a9d1ae": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "X7c01f022765630af": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "X7fd8ca3f891aae84": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "X80e6aaa45575930a": {
+   "batch_id": "G3-003",
+   "verdict": "key_miss"
+  },
+  "X86feb54326687022": {
+   "batch_id": "G3-003",
+   "verdict": "duplicate"
+  },
+  "X8d2159e496d61cc6": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "X8e198589cfc2917f": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "X8e7ae846d72a4dfe": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "X95aa6d36cce8922a": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "X99d7bc16850a9dde": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "X9b6e4dcf1d43f68e": {
+   "batch_id": "G3-012",
+   "verdict": "duplicate"
+  },
+  "X9cdae8b168c23a2a": {
+   "batch_id": "G3-012",
+   "verdict": "duplicate"
+  },
+  "Xa08160168595ca26": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "Xa0f9de09f3c55112": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "Xa2480c79b460e114": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "Xa2b729c37573e3b6": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "Xa3708e607c7ea5c9": {
+   "batch_id": "G3-000",
+   "verdict": "duplicate"
+  },
+  "Xa4deadc9031eb381": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "Xa6096f3fa348cdd9": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "Xa7bfdf2b6ab0c842": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "Xa8876ee91bdb4b67": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "Xa89529fe646aaa72": {
+   "batch_id": "G3-011",
+   "verdict": "key_miss"
+  },
+  "Xa9539f6f9f30a4c6": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "Xb100f34c67a98cff": {
+   "batch_id": "G3-004",
+   "verdict": "duplicate"
+  },
+  "Xb3a3351bca3b64eb": {
+   "batch_id": "G3-011",
+   "verdict": "duplicate"
+  },
+  "Xb4199b551afdffcd": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "Xb59980347da41ea2": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "Xb649417e45cad2de": {
+   "batch_id": "G3-003",
+   "verdict": "duplicate"
+  },
+  "Xb7d74730695127ef": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "Xb8d3efab26630ed1": {
+   "batch_id": "G3-009",
+   "verdict": "key_miss"
+  },
+  "Xba92891f45109f52": {
+   "batch_id": "G3-014",
+   "verdict": "duplicate"
+  },
+  "Xbae787103e785e11": {
+   "batch_id": "G3-011",
+   "verdict": "key_miss"
+  },
+  "Xbb48c40216961570": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "Xbd0db500ca169c0a": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "Xbd1a43bdf9debd46": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "Xbfdce791095ec14e": {
+   "batch_id": "G3-008",
+   "verdict": "duplicate"
+  },
+  "Xc0176db34612ea2c": {
+   "batch_id": "G3-008",
+   "verdict": "duplicate"
+  },
+  "Xc1c8f8411ee75a20": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "Xc41c0e28ba4f1e05": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "Xc60ccdea49a8ca1a": {
+   "batch_id": "G3-008",
+   "verdict": "duplicate"
+  },
+  "Xc6e8defff53e5743": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "Xc918d203e3a77f17": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "Xce1efa269060a6fb": {
+   "batch_id": "G3-006",
+   "verdict": "duplicate"
+  },
+  "Xcf1d14b2028b62d2": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "Xdeba718a668874a1": {
+   "batch_id": "G3-005",
+   "verdict": "duplicate"
+  },
+  "Xe10aa94910fc4e7a": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "Xe2020b8d13e3d8dc": {
+   "batch_id": "G3-002",
+   "verdict": "duplicate"
+  },
+  "Xe241261548339f09": {
+   "batch_id": "G3-007",
+   "verdict": "duplicate"
+  },
+  "Xe53ce648226c9f64": {
+   "batch_id": "G3-002",
+   "verdict": "unsupported"
+  },
+  "Xe71679de4dec96b9": {
+   "batch_id": "G3-000",
+   "verdict": "duplicate"
+  },
+  "Xe7dd22baabb1c77b": {
+   "batch_id": "G3-008",
+   "verdict": "duplicate"
+  },
+  "Xeb9efe850afaa8e3": {
+   "batch_id": "G3-013",
+   "verdict": "duplicate"
+  },
+  "Xf2bdb18bab1c8ab8": {
+   "batch_id": "G3-010",
+   "verdict": "duplicate"
+  },
+  "Xf6928f184a847e9e": {
+   "batch_id": "G3-009",
+   "verdict": "duplicate"
+  },
+  "Xf6cbcbd375607d09": {
+   "batch_id": "G3-001",
+   "verdict": "duplicate"
+  },
+  "Xfcd052498cda6edb": {
+   "batch_id": "G3-000",
+   "verdict": "key_miss"
+  }
+ },
+ "credited_questions": 110,
+ "questions": 117,
+ "run_identity": {
+  "root_sha256": "56eeda65fd0863823531410aeb05b2a54486eda9c44663222e6af86941e44c6e",
+  "run_digest": "3862785d8b7798dc45b3c881ca45625e12a79ba7dd97e65b761f8d356c6768df",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G3/run",
+  "run_files": 147
+ },
+ "schema": "a7_g23_whole_run_completion/1",
+ "task_kind": "G3",
+ "unresolved": [
+  {
+   "batch_id": "G3-000",
+   "question_id": "X71b9db6a75a5f63a",
+   "reasons": [
+    {
+     "answers": [
+      "unsupported",
+      "duplicate"
+     ],
+     "question_id": "X71b9db6a75a5f63a",
+     "reason": "the readings disagree"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X5603a0beaadd5e3c",
+   "reasons": [
+    {
+     "answers": [
+      "key_miss",
+      "duplicate"
+     ],
+     "question_id": "X5603a0beaadd5e3c",
+     "reason": "the readings disagree"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X6e22977f210d9c10",
+   "reasons": [
+    {
+     "answers": [
+      "key_miss",
+      "duplicate"
+     ],
+     "question_id": "X6e22977f210d9c10",
+     "reason": "the readings disagree"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-003",
+   "question_id": "X0cca68dc69dcd11b",
+   "reasons": [
+    {
+     "answers": [
+      "duplicate",
+      "unsupported"
+     ],
+     "question_id": "X0cca68dc69dcd11b",
+     "reason": "the readings disagree"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-004",
+   "question_id": "X6f9c048ff25601a9",
+   "reasons": [
+    {
+     "answers": [
+      "unsupported",
+      "key_miss"
+     ],
+     "question_id": "X6f9c048ff25601a9",
+     "reason": "the readings disagree"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X11cf711eee0371d7",
+   "reasons": [
+    {
+     "answers": [
+      "key_miss",
+      "duplicate"
+     ],
+     "question_id": "X11cf711eee0371d7",
+     "reason": "the readings disagree"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-008",
+   "question_id": "X4c3aaf2cf2f4bcee",
+   "reasons": [
+    {
+     "answers": [
+      "unsupported",
+      "duplicate"
+     ],
+     "question_id": "X4c3aaf2cf2f4bcee",
+     "reason": "the readings disagree"
+    }
+   ]
+  }
+ ],
+ "unresolved_questions": 7
+}

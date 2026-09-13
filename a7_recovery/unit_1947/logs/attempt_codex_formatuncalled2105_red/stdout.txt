@@ -1,0 +1,38 @@
+.............................................................F           [100%]
+=================================== FAILURES ===================================
+________ test_explicit_zero_call_closure_is_not_a_missing_model_answer _________
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': ['batch/G1a'], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fec8910c450>
+
+    def test_explicit_zero_call_closure_is_not_a_missing_model_answer(run_fixture, monkeypatch):
+        root, doc, lanes, final = run_fixture
+        final['uncalled'] = ['batch/G1a']
+        lanes['batch/G1a']['attempts'] = {}
+        def no_answer(*args):
+            raise AssertionError('an uncalled reservation has no model answer to recover')
+        monkeypatch.setattr(G, 'whole_answers', no_answer)
+        with approved_scope():
+>           assert C.evidence('c', 'r', 'h', 'd', 10)[2] == lanes
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:77: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('r', 1)
+
+    def no_answer(*args):
+>       raise AssertionError('an uncalled reservation has no model answer to recover')
+E       AssertionError: an uncalled reservation has no model answer to recover
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:263: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_explicit_zero_call_closure_is_not_a_missing_model_answer
+1 failed, 61 passed in 0.54s

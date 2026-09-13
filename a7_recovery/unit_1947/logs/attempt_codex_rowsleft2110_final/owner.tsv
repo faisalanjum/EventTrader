@@ -1,0 +1,7 @@
+attempt	codex_rowsleft2110_final
+payload	../../unit_2109_rowsleft_check/test_rows_left_2109.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	168783
+payload_pid	168787
+started_utc	2026-09-13T10:41:04Z
+state	finished exit 0

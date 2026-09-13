@@ -1,0 +1,53 @@
+  the pending segment 5 blocks the next publication              PASS ['segment 5 is still pending; one publication at a time']
+  inspect accepts it from the REAL saved reply, no report supplied PASS []
+  the prior reading is derived, recovered, and still originally invalid PASS 
+  the scanned-state count is transient, not part of the identity PASS 
+  close writes the finalization                                  PASS []
+  zero credited, every lane uncalled, no verdict invented        PASS 
+  an already-called primary is still refused                     PASS ['G2-000/G1a has already produced a captured attempt-1 result; it can never be a primary a
+  the consumed reservation cannot be re-reserved                 PASS ['G2-001/G1a was already reserved at attempt 2 by segment 5']
+  G.publish_run actually publishes the next never-called primary PASS []
+  closure applied to the connection copy                         PASS []
+  C.evidence under F.scope selects the prior recovered attempt   PASS []
+  the identity carries the recovery audit with original-invalid flags PASS [{'raw_sha256': 'e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee', 'origi
+  the recovered lane is present in the selected relations        PASS ['G2-000/G1a', 'G2-000/G1b', 'G2-001/G1a']
+  C.complete_g23 succeeds over the recovered population          PASS []
+  the completion covers the EXACT frozen question population     PASS 306 of 306
+  every frozen question reaches exactly one outcome              PASS 306 of 306
+  every missing judgment is retained as unresolved, none dropped PASS 306
+  positive control: without recovery only the one originally-valid lane is selected PASS ['G2-000/G1a']
+  positive control: the prior whole reply exists                 PASS 
+  positive control: the prior reply text really changed          PASS 
+  a tampered prior whole reply is refused by the owner hash check PASS ['prior segment 4: segment 4 G2-001/G1a: the bound whole answer does not match its own rec
+  positive control: one judgment really was altered              PASS 
+  positive control: the rehashed record now SATISFIES the bound-answer check, so only the native audit can catch it PASS []
+  a rehashed altered prior record is refused by the NATIVE audit PASS ['the prior segment 4 bound whole answers are not the native audited ones']
+  a native audit failure refuses the closure                     PASS ['prior segment 4 native audit: injected native audit failure']
+  a missing prior whole reply is refused                         PASS ['prior segment 4: segment 4 records no bound whole answers']
+  a prior reading recorded VALID is refused (nothing to recover) PASS ['the prior segment 4 records G2-001/G1a as valid; this closure is only for a recovered in
+  positive control: the real sidecar is the empty owner shape    PASS {'run_id': 'run', 'states': []}
+  a states null sidecar is refused                               PASS ["the state sidecar is not this receipt's empty {run_id, states: []}"]
+  a states false sidecar is refused                              PASS ["the state sidecar is not this receipt's empty {run_id, states: []}"]
+  a states missing sidecar is refused                            PASS ["the state sidecar is not this receipt's empty {run_id, states: []}"]
+  a wrong run_id sidecar is refused                              PASS ["the state sidecar is not this receipt's empty {run_id, states: []}"]
+  a active sidecar is refused                                    PASS ["the state sidecar is not this receipt's empty {run_id, states: []}"]
+  a extra key sidecar is refused                                 PASS ["the state sidecar is not this receipt's empty {run_id, states: []}"]
+  a Workflow use naming this script is refused                   PASS ['the session records 1 Workflow uses naming /tmp/claude-1000/-home-faisal-EventMarketDB/5
+  an official state naming this script is refused                PASS ['1 official workflow states name /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f
+  a wrong externally supplied FORMAT CODE pin is refused         PASS ['the approved recovery scope refused: unapproved meaning-format code']
+  existing output for this segment is refused                    PASS ['segment 5 already has errors']
+  a segment carrying refusal-closure evidence is refused         PASS ['segment 5 already has refusal evidence']
+  positive control: clean before staging                         PASS []
+  an interrupted closure resumes from its exact staged evidence  PASS []
+  staged evidence that differs is refused, never overwritten     PASS ['the staged closure evidence for segment 5 is not the evidence this run derives']
+  accounting without staged evidence is refused                  PASS ['segment 5 has accounting but no closure evidence']
+  positive control: the injection actually fired                 PASS 
+  activity appearing BETWEEN the inspections is refused          PASS ['segment 5 already has errors']
+  and no finalization was written for it                         PASS 
+  positive control: clean before staging the unrelated case      PASS []
+  positive control: the scanner count really changed between inspections PASS 2
+  a staged closure still resumes when only the scanned count changed PASS []
+  a closure interrupted after canonical accounting resumes       PASS []
+  staged accounting that is not the canonical zero-capture one refuses PASS ['the staged accounting for segment 5 is not the canonical zero-capture accounting of it']
+
+51/51 checks passed

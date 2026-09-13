@@ -1,0 +1,410 @@
+{
+ "actual_calls": 33,
+ "agreed_questions": 110,
+ "completion_candidate_sha256": "ad57566129ff658d4fb7a1e1d2176105f2cd73ab24027ca8cb543f463547194f",
+ "exhausted": 0,
+ "manifests": [
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/PRESERVED.json",
+   "sha256": "6e4101545841d63b994442e2a5a6a39a0f55f2ac0fa4fc207b4beb4e83ea05e4"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/PRESERVED.json",
+   "sha256": "fa0a480ae9714f47b6eeddaba3cd8300689d9ec31bad0ba5efa5310e0ab4f59b"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/PRESERVED.json",
+   "sha256": "263b305a262d97f6dba615c965b234b67699b01b13e436331c36e762b84909aa"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg04/wf_6d9ec059-fa3/PRESERVED.json",
+   "sha256": "f9b699d58d9e356071085cfe7d55dc488a69d3ed7f8976166dda72ef45f2f737"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/PRESERVED.json",
+   "sha256": "d10f53ce153515d275f8f6d0de166924da222a33e65b53fb28a7fd831017b9cd"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/PRESERVED.json",
+   "sha256": "634470d996bf6d20e6073b1f8d95c7906252d5fdbaa8129c4fc1b801a33eb0b6"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg07/wf_19b43350-94b/PRESERVED.json",
+   "sha256": "0b980dbcc5d60ea3464b14666f43e3de7d4b2a9b49f9ece1afca786356dffddb"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db/PRESERVED.json",
+   "sha256": "9573693c9b7b0054995d15b82642f19ebde1bb029fcf14816dbf16284cdc7525"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/PRESERVED.json",
+   "sha256": "689e8741f6db624259f59fd46f6a4702fe80440558236fe7a1661093343f25ad"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/PRESERVED.json",
+   "sha256": "d46449e096c04294ad3cba06a817b1cae75bd09845c01e61c27559406f9406f5"
+  }
+ ],
+ "native_copies": [
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/official_state.json",
+   "sha256": "088f0a2f39a4693c5d85b60246ed5495a9e82eb5b4af7174e166f79d483309ab"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/transcripts/agent-a23f8c5a9e96b7bff.jsonl",
+   "sha256": "26f7adacac9bdfd609087715f0cfd7a4171a25314e6acd2fe2c8fdee6c4d22a5"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/transcripts/agent-a23f8c5a9e96b7bff.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/transcripts/agent-ab058b75244a1e95d.jsonl",
+   "sha256": "8088d2ed3490ba8c93d22a6da7e007063314f57b0a9063fc82de63fc565db0ce"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/transcripts/agent-ab058b75244a1e95d.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/transcripts/agent-ab8706a55149391df.jsonl",
+   "sha256": "39d0ef72fc8e6979831bf64f17ecf685c962763e2a39e4076eec13d9ac583c29"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/transcripts/agent-ab8706a55149391df.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg01/wf_2a0b9da0-65a/transcripts/journal.jsonl",
+   "sha256": "61673964540f722d1a641b65f0b7cbb068243282198b5c8dc155c9ed494793c4"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/official_state.json",
+   "sha256": "f7965b7ba888eed94ebb6aff30b8bc8a62fa9ee2b2bd4c26e871b9de4d7bdfcd"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/transcripts/agent-a55027807d8ba4b15.jsonl",
+   "sha256": "78d9964329c65f9003ce0d0f3aec59ac95913455f5c96a356b95d8c825a60ea6"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/transcripts/agent-a55027807d8ba4b15.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/transcripts/agent-a587117eb67c5f9de.jsonl",
+   "sha256": "323349693d112ab1d69e7514d2268b2947c5bdba5fcea780fc8005e91c0b31bb"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/transcripts/agent-a587117eb67c5f9de.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/transcripts/agent-ae1a428ad89141550.jsonl",
+   "sha256": "569c2123680a0c9ef2dc1da8d6977bed32d92ce70ce53f7ce3028b8ad93ef216"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/transcripts/agent-ae1a428ad89141550.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg02/wf_d28848a3-a76/transcripts/journal.jsonl",
+   "sha256": "fdc2db4b45e2c0b529fe248c33de90f89839e0e1268b9207d4849dd3fe82e0a3"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/official_state.json",
+   "sha256": "ab9ce03fae08a4654b6bc1d9f807d122f7ec3b4cf8099938e944e0244cd77f78"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/transcripts/agent-a142e0fa3a51739b8.jsonl",
+   "sha256": "e69914883872aef9819101bb6e65d414640e9362f21d921bd90ea41f4cf9dcf3"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/transcripts/agent-a142e0fa3a51739b8.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/transcripts/agent-a765361f72f711a15.jsonl",
+   "sha256": "055c9e7a832f092a5d2de5e7788d4d422bbc5d24c060e02b7a202f7c741e2d80"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/transcripts/agent-a765361f72f711a15.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/transcripts/agent-ad609b36e4e37bf6d.jsonl",
+   "sha256": "db605445f06c1687ca380b5c6736004228bea350191ee4ac4e1daffee48256b8"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/transcripts/agent-ad609b36e4e37bf6d.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg03/wf_524c8cbb-3a1/transcripts/journal.jsonl",
+   "sha256": "dc626b24c8aa23cb31adfb1ef12c62db3ec31b1b9bea8bd2f58976fb255d24e4"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg04/wf_6d9ec059-fa3/official_state.json",
+   "sha256": "084400f963a38e6d529362383bdb4f355486ce38cf02af91ccc0c88824d12ef5"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg04/wf_6d9ec059-fa3/transcripts/agent-a6e2f0cd808bb9219.jsonl",
+   "sha256": "a33c56a5a52dabc3c54f92a4e0e89e8565fedbae935e377073168dcd1695ec1b"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg04/wf_6d9ec059-fa3/transcripts/agent-a6e2f0cd808bb9219.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg04/wf_6d9ec059-fa3/transcripts/journal.jsonl",
+   "sha256": "690701479f99b575d762ddc9488ee197d1563deb0f9aa62858f517fe1f072fca"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/official_state.json",
+   "sha256": "8210866954fb477597d0417deece93ca7361fcc9a8011dd3409c3f18d16b4b3a"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/transcripts/agent-a47fbceea4ccd9d52.jsonl",
+   "sha256": "a4e4cbf30ac7731ab4612bd90f77349b2ee1eff60291312c971f5186c6ad18a3"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/transcripts/agent-a47fbceea4ccd9d52.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/transcripts/agent-a95e3f0cb46a7d5e2.jsonl",
+   "sha256": "982bf7f0d7ad34327808652995147f3ca5a1183933f34deead48096e3b6389a7"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/transcripts/agent-a95e3f0cb46a7d5e2.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/transcripts/agent-aceee9a8411a7f47d.jsonl",
+   "sha256": "caab7d902da2cd1b5e18ff62293d2ae1bb9d930d278914292e4181d5c2a9ec04"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/transcripts/agent-aceee9a8411a7f47d.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg05/wf_1f887f98-317/transcripts/journal.jsonl",
+   "sha256": "2a5f551ba4c15da5490e7e8b21ae8a5bc5dbb94cfe2670c02ce2d809a0e78400"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/official_state.json",
+   "sha256": "d54cc0fec0d145618049e293f5a80510533ca4cecafc8f1518710ae507326f73"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/transcripts/agent-a653a4f1f32f75535.jsonl",
+   "sha256": "6a15c0edda49c721ff0ebdcbbf36ace9a10c644379d9174f3ab0705b0b2d787c"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/transcripts/agent-a653a4f1f32f75535.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/transcripts/agent-a668b90043dc6b32f.jsonl",
+   "sha256": "c7f36ad97273a1c8daa18198d362130865cc6bfdf21e9f7b1854fa507456d257"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/transcripts/agent-a668b90043dc6b32f.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/transcripts/agent-adcdabfe9f3aab070.jsonl",
+   "sha256": "55bcd7b861a9c31e136b09f10919f4878c33182bc99d111af4af13837fba292d"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/transcripts/agent-adcdabfe9f3aab070.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg06/wf_b1da9d95-58d/transcripts/journal.jsonl",
+   "sha256": "2865ae1e53724673aed0a8defbccef4a24461b594de19d08bb3712b34a8167f5"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg07/wf_19b43350-94b/official_state.json",
+   "sha256": "b27436bd6ed24cf84f029ac0a3e75189e0aeaf420f866b99138796c705357a87"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg07/wf_19b43350-94b/transcripts/agent-a615c9043835d6bbe.jsonl",
+   "sha256": "717226dfcb621c5b7ab65e450f97036433061c90d04383675421836758bea026"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg07/wf_19b43350-94b/transcripts/agent-a615c9043835d6bbe.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg07/wf_19b43350-94b/transcripts/agent-ac9dc17e24a10f7db.jsonl",
+   "sha256": "30a60502b6cbe84da8c6a7311ba29de7fb6cee390c3c313ac10176ae84b8927c"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg07/wf_19b43350-94b/transcripts/agent-ac9dc17e24a10f7db.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg07/wf_19b43350-94b/transcripts/journal.jsonl",
+   "sha256": "e50e4252530875a1a643332953d19d15d5085af4e16689f3ff92c099d802f6d0"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db/official_state.json",
+   "sha256": "a7e053e46487fc787f93b04bd5e50e74e4dacd3b05012e9aac596e026176b3d0"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db/transcripts/agent-a30ef8410770a6b8f.jsonl",
+   "sha256": "fb2849c3ec8e19ea547fc25dd19cc4b9626e4dcf99a09bb084a6b1bb4f526ac0"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db/transcripts/agent-a30ef8410770a6b8f.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db/transcripts/agent-ab7a6d5a015cbdb50.jsonl",
+   "sha256": "9853be756d84549a8737dda5162b8418b44358820e6ea4073f3eb2a70dd5d313"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db/transcripts/agent-ab7a6d5a015cbdb50.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg08/wf_64f4e15d-7db/transcripts/journal.jsonl",
+   "sha256": "2eb34e6c4f7fdd993003f1af9b88f520a833dfa42bd4b7324b1455768cd5b4a2"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/official_state.json",
+   "sha256": "e06e4fdf39b7a76fd6be8af5f91a7e304381c9980bdca4c5cb28daadd011d4bb"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/transcripts/agent-a2092106133d7a694.jsonl",
+   "sha256": "3304d185aef4e261362b6cef3aed2e23c4230944780053de16074d058af2ef2b"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/transcripts/agent-a2092106133d7a694.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/transcripts/agent-a4bcb6c23e0de3e50.jsonl",
+   "sha256": "9b1fe85f3587b913e99ac1041450f97648e57eaade2d67d2bb05a158b27ce36e"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/transcripts/agent-a4bcb6c23e0de3e50.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/transcripts/agent-a7904b0dff3b3071a.jsonl",
+   "sha256": "9b8bd1044913e7af3c49e31bed4ac5151182ac04138535846d8a3ce28ef185a9"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/transcripts/agent-a7904b0dff3b3071a.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg09/wf_99b9ec57-090/transcripts/journal.jsonl",
+   "sha256": "8f77535646a18466b53b86369d4ff7c8263137cf1ebbc7caa6f4fc79f5ca359b"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/official_state.json",
+   "sha256": "9ee2dde14ebb135c47ae04607a5ae8a2c9bc3a035ca31b6733f380bb54f6c603"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a0b21e25a5dd1b3b6.jsonl",
+   "sha256": "08b75784364fb657b15f62eac6e00ad572b822513126ed50ee1b7c0245d25096"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a0b21e25a5dd1b3b6.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a1648a735450cf45b.jsonl",
+   "sha256": "0568d3f49b55d37ddc922cb9055f1708e675113b3875df3666e3ee740c6f6a82"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a1648a735450cf45b.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a194a48522bf39eb1.jsonl",
+   "sha256": "149ce0e1dfbd8707de51f34de3bff98aa4096e996d2aaec66a706419a571df37"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a194a48522bf39eb1.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a1fe52807e8f25257.jsonl",
+   "sha256": "2195362d81172baa6c153f68d618d5531a8d2cf429c69daef25db741fbb0a1ea"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a1fe52807e8f25257.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a268e312dc87c2a1d.jsonl",
+   "sha256": "0cd13c6357a6a820519f6f96539cd2b3de22eff9fcd0a9b1b3efb11815ff4193"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a268e312dc87c2a1d.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a784236daa44a36db.jsonl",
+   "sha256": "3141370c01e72bfd40ddaf5467b9834dbc743b72720b7ec1417b26475ecfe8a1"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a784236daa44a36db.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a9dbe444ba5a4e282.jsonl",
+   "sha256": "13b9c9d63d2c4c55624f66e81b5402b04717e202207c5c1331c9f02e5f61b2c6"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-a9dbe444ba5a4e282.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-abfcd021adb491035.jsonl",
+   "sha256": "eebda37f21afde5e465a46c05b5c2d2406a6b9647d817dea9fa6e31263a4a3ea"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-abfcd021adb491035.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-ad30c5d99524244ca.jsonl",
+   "sha256": "6fc7e4c6b749b265139b3b660017b940e86dedc71aa98fb80a60f3f80c7f3a88"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-ad30c5d99524244ca.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-ad62ef2c43e8a1dc2.jsonl",
+   "sha256": "e0e94138751e786e503bf7e88777e3a5fd03aaf823e06f4b0388eef034a05018"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/agent-ad62ef2c43e8a1dc2.meta.json",
+   "sha256": "253ee425d7c8c9c669a71091847d268025052341a73951905e204d1870b8bc11"
+  },
+  {
+   "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2103_g23_grading/G3/native/seg10/wf_d079903b-e2e/transcripts/journal.jsonl",
+   "sha256": "8938b9193374960aa0714948b358be2c14c8649109aaa6ac13075b36060564be"
+  }
+ ],
+ "new_model_calls": 0,
+ "original_invalid": 1,
+ "original_valid": 32,
+ "questions": 117,
+ "required_primary_readings": 32,
+ "root_sha256": "56eeda65fd0863823531410aeb05b2a54486eda9c44663222e6af86941e44c6e",
+ "run_identity": {
+  "root_sha256": "56eeda65fd0863823531410aeb05b2a54486eda9c44663222e6af86941e44c6e",
+  "run_digest": "3862785d8b7798dc45b3c881ca45625e12a79ba7dd97e65b761f8d356c6768df",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G3/run",
+  "run_files": 147
+ },
+ "scope": "real G3 whole-evidence/paired-verdict review; NOT an A7 score",
+ "selected_usable": 32,
+ "uncalled": 0,
+ "unresolved_questions": 7
+}

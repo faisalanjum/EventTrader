@@ -1,0 +1,10 @@
+{
+ "lanes": {
+  "G3-004/G1a": {
+   "chars": 645,
+   "sha256": "047cfeed61671a5952dbc6f5082ed1f8195a3b58e92a07ef048bc70fc9164997",
+   "text": "```json\n[\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xa4deadc9031eb381\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"X1324b492faa2981e\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X126166ff9554cd21\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xb100f34c67a98cff\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X3084ebf401c9eb68\"},\n  {\"bucket\": \"unsupported\", \"question_id\": \"X6f9c048ff25601a9\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X18645f55a6091ad6\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xa2480c79b460e114\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X8e7ae846d72a4dfe\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X64d9845a89cc6734\"}\n]\n```"
+  }
+ },
+ "segment": 4
+}

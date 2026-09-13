@@ -1,0 +1,18 @@
+{
+ "attempt": 2,
+ "ledger": {
+  "invalid": 0,
+  "retry": 0,
+  "scheduled": 0,
+  "uncalled": 1,
+  "valid": 0
+ },
+ "problems": {},
+ "retry": [],
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 5,
+ "uncalled": [
+  "G2-001/G1a"
+ ],
+ "validity": []
+}

@@ -1,0 +1,7 @@
+attempt	codex_retryplan2107_red
+payload	../../unit_2020_codex_check/test_meaning_retry_plan_native_2107.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	113865
+payload_pid	113869
+started_utc	2026-09-13T10:06:57Z
+state	finished exit 1

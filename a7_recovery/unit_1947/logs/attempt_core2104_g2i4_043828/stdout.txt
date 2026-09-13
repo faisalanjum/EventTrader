@@ -1,0 +1,7 @@
+SEGMENT     : 4 state_file wf_49a589de-7fa.json
+OFFICIAL_ROWS: 1
+LEDGER      : {"invalid":1,"retry":1,"scheduled":1,"uncalled":0,"valid":0}
+RETRY       : ['G2-001/G1a'] UNCALLED []
+NONVALID    : [['G2-001/G1a', False]] why {"G2-001/G1a":["Mf21bd5959134fc54 carries a value that is not true, false or null","M85b17ecaa1bc123d carries a value that is not true, false or null","M6c722b0ca333185b carries a value that is not true, false or null"]}
+SEGMENT_CLEAN: False
+STOP: segment 4 is not clean; do NOT start the next segment

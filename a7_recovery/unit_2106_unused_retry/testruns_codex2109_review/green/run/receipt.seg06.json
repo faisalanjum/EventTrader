@@ -1,0 +1,23 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+ "invocation_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2106_unused_retry/testruns_codex2109_review/green/run/invocation.seg06.json",
+ "invocation_sha256": "787b6b2a72c3054806c23c4480ba00954ebb52d8e88f5a6244d17ec9bd3b6b85",
+ "parent": null,
+ "reservation_sha256": "5412a03e9fcd48821c4e086ba82d63e194bd91254e2b27feabb7a499a1ce09b5",
+ "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+ "rows": [
+  {
+   "batch_id": "G2-002",
+   "lane_id": "G2-002/G1a",
+   "ordinal": 4,
+   "prompt_sha256": "a5931bfed7aadf78d840c07b9e603b73c873072c9dea52a7cb66348fa4cbf69f"
+  }
+ ],
+ "run_id": "run",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2106_unused_retry/testruns_codex2109_review/green/run/grade_batch.seg06.js",
+ "script_sha256": "0a61db526187893ffcdeea1251167282ceece39eb377fed42ee459ab6c0bbe12",
+ "segment": 6,
+ "state_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2106_unused_retry/testruns_codex2109_review/green/run/state.seg06.json"
+}

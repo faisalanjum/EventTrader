@@ -1,0 +1,135 @@
+VIEW /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+AFFECTED_MODULES 8
+ENVIRONMENT {"A7_APPROVED_KEY_DIR": null, "A7_DRIVER_VALIDATORS_SHA": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5", "A7_FIXTURE_PROJECTS": null, "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json", "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/map_codex_grader_core2100ord.tsv", "A7_TRACE_FIXTURE": null, "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"}
+
+===== MODULE test_a6_fixture_isolation_1768.py exit=0 =====
+----- stdout -----
+...                                                                      [100%]
+3 passed in 3.27s
+
+----- stderr -----
+
+
+===== MODULE test_a6_fixture_isolation_after_1768.py exit=0 =====
+----- stdout -----
+.                                                                        [100%]
+1 passed in 0.54s
+
+----- stderr -----
+
+
+===== MODULE test_a7_closeout_integrity_1482.py exit=0 =====
+----- stdout -----
+...............                                                          [100%]
+15 passed in 35.62s
+
+----- stderr -----
+
+
+===== MODULE test_a7_postrun_identity_1521.py exit=0 =====
+----- stdout -----
+..............                                                           [100%]
+14 passed in 6.22s
+
+----- stderr -----
+
+
+===== MODULE test_a7_raw_binding_1483.py exit=0 =====
+----- stdout -----
+............                                                             [100%]
+12 passed in 1.02s
+
+----- stderr -----
+
+
+===== MODULE test_a7_runstates_1470.py exit=0 =====
+----- stdout -----
+...........................                                              [100%]
+27 passed in 7.66s
+
+----- stderr -----
+
+
+===== MODULE test_a7_source_correction_1487.py exit=0 =====
+----- stdout -----
+..................ss                                                     [100%]
+=========================== short test summary info ============================
+SKIPPED [1] test_a7_source_correction_1487.py:332: v10 shell not prepared
+SKIPPED [1] test_a7_source_correction_1487.py:346: budget not derived
+18 passed, 2 skipped in 16.74s
+
+----- stderr -----
+
+
+===== MODULE test_g1_cached_resume_1781.py exit=0 =====
+----- stdout -----
+.................................................                        [100%]
+49 passed in 1.07s
+
+----- stderr -----
+
+
+RESULT {
+ "kind": "baseline regression of the affected grading modules, current TEST view",
+ "exercises_partial_scope": false,
+ "module_count": 8,
+ "modules_green": 8,
+ "per_module": [
+  {
+   "module": "test_a6_fixture_isolation_1768.py",
+   "exit": 0,
+   "summary": "3 passed in 3.27s",
+   "stdout_bytes": 98,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a6_fixture_isolation_after_1768.py",
+   "exit": 0,
+   "summary": "1 passed in 0.54s",
+   "stdout_bytes": 98,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_closeout_integrity_1482.py",
+   "exit": 0,
+   "summary": "15 passed in 35.62s",
+   "stdout_bytes": 100,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_postrun_identity_1521.py",
+   "exit": 0,
+   "summary": "14 passed in 6.22s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_raw_binding_1483.py",
+   "exit": 0,
+   "summary": "12 passed in 1.02s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_runstates_1470.py",
+   "exit": 0,
+   "summary": "27 passed in 7.66s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_a7_source_correction_1487.py",
+   "exit": 0,
+   "summary": "18 passed, 2 skipped in 16.74s",
+   "stdout_bytes": 336,
+   "stderr_bytes": 0
+  },
+  {
+   "module": "test_g1_cached_resume_1781.py",
+   "exit": 0,
+   "summary": "49 passed in 1.07s",
+   "stdout_bytes": 99,
+   "stderr_bytes": 0
+  }
+ ]
+}

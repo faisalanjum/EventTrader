@@ -1,0 +1,686 @@
+MUTATION false_becomes_true test_exact_values_recover_without_changing_any_judgment
+.F..F.                                                                   [100%]
+=================================== FAILURES ===================================
+_____ test_exact_values_recover_without_changing_any_judgment[False-False] _____
+
+value = False, fenced = False
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+        assert not problems
+>       assert answer == expected
+               ^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:47: AssertionError
+_____ test_exact_values_recover_without_changing_any_judgment[True-False] ______
+
+value = False, fenced = True
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+        assert not problems
+>       assert answer == expected
+               ^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[False-False]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[True-False]
+2 failed, 4 passed in 0.11s
+MUTATION unknown_becomes_true test_exact_values_recover_without_changing_any_judgment
+..F..F                                                                   [100%]
+=================================== FAILURES ===================================
+_____ test_exact_values_recover_without_changing_any_judgment[False-None] ______
+
+value = None, fenced = False
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+        assert not problems
+>       assert answer == expected
+               ^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:47: AssertionError
+______ test_exact_values_recover_without_changing_any_judgment[True-None] ______
+
+value = None, fenced = True
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+        assert not problems
+>       assert answer == expected
+               ^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[False-None]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[True-None]
+2 failed, 4 passed in 0.07s
+MUTATION nonexact_strings_accepted test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control
+........FFFFFF.....                                                      [100%]
+=================================== FAILURES ===================================
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[True] _
+
+invalid = 'True'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is None and bad
+                   ^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:85: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[False] _
+
+invalid = 'False'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is None and bad
+                   ^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:85: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[NULL] _
+
+invalid = 'NULL'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is None and bad
+                   ^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:85: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[ true] _
+
+invalid = ' true'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is None and bad
+                   ^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:85: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[false ] _
+
+invalid = 'false '
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is None and bad
+                   ^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:85: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[null\n] _
+
+invalid = 'null\n'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is None and bad
+                   ^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:85: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[True]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[False]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[NULL]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[ true]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[false ]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[null\n]
+6 failed, 13 passed in 0.16s
+MUTATION incomplete_schema_credited test_original_schema_and_identity_checks_still_own_the_boundary[missing_aspect]
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_original_schema_and_identity_checks_still_own_the_boundary[missing_aspect] _
+
+fault = 'missing_aspect'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+>       assert answer is None and problems
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:124: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[missing_aspect]
+1 failed in 0.04s
+MUTATION original_failures_erased test_versioned_completion_gets_recovered_relation_and_original_invalid_record
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_versioned_completion_gets_recovered_relation_and_original_invalid_record _
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+
+    def test_versioned_completion_gets_recovered_relation_and_original_invalid_record(run_fixture):
+        original_evidence, original_identity = C.evidence, C.g23_identity
+        with approved_scope():
+            root, doc, lanes, bad = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+            assert not bad
+            assert lanes['batch/G1a']['relation'] == {'unfamiliar-id': {f: False for f in B.meaning_fields()}}
+            assert lanes['batch/G1a']['selected'] == 1
+>           assert lanes['batch/G1a']['attempts'] == {1: False}, 'original invalid flag must survive'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError: original invalid flag must survive
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:198: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_versioned_completion_gets_recovered_relation_and_original_invalid_record
+1 failed in 0.04s
+MUTATION original_evidence_failure_ignored test_original_evidence_refusals_cannot_be_normalized_away
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_original_evidence_refusals_cannot_be_normalized_away[missing native evidence] _
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa16c690>
+error = 'missing native evidence'
+
+    @pytest.mark.parametrize('error', ['missing native evidence', 'identity drift', 'unfinished segment',
+                                      'refusal', 'wrong run hash', 'wrong frozen owner'])
+    def test_original_evidence_refusals_cannot_be_normalized_away(run_fixture, monkeypatch, error):
+        root, doc, lanes, final = run_fixture
+        monkeypatch.setattr(C, 'evidence', lambda *args: (root, doc, lanes, [error]))
+        def forbidden(*args):
+            raise AssertionError('format recovery ran after original evidence was refused')
+        monkeypatch.setattr(G, 'whole_answers', forbidden)
+        with approved_scope():
+>           result = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:81: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('fixture-run', 1)
+
+    def forbidden(*args):
+>       raise AssertionError('format recovery ran after original evidence was refused')
+E       AssertionError: format recovery ran after original evidence was refused
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:215: AssertionError
+__ test_original_evidence_refusals_cannot_be_normalized_away[identity drift] ___
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa21aed0>
+error = 'identity drift'
+
+    @pytest.mark.parametrize('error', ['missing native evidence', 'identity drift', 'unfinished segment',
+                                      'refusal', 'wrong run hash', 'wrong frozen owner'])
+    def test_original_evidence_refusals_cannot_be_normalized_away(run_fixture, monkeypatch, error):
+        root, doc, lanes, final = run_fixture
+        monkeypatch.setattr(C, 'evidence', lambda *args: (root, doc, lanes, [error]))
+        def forbidden(*args):
+            raise AssertionError('format recovery ran after original evidence was refused')
+        monkeypatch.setattr(G, 'whole_answers', forbidden)
+        with approved_scope():
+>           result = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:81: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('fixture-run', 1)
+
+    def forbidden(*args):
+>       raise AssertionError('format recovery ran after original evidence was refused')
+E       AssertionError: format recovery ran after original evidence was refused
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:215: AssertionError
+_ test_original_evidence_refusals_cannot_be_normalized_away[unfinished segment] _
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa1d40d0>
+error = 'unfinished segment'
+
+    @pytest.mark.parametrize('error', ['missing native evidence', 'identity drift', 'unfinished segment',
+                                      'refusal', 'wrong run hash', 'wrong frozen owner'])
+    def test_original_evidence_refusals_cannot_be_normalized_away(run_fixture, monkeypatch, error):
+        root, doc, lanes, final = run_fixture
+        monkeypatch.setattr(C, 'evidence', lambda *args: (root, doc, lanes, [error]))
+        def forbidden(*args):
+            raise AssertionError('format recovery ran after original evidence was refused')
+        monkeypatch.setattr(G, 'whole_answers', forbidden)
+        with approved_scope():
+>           result = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:81: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('fixture-run', 1)
+
+    def forbidden(*args):
+>       raise AssertionError('format recovery ran after original evidence was refused')
+E       AssertionError: format recovery ran after original evidence was refused
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:215: AssertionError
+______ test_original_evidence_refusals_cannot_be_normalized_away[refusal] ______
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa226ed0>
+error = 'refusal'
+
+    @pytest.mark.parametrize('error', ['missing native evidence', 'identity drift', 'unfinished segment',
+                                      'refusal', 'wrong run hash', 'wrong frozen owner'])
+    def test_original_evidence_refusals_cannot_be_normalized_away(run_fixture, monkeypatch, error):
+        root, doc, lanes, final = run_fixture
+        monkeypatch.setattr(C, 'evidence', lambda *args: (root, doc, lanes, [error]))
+        def forbidden(*args):
+            raise AssertionError('format recovery ran after original evidence was refused')
+        monkeypatch.setattr(G, 'whole_answers', forbidden)
+        with approved_scope():
+>           result = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:81: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('fixture-run', 1)
+
+    def forbidden(*args):
+>       raise AssertionError('format recovery ran after original evidence was refused')
+E       AssertionError: format recovery ran after original evidence was refused
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:215: AssertionError
+__ test_original_evidence_refusals_cannot_be_normalized_away[wrong run hash] ___
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa0b4910>
+error = 'wrong run hash'
+
+    @pytest.mark.parametrize('error', ['missing native evidence', 'identity drift', 'unfinished segment',
+                                      'refusal', 'wrong run hash', 'wrong frozen owner'])
+    def test_original_evidence_refusals_cannot_be_normalized_away(run_fixture, monkeypatch, error):
+        root, doc, lanes, final = run_fixture
+        monkeypatch.setattr(C, 'evidence', lambda *args: (root, doc, lanes, [error]))
+        def forbidden(*args):
+            raise AssertionError('format recovery ran after original evidence was refused')
+        monkeypatch.setattr(G, 'whole_answers', forbidden)
+        with approved_scope():
+>           result = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:81: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('fixture-run', 1)
+
+    def forbidden(*args):
+>       raise AssertionError('format recovery ran after original evidence was refused')
+E       AssertionError: format recovery ran after original evidence was refused
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:215: AssertionError
+_ test_original_evidence_refusals_cannot_be_normalized_away[wrong frozen owner] _
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa11c310>
+error = 'wrong frozen owner'
+
+    @pytest.mark.parametrize('error', ['missing native evidence', 'identity drift', 'unfinished segment',
+                                      'refusal', 'wrong run hash', 'wrong frozen owner'])
+    def test_original_evidence_refusals_cannot_be_normalized_away(run_fixture, monkeypatch, error):
+        root, doc, lanes, final = run_fixture
+        monkeypatch.setattr(C, 'evidence', lambda *args: (root, doc, lanes, [error]))
+        def forbidden(*args):
+            raise AssertionError('format recovery ran after original evidence was refused')
+        monkeypatch.setattr(G, 'whole_answers', forbidden)
+        with approved_scope():
+>           result = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:81: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('fixture-run', 1)
+
+    def forbidden(*args):
+>       raise AssertionError('format recovery ran after original evidence was refused')
+E       AssertionError: format recovery ran after original evidence was refused
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:215: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_evidence_refusals_cannot_be_normalized_away[missing native evidence]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_evidence_refusals_cannot_be_normalized_away[identity drift]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_evidence_refusals_cannot_be_normalized_away[unfinished segment]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_evidence_refusals_cannot_be_normalized_away[refusal]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_evidence_refusals_cannot_be_normalized_away[wrong run hash]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_evidence_refusals_cannot_be_normalized_away[wrong frozen owner]
+6 failed in 0.11s
+MUTATION unapproved_code_allowed test_an_unapproved_format_version_never_opens_the_scope[code]
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_an_unapproved_format_version_never_opens_the_scope[code] _________
+
+which = 'code'
+
+    @pytest.mark.parametrize('which', ['code', 'rule'])
+    def test_an_unapproved_format_version_never_opens_the_scope(which):
+        pins = [G._sha_file(F.__file__), G._sha_file(str(F.RULE_FILE))]
+        pins[0 if which == 'code' else 1] = 'not-approved'
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:226: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_an_unapproved_format_version_never_opens_the_scope[code]
+1 failed in 0.04s
+MUTATION unapproved_rule_allowed test_an_unapproved_format_version_never_opens_the_scope[rule]
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_an_unapproved_format_version_never_opens_the_scope[rule] _________
+
+which = 'rule'
+
+    @pytest.mark.parametrize('which', ['code', 'rule'])
+    def test_an_unapproved_format_version_never_opens_the_scope(which):
+        pins = [G._sha_file(F.__file__), G._sha_file(str(F.RULE_FILE))]
+        pins[0 if which == 'code' else 1] = 'not-approved'
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:226: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_an_unapproved_format_version_never_opens_the_scope[rule]
+1 failed in 0.04s
+MUTATION no_recovery_identity test_versioned_completion_gets_recovered_relation_and_original_invalid_record
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_versioned_completion_gets_recovered_relation_and_original_invalid_record _
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+
+    def test_versioned_completion_gets_recovered_relation_and_original_invalid_record(run_fixture):
+        original_evidence, original_identity = C.evidence, C.g23_identity
+        with approved_scope():
+            root, doc, lanes, bad = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+            assert not bad
+            assert lanes['batch/G1a']['relation'] == {'unfamiliar-id': {f: False for f in B.meaning_fields()}}
+            assert lanes['batch/G1a']['selected'] == 1
+            assert lanes['batch/G1a']['attempts'] == {1: False}, 'original invalid flag must survive'
+            ident = C.g23_identity('root-pin', 'fixture-run')
+>           audit = ident['meaning_format_recovery']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'meaning_format_recovery'
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:200: KeyError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_versioned_completion_gets_recovered_relation_and_original_invalid_record
+1 failed in 0.04s
+MUTATION other_grading_kind_changed test_other_grading_kinds_are_unchanged
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+__________________ test_other_grading_kinds_are_unchanged[G1] __________________
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+kind = 'G1'
+
+    @pytest.mark.parametrize('kind', ['G1', 'G3'])
+    def test_other_grading_kinds_are_unchanged(run_fixture, kind):
+        root, doc, lanes, final = run_fixture
+        doc['task_kind'] = kind
+        original_evidence, original_identity = C.evidence, C.g23_identity
+        with approved_scope():
+>           assert C.evidence('c', 'r', 'h', 'd', 10) == original_evidence('c', 'r', 'h', 'd', 10)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:237: AssertionError
+__________________ test_other_grading_kinds_are_unchanged[G3] __________________
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+kind = 'G3'
+
+    @pytest.mark.parametrize('kind', ['G1', 'G3'])
+    def test_other_grading_kinds_are_unchanged(run_fixture, kind):
+        root, doc, lanes, final = run_fixture
+        doc['task_kind'] = kind
+        original_evidence, original_identity = C.evidence, C.g23_identity
+        with approved_scope():
+>           assert C.evidence('c', 'r', 'h', 'd', 10) == original_evidence('c', 'r', 'h', 'd', 10)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:237: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_other_grading_kinds_are_unchanged[G1]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_other_grading_kinds_are_unchanged[G3]
+2 failed in 0.05s
+MUTATION original_validity_drift_ignored test_recovery_reread_refuses_each_own_evidence_failure[validity_drift]
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_recovery_reread_refuses_each_own_evidence_failure[validity_drift] ____
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':..._id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', True]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa05b1d0>
+fault = 'validity_drift'
+
+    @pytest.mark.parametrize('fault', ['whole_error', 'unfinalized', 'unbound_reply',
+                                      'unknown_lane', 'duplicate_attempt', 'validity_drift'])
+    def test_recovery_reread_refuses_each_own_evidence_failure(run_fixture, monkeypatch, fault):
+        root, doc, lanes, final = run_fixture
+        with approved_scope():
+            assert not C.evidence('c', 'r', 'h', 'd', 10)[3]
+        if fault == 'whole_error':
+            monkeypatch.setattr(G, 'whole_answers', lambda *args: (None, ['whole bytes moved']))
+        elif fault == 'unfinalized':
+            monkeypatch.setattr(G, 'segment_state', lambda *args: 'published')
+        elif fault == 'unbound_reply':
+            monkeypatch.setattr(G, 'whole_answers', lambda *args: ({'unbound/lane': '[]'}, []))
+        elif fault == 'unknown_lane':
+            root['rows'] = []
+        elif fault == 'duplicate_attempt':
+            monkeypatch.setattr(G, 'segments', lambda *args: [1, 2])
+        else:
+            final['validity'] = [['batch/G1a', True]]
+>       with pytest.raises(ValueError), approved_scope():
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:288: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_recovery_reread_refuses_each_own_evidence_failure[validity_drift]
+1 failed in 0.04s
+MUTATION uncalled_treated_as_missing_answer test_explicit_zero_call_closure_is_not_a_missing_model_answer
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_explicit_zero_call_closure_is_not_a_missing_model_answer _________
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': ['batch/G1a'], 'validity': [['batch/G1a', False]]})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9afa2c8c50>
+
+    def test_explicit_zero_call_closure_is_not_a_missing_model_answer(run_fixture, monkeypatch):
+        root, doc, lanes, final = run_fixture
+        final['uncalled'] = ['batch/G1a']
+        lanes['batch/G1a']['attempts'] = {}
+        def no_answer(*args):
+            raise AssertionError('an uncalled reservation has no model answer to recover')
+        monkeypatch.setattr(G, 'whole_answers', no_answer)
+        with approved_scope():
+>           assert C.evidence('c', 'r', 'h', 'd', 10)[2] == lanes
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:42: in evidence
+    attempts, _audit = _read_run(root, doc, run_dir)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a7_recovery/unit_2020_codex_check/a7_meaning_format_2105.py:81: in _read_run
+    whole, problems = G.whole_answers(run_dir, segment)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ('r', 1)
+
+    def no_answer(*args):
+>       raise AssertionError('an uncalled reservation has no model answer to recover')
+E       AssertionError: an uncalled reservation has no model answer to recover
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:263: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_explicit_zero_call_closure_is_not_a_missing_model_answer
+1 failed in 0.04s
+RESTORED_FULL_CONTROL
+....................................................................     [100%]
+68 passed in 0.41s
+VERIFIED 12 mutations detected; restored full control passed

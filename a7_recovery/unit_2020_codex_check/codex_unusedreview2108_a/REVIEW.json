@@ -1,0 +1,3645 @@
+{
+ "actual_model_calls": 0,
+ "code_sha256": "5504673f343816821f49764189e3b833695da7d542ee7d262a8633e43451521a",
+ "completion": {
+  "batches": 70,
+  "credited": {},
+  "credited_questions": 0,
+  "questions": 306,
+  "run_identity": {
+   "meaning_format_recovery": {
+    "attempts": [
+     {
+      "attempt": 1,
+      "conversions": [],
+      "lane_id": "G2-000/G1a",
+      "original_problems": [],
+      "original_valid": true,
+      "raw_sha256": "ca2137bd4347cd35e2ff36c4f9b31f4003c67e7e2554f0a632b80d18d28e9746",
+      "recovered": false,
+      "segment": 1
+     },
+     {
+      "attempt": 1,
+      "conversions": [
+       {
+        "field": "driver_state",
+        "from": "false",
+        "question_id": "M35df46a5d2795d66",
+        "to": false
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "null",
+        "question_id": "M35df46a5d2795d66",
+        "to": null
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "false",
+        "question_id": "M35df46a5d2795d66",
+        "to": false
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "null",
+        "question_id": "M786fc3fe140b5899",
+        "to": null
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       }
+      ],
+      "lane_id": "G2-000/G1b",
+      "original_problems": [
+       "M35df46a5d2795d66 carries a value that is not true, false or null",
+       "M341ed3bdf05f28cf carries a value that is not true, false or null",
+       "M1d96bbbc9fdd6147 carries a value that is not true, false or null",
+       "M786fc3fe140b5899 carries a value that is not true, false or null",
+       "M726673b0f7719042 carries a value that is not true, false or null"
+      ],
+      "original_valid": false,
+      "raw_sha256": "91e1dda317566a16c2b319f45f9b2c6ae765d6fb870a86fed8e67771bd1b48db",
+      "recovered": true,
+      "segment": 2
+     },
+     {
+      "attempt": 2,
+      "conversions": [
+       {
+        "field": "driver_state",
+        "from": "false",
+        "question_id": "M35df46a5d2795d66",
+        "to": false
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "null",
+        "question_id": "M35df46a5d2795d66",
+        "to": null
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M35df46a5d2795d66",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "false",
+        "question_id": "M35df46a5d2795d66",
+        "to": false
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "null",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": null
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M341ed3bdf05f28cf",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "null",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": null
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M1d96bbbc9fdd6147",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "null",
+        "question_id": "M786fc3fe140b5899",
+        "to": null
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M786fc3fe140b5899",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "null",
+        "question_id": "M726673b0f7719042",
+        "to": null
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M726673b0f7719042",
+        "to": true
+       }
+      ],
+      "lane_id": "G2-000/G1b",
+      "original_problems": [
+       "M35df46a5d2795d66 carries a value that is not true, false or null",
+       "M341ed3bdf05f28cf carries a value that is not true, false or null",
+       "M1d96bbbc9fdd6147 carries a value that is not true, false or null",
+       "M786fc3fe140b5899 carries a value that is not true, false or null",
+       "M726673b0f7719042 carries a value that is not true, false or null"
+      ],
+      "original_valid": false,
+      "raw_sha256": "9c3d038f8ee4b51219f8b9077522f36887c8c108b3e270fa5d71269fa498ca42",
+      "recovered": true,
+      "segment": 3
+     },
+     {
+      "attempt": 1,
+      "conversions": [
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "Mf21bd5959134fc54",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "Mf21bd5959134fc54",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "Mf21bd5959134fc54",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "Mf21bd5959134fc54",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "Mf21bd5959134fc54",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "Mf21bd5959134fc54",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "Mf21bd5959134fc54",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M85b17ecaa1bc123d",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M85b17ecaa1bc123d",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M85b17ecaa1bc123d",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "M85b17ecaa1bc123d",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M85b17ecaa1bc123d",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M85b17ecaa1bc123d",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M85b17ecaa1bc123d",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M6c722b0ca333185b",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M6c722b0ca333185b",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M6c722b0ca333185b",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "M6c722b0ca333185b",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "false",
+        "question_id": "M6c722b0ca333185b",
+        "to": false
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M6c722b0ca333185b",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "false",
+        "question_id": "M6c722b0ca333185b",
+        "to": false
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "M7a5e4a77f0c4c495",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "M7a5e4a77f0c4c495",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "M7a5e4a77f0c4c495",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "M7a5e4a77f0c4c495",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "M7a5e4a77f0c4c495",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "M7a5e4a77f0c4c495",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "M7a5e4a77f0c4c495",
+        "to": true
+       },
+       {
+        "field": "driver_state",
+        "from": "true",
+        "question_id": "Mece90a618a058690",
+        "to": true
+       },
+       {
+        "field": "lane_routing",
+        "from": "true",
+        "question_id": "Mece90a618a058690",
+        "to": true
+       },
+       {
+        "field": "favorability",
+        "from": "true",
+        "question_id": "Mece90a618a058690",
+        "to": true
+       },
+       {
+        "field": "growth_basis",
+        "from": "true",
+        "question_id": "Mece90a618a058690",
+        "to": true
+       },
+       {
+        "field": "slice_vs_menu",
+        "from": "true",
+        "question_id": "Mece90a618a058690",
+        "to": true
+       },
+       {
+        "field": "driver_name_meaning",
+        "from": "true",
+        "question_id": "Mece90a618a058690",
+        "to": true
+       },
+       {
+        "field": "record_matches_source",
+        "from": "true",
+        "question_id": "Mece90a618a058690",
+        "to": true
+       }
+      ],
+      "lane_id": "G2-001/G1a",
+      "original_problems": [
+       "Mf21bd5959134fc54 carries a value that is not true, false or null",
+       "M85b17ecaa1bc123d carries a value that is not true, false or null",
+       "M6c722b0ca333185b carries a value that is not true, false or null",
+       "M7a5e4a77f0c4c495 carries a value that is not true, false or null",
+       "Mece90a618a058690 carries a value that is not true, false or null"
+      ],
+      "original_valid": false,
+      "raw_sha256": "e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee",
+      "recovered": true,
+      "segment": 4
+     }
+    ],
+    "code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+    "rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b"
+   },
+   "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+   "run_digest": "6577d997b0b07cd1b00bbe0a8474678f31603794defc5669b6accf7333cb4c33",
+   "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2106_unused_retry/testruns/connection/run",
+   "run_files": 49
+  },
+  "schema": "a7_g23_whole_run_completion/1",
+  "task_kind": "G2",
+  "unresolved": [
+   {
+    "batch_id": "G2-000",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    },
+    "question_id": "M35df46a5d2795d66",
+    "reasons": [
+     {
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": false,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "question_id": "M35df46a5d2795d66",
+      "reason": "a reading could not establish it"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-000",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M341ed3bdf05f28cf",
+    "reasons": [
+     {
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M341ed3bdf05f28cf",
+      "reason": "a reading could not establish it"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-000",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M1d96bbbc9fdd6147",
+    "reasons": [
+     {
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M1d96bbbc9fdd6147",
+      "reason": "a reading could not establish it"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-000",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M786fc3fe140b5899",
+    "reasons": [
+     {
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M786fc3fe140b5899",
+      "reason": "a reading could not establish it"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-000",
+    "established": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "question_id": "M726673b0f7719042",
+    "reasons": [
+     {
+      "aspect": "growth_basis",
+      "established": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": true,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "question_id": "M726673b0f7719042",
+      "reason": "a reading could not establish it"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-001",
+    "question_id": "Mf21bd5959134fc54",
+    "reasons": [
+     {
+      "reason": "1 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-001",
+    "question_id": "M85b17ecaa1bc123d",
+    "reasons": [
+     {
+      "reason": "1 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-001",
+    "question_id": "M6c722b0ca333185b",
+    "reasons": [
+     {
+      "reason": "1 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-001",
+    "question_id": "M7a5e4a77f0c4c495",
+    "reasons": [
+     {
+      "reason": "1 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-001",
+    "question_id": "Mece90a618a058690",
+    "reasons": [
+     {
+      "reason": "1 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-002",
+    "question_id": "M00ecbc6e81dd5284",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-002",
+    "question_id": "Md1b56847528f639c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-002",
+    "question_id": "M6aaed09074df8395",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-002",
+    "question_id": "M02dd1d33369df31b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-002",
+    "question_id": "Me2615b2c555ed925",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-003",
+    "question_id": "M61f1a43573a6836b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-003",
+    "question_id": "Mb18c07ecdfc63be7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-003",
+    "question_id": "M4ca257814a3d2655",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-003",
+    "question_id": "M66e7557e3b1064dd",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-003",
+    "question_id": "M92afa94c159eb5e0",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-004",
+    "question_id": "M1aa19982f56a2a96",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-004",
+    "question_id": "Mf8e5b413ab229c35",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-004",
+    "question_id": "M6077f569317f1f81",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-004",
+    "question_id": "M72d67ba2e2c5d512",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-004",
+    "question_id": "M40c9264a220ea3e1",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-005",
+    "question_id": "M5f733feacaa92ecd",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-005",
+    "question_id": "M9edc11e050df4f8a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-005",
+    "question_id": "M841625afc3bb541b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-005",
+    "question_id": "M16e5547d3350a121",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-005",
+    "question_id": "M2dd38ea8166761eb",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-006",
+    "question_id": "Mea4cf23970b9ae92",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-006",
+    "question_id": "M07bccfc1f9f03ec5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-006",
+    "question_id": "M63a211408d38ee40",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-006",
+    "question_id": "M357a5ef0bb7e36e6",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-006",
+    "question_id": "M4be2201467e52b28",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-007",
+    "question_id": "M9484933efd39aaa7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-007",
+    "question_id": "M25685d07827234a2",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-007",
+    "question_id": "M29d7ecb1954bd124",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-007",
+    "question_id": "M7c647e1cedf0a3e3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-007",
+    "question_id": "Mde7d5e39712de0c7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-008",
+    "question_id": "Mf1aca8c5849b0770",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-008",
+    "question_id": "Ma5d5cffc07c4dd0c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-008",
+    "question_id": "Mc00952c368d8b096",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-008",
+    "question_id": "M1d1e2b191c165491",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-008",
+    "question_id": "M6b47edb7bc68c5fb",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-009",
+    "question_id": "M0c5dd9bbeece43b0",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-009",
+    "question_id": "Mc428a88a58bd94f1",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-010",
+    "question_id": "M7ff400be016d0141",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-010",
+    "question_id": "M95c73e1ef95ea6d0",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-010",
+    "question_id": "M94c0b5e28cf36305",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-011",
+    "question_id": "M2e58ae4e8cfd6435",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-011",
+    "question_id": "Maea7c65b7628c57e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-011",
+    "question_id": "M6b93c6940b2be9e0",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-011",
+    "question_id": "M733ebab7ba30bb0f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-011",
+    "question_id": "Mcedf6ff6e7dc43bd",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-012",
+    "question_id": "M7b666c83f5a85ea2",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-012",
+    "question_id": "M58f5060eedb7a8c6",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-012",
+    "question_id": "Mcfb3a4b2975d211e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-012",
+    "question_id": "M011aedfe5770024b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-012",
+    "question_id": "M765d517b782cfa01",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-013",
+    "question_id": "M9c978dc353a235b8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-013",
+    "question_id": "M235ca9d8f83aa1f1",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-013",
+    "question_id": "M8351d2825bae0891",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-013",
+    "question_id": "Mffc29b8ff785d499",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-013",
+    "question_id": "Mf1c41a01fa7b1847",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-014",
+    "question_id": "Mc8b6f7dd212ec289",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-014",
+    "question_id": "Mc0f0ddce1137557e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-014",
+    "question_id": "Mb2d4aa3ce9f9cd04",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-014",
+    "question_id": "M1bd499dd6d3860ed",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-014",
+    "question_id": "M72caa9bf890c910b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-015",
+    "question_id": "M43cfef5e4a9944f6",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-015",
+    "question_id": "M1cc002a6431725fe",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-015",
+    "question_id": "M7d7177600917b880",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-015",
+    "question_id": "Mbbbad21e2ccc2af7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-015",
+    "question_id": "Me9e14acbd9f77007",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-016",
+    "question_id": "M31b20a4a0b7e5203",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-016",
+    "question_id": "Mee82318cbe88a420",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-017",
+    "question_id": "Mb0773afb058b29b3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-017",
+    "question_id": "M0fa273105b8bcf8a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-017",
+    "question_id": "M645d780bfaa2241b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-018",
+    "question_id": "M17b3e0300b7968b8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-018",
+    "question_id": "M4e5b3f2256646925",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-018",
+    "question_id": "M6b218cbff4a78d0f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-018",
+    "question_id": "M206c7e8a11af3c3f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-018",
+    "question_id": "M2e3002c881fc434b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-019",
+    "question_id": "Mc666c76ff3657bc1",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-019",
+    "question_id": "M02b07af753a517ef",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-019",
+    "question_id": "Md6e308ee74cdf815",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-019",
+    "question_id": "M62a85f0d06c8aa5c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-019",
+    "question_id": "M42c321d822ac47f4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-020",
+    "question_id": "Mf2eec24a8d847ee5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-020",
+    "question_id": "Mbde8235f83e49a93",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-020",
+    "question_id": "Mf6bf097c465003eb",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-020",
+    "question_id": "Mec9e16d57c989430",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-020",
+    "question_id": "M2fc403e126b61f37",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-021",
+    "question_id": "Mc7890bf18242f3ee",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-021",
+    "question_id": "M98d240dfaa7a7526",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-021",
+    "question_id": "M1c4c23ebd184f0cc",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-021",
+    "question_id": "M9016aa97b872556a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-021",
+    "question_id": "M70f663f593c28775",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-022",
+    "question_id": "Md5b6d93a0e42868a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-022",
+    "question_id": "Medaf936df04cd393",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-022",
+    "question_id": "M6d9dd25a44c4125e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-022",
+    "question_id": "M5d144e1666edf465",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-022",
+    "question_id": "Mb22c2a72f4424c7e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-023",
+    "question_id": "Md061467de5b6ca9c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-023",
+    "question_id": "M97687ce178b7517e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-024",
+    "question_id": "Maab35fb20cc371a5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-024",
+    "question_id": "Mb693cbc83edbc2b9",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-024",
+    "question_id": "M05f6ac5ac72ab8bb",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-025",
+    "question_id": "Md493b607e9f607e3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-025",
+    "question_id": "Mba17df14d96f594b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-025",
+    "question_id": "M558257457a55f3be",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-025",
+    "question_id": "M4c7103daca170dcc",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-025",
+    "question_id": "M752dab6e0c48afa8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-026",
+    "question_id": "M48176346f1082ca4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-026",
+    "question_id": "Md537d4751f505235",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-026",
+    "question_id": "Mdeaf9591a2dcc241",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-026",
+    "question_id": "M2c147d86c788aab4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-026",
+    "question_id": "Ma0a6445d4ac518c0",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-027",
+    "question_id": "M426b2d4f83a776af",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-027",
+    "question_id": "Mb6660dcce1356528",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-027",
+    "question_id": "M75813437a92cf998",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-027",
+    "question_id": "M990e3e1bcb642c43",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-027",
+    "question_id": "Me41517754e358a49",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-028",
+    "question_id": "M016be8813253ad71",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-028",
+    "question_id": "Mfeb0c103032e5aba",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-028",
+    "question_id": "M0fb38696c153d6f8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-028",
+    "question_id": "Mfdc3b99ab640f039",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-028",
+    "question_id": "M53a1b3ba077cabd8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-029",
+    "question_id": "M37c3fd00330d665b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-029",
+    "question_id": "M619427b099934206",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-029",
+    "question_id": "Me83d11be2c9b62d4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-029",
+    "question_id": "Mfe7fec741c481d3a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-029",
+    "question_id": "M673147c1d86816fa",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-030",
+    "question_id": "M3c01992f2e58d996",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-030",
+    "question_id": "M961a664de76b0d2d",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-030",
+    "question_id": "M54c69cfbbfb770fe",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-030",
+    "question_id": "Mf74bd5a258f4c57b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-030",
+    "question_id": "Mf6ae20255741f5af",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-031",
+    "question_id": "Mf779fb08c3d45f27",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-031",
+    "question_id": "M51fe2eb8ba3ffada",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-031",
+    "question_id": "Md5b6c966cbdbf15c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-031",
+    "question_id": "M56692399adb07bf0",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-031",
+    "question_id": "M2631bbcafac8881d",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-032",
+    "question_id": "Mff46eed2c64e8d13",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-032",
+    "question_id": "M20bf61063ac29515",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-032",
+    "question_id": "M34257810d4d23607",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-032",
+    "question_id": "M480abb5b3f613e1c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-032",
+    "question_id": "M1e4b6cd09563f250",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-033",
+    "question_id": "M86be1a27f32dbaf2",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-033",
+    "question_id": "M6221427dec8dc14b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-033",
+    "question_id": "M0a51fce4dd855b65",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-033",
+    "question_id": "M265b7554e70f66e3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-033",
+    "question_id": "Mea91bf3171f0511f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-034",
+    "question_id": "M4ee9337472e91555",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-034",
+    "question_id": "M78a5c6360c93a561",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-035",
+    "question_id": "M2badc2f344015152",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-035",
+    "question_id": "M25a3c0332278688d",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-035",
+    "question_id": "M2ad3c19c55a33b22",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-036",
+    "question_id": "Me2e627d647dd21b3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-036",
+    "question_id": "Mc79809b979b20d53",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-036",
+    "question_id": "Me74de620b82e56bf",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-036",
+    "question_id": "M3d3bf43c6b9baad8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-036",
+    "question_id": "M5e086dfe139e25f5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-037",
+    "question_id": "M0de45b05b3884472",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-037",
+    "question_id": "M53a13722243e356b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-037",
+    "question_id": "M5aeb2352c3aae25f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-037",
+    "question_id": "Mbcadb2079632a153",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-037",
+    "question_id": "M4b4e22abcaa8d591",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-038",
+    "question_id": "Me283ca1f2067854f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-038",
+    "question_id": "M8f3cb6b387ec8ba9",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-038",
+    "question_id": "M2a81c745481f2ebc",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-038",
+    "question_id": "M292ac8520c3978ff",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-038",
+    "question_id": "M0e085961f8057af7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-039",
+    "question_id": "M2340bbdb4b9ef356",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-039",
+    "question_id": "M76b7557972096ab4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-039",
+    "question_id": "M96e4fc2ed3155b3b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-039",
+    "question_id": "Me8ba12d5cb70f4da",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-039",
+    "question_id": "M9176d0f5d99a2a38",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-040",
+    "question_id": "Mfd3a9491b84b8814",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-040",
+    "question_id": "M29bb54bb6f349c17",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-040",
+    "question_id": "M155d065a49c7695b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-040",
+    "question_id": "Ma04215d8a4d68dbe",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-040",
+    "question_id": "M7d108e2b58d24396",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-041",
+    "question_id": "Mf8dc0510a0ba179c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-041",
+    "question_id": "M12f0e3b0f622a71c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-042",
+    "question_id": "M227ed2f3b94a6629",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-042",
+    "question_id": "M6eca39edb54086d3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-042",
+    "question_id": "M884f0d41f757f7bc",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-043",
+    "question_id": "Mb87e99d1b27c6c1d",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-043",
+    "question_id": "M1a1d8504821bf26a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-043",
+    "question_id": "M7c7c1ecb69bbe2c9",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-043",
+    "question_id": "M22ede9a4b555fd5b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-043",
+    "question_id": "Me35ea17f29972c9f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-044",
+    "question_id": "Mfe6f9cd55ddfdb17",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-044",
+    "question_id": "M84f7bd7ab2bad82f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-044",
+    "question_id": "M8574c1ed58214a6e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-044",
+    "question_id": "Mba3e48c6e9efd4f9",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-044",
+    "question_id": "M89349f9d421cb374",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-045",
+    "question_id": "M05a0426b99cc6edf",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-045",
+    "question_id": "Md5def2bc09fe22d8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-045",
+    "question_id": "Mdcf1d03950dd4702",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-045",
+    "question_id": "M3e5aa7f1ebcc7dae",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-045",
+    "question_id": "Mc17055ff4a7a52dd",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-046",
+    "question_id": "M1ff094f118e22d74",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-046",
+    "question_id": "M71a7dd9d10cc76f3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-046",
+    "question_id": "M4ea4d7f5cd26d81a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-046",
+    "question_id": "Mf8cecf2c5aa99602",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-046",
+    "question_id": "Mc6c32dee91400e91",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-047",
+    "question_id": "M61beee43a203dd9f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-047",
+    "question_id": "Mf465bfe9429c40c4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-047",
+    "question_id": "M30d5d757ba3409a4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-047",
+    "question_id": "M38757d908e703ecf",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-047",
+    "question_id": "Mc3faae8812cd07d3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-048",
+    "question_id": "M10ce98c4b9b80aa1",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-048",
+    "question_id": "M2e94246659324fa7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-048",
+    "question_id": "M43f1a5537c074140",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-048",
+    "question_id": "M5b2ecf7412ac6ecb",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-048",
+    "question_id": "Mbc20137b9967b569",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-049",
+    "question_id": "M61563d2abc07f74c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-049",
+    "question_id": "M9421addcc8b5eec2",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-049",
+    "question_id": "M2e22ae8245cd4280",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-049",
+    "question_id": "M5da15f425e4d9b10",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-049",
+    "question_id": "Mfd11133db92c03f0",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-050",
+    "question_id": "Mdb9090926047d818",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-050",
+    "question_id": "M9a51df2bd16d7344",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-050",
+    "question_id": "Mb81fc1be7b290e6b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-050",
+    "question_id": "M7f09e480a7710fcf",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-050",
+    "question_id": "M8624b63494238990",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-051",
+    "question_id": "Ma31af1665347b9ec",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-051",
+    "question_id": "M6fdeee55db09c5ae",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-052",
+    "question_id": "M340cd96cab48c901",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-052",
+    "question_id": "M318f83b764fa0551",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-052",
+    "question_id": "M0d11a0029b0b0718",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-053",
+    "question_id": "Mf3f2ee3a17e5b2ec",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-053",
+    "question_id": "M89298db1b2082404",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-053",
+    "question_id": "Mc562cb4596db6b95",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-053",
+    "question_id": "M4391065085a27e2a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-053",
+    "question_id": "Mfd30cdb6d130e25f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-054",
+    "question_id": "Meaab12906816245d",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-054",
+    "question_id": "M5bfe5bdf236475e6",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-054",
+    "question_id": "M8222e982fe3cfda8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-054",
+    "question_id": "M24065e66c77fea00",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-054",
+    "question_id": "M838398e01dc7b3d7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-055",
+    "question_id": "M6d2b09a6d78a96e6",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-055",
+    "question_id": "M3f9d9d0d4512b849",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-055",
+    "question_id": "M39ea21b3a6adc755",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-055",
+    "question_id": "M16b855d95ff36181",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-055",
+    "question_id": "M63c05645b2228cf4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-056",
+    "question_id": "Ma529b8a7aa02495d",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-056",
+    "question_id": "Me2f731a704f57d75",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-056",
+    "question_id": "Mf01ecd20b2b41f8c",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-056",
+    "question_id": "M93528853809ec3f4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-056",
+    "question_id": "M7bd698ec86f673ae",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-057",
+    "question_id": "Mc99eeb7a83140a80",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-057",
+    "question_id": "Md2061d63bedc8f75",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-057",
+    "question_id": "M752301ecc84d4207",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-057",
+    "question_id": "Mf2f33b201f73e18d",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-057",
+    "question_id": "Mab3c1cc44faa7224",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-058",
+    "question_id": "Mdf432700399897a5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-058",
+    "question_id": "Me35f4178e598dcb5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-058",
+    "question_id": "M86edaa1155c3b0d6",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-058",
+    "question_id": "Mea888420e38231f5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-058",
+    "question_id": "M5bb3d300ea194bd7",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-059",
+    "question_id": "M6a52868797fca479",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-059",
+    "question_id": "Mf17b1316b60436d3",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-059",
+    "question_id": "M06fbbc20be8eff83",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-059",
+    "question_id": "M08f98c68011966f4",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-059",
+    "question_id": "M3267fda9050619b6",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-060",
+    "question_id": "M72e4aef467cb286e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-060",
+    "question_id": "M6c349838c34d5aee",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-060",
+    "question_id": "Md51d433bdbbf21c8",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-060",
+    "question_id": "Mfc55a0436aac4c78",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-060",
+    "question_id": "Mf4f67944a7e5e549",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-061",
+    "question_id": "M2efc93f359529c0b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-061",
+    "question_id": "Mc2c7e279f1be760e",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-061",
+    "question_id": "M74ee782ce4554785",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-061",
+    "question_id": "Mad083fb51409521b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-061",
+    "question_id": "M5ac362fadf8bf806",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-062",
+    "question_id": "M42b29840407e0051",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-062",
+    "question_id": "M58a292b9b8e315f9",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-062",
+    "question_id": "M1f4102adb8cdb0b1",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-062",
+    "question_id": "M6fd88e81bd646c18",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-062",
+    "question_id": "M700afaa8868c8f08",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-063",
+    "question_id": "Meae5deb8e54cd4dc",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-063",
+    "question_id": "Mb440e706885e6f10",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-063",
+    "question_id": "Mc0fee81b5ffc9975",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-063",
+    "question_id": "M4e236380221db347",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-063",
+    "question_id": "M8d392b03ceaf4b7a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-064",
+    "question_id": "M16c32ef759346e0a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-064",
+    "question_id": "Mabd80961830fa09a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-064",
+    "question_id": "M9ac184b07624a590",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-064",
+    "question_id": "M49ccb6aa2eb4a6c5",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-065",
+    "question_id": "M884c4845393d55ce",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-065",
+    "question_id": "Mb65ece4291c4b307",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-065",
+    "question_id": "M1190a2305161d201",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-065",
+    "question_id": "M35b5be11f3dac0be",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-065",
+    "question_id": "Mcb1fb316d377bb0a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-066",
+    "question_id": "M992cde76841a593a",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-066",
+    "question_id": "Me9adff0c6d62ed44",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-066",
+    "question_id": "Mfea65de589d06fec",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-067",
+    "question_id": "M43e87509e5cc819b",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-067",
+    "question_id": "Mf91a92c59065852f",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-068",
+    "question_id": "Me36640ff3213b7f2",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   },
+   {
+    "batch_id": "G2-069",
+    "question_id": "M02d957fa99800507",
+    "reasons": [
+     {
+      "reason": "0 of 2 blind readings are usable"
+     }
+    ]
+   }
+  ],
+  "unresolved_questions": 306
+ },
+ "completion_problems": [],
+ "correct_completion_call": "C.complete_g23(doc, C.relations_from_run(lanes), identity)",
+ "incorrectly_accepted_rehashed_whole": {
+  "attempt": 2,
+  "closure": "unused_recovered_retry",
+  "format_code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+  "format_rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b",
+  "lanes": [
+   "G2-001/G1a"
+  ],
+  "model_calls": 0,
+  "official_states_naming_this_script": 0,
+  "prior_reading": {
+   "G2-001/G1a": {
+    "conversions": 35,
+    "original_problems": [
+     "Mf21bd5959134fc54 carries a value that is not true, false or null",
+     "M85b17ecaa1bc123d carries a value that is not true, false or null",
+     "M6c722b0ca333185b carries a value that is not true, false or null",
+     "M7a5e4a77f0c4c495 carries a value that is not true, false or null",
+     "Mece90a618a058690 carries a value that is not true, false or null"
+    ],
+    "original_valid": false,
+    "prior_attempt": 1,
+    "prior_raw_sha256": "1c8cf7f2a11fd46141721376f9d850b2bab42ba8d05ec61d3154d32d065bf22f",
+    "prior_segment": 4,
+    "recovered": true
+   }
+  },
+  "reason": "the published retry was never launched and the prior reading it existed to replace is completely recovered under the approved format rule",
+  "receipt_sha256": "b04fe0d4668b9be916a855a6146b1dcfbd83b920e221d124afff7fd8d67b80b2",
+  "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+  "schema": "a7_unused_retry_closure/1",
+  "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run/grade_batch.seg05.js",
+  "segment": 5,
+  "state_sidecar_entries": 0,
+  "transient": {
+   "official_states_scanned": 1648
+  },
+  "workflow_gate_sha256": "e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703",
+  "workflow_uses_naming_this_script": 0
+ },
+ "positive": {
+  "attempt": 2,
+  "closure": "unused_recovered_retry",
+  "format_code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+  "format_rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b",
+  "lanes": [
+   "G2-001/G1a"
+  ],
+  "model_calls": 0,
+  "official_states_naming_this_script": 0,
+  "prior_reading": {
+   "G2-001/G1a": {
+    "conversions": 35,
+    "original_problems": [
+     "Mf21bd5959134fc54 carries a value that is not true, false or null",
+     "M85b17ecaa1bc123d carries a value that is not true, false or null",
+     "M6c722b0ca333185b carries a value that is not true, false or null",
+     "M7a5e4a77f0c4c495 carries a value that is not true, false or null",
+     "Mece90a618a058690 carries a value that is not true, false or null"
+    ],
+    "original_valid": false,
+    "prior_attempt": 1,
+    "prior_raw_sha256": "e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee",
+    "prior_segment": 4,
+    "recovered": true
+   }
+  },
+  "reason": "the published retry was never launched and the prior reading it existed to replace is completely recovered under the approved format rule",
+  "receipt_sha256": "b04fe0d4668b9be916a855a6146b1dcfbd83b920e221d124afff7fd8d67b80b2",
+  "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+  "schema": "a7_unused_retry_closure/1",
+  "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run/grade_batch.seg05.js",
+  "segment": 5,
+  "state_sidecar_entries": 0,
+  "transient": {
+   "official_states_scanned": 1648
+  },
+  "workflow_gate_sha256": "e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703",
+  "workflow_uses_naming_this_script": 0
+ },
+ "real_run_unchanged": true
+}

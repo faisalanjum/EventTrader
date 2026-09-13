@@ -1,0 +1,44 @@
+................................................F......FF..              [100%]
+=================================== FAILURES ===================================
+_ test_versioned_completion_gets_recovered_relation_and_original_invalid_record _
+
+run_fixture = ({'candidate_dir': 'fixture-candidate', 'candidate_sha256': 'candidate-pin', 'rows': [{'batch_id': 'batch', 'lane_id':...id': 'batch', 'relation': None, 'selected': None}}, {'attempt': 1, 'uncalled': [], 'validity': [['batch/G1a', False]]})
+
+    def test_versioned_completion_gets_recovered_relation_and_original_invalid_record(run_fixture):
+        original_evidence, original_identity = C.evidence, C.g23_identity
+        with approved_scope():
+            root, doc, lanes, bad = C.evidence('fixture-candidate', 'fixture-run', 'root-pin', 'run-pin', 10)
+            assert not bad
+>           assert lanes['batch/G1a']['relation'] == {'unfamiliar-id': {f: False for f in B.meaning_fields()}}
+E           AssertionError: assert None == {'unfamiliar-id': {'driver_name_meaning': False, 'driver_state': False, 'favorability': False, 'growth_basis': False, ...}}
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:196: AssertionError
+________ test_an_unapproved_format_version_never_opens_the_scope[code] _________
+
+which = 'code'
+
+    @pytest.mark.parametrize('which', ['code', 'rule'])
+    def test_an_unapproved_format_version_never_opens_the_scope(which):
+        pins = [G._sha_file(F.__file__), G._sha_file(str(F.RULE_FILE))]
+        pins[0 if which == 'code' else 1] = 'not-approved'
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:226: Failed
+________ test_an_unapproved_format_version_never_opens_the_scope[rule] _________
+
+which = 'rule'
+
+    @pytest.mark.parametrize('which', ['code', 'rule'])
+    def test_an_unapproved_format_version_never_opens_the_scope(which):
+        pins = [G._sha_file(F.__file__), G._sha_file(str(F.RULE_FILE))]
+        pins[0 if which == 'code' else 1] = 'not-approved'
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:226: Failed
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_versioned_completion_gets_recovered_relation_and_original_invalid_record
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_an_unapproved_format_version_never_opens_the_scope[code]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_an_unapproved_format_version_never_opens_the_scope[rule]
+3 failed, 56 passed in 0.45s

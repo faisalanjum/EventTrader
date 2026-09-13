@@ -1,0 +1,7 @@
+SEGMENT     : 3 state_file wf_524c8cbb-3a1.json
+OFFICIAL_ROWS: 3
+LEDGER      : {"invalid":1,"retry":1,"scheduled":3,"uncalled":0,"valid":2}
+RETRY       : ['G3-004/G1a'] UNCALLED []
+NONVALID    : [['G3-004/G1a', False]] why {"G3-004/G1a":["X8e7ae846d72a4dfe was not answered"]}
+SEGMENT_CLEAN: False
+STOP: segment 3 is not clean; do NOT start the next segment

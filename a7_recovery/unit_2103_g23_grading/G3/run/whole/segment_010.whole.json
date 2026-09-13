@@ -1,0 +1,55 @@
+{
+ "lanes": {
+  "G3-011/G1a": {
+   "chars": 260,
+   "sha256": "d4a6eb644ec268b219524808034b7f483dd4ec880c3dccb23848af246c43d96c",
+   "text": "```json\n[\n {\"bucket\": \"key_miss\", \"question_id\": \"Xbae787103e785e11\"},\n {\"bucket\": \"key_miss\", \"question_id\": \"Xa89529fe646aaa72\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"X0df833dc3d20e76e\"},\n {\"bucket\": \"duplicate\", \"question_id\": \"Xb3a3351bca3b64eb\"}\n]\n```"
+  },
+  "G3-011/G1b": {
+   "chars": 264,
+   "sha256": "159dc2ad47a0c61f8f298253ed3ad7f4243f2aa9bd8611d998b514897b930510",
+   "text": "```json\n[\n  {\"bucket\": \"key_miss\", \"question_id\": \"Xbae787103e785e11\"},\n  {\"bucket\": \"key_miss\", \"question_id\": \"Xa89529fe646aaa72\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X0df833dc3d20e76e\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"Xb3a3351bca3b64eb\"}\n]\n```"
+  },
+  "G3-012/G1a": {
+   "chars": 140,
+   "sha256": "f6e66f1daf0e5de57814fcbc8f834815756107ab3715b4257f8e9e69449e161e",
+   "text": "```json\n[\n  {\"bucket\": \"duplicate\", \"question_id\": \"X9cdae8b168c23a2a\"},\n  {\"bucket\": \"duplicate\", \"question_id\": \"X9b6e4dcf1d43f68e\"}\n]\n```"
+  },
+  "G3-012/G1b": {
+   "chars": 122,
+   "sha256": "eb3a3520b01e76eb742861aa021ce0ee01b3303ab3f04b879ba816d7692f0789",
+   "text": "[{\"bucket\": \"duplicate\", \"question_id\": \"X9cdae8b168c23a2a\"}, {\"bucket\": \"duplicate\", \"question_id\": \"X9b6e4dcf1d43f68e\"}]"
+  },
+  "G3-013/G1a": {
+   "chars": 73,
+   "sha256": "3bf6d0f4969a76fea4ec1d3379046110465c28ad3ca64f299deab16946dfc588",
+   "text": "```json\n[{\"bucket\": \"duplicate\", \"question_id\": \"Xeb9efe850afaa8e3\"}]\n```"
+  },
+  "G3-013/G1b": {
+   "chars": 61,
+   "sha256": "eb609fbb5d035163511bed888bdc83358abae18a0ac47ec7cfcc89112afc6b29",
+   "text": "[{\"bucket\": \"duplicate\", \"question_id\": \"Xeb9efe850afaa8e3\"}]"
+  },
+  "G3-014/G1a": {
+   "chars": 73,
+   "sha256": "450990fa98f30e52e4232a33f54da2a8fa44fbefdf14be9c02675230eaa51ae0",
+   "text": "```json\n[{\"bucket\": \"duplicate\", \"question_id\": \"Xba92891f45109f52\"}]\n```"
+  },
+  "G3-014/G1b": {
+   "chars": 61,
+   "sha256": "abde7a12add38915c270e0704fd59ec1e94716feddd15fb0898b38c27561a161",
+   "text": "[{\"bucket\": \"duplicate\", \"question_id\": \"Xba92891f45109f52\"}]"
+  },
+  "G3-015/G1a": {
+   "chars": 61,
+   "sha256": "f5a709b6b0c36e77c0bd81ffe51b6c58487043b91bce20194e9fe0b7ad7b9172",
+   "text": "[{\"bucket\": \"duplicate\", \"question_id\": \"X1cdb0213363706c7\"}]"
+  },
+  "G3-015/G1b": {
+   "chars": 79,
+   "sha256": "005d19628d7e4d43b631acce8d87aa53b0e2cef41ae4b1fb80bd16a484476e19",
+   "text": "```json\n[{\n  \"bucket\": \"duplicate\",\n  \"question_id\": \"X1cdb0213363706c7\"\n}]\n```"
+  }
+ },
+ "segment": 10
+}

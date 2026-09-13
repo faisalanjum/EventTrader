@@ -1,0 +1,7 @@
+attempt	core2104_g2p3_043430
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	4166702
+payload_pid	4166706
+started_utc	2026-09-13T08:34:32Z
+state	finished exit 0

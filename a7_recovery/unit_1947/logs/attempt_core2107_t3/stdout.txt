@@ -1,0 +1,34 @@
+  the pending segment 5 blocks the next publication              PASS ['segment 5 is still pending; one publication at a time']
+  inspect accepts it from the REAL saved reply, no report supplied PASS []
+  the prior reading is derived, recovered, and still originally invalid PASS 
+  the scanned-state count is transient, not part of the identity PASS 
+  close writes the finalization                                  PASS []
+  zero credited, every lane uncalled, no verdict invented        PASS 
+  an already-called primary is still refused                     PASS ['G2-000/G1a has already produced a captured attempt-1 result; it can never be a primary a
+  the consumed reservation cannot be re-reserved                 PASS ['G2-001/G1a was already reserved at attempt 2 by segment 5']
+  G.publish_run actually publishes the next never-called primary PASS []
+  closure applied to the connection copy                         PASS []
+  C.evidence under F.scope selects the prior recovered attempt   PASS []
+  the identity carries the recovery audit with original-invalid flags PASS [{'raw_sha256': 'e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee', 'origi
+  complete_g23 behaves identically with and without the recovery scope PASS AttributeError vs AttributeError
+  positive control: the plain population selects only the one valid lane PASS 
+  positive control: the prior whole reply exists                 PASS 
+  a prior reply that recovery cannot fix is refused              FAIL []
+  a missing prior whole reply is refused                         PASS ['prior segment 4: segment 4 records no bound whole answers']
+  a prior reading recorded VALID is refused (nothing to recover) PASS ['the prior segment 4 records G2-001/G1a as valid; this closure is only for a recovered in
+  positive control: an active sidecar was written                PASS 
+  a wrong externally supplied gate hash is refused               PASS ['the workflow gate is e2386da5f64260acdc7da1a1b44c40c3fcad5a624affd3755b01448ce32d0703, n
+  a wrong externally supplied FORMAT CODE pin is refused         PASS ['the approved recovery scope refused: unapproved meaning-format code']
+  existing output for this segment is refused                    PASS ['segment 5 already has errors']
+  a segment carrying refusal-closure evidence is refused         PASS ['segment 5 already has refusal evidence']
+  positive control: clean before staging                         PASS []
+  an interrupted closure resumes from its exact staged evidence  PASS []
+  staged evidence that differs is refused, never overwritten     PASS ['the staged closure evidence for segment 5 is not the evidence this run derives']
+  accounting without staged evidence is refused                  PASS ['segment 5 has accounting but no closure evidence']
+  positive control: the injection actually fired                 PASS 
+  activity appearing BETWEEN the inspections is refused          PASS ['segment 5 already has errors']
+  and no finalization was written for it                         PASS 
+  an unrelated new state changes only the transient count        PASS 
+  a staged closure still resumes despite unrelated new activity  PASS []
+
+31/32 checks passed

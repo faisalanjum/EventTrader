@@ -1,0 +1,6 @@
+ROOT_SHA    : 1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18
+SEGMENTS    : [1, 2, 3]
+  seg 1 finalized
+  seg 2 finalized
+  seg 3 published
+LANE_STATES : called 2 of 140

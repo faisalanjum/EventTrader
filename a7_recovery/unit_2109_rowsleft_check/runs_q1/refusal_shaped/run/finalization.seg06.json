@@ -1,0 +1,27 @@
+{
+ "attempt": 1,
+ "ledger": {
+  "invalid": 0,
+  "retry": 0,
+  "scheduled": 0,
+  "uncalled": 1,
+  "valid": 0
+ },
+ "problems": {
+  "G2-002/G1a": [
+   "prelaunch_refusal"
+  ]
+ },
+ "retry": [],
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 6,
+ "uncalled": [
+  "G2-002/G1a"
+ ],
+ "validity": [
+  [
+   "G2-002/G1a",
+   false
+  ]
+ ]
+}

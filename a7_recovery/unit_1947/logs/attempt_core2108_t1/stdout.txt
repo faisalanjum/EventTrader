@@ -1,0 +1,14 @@
+  the pending segment 5 blocks the next publication              PASS ['segment 5 is still pending; one publication at a time']
+  inspect accepts it from the REAL saved reply, no report supplied PASS []
+  the prior reading is derived, recovered, and still originally invalid PASS 
+  the scanned-state count is transient, not part of the identity PASS 
+  close writes the finalization                                  PASS []
+  zero credited, every lane uncalled, no verdict invented        PASS 
+  an already-called primary is still refused                     PASS ['G2-000/G1a has already produced a captured attempt-1 result; it can never be a primary a
+  the consumed reservation cannot be re-reserved                 PASS ['G2-001/G1a was already reserved at attempt 2 by segment 5']
+  G.publish_run actually publishes the next never-called primary PASS []
+  closure applied to the connection copy                         PASS []
+  C.evidence under F.scope selects the prior recovered attempt   PASS []
+  the identity carries the recovery audit with original-invalid flags PASS [{'raw_sha256': 'e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee', 'origi
+  the recovered lane is present in the selected relations        PASS ['G2-000/G1a', 'G2-000/G1b', 'G2-001/G1a']
+  C.complete_g23 succeeds over the recovered population          PASS []

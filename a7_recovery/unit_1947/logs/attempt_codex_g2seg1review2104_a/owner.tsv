@@ -1,0 +1,7 @@
+attempt	codex_g2seg1review2104_a
+payload	../../unit_2020_codex_check/review_finalized_grading_2104.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	4162293
+payload_pid	4162297
+started_utc	2026-09-13T08:32:08Z
+state	finished exit 0

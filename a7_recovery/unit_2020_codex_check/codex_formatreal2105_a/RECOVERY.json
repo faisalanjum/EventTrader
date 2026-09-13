@@ -1,0 +1,892 @@
+{
+ "actual_model_calls": 0,
+ "code_sha256": "b060dcbb59eaee8b0ce5298f7a1651a7d9de1fb244c366876c267ecf8aac116f",
+ "original_review_sha256": "3785da62ce266c1a8f60ca022d6c01d28cb35b4b75c2d0ccf3e00c66aa597b73",
+ "readings": [
+  {
+   "answer": {
+    "M1d96bbbc9fdd6147": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M341ed3bdf05f28cf": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M35df46a5d2795d66": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    },
+    "M726673b0f7719042": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M786fc3fe140b5899": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "audit": {
+    "conversions": [],
+    "original_problems": [],
+    "original_valid": true,
+    "raw_sha256": "ca2137bd4347cd35e2ff36c4f9b31f4003c67e7e2554f0a632b80d18d28e9746",
+    "recovered": false
+   },
+   "lane_id": "G2-000/G1a",
+   "segment": 1
+  },
+  {
+   "answer": {
+    "M1d96bbbc9fdd6147": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M341ed3bdf05f28cf": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M35df46a5d2795d66": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    },
+    "M726673b0f7719042": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M786fc3fe140b5899": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "audit": {
+    "conversions": [
+     {
+      "field": "driver_state",
+      "from": "false",
+      "question_id": "M35df46a5d2795d66",
+      "to": false
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "null",
+      "question_id": "M35df46a5d2795d66",
+      "to": null
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "false",
+      "question_id": "M35df46a5d2795d66",
+      "to": false
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "null",
+      "question_id": "M786fc3fe140b5899",
+      "to": null
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     }
+    ],
+    "original_problems": [
+     "M35df46a5d2795d66 carries a value that is not true, false or null",
+     "M341ed3bdf05f28cf carries a value that is not true, false or null",
+     "M1d96bbbc9fdd6147 carries a value that is not true, false or null",
+     "M786fc3fe140b5899 carries a value that is not true, false or null",
+     "M726673b0f7719042 carries a value that is not true, false or null"
+    ],
+    "original_valid": false,
+    "raw_sha256": "91e1dda317566a16c2b319f45f9b2c6ae765d6fb870a86fed8e67771bd1b48db",
+    "recovered": true
+   },
+   "lane_id": "G2-000/G1b",
+   "segment": 2
+  },
+  {
+   "answer": {
+    "M1d96bbbc9fdd6147": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M341ed3bdf05f28cf": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M35df46a5d2795d66": {
+     "driver_name_meaning": true,
+     "driver_state": false,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": true
+    },
+    "M726673b0f7719042": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M786fc3fe140b5899": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": null,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "audit": {
+    "conversions": [
+     {
+      "field": "driver_state",
+      "from": "false",
+      "question_id": "M35df46a5d2795d66",
+      "to": false
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "null",
+      "question_id": "M35df46a5d2795d66",
+      "to": null
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M35df46a5d2795d66",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "false",
+      "question_id": "M35df46a5d2795d66",
+      "to": false
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "null",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": null
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M341ed3bdf05f28cf",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "null",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": null
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M1d96bbbc9fdd6147",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "null",
+      "question_id": "M786fc3fe140b5899",
+      "to": null
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M786fc3fe140b5899",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "null",
+      "question_id": "M726673b0f7719042",
+      "to": null
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M726673b0f7719042",
+      "to": true
+     }
+    ],
+    "original_problems": [
+     "M35df46a5d2795d66 carries a value that is not true, false or null",
+     "M341ed3bdf05f28cf carries a value that is not true, false or null",
+     "M1d96bbbc9fdd6147 carries a value that is not true, false or null",
+     "M786fc3fe140b5899 carries a value that is not true, false or null",
+     "M726673b0f7719042 carries a value that is not true, false or null"
+    ],
+    "original_valid": false,
+    "raw_sha256": "9c3d038f8ee4b51219f8b9077522f36887c8c108b3e270fa5d71269fa498ca42",
+    "recovered": true
+   },
+   "lane_id": "G2-000/G1b",
+   "segment": 3
+  },
+  {
+   "answer": {
+    "M6c722b0ca333185b": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": false,
+     "slice_vs_menu": false
+    },
+    "M7a5e4a77f0c4c495": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "M85b17ecaa1bc123d": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "Mece90a618a058690": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    },
+    "Mf21bd5959134fc54": {
+     "driver_name_meaning": true,
+     "driver_state": true,
+     "favorability": true,
+     "growth_basis": true,
+     "lane_routing": true,
+     "record_matches_source": true,
+     "slice_vs_menu": true
+    }
+   },
+   "audit": {
+    "conversions": [
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "Mf21bd5959134fc54",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "Mf21bd5959134fc54",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "Mf21bd5959134fc54",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "Mf21bd5959134fc54",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "Mf21bd5959134fc54",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "Mf21bd5959134fc54",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "Mf21bd5959134fc54",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M85b17ecaa1bc123d",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M85b17ecaa1bc123d",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M85b17ecaa1bc123d",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "M85b17ecaa1bc123d",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M85b17ecaa1bc123d",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M85b17ecaa1bc123d",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M85b17ecaa1bc123d",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M6c722b0ca333185b",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M6c722b0ca333185b",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M6c722b0ca333185b",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "M6c722b0ca333185b",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "false",
+      "question_id": "M6c722b0ca333185b",
+      "to": false
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M6c722b0ca333185b",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "false",
+      "question_id": "M6c722b0ca333185b",
+      "to": false
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "M7a5e4a77f0c4c495",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "M7a5e4a77f0c4c495",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "M7a5e4a77f0c4c495",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "M7a5e4a77f0c4c495",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "M7a5e4a77f0c4c495",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "M7a5e4a77f0c4c495",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "M7a5e4a77f0c4c495",
+      "to": true
+     },
+     {
+      "field": "driver_state",
+      "from": "true",
+      "question_id": "Mece90a618a058690",
+      "to": true
+     },
+     {
+      "field": "lane_routing",
+      "from": "true",
+      "question_id": "Mece90a618a058690",
+      "to": true
+     },
+     {
+      "field": "favorability",
+      "from": "true",
+      "question_id": "Mece90a618a058690",
+      "to": true
+     },
+     {
+      "field": "growth_basis",
+      "from": "true",
+      "question_id": "Mece90a618a058690",
+      "to": true
+     },
+     {
+      "field": "slice_vs_menu",
+      "from": "true",
+      "question_id": "Mece90a618a058690",
+      "to": true
+     },
+     {
+      "field": "driver_name_meaning",
+      "from": "true",
+      "question_id": "Mece90a618a058690",
+      "to": true
+     },
+     {
+      "field": "record_matches_source",
+      "from": "true",
+      "question_id": "Mece90a618a058690",
+      "to": true
+     }
+    ],
+    "original_problems": [
+     "Mf21bd5959134fc54 carries a value that is not true, false or null",
+     "M85b17ecaa1bc123d carries a value that is not true, false or null",
+     "M6c722b0ca333185b carries a value that is not true, false or null",
+     "M7a5e4a77f0c4c495 carries a value that is not true, false or null",
+     "Mece90a618a058690 carries a value that is not true, false or null"
+    ],
+    "original_valid": false,
+    "raw_sha256": "e1d4597172c01c4844495094209ede8046ddb711053383313f3043242f9736ee",
+    "recovered": true
+   },
+   "lane_id": "G2-001/G1a",
+   "segment": 4
+  }
+ ],
+ "rule_sha256": "76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b",
+ "scope": "real saved reply format recovery only; no completion or A7 score"
+}

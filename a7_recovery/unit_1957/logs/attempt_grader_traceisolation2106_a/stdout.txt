@@ -1,0 +1,127 @@
+VIEW /tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3
+AFFECTED_MODULES 1
+ENVIRONMENT {"A7_APPROVED_KEY_DIR": "/tmp/a7_logs_1781/life_native5/candidate_owed_002", "A7_DRIVER_VALIDATORS_SHA": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5", "A7_FIXTURE_PROJECTS": "/tmp/a7_logs_1781/life_native5/TEST_projects", "A7_LANE_INPUT_PROFILES": "/tmp/a7_lane_input_profiles.json", "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/../unit_2020_codex_check/map_formatreg_trace_2106.tsv", "A7_TRACE_FIXTURE": "/tmp/a7_logs_1781/attempt_grader_path7", "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000"}
+
+===== MODULE test_a7_trace_1471.py exit=1 =====
+----- stdout -----
+..........F                                                              [100%]
+=================================== FAILURES ===================================
+_______ test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts _______
+
+tmp_path = PosixPath('/tmp/pytest-of-faisal/pytest-0/test_real_invalid_primary_and_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1808da2850>
+
+    def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, monkeypatch):
+        import build_a5_exp5_kit as A5
+        import raw_transport as RT
+        import audit_worker_access as AUD
+        import g1_fake_state as FAKE
+        import test_harness_guards as TG
+        from pathlib import Path
+    
+        projects = str(tmp_path / "TEST_projects")
+        monkeypatch.setattr(AUD, "PROJECTS_ROOT", projects)
+        native = FAKE.declared_input_record()
+        assert native
+        original = TG._a1_transcript
+    
+        def transcript(prompt, answer, model, uuid0="u0", uuid1="u1", agent_id="a01", session_id="sess"):
+            records = original(prompt, answer, model, uuid0, uuid1, agent_id, session_id)
+            records.insert(native["record_index"], {
+                "type": native["record_type"], "uuid": "input-" + uuid0,
+                "agentId": agent_id, "sessionId": session_id,
+                native["payload_field"]: copy.deepcopy(native["payload"])})
+            for before, after in zip(records, records[1:]):
+                after["parentUuid"] = before["uuid"]
+            return records
+    
+        monkeypatch.setattr(TG, "_a1_transcript", transcript)
+        producer = str(tmp_path / "producer")
+        prep = A5.prepare(producer)
+        assert prep["ok"], prep.get("problems")
+        plan = RT.a1_plan_for_run(producer)
+        replies = {p["prompt_sha256"]: json.dumps({
+            "source_id": p["source_id"], "facts": [],
+            "abstentions": [{"reason": "TEST abstention"}], "continuity_hints": []})
+            for p in plan["packets"]}
+        bad = dict(replies)
+        bad[plan["packets"][0]["prompt_sha256"]] = "{bad json"
+        first = tmp_path / "primary_transport"
+        first.mkdir()
+        TG._a1_execute(Path(_HERE), first, prep, plan, projects, bad, "trace_primary")
+        final = RT.a1_finalize(producer)
+        expected = {(plan["packets"][0]["packet_id"], lane["lane_id"])
+                    for lane in plan["packets"][0]["lanes"]}
+        assert {tuple(k) for k in final["retry"]} == expected
+        retry = RT.a1_prepare_retry(producer)
+        assert retry["ok"], retry.get("problems")
+        second = tmp_path / "retry_transport"
+        second.mkdir()
+        TG._a1_execute(Path(_HERE), second, retry, plan, projects, replies, "trace_retry")
+        final_retry = RT.a1_finalize(os.path.join(producer, RT.RETRY_DIRNAME))
+        assert not final_retry["retry"]
+>       doc, problems = C.terminals(PR.load(producer), str(tmp_path / "audit"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_a7_trace_1471.py:377: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_conservation.py:101: in terminals
+    rows, arms, problems = contributions(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_conservation.py:28: in contributions
+    arms, meta, problems = G.materialize(run)
+                           ^^^^^^^^^^^^^^^^^^
+a7_g1_build.py:545: in materialize
+    base, _sidecar = gold_by_event()
+                     ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def gold_by_event():
+        """The accepted gold, through the owners the A4 lock itself names.
+    
+        The lock records loader `build_kfields_final.v6_shards`; its key
+        materializer accounts all 196 rows and stamps each accepted fact with the
+        reviewer's own gold fields. Attaching those by hand would be a second,
+        unreviewed key builder.
+        """
+        import build_kfields_final as F
+        import build_a5_exp5_kit as A5
+        if A5.APPROVED_KEY_DIR:
+            # THE APPROVED KEY'S OWN SETTLEMENT, through the SAME owners that
+            # produced its signed sidecar. The historical route below asks
+            # A6.bound() for the run it was sealed against and reads it with
+            # v6_shards; on this key that route does not merely disagree, it
+            # cannot derive at all - it refuses with "A3 evidence is not proved",
+            # because the settlement it looks for is another run's. F's own
+            # signing gate and materializer are what signed this key, so they are
+            # what re-derive it (Codex SEQ 1933 item 3 / 1935).
+            bound = _approved_bound()
+            gate = F.signing_gate(bound.events, bound)
+            if not gate.get("ok"):
+>               raise ValueError("the approved key's signing gate is not clean: "
+                                 "%s" % (gate.get("stops") or [])[:2])
+E               ValueError: the approved key's signing gate is not clean: ['the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one', 'the hard review reports: hard_review_primary: hr-000/b1: the state is not where the runtime puts an official one']
+
+a7_g1_build.py:364: ValueError
+=========================== short test summary info ============================
+FAILED test_a7_trace_1471.py::test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts
+1 failed, 10 passed in 20.45s
+
+----- stderr -----
+
+
+RESULT {
+ "kind": "baseline regression of the affected grading modules, current TEST view",
+ "exercises_partial_scope": false,
+ "module_count": 1,
+ "modules_green": 0,
+ "per_module": [
+  {
+   "module": "test_a7_trace_1471.py",
+   "exit": 1,
+   "summary": "1 failed, 10 passed in 20.45s",
+   "stdout_bytes": 5534,
+   "stderr_bytes": 0
+  }
+ ]
+}

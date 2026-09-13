@@ -1,0 +1,117 @@
+{
+ "actual_model_calls": 0,
+ "code_sha256": "7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8",
+ "files_changed_by_mutations": 0,
+ "mutations": [
+  {
+   "exit": 1,
+   "function": "read",
+   "mutant_sha256": "6897ea5c0590f0007681e74ec9ab1deb76efdbb4507e741fe7fc8281a83ff1f6",
+   "mutation": "false_becomes_true",
+   "new": "decoded = True if value == \"false\" else literals[value]",
+   "old": "decoded = literals[value]",
+   "test": "test_exact_values_recover_without_changing_any_judgment"
+  },
+  {
+   "exit": 1,
+   "function": "read",
+   "mutant_sha256": "d91eab1149147e9211f78e85a218f2fe25c8bc4ac61c0430ec11c84bf1247005",
+   "mutation": "unknown_becomes_true",
+   "new": "decoded = True if value == \"null\" else literals[value]",
+   "old": "decoded = literals[value]",
+   "test": "test_exact_values_recover_without_changing_any_judgment"
+  },
+  {
+   "exit": 1,
+   "function": "read",
+   "mutant_sha256": "ef351782be8b95bd3a9f49e573bcf169925129df51a5b388d41f52431e320fc6",
+   "mutation": "nonexact_strings_accepted",
+   "new": "value = row['verdicts'].get(field)\n            value = value.lower().strip() if isinstance(value, str) else value",
+   "old": "value = row['verdicts'].get(field)",
+   "test": "test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control"
+  },
+  {
+   "exit": 1,
+   "function": "read",
+   "mutant_sha256": "a4a5bc36021ba82791c712fd7e9c1661403e942d2d9ad482e2396da24e5acac7",
+   "mutation": "incomplete_schema_credited",
+   "new": "answer, remaining = {r[\"question_id\"]: r[\"verdicts\"] for r in rows}, []",
+   "old": "answer, remaining = B.read_meaning_reply(G._plain(rows), packet)",
+   "test": "test_original_schema_and_identity_checks_still_own_the_boundary[missing_aspect]"
+  },
+  {
+   "exit": 1,
+   "function": "scope",
+   "mutant_sha256": "5e334122e18ce93098de0e33bc9fa24cdf799463401e8f5c467ff864dbab6f76",
+   "mutation": "original_failures_erased",
+   "new": "recovered[lane]['attempts'] = {n: True for n in recovered[lane]['attempts']}\n            recovered[lane]['selected'] = None if chosen is None else chosen[0]",
+   "old": "recovered[lane]['selected'] = None if chosen is None else chosen[0]",
+   "test": "test_versioned_completion_gets_recovered_relation_and_original_invalid_record"
+  },
+  {
+   "exit": 1,
+   "function": "scope",
+   "mutant_sha256": "6c7cfc7bebf586c883c125d87bdb7a852baf7f5c1bdf6800d58578b29dcbb34a",
+   "mutation": "original_evidence_failure_ignored",
+   "new": "if root is None or G.task_kind(doc) != 'G2':",
+   "old": "if problems or root is None or G.task_kind(doc) != 'G2':",
+   "test": "test_original_evidence_refusals_cannot_be_normalized_away"
+  },
+  {
+   "exit": 1,
+   "function": "scope",
+   "mutant_sha256": "c1336f530647a7d346f61dc080475cc2091205c3f188995d862ed0992c372559",
+   "mutation": "unapproved_code_allowed",
+   "new": "if False:",
+   "old": "if G._sha_file(__file__) != expected_code_sha256:",
+   "test": "test_an_unapproved_format_version_never_opens_the_scope[code]"
+  },
+  {
+   "exit": 1,
+   "function": "scope",
+   "mutant_sha256": "2e2ed60ab77ae80387df397b5f2cd6f1c0c4905cd667a46dd35565f83fae8796",
+   "mutation": "unapproved_rule_allowed",
+   "new": "if False:",
+   "old": "if G._sha_file(str(RULE_FILE)) != expected_rule_sha256:",
+   "test": "test_an_unapproved_format_version_never_opens_the_scope[rule]"
+  },
+  {
+   "exit": 1,
+   "function": "scope",
+   "mutant_sha256": "8cbaadbd69399fca1f02087282384a366d26c792f8204b8d8a2e7f9d4ee08642",
+   "mutation": "no_recovery_identity",
+   "new": "value['wrong_recovery_field'] = {",
+   "old": "value['meaning_format_recovery'] = {",
+   "test": "test_versioned_completion_gets_recovered_relation_and_original_invalid_record"
+  },
+  {
+   "exit": 1,
+   "function": "scope",
+   "mutant_sha256": "06af177d00affc5869a5d49c192ecfe54d380a2086438949bb579562edfd6392",
+   "mutation": "other_grading_kind_changed",
+   "new": "if problems or root is None:",
+   "old": "if problems or root is None or G.task_kind(doc) != 'G2':",
+   "test": "test_other_grading_kinds_are_unchanged"
+  },
+  {
+   "exit": 1,
+   "function": "_read_run",
+   "mutant_sha256": "e7faf7060c12baa10d620f2a29ae0da7c99b9a01de1ec40861d064259c8c1987",
+   "mutation": "original_validity_drift_ignored",
+   "new": "if False:",
+   "old": "if record['original_valid'] != original_valid:",
+   "test": "test_recovery_reread_refuses_each_own_evidence_failure[validity_drift]"
+  },
+  {
+   "exit": 1,
+   "function": "_read_run",
+   "mutant_sha256": "017a6e73bc9e258f7151fc33174f5d48d571237b3f7bba93062af632b521cdde",
+   "mutation": "uncalled_treated_as_missing_answer",
+   "new": "if False:",
+   "old": "if not called:",
+   "test": "test_explicit_zero_call_closure_is_not_a_missing_model_answer"
+  }
+ ],
+ "restored_control_exit": 0,
+ "test_sha256": "c4fd630ac0e2295992c7d4a71f96b6bcf9b907ef53f9c662554838596f3c363e"
+}

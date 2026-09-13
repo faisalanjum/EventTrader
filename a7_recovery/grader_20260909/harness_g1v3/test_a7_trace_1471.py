@@ -326,6 +326,7 @@ def test_dropped_trace_arm_still_owes_the_full_frozen_schedule(run, tmp_path, mo
 
 
 def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, monkeypatch):
+    import uuid
     import build_a5_exp5_kit as A5
     import raw_transport as RT
     import audit_worker_access as AUD
@@ -334,6 +335,7 @@ def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, m
     from pathlib import Path
 
     projects = os.environ["A7_FIXTURE_PROJECTS"]
+    tag = uuid.uuid4().hex
     monkeypatch.setattr(AUD, "PROJECTS_ROOT", projects)
     native = FAKE.declared_input_record()
     assert native
@@ -362,7 +364,7 @@ def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, m
     bad[plan["packets"][0]["prompt_sha256"]] = "{bad json"
     first = tmp_path / "primary_transport"
     first.mkdir()
-    TG._a1_execute(Path(_HERE), first, prep, plan, projects, bad, "trace_primary")
+    TG._a1_execute(Path(_HERE), first, prep, plan, projects, bad, "trace_primary_" + tag)
     final = RT.a1_finalize(producer)
     expected = {(plan["packets"][0]["packet_id"], lane["lane_id"])
                 for lane in plan["packets"][0]["lanes"]}
@@ -371,7 +373,7 @@ def test_real_invalid_primary_and_valid_retry_keep_both_raw_attempts(tmp_path, m
     assert retry["ok"], retry.get("problems")
     second = tmp_path / "retry_transport"
     second.mkdir()
-    TG._a1_execute(Path(_HERE), second, retry, plan, projects, replies, "trace_retry")
+    TG._a1_execute(Path(_HERE), second, retry, plan, projects, replies, "trace_retry_" + tag)
     final_retry = RT.a1_finalize(os.path.join(producer, RT.RETRY_DIRNAME))
     assert not final_retry["retry"]
     doc, problems = C.terminals(PR.load(producer), str(tmp_path / "audit"))

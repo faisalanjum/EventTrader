@@ -1,0 +1,1 @@
+/home/faisal/EventMarketDB/venv/bin/python3: can't open file '/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../../../tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/probe_complete.py': [Errno 2] No such file or directory

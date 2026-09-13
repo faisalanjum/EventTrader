@@ -1,0 +1,7 @@
+attempt	core2109_fixed2
+payload	../../unit_2109_rowsleft_check/test_rows_left_2109.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	156970
+payload_pid	156974
+started_utc	2026-09-13T10:33:52Z
+state	finished exit 0

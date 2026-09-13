@@ -1,0 +1,7 @@
+attempt	codex_formatnative2105_c
+payload	../../unit_2020_codex_check/test_meaning_format_native_2105.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	74049
+payload_pid	74054
+started_utc	2026-09-13T09:39:47Z
+state	finished exit 0

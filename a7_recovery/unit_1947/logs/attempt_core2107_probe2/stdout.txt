@@ -1,0 +1,3 @@
+plain evidence problems: []
+plain lanes with a selected attempt: ['G2-000/G1a']
+plain complete_g23 RAISED: AttributeError 'str' object has no attribute 'get'

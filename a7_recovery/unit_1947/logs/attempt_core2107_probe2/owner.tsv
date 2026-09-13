@@ -1,0 +1,7 @@
+attempt	core2107_probe2
+payload	../../unit_2106_unused_retry/probe_complete_2107.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	120264
+payload_pid	120268
+started_utc	2026-09-13T10:10:31Z
+state	finished exit 0

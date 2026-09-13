@@ -1,0 +1,1070 @@
+FFFFFF...FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF......F                         [100%]
+=================================== FAILURES ===================================
+_____ test_exact_values_recover_without_changing_any_judgment[False-True] ______
+
+value = True, fenced = False
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+>       assert not problems
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:45: AssertionError
+_____ test_exact_values_recover_without_changing_any_judgment[False-False] _____
+
+value = False, fenced = False
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+>       assert not problems
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:45: AssertionError
+_____ test_exact_values_recover_without_changing_any_judgment[False-None] ______
+
+value = None, fenced = False
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+>       assert not problems
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:45: AssertionError
+______ test_exact_values_recover_without_changing_any_judgment[True-True] ______
+
+value = True, fenced = True
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+>       assert not problems
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:45: AssertionError
+_____ test_exact_values_recover_without_changing_any_judgment[True-False] ______
+
+value = False, fenced = True
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+>       assert not problems
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:45: AssertionError
+______ test_exact_values_recover_without_changing_any_judgment[True-None] ______
+
+value = None, fenced = True
+
+    @pytest.mark.parametrize('value', [True, False, None])
+    @pytest.mark.parametrize('fenced', [False, True])
+    def test_exact_values_recover_without_changing_any_judgment(value, fenced):
+        rows, packet = case(value)
+        expected = {row['question_id']: copy.deepcopy(row['verdicts']) for row in rows}
+        for row in rows:
+            row['verdicts'] = {field: json.dumps(v) for field, v in row['verdicts'].items()}
+        raw = json.dumps(rows)
+        if fenced:
+            raw = '```json\n' + raw + '\n```'
+        before = copy.deepcopy(packet)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, audit = F.read(raw, packet)
+>       assert not problems
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:45: AssertionError
+_ test_each_field_handles_mixed_representations_without_rewriting_other_fields _
+
+    def test_each_field_handles_mixed_representations_without_rewriting_other_fields():
+        for field, value in itertools.product(B.meaning_fields(), [True, False, None]):
+            rows, packet = case(False)
+            rows[0]['verdicts'][field] = value
+            expected = copy.deepcopy(rows[0]['verdicts'])
+            rows[0]['verdicts'][field] = json.dumps(value)
+            result, bad, audit = F.read(json.dumps(rows), packet)
+>           assert not bad and result == {'unfamiliar-id': expected}
+E           AssertionError: assert (not ['unfamiliar-id carries a value that is not true, false or null'])
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:71: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[0_0] _
+
+invalid = 0
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[1_0] _
+
+invalid = 1
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[-1] _
+
+invalid = -1
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[0.0] _
+
+invalid = 0.0
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[1.0] _
+
+invalid = 1.0
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[0_1] _
+
+invalid = '0'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[1_1] _
+
+invalid = '1'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[] _
+
+invalid = ''
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[True] _
+
+invalid = 'True'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[False] _
+
+invalid = 'False'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[NULL] _
+
+invalid = 'NULL'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[ true] _
+
+invalid = ' true'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[false ] _
+
+invalid = 'false '
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[null\n] _
+
+invalid = 'null\n'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[yes] _
+
+invalid = 'yes'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[no] _
+
+invalid = 'no'
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[invalid16] _
+
+invalid = []
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[invalid17] _
+
+invalid = {}
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[invalid18] _
+
+invalid = ['true']
+
+    @pytest.mark.parametrize('invalid', [0, 1, -1, 0.0, 1.0, '0', '1', '', 'True',
+                                       'False', 'NULL', ' true', 'false ', 'null\n',
+                                       'yes', 'no', [], {}, ['true']])
+    def test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control(invalid):
+        for field in B.meaning_fields():
+            rows, packet = case('true')
+            rows[0]['verdicts'][field] = invalid
+            result, bad, _ = F.read(json.dumps(rows), packet)
+            assert result is None and bad
+            rows[0]['verdicts'][field] = True
+            result, bad, _ = F.read(json.dumps(rows), packet)
+>           assert result is not None and not bad
+E           assert (None is not None)
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:87: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[missing_question] _
+
+fault = 'missing_question'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[extra_question] _
+
+fault = 'extra_question'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[repeated_question] _
+
+fault = 'repeated_question'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[unknown_id] __
+
+fault = 'unknown_id'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[missing_aspect] _
+
+fault = 'missing_aspect'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[extra_aspect] _
+
+fault = 'extra_aspect'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[missing_top_field] _
+
+fault = 'missing_top_field'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[extra_top_field] _
+
+fault = 'extra_top_field'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+___ test_original_schema_and_identity_checks_still_own_the_boundary[bad_id] ____
+
+fault = 'bad_id'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+__ test_original_schema_and_identity_checks_still_own_the_boundary[nonobject] __
+
+fault = 'nonobject'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+__ test_original_schema_and_identity_checks_still_own_the_boundary[not_array] __
+
+fault = 'not_array'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+_ test_original_schema_and_identity_checks_still_own_the_boundary[not_verdict_object] _
+
+fault = 'not_verdict_object'
+
+    @pytest.mark.parametrize('fault', ['missing_question', 'extra_question', 'repeated_question',
+                                      'unknown_id', 'missing_aspect', 'extra_aspect',
+                                      'missing_top_field', 'extra_top_field', 'bad_id',
+                                      'nonobject', 'not_array', 'not_verdict_object'])
+    def test_original_schema_and_identity_checks_still_own_the_boundary(fault):
+        rows, packet = case('true')
+        if fault == 'missing_question':
+            packet['question_ids'].append('another-id')
+        elif fault == 'extra_question':
+            rows.append(dict(rows[0], question_id='extra-id'))
+        elif fault == 'repeated_question':
+            rows.append(copy.deepcopy(rows[0]))
+        elif fault == 'unknown_id':
+            rows[0]['question_id'] = 'not-asked'
+        elif fault == 'missing_aspect':
+            del rows[0]['verdicts'][B.meaning_fields()[0]]
+        elif fault == 'extra_aspect':
+            rows[0]['verdicts']['not-an-aspect'] = 'true'
+        elif fault == 'missing_top_field':
+            del rows[0]['question_id']
+        elif fault == 'extra_top_field':
+            rows[0]['explanation'] = 'not allowed'
+        elif fault == 'bad_id':
+            rows[0]['question_id'] = []
+        elif fault == 'nonobject':
+            rows[0] = 'true'
+        elif fault == 'not_array':
+            rows = rows[0]
+        else:
+            rows[0]['verdicts'] = 'true'
+        raw = json.dumps(rows)
+        assert B.read_meaning_reply(raw, packet)[1]
+        answer, problems, _ = F.read(raw, packet)
+        assert answer is None and problems
+        control, packet = case('false')
+>       assert not F.read(json.dumps(control), packet)[1]
+E       AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:125: AssertionError
+________ test_reconciliation_keeps_false_null_and_disagreement_distinct ________
+
+    def test_reconciliation_keeps_false_null_and_disagreement_distinct():
+        for left, right in itertools.product([True, False, None], repeat=2):
+            a, packet = case(json.dumps(left))
+            b, _ = case(json.dumps(right))
+            first, bad, _ = F.read(json.dumps(a), packet)
+>           assert not bad
+E           AssertionError: assert not ['unfamiliar-id carries a value that is not true, false or null']
+
+a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py:152: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[False-True]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[False-False]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[False-None]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[True-True]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[True-False]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_exact_values_recover_without_changing_any_judgment[True-None]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_each_field_handles_mixed_representations_without_rewriting_other_fields
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[0_0]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[1_0]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[-1]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[0.0]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[1.0]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[0_1]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[1_1]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[True]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[False]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[NULL]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[ true]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[false ]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[null\n]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[yes]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[no]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[invalid16]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[invalid17]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_every_wrong_type_or_nonexact_string_stays_invalid_with_positive_control[invalid18]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[missing_question]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[extra_question]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[repeated_question]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[unknown_id]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[missing_aspect]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[extra_aspect]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[missing_top_field]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[extra_top_field]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[bad_id]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[nonobject]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[not_array]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_original_schema_and_identity_checks_still_own_the_boundary[not_verdict_object]
+FAILED a7_recovery/unit_2020_codex_check/test_meaning_format_2105.py::test_reconciliation_keeps_false_null_and_disagreement_distinct
+39 failed, 9 passed in 0.49s

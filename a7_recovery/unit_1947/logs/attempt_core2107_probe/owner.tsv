@@ -1,0 +1,7 @@
+attempt	core2107_probe
+payload	../../../../tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/probe_complete.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	119612
+payload_pid	119616
+started_utc	2026-09-13T10:10:17Z
+state	finished exit 2

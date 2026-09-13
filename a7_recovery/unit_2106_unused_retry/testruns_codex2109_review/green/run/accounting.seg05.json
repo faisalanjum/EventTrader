@@ -1,0 +1,14 @@
+{
+ "attempt": 2,
+ "captures": [],
+ "counts": {
+  "missing": 1
+ },
+ "outcomes": {
+  "G2-001/G1a": "missing"
+ },
+ "receipt_sha256": "b04fe0d4668b9be916a855a6146b1dcfbd83b920e221d124afff7fd8d67b80b2",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 5,
+ "selected": 1
+}

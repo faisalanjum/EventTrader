@@ -1,0 +1,34 @@
+{
+ "attempt": 1,
+ "captures": [
+  "seg10.pos000",
+  "seg10.pos001",
+  "seg10.pos002",
+  "seg10.pos003",
+  "seg10.pos004",
+  "seg10.pos005",
+  "seg10.pos006",
+  "seg10.pos007",
+  "seg10.pos008",
+  "seg10.pos009"
+ ],
+ "counts": {
+  "served": 10
+ },
+ "outcomes": {
+  "G3-011/G1a": "served",
+  "G3-011/G1b": "served",
+  "G3-012/G1a": "served",
+  "G3-012/G1b": "served",
+  "G3-013/G1a": "served",
+  "G3-013/G1b": "served",
+  "G3-014/G1a": "served",
+  "G3-014/G1b": "served",
+  "G3-015/G1a": "served",
+  "G3-015/G1b": "served"
+ },
+ "receipt_sha256": "b6ba5fdfd6bbc8776590bacf904b7a7c09079244ae228767d4ac46dfcfd58bef",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 10,
+ "selected": 10
+}
