@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 64, 2026-09-12 Eastern. Maintainer: Codex.
+Revision 66, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -39,26 +39,53 @@ plan tree. The amendment changes reuse/key timing, not coverage or pass bars.
 
 ## 2. Current checkpoint — read this before history
 
-LAST TASK: Codex2088, SHA256
-8c3554135454995e0d89d64c74953a796397abaf06832eaf2bf2c61b52db3e93.
-The exact task and its byte-identical archive authorize ONLY the new first52
-primary G1 calls, durable native/raw capture and existing finalization; then
-one Core reply and wait. No next segment or retry is authorized by that task.
-Core has received the watcher notification and the bound session is unchanged.
+CURRENT TASK: Codex2091, SHA256
+bbfec3e3e4b3878940eb2f7fde5700cbccb6a8b25a71b46f2ece380a9159e72f,
+answers Core2091 89de2aac3c46a1e84e78ac7e0a3544566163a896c0bfa223d90cf36a6d695f57.
+Segment1 is independently VERIFIED within collection/native/schema scope:
+52 valid,0 invalid/retry/uncalled. The existing native auditor and completion
+reader replayed all52 whole answers, with zero problems. Proof and remaining
+semantic evidence: unit_2020_codex_check/G1_SEGMENT01_REVIEW_2091.md and
+codex_g1review2090_a/REVIEW.json1061e70f55d9a66b8a440198f70d881d6ad6d16b9286e690a5b19c0cb72e1bb4.
+Core's producer-digest question is also resolved: all799 bytes match their
+committed Git blobs and the original460c543b digest reproduces exactly when
+the COMPLETE hash/path lines are sorted, not the paths alone.
 
-CURRENT STOP: Core2089 message/archive482e0d22ead929eec6488467b0f294e528546b53f64965acd7ad29de26d5749f
-reports Workflow wf_61f6147b-947. Codex independently verified the original
-state, journal, actual published path/script/52 arguments and durable copies.
-At10:31:38 p.m. Eastern the first worker was refused by Claude Code's auto-mode
-permission classifier before any agent existed:0 grading-worker tokens,
-0 answers,1 pre-worker refusal,51 never attempted. All192 required G1 readings
-remain unanswered. Prior668 calls and original382 replies remain unchanged.
-No second Workflow or retry is authorized. The normal permission/approval
-path must resolve that specific refusal; do not disable checks or change the
-prompt/model/route to evade it. No answer-key, grader or production repair is
-indicated. Exact evidence and correction of Core's unsupported ingestion
-explanation: unit_2020_codex_check/REFUSAL_REVIEW_2088.md. First blocked audit
-in this goal turn; keep existing watcher/goal, no duplicate or premature close.
+COMPLETED FIRST BATCH HISTORY:
+The owner used the normal permission interface and explicitly requested one
+identical retry while watching for approvals. Core launched wf_9a7866e5-c64,
+task wwskzqc3s, at 11:34:30 p.m. Eastern. Codex independently verified the
+actual published script path/hash and all52 arguments were unchanged, and
+bound the first raw answer to its original journal, worker and request/response
+identities. The actual run completed in419230ms:52 workers,52 returned results,
+976135 grading-worker tokens,0 tools; the original journal has52 nonempty
+answers and0 failed records. Subsequent independent finalization checks are
+recorded above; this is not an A7 score.
+
+NEXT: only the ALREADY-PREPARED segment2,50 new primary lanes, ordinals52–101,
+G1-026/G1a through G1-050/G1b. Codex used the existing operator: preparation
+codex_g1prepare2091_a exited0, stderr empty; exact next unused root rows and
+arguments independently checked. Receipt794833b75d4b82d5a8e81810225486f002b3b1f76147824ac47740281062949c,
+scriptab0b75f8eea7935881c5e8b0e9e56892e5936cab6c87363bf7a09f0386dab7ac,
+523774 bytes; invocation6f82ea463c92caf4a49b6a6ebb403c0cfb8c425f5c85484419e74a39d161b6e1.
+Core may run only that published segment once, preserve and finalize it,
+report once to2091 and WAIT. No prepare-again, successful-call repeat, further
+segment, G2/G3 or code/prompt/key change. Codex owns checkpoint publication
+and independently verifies each batch. The existing goal is active again;
+both sessions and the single watcher are unchanged. The permission blocker
+did not recur in this run; its underlying cause is not proved by that fact.
+
+PRESERVED HISTORY: Core2089 message/archive482e0d22ead929eec6488467b0f294e528546b53f64965acd7ad29de26d5749f
+reported wf_61f6147b-947, refused before any grading worker existed at10:31:38
+p.m. Eastern:0 answers,1 pre-worker refusal,51 never attempted. Its original
+state, journal and exact launch were independently verified and committed/
+pushed at9d8041df46fada8cebc13c6275e1a27b3a433322. Do not overwrite or hide
+that evidence. No source/key/grader repair was needed for the successful
+launch. Details: unit_2020_codex_check/REFUSAL_REVIEW_2088.md. The cumulative
+completed-call count is now668+52=720, with the denied dispatch separately
+reported. Full initial G1 requires192 readings:52 collected,140 not yet run;
+whole-response validity for the first52 is now independently verified; final
+whole-run semantic reconciliation and scoring remain to be completed.
 
 PUBLICATION COMPLETE: commit467c5de71e0a4e362c26927a8984c97cf713dee3,
 treee6081be7c6c3753ab403e2a9ebdda68672ce6860, single parent8f1fcd7f3532fb1a9f85b3fc6487f25830753dda.
@@ -76,12 +103,12 @@ completed the narrow peer review. Preparation checks agree, but its proposed
 same-byte execution copy would NOT bind: the G1 auditor requires the actual
 published path or the same OS file. Codex corrected only the caller's launch
 location through the existing publisher and boundary; no grader owner change.
-Core is executing the exact2088 task. Its actual preflight core_g1seg01_2088_a
+Core's original2088 preflight core_g1seg01_2088_a
 exited0 with empty stderr and stdout e852224924b26614cf9cb5ee9565a0d7bbdda28d334221a26e761747bb6b58d2,
 identical to Codex's final preflight. The launch record and actual regular-file
-execution copy independently match every new pin. The one Workflow launch is
-now confirmed above, but produced no model answer; its completed workflow
-status is NOT a completed grading result.
+execution copy independently match every new pin. The first denied Workflow
+and subsequent owner-authorized successful Workflow are distinguished above;
+completed workflow status alone is NOT a completed grading result.
 Codex owns independent review and this work order. Never launch the old
 unit_2086 root. The stopped Core2084 preparation is also not approved.
 
@@ -113,7 +140,7 @@ a nonexistent accepted field. Corrected exact full-list identities now pass.
 Keep failed logs; the reference is independently re-derived, not accepted
 because that failed run wrote parseable JSON. No model result was repeated.
 
-REAL UNRUN LAUNCH FROZEN: unit_2088_real_grading/LAUNCH.json
+REAL LAUNCH FROZEN BEFORE EXECUTION: unit_2088_real_grading/LAUNCH.json
 ef8095d796b59b36e6fd8e4039a99f26ca24a012b9692560b0fb3060cf9bb327;
 root013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8;
 segment1 receipt f4a636a9e2d2b654228c7bee6c3ea35273a7d0c5822d4a4f9cb73915e20acbc8,
@@ -129,7 +156,7 @@ is the exact old map plus one durable RW run binding. Same root, answers,
 prompts, ordered arguments,192-lane population, owners and rules. Only the
 invocation path and its derived hash/script/receipt change. No call repeated.
 
-Preparation is now published. NEXT: actual receipted grading under2088;
+Preparation is now published. NEXT: actual receipted grading under2091;
 independently verify the first segment before the next bounded task. No further
 source review, signature, blanket regression or grading framework is needed.
 The real signature is proved, canonically harvested and LOCKED:667+1=668
