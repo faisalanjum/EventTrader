@@ -1,0 +1,7 @@
+attempt	core_g1ing06_2095_a
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3862456
+payload_pid	3862460
+started_utc	2026-09-13T05:22:58Z
+state	finished exit 0

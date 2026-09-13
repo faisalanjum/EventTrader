@@ -1,8 +1,8 @@
 """Operate the frozen real G1 run through the existing, reviewed operator.
 
 No workflow/model is launched here. Core supplies a separately authorized
-Workflow call and its actual run id. The old operator remains the sole owner
-of preparation, native ingestion, retry handling and status sequencing.
+Workflow call and its actual run id. The existing lifecycle owners control
+preparation, native ingestion, retry eligibility and status sequencing.
 """
 import importlib.util
 import os
@@ -52,8 +52,21 @@ with R._using(old, RUN=run_dir, CAND=cand, S=str(launch_path.parent)):
                    os.environ['A7_GRADING_RECEIPT_SHA256'],
                    os.environ['A7_GRADING_WORKFLOW_RUN'].removeprefix('wf_'))
     elif command == 'retry':
-        # The existing finalizer determines eligibility; the external exact
-        # lane list is a reviewer check, never an authorization to repeat a success.
-        old.retry(os.environ['A7_GRADING_RETRY_LANES'].split(','))
+        # Historical retry entries include consumed attempts. The publisher's
+        # existing lifecycle check, not that whole historical set, owns whether
+        # this explicitly authorized subset may run.
+        lanes = os.environ['A7_GRADING_RETRY_LANES'].split(',')
+        pub, bad = G.publish_run(cand, run_dir, launch['root_sha256'], lanes, attempt=2)
+        if bad:
+            raise SystemExit('REFUSED publish_run(attempt=2): %s' % bad)
+        n, receipt_sha = pub['segment'], pub['receipt_sha256']
+        packet, bad = G.preflight(cand, run_dir, n, launch['root_sha256'], receipt_sha)
+        if bad:
+            raise SystemExit('REFUSED preflight: %s' % bad)
+        args_file = launch_path.parent / ('g1_args_seg%02d.json' % n)
+        G._write_new(str(args_file), G._plain(packet['args']))
+        print(G._plain({'segment': n, 'attempt': 2, 'lanes': lanes,
+                        'receipt_sha256': receipt_sha, 'packet': packet,
+                        'args_file': str(args_file)}), flush=True)
     else:
         raise ValueError('unknown grading operation: ' + command)

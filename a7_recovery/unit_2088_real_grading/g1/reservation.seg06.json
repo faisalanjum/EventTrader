@@ -1,0 +1,19 @@
+{
+ "attempt": 1,
+ "lanes": [
+  "G1-091/G1a",
+  "G1-091/G1b",
+  "G1-092/G1a",
+  "G1-092/G1b",
+  "G1-093/G1a",
+  "G1-093/G1b",
+  "G1-094/G1a",
+  "G1-094/G1b",
+  "G1-095/G1a",
+  "G1-095/G1b"
+ ],
+ "parent": null,
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 6
+}

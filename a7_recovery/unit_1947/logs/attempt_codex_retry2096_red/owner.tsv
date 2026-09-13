@@ -1,0 +1,7 @@
+attempt	codex_retry2096_red
+payload	../../unit_2020_codex_check/run_grading_2086.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3875032
+payload_pid	3875036
+started_utc	2026-09-13T05:30:59Z
+state	finished exit 1

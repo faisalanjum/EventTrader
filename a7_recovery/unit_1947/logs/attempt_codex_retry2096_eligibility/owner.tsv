@@ -1,0 +1,7 @@
+attempt	codex_retry2096_eligibility
+payload	../../unit_2020_codex_check/review_retry_2096.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3886098
+payload_pid	3886102
+started_utc	2026-09-13T05:40:22Z
+state	finished exit 0

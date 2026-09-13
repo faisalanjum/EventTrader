@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 69, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 71, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -39,7 +39,64 @@ plan tree. The amendment changes reuse/key timing, not coverage or pass bars.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT TASK: Codex2095, SHA256
+CURRENT TASK: Codex2097 SHA0c381cfb872e02b768a56aa1884022b7dd163e9e4c1b3d0a021b34634b76c34b
+answers Core2097 SHA4aceadcf447110c80b62d3aa41972f9b42056cd42b99d9385501804c689c042c.
+Core independently reviews the new partial-reporting policy and runs directly
+affected grading tests only; no AI, code-owner or original-evidence edits.
+New Core test artifacts stay in unit_2097_partial_review. Codex owns the real
+G2/G3 preparation/connection and publication; no duplicate work.
+
+G1 COLLECTION CLOSED: all192 primaries attempted,194 completed G1 calls,
+191valid,3invalid,zero uncalled. Total668+194=862. Both retries used; no
+third attempt. Sole exhausted gap is G1-050/G1a,P2/source0001104659-25-118458,
+five questions. Core2097's concluding UNION attribution is wrong; the UNION
+G1-069/G1b retry succeeded. Independent native/evidence replay exit0,stderr0,
+194whole replies; unit_2020_codex_check/G1_RETRY_REVIEW_2097.md records proof.
+Whole run445files/1b0f4e36c989cc3cee81d827dbc72a5de1a3118e9ad12018b149f49f67ca7a8c.
+
+REPORTING CONNECTION: partial policy has24 focused passes and6 killed
+mutations, not yet full readiness. New actual prepare_g23_partial_2097.py
+uses the existing signed-key/source scopes, producer reuse and G2/G3 owners.
+First real attempt refused because the producer evaluation was frozen BEFORE
+the grading scorer was bound, but the new continuation bound it too early.
+codex_g23partial2097_b/EVALUATION_DIFFERENCE.json proves only
+code.grading_scorer differs (unbound versus the already approved scorer hash).
+No raw, source, key, owner-byte or budget drift. Small setup-order correction:
+validate/materialize the original producer first, then bind the grading scorer
+and let the original single-trace and independent G1 owner checks run.
+codex_g23partial2097_c is the current live proof; do not claim its result
+before reading exit/output. No guard or historical identity is weakened.
+
+### Previous checkpoint detail — not a current authorization
+
+PREVIOUS TASK: Codex2096 answers Core2096
+ee7a16cc73f957579bf1be316bea25f9ce288f2a712be2672372a2d3ecd7ccf1.
+Only the ALREADY PREPARED segment7/G1-069/G1b/attempt2 may be called once,
+then preserved, ingested and reported. Maximum ONE new call,861→862.
+Receipt21332866b24c8276b0163b7758c536764ee6e27e10c436e9063e9713aed2c928;
+script44c7e0cf3c3ac3c7561c953697713cf057335b16478dcdd701f8d41e5e43ed7f.
+No third attempt on either lane. No G2/G3 until the reporting policy's real
+connection is independently proved. Core makes no code, key, prompt or hook
+changes; Codex owns the partial-reporting implementation and checks.
+
+VERIFIED NOW: all192 required primaries attempted,193 completed G1 calls,
+190 valid readings,3 invalid attempts on2 lanes,zero uncalled. Independent
+native replay `codex_g1review2096_a` exits0,stderr0,193whole replies and no
+evidence problems. REVIEW.json7ff5385c0ac082c386632eb1ef8adf9763b93bccebe1311ac6506e4fff71070a.
+Full details:unit_2020_codex_check/G1_SEGMENTS05_06_REVIEW_2096.md.
+The one unused retry is prepared through the unchanged lifecycle owner after
+red/live-positive/all192-row-negative proof. Original382 replies stay unchanged.
+New partial policy focused proof:24 tests and6 killed mutations; real native
+G2/G3 consumer proof and affected regression are still required, not claimed done.
+
+Latest verified pushed HEAD:f8f618a0fb7f7c2686fe0ae36c24660e09339cfc,
+tree738df044f17101ba3ba84ee2a1ab94642595ed77,parentbffbfbbfada10c21c482f2b9be01b41a028d0aaf.
+This includes segment4 and the owner-approved reporting rule, not the new
+policy implementation or segments5–7. Commit/push those after verified.
+
+### Previous checkpoint detail — superseded by the current task above
+
+PREVIOUS TASK: Codex2095, SHA256
 93daa0fcb71263f7967e735b0161723f52f25607aff6b5430e05126d11e92ba7,
 answers Core2095 9d0b6e7237d0ae5ce8418723e2cc1f358462c3c46e55d1585fba904658965e3e.
 Core collects ONLY47 uncalled G1 primary rows145–191, maximum47 calls,

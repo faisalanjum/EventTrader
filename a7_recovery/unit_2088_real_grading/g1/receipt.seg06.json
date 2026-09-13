@@ -1,0 +1,77 @@
+{
+ "attempt": 1,
+ "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+ "invocation_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1/invocation.seg06.json",
+ "invocation_sha256": "0fc14414bdc09c7a4877feeddde6c92dca7e32c211a6d6041458550b064016a7",
+ "parent": null,
+ "reservation_sha256": "705f1b2bec53447ce0cc24fb97d12d7435bed226f6bca1c652e6cf2206c2c9f1",
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "rows": [
+  {
+   "batch_id": "G1-091",
+   "lane_id": "G1-091/G1a",
+   "ordinal": 182,
+   "prompt_sha256": "96974e2a9b45fb52890681c0ee7debe28da8750eed563ec78755051400820a84"
+  },
+  {
+   "batch_id": "G1-091",
+   "lane_id": "G1-091/G1b",
+   "ordinal": 183,
+   "prompt_sha256": "96974e2a9b45fb52890681c0ee7debe28da8750eed563ec78755051400820a84"
+  },
+  {
+   "batch_id": "G1-092",
+   "lane_id": "G1-092/G1a",
+   "ordinal": 184,
+   "prompt_sha256": "66aeed46bf5be2d2f33d37f34601cac0ca13bc7a9aac989b7ddd7295406bd4e6"
+  },
+  {
+   "batch_id": "G1-092",
+   "lane_id": "G1-092/G1b",
+   "ordinal": 185,
+   "prompt_sha256": "66aeed46bf5be2d2f33d37f34601cac0ca13bc7a9aac989b7ddd7295406bd4e6"
+  },
+  {
+   "batch_id": "G1-093",
+   "lane_id": "G1-093/G1a",
+   "ordinal": 186,
+   "prompt_sha256": "7f319a6a39689eddbc54b13adaae3343f5d48b2843f0889c6738c79a44af0f12"
+  },
+  {
+   "batch_id": "G1-093",
+   "lane_id": "G1-093/G1b",
+   "ordinal": 187,
+   "prompt_sha256": "7f319a6a39689eddbc54b13adaae3343f5d48b2843f0889c6738c79a44af0f12"
+  },
+  {
+   "batch_id": "G1-094",
+   "lane_id": "G1-094/G1a",
+   "ordinal": 188,
+   "prompt_sha256": "8d297b7163963f94db267efe1da995b0a8d23897068603b4f8a65397d7abb4b5"
+  },
+  {
+   "batch_id": "G1-094",
+   "lane_id": "G1-094/G1b",
+   "ordinal": 189,
+   "prompt_sha256": "8d297b7163963f94db267efe1da995b0a8d23897068603b4f8a65397d7abb4b5"
+  },
+  {
+   "batch_id": "G1-095",
+   "lane_id": "G1-095/G1a",
+   "ordinal": 190,
+   "prompt_sha256": "9c6f2a9d6e760451edec3c7b63ab7b74a214153873b7f0fbf7870d9d3deed7bf"
+  },
+  {
+   "batch_id": "G1-095",
+   "lane_id": "G1-095/G1b",
+   "ordinal": 191,
+   "prompt_sha256": "9c6f2a9d6e760451edec3c7b63ab7b74a214153873b7f0fbf7870d9d3deed7bf"
+  }
+ ],
+ "run_id": "g1",
+ "schema": "a7_g1_event_candidate/3",
+ "script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1/grade_batch.seg06.js",
+ "script_sha256": "b046a10b6a5c5f9de047f254667c5a78abc587485fee36a36473c7a70b031ae6",
+ "segment": 6,
+ "state_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1/state.seg06.json"
+}

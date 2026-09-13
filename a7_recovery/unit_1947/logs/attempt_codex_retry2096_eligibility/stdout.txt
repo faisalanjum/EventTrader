@@ -1,0 +1,10 @@
+ROOT_SHA    : 013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8
+SEGMENTS    : [1, 2, 3, 4, 5, 6]
+  seg 1 finalized
+  seg 2 finalized
+  seg 3 finalized
+  seg 4 finalized
+  seg 5 finalized
+  seg 6 finalized
+LANE_STATES : called 192 of 192
+ELIGIBILITY_VERIFIED 192 eligible ['G1-069/G1b']

@@ -1,0 +1,7 @@
+attempt	codex_g1review2097_a
+payload	../../unit_2020_codex_check/review_grading_segment_2090.py
+map	../unit_2020_codex_check/map_real_grading_2088.tsv
+wrapper_pid	3902067
+payload_pid	3902071
+started_utc	2026-09-13T05:51:11Z
+state	finished exit 0

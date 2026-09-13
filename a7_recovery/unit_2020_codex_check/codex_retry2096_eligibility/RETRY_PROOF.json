@@ -1,0 +1,1735 @@
+{
+  "eligible": [
+    "G1-069/G1b"
+  ],
+  "negative_controls": 4,
+  "rows": [
+    {
+      "first_refusal": [
+        "G1-000/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-000/G1a",
+      "retry_refusal": [
+        "G1-000/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-000/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-000/G1b",
+      "retry_refusal": [
+        "G1-000/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-001/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-001/G1a",
+      "retry_refusal": [
+        "G1-001/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-001/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-001/G1b",
+      "retry_refusal": [
+        "G1-001/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-002/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-002/G1a",
+      "retry_refusal": [
+        "G1-002/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-002/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-002/G1b",
+      "retry_refusal": [
+        "G1-002/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-003/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-003/G1a",
+      "retry_refusal": [
+        "G1-003/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-003/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-003/G1b",
+      "retry_refusal": [
+        "G1-003/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-004/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-004/G1a",
+      "retry_refusal": [
+        "G1-004/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-004/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-004/G1b",
+      "retry_refusal": [
+        "G1-004/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-005/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-005/G1a",
+      "retry_refusal": [
+        "G1-005/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-005/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-005/G1b",
+      "retry_refusal": [
+        "G1-005/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-006/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-006/G1a",
+      "retry_refusal": [
+        "G1-006/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-006/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-006/G1b",
+      "retry_refusal": [
+        "G1-006/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-007/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-007/G1a",
+      "retry_refusal": [
+        "G1-007/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-007/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-007/G1b",
+      "retry_refusal": [
+        "G1-007/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-008/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-008/G1a",
+      "retry_refusal": [
+        "G1-008/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-008/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-008/G1b",
+      "retry_refusal": [
+        "G1-008/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-009/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-009/G1a",
+      "retry_refusal": [
+        "G1-009/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-009/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-009/G1b",
+      "retry_refusal": [
+        "G1-009/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-010/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-010/G1a",
+      "retry_refusal": [
+        "G1-010/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-010/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-010/G1b",
+      "retry_refusal": [
+        "G1-010/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-011/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-011/G1a",
+      "retry_refusal": [
+        "G1-011/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-011/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-011/G1b",
+      "retry_refusal": [
+        "G1-011/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-012/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-012/G1a",
+      "retry_refusal": [
+        "G1-012/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-012/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-012/G1b",
+      "retry_refusal": [
+        "G1-012/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-013/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-013/G1a",
+      "retry_refusal": [
+        "G1-013/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-013/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-013/G1b",
+      "retry_refusal": [
+        "G1-013/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-014/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-014/G1a",
+      "retry_refusal": [
+        "G1-014/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-014/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-014/G1b",
+      "retry_refusal": [
+        "G1-014/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-015/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-015/G1a",
+      "retry_refusal": [
+        "G1-015/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-015/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-015/G1b",
+      "retry_refusal": [
+        "G1-015/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-016/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-016/G1a",
+      "retry_refusal": [
+        "G1-016/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-016/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-016/G1b",
+      "retry_refusal": [
+        "G1-016/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-017/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-017/G1a",
+      "retry_refusal": [
+        "G1-017/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-017/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-017/G1b",
+      "retry_refusal": [
+        "G1-017/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-018/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-018/G1a",
+      "retry_refusal": [
+        "G1-018/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-018/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-018/G1b",
+      "retry_refusal": [
+        "G1-018/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-019/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-019/G1a",
+      "retry_refusal": [
+        "G1-019/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-019/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-019/G1b",
+      "retry_refusal": [
+        "G1-019/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-020/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-020/G1a",
+      "retry_refusal": [
+        "G1-020/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-020/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-020/G1b",
+      "retry_refusal": [
+        "G1-020/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-021/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-021/G1a",
+      "retry_refusal": [
+        "G1-021/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-021/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-021/G1b",
+      "retry_refusal": [
+        "G1-021/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-022/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-022/G1a",
+      "retry_refusal": [
+        "G1-022/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-022/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-022/G1b",
+      "retry_refusal": [
+        "G1-022/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-023/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-023/G1a",
+      "retry_refusal": [
+        "G1-023/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-023/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-023/G1b",
+      "retry_refusal": [
+        "G1-023/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-024/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-024/G1a",
+      "retry_refusal": [
+        "G1-024/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-024/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-024/G1b",
+      "retry_refusal": [
+        "G1-024/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-025/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-025/G1a",
+      "retry_refusal": [
+        "G1-025/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-025/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-025/G1b",
+      "retry_refusal": [
+        "G1-025/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-026/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-026/G1a",
+      "retry_refusal": [
+        "G1-026/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-026/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-026/G1b",
+      "retry_refusal": [
+        "G1-026/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-027/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-027/G1a",
+      "retry_refusal": [
+        "G1-027/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-027/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-027/G1b",
+      "retry_refusal": [
+        "G1-027/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-028/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-028/G1a",
+      "retry_refusal": [
+        "G1-028/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-028/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-028/G1b",
+      "retry_refusal": [
+        "G1-028/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-029/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-029/G1a",
+      "retry_refusal": [
+        "G1-029/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-029/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-029/G1b",
+      "retry_refusal": [
+        "G1-029/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-030/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-030/G1a",
+      "retry_refusal": [
+        "G1-030/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-030/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-030/G1b",
+      "retry_refusal": [
+        "G1-030/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-031/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-031/G1a",
+      "retry_refusal": [
+        "G1-031/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-031/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-031/G1b",
+      "retry_refusal": [
+        "G1-031/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-032/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-032/G1a",
+      "retry_refusal": [
+        "G1-032/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-032/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-032/G1b",
+      "retry_refusal": [
+        "G1-032/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-033/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-033/G1a",
+      "retry_refusal": [
+        "G1-033/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-033/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-033/G1b",
+      "retry_refusal": [
+        "G1-033/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-034/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-034/G1a",
+      "retry_refusal": [
+        "G1-034/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-034/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-034/G1b",
+      "retry_refusal": [
+        "G1-034/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-035/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-035/G1a",
+      "retry_refusal": [
+        "G1-035/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-035/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-035/G1b",
+      "retry_refusal": [
+        "G1-035/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-036/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-036/G1a",
+      "retry_refusal": [
+        "G1-036/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-036/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-036/G1b",
+      "retry_refusal": [
+        "G1-036/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-037/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-037/G1a",
+      "retry_refusal": [
+        "G1-037/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-037/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-037/G1b",
+      "retry_refusal": [
+        "G1-037/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-038/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-038/G1a",
+      "retry_refusal": [
+        "G1-038/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-038/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-038/G1b",
+      "retry_refusal": [
+        "G1-038/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-039/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-039/G1a",
+      "retry_refusal": [
+        "G1-039/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-039/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-039/G1b",
+      "retry_refusal": [
+        "G1-039/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-040/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-040/G1a",
+      "retry_refusal": [
+        "G1-040/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-040/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-040/G1b",
+      "retry_refusal": [
+        "G1-040/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-041/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-041/G1a",
+      "retry_refusal": [
+        "G1-041/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-041/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-041/G1b",
+      "retry_refusal": [
+        "G1-041/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-042/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-042/G1a",
+      "retry_refusal": [
+        "G1-042/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-042/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-042/G1b",
+      "retry_refusal": [
+        "G1-042/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-043/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-043/G1a",
+      "retry_refusal": [
+        "G1-043/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-043/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-043/G1b",
+      "retry_refusal": [
+        "G1-043/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-044/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-044/G1a",
+      "retry_refusal": [
+        "G1-044/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-044/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-044/G1b",
+      "retry_refusal": [
+        "G1-044/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-045/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-045/G1a",
+      "retry_refusal": [
+        "G1-045/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-045/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-045/G1b",
+      "retry_refusal": [
+        "G1-045/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-046/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-046/G1a",
+      "retry_refusal": [
+        "G1-046/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-046/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-046/G1b",
+      "retry_refusal": [
+        "G1-046/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-047/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-047/G1a",
+      "retry_refusal": [
+        "G1-047/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-047/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-047/G1b",
+      "retry_refusal": [
+        "G1-047/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-048/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-048/G1a",
+      "retry_refusal": [
+        "G1-048/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-048/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-048/G1b",
+      "retry_refusal": [
+        "G1-048/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-049/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-049/G1a",
+      "retry_refusal": [
+        "G1-049/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-049/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-049/G1b",
+      "retry_refusal": [
+        "G1-049/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-050/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-050/G1a",
+      "retry_refusal": [
+        "G1-050/G1a was already reserved at attempt 2 by segment 3"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-050/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-050/G1b",
+      "retry_refusal": [
+        "G1-050/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-051/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-051/G1a",
+      "retry_refusal": [
+        "G1-051/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-051/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-051/G1b",
+      "retry_refusal": [
+        "G1-051/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-052/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-052/G1a",
+      "retry_refusal": [
+        "G1-052/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-052/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-052/G1b",
+      "retry_refusal": [
+        "G1-052/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-053/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-053/G1a",
+      "retry_refusal": [
+        "G1-053/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-053/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-053/G1b",
+      "retry_refusal": [
+        "G1-053/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-054/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-054/G1a",
+      "retry_refusal": [
+        "G1-054/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-054/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-054/G1b",
+      "retry_refusal": [
+        "G1-054/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-055/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-055/G1a",
+      "retry_refusal": [
+        "G1-055/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-055/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-055/G1b",
+      "retry_refusal": [
+        "G1-055/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-056/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-056/G1a",
+      "retry_refusal": [
+        "G1-056/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-056/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-056/G1b",
+      "retry_refusal": [
+        "G1-056/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-057/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-057/G1a",
+      "retry_refusal": [
+        "G1-057/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-057/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-057/G1b",
+      "retry_refusal": [
+        "G1-057/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-058/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-058/G1a",
+      "retry_refusal": [
+        "G1-058/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-058/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-058/G1b",
+      "retry_refusal": [
+        "G1-058/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-059/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-059/G1a",
+      "retry_refusal": [
+        "G1-059/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-059/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-059/G1b",
+      "retry_refusal": [
+        "G1-059/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-060/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-060/G1a",
+      "retry_refusal": [
+        "G1-060/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-060/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-060/G1b",
+      "retry_refusal": [
+        "G1-060/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-061/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-061/G1a",
+      "retry_refusal": [
+        "G1-061/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-061/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-061/G1b",
+      "retry_refusal": [
+        "G1-061/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-062/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-062/G1a",
+      "retry_refusal": [
+        "G1-062/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-062/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-062/G1b",
+      "retry_refusal": [
+        "G1-062/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-063/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-063/G1a",
+      "retry_refusal": [
+        "G1-063/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-063/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-063/G1b",
+      "retry_refusal": [
+        "G1-063/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-064/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-064/G1a",
+      "retry_refusal": [
+        "G1-064/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-064/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-064/G1b",
+      "retry_refusal": [
+        "G1-064/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-065/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-065/G1a",
+      "retry_refusal": [
+        "G1-065/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-065/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-065/G1b",
+      "retry_refusal": [
+        "G1-065/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-066/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-066/G1a",
+      "retry_refusal": [
+        "G1-066/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-066/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-066/G1b",
+      "retry_refusal": [
+        "G1-066/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-067/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-067/G1a",
+      "retry_refusal": [
+        "G1-067/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-067/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-067/G1b",
+      "retry_refusal": [
+        "G1-067/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-068/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-068/G1a",
+      "retry_refusal": [
+        "G1-068/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-068/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-068/G1b",
+      "retry_refusal": [
+        "G1-068/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-069/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-069/G1a",
+      "retry_refusal": [
+        "G1-069/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-069/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-069/G1b",
+      "retry_refusal": []
+    },
+    {
+      "first_refusal": [
+        "G1-070/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-070/G1a",
+      "retry_refusal": [
+        "G1-070/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-070/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-070/G1b",
+      "retry_refusal": [
+        "G1-070/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-071/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-071/G1a",
+      "retry_refusal": [
+        "G1-071/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-071/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-071/G1b",
+      "retry_refusal": [
+        "G1-071/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-072/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-072/G1a",
+      "retry_refusal": [
+        "G1-072/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-072/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-072/G1b",
+      "retry_refusal": [
+        "G1-072/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-073/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-073/G1a",
+      "retry_refusal": [
+        "G1-073/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-073/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-073/G1b",
+      "retry_refusal": [
+        "G1-073/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-074/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-074/G1a",
+      "retry_refusal": [
+        "G1-074/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-074/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-074/G1b",
+      "retry_refusal": [
+        "G1-074/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-075/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-075/G1a",
+      "retry_refusal": [
+        "G1-075/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-075/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-075/G1b",
+      "retry_refusal": [
+        "G1-075/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-076/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-076/G1a",
+      "retry_refusal": [
+        "G1-076/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-076/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-076/G1b",
+      "retry_refusal": [
+        "G1-076/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-077/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-077/G1a",
+      "retry_refusal": [
+        "G1-077/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-077/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-077/G1b",
+      "retry_refusal": [
+        "G1-077/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-078/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-078/G1a",
+      "retry_refusal": [
+        "G1-078/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-078/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-078/G1b",
+      "retry_refusal": [
+        "G1-078/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-079/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-079/G1a",
+      "retry_refusal": [
+        "G1-079/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-079/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-079/G1b",
+      "retry_refusal": [
+        "G1-079/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-080/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-080/G1a",
+      "retry_refusal": [
+        "G1-080/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-080/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-080/G1b",
+      "retry_refusal": [
+        "G1-080/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-081/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-081/G1a",
+      "retry_refusal": [
+        "G1-081/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-081/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-081/G1b",
+      "retry_refusal": [
+        "G1-081/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-082/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-082/G1a",
+      "retry_refusal": [
+        "G1-082/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-082/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-082/G1b",
+      "retry_refusal": [
+        "G1-082/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-083/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-083/G1a",
+      "retry_refusal": [
+        "G1-083/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-083/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-083/G1b",
+      "retry_refusal": [
+        "G1-083/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-084/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-084/G1a",
+      "retry_refusal": [
+        "G1-084/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-084/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-084/G1b",
+      "retry_refusal": [
+        "G1-084/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-085/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-085/G1a",
+      "retry_refusal": [
+        "G1-085/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-085/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-085/G1b",
+      "retry_refusal": [
+        "G1-085/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-086/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-086/G1a",
+      "retry_refusal": [
+        "G1-086/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-086/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-086/G1b",
+      "retry_refusal": [
+        "G1-086/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-087/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-087/G1a",
+      "retry_refusal": [
+        "G1-087/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-087/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-087/G1b",
+      "retry_refusal": [
+        "G1-087/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-088/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-088/G1a",
+      "retry_refusal": [
+        "G1-088/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-088/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-088/G1b",
+      "retry_refusal": [
+        "G1-088/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-089/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-089/G1a",
+      "retry_refusal": [
+        "G1-089/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-089/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-089/G1b",
+      "retry_refusal": [
+        "G1-089/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-090/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-090/G1a",
+      "retry_refusal": [
+        "G1-090/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-090/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-090/G1b",
+      "retry_refusal": [
+        "G1-090/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-091/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-091/G1a",
+      "retry_refusal": [
+        "G1-091/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-091/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-091/G1b",
+      "retry_refusal": [
+        "G1-091/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-092/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-092/G1a",
+      "retry_refusal": [
+        "G1-092/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-092/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-092/G1b",
+      "retry_refusal": [
+        "G1-092/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-093/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-093/G1a",
+      "retry_refusal": [
+        "G1-093/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-093/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-093/G1b",
+      "retry_refusal": [
+        "G1-093/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-094/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-094/G1a",
+      "retry_refusal": [
+        "G1-094/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-094/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-094/G1b",
+      "retry_refusal": [
+        "G1-094/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-095/G1a has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-095/G1a",
+      "retry_refusal": [
+        "G1-095/G1a was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    },
+    {
+      "first_refusal": [
+        "G1-095/G1b has already produced a captured attempt-1 result; it can never be a primary again"
+      ],
+      "lane": "G1-095/G1b",
+      "retry_refusal": [
+        "G1-095/G1b was not named a retry by the latest finalized attempt-1 segment"
+      ]
+    }
+  ],
+  "run_unchanged": true
+}

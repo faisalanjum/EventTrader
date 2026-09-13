@@ -1,0 +1,10 @@
+{
+ "lanes": {
+  "G1-069/G1b": {
+   "chars": 59,
+   "sha256": "96b74d7cf6512983859c424754748acbf6154dc00449f3f2f5341fedb3bcb838",
+   "text": "[{\"question_id\": \"Qf62750033d11e2f3\", \"produced_idxs\": []}]"
+  }
+ },
+ "segment": 7
+}

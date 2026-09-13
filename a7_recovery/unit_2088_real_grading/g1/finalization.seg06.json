@@ -1,0 +1,61 @@
+{
+ "accounting_sha256": "f756b3e5e4d06487c2499e951a3ad84dcd86cadd634e93c593c6a04a79c156e4",
+ "attempt": 1,
+ "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+ "ledger": {
+  "invalid": 0,
+  "retry": 0,
+  "scheduled": 10,
+  "uncalled": 0,
+  "valid": 10
+ },
+ "problems": {},
+ "receipt_sha256": "797d11e1fc263f98c3c8efcb4064889a2d0534de2255ca7f693f77af02649d41",
+ "retry": [],
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 6,
+ "uncalled": [],
+ "validity": [
+  [
+   "G1-091/G1a",
+   true
+  ],
+  [
+   "G1-091/G1b",
+   true
+  ],
+  [
+   "G1-092/G1a",
+   true
+  ],
+  [
+   "G1-092/G1b",
+   true
+  ],
+  [
+   "G1-093/G1a",
+   true
+  ],
+  [
+   "G1-093/G1b",
+   true
+  ],
+  [
+   "G1-094/G1a",
+   true
+  ],
+  [
+   "G1-094/G1b",
+   true
+  ],
+  [
+   "G1-095/G1a",
+   true
+  ],
+  [
+   "G1-095/G1b",
+   true
+  ]
+ ]
+}

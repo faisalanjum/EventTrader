@@ -1,0 +1,169 @@
+{
+ "accounting_sha256": "b51975c463b4da9072138c70e1abba8c20c22ce5267cc4425e1aca35b7363c43",
+ "attempt": 1,
+ "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+ "ledger": {
+  "invalid": 0,
+  "retry": 0,
+  "scheduled": 37,
+  "uncalled": 0,
+  "valid": 37
+ },
+ "problems": {},
+ "receipt_sha256": "5366a727aaf8904a68585ea5ca40706727c5fa1e13d1ff30deef9914ddea5030",
+ "retry": [],
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 5,
+ "uncalled": [],
+ "validity": [
+  [
+   "G1-072/G1b",
+   true
+  ],
+  [
+   "G1-073/G1a",
+   true
+  ],
+  [
+   "G1-073/G1b",
+   true
+  ],
+  [
+   "G1-074/G1a",
+   true
+  ],
+  [
+   "G1-074/G1b",
+   true
+  ],
+  [
+   "G1-075/G1a",
+   true
+  ],
+  [
+   "G1-075/G1b",
+   true
+  ],
+  [
+   "G1-076/G1a",
+   true
+  ],
+  [
+   "G1-076/G1b",
+   true
+  ],
+  [
+   "G1-077/G1a",
+   true
+  ],
+  [
+   "G1-077/G1b",
+   true
+  ],
+  [
+   "G1-078/G1a",
+   true
+  ],
+  [
+   "G1-078/G1b",
+   true
+  ],
+  [
+   "G1-079/G1a",
+   true
+  ],
+  [
+   "G1-079/G1b",
+   true
+  ],
+  [
+   "G1-080/G1a",
+   true
+  ],
+  [
+   "G1-080/G1b",
+   true
+  ],
+  [
+   "G1-081/G1a",
+   true
+  ],
+  [
+   "G1-081/G1b",
+   true
+  ],
+  [
+   "G1-082/G1a",
+   true
+  ],
+  [
+   "G1-082/G1b",
+   true
+  ],
+  [
+   "G1-083/G1a",
+   true
+  ],
+  [
+   "G1-083/G1b",
+   true
+  ],
+  [
+   "G1-084/G1a",
+   true
+  ],
+  [
+   "G1-084/G1b",
+   true
+  ],
+  [
+   "G1-085/G1a",
+   true
+  ],
+  [
+   "G1-085/G1b",
+   true
+  ],
+  [
+   "G1-086/G1a",
+   true
+  ],
+  [
+   "G1-086/G1b",
+   true
+  ],
+  [
+   "G1-087/G1a",
+   true
+  ],
+  [
+   "G1-087/G1b",
+   true
+  ],
+  [
+   "G1-088/G1a",
+   true
+  ],
+  [
+   "G1-088/G1b",
+   true
+  ],
+  [
+   "G1-089/G1a",
+   true
+  ],
+  [
+   "G1-089/G1b",
+   true
+  ],
+  [
+   "G1-090/G1a",
+   true
+  ],
+  [
+   "G1-090/G1b",
+   true
+  ]
+ ]
+}

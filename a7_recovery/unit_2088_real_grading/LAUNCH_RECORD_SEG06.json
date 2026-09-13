@@ -1,0 +1,53 @@
+{
+ "kind": "pre-call launch record for G1 segment 6",
+ "authority": "Codex SEQ 2095",
+ "authority_sha256": "93daa0fcb71263f7967e735b0161723f52f25607aff6b5430e05126d11e92ba7",
+ "publication_head": "bffbfbbfada10c21c482f2b9be01b41a028d0aaf",
+ "frozen_utc": "2026-09-13T05:20:25Z",
+ "segment": 6,
+ "attempt": 1,
+ "map": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/map_real_grading_2088.tsv",
+ "map_sha256": "8efa8aeba1cd01bf69942b71a5045fe64b711cbe4709fa213d6a4e87eca5d3b8",
+ "caller_sha256": "770fcdd3bbb61788dde23ba9224b5a8da585894738420314d1e95cbec1ee3fbc",
+ "launch_sha256": "ef8095d796b59b36e6fd8e4039a99f26ca24a012b9692560b0fb3060cf9bb327",
+ "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+ "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+ "receipt_sha256": "797d11e1fc263f98c3c8efcb4064889a2d0534de2255ca7f693f77af02649d41",
+ "invocation_sha256": "0fc14414bdc09c7a4877feeddde6c92dca7e32c211a6d6041458550b064016a7",
+ "preserved_script": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/g1/grade_batch.seg06.js",
+ "preserved_script_sha256": "b046a10b6a5c5f9de047f254667c5a78abc587485fee36a36473c7a70b031ae6",
+ "published_args_file": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/g1_args_seg06.json",
+ "published_args_sha256": "66ef0124b5da7791831b4dbb58d1e724fc62e4b8080731e7c124b27116616e46",
+ "executed_script_path": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1/grade_batch.seg06.js",
+ "executed_script_sha256": "b046a10b6a5c5f9de047f254667c5a78abc587485fee36a36473c7a70b031ae6",
+ "executed_script_bytes": 129582,
+ "executed_script_is_regular_file": true,
+ "executed_script_hardlinks": 1,
+ "transport": {
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "segment_lanes": 10,
+ "lane_ids": [
+  "G1-091/G1a",
+  "G1-091/G1b",
+  "G1-092/G1a",
+  "G1-092/G1b",
+  "G1-093/G1a",
+  "G1-093/G1b",
+  "G1-094/G1a",
+  "G1-094/G1b",
+  "G1-095/G1a",
+  "G1-095/G1b"
+ ],
+ "readings_already_accepted": 180,
+ "repeats_an_accepted_reading": [],
+ "total_primary_lanes": 192,
+ "launched": 0
+}
