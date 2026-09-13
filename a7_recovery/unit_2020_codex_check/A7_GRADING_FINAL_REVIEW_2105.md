@@ -4,7 +4,15 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Newest evidence checkpoint,12:31 Eastern: normally committed/pushed
+Newest evidence checkpoint, verified13:25 Eastern: normally committed/pushed
+353a7f2182992abb36291fef5f538acdd12ba4fe, tree6c8d970075f3d46b41adfaa1cb72b41aaa8d94a5;
+fresh remote matches. G2_PROGRESS_PUBLICATION_2111_E.json SHA0db1d986 pins2245
+reviewed files through G2 segment97 plus unchanged G3 completion.326 changed
+paths; all2246 selected committed files were read from Git and byte-hash
+verified, index empty, unrelated work preserved. No grader or input change.
+35 primaries remain at13:25. Core continues Codex2110; no final score or PASS.
+
+Earlier evidence checkpoint,12:31 Eastern: normally committed/pushed
 c03009733270ab985ad64fb1bd8f55fedccb4bf8, treea82b5c0e75ebe406ee6de430aae3213f2994de04;
 fresh remote matches. G2_PROGRESS_PUBLICATION_2111_D.json SHA26e2091f pins1922
 reviewed files through G2 segment84 plus unchanged G3 completion.366 changed
@@ -47,16 +55,30 @@ G3 is already verified. Actual G2 evidence review and final scoring remain;
 no A7 score or PASS is implied. The pass log below preserves pre-publication
 proof history; its former closure/publication blockers are resolved.
 
-Collection review,13:18 Eastern: G2 segments6–97 independently replayed through
+Collection review,14:18 Eastern: G2 segments6–114 independently replayed through
 the original native/parser checks (REVIEWs SHAbcbef7be,2f949a42,dd226d67,
-96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5,73241d30,a6f6f669,c91f1246,39f87cf4,193b01c2,c0b9aa67,1ac95c61,8a14957a,686ee614,cceb3064), and all382
-durable native copies match their sources. The99 readings include37 original-
-valid and62 recovered; exact retry-filter replays preserve every negative
+96690847,fb9869c9,4e99eb98,a66c8ac5,12596534,8a798ecf,843d3331,baf1e662,5c999c88,d36b6567,c4f2a534,b1b20563,70a942d7,8eb5fdac,d6c91ac0,02ca76c5,14671483,d1344a6c,691dd870,34de60c8,92397750,bd13f38f,117af5fa,972f798b,1aad1c25,e00e3cc5,c3f23e91,581193e1,92e92787,b4f7cfc8,f27f3ff2,f52a5274,ecc57290,f3537e75,c7a28b7f,07921a0b,58d942cc,e0ea99c1,5f4a9f2b,e82385c6,98936cf5,73241d30,a6f6f669,c91f1246,39f87cf4,193b01c2,c0b9aa67,1ac95c61,8a14957a,686ee614,cceb3064,9a1f5ba3,3e3b16e9,6ac467b5,97850833,75a8c4ed,cbe023f2,5336fce1,2d1b40ac,997683e0,9e83285c,5c6cf2ff,9cfa5c9d,d96ae913), and all450
+durable native copies match their sources. The116 readings include42 original-
+valid and74 recovered; exact retry-filter replays preserve every negative
 judgment and require no retry. Two-reading segments17,24,27,36,49,66 and83 are verified.
 G3's reviewed completion
 is now saved through C.persist_g23 and reloaded: exact approved bytesad575661,
 110 agreed/7 unresolved,147-file run unchanged. PERSISTED_G3 report11ed9654.
 Neither this progress nor successful collection is a final score or PASS.
+
+Owner follow-up is OPEN in ../A7_PREGRADING_WORK_ORDER.md §6: finish and
+preserve the baseline, determine the causes of the complete final finding
+population, fix only proved causes, verify changed claims without answer
+leakage, and publish the separately checked correction result. That section
+owns the tasks and closure conditions. The provisional33 agreed error flags
+are not confirmed source errors;91 unresolved comparisons are not proved
+wrong. Latest owner scope also requires proving reuse through one supported
+model selection, including the existing local setup, then STOP AND WAIT.
+The work order §6 owns that bounded task; no A8 or later task may start.
+No later-step gate, current frozen model identity or production boundary is waived.
+Owner clarified that corrections target faults in the test/key/grading, not
+genuine mistakes by the evaluated model. Keep such model errors in the score;
+do not tune its prompt or rerun valid answers to obtain a better result.
 
 ## Strategy and stopping rule
 

@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 135, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 143, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -13,6 +13,18 @@ without waiting for another routine owner approval. Necessary bounded AI
 calls are permitted after their exact task, inputs and ceiling are verified.
 Accuracy means source-supported decisions and honest accounting, not a
 guaranteed high score or a claim of universal reliability.
+
+LATEST OWNER SCOPE,2026-09-13: finish A7, investigate its actual errors and
+uncertainties, correct proved causes, and leave the same test/grader reusable
+by selecting another supported model, including the owner's local model.
+Verify this reuse, then STOP AND WAIT for owner instructions. Do not start A8
+or any later step. This supersedes the older automatic-advance instruction and
+the broader stored goal's work horizon; it does not declare that goal achieved.
+Owner clarification: correct the TEST, key and grading where genuinely wrong;
+do not tune or reroll the tested model to repair its genuine reasoning errors.
+A correctly measured model error is a valid test finding, not a test-code fault.
+The bounded work and closure conditions are in §6. This adds no prerequisite
+to the ongoing baseline collection and does not change its frozen model/input.
 
 Only THREE preparation stages belong here:
 
@@ -44,7 +56,18 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-NEWEST PUBLICATION,12:31 Eastern: verified G2 prefix6–84 and unchanged G3
+NEWEST PUBLICATION, verified13:25 Eastern: G2 prefix6–97 and unchanged G3
+completion are committed and normally pushed as353a7f2182992abb36291fef5f538acdd12ba4fe,
+tree6c8d970075f3d46b41adfaa1cb72b41aaa8d94a5, sole parentc03009733270ab985ad64fb1bd8f55fedccb4bf8.
+Fresh remote read matches. G2_PROGRESS_PUBLICATION_2111_E.json
+SHA0db1d9868b4f87d87e50801a5a1d87fa79204dca8ba7e62376b52d89952c2837
+pins2245 reviewed files;326 changed paths. All2246 selected committed files
+including the manifest were read from Git and byte-hash verified. Index empty;
+unrelated work preserved. No grader, input, rule, main or database change.
+Core continues Codex2110;35 primaries remain at13:25. Segments after97 are
+outside this checkpoint. No final A7 score or PASS is claimed.
+
+EARLIER PUBLICATION,12:31 Eastern: verified G2 prefix6–84 and unchanged G3
 completion are committed and normally pushed as c03009733270ab985ad64fb1bd8f55fedccb4bf8,
 treea82b5c0e75ebe406ee6de430aae3213f2994de04, sole parentc94cfe4e722afe625eb2b8c28b6cfb4f4c0413bf.
 Fresh remote read matches. G2_PROGRESS_PUBLICATION_2111_D.json
@@ -124,7 +147,7 @@ use the existing completion/route/scorer owners to report all denominators,
 wrong accepts, misses, disagreements and exhausted invalids. No new framework.
 The active goal and one Codex watcher remain unchanged; no handover restart.
 
-INDEPENDENT PROGRESS, 13:18 Eastern: segments6–97 pass original native,
+INDEPENDENT PROGRESS, 14:18 Eastern: segments6–114 pass original native,
 whole-reply and parser replay; proof codex_g2native2111_seg6to7/REVIEW.json
 SHAbcbef7bef33af8e3e611bfa311dc228d931d9120bf174ffcb7c0adcdae5eb2c7.
 The second prefix proof is codex_g2native2111_seg8to9/REVIEW.json
@@ -232,10 +255,36 @@ SHA8a14957ab57cf77f4616dcaa465b151facb9c80467a5828150c5118e3e6e11d8;
 codex_g2native2111_seg96to96/REVIEW.json
 SHA686ee61404fbea72ade2e92d1a95c21cafb3087d9a368df01c50505c039bee51;
 codex_g2native2111_seg97to97/REVIEW.json
-SHAcceb30649838b469801c7d7ec6dd7165e299ad05c5bb68212aeb1137b5cee60c.
-All382 copied native files match their original sources. Separate exact pinned
-retry-filter replays pass with empty stderr. The99 new primary readings across
-these92 segments include37 originally valid and62 recovered readings; all99
+SHAcceb30649838b469801c7d7ec6dd7165e299ad05c5bb68212aeb1137b5cee60c;
+codex_g2native2111_seg98to100/REVIEW.json
+SHA9a1f5ba33c915b9cd7f6accf9c1285178db54c2bc2aad09d2b213278f0aa973d;
+codex_g2native2111_seg101to101/REVIEW.json
+SHA3e3b16e99430faf5e1af541e1b33a961eb9483a8d8765a7bd56e3a57873a3403;
+codex_g2native2111_seg102to102/REVIEW.json
+SHA6ac467b5a492e251ab58a402da6ea7890a4da9f751004d974e427e5b7a84ba58;
+codex_g2native2111_seg103to103/REVIEW.json
+SHA97850833accf227f9b587110ab138705476e1667c2a4a52da8fca856dbb2dc1e;
+codex_g2native2111_seg104to104/REVIEW.json
+SHA75a8c4ed79460af3b28365d3e1d4f594c454712a25d08b8342a0e5886ce62a1b;
+codex_g2native2111_seg105to105/REVIEW.json
+SHAcbe023f2df65ad0a45db57e7524f1bef388e7e73ee908e56c9f0002ae40d6725;
+codex_g2native2111_seg106to106/REVIEW.json
+SHA5336fce1d36b44c61ccdf7d29c77f8f372b058a04976d4b41764129f98d5e879;
+codex_g2native2111_seg107to107/REVIEW.json
+SHA2d1b40ac6cc84da1dba9d420e6a1582ee6f1e355c1a60aca115ce27546372ad2;
+codex_g2native2111_seg108to108/REVIEW.json
+SHA997683e0f59c77bba09df949f5619ed67843e4f38a284bf08ad9f503f902bd5c;
+codex_g2native2111_seg109to109/REVIEW.json
+SHA9e83285cf062f0142c4ae0e06a9683a709b233d9fc9ab6b913d5768c1c418e25;
+codex_g2native2111_seg110to110/REVIEW.json
+SHA5c6cf2ffbcb794c7fe675579996163f3264af5140f24a99c702a3b49bca1f805;
+codex_g2native2111_seg111to111/REVIEW.json
+SHA9cfa5c9d9a3eeae7e38fea2c1e0b24b854b82082f7df648b39a2dde8c95349ec;
+codex_g2native2111_seg112to114/REVIEW.json
+SHAd96ae913082c7c65b287ebee88f1841825ecce627d420b45017a7ace94dd3ff6.
+All450 copied native files match their original sources. Separate exact pinned
+retry-filter replays pass with empty stderr. The116 new primary readings across
+these109 segments include42 originally valid and74 recovered readings; all116
 require zero retry. Segments17,24,27,36,49,66 and83 each lawfully contain both readings of
 their frozen batch. All negative judgments remain unchanged.
 These are usable grading judgments, not claims that the tested answers were
@@ -274,9 +323,14 @@ and seg9 stdout65b346d5; seg10 stdoutafa03f96,11 stdout85145929,
 83 stdout889846d8,84 stdout62929b31,85 stdoutae51a34a,86 stdoutac657185,
 87 stdoutc596f3f9,88 stdoutfd2d98dc,89 stdout62c5d738,90 stdoutf375a12a,
 91 stdout49e33416,92 stdout2f03c0c4,93 stdout2e30827a,94 stdouteb3967f1,
-95 stdout901e1170,96 stdout87214637,97 stdoutf374f010.
+95 stdout901e1170,96 stdout87214637,97 stdoutf374f010,98 stdout56aef245,
+99 stdoutb6aa8d7f,100 stdoutd7986489,101 stdoutd7dbbfe0,102 stdoutf94d4ed8,
+103 stdout312c0f1f,104 stdout128cb978,105 stdout173f3a35,106 stdout7e8bebac,
+107 stdout51835a99,108 stdout19fb746e,109 stdout541611b4,
+110 stdoutc0f32242,111 stdoutedfe8ef8,112 stdout11e1e6c1,
+113 stdout36fa709e,114 stdoutac1c9588.
 All segment review payloads exit0 with empty stderr. The live lane-state owner
-last reported38 primaries remaining at13:16. Segments after97 are not yet included
+last reported21 primaries remaining at14:18:36. Segments after114 are not yet included
 in this reviewed prefix. Counts are
 a timestamped snapshot only. ETA updated10:23: best estimate17:00 Eastern,
 provisional16:00–19:00 range. The most recent12 preserved workflows (42–53)
@@ -285,6 +339,24 @@ took348438,402232,346682,335912ms. This replaces the15:30 estimate and earlier
 13:00–17:00 range because actual AI runtime slowed, not because scope grew.
 These timings are provider durationMs/startTime/timestamp values, not Core's
 guess. No new blocker or code change. This is the checked report, not A7 PASS.
+It is the baseline report ETA, not an estimate for correcting causes still
+unknown until that report is checked.
+
+Provisional owner-requested tally, through segment110 only:115 selected primary
+readings yield57 complete two-reader batches and one partial batch. Of255
+completed fact comparisons,131 (51.37%) have all seven aspects approved by
+both readers,33 (12.94%) have at least one aspect marked false by both, and91
+(35.69%) have uncertainty/disagreement without an agreed false. These are
+pooled P1/P2/UNION comparisons, NOT255 distinct facts or producer answers.
+The33 are error flags, not independently confirmed source errors;91 are not
+proved wrong. Misses, duplicates, unfinished comparisons, numeric/routing
+checks and final gates are excluded. This is NOT the A7 success rate.
+Read-only arithmetic used the verified original four-reading recovery
+codex_formatreal2107_a/RECOVERY.json SHA7b1307320e2c7528a101d78c3217962066025ade98af8176b1f844851f379f26
+and actual retry-filter stdout for segments6–110; highest usable attempt per
+lane follows C.select_attempt and aspect agreement follows B.reconcile_meaning.
+All original false/null judgments survive. No call, completion write or score
+was created. §6 derives its work from the FINAL population, not just33+91.
 
 Timing check11:08: preserved native segments53–64 are12 completed single-reading
 workflows, mean203020ms. Their first start through last finish spans2784020ms
@@ -317,6 +389,14 @@ respectively, with distinct start times and completed durations. Their shared
 prompt/cache key does not replace the distinct actual agent identities.
 No defect or extra call follows from identical answer text.
 
+Bounded non-finding13:48: segments104/105 saved finalizations show three
+diagnostic strings while the independent full parser shows five. The original
+finalizer deliberately stores bad[:3] (served2006 a7_g1_build.py:2286); both
+saved lists equal the full parser's first three, and both finalization hashes
+and timestamps are unchanged. This is diagnostic truncation, not result drift.
+No file, rule, call or Core task changed. Segment105's native workflow completed
+normally in345413ms; the longer wait was an AI runtime, not a stop.
+
 The exact existing renderer forecasts135 then-remaining primaries in125
 Workflow groups (116 single,8 double,1 triple), excluding retries. Evidence:
 codex_g2batch2111_a/BATCH_MEASUREMENT.json
@@ -335,8 +415,8 @@ the result afterward; payloadexit0/stderr0. Report:
 codex_g3persist2111_a/PERSISTED_G3.json
 SHA11ed9654a2fec1822ce91da058fc4b85dfafe90e3d9a6f594fc167f4c0af9036.
 The147-file G3 run is unchanged. Do NOT persist G3 again or rerun its AI calls.
-No final A7 score yet. Evidence through G2 segment84 and the G3 persistence
-is published inc0300973; later verified evidence awaits the next checkpoint.
+No final A7 score yet. Evidence through G2 segment97 and the G3 persistence
+is published in353a7f21; later verified evidence awaits the next checkpoint.
 The grading code is unchanged from pushed b86c9052.
 
 Final scoring execution note (09:11, no new requirement): after Core's one
@@ -1588,6 +1668,8 @@ No staging or publication of incomplete or inconclusive preparation.
 | Saved-answer/evaluation freeze | Existing A5/A6/G1/G2/G3 owners | Original382 bindings unchanged; full required grading population/call ceiling derived and pinned |
 | Preparation publication | Core after Codex verifies exact snapshot | Affected checks passed; approved manifest/staged tree only; normal commit/push; remote identity verified |
 | Actual A7 grading and score | Qualified graders; Core operates, Codex verifies | Complete outcomes, raw evidence, correct formulas and independent final report |
+| Post-baseline cause correction and checked result | Codex owns §6; one bounded Core task at a time | Complete finding inventory, source-supported decisions, proved minimal corrections, preserved baseline and separately verified corrected result |
+| Same-infrastructure model selection | Codex owns §6 after the baseline is preserved | Proved reuse of the same supported test/grader path with model-specific connection details confined to model selection; include the existing local setup, disclose unsupported contracts |
 
 A/B may progress together only as these non-overlapping source-review and
 mechanical connection tasks. No AI launch uses unfinished source-review data
@@ -1716,8 +1798,9 @@ rerolls or hidden replacement of the original score.
 | Separate duplication / organization | VERIFIED: reused prefix/body/lifecycle/counting/lock; one true-origin merge for this phase; no second grader |
 | Final simplicity pass | VERIFIED for inspected delta: four required tracked-line connections and narrow existing-owner binding; no unrelated production work |
 | Tests / regression / mutations | Current three-round proof:32 TEST lifecycle/lock,26 real cold-packet,8 native collision refusals/16 controls,25 actual cold-consumer,6 real controls/5 saved-chain refusals and22 unchanged full-regression tests on the NEW owner pass. Earlier proof and disclosed D3 implementation-name assertion failure remain preserved |
-| Key lock / evaluation freeze / publication | Real key lock and actual evaluation/G1 freeze VERIFIED, including byte-identical cold replay. Launch record/publication OPEN; current HEAD still source evidence only |
-| Actual grading | NOT STARTED; no score or A7 PASS claimed |
+| Key lock / evaluation freeze / publication | VERIFIED AND PUSHED; preparation b86c9052 and later evidence checkpoints in §2. Final collection/result publication remains open |
+| Actual grading | IN PROGRESS; §2 pins the checked prefix and remaining full-population work. No final score or A7 PASS claimed |
+| Post-baseline root causes and corrected result | OPEN; owner-requested bounded follow-up in §6. No baseline finding has been silently waived or relabeled |
 
 ## 5. Evidence and resume rules
 
@@ -1797,10 +1880,36 @@ attempt records. Do not build another status database or proof framework.
 
 ## 6. After grading and later-step compatibility
 
-A7 PASS is required before A8/EXP-6. FAIL or INCONCLUSIVE stops LaneA as Step1
-requires; it is not permission to tune until green or patch production.
-Remaining Step1 catalog/identity work remains separately ordered. Then follow
-Steps2–13 and their dependencies. Step14 stays dormant.
+Owner instructions,2026-09-13: do not stop at the baseline number. Determine
+what caused the actual problems, make justified corrections, deliver the
+final checked A7 result, prove model-switch reuse, then stop for the owner.
+Corrections target the test/key/grading, not the tested model's intelligence.
+Source-confirmed model mistakes remain in the score and need no automatic
+producer-prompt change or new answer call. This is not a promise of A7 PASS.
+This is the single follow-up checklist; the latest
+mailbox still limits Core to collection until its one final reply. Codex owns
+independent review and chooses the faster safe implementer for each bounded
+task. No overlapping edits or blanket re-audit of unchanged proved machinery.
+
+| Order / task | Status | Required evidence and boundary |
+|---|---|---|
+| 1. Freeze the honest baseline | IN PROGRESS | Finish all required readings and lawful retries; verify complete native identities; persist G2 once, reuse saved G3, run the actual no-write route/scorer. Publish complete counts, original errors, uncertainties, misses, duplicates and exhausted invalids; no omitted denominator or implied PASS. |
+| 2. Establish each actual cause | OPEN after baseline | Derive the complete finding population from final scorer/completion records, including but not limited to provisional33+91. Bind each finding to exact event/item/fact/field, original prompt/output, source, key and grader replies. Distinguish producer meaning errors, source/key errors, grading errors, deterministic code/transport faults and legitimate ambiguity. Check apparently cautious answers against the rule actually served; do not turn uncertainty into a wrong answer or force unsupported truth. Record an evidence-backed disposition for every finding. |
+| 3. Correct only proved TEST causes | OPEN after cause proof | Reproduce grading/code defects first; fix the single existing owner generally, with affected-population tests, positive/negative controls, meaningful mutations and affected regression. Key corrections require a fresh source-only independent qualified owner that has not seen evaluated replies or scores. Models decide meaning; no answer-specific strings, semantic code or production patch. Correct a grading prompt only for a demonstrated mismatch with its governing task. Record genuine tested-model errors without trying to improve that model's score. An unclear rule gets the Plan's rule_ambiguity exhibit and required decision, not an invented resolution. |
+| 4. Verify the corrected TEST without cheating | OPEN after named correction | Regrade the unchanged382 saved answers for proved code/key corrections, reusing valid judgments only where full bindings still hold. If a corrected AI-facing GRADING task/input/configuration needs new evidence, pre-freeze the reason, full affected population and call ceiling; use targeted fresh blind grading tests with no expected verdict or previous attempt supplied. Known repaired cases are regression evidence, not unseen qualification. No producer-prompt tuning, unchanged semantic rerolls, successful-call repeats, dropped hard cases, lowered bars or altered raw answers. |
+| 5. Prove the same infrastructure supports model selection | OPEN after baseline preservation | Inspect existing model/transport owners and the local Qwen handoff; reuse the same source inputs, key where bindings permit, grading contracts, accounting and report code. Keep justified model-specific identity, endpoint/runner and input/output limits behind one documented model selection, reusing existing configuration where available. Make only demonstrated missing connections, with test-first focused end-to-end and invalid-input proof. Verify the local path rather than assuming a name change establishes protocol compatibility. No second grader, speculative provider framework, production import, full382-answer rerun or change to the current frozen run. Any necessary actual model probe must first freeze its narrow purpose, inputs and call ceiling and stay separate from the baseline score. |
+| 6. Deliver the checked correction/reuse result and stop | OPEN | Keep baseline and each corrected version separately with exact hashes and all attempts. Reconcile every finding and all unchanged A7 gates; publish verified code/evidence normally on the same recovery branch. Report model-selection usage, actual local/alternate-model evidence, unsupported limits and remaining uncertainty explicitly. A genuine model error is a completed test finding and stays in the score; a remaining unverified test/evidence defect is an open limitation. Preserve required FAIL/INCONCLUSIVE outcomes; do not manufacture PASS. Once this A7 test/correction/reuse package is verified, STOP AND WAIT for owner instructions; no A8 or later-step task. |
+
+This is the existing Plan §2 amendment3–6 correction/reuse path, not new product
+law, a second scorer or permission to spend without a frozen missing proof.
+The baseline and final corrected result must state what each actually proves.
+A7 PASS is required before A8/EXP-6. FAIL or INCONCLUSIVE stops LaneA advance
+as Step1 requires; it is not permission to tune until green or patch production.
+The wider roadmap goal remains unclosed; partial scoring or this checklist
+cannot waive its requirements. The latest owner instruction independently
+forbids starting A8 or later work even after A7 passes. Remaining Step1 catalog/
+identity work and Steps2–13 retain their order for a future owner-directed
+resumption. Step14 stays dormant. Do not mark the old all-steps goal complete.
 
 Preserve signed contracts, exact fact/identity distinctions, dry-run evidence,
 misses/ambiguities and immutable raw inputs for later production steps.

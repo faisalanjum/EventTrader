@@ -1,0 +1,77 @@
+{
+ "kind": "G2",
+ "launch_sha256": "d736ad8392962291177b64a4a92686d44e0f0a295dafeb3119ec87d417b72d90",
+ "new_model_calls": 0,
+ "scope": "finalized-segment native and parser replay; not semantic adjudication or an A7 score",
+ "segments": [
+  {
+   "finalization_sha256": "181f44616daf1993e69bbb056d123ca681c5a5e132a671e1b1bf133f0d701355",
+   "ledger": {
+    "invalid": 0,
+    "retry": 0,
+    "scheduled": 1,
+    "uncalled": 0,
+    "valid": 1
+   },
+   "receipt_sha256": "afd1b8ef592f3eef8b7ac6d9a36b0810de2fb61f07034c44575e8a5bd787e35f",
+   "retry": [],
+   "rows": [
+    {
+     "answer": {
+      "M16b855d95ff36181": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      },
+      "M39ea21b3a6adc755": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M3f9d9d0d4512b849": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M63c05645b2228cf4": {
+       "driver_name_meaning": true,
+       "driver_state": true,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": true,
+       "slice_vs_menu": true
+      },
+      "M6d2b09a6d78a96e6": {
+       "driver_name_meaning": true,
+       "driver_state": false,
+       "favorability": null,
+       "growth_basis": null,
+       "lane_routing": true,
+       "record_matches_source": false,
+       "slice_vs_menu": true
+      }
+     },
+     "lane": "G2-055/G1a",
+     "problems": [],
+     "valid": true,
+     "whole_sha256": "bbf85da169329be70ebc25a02dcf14249c5e6f10a3b29d2617c4b3ba5db62e61"
+    }
+   ],
+   "segment": 106,
+   "uncalled": []
+  }
+ ]
+}
