@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 216, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 217, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,31 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision216: VERIFIED root G2 connection and corrected input package.
+CURRENT,Revision217: G2 checkpoint963725ee17e9cb66b34fb529f1ed56f1e25c2bc7
+is committed and normally pushed; remote equality checked22:50:58UTC.
+Core2157/fbe73f6d and its archive answer Codex2160 exactly; same bound
+sessions, main HEAD2dc0ad39 and recovery HEAD963725ee. Exactly one watcher.
+The saved G3 candidate088902eb is now independently VERIFIED: native attempt
+core_g3verify2159_a raw0/empty stderr, report005ec85e; checker c52bc67d,
+caller93e380ef, tests74bb241c. Root compared ALL116 questions, full contexts,
+reference cards and matched-only comparison records against the already
+verified current base, not Core's summary. Full310 G2 pairs retained; all4
+lawful empty groups retained. All120 bound-script variants fit, max470525;
+30batches/60primary plus at most60 invalid-only retries. Root's combined
+affected suite:160passed +24subtests in2.29s. No calls, corrected score or
+semantic approval is claimed by an input check.
+
+Core's next bounded task: freeze the EXACT runtime/run/script/receipt paths
+for these60 G3 and the38 verified G2 primary lanes through existing owners;
+preflight and preserve byte-identical durable roots/receipts/scripts BEFORE
+calls. This is an evidence copy, not a new transport or rewritten receipt.
+Report once, WAIT; root publishes verified G3 preparation in parallel and
+then authorizes collection after reviewing those actual bindings. No inputs,
+prompts, owners or successful results change. END-only offline model setup
+and STOP/WAIT remain the horizon. Target8–10p.m.Eastern Sep14 remains
+provisional, not a rolling estimate or a guarantee of a high score.
+
+PREVIOUS,Revision216: VERIFIED root G2 connection and corrected input package.
 codex_g2reuse2159_a raw exit0, empty stderr; exit marker22:35:36UTC. Report
 75612fc5, candidate10290181, plan64d1c2a1, owner629817ec and caller d392af74.
 Independent original-completion-to-report comparison228/228, current full

@@ -1,0 +1,2 @@
+G3 VERIFIED: {"questions_audited": 116, "audit_problem_count": 0, "batches": 30, "primary_call_ceiling": 60, "invalid_only_retry_ceiling": 60, "maximum_bound_script_bytes": 470525, "empty_comparator_groups": ["P2|0001104659-25-118458", "UNION|0000898173-26-000006", "UNION|0001104659-25-118458", "UNION|bzNews_50877032"]}
+Completed saved-package verification; no model call.
