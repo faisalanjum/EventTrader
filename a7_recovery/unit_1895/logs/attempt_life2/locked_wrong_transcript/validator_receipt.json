@@ -1,0 +1,30 @@
+{
+ "problems": [],
+ "records_checked": 101,
+ "report": {
+  "blocked_events": [],
+  "exclusions_accounted": 196,
+  "format_invalid": [],
+  "hard_classes": {
+   "ambiguous_menus": 18,
+   "corrections_and_amendments": 18,
+   "expectation_routing": 18,
+   "favourable_unfavourable_direction": 18,
+   "losses_and_sign": 20,
+   "measurement_wording": 18,
+   "point_range_floor_ceiling": 19,
+   "portion_versus_whole": 18,
+   "sequential_comparison": 37,
+   "slices_and_unknown_axes": 18
+  },
+  "open_issues": 0,
+  "record_kinds": {
+   "lawful_abstention_control": 34,
+   "negative_control": 33,
+   "real_item": 34
+  },
+  "rows_final": 101,
+  "sequential_comparison": 37
+ },
+ "validator": ".claude/plans/Drivers/experiments/harness_g1v3/validate_benchmark_inventory.py"
+}

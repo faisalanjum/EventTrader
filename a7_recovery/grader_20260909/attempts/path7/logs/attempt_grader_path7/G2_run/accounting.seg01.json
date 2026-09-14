@@ -1,0 +1,26 @@
+{
+ "attempt": 1,
+ "captures": [
+  "seg01.pos000",
+  "seg01.pos001",
+  "seg01.pos002",
+  "seg01.pos003",
+  "seg01.pos004",
+  "seg01.pos005"
+ ],
+ "counts": {
+  "served": 6
+ },
+ "outcomes": {
+  "G2-000/G1a": "served",
+  "G2-000/G1b": "served",
+  "G2-001/G1a": "served",
+  "G2-001/G1b": "served",
+  "G2-002/G1a": "served",
+  "G2-002/G1b": "served"
+ },
+ "receipt_sha256": "30ca07754d245d024e9dc3f4b8e0983a0e5e5dbcc0e438e7bbb7f9cdaac39d99",
+ "schema": "a7_g1_event_candidate/3",
+ "segment": 1,
+ "selected": 6
+}

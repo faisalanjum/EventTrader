@@ -1,0 +1,35 @@
+{
+ "lanes": {
+  "G2-000/G1a": {
+   "chars": 223,
+   "sha256": "3084bb548c11bcb9a2654ffe07b0e5025c8d1141cbd62a858c0d35e3b9ceb45c",
+   "text": "[{\"question_id\": \"M385b2882c2290e64\", \"verdicts\": {\"driver_state\": true, \"lane_routing\": true, \"favorability\": true, \"growth_basis\": true, \"slice_vs_menu\": true, \"driver_name_meaning\": true, \"record_matches_source\": true}}]"
+  },
+  "G2-000/G1b": {
+   "chars": 223,
+   "sha256": "3084bb548c11bcb9a2654ffe07b0e5025c8d1141cbd62a858c0d35e3b9ceb45c",
+   "text": "[{\"question_id\": \"M385b2882c2290e64\", \"verdicts\": {\"driver_state\": true, \"lane_routing\": true, \"favorability\": true, \"growth_basis\": true, \"slice_vs_menu\": true, \"driver_name_meaning\": true, \"record_matches_source\": true}}]"
+  },
+  "G2-001/G1a": {
+   "chars": 223,
+   "sha256": "294bf39ac54a3e44e282f19ae9ea4e8ad666dd98aaf6a11d38152af78432ff60",
+   "text": "[{\"question_id\": \"M6a891be7b76ba91e\", \"verdicts\": {\"driver_state\": true, \"lane_routing\": true, \"favorability\": true, \"growth_basis\": true, \"slice_vs_menu\": true, \"driver_name_meaning\": true, \"record_matches_source\": true}}]"
+  },
+  "G2-001/G1b": {
+   "chars": 223,
+   "sha256": "294bf39ac54a3e44e282f19ae9ea4e8ad666dd98aaf6a11d38152af78432ff60",
+   "text": "[{\"question_id\": \"M6a891be7b76ba91e\", \"verdicts\": {\"driver_state\": true, \"lane_routing\": true, \"favorability\": true, \"growth_basis\": true, \"slice_vs_menu\": true, \"driver_name_meaning\": true, \"record_matches_source\": true}}]"
+  },
+  "G2-002/G1a": {
+   "chars": 223,
+   "sha256": "b34048dfa48cbd6e1f935a730f66c71138bd5336f5596d876b5d41d4e572e888",
+   "text": "[{\"question_id\": \"M199529593ebb98bf\", \"verdicts\": {\"driver_state\": true, \"lane_routing\": true, \"favorability\": true, \"growth_basis\": true, \"slice_vs_menu\": true, \"driver_name_meaning\": true, \"record_matches_source\": true}}]"
+  },
+  "G2-002/G1b": {
+   "chars": 223,
+   "sha256": "b34048dfa48cbd6e1f935a730f66c71138bd5336f5596d876b5d41d4e572e888",
+   "text": "[{\"question_id\": \"M199529593ebb98bf\", \"verdicts\": {\"driver_state\": true, \"lane_routing\": true, \"favorability\": true, \"growth_basis\": true, \"slice_vs_menu\": true, \"driver_name_meaning\": true, \"record_matches_source\": true}}]"
+  }
+ },
+ "segment": 1
+}

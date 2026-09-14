@@ -1,0 +1,123 @@
+```json
+{
+ "source_id": "MCD_2026-02-11T16.30",
+ "verdicts": [
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P006",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P007",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P008",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P009",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "MCD_2026-02-11T16.30#P010",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "expect our full year effective tax rate to be between 21% and 23%, with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+    "raw_label_or_claim": "full year effective tax rate",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "we target approximately 2,600 gross restaurant openings in 2026, which keeps us on track to achieve 50,000 restaurants by the end of 2027.",
+    "raw_label_or_claim": "approximately 2,600 gross restaurant openings in 2026",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "MCD_2026-02-11T16.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "Overall, we anticipate about 4.5 percent unit growth from the approximately 2,100 net restaurant additions in 2026.",
+    "raw_label_or_claim": "about 4.5 percent unit growth",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

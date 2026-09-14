@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 150, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 164, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,6 +61,481 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
+CURRENT SPLIT,Revision164: current grading modules remain frozen at the
+Revision163 identities. Fresh focused verification including the counter:
+85 passed in1.96s, exit0. Existing native38 and historical698+2skip evidence
+is reused at its exact identity. GRADING_REPAIR_REVIEW_2123.md defines the
+bounded publication package; the new key candidate and Core's ongoing
+post-signature work are excluded. No final corrected score is claimed.
+
+Root's original-context reuse proof codex_keyreuse2123_a is complete, raw
+exit0. KEY_GRADING_REUSE_BASE.json SHA
+cce187e23262708ba05e419368d49054304a2fdadfe796e2111909aad94e6847
+reconstructs all413 G1 questions in96 event/arm prompts, exact-compares
+every prompt and binding, and revalidates both complete G2/G3 saved runs
+through the existing consumer. All33 key-source hashes retained. The two
+review sources occupy6 current event/arm groups and31 identity questions;
+these are NOT approved new calls. Exact command:KEY_REUSE_COMMAND_2123.txt.
+
+Scope ruling from live owners: first obtain the independent source decisions.
+Do not build a speculative re-keying framework. If truth changes, preserve
+the old verified context, compare the new complete event inputs/populations,
+and reuse only judgments whose bindings still hold; neither a new global
+key hash nor an unchanged row number decides reuse alone. That changed-key
+handoff remains unverified until an actual new signed key exists. Core's
+sole task remains Codex2122/88823dea; no newer reply was present at resume.
+Latest Core transcript activity was independently observed02:02UTC; one
+live watcher/monitor, unchanged sessions, no duplicate task or AI call.
+
+CURRENT SPLIT,Revision163: Core2122/84d2a6e0 plus the two bounded Codex
+finishes are VERIFIED for the grading-input connection, not for new semantic
+grading. Core's canonical-to-explicit sparse view is retained. Codex removed
+only its unnecessary rejection of a valid wholly empty G2 mapping, after a
+RED with a matched control (EMPTY_MATCH_POPULATION_2122_RED.txt), and added a
+mutation that removes the ACTUAL consumer's full matched-population check.
+Current renderer32e2f650, revisiondd708431, seam50f9298c, native test5c2341b9,
+mutationcab208e1, input test eeba0cf5, proof caller c3c6d82c. All earlier
+reported bytes are preserved in Core and Codex snapshots. Focused62 pass;
+own native codex_core2122_a passes2+26+10, raw/combined exit0 and stdout
+218111deb363e28b1377352a9b526496d2141094985634643aef32c0d21d920b.
+
+Actual input proof codex_inputfit2122_a/GRADING_INPUT_PROOF.json
+4e3adcd02dcb8b037ba70fbd5e7efa80efce0a2540e451087b8cd352ce0dc9da:
+306 G2 +117 G3,70+30 fitted batches,400 bound scripts, maxima516575/468555
+under524288 bytes. Independent source/question/card and EXACT pool comparison
+INDEPENDENT_INPUT_CHECK_2122.json/0262dbc8c29db3afc6a5a215f2bcdb18fbe1c00a23961a2703c2fa370b1c3696
+preserves all423 questions, the full key/producer/source/owners, and verifies
+the permitted526 comparison-record removals. All4 no-match groups/21 G3
+questions explicitly have no comparator. No AI calls or semantic relabeling.
+Full exact environment/commands are now shared in
+unit_2020_codex_check/INPUT_CHECK_AND_RUN_COMMANDS_2122.txt; do not guess
+runtime mappings or repeat Core's five setup attempts. Reuse the19 unchanged
+historical regressions already verified at Revision162.
+
+LIVE CORE TASK: Codex2122/88823dea4fc8a9ace6d82329b6d44a83bcfcd9ccd059b0f2891adf8adc927cfe
+answers Core2122/84d2a6e05dc880c571a546ebbf57e38b2574d52776b41ef480f7c2fd98b8be3c;
+its monitor-created archive was byte-compared with the outgoing mailbox.
+It is the bounded post-signature source-key correction
+preparation for ORLY/CAKE ONLY, using the existing owners and root candidate
+fe3ac02c if independently valid. No fresh source call yet. Reuse the current
+lock's count/native proof and preserve signature wf_cf398299-777 through the
+new key request's count/identities/history. The source-only bindings remain
+a97d16ba; all6 ORIGINAL targets per event, no tested outputs, grader flags or
+output-informed notes. There is no authority to regenerate382 answers or
+rewrite the2 original news entries. Root is not editing the delegated key
+candidate while Core works. Grading32e2f650/dd708431/50f9298c is now frozen.
+
+Existing-owner check: unit_2008/harness_g1v3/a7_key_correction.py was read
+completely. It has a generic patch/add applier, but current_key explicitly
+bypasses the historical v9 ledger when an approved signed key is selected.
+Do not apply that unrelated old ledger or assume its presence solves a new
+signed-key correction. Use an existing smaller lawful path if proved; do not
+create a second semantic applier. Old/new-key grading evidence reuse must
+still be demonstrated before corrective grading calls can be frozen.
+
+CURRENT SPLIT,Revision162: Codex2121/e6e56ff07b3904abe39cc70effc2b8bd0e42b8279fe46b55306213bf6db55aa0
+is the sole current Core task (the actual sparse/empty G3 group repair),
+answering Core2121/469df48b. Do not send another task before its one reply.
+Historical19-module regression independently parsed:559 native +139 ordinary
+passes,2 historical skips; all module exits0. stdout40c877905d15a019a77338dace52949745264f4fbc22f8bd0d78abcdf4a4ad2d
+and2f747bb5309c4bfb0a4a79454c36de483472b87b1b4769e2f7e7df3b2a3bd88f.
+
+ROOT KEY ADMISSION/ORIGIN BOUNDARY VERIFIED at candidatefe3ac02c, NOT the
+whole post-score key workflow. Latest real no-call positive control is
+codex_keymut2121_control/CURRENT_KEY_BOUNDARY_PROOF.json SHA
+e6ad19a28286fd7bb633445c37f0312e04c22583045612bf6716ea7b0c819473.
+All31 v5-supported sources render with original payloads and actual current
+raw origins, all33 source entries carry forward unchanged, all3 historical
+rounds reproduce10 recorded prompts and clean receipts,7 field/history
+negative controls refuse. The2 original news entries remain outside this
+existing correction phase, not dropped from the key. Four separately run
+mutations are killed for their intended reasons: last-phase-only admission,
+ignored raw hash, mislabeled origin, ignored unproved merge. Each reuses the
+same verified real positive control; all attempts and exact commands are
+saved in unit_2121_current_key/VERIFICATION_2121.json and
+NATIVE_AND_MUTATION_COMMANDS_2121.txt. Current caller64322322; historical
+reported callers retained as .txt. Historical2076 ownerbeed4309 is unchanged.
+
+NEXT ROOT BOUNDARY: POST_SIGNATURE_ACCOUNTING_PROBE.json in
+codex_keyboundary2121_c, SHA3b8e9375fe359203dc247e9d9f5278a6e937a2ce1b95c5be91836833f7f64467.
+The existing signer_proof owner freshly proves wf_cf398299-777 (signature
+evidence90bbc0366549441d19d3e8681648e832569df2104d73acc58420afa84953bbcf,
+one native response identity). Yet the successor still gives the old
+pre-signature source-key count667, omits the completed signature from its
+prior-run list/history, and the legacy spent-identity reader returns four
+empty sets for that signer's different directory format. The verified lock
+already owns the correct signer count/chain/native proof; REUSE it and the
+existing phase seams, do not invent another signer validator or receipt.
+Determine the minimal post-signature count/identity/history handoff and the
+old-key/new-key grading connection before authorizing fresh source reviews.
+No source-key semantic change, model call, publication or A7 closure follows
+from the admission test alone. ORLY/CAKE remain the only fresh source leads.
+
+CURRENT SPLIT,Revision161: Core2121/469df48b reviewed, all10 changed files,
+their10 preserved snapshots and5 proof artifacts independently rehashed.
+Own native codex_core2121_a passed2+25+8 checks; raw/combined exit0,
+stdout242672382554614b1ed7529082912c10140d48f7e283b3eea87b753ed23668b9.
+BUT actual input-fit codex_inputfit2121_a refuses at P2|0001104659-25-118458:
+the G2 owner deliberately omits groups with zero matches (run.populations,
+the `if rows` branch). Renderer26caddc7 mistakes that valid sparse absence
+for missing evidence. Saved stderr6d3417e10de24ed1ace3a2720a7e3c8c66aaf29ce8649409fb39cf5de3f737fc.
+This is one demonstrated remaining boundary, not a second general audit.
+Core's next task is distinguish a legitimately empty group from an absent
+or tampered inventory, using existing frozen populations and source bindings.
+Keep canonical full G2 membership checked by revisiondd708431; no second
+matcher, fictional matches or weakened missing-evidence check. Re-render ALL
+117 live G3 inputs, prove the four no-match groups/21 questions get empty
+pools, preserve all other bytes, and finish affected native/focused/mutation
+checks. Reuse unchanged historical regression evidence. No AI call yet.
+Delegated file ownership stays as Revision160 for this one repair.
+
+Codex parallel key candidate: unit_2121_current_key/a4_v6_successor_chain.py
+fe3ac02cbd125feb1916b1d8a8f56ce9f2ba70231a2dd9e3733db371696ef8d0;
+historical2076 ownerbeed4309 unchanged. Admission RED preserves caller
+eef11a45 and rejects31 inherited sources; GREENc3df74c1 admits all33 while
+the signed key still reconstructs. Expanded native check reaches the real
+phase guard: two original news sources cannot enter this v6 phase, which is
+restricted to sources corrected at v5. They are NOT current key-error leads;
+do not expand that phase speculatively. Prove the31 supported source prompts
+and carry all33 key entries forward unchanged except genuine reviewed changes.
+The root candidate is NOT a published key or call approval. Post-signature
+call/identity/history accounting, fresh source-only ORLY/CAKE decisions and
+their final key/score connection remain unproved. Keep scope A7 then STOP.
+
+CURRENT SPLIT,Revision160: Core2120/5ba5d66b independently verified.
+Own native codex_core2120_a:2 rules-pin +18 native +6 mutation checks pass,
+raw exit0, all exact served hashes match. The two-question same-group tests
+prove partial preservation and multi-batch completion separately; no third
+fixture question is demanded just for a combined scenario. Actual19-module
+regression outputs independently read:698 passed,2 historical skips, every
+module exit0 in its correct11-native/8-ordinary view. Reuse these proofs.
+
+One NEW Core task is the reproduced G3 matched-comparator boundary, described
+in G3_MATCHED_COMPARATOR_REVIEW_2119.md/2ecdf438. Codex delegates the existing
+renderer, revision and their directly affected tests/input-proof caller to
+Core for this bounded fix ONLY, alongside Core's existing preparation seam.
+Preserve e52c932a/b2b44d56/7c5b94fc and reported tests before editing; do not
+create competing implementations. Codex will not edit those delegated files
+until Core reports. Reuse the already-derived full G2 matched-pair population
+as G3's eligible RAW comparison pool; bind and verify that population at the
+existing candidate/revision boundary. No new output schema, matcher, semantic
+code or detector/other-grader conclusions in model inputs. Core must verify
+the proposed boundary independently, then implement/test the smallest lawful
+fix. No AI call. Codex continues source-key review preparation separately.
+Counter375cc483/f9345f36 is already VERIFIED, not work to redo. Final corrected
+grading, necessary source-key correction, publication and END-only local
+configuration check remain open; stop after A7 as §1/§6 require.
+
+Codex source preparation: SOURCE_KEY_RECHECK_BINDINGS_2120.json
+a97d16ba0895f6170e3f4ac5358152d7e4c987057b9c2bdf09c153513b964bb0
+pins the original6 targets for each of ORLY/CAKE, complete source-only body
+digests, actual prior prompt hashes from the finalized31-event receipt and
+current signed-key origins. Both rows still originate in v5; the last v6
+round only contains CMG/DAL. Thus any necessary next key correction must
+carry the complete33-event current key, not mistake the last2 replies for
+that key. The existing v6 successor's first_round_accepted currently reads
+only its last run; do not relabel an inherited v5 raw as a v6 reply or lose
+the other31 accepted contributions. This is preparation, not a new key or
+call approval. No output-informed review note may reach the fresh key owner.
+
+CURRENT SPLIT,Revision159: Core2119/700e85b3 is independently reviewed.
+The rules-pin fix7c5b94fc is accepted: own native attempt codex_core2119_a
+passed2 rules-pin +16 connection +5 mutation checks, real exit0, against
+renderer95d1a5ae. G3 reaches the real scorer, lawful partial G2 stays
+uncredited where unresolved, and original evidence is preserved. The small
+fixture still does not prove multiple questions in one group or multiple
+fitted batches. Core's3 regression failures used the WRONG historical view:
+the earlier ordinary-view run passed15/14/18 tests in those3 modules, with
+2 declared historical skips. No historical implementation fix is justified.
+
+Codex has preserved95d1a5ae as a hash-named.txt snapshot and now freezes
+renderer e52c932a7d5006379681735ed922e7b53eb6a97f10c360b1b78ed6a409abdd14.
+Both grading kinds reuse ONE existing field contract. Two numeric clauses
+now use FINAL_DESIGN7.1 directly. Crucially, the closed-shape clause retains
+"merely": it does NOT invent a blanket ban on every source-stated delta
+whenever closed operands coexist. The previous draft test over-specified
+that rule and is preserved, not treated as law. The new8 assembled-prompt
+checks include3 omission mutations; combined input/revision/accounting
+suite84 passed in1.85s. This is prompt/code proof, not semantic score proof.
+New test ccff7d5f1cd935c8b43c9b9399cace9c8a60d3d6e20b78b46b00c8209ef9ae59.
+
+Current actual input proof codex_inputfit2119_a/GRADING_INPUT_PROOF.json
+c826c6942cb11dc067d3ac5f08608ffc8a63b1d5e04a8f65e13ce1b5bcaec6eb:
+306 G2/117 G3 questions,70/31 batches,404 bound-script variants fit524288
+bytes (max516575/502262). INDEPENDENT_INPUT_CHECK_2119.json re-hashes every
+actual prompt and compares every question's complete data to the prior95d1
+proof:423 preserved, unchanged key/source/owners. Zero model calls.
+
+Next Core task remains only the final corrected preparation/consumer proof
+with this frozen renderer and proper regression views. Codex owns actual
+input-fit replay, source/key dispositions and the exact necessary-call
+population. Reuse the signed key's existing MCD/YUM exclusions; no duplicate
+source-key calls for those already settled scope questions. ORLY/CAKE are
+still source-key leads, not approved errata. No new AI call is authorized
+by this checkpoint. No owner approval or external blocker. Final corrected
+score, publication and END-only offline local-model setup remain OPEN.
+
+New source/call-boundary evidence: CORRECTION_SCOPE_DIAGNOSTIC_2119.json
+derives all306 G2 rows and a provisional122-question affected class (40
+guidance,34 signed metrics,5 menu displays,62 closed operand pairs, overlaps
+retained). This is NOT a launch approval. The same exact matcher reproduces
+121/114/71 baseline matches and finds14 of92 duplicate labels in events with
+NO matched fact, contrary to spec-v3§5. See
+unit_2020_codex_check/G3_MATCHED_COMPARATOR_REVIEW_2119.md for the raw-evidence
+proof and the proposed existing-pool repair, not a new response schema or
+matcher. Do not change Core's frozen2120 proof mid-run; no new AI call before
+this actual boundary is resolved. Source-key leads remain ORLY/CAKE, with
+their ORIGINAL target/quote scopes checked; no broad source harvest.
+
+CURRENT SPLIT,Revision158: Core2118/81480078 is independently reviewed;
+Codex2118 SHA2733c49604c28c50d875bf82c08cf909843db2a23e50ddcac702d26b5f0098fc
+assigns ONE finish of the correction-candidate connection: fix its actual
+rules identity and complete directly relevant native G3/partial/question-
+scope and affected regression proof. Core may edit its own2118 seam/test with
+old hash snapshots preserved; renderer95d1a5ae and revisionb2b44d56 remain
+frozen. Codex continues source dispositions. Same sessions, single watcher;
+no new AI calls, owner approval or external blocker.
+
+COUNTER SUCCESSOR REPLAY COMPLETE: codex_counter2116_b/
+COUNTER_CORRECTION_PROOF.json SHA
+f9345f362dbedf83112537df1b5a4c00f58aef0bbed01fa247cded5271acb0f4.
+Actual raw exit0,99 routes, code375cc483, caller53a3cc14. A separate Node
+deep comparison restores only the two named counters and obtains all3
+original result objects exactly. Both FAIL decisions and all other scores
+remain unchanged. The import-only simplification is now tested natively.
+
+CORE2118 REVIEW: all6 artifact hashes and the4 added read-only map rows are
+verified. Its13 native tests genuinely enter G2 completion/consumer/scorer;
+G3 only prepares a candidate, not a consumed correction. A valid partial G2
+reply was not exercised; the omitted-all reply is a different invalid case.
+The smallest seam is retained, not replaced. Independent native RED in
+attempt_codex_rules2118_c:2 failures in9.44s after successful prompt-byte and
+renderer-pin positive controls. Both candidate rules hashes name OLD rules:
+G2 17e700d1 instead of actual9911b987; G3 1ccd2c4c instead of actual3fbee280.
+The written prompts themselves use the correct new rules. The new writer
+adapter still calls R.KIND_RULES's old functions; fix at that preparation
+boundary, retain the existing hashing owner, and preserve old candidates.
+Reproducer: unit_2020_codex_check/test_correction_rules_2118.py, matching map
+and run_correction_rules_2118.py. Earlier _a/_b were Codex setup failures
+(missing TRACE_FIXTURE, then FIXTURE_PROJECTS), preserved and not defect proof.
+
+Further source checks are recorded in A7_CAUSE_REVIEW_2118.md. They are
+cause-review decisions, not replacement qualified grader/key evidence.
+Source/key dispositions, exact justified call population, integrated final
+regression/publication and corrected semantic score remain OPEN.
+
+CURRENT SPLIT,Revision157: Core2117/f9764eb1 is reviewed; Codex2117
+SHA3492bb04dd332c049edcabd896492e757fab884c3b76b492f9b2c6eb6c9075c1
+assigns ONE correction-candidate preparation plus native consumer proof in
+unit_2118_correction_native, with uniquely tagged unit_1957 test attempts.
+Same sessions, one watcher/monitor. This goal turn made PROGRESS: actual input
+fitting and counter replay completed, missing preparation is now precisely
+assigned. No owner approval or external blocker; no new AI calls.
+
+INPUT FIT PROVED: codex_inputfit2116_b/GRADING_INPUT_PROOF.json051c7d22;
+independent comparison0207312f.423 questions,1169 record views,117 complete G3
+contexts remain intact in101 fitted batches (70G2/31G3). The existing2098
+owner measured/bisected;404 actual bound-script variants including both
+attempts fit the524288-byte cap. MaxG2/G3=516344/492599. Current renderer is
+95d1a5ae, proof caller513815fa. This proves fit, not new-call authorization or
+semantic correctness. Failed attempt codex_inputfit2116_a preserved: the new
+proof's independent measurement omitted ordinal; fixed before _b, no AI call.
+
+COUNTER FIX PROVED AT REAL CONSUMER: codex_counter2116_a ran99 real write-
+disabled routes through the original G1/G2/G3 evidence checks. Only two
+counters change: duplicate_violations1/3/144 ->0/0/0 and open identity1/1/1
+->1/3/55. Every other result and both FAIL decisions remain byte-equivalent.
+Original baseline and raw evidence unchanged.23 focused tests include3 killed
+mutations, exact repetition counts2/3/5 across all4 route outcomes, real full-
+population replay and unchanged positive controls. Code375cc483 is a narrow
+explicit successor over the existing score_arm body; no second matcher or
+scoring formulas. It also removes the unnecessary A4 import; the import-only
+successor is getting its own real replay in codex_counter2116_b. Historical
+c59d5620 code is preserved as.txt under codex_corrections2116.
+
+Core2117 native4-test proof correctly exposes the revision's unnecessary A4
+dependency and the absence of NEW subset/input-version preparation. M0 fixed:
+revisionb2b44d56 uses direct try/finally restoration, no A4 dependency. Combined
+input/revision/counter tests76 pass after simplification. Its old d4e50580 code
+is preserved as.txt. M1/M2 do NOT justify weakening whole-population checks or
+editing old candidates: Core's new task prepares a NEW candidate whose whole
+population IS the independently approved subset, with new input version and
+rules bound before root freeze. Original/full and new/subset completions must
+each independently satisfy the same existing verifier. Actual revised-
+judgment/scorer connection remains OPEN. Core2117's payload printed test exit
+without propagating it;2117's4-pass stdout was checked, and2118 must propagate
+real pytest status. No blanket four-record grading rescue is accepted.
+
+Remaining: finish actual source/key dispositions and the justified affected
+call population; finish the new candidate/consumer proof; full affected
+regression and freeze/publish; only necessary targeted new grading/key calls;
+corrected report; END-only offline local-model setup; then STOP AND WAIT.
+
+CURRENT SPLIT,Revision156: Core2116/2018f368 is reviewed; Codex2116 assigns
+ONE native TEST-lifecycle proof of the new question-scoped revision consumer.
+Core writes unit_2117_revision_native and uniquely tagged unit_1957 attempt
+evidence only. No AI calls or implementation changes to frozen owners. Codex
+owns input fitting, source dispositions and the accounting correction. Same
+bound sessions, one watcher/monitor; no new handover. Last status-only turn
+rechecked53 tests but did not complete the real connection; work is not blocked.
+
+Revision consumer a7_grading_revision_2115.py/d4e50580 verifies original full
+evidence first, verifies an approved correction subset through that SAME
+consumer, then replaces only exact questions. An unresolved or partial new
+judgment cannot inherit old credit.33 boundary tests pass, including4 killed
+mutations. Those tests use a consumer double and are NOT native/scorer proof;
+Core's current task closes that exact gap. No real grade has been replaced.
+
+Input renderer95d1a5ae now preserves source-stated introduced/withdrawn guides
+and legal omitted slice_parts;20 focused tests pass, including the prior4
+mutations and3 new red-to-green cases. Combined53 tests passed again. Core2115
+D1/L1 are fixed. D2 is launch-preparation work:11 of86 old rebuilt prompts
+exceed the existing524288-byte limit. Codex is using the existing unit_2098
+_rows_and_prompts bound-script measurement/bisection, not truncation or a new
+limiter. L2 has no proved live collision; no speculative decoder rewrite. L3
+extra marker guard is cut because its whole owner is frozen and no defect was
+found. The old codex_input2114_a proof covers only its historical20fc3f51 input
+version; exact old renderer/tests/caller snapshots are preserved there as.txt.
+It is not proof of current launch fit. Current full affected regression OPEN.
+
+Core2116 report3ba0cfcf distinguishes exact emitted duplicates, unresolved G1
+identity groups and semantic extra buckets; actual laws and counter locations
+were independently read. Current counter mixes those categories. Its proposed
+owner edit is NOT applied: reuse the matcher's exact-duplicate owner and keep
+all immutable completions. PartD's later normative exact-duplicate violation
+is retained. Core's claim that removing duplicates makes the baseline
+INCONCLUSIVE is REFUTED: actual11/14/8 wrong-accept increments still trigger
+final_gate first. Neither those flags nor the earlier four claimed whole-record
+rescues are source-adjudicated by that counter analysis. Codex owns the narrow
+correction and residual source decisions; no bar waiver or model tuning.
+
+CURRENT SPLIT,18:05 Eastern: Core2114/ad0bd264 is independently checked;
+Codex2114 SHA4758a866eae852146ad0bf62c9fdafe136e108404ea49b2d808bf258fa7fb3d4
+assigns ONE input-only review of renderer a7_grading_input_correction_2114.py
+SHA20fc3f51df0d0e79c375f20bff9ed8eef27022967510bd0cb8843d2371752cde,
+its tests/native caller and saved actual prompts. Core writes only a new
+unit_2115_input_review directory, no AI or implementation edit; one reply then
+wait. Codex freezes those three reviewed files while Core reviews them and
+owns source/counter dispositions and subsequent lifecycle integration. No new
+handover; same sessions, one watcher and one Core monitor; goal stays active.
+
+Core2114 extraction is verified:40 questions,22 combinations,14 sources,
+280 cells. Its semantic conclusions are NOT all accepted. The DRI retraction
+stands. Its AAL magnitude readings are reversed once the actual multiplier
+is applied; its global introduced ban and two-different-states contradiction
+are unsupported. Empty measurement does not authorize dropping a source
+qualifier. Correct unknown state does not rescue YUM's misplaced percent-only
+guide change_value. See A7_CAUSE_REVIEW_2114.md under unit_2020_codex_check;
+CORE_2114_INDEPENDENT_CHECK.json SHA78790555 in codex_scoretrace2112_a contains
+the original-input reconstruction and independent exact numerical checks.
+Do not repeat the entire guidance review; Codex owns the residual rulings.
+
+NEW INPUT PROOF:17 focused tests pass including4 meaningful mutations. Actual
+verified preparation codex_input2114_a completed exit0 with423 questions
+(G2:306/70batches;G3:117/16batches). Independent comparison checks1169 record
+views and all117 G3 contexts across32 distinct source contexts: all non-display
+record fields and original verified source contexts unchanged. Proof08925efc;
+independent comparisonc7151f92. Both reports and reproduction recipes are
+durable. This is INPUT preparation only: no new AI, corrected grade or real
+new-version collection/scorer binding yet. Old698-test regression does not
+cover the new renderer. Maximum G3 batch969253bytes is not token-capacity proof;
+Core checks the actual input-size boundary, not the deferred local model.
+Remaining scope is stated in the new cause note: bounded required corrections,
+verified affected population/integration and regressions, publication, only
+justified targeted new grading/key evidence, corrected report, END-only offline
+local setup, then STOP AND WAIT. No owner approval currently blocks this work.
+
+CURRENT SPLIT,17:15 Eastern: Core2113/165137de is reviewed; Codex2113
+SHAe7ff38479c78cf567db6b039d7edafa028b08926c8654458bd66ae543cdf3d29
+assigns the same bounded guidance source review, with the extraction reused:
+40 questions,22 distinct record/context/reference combinations,14 sources.
+Core's first review generated170 generic unknown cells; these are not source-
+adjudicated uncertainty. Its DRI midpoint disagreement is REFUTED:10.60 to
+10.62, and the same qa paragraph explicitly says the midpoint is higher.
+Do not overturn that correct raised-state grade. The lane flag/empty slice
+cannot prove source confirmation/population. Core must read the actual full
+source and record source-specific grounds, writing only the new
+unit_2114_guidance_source_review directory. No model calls or changed grades.
+The one hard repeated-record contradiction is verified, but different question
+ids/batches mean these were not byte-identical calls. Codex owns all other
+findings and the smallest proved test corrections. CORE_2113_INDEPENDENT_CHECK
+and DISPLAY_GAP_2113 in codex_scoretrace2112_a record the read-only checks.
+The latter proves24 encoded-token occurrences still shown raw to graders,
+including6 occurrences in5 G2 questions; the existing decoder is reversible.
+This is an input-view mismatch, not proof that all affected grades are wrong.
+Cause attribution/correction is still OPEN. Preserve every original result;
+no grader/key/prompt/scorer change or new call has occurred in this pass.
+Source findings, rejected rescues, and the remaining correction boundary are
+recorded in unit_2020_codex_check/A7_CAUSE_REVIEW_2113.md (91496c22).
+Independent-check report568962f3 and display-gap report4d2594c7 are diagnostic
+evidence, not new grading rules or permission to relabel historical results.
+
+Previous split,16:45 Eastern: Core2112 is reviewed; Codex2112
+SHA9870cd40e47d194d45319ff769d7adfc2bfde34aad76a040eca9657747c60438
+is byte-identically archived. Same bound sessions; one live watcher and one
+Core monitor. ONE Core task: read-only source/rule review of ALL40 G2 guidance
+questions, all seven aspects, using the actual served prompts and native
+judgments. Artifacts only in unit_2113_guidance_review, no calls or edits to
+grader/key/answers, one reply then wait. Codex owns the other findings and
+duplicate-accounting rule boundary. The previous goal turn made PROGRESS:
+completed actual trace and306-question consumer proof changed the next task;
+there is no blocker and no new handover.
+
+Core's173/176/211 produced,121/114/71 matched,126 arm-match union,55 losses,
+and0 gains are independently reproduced. CORE_2112_INDEPENDENT_CHECK.json
+SHA911eeeba7613e6348142f8a319e1db01ab2d5614ceaadbdf209bfa6320e1fe62
+is under codex_scoretrace2112_a.54 UNION groups name110 facts;90 G3 duplicate
+judgments overlap72 of those facts.144 combines groups and facts and is NOT
+a distinct-fact count. Core's stronger claims are rejected: two groups have
+three members; unequal fields can be lawful synonyms/representations; current
+non-bijection is not completed source adjudication; a low measured score does
+not need a lowered bar or owner relief. The proposed counter split is NOT
+approved pending PartD3/6 and Step1's separate emission/group requirements.
+Read the actual G1 task: it links ATTEMPTS at the same claim, including wrong
+fields, so those links alone do not establish correctness or exact emissions.
+Preserve the baseline and every original diagnosis artifact unchanged.
+
+MEANING_BINDING_CHECK.json SHA648da353b66706145223084ce1da49940be84fb54834c0bebf26e3416a3a3fef
+in the same trace directory binds ALL306 questions from frozen candidate
+cc9d51f5,70 exact prompts and native review input59d54d97 to the actual
+consumer:178 complete,128 partial,42 with an agreed false aspect. No lost or
+relabeled consumer verdict. These are semantic findings, not transport gaps.
+Source review has identified a concrete guidance-state grading problem, but
+it must not rescue unrelated wrong values or erase legitimate uncertainty.
+No scorer, prompt, key or model change has been made in this cause-review pass.
+
+CURRENT CAUSE-REVIEW PASS,16:16 Eastern: one observation-only replay of the
+UNCHANGED actual scorer completed with exit0. It made zero model calls and
+reproduces A7_BASELINE.json byte-for-byte (98a7a6ad). The saved per-fact trace
+is codex_scoretrace2112_a/SCORER_TRACE.json under unit_2020_codex_check,
+SHA0b4a3f624a4024fb071fff1740f04b186027b2c91bcade2aaba4ce6bb05f7ee4;
+TRACE_CHECK.json SHA5e6e630cd60c326ae36b60f5a16a8c37a7f168f67ad36027d66e2eb170a46f73.
+Observer trace_actual_scoring_2112.py SHA1d4e3b102ca8cf5b598c2979fefa57c025a822cc260e758e8e79c9648e6231eb
+records the existing scorer's actual inputs, all870 error-code emissions,
+all33 wrong-accept increments and all128 missing-judgment increments; no new
+scoring rule or judgment is introduced. Every emitted-code count, raw
+counter total and final score agrees with the baseline.33 is an ARM-SPECIFIC
+count:31 matched findings over22 distinct gold identities plus2 UNION extras,
+not33 independent facts. Source/test attribution is still OPEN; identical key
+and produced fields alone do not prove either is correct. Original records,
+completions and the immutable baseline are reused, never overwritten.
+The replay uses the same original G1 launch/map2103 and no A7_TEST settings.
+Its existing attempt log is unit_1947/logs/attempt_codex_scoretrace2112_a;
+never rerun this create-only tag. Codex2111's UNION diagnosis is now reported
+and reviewed above; Codex2112 owns Core's current non-overlapping task.
+
+NEWEST PUBLICATION, verified15:58 Eastern: the complete collection, reviewed
+completions and measured baseline are committed and normally pushed as
+86e742ee80321841abd7be9992b826a3abc9e734, tree8e38f98dfe9e30651c7a021430c71d0bebb10d60,
+sole parent e3964bd06f902eb6218215560afe35ba28a9023a. Fresh remote read matches.
+A7_BASELINE_PUBLICATION_2111.json SHA464c1efc0200053ddc9012e28bb43c7490b71b2ce70468d41967755ec5f07919
+pins3346 reviewed files;422 changed paths. All3347 selected committed files,
+including the manifest, were read from Git and byte-hash verified. Index
+empty; main and unrelated work unchanged. This preserves a FAIL baseline,
+not A7 PASS or completed cause review. Core's ongoing UNION diagnosis is
+outside this checkpoint. The baseline-report ETA is fulfilled; remaining
+source/test corrections and deferred offline local setup are separate work.
+
 CURRENT,15:41 Eastern: G2 COLLECTION IS INDEPENDENTLY VERIFIED COMPLETE.
 All140 required primary readings are usable;141 actual calls retain48
 original-valid and93 original-invalid/recovered attempts. Exactly one earlier
@@ -101,8 +576,8 @@ uses the ORIGINAL G1 context, no TEST inputs, the same map2103 and pinned
 format scope; it saves/reuses the approved G2 completion, reuses saved G3 and
 calls the existing official tier scorer once. These are operational callers,
 not new grader rules. Exact G2 completion already saved by a partial scoring
-attempt must be reloaded, never overwritten. Source-cause checks and
-publication of this increment remain owed; no A7 PASS is claimed.
+attempt must be reloaded, never overwritten. Source-cause checks remain owed;
+this baseline increment is published above, without claiming A7 PASS.
 
 Core2111 SHA4ea8566b6aac310289a688b69d66ce907e1c809f558d2b5f1e129e4f0a156169
 is verified against its archive and all132 segment pins/full recovery audit.
@@ -123,7 +598,7 @@ The latest manual scope remains §1/§6: correct TEST faults only; local setup
 check at the END without engine/client/server changes or live calls; then
 STOP AND WAIT. No A8 or later-step task.
 
-NEWEST PUBLICATION, verified14:55 Eastern: G2 prefix6–121, unchanged G3
+EARLIER PUBLICATION, verified14:55 Eastern: G2 prefix6–121, unchanged G3
 completion and the latest local-setup-only/end-of-task limit are committed and
 normally pushed ase3964bd06f902eb6218215560afe35ba28a9023a,
 tree40444ee6466fdc4054fe30e937c112aa20e9f52a, sole parent56bdb12c70e547d3801b23a1f5622a0d255f58d0.
@@ -2009,14 +2484,14 @@ Corrections target the test/key/grading, not the tested model's intelligence.
 Source-confirmed model mistakes remain in the score and need no automatic
 producer-prompt change or new answer call. This is not a promise of A7 PASS.
 This is the single follow-up checklist; the latest
-mailbox still limits Core to collection until its one final reply. Codex owns
+mailbox limits Core to its one bounded diagnosis and one final reply. Codex owns
 independent review and chooses the faster safe implementer for each bounded
 task. No overlapping edits or blanket re-audit of unchanged proved machinery.
 
 | Order / task | Status | Required evidence and boundary |
 |---|---|---|
-| 1. Freeze the honest baseline | IN PROGRESS | Finish all required readings and lawful retries; verify complete native identities; persist G2 once, reuse saved G3, run the actual no-write route/scorer. Publish complete counts, original errors, uncertainties, misses, duplicates and exhausted invalids; no omitted denominator or implied PASS. |
-| 2. Establish each actual cause | OPEN after baseline | Derive the complete finding population from final scorer/completion records, including but not limited to provisional33+91. Bind each finding to exact event/item/fact/field, original prompt/output, source, key and grader replies. Distinguish producer meaning errors, source/key errors, grading errors, deterministic code/transport faults and legitimate ambiguity. Check apparently cautious answers against the rule actually served; do not turn uncertainty into a wrong answer or force unsupported truth. Record an evidence-backed disposition for every finding. |
+| 1. Freeze the honest baseline | VERIFIED and published86e742ee | All required readings and lawful attempts accounted for; G2/G3 completions reused by the actual no-write route/scorer; baseline98a7a6ad and full accounting preserved. This is a FAIL measurement, not A7 PASS. |
+| 2. Establish each actual cause | IN PROGRESS: complete raw scoring trace verified; semantic dispositions open | Derive the complete finding population from final scorer/completion records, including but not limited to provisional33+91. Bind each finding to exact event/item/fact/field, original prompt/output, source, key and grader replies. Distinguish producer meaning errors, source/key errors, grading errors, deterministic code/transport faults and legitimate ambiguity. Check apparently cautious answers against the rule actually served; do not turn uncertainty into a wrong answer or force unsupported truth. Record an evidence-backed disposition for every finding. |
 | 3. Correct only proved TEST causes | OPEN after cause proof | Reproduce grading/code defects first; fix the single existing owner generally, with affected-population tests, positive/negative controls, meaningful mutations and affected regression. Key corrections require a fresh source-only independent qualified owner that has not seen evaluated replies or scores. Models decide meaning; no answer-specific strings, semantic code or production patch. Correct a grading prompt only for a demonstrated mismatch with its governing task. Record genuine tested-model errors without trying to improve that model's score. An unclear rule gets the Plan's rule_ambiguity exhibit and required decision, not an invented resolution. |
 | 4. Verify the corrected TEST without cheating | OPEN after named correction | Regrade the unchanged382 saved answers for proved code/key corrections, reusing valid judgments only where full bindings still hold. If a corrected AI-facing GRADING task/input/configuration needs new evidence, pre-freeze the reason, full affected population and call ceiling; use targeted fresh blind grading tests with no expected verdict or previous attempt supplied. Known repaired cases are regression evidence, not unseen qualification. No producer-prompt tuning, unchanged semantic rerolls, successful-call repeats, dropped hard cases, lowered bars or altered raw answers. |
 | 5. Check model-selection setup AT THE END | DEFERRED until A7 test/grading corrections are complete | Read the owner's /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/LeftOverSteps/QwenInference.md and /home/faisal/EventMarketDB/.claude/plans/Drivers/FinalDesign/QwenTests/LOCAL_QWEN_HANDOFF.md. Check the existing test/grader's configuration and connection contract for another supported model, including local; preserve sources/key where bindings permit and the same grading/accounting/report owners. Confine justified model-specific details to one documented selection and make only demonstrated A7-side connection fixes, with focused offline positive/invalid tests. Do NOT change the inference engine/client/server or try the local model, run its preflight, alter its settings or launch a live probe. Host-side execution is a separate task. No second grader, speculative provider framework, production import,382-answer rerun or change to the frozen current run. |

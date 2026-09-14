@@ -1,0 +1,38 @@
+env A7_APPROVED_KEY_DIR='/tmp/a7_logs_1781/life_native5/candidate_owed_002' A7_DRIVER_VALIDATORS_SHA='4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5' A7_FIXTURE_PROJECTS='/tmp/a7_logs_1781/life_native5/TEST_projects' A7_LANE_INPUT_PROFILES='/tmp/a7_lane_input_profiles.json' A7_TRACE_FIXTURE='/tmp/a7_logs_1781/attempt_grader_path7' CLAUDE_CODE_MAX_OUTPUT_TOKENS='128000' bash a7_recovery/unit_1957/ledger/run_1957.sh ../unit_2020_codex_check/map_core2122_review.tsv ../../unit_2122_sparse_match_groups/payload_sparse_2122.py codex_core2122_a 900
+
+env PYTHONDONTWRITEBYTECODE='1' A7_RUN_BINDING='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/map_g23_transport_2103.tsv' A7_LANE_INPUT_PROFILES='/tmp/a7_lane_input_profiles.json' A7_SOURCE_PROJECTS='/home/faisal/.claude/projects' A7_REVIEW_OUT='/tmp/a7_real_package_1947' A7_SOURCE_CONTEXT='/tmp/a7_source_context' A7_GRADING_LAUNCH='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2088_real_grading/LAUNCH.json' A7_GRADING_LAUNCH_SHA256='ef8095d796b59b36e6fd8e4039a99f26ca24a012b9692560b0fb3060cf9bb327' A7_REVIEW_RUN_SHA256='1b0f4e36c989cc3cee81d827dbc72a5de1a3118e9ad12018b149f49f67ca7a8c' A7_REVIEW_RUN_FILES='445' A7_REVIEW_G1_PINS='{"run_tree_sha256":"1b0f4e36c989cc3cee81d827dbc72a5de1a3118e9ad12018b149f49f67ca7a8c","run_file_count":445,"root_sha256":"013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8","candidate_sha256":"24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467","prompt_tree_sha256":"75c879e9068074d025d79e8a0c8d37ad9432953a60df40c8db9daa3f82c15423","rules_block_sha256":"7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32","git_head":"2dc0ad39f30dba4756078573f5e80038465939cc","git_tree":"a45f8d0c2802e0d482ddefc5d330a4774d25a787","partial_grading_policy_sha256":"1a465b94ff57789bee9bc210b36e7b892768156975702160fe22cd46b16db959","partial_grading_rule_sha256":"05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b"}' A7_PARTIAL_POLICY_SHA256='1a465b94ff57789bee9bc210b36e7b892768156975702160fe22cd46b16db959' A7_REAL_CANDIDATE_BUILD='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a' A7_VERIFY_PREPARATION='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_gprep2086_a/PREPARATION.json' A7_VERIFY_PREPARATION_SHA256='a889236369af76bdbadb3ffc9056395524b5473d45647e00e2c45e919e91ab6c' A7_VERIFY_G23_PREPARATION='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g23partial2098_fit/PREPARATION.json' A7_VERIFY_G23_PREPARATION_SHA256='a57a90fff7c2f77fa6ba5e34b7b285d6ef8793b55d4d30c472bf6643108bc718' A7_OLD_G23_PREPARATION='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g23partial2097_c/PREPARATION.json' A7_OLD_G23_PREPARATION_SHA256='c1a857abc3a1441ab941fa446ec80f29a8b82df2a46ff52914ff98d3a4862f47' A7_TAG='codex_inputfit2122_a' A7_FORMAT_CODE_SHA256='7aeabc6b236d425de3fed02c250f1cf3744296107015d273fb2c395e8fa680f8' A7_FORMAT_RULE_SHA256='76b83ceb2dcf0bb6079c90399c103df7aa0a3cca29dbc411d918ffc89b66881b' A7_G2_REVIEW_REPORT='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g2completion2111_a/REVIEW.json' A7_G2_REVIEW_REPORT_SHA256='afdc8bd2bee60f877f79cc0dc2924e949b675a82d02f03ba0f003464fdff0f26' A7_G3_PERSISTED_REPORT='/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_g3persist2111_a/PERSISTED_G3.json' A7_G3_PERSISTED_REPORT_SHA256='11ed9654a2fec1822ce91da058fc4b85dfafe90e3d9a6f594fc167f4c0af9036' bash a7_recovery/unit_1947/ledger/run_real_1947.sh ../unit_2020_codex_check/map_g23_transport_2103.tsv ../../unit_2020_codex_check/prove_grading_input_correction_2114.py codex_inputfit2122_a 900
+
+node <<'JS'
+const fs=require('fs'),assert=require('assert/strict'),crypto=require('crypto');
+const root='a7_recovery/unit_2020_codex_check',hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+const old=JSON.parse(fs.readFileSync(root+'/codex_inputfit2119_a/GRADING_INPUT_PROOF.json'));
+const curFile=root+'/codex_inputfit2122_a/GRADING_INPUT_PROOF.json',cur=JSON.parse(fs.readFileSync(curFile));
+const g2=JSON.parse(fs.readFileSync(root+'/codex_g23partial2098_fit/G2/a7_g1_candidate.json'));
+const g3=JSON.parse(fs.readFileSync(root+'/codex_g23partial2098_fit/G3/a7_g1_candidate.json'));
+assert.equal(hash(fs.readFileSync(root+'/codex_g23partial2098_fit/G2/a7_g1_candidate.json')),cur.kinds.G2.original_candidate_sha256);
+assert.equal(hash(fs.readFileSync(root+'/codex_g23partial2098_fit/G3/a7_g1_candidate.json')),cur.kinds.G3.original_candidate_sha256);
+const ids=new Map();for(const [group,rows]of Object.entries(g3.population))for(const idx of rows){const id='X'+hash('G3|'+group+'|'+idx).slice(0,16);ids.set(id,{group,idx});}
+function questions(doc,kind){const map=new Map();for(const r of doc.kinds[kind].rows){const buf=fs.readFileSync(r.path);assert.equal(hash(buf),r.sha256);assert.equal(buf.length,r.bytes);const text=buf.toString(),body=JSON.parse(text.slice(text.indexOf('[EVENT]\n')+8));for(const e of body.events)for(const q of e.questions){assert(!map.has(q.question_id));map.set(q.question_id,{event:e,q});}}return map;}
+const result={};const zeroGroups=new Set();let zeroQuestions=0;
+for(const kind of ['G2','G3']){
+ const prev=questions(old,kind),next=questions(cur,kind);assert.deepEqual([...prev.keys()].sort(),[...next.keys()].sort());let removed=0;
+ for(const [id,{event:e,q}]of next){const before=prev.get(id);assert.deepEqual(q,before.q);assert.deepEqual(e.event_context,before.event.event_context);
+  if(kind==='G3'){
+   assert.deepEqual(e.reference_cards,before.event.reference_cards);assert.equal(before.event.questions.length,1);
+   const bind=ids.get(id);assert(bind,id);const matched=(g2.population[bind.group]||[]).map(p=>p[1]);
+   const priorIndices=Array.from({length:before.event.other_records.length+1},(_,i)=>i).filter(i=>i!==bind.idx);assert.equal(priorIndices.length,before.event.other_records.length);
+   const wanted=before.event.other_records.filter((_,i)=>matched.includes(priorIndices[i])).map((r,i)=>({other:'O'+(i+1),produced_record:r.produced_record}));
+   assert.deepEqual(e.other_records,wanted,id);removed+=before.event.other_records.length-wanted.length;
+   if(wanted.length===0){zeroGroups.add(bind.group);zeroQuestions++;}
+  }
+ }
+ result[kind]={questions:next.size,batches:cur.kinds[kind].batches,all_question_source_and_card_bytes_preserved:true,removed_comparison_records:removed};
+}
+for(const k of ['producer','key_identity','owners','source_manifest_sha256','trace_sha256'])assert.deepEqual(cur[k],old[k],k);
+console.log(JSON.stringify({current_proof_sha256:hash(fs.readFileSync(curFile)),input_correction_sha256:cur.input_correction_sha256,kinds:result,empty_comparator_groups:[...zeroGroups].sort(),empty_comparator_questions:zeroQuestions,model_calls:0},null,1));
+JS
+
+The first independent comparison attempt used a 15-character digest slice.
+It stopped at an unbound qid before comparing G3 pools. The frozen owner sets
+OPAQUE_LEN=16; the corrected independent calculation above matches all117.
+No source, prompt, key, candidate or grading rule changed for that test fix.

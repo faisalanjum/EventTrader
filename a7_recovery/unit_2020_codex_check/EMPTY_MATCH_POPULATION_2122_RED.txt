@@ -1,0 +1,56 @@
+env PYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -m pytest -q -p no:cacheprovider a7_recovery/unit_2020_codex_check/test_grading_input_correction_2114.py -k complete_zero_match
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_a_complete_zero_match_inventory_is_not_missing_evidence _________
+
+source = ({'event_date': '2026-02-15', 'fye_month': 8, 'menu_tokens': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e... units.', 'slice_parts': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e6e656c41786973__new_channel']}, ...})
+
+    def test_a_complete_zero_match_inventory_is_not_missing_evidence(source):
+        raw, run, inputs, fact = source
+        group = 'P1|' + raw['source_id']
+        asked = {group: [0]}
+    
+        def packet(canonical):
+            return SUBJECT.extras_packet(
+                'P1', raw['source_id'], [0], [fact, copy.deepcopy(fact)], [(0, fact)],
+                run, inputs=inputs,
+                matched_pairs=SUBJECT.matched_inventory(canonical, asked))
+    
+        control = packet({group: [[0, 1]]})
+        assert len(control['other_records']) == 1
+        # Explicit zero and the canonical sparse representation mean the same
+        # thing, even when no other event happened to produce a matched pair.
+        for canonical in ({group: []}, {}):
+>           empty = packet(canonical)
+                    ^^^^^^^^^^^^^^^^^
+
+a7_recovery/unit_2020_codex_check/test_grading_input_correction_2114.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a7_recovery/unit_2020_codex_check/test_grading_input_correction_2114.py:123: in packet
+    matched_pairs=SUBJECT.matched_inventory(canonical, asked))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matched_pairs = {}, asked_population = {'P1|unfamiliar-source': [0]}
+
+    def matched_inventory(matched_pairs, asked_population):
+        """The canonical G2 population, made EXPLICIT for every asked group.
+    
+        `a7_g23_run.populations` writes g2[group] only `if rows`, so the frozen
+        full inventory is sparse: a leg/source that matched nothing is simply
+        absent. The G3 population names exactly which groups are legitimately
+        asked about, so the two together say - mechanically, per group and with no
+        per-event branch - which absences are lawful. Every asked group appears
+        here, with its matched pairs or with an explicit empty list; a group that
+        is NOT asked about stays absent, so a wrong, truncated or tampered
+        inventory still refuses downstream instead of turning into an empty pool.
+        """
+        if not isinstance(matched_pairs, dict) or not matched_pairs:
+>           raise ValueError('the matched-pair inventory is required')
+E           ValueError: the matched-pair inventory is required
+
+a7_recovery/unit_2020_codex_check/a7_grading_input_correction_2114.py:131: ValueError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_grading_input_correction_2114.py::test_a_complete_zero_match_inventory_is_not_missing_evidence
+1 failed, 20 deselected in 0.15s

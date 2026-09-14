@@ -1,0 +1,38 @@
+PYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B - <<'PY'
+import sys,json,hashlib
+from decimal import Decimal
+from pathlib import Path
+root=Path('a7_recovery/unit_2020_codex_check').resolve();sys.path.insert(0,str(root))
+import test_duplicate_accounting_2116 as T
+import a7_g23_build as B
+B.bind_grading_scorer(str(T.OWNER),T.OWNER_SHA)
+cpath=root/'codex_g23partial2098_fit/G2/a7_g1_candidate.json'
+data=cpath.read_bytes();candidate=json.loads(data)
+display=json.loads((root/'codex_scoretrace2112_a/DISPLAY_GAP_2113.json').read_text())
+tokens={r['raw'] for r in display['rows']}
+rows=[];duplicates=[];summary={};by_reason={}
+for leg in ('P1','P2','UNION'):
+ args,baseline=T.replay(leg)
+ pairs=B.matched_pairs(args['gold_by_event'],args['arm_by_event'],args['ambiguity_resolutions'])
+ assert sum(map(len,pairs.values()))==baseline['matched']
+ for (sid,pi),v in args['extras_verdicts'].items():
+  if v=='duplicate':duplicates.append(dict(leg=leg,source_id=sid,produced_idx=pi,matched_count=len(pairs[sid])))
+ for group,items in candidate['population'].items():
+  group_leg,sid=group.split('|',1)
+  if group_leg!=leg:continue
+  for gi,pi in items:
+   fact=args['arm_by_event'][sid]['facts'][pi];item=fact['item'];reasons=[]
+   if fact['fact_type']=='guidance':reasons.append('guidance_state_and_growth_slots')
+   slots=[item.get(k) for k in ('level_low','level_high','comparison_low','comparison_high')]
+   if fact['fact_type']=='metric' and any(s is not None and Decimal(str(s['value']))<0 for s in slots):reasons.append('signed_metric_direction')
+   if any(p in tokens for p in item.get('slice_parts',[])):reasons.append('reversible_menu_display')
+   if all(s is not None for s in slots):reasons.append('closed_operand_omission_instruction')
+   qid='M'+hashlib.sha256(('G2|%s|%s|%d|%d'%(leg,sid,gi,pi)).encode()).hexdigest()[:16]
+   verdict=args['grader_verdicts'].get((sid,gi),{})
+   rows.append(dict(group=group,gold_idx=gi,produced_idx=pi,question_id=qid,reasons=reasons,missing_aspects=[f for f in B.meaning_fields() if verdict.get(f) is None]))
+   for reason in reasons:by_reason[reason]=by_reason.get(reason,0)+1
+ expected={q for b in candidate['batch_rows'] for q in b['question_ids']}
+assert {r['question_id'] for r in rows}==expected and len(rows)==len(expected)
+summary=dict(g2_questions=len(rows),provisional_affected=sum(bool(r['reasons']) for r in rows),unaffected_by_these_structural_changes=sum(not r['reasons'] for r in rows),by_reason=by_reason,semantic_duplicates=len(duplicates),duplicates_without_any_matched_event_fact=sum(r['matched_count']==0 for r in duplicates))
+print(json.dumps(dict(scope='Diagnostic population, NOT launch approval or substitute semantic verdicts',candidate_sha256=hashlib.sha256(data).hexdigest(),trace_sha256=T.TRACE_SHA,scorer_sha256=T.OWNER_SHA,summary=summary,g2=rows,semantic_duplicate_verdicts=duplicates,unresolved='Source/key review and the duplicate-of-matched-fact prerequisite must be resolved before freezing the final corrected call population. A structural reason does not mean the existing answer is wrong.'),sort_keys=True))
+PY

@@ -1,0 +1,55 @@
+"""Explicit correction of two counters in the frozen scorer; no new matcher.
+
+Part D.3's exact emitted duplicates already appear in the matcher's diagnostic
+rows. G1's non-bijective claim attempts instead leave identity unresolved.
+The semantic extras bucket stays visible without an emission penalty (spec v3
+section 5). Original files, judgments, formulas and historical reports stay
+unchanged. A corrected report must name this version explicitly.
+"""
+import inspect
+from contextlib import contextmanager
+
+import a4_review_composite as R
+import a7_g1_build as G
+
+
+@contextmanager
+def scope(scorer, expected_code_sha256, expected_scorer_sha256):
+    """Apply only the reviewed counter change; restore the owner on exit.
+
+    The original function body is reused so matching, field accuracy, safety
+    and pass formulas retain one owner, not a copied second implementation.
+    Exact source replacements also refuse an incompatible frozen version.
+    """
+    def verify():
+        if G._sha_file(__file__) != expected_code_sha256:
+            raise ValueError('unapproved duplicate-accounting code')
+        if G._sha_file(scorer.__file__) != expected_scorer_sha256:
+            raise ValueError('unapproved duplicate-accounting scorer')
+
+    verify()
+    source = inspect.getsource(scorer.score_arm)
+    old = ('    duplicate_violations = (len(_find.get("confirmed_duplicate_groups") or [])\n'
+           '                            + extras_tally.get("duplicate", 0))\n'
+           '    open_identity = (len(_find.get("disputed_identity_groups") or [])\n')
+    new = ('    duplicate_violations = sum(len(row["produced_idxs"]) - 1\n'
+           '                               for row in ambiguous_rows\n'
+           '                               if row.get("reason") == "duplicate_produced")\n'
+           '    open_identity = (len(_find.get("confirmed_duplicate_groups") or [])\n'
+           '                     + len(_find.get("disputed_identity_groups") or [])\n')
+    if source.count(old) != 1:
+        raise ValueError('the frozen duplicate-accounting boundary changed')
+    namespace = {}
+    exec(compile(source.replace(old, new, 1), __file__ + ':score_arm', 'exec'),
+         vars(scorer), namespace)
+    corrected = namespace['score_arm']
+
+    def score_arm(*args, **kwargs):
+        verify()
+        return corrected(*args, **kwargs)
+
+    try:
+        with R._using(scorer, score_arm=score_arm):
+            yield
+    finally:
+        verify()

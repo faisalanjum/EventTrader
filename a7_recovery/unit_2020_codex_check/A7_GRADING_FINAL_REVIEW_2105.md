@@ -4,6 +4,179 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
+Current pass,work-order Revision164: verified repair checkpoint and original
+key-to-grading reuse baseline. No new source truth or corrected score.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Grading owners unchanged at32e2f650/dd708431/50f9298c/375cc483. New no-call diagnostic compares complete event inputs, not company-specific matching rules or index-only equivalence. |
+| Complete workflow | All413 old G1 questions/96 prompts re-derived byte-exactly; both original G2/G3 completions passed their actual consumer. Proof cce187e2, raw exit0. This does not prove a not-yet-created changed key. |
+| One owner and organization | Reuses G.questions/event_packet and the existing lifecycle/format/verdict consumers. No new matcher, parser, key applier or grading framework. |
+| Simplicity | Await the two blind source decisions before implementing any necessary changed-key handoff. Retain all382 answers and unaffected qualified judgments. Only the closed grading repair belongs in this checkpoint. |
+| Verification and limits |85 focused pass in1.96s; prior exact native38 and historical698+2skip retained. Independent source correction, new-key connection if needed, corrective grading, final report and END-only offline local setup remain OPEN. |
+
+Previous pass,work-order Revision163: grading-input and consumer correction
+VERIFIED at32e2f650/dd708431/50f9298c, before new semantic grading.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Sparse and wholly empty canonical match sets work. Missing/wrong inventory still fails closed; a matched positive control and new RED/green prove the wholly empty case. No semantic inference or event-name branch. |
+| Complete workflow | Native2+26+10 pass, including deliberate removal of the real consumer's canonical population check. Actual423-question rendering and400 bound-script variants fit. |
+| One owner and organization | One canonical-to-explicit matched view is reused by preparation and proof; canonical membership remains the revision consumer's rule. Both original schema and scorer are unchanged. |
+| Simplicity | Codex's production-code delta after Core2122 is removal of one unnecessary truthiness check. No new configuration or framework. Core moves to the two-source key handoff only. |
+| Verification and limits |62 focused pass; native stdout218111de; actual input proof4e3adcd0; independent byte/pool proof0262dbc8 validates all117 pools,21 explicit-empty questions and unchanged source/cards/questions. Key correction/signature handoff, corrected grading/score, publication and END-only local configuration remain OPEN. |
+
+Previous pass,work-order Revision162: source-key admission/origin boundary
+proved on the full supported population; post-signature handoff stays OPEN.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Current complete-key raw/origin owner replaces latest-round-only source admission. All31 phase-supported sources tested, no event-name branches. The existing2 original-news exclusions are retained. |
+| Complete workflow | Positive control preserves all33 key entries and re-derives all3 historical rounds/10 prompts. It is not proof of fresh source adjudication, post-signature accounting or old/new-key grading. |
+| One owner and organization | Candidate reuses first_round_key and existing payload/history/merge; historical2076 file unchanged. Exact earlier callers and four deliberate mutants are evidence .txt files, not alternate runtime owners. |
+| Simplicity | No new phase, model call or source harvest. Next check is reuse of the existing lock's signer proof/count, not another signature implementation. |
+| Verification and limits | 7 negative controls and4 meaningful mutations with real positive control; report e6ad19a2. Post-signature probe3b8e9375 confirms omitted existing signer call/identities/history. Core alone owns the current sparse G3 repair. Final score/publication/local setup remain OPEN. |
+
+Previous pass,work-order Revision161: Core2121's native35 checks pass in the
+independent run, but real input fitting fails at a legitimate empty group.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Matched-only duplicate rule retained. Real full population exposes sparse G2 groups; do not confuse zero matches with missing or altered evidence. |
+| Complete workflow | Native2+25+8 passed at26caddc7/dd708431/9b421a43; actual117-question render still refuses. Codex2121 assigns that exact completion, not another blanket audit. |
+| One owner and organization | Reuse G2/G3 frozen population owners and the existing consumer comparison. Historical match/scoring owners stay immutable. |
+| Simplicity | Root key-candidate change reuses the existing complete merge. The phase's two original-news exclusions stay intact because neither has a current key-error finding. No new phase or model call. |
+| Verification and limits | Exact Core hashes/snapshots checked; actual fit failure preserved. Key admission RED31 refused/GREEN33 admitted, but only31 belong to this phase; prompt/history and post-signature evidence checks remain open. Final score/publication/local setup remain open. |
+
+Previous pass,work-order Revision160: Core2120 is independently verified;
+codex_core2120_a passed2+18+6 native/mutation checks. All19 historical
+regression modules passed in their correct views:698 passes,2 named skips.
+
+| Requirement | Current status and verified evidence |
+|---|---|
+| Generality and legitimate rules | New G3 cause proof:14 duplicate labels have no possible matched comparator in their event; diagnostic0bbc1f25 derives ALL92 duplicate labels and reproduces121/114/71 baseline matches. No semantic verdict is inferred by code. |
+| Complete workflow | Corrected-results connection VERIFIED at e52c932a/b2b44d56/7c5b94fc, including partial same-group preservation and several completed batches. Current G3 comparator repair delegated to Core under Codex2120/d84cf086; do not edit those modules concurrently. |
+| One owner and organization | Proposed repair reuses the existing full G2 matched-pair population, raw record view and original G3 reply/parser/scorer. No additional relation schema or matcher is authorized without a demonstrated need. |
+| Simplicity | Two source-key leads only; original6 targets per event and source-only receipt identities pinned in SOURCE_KEY_RECHECK_BINDINGS_2120.json/a97d16ba. No fresh source harvest, model call or repeated successful reply. |
+| Verification and limitations |84 focused checks plus actual423-question/101-batch input-fit proof retained for their exact historical version. New comparator boundary, independent key rulings, final corrected score/publication and END-only local configuration checks remain OPEN. |
+
+Previous pass,work-order Revision159: Core's rules-pin fix is independently
+verified in codex_core2119_a:2+16+5 checks passed, exit0. Current input
+renderer e52c932a serves one shared field contract for G2/G3, including the
+two precise numeric rules from FINAL_DESIGN7.1. Old95d1a5ae is preserved.
+
+| Requirement | What changed and how verified |
+|---|---|
+| Generality and legitimate rules | Reused the existing field contract and preserved the authority's "merely derived" qualification; no blanket ban on source-stated deltas, semantic code or answer-specific rule. |
+| Complete workflow | Real input proof c826c694 covers306 G2 and117 G3 questions in101 fitted batches. Independent per-question comparison preserves every source, record, comparison card and identity against the prior proof. Core owns the remaining native multi-question/multi-batch correction proof. |
+| One owner and organization | G2/G3 share meaning_contract once. The existing writer still hashes its supplied rules. No copied schema, matcher, scorer or lifecycle. |
+| Simplicity | Three historical regression failures were wrong-view tests, not proved implementation defects; retain the11-native/8-ordinary split. No historical code repair or new source harvest. |
+| Verification |84 focused checks passed in1.85s including3 new prompt-rule omission mutations.404 bound-script variants fit524288 bytes; G2 maximum516575, G3 maximum502262. Final combined regression, source dispositions, corrected score and END-only local setup remain OPEN. |
+
+Previous pass,work-order Revision158: the simplified counter passed its real
+99-route replay and all3 complete results were independently compared.
+Core2118's native G2 connection is real but its new candidate pins old rules.
+Codex2118 assigns the correction and remaining native/affected proof to Core.
+
+| Requirement | Current evidence and remaining work |
+|---|---|
+| Generality and legitimate rules | Existing renderer/state/source rules retained. Independent rules-pin RED fails for BOTH G2/G3, not one example; no semantic code or raw-answer edits. Source dispositions remain open. |
+| Complete workflow | Counter successor proof f9345f36:99 real routes and original scores unchanged except2 counters. Core13-test proof includes actual G2/scorer; native corrected G3 and valid partial replacement remain open. |
+| One owner and organization | Retain Core's small existing-writer adapter; correct its kind/rules mapping instead of copying hashing or lifecycle. All6 Core artifacts and4 map additions checked. |
+| Simplicity | No production work, new matcher or whole-answer rerun. Next task is bounded to this connection, with old bytes preserved. |
+| Verification | Independent native rules-pin test2 failures in9.44s with real passing prompt/pin controls; original76 focused tests and new counter real proof retained. Combined affected regression and final corrected measurement remain open. |
+
+Previous pass,work-order Revision157: native input fitting completed; the
+counter-only corrected real replay completed. Core2118 now owns NEW subset
+candidate preparation and the still-missing actual revision-consumer proof.
+
+| Requirement | What changed and how verified |
+|---|---|
+| Generality and legitimate rules | Input95d1a5ae preserves source context and all lawful states. Counter375cc483 separates exact emissions from unresolved G1 groups and semantic extra buckets under PartD/spec-v3; no semantic keyword rule. |
+| Complete relevant workflow | Actual423-question input proof051c7d22 plus independent1169-record comparison0207312f;404 bound-script variants fit. Counter-only99-route full consumer proof passed before import-only simplification; current replay in progress. Revised-judgment connection remains OPEN with Core. |
+| One owner and organization | Existing splitter, matcher, scorer body and full evidence verifier reused. Removed unnecessary A4 imports from revision/counter scopes. Historical d4e50580/c59d5620 snapshots retained; no raw evidence changes. |
+| Final simplicity | No copied scorer, new matcher/limiter or source truncation. New subset preparation must reuse existing candidate/lifecycle owners; no weakening of population checks. Combined final review remains OPEN after integration. |
+| Verification |76 focused tests pass including11 killed mutations. New counter tests replay all3 complete saved results and test repeated emissions across written/parked/skipped/rejected outcomes. Full affected regression, source dispositions and final corrected report remain OPEN. |
+
+Current pass,work-order Revision156: first report remains immutable and pushed.
+Codex2116 assigns Core only the missing native revision-consumer proof; Codex
+owns real input fitting and source/accounting dispositions. No new AI calls.
+
+| Requirement | Current change and actual verification |
+|---|---|
+| Generality and legitimate rules | Input95d1a5ae preserves introduced/withdrawn guidance and omitted slice_parts. Three meaningful new failures reproduced then fixed;20 focused tests pass. Unproved collision machinery and unnecessary marker guard are not added. |
+| Complete relevant workflow | New revision d4e50580 checks original whole evidence and exact new subset, never inherits superseded credit.33 boundary tests pass; actual native/scorer proof remains OPEN and is Core's one task. Input launch-fit proof remains OPEN with Codex. |
+| One owner and organization | Existing menu decoder, bound-script size owner, full evidence consumer and matcher reused. Historical owners/results unchanged. Counter mixes exact duplicates, identity groups and semantic extras; smallest correction still OPEN. |
+| Final simplicity | No new limiter, source truncation, replacement scorer or production feature. New changes still require the final affected pass after native integration. |
+| Verification | Combined53 focused tests pass, including8 mutations across the two modules. Old native423-question proof is preserved with exact historical code; it does NOT cover current code or fit. Full affected regression and corrected score remain OPEN. |
+
+Current correction pass,18:05 Eastern: the first report remains immutable and
+published. Core2114 identities/extraction are independently verified, but its
+four claimed whole-record grading errors are not all accepted. See
+A7_CAUSE_REVIEW_2114.md and CORE_2114_INDEPENDENT_CHECK.json/78790555.
+No historical key, answer or grade was changed. Codex2114/4758a866 assigns
+Core an input-only independent review; Codex retains source/counter rulings.
+
+| Requirement for the new input correction | Status and actual verification |
+|---|---|
+| Generality and legitimate fixed rules | PROVED for display: all560 saved facts change only24 reversible menu-display occurrences; unfamiliar/Unicode/off-menu/malformed tokens covered. State wording still under independent live-law review. |
+| Complete relevant workflow | INPUT PREPARATION PROVED through actual verified producer/key/source owners:423 questions,86 batches. New-version collection/scorer integration remains OPEN; no corrected score claimed. |
+| One owner, no duplication or unrelated edits | Frozen G/B unchanged; reuse existing menu decoder, event-context and identity owners. Core independently checking the explicit successor. No production-path migration or second grader. |
+| Final simplicity pass | PENDING independent review of this narrow renderer; no speculative local-model or schema feature added. |
+| Tests and meaningful failures |17 focused tests passed including4 killed mutations with positive controls. Native preparation and independent1169-record-view/117-G3-context comparison passed. Full affected regression and final call-capacity/binding checks remain OPEN for this version. |
+
+Cause-review update,17:15 Eastern: Core2113 extraction is independently bound
+to all40 guidance questions,22 distinct input combinations across14 sources.
+Its substantive review is not accepted:170 generic unknown cells and producer
+self-assertions are not source review, and its claimed unchanged DRI midpoint
+is refuted by10.60 to10.62 plus explicit source wording. The existing correct
+raised-state judgments stay. Codex2113/e7ff3847 assigns a source-based completion
+of this same scope to Core; no blanket new audit or model call. The repeated-
+record disagreement is independently reproduced with its batch/id limitation.
+CORE_2113_INDEPENDENT_CHECK.json and DISPLAY_GAP_2113.json under
+codex_scoretrace2112_a preserve the new checks. The display check executes the
+actual owner and existing decoder:24 encoded-token occurrences remain raw,
+including6 occurrences across5 G2 questions. Fix and semantic impact remain
+OPEN; no code, key, prompt, grade or original answer has been changed.
+
+Previous cause-review update,16:45 Eastern: ALL306 G2 questions and every established
+or missing aspect are independently joined from the native paired answers,
+their70 pinned prompts and frozen candidate to the actual scorer inputs.
+MEANING_BINDING_CHECK.json SHA648da353 in codex_scoretrace2112_a records that
+proof; no consumer identity/verdict loss. CORE_2112_INDEPENDENT_CHECK.json
+SHA911eeeba reproduces the complete UNION structural inventory and records
+four rejected overclaims from Core2112. Its proposed counter repair is not
+yet approved: identical emissions, same-claim attempts and unresolved groups
+must retain their distinct rule meanings. Codex owns that review; Core's new
+task is the complete40-question guidance review under Codex2112/9870cd40,
+already byte-identically archived. No model call or grader/key/prompt edit.
+Baseline remains immutable. Final source dispositions and proved corrections
+are OPEN, not a new blanket audit or a requirement that the model pass.
+
+Cause-review pass,16:16 Eastern: observation-only actual replay
+codex_scoretrace2112_a completed exit0, zero model calls, no changed scorer or
+judgment. The replay baseline is byte-identical to98a7a6ad. SCORER_TRACE.json
+SHA0b4a3f624a4024fb071fff1740f04b186027b2c91bcade2aaba4ce6bb05f7ee4
+captures every final-leg input,870 error-code emissions,33 wrong-accept
+increments and128 missing-judgment increments. TRACE_CHECK.json
+SHA5e6e630cd60c326ae36b60f5a16a8c37a7f168f67ad36027d66e2eb170a46f73
+reconciles all codes/counters/results to the frozen baseline. The observer
+1d4e3b10 reads exact owner code and changes no decisions.31 matched findings
+refer to22 distinct gold identities across arms;2 additional UNION findings
+are extras. These are not33 independent facts or source-confirmed errors.
+The shared work order §6 remains the follow-up checklist: baseline DONE;
+source/test cause dispositions OPEN; Core's UNION review separate; local setup
+deferred to the END and no live local-model calls. No grader fix is claimed.
+
+Newest publication, verified15:58 Eastern: complete G2 collection, both real
+completions and measured baseline are committed/pushed as
+86e742ee80321841abd7be9992b826a3abc9e734, tree8e38f98dfe9e30651c7a021430c71d0bebb10d60.
+Fresh remote matches. A7_BASELINE_PUBLICATION_2111.json SHA464c1efc pins3346
+reviewed files;422 changed paths; all3347 selected Git blobs verified. Index
+empty, main and unrelated work unchanged. Baseline publication is DONE;
+source/test cause review and the deferred offline local setup remain OPEN.
+The current UNION diagnosis is outside this checkpoint; no A7 PASS is claimed.
+
 Current pass,15:41 Eastern: the COMPLETE G2 collection is independently
 verified:140 required readings,141 actual calls,48 original-valid and93
 explicitly recovered attempts,0 missing usable readings or exhausted invalids.
@@ -22,7 +195,7 @@ event-leg routes,2 completion loads and163 gold facts per leg. Both tier
 decisions are FAIL with all missing judgments retained. Recall recomputes as
 121/163,114/163 and71/163 for P1/P2/UNION; wrong accepts11/14/8 and duplicate
 violations1/3/144 are scorer findings still awaiting source/test attribution.
-Mechanical check is saved beside the baseline; publication remains open.
+Mechanical check is saved beside the baseline; publication is completed above.
 Core2111's collection report is independently verified; its manifest's
 actual_calls=142 is the published-row count, not the141 actual calls correctly
 reported in its mailbox. Raw history is preserved, not silently relabeled.
@@ -35,7 +208,7 @@ and the scoring caller reached the actual existing scorer with the exact
 reviewed completions. The full cause review and any justified corrections
 are still open; these results do not claim a fault-free test or A7 PASS.
 
-Newest evidence checkpoint, verified14:55 Eastern: normally committed/pushed
+Earlier evidence checkpoint, verified14:55 Eastern: normally committed/pushed
 e3964bd06f902eb6218215560afe35ba28a9023a, tree40444ee6466fdc4054fe30e937c112aa20e9f52a;
 fresh remote matches. G2_PROGRESS_PUBLICATION_2111_G.json SHA475e1e5c pins2849
 reviewed files through G2 segment121 plus unchanged G3 completion and the

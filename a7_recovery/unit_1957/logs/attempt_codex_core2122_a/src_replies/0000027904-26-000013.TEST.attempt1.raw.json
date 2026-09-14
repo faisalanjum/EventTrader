@@ -1,0 +1,111 @@
+```json
+{
+ "source_id": "0000027904-26-000013",
+ "verdicts": [
+  {
+   "proposal_id": "0000027904-26-000013#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P006",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P007",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000013#P008",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000013",
+    "part_ref": "risk",
+    "occurrence_in_part": null,
+    "quote": "Fuel costs represented 17%, 19% and 21% of our operating expense in 2025, 2024 and 2023, respectively.",
+    "raw_label_or_claim": "Fuel costs",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000013",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Revenue in the Pacific region increased 10% on a 9% increase in capacity compared to 2024 on strong demand to Japan and South Korea, particularly with our premium product offerings.",
+    "raw_label_or_claim": "Pacific region",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "portion_versus_whole",
+     "ambiguous_menus"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000013",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "We expect fuel consumption to increase in 2026 generally aligned with capacity.",
+    "raw_label_or_claim": "fuel consumption to increase in 2026",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "ambiguous_menus",
+     "corrections_and_amendments"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

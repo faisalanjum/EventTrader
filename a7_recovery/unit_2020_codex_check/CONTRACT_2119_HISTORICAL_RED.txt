@@ -1,0 +1,71 @@
+Strengthened assembled-prompt checks against the preserved historical renderer; no model calls.
+COMMAND
+PYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B - <<'PY'
+import importlib.util, importlib.machinery, sys
+from pathlib import Path
+import pytest
+root=Path('a7_recovery/unit_2020_codex_check').resolve()
+sys.path.insert(0,str(root))
+import test_grading_contract_gaps_2118 as test
+path=root/'codex_contract2119_snapshots/a7_grading_input_correction_2114.py.95d1a5aeff1ea37c0147c81e8bcbf020f204d5d783e34a279b4e9e9410e1997e.txt'
+loader=importlib.machinery.SourceFileLoader('historical_contract2119',str(path))
+spec=importlib.util.spec_from_loader(loader.name,loader)
+old=importlib.util.module_from_spec(spec)
+loader.exec_module(old)
+test.SUBJECT=old
+sys.exit(pytest.main(['-q','--tb=short','-p','no:cacheprovider',str(root/'test_grading_contract_gaps_2118.py')]))
+PY
+EXIT 1
+FFFFFFFF                                                                 [100%]
+=================================== FAILURES ===================================
+_____________ test_closed_operand_change_precedence_is_served[G2] ______________
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:37: in test_closed_operand_change_precedence_is_served
+    assert ('Leave change_value null when it could merely be derived from a '
+E   AssertionError
+_____________ test_closed_operand_change_precedence_is_served[G3] ______________
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:37: in test_closed_operand_change_precedence_is_served
+    assert ('Leave change_value null when it could merely be derived from a '
+E   AssertionError
+______ test_percent_guidance_and_its_own_revision_use_distinct_slots[G2] _______
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:45: in test_percent_guidance_and_its_own_revision_use_distinct_slots
+    assert ('Percent-only guidance stores its growth basis in level_unit; only '
+E   AssertionError
+______ test_percent_guidance_and_its_own_revision_use_distinct_slots[G3] _______
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:44: in test_percent_guidance_and_its_own_revision_use_distinct_slots
+    assert "against the company's own prior guide" in rules
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+____________ test_extras_gets_the_same_existing_field_contract_once ____________
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:53: in test_extras_gets_the_same_existing_field_contract_once
+    assert rules.count(contract) == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+_ test_a_missing_numeric_rule_is_detected_on_both_paths[Leave change_value null when it could merely be derived\n   from a closed shape; derive at read time.-test_closed_operand_change_precedence_is_served] _
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:72: in test_a_missing_numeric_rule_is_detected_on_both_paths
+    check(source, kind)
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:37: in test_closed_operand_change_precedence_is_served
+    assert ('Leave change_value null when it could merely be derived from a '
+E   AssertionError
+_ test_a_missing_numeric_rule_is_detected_on_both_paths[Percent-only guidance stores its growth\n   basis in level_unit; only the guide's own revision size belongs in\n   change_value.-test_percent_guidance_and_its_own_revision_use_distinct_slots] _
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:72: in test_a_missing_numeric_rule_is_detected_on_both_paths
+    check(source, kind)
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:45: in test_percent_guidance_and_its_own_revision_use_distinct_slots
+    assert ('Percent-only guidance stores its growth basis in level_unit; only '
+E   AssertionError
+_________________ test_an_extras_contract_omission_is_detected _________________
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:83: in test_an_extras_contract_omission_is_detected
+    test_extras_gets_the_same_existing_field_contract_once(source)
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:53: in test_extras_gets_the_same_existing_field_contract_once
+    assert rules.count(contract) == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_closed_operand_change_precedence_is_served[G2]
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_closed_operand_change_precedence_is_served[G3]
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_percent_guidance_and_its_own_revision_use_distinct_slots[G2]
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_percent_guidance_and_its_own_revision_use_distinct_slots[G3]
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_extras_gets_the_same_existing_field_contract_once
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_a_missing_numeric_rule_is_detected_on_both_paths[Leave change_value null when it could merely be derived\n   from a closed shape; derive at read time.-test_closed_operand_change_precedence_is_served]
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_a_missing_numeric_rule_is_detected_on_both_paths[Percent-only guidance stores its growth\n   basis in level_unit; only the guide's own revision size belongs in\n   change_value.-test_percent_guidance_and_its_own_revision_use_distinct_slots]
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_an_extras_contract_omission_is_detected
+8 failed in 0.16s

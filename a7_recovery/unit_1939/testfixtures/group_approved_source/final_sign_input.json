@@ -1,0 +1,3213 @@
+{
+ "base_commit": "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc",
+ "base_tree": "74b231655193c14daccd877915daa051b078b330",
+ "materialized": {
+  "adjudication_sidecar_sha256": "654f1b67be4b914cb9f66e48bf20f6951d8340b143dcbb48766918f8756cbfd4",
+  "final_inventory_sha256": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+  "validator_receipt_sha256": "ae1fcd6fc2b98386ae6a75f41c7094560ab979bd2b7db7cfd56e51956876a827"
+ },
+ "output": "One JSON object: {\"signed\": true, \"blocked\": null, \"why\": \"<one sentence>\"}. No prose outside it.",
+ "package": {
+  "inputs": {
+   "0000006201-26-000031": "04b30974b028f330a4573b6790d688e2f9932e1176135e96e75cd622e83bfecc",
+   "0000006201-26-000032": "3c345666385d40220fad7a1ad086e8fcdddb0613ca6ecc28d12da87b5e5c57bd",
+   "0000027904-26-000013": "c7c505e7d3c41e27f8813ac3de7a8a370445245df77371b45ada42140ccb1b7e",
+   "0000027904-26-000020": "c6e95ee52a256ba6b1b81225f124dc0190d665bebd6693fd2363a7757538c706",
+   "0000027904-26-000022": "666ee371edf11c2e2c733086b8631a1dc879680e713a625229c2d99df3735c47",
+   "0000063908-26-000032": "44609a0a41bb6f9770b8c048b79e027a4639b90fbb4f7d9c908b05e3aefc7c40",
+   "0000092380-26-000044": "04854cfc0ab5af911bbf4d9680a7ba235922911b25f54f634e7a7fc650071d72",
+   "0000764478-25-000057": "98f4fd90f0d1d360405520134d61e67b37b5342ffd9e994895ba3ffe4166ff3e",
+   "0000764478-26-000005": "34e2fbcb4902d3441d04029892ba5f1ec7aa7081a6b6e21920c9ccd747a17e9a",
+   "0000898173-26-000006": "7ca62eab5eb204f15bceb0c7a5ae1d10a64d55f530603503d68078eddc70e5ee",
+   "0000940944-25-000038": "f4468f722378a0a3a60b6d58705c7aa432e8f932b0c2efa7266e5007d7aea78d",
+   "0000940944-26-000005": "1c355a2a6a6ed4884d7986721291704240fbef3925fed050456fd09ccda28971",
+   "0000940944-26-000009": "555b5362b836ae20d9d08b351abb0823ceb6fee73496af220b9894ec5fb90854",
+   "0001041061-25-000109": "9c3efa8bede7c4f8ee859479d99dce628be063ca6de8b6b2b13436061a387b55",
+   "0001041061-26-000003": "26b779342f4220064117ff0f7b56381d63802e019eeeb53265ccdabd6a835ed3",
+   "0001041061-26-000084": "4ba111b74470e082a7b55ab69c59482d790379631ae7dd635c7c349ba3fca480",
+   "0001058090-26-000007": "2e7ccd62a456fab5594c3392d59768dcff90467d47e42d3104e6757b87fdfb01",
+   "0001104659-25-102611": "e76602d6a88bcce24e238b47356c5179a7f2508c36273b7129054c8389a3055b",
+   "0001104659-25-105631": "14600e160e3ad4c331caae3b7cdb6ff2b6c2bb764ab113a6608e14d76bb5da9d",
+   "0001104659-25-118458": "22b65ad7bf039e1ed0645902819011fe5b0c5fdf5c5929159a8917249fd36ee5",
+   "0001104659-26-017090": "8f93fb8b4330ca606b3cc1dd263c4cdb0c34c0b89d1eb15858781e8e5ff70562",
+   "0001104659-26-027061": "3185503fdf6f662c9c1acc26ec6efe34fbdd0fb4cd91ba3e490f32c546519f8c",
+   "0001104659-26-032757": "fade95d4bb89ded99293e67c056af42e693eb46686f20091302f71ec82ebbcd2",
+   "0001171843-26-001288": "7095a3108162c41bc661e9f224d44ee592810d521583b30260bac95acf64864a",
+   "AAL_2026-04-23T08.30": "bae26f34fac5e63646622243ef7b95c6387c2113a14784ef9d71f8e1058f067a",
+   "BBY_2026-03-03T08.00": "5a2e53f1c0a7286f60ccda597ebae5374ee19a6a7da2bb6bf10b4db6cc187967",
+   "CMG_2026-02-03T16.30": "de8a489f465d0aa585010dfc844f740309bc7a062f01a134b3df875a88bffbab",
+   "DAL_2026-04-08T10.00": "42d05a606cfc64fbc4f89e8c66d9853d79ac19754761742edf71e4aa7bb7a614",
+   "DRI_2026-03-19T08.30": "7aad476cf95eb54a9ef313f7513077ab284acc0a5d7558a644f7248216423790",
+   "MCD_2026-02-11T16.30": "d324e168c39943583b9e412d86c0a7d2facf1c6097e750435c152ce05ab3762d",
+   "ULTA_2026-03-12T16.30": "68fc90e55d8c44a278cda4aded44da4c92bbf38913e56a8348cc1255f8bf1123",
+   "YUM_2026-02-04T08.15": "165359b10cbeaff7e9395e615e9103b2b343846b175dd4fbcd391f619893ab9e",
+   "bzNews_42014391": "0be7e5dd6f4268232d18c9658b0064bb806e44d2b48891c422c1e2f83aae41ce",
+   "bzNews_49256211": "de055cdfbb554e9b61b8bcd22c5229e3ecf3cccf254e4ec8104a600b7493141b",
+   "bzNews_50877032": "88ed352289587037fbfc372fa7fb41367db58348902bf90dc79ab7ebe7cd9d60",
+   "bzNews_51962983": "da50a62815e52793ca6e4f09cb7d3d76bb5ce62778fb20b043c61491c1aec02d"
+  },
+  "manifest_sha256": "2dcf07c9c9c781e5be6acf445f0619eeba5a2582bf1f19a6f1ef9374c8984473",
+  "owner_sha256": "3b57d131a76ad2aed39849c51be0f64750e6932ca7b61b2c5d83264c22927baa",
+  "prefix_sha256": "6a4273b6f1b44382261248bd7c04110137d5a7327775f0c3e2a4902a870a3de9"
+ },
+ "raw_replies": {
+  "0000006201-26-000031": "b130653a4ef5cb9cb994258156153a8097676a4e312ec4709b8954fc8208b764",
+  "0000006201-26-000032": "c0c528aabc3dd62a4659fd12e2936a39f222f331b9abcb8107f9ceebd27c2733",
+  "0000027904-26-000013": "cf4f234d7b0a253a1261a22df36bf0d55e8e11a40c0d54893154eb979b4da458",
+  "0000027904-26-000020": "686a68f32e91611f12c125b9693aeb747994d17d5d7c69488fa0f919ebccb509",
+  "0000027904-26-000022": "ea88e48029b40a439ed06e1246a901c137d6905a9d0f344ed3d95fc8d781e9bc",
+  "0000063908-26-000032": "474fc7a4523e0dd96c75fc266317479a050910ce630903f3667da40759fbb696",
+  "0000092380-26-000044": "96f0e81a14965ca5354e8939955c87d3f8be32b1f80f05d38de6218a9fc21c2d",
+  "0000764478-25-000057": "f241c6eb16e275be1738cf96b8e53e03b824aba85e3fecb7c1c18e6c51c7bbb7",
+  "0000764478-26-000005": "0ea7cb7e3608f60484717e8e3e20036ff37d7ba688d80576131021b28dab1538",
+  "0000898173-26-000006": "129cb1f42570e448565302bb464f76eb74fb9ea48f9e8335a2e9390a436bff30",
+  "0000940944-25-000038": "9e6494b5e1078aee3eae5ebd3153434de289a2bad38701cbc9af51153ee54565",
+  "0000940944-26-000005": "e5ad4a73c9b2914d90bf0c587c8f5ea5738beb8a0c02fae6d74a1ab62e1c5b2f",
+  "0000940944-26-000009": "18239128f15a7477ce455aac40219938d8b848c52908868259cf8cdb85482816",
+  "0001041061-25-000109": "a3e24155ea63fbae3992cce541d6cd02413e6b8e7a11439f1d8957333b3b3f74",
+  "0001041061-26-000003": "adb858a2b9d24a111a3b76f5bb68a6f4f904fa9e3015dfedaeb567d950a16959",
+  "0001041061-26-000084": "1d3bc1dfdd415669a83c39c4ebc41c09323031022c6fe47e35f7b704387a2c1d",
+  "0001058090-26-000007": "f59d30181399ae6c8a8007dc8d929f78fcd4e10defc70a6c697cf3abb25192ae",
+  "0001104659-25-102611": "44d3133a97bf3642c010167dde527f35d68710dd735a6e3b7c6eb5a5706fc622",
+  "0001104659-25-105631": "4aed1a05fb745a42efe5084470ff93088c0f7de8bc059247613bf2f3e5b01b86",
+  "0001104659-25-118458": "208c675fcb5816c4ddf23265423504cd6b4e36a854fc8e9fb742ef70b7d92665",
+  "0001104659-26-017090": "c8f74282432948a38c9a00546dc0eb2c246df50b8dd6c31e6a9469f1b84d6b62",
+  "0001104659-26-027061": "4fb96e51bc5ed29f0ee3145d752f8f7d6813b5b957fb4e391680a6b2409a49f7",
+  "0001104659-26-032757": "0571aa325d818434cd86a9287b00118e93103cc6b569e9376a3de087f3652583",
+  "0001171843-26-001288": "3e02cf45f251270c15d34f8d53e50dd8672f57f73e9d48a503d80a31f69baa0c",
+  "AAL_2026-04-23T08.30": "96ef629d42e8503d3d777b7f3212e2400957a4702cc826b263645e222b64657b",
+  "BBY_2026-03-03T08.00": "af05412cd210e7b3b917f787052bbb7d25db7e8864c6f5f890fafec9e9d089c6",
+  "CMG_2026-02-03T16.30": "f68c6cc51053fe148f6e7cd1788ba52e9437b641554ba446b2b469425e0ed5a4",
+  "DAL_2026-04-08T10.00": "61ce4630690747aad7763861aa48124b18110be1955e45958e05b37079414832",
+  "DRI_2026-03-19T08.30": "1ae5f070a3971a7353e1a735619c30f7daa6f3790148ace60a11380483dcab45",
+  "MCD_2026-02-11T16.30": "614439e06e56f0f14aca1e369a3a1a80805dc464736093e21da35a8e6712a37b",
+  "ULTA_2026-03-12T16.30": "d313e32c46bce5fe530c4a3160a90a678550946ee9c5cb98e8d50b27225c7107",
+  "YUM_2026-02-04T08.15": "61db61df8326347775106824a29cd5839f0107624eb7d7f86c37c17a212f4ea3",
+  "bzNews_42014391": "d4f9bbbac3122bae672c9819962d91b70f5cef60c89d3f02771bc3886a1b2bdc",
+  "bzNews_49256211": "d093883a2f0f4abb77eb68b8953fe24a0cddcea2a5f1562098658a5be913c0f4",
+  "bzNews_50877032": "83c10836c2a021a2544bc4292d70c5c00c59978b05d8cb804d54ae262d0ca859",
+  "bzNews_51962983": "62473c9a36b3927341d4380cec25aa028c80efd2ce575d1b323d45cba7f6d4c3"
+ },
+ "reviewer_agents": {
+  "0000006201-26-000031": "TEST1894agent001",
+  "0000006201-26-000032": "TEST1894agent002",
+  "0000027904-26-000013": "TEST1894agent003",
+  "0000027904-26-000020": "TEST1894agent004",
+  "0000027904-26-000022": "TEST1894agent005",
+  "0000063908-26-000032": "TEST1894agent006",
+  "0000092380-26-000044": "TEST1894agent007",
+  "0000764478-25-000057": "TEST1894agent008",
+  "0000764478-26-000005": "TEST1894agent009",
+  "0000898173-26-000006": "TEST1894agent010",
+  "0000940944-25-000038": "TEST1894agent011",
+  "0000940944-26-000005": "TEST1894agent012",
+  "0000940944-26-000009": "TEST1894agent013",
+  "0001041061-25-000109": "TEST1894agent014",
+  "0001041061-26-000003": "TEST1894agent015",
+  "0001041061-26-000084": "TEST1894agent016",
+  "0001058090-26-000007": "TEST1894agent017",
+  "0001104659-25-102611": "TEST1894agent018",
+  "0001104659-25-105631": "TEST1894agent019",
+  "0001104659-25-118458": "TEST1894agent020",
+  "0001104659-26-017090": "TEST1894agent021",
+  "0001104659-26-027061": "TEST1894agent022",
+  "0001104659-26-032757": "TEST1894agent023",
+  "0001171843-26-001288": "TEST1894agent024",
+  "AAL_2026-04-23T08.30": "TEST1894agent025",
+  "BBY_2026-03-03T08.00": "TEST1894agent026",
+  "CMG_2026-02-03T16.30": "TEST1894agent027",
+  "DAL_2026-04-08T10.00": "TEST1894agent028",
+  "DRI_2026-03-19T08.30": "TEST1894agent029",
+  "MCD_2026-02-11T16.30": "TEST1894agent030",
+  "ULTA_2026-03-12T16.30": "TEST1894agent031",
+  "YUM_2026-02-04T08.15": "TEST1894agent032",
+  "bzNews_42014391": "TEST1894agent033",
+  "bzNews_49256211": "TEST1894agent034",
+  "bzNews_50877032": "TEST1894agent035",
+  "bzNews_51962983": "TEST1894agent036"
+ },
+ "run": {
+  "base_commit": "cd961e51d55bf13aa9311b79c5d7eca20e9b11cc",
+  "base_tree": "74b231655193c14daccd877915daa051b078b330",
+  "max_output_tokens": "128000",
+  "package_manifest_sha256": "2dcf07c9c9c781e5be6acf445f0619eeba5a2582bf1f19a6f1ef9374c8984473",
+  "parent_session_id": "TESTsess1894",
+  "transport": "subscription"
+ },
+ "scope": "the pre-A2 benchmark source-item and control inventory only; not the A3 drafting run and not the A4 completed answer key",
+ "source_manifest": {
+  "combined_sha256": "3794d26d7ba47ac33a3b402d536e31c5c3b6c278cc2c0b0c471561dcbbb28883",
+  "file_sha256": "e083cd6a72ff2a79e51b99935c79978ef16c9042e507e21ae47ab4ca3d12b386",
+  "n": 36,
+  "path": "keys/K-fields/draft_inputs.hashes.json"
+ },
+ "task": "Confirm that the materialized representative inventory below is exactly the rows the 36 event verdicts decided, that no judgment changed between those verdicts and this materialization, and sign. If anything differs, return blocked and name the row.",
+ "verdicts": {
+  "0000006201-26-000031": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+      "raw_label_or_claim": "total revenue growth",
+      "source_id": "0000006201-26-000031"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Net loss excluding net special items $ (267) $ (386) (30.8%)",
+      "raw_label_or_claim": "Net loss excluding net special items",
+      "source_id": "0000006201-26-000031"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Total unit revenue was 7.6% higher year over year",
+      "raw_label_or_claim": "Total unit revenue",
+      "source_id": "0000006201-26-000031"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+      "raw_label_or_claim": "second quarter",
+      "source_id": "0000006201-26-000031"
+     },
+     "why": "unit_1925 SOFTWARE TEST FIXTURE: a second lawful label over the same inseparable quote, so the locator-conflict path can be DERIVED. Not source truth, never a benchmark denominator."
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000006201-26-000031",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P007",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000031#P008",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000006201-26-000032": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Pre-tax loss and net loss were $476 million and $382 million, respectively, in the first quarter of 2026. This compares to first quarter of 2025 pre-tax loss and net loss of $648 million and $473 million, respectively.",
+      "raw_label_or_claim": "Pre-tax loss",
+      "source_id": "0000006201-26-000032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Our 2026 first quarter total operating cost per available seat mile (CASM) was 19.38 cents, an increase of 5.6% from 18.34 cents in the first quarter of 2025.",
+      "raw_label_or_claim": "total operating cost per available seat mile (CASM)",
+      "source_id": "0000006201-26-000032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "In the first quarter of 2026, we reported total operating revenues of $13.9 billion, an increase of $1.4 billion, or 10.8%, from the first quarter of 2025.",
+      "raw_label_or_claim": "total operating revenues",
+      "source_id": "0000006201-26-000032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000006201-26-000032",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000032#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000032#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000032#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000032#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000032#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000006201-26-000032#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000027904-26-000013": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "risk",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Fuel costs represented 17%, 19% and 21% of our operating expense in 2025, 2024 and 2023, respectively.",
+      "raw_label_or_claim": "Fuel costs",
+      "source_id": "0000027904-26-000013"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Revenue in the Pacific region increased 10% on a 9% increase in capacity compared to 2024 on strong demand to Japan and South Korea, particularly with our premium product offerings.",
+      "raw_label_or_claim": "Pacific region",
+      "source_id": "0000027904-26-000013"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "We expect fuel consumption to increase in 2026 generally aligned with capacity.",
+      "raw_label_or_claim": "fuel consumption to increase in 2026",
+      "source_id": "0000027904-26-000013"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000027904-26-000013",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P007",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000013#P008",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000027904-26-000020": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Guiding to low-teens revenue growth in the June quarter on flat capacity growth, reflecting strong demand momentum, meaningful capacity reductions, and rapid actions to recapture higher fuel",
+      "raw_label_or_claim": "low-teens revenue growth in the June quarter",
+      "source_id": "0000027904-26-000020"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Non\u2011fuel unit costs grew 6 percent over prior year, reflecting lower than planned capacity growth and higher recovery costs.",
+      "raw_label_or_claim": "Non\u2011fuel unit costs grew 6 percent over prior year",
+      "source_id": "0000027904-26-000020"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "The March quarter was the first full quarter of positive unit revenue growth in main cabin since the end of 2024, reflecting strong demand and continued supply rationalization.",
+      "raw_label_or_claim": "positive unit revenue growth in main cabin",
+      "source_id": "0000027904-26-000020"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000027904-26-000020",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000020#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000020#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000020#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000020#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000027904-26-000022": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Cost per available seat mile (\"CASM\") 22.20 \u00a2 19.69 \u00a2 13 %",
+      "raw_label_or_claim": "Cost per available seat mile (\"CASM\")",
+      "source_id": "0000027904-26-000022"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Gain/(loss) on investments, net (550) (40) (510)",
+      "raw_label_or_claim": "Gain/(loss) on investments, net",
+      "source_id": "0000027904-26-000022"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Domestic passenger revenue increased 8% in the March 2026 quarter compared to the March 2025 quarter on a 1% increase in capacity.",
+      "raw_label_or_claim": "Domestic passenger revenue",
+      "source_id": "0000027904-26-000022"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000027904-26-000022",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000022#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000022#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000022#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000027904-26-000022#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000063908-26-000032": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Diluted earnings per share was $3.03, an increase of 8% (5% in constant currencies).",
+      "raw_label_or_claim": "Diluted earnings per share",
+      "source_id": "0000063908-26-000032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Global comparable sales in the fourth quarter increased 5.7%, with positive global comparable guest counts and strong comparable sales growth across all segments",
+      "raw_label_or_claim": "Global comparable sales",
+      "source_id": "0000063908-26-000032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Pre-tax charges of $74 million, or $0.10 per share, for the quarter and $221 million, or $0.25 per share, for the year, primarily related to restructuring charges associated with Accelerating the Organization",
+      "raw_label_or_claim": "Pre-tax charges",
+      "source_id": "0000063908-26-000032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000063908-26-000032",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000063908-26-000032#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000063908-26-000032#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000063908-26-000032#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000063908-26-000032#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000063908-26-000032#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000063908-26-000032#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000063908-26-000032#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000092380-26-000044": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Given the ongoing macroeconomic uncertainty, updating the Company's full-year adjusted EPS guidance of $4.00 would not be productive at this time.",
+      "raw_label_or_claim": "full-year adjusted EPS guidance of $4.00",
+      "source_id": "0000092380-26-000044"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Expect 66 Boeing 737-8 aircraft deliveries and plan to retire approximately 60 aircraft in 2026",
+      "raw_label_or_claim": "66 Boeing 737-8 aircraft deliveries",
+      "source_id": "0000092380-26-000044"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "First quarter 2026 operating expenses increased 4.0 percent year-over-year, to $6.9 billion",
+      "raw_label_or_claim": "operating expenses",
+      "source_id": "0000092380-26-000044"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000092380-26-000044",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000092380-26-000044#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000092380-26-000044#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000092380-26-000044#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000092380-26-000044#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000092380-26-000044#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000764478-25-000057": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Comparable online sales % change (1) \n\n3.5 % (1.0) % 3.6 % (2.9) %",
+      "raw_label_or_claim": "Comparable online sales % change",
+      "source_id": "0000764478-25-000057"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Diluted EPS decreased in the third quarter of fiscal 2026, primarily due to lower net earnings driven by higher goodwill and intangible asset impairments, partially offset by lower income tax expense.",
+      "raw_label_or_claim": "Diluted EPS",
+      "source_id": "0000764478-25-000057"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "The Five-Year Facility Agreement permits borrowings of up to $1.25 billion and expires in April 2030.",
+      "raw_label_or_claim": "Five-Year Facility Agreement",
+      "source_id": "0000764478-25-000057"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000764478-25-000057",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000764478-25-000057#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000764478-25-000057#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000764478-25-000057#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000764478-25-000057#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000764478-25-000057#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000764478-26-000005": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "items",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "ITEMS: [\"Item 2.02: Results of Operations and Financial Condition\", \"Item 9.01: Financial Statements and Exhibits\"]",
+      "raw_label_or_claim": "Item 2.02: Results of Operations and Financial Condition",
+      "source_id": "0000764478-26-000005"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000764478-26-000005",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000764478-26-000005#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000898173-26-000006": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Our full-year comparable store sales result of 4.7% was at the high end of our revised guidance range of 4.0% to \u200b 5.0%.",
+      "raw_label_or_claim": "full-year comparable store sales result",
+      "source_id": "0000898173-26-000006"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Comparable store sales increased 4.7% for the year ended December 31, 2025, on top of 2.9% for the same period one year ago.",
+      "raw_label_or_claim": "Comparable store sales",
+      "source_id": "0000898173-26-000006"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Gross profit for the year ended December 31, 2025, increased 7% to $9.17 billion (or 51.6% of sales) from $8.55 billion (or 51.2% of sales) for the same period one year ago.",
+      "raw_label_or_claim": "Gross profit",
+      "source_id": "0000898173-26-000006"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000898173-26-000006",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000898173-26-000006#P007",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000940944-25-000038": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Fine Dining 18.6% 19.0% (40) BP",
+      "raw_label_or_claim": "Fine Dining",
+      "source_id": "0000940944-25-000038"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "On September 16, 2024, we entered into Amendment No. 1 (Amendment) to the Revolving Credit Agreement, which replaced the prior financial covenant (which provided for a maximum consolidated total debt to total capitalization ratio) with a new financial covenant requiring us to maintain, measured as of the end of each fiscal quarter, a maximum consolidated leverage ratio of 3.50 to 1.00 (which may be temporarily increased to 4.00 to 1.00 upon the election as a result of a covered acquisition, subject to customary limitations set forth in the Revolving Credit Agreement).",
+      "raw_label_or_claim": "maximum consolidated leverage ratio",
+      "source_id": "0000940944-25-000038"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "business",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "During fiscal 2025, the average check per person (defined as total sales divided by number of entr\u00e9es sold) was approximately $24.00, with alcoholic beverages accounting for 4.7 percent of Olive Garden\u2019s sales.",
+      "raw_label_or_claim": "average check per person",
+      "source_id": "0000940944-25-000038"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000940944-25-000038",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-25-000038#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-25-000038#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-25-000038#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-25-000038#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-25-000038#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-25-000038#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000940944-26-000005": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Reported diluted net earnings per share from continuing operations $10.40 to $10.50",
+      "raw_label_or_claim": "Reported diluted net earnings per share from continuing operations",
+      "source_id": "0000940944-26-000005"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Losses from discontinued operations, net of tax benefit of $1.3, $0.2, $1.6, and $0.7, respectively (3.8) (0.3) (4.1) (1.2)",
+      "raw_label_or_claim": "Losses from discontinued operations",
+      "source_id": "0000940944-26-000005"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "During the fourth quarter of fiscal 2025, the Company changed its reporting of segment profit to exclude pre-opening costs.",
+      "raw_label_or_claim": "changed its reporting of segment profit to exclude pre-opening costs",
+      "source_id": "0000940944-26-000005"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000940944-26-000005",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000005#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000005#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000005#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000005#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0000940944-26-000009": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Impairments and (gain) loss on disposal of assets, net 25.1 0.1 NM",
+      "raw_label_or_claim": "Impairments and (gain) loss on disposal of assets, net",
+      "source_id": "0000940944-26-000009"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026 was primarily driven by same-restaurant sales increases, as well as revenue from new restaurants. The increase in same-restaurant sales for the third quarter of fiscal 2026 resulted from a 3.9 percent increase in average check combined with a 3.3 percent increase in same-restaurant guest counts.",
+      "raw_label_or_claim": "LongHorn Steakhouse\u2019s sales increase for the third quarter of fiscal 2026",
+      "source_id": "0000940944-26-000009"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Our current liabilities totaled $2.61 billion as of February 22, 2026, compared to $2.25 billion as of May 25, 2025.",
+      "raw_label_or_claim": "current liabilities",
+      "source_id": "0000940944-26-000009"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0000940944-26-000009",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000009#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000009#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000009#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000009#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0000940944-26-000009#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001041061-25-000109": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Less Special Items EPS \n\n$(0.16) $(0.02) NM $(0.67) $(0.14) NM",
+      "raw_label_or_claim": "Less Special Items EPS",
+      "source_id": "0001041061-25-000109"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "The Pizza Hut Division has 19,872 units, 68% of which are located outside the U.S.",
+      "raw_label_or_claim": "The Pizza Hut Division has 19,872 units, 68% of which are located outside the U.S.",
+      "source_id": "0001041061-25-000109"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Operating Profit (Loss) $ (2) $ 1 (572) (572) $ \u2014 $ (2) 82 82",
+      "raw_label_or_claim": "Operating Profit (Loss)",
+      "source_id": "0001041061-25-000109"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001041061-25-000109",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-25-000109#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-25-000109#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-25-000109#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-25-000109#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001041061-26-000003": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "For the quarter, company-owned restaurant margins were 12.7%, up 40 basis points year-over-year.",
+      "raw_label_or_claim": "company-owned restaurant margins",
+      "source_id": "0001041061-26-000003"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "The impact of lapping the 53rd week negatively impacted the change in company-owned restaurant margins by 40 basis points in the quarter and by 10 basis points for the year.",
+      "raw_label_or_claim": "company-owned restaurant margins",
+      "source_id": "0001041061-26-000003"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Foreign currency translation favorably impacted operating profit by $10 million for the quarter and $12 million for the year.",
+      "raw_label_or_claim": "Foreign currency translation favorably impacted operating profit",
+      "source_id": "0001041061-26-000003"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001041061-26-000003",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000003#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000003#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000003#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000003#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000003#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001041061-26-000084": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "In September 2025, the FASB issued ASU 2025-06, Intangibles \u2014 Goodwill and Other \u2014 Internal-Use Software (Subtopic 350-40): Targeted Improvements to the Accounting for Internal-Use Software",
+      "raw_label_or_claim": "ASU 2025-06, Intangibles \u2014 Goodwill and Other \u2014 Internal-Use Software (Subtopic 350-40): Targeted Improvements to the Accounting for Internal-Use Software",
+      "source_id": "0001041061-26-000084"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Gross unit openings for the year were 4,567 units resulting in 1,939 net new units.",
+      "raw_label_or_claim": "Gross unit openings for the year were 4,567 units",
+      "source_id": "0001041061-26-000084"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "The KFC Division has 33,897 units, 90% of which are located outside the U.S.",
+      "raw_label_or_claim": "The KFC Division has 33,897 units",
+      "source_id": "0001041061-26-000084"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001041061-26-000084",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P007",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001041061-26-000084#P008",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001058090-26-000007": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Full year comparable restaurant sales to be about flat",
+      "raw_label_or_claim": "Full year comparable restaurant sales",
+      "source_id": "0001058090-26-000007"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Operating margin was 16.2%, a decrease from 16.9%",
+      "raw_label_or_claim": "Operating margin",
+      "source_id": "0001058090-26-000007"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Digital sales represented 37.2% of total food and beverage revenue.",
+      "raw_label_or_claim": "Digital sales",
+      "source_id": "0001058090-26-000007"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001058090-26-000007",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001058090-26-000007#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001058090-26-000007#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001058090-26-000007#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001058090-26-000007#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001104659-25-102611": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "As amended, the Revolving Credit Agreement will terminate, and all amounts borrowed will be due and payable, on November 15, 2028 .",
+      "raw_label_or_claim": "Revolving Credit Agreement",
+      "source_id": "0001104659-25-102611"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Each of the first three quarters of our fiscal year consists of 12 weeks, and the fourth quarter consisted of 16 weeks in 2025, 17 weeks in 2024 and 16 weeks in 2023.",
+      "raw_label_or_claim": "the fourth quarter consisted of 16 weeks in 2025, 17 weeks in 2024 and 16 weeks in 2023",
+      "source_id": "0001104659-25-102611"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "The fourth quarter of fiscal year 2025 represented 33.0% of annual sales and 33.5% of net income",
+      "raw_label_or_claim": "The fourth quarter of fiscal year 2025",
+      "source_id": "0001104659-25-102611"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001104659-25-102611",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-102611#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-102611#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-102611#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-102611#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-102611#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-102611#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001104659-25-105631": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Sales through the off-premise channel comprised approximately 21% of our restaurant sales during both the first nine months of fiscal 2025 and fiscal 2024.",
+      "raw_label_or_claim": "off-premise channel",
+      "source_id": "0001104659-25-105631"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Average sales per restaurant operating week increased 0.4% to $231,971 in the third quarter of fiscal 2025 from $231,011 in the third quarter of fiscal 2024.",
+      "raw_label_or_claim": "Average sales per restaurant operating week",
+      "source_id": "0001104659-25-105631"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "The Revolver Facility contains a commitment increase feature that, subject to certain conditions precedent, could provide for an additional $200 million in revolving loan commitments.",
+      "raw_label_or_claim": "commitment increase feature",
+      "source_id": "0001104659-25-105631"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001104659-25-105631",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-105631#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-105631#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-105631#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-105631#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001104659-25-118458": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Interest expense, net was $4.1 million for the 13 weeks ended November 1, 2025, compared to interest income, net of $1.7 million for the 13 weeks ended November 2, 2024.",
+      "raw_label_or_claim": "Interest expense, net",
+      "source_id": "0001104659-25-118458"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Gross profit as a percentage of net sales increased to 39.6% for the 39 weeks ended November 1, 2025, compared to 39.1% for the 39 weeks ended November 2, 2024.",
+      "raw_label_or_claim": "Gross profit as a percentage of net sales",
+      "source_id": "0001104659-25-118458"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "The Loan Agreement requires the Company to maintain a minimum fixed charge coverage ratio of 1.0 whenever availability under the Loan Agreement falls below the specified threshold.",
+      "raw_label_or_claim": "minimum fixed charge coverage ratio of 1.0",
+      "source_id": "0001104659-25-118458"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001104659-25-118458",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-118458#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-118458#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-118458#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-25-118458#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001104659-26-017090": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Gift card adjustment, net(3) (9,396 ) - (9,396 ) -",
+      "raw_label_or_claim": "Gift card adjustment, net(3)",
+      "source_id": "0001104659-26-017090"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Comparable restaurant sales at The Cheesecake Factory restaurants declined 2.2% year-over-year in the fourth quarter of fiscal 2025.",
+      "raw_label_or_claim": "Comparable restaurant sales",
+      "source_id": "0001104659-26-017090"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "adjusted diluted net income per share finished toward the higher end of our expectations",
+      "raw_label_or_claim": "adjusted diluted net income per share",
+      "source_id": "0001104659-26-017090"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001104659-26-017090",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-017090#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-017090#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-017090#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-017090#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-017090#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001104659-26-027061": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Comparable sales increased 5.8%, driven by a 4.2% increase in average ticket and a 1.6% increase in transactions.",
+      "raw_label_or_claim": "Comparable sales",
+      "source_id": "0001104659-26-027061"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Interest expense (income), net \u200b \u200b 2,624 \u200b 0.1% \u200b \u200b (1,994) \u200b (0.1%)",
+      "raw_label_or_claim": "Interest expense (income), net",
+      "source_id": "0001104659-26-027061"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Diluted earnings per share increased 1.2% to $25.64.",
+      "raw_label_or_claim": "Diluted earnings per share",
+      "source_id": "0001104659-26-027061"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001104659-26-027061",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P007",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P008",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P009",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-027061#P010",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001104659-26-032757": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Gross profit, as a percentage of sales, was 51.7% compared to 53.4% during the comparable prior year period.",
+      "raw_label_or_claim": "Gross profit, as a percentage of sales",
+      "source_id": "0001104659-26-032757"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "On February 20, 2026, the U.S. Supreme Court invalidated tariffs imposed under the International Emergency Economic Powers Act. The President immediately introduced new tariffs under different statutory authority, though their scope and duration, and the likelihood and outcome of further legal challenges to these tariffs, remain uncertain. Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations.",
+      "raw_label_or_claim": "Tariff policy continues to evolve, and we are monitoring potential impacts on our business and results of operations",
+      "source_id": "0001104659-26-032757"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "mdna",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Effective tax rate over trailing four quarters ended February 14, 2026, and February 15, 2025, was 20.4% and 20.3%, respectively.",
+      "raw_label_or_claim": "Effective tax rate",
+      "source_id": "0001104659-26-032757"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001104659-26-032757",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-032757#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-032757#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-032757#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-032757#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-032757#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001104659-26-032757#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "0001171843-26-001288": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Trailing 4 Quarters ending February 15, 2025 include an additional week of sales of approximately $359.1 million for Total AutoZone Stores with $95.7 million for Domestic Commercial.",
+      "raw_label_or_claim": "an additional week of sales of approximately $359.1 million for Total AutoZone Stores with $95.7 million for Domestic Commercial",
+      "source_id": "0001171843-26-001288"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Operating profit decreased 1.2% to $698.5 million.",
+      "raw_label_or_claim": "Operating profit",
+      "source_id": "0001171843-26-001288"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "exhibit_99_1",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Net inventory (net of payables) (813,494 ) (1,196,131 )",
+      "raw_label_or_claim": "Net inventory (net of payables)",
+      "source_id": "0001171843-26-001288"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "0001171843-26-001288",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "0001171843-26-001288#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001171843-26-001288#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001171843-26-001288#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001171843-26-001288#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "0001171843-26-001288#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "AAL_2026-04-23T08.30": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Second quarter CASMX is anticipated to be up 2% to 4% year over year",
+      "raw_label_or_claim": "CASMX",
+      "source_id": "AAL_2026-04-23T08.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "We expect domestic unit revenue to grow more than 10% in the second quarter.",
+      "raw_label_or_claim": "domestic unit revenue",
+      "source_id": "AAL_2026-04-23T08.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "This is the first time our total debt has been below $35 billion since mid-2015.",
+      "raw_label_or_claim": "total debt",
+      "source_id": "AAL_2026-04-23T08.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "AAL_2026-04-23T08.30",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "AAL_2026-04-23T08.30#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "AAL_2026-04-23T08.30#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "AAL_2026-04-23T08.30#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "AAL_2026-04-23T08.30#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "BBY_2026-03-03T08.00": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "adjusted diluted earnings per share of $6.30 to $6.60",
+      "raw_label_or_claim": "adjusted diluted earnings per share",
+      "source_id": "BBY_2026-03-03T08.00"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "In fiscal 26, our gross advertising collections were just over $900 million. This is up more than 7% versus last year. Today, these collections show up mostly as an offset to our cost of goods sold, with a small amount flowing through revenue. In fiscal 27, we anticipate growth of approximately 10%.",
+      "raw_label_or_claim": "gross advertising collections",
+      "source_id": "BBY_2026-03-03T08.00"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "we delivered our eighth consecutive quarter of positive comparable sales in computing driven by laptops, desktops, and accessories.",
+      "raw_label_or_claim": "computing",
+      "source_id": "BBY_2026-03-03T08.00"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "BBY_2026-03-03T08.00",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "BBY_2026-03-03T08.00#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "BBY_2026-03-03T08.00#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "BBY_2026-03-03T08.00#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "BBY_2026-03-03T08.00#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "BBY_2026-03-03T08.00#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "BBY_2026-03-03T08.00#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "CMG_2026-02-03T16.30": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "For the fourth quarter, sales grew 4.9% to reach $3 billion, with a comp decline of 2.5%.",
+      "raw_label_or_claim": "sales grew 4.9% to reach $3 billion",
+      "source_id": "CMG_2026-02-03T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Marketing costs were 3.5% of sales in Q4, an increase of about 50 basis points from last year.",
+      "raw_label_or_claim": "Marketing costs were 3.5% of sales in Q4",
+      "source_id": "CMG_2026-02-03T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "we anticipate our full-year comparable restaurant sales to be about flat.",
+      "raw_label_or_claim": "full-year comparable restaurant sales to be about flat",
+      "source_id": "CMG_2026-02-03T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "CMG_2026-02-03T16.30",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "CMG_2026-02-03T16.30#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "CMG_2026-02-03T16.30#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "CMG_2026-02-03T16.30#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "CMG_2026-02-03T16.30#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "CMG_2026-02-03T16.30#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "CMG_2026-02-03T16.30#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "CMG_2026-02-03T16.30#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "DAL_2026-04-08T10.00": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "we expect to deliver a 6% to 8% operating margin with a pre-tax profit of $1 billion.",
+      "raw_label_or_claim": "6% to 8% operating margin",
+      "source_id": "DAL_2026-04-08T10.00"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "we expect second quarter total revenue growth of low teens on flat capacity growth, reflecting double-digit passenger unit revenue growth. This is meaningful acceleration from mid-single-digit unit revenue growth in the March quarter.",
+      "raw_label_or_claim": "meaningful acceleration from mid-single-digit unit revenue growth in the March quarter",
+      "source_id": "DAL_2026-04-08T10.00"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "we ended the quarter with adjusted net debt of 13.5 billion down 20% from last year and gross leverage of 2.4 times.",
+      "raw_label_or_claim": "adjusted net debt of 13.5 billion down 20% from last year",
+      "source_id": "DAL_2026-04-08T10.00"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "DAL_2026-04-08T10.00",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "DAL_2026-04-08T10.00#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DAL_2026-04-08T10.00#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DAL_2026-04-08T10.00#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DAL_2026-04-08T10.00#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "DRI_2026-03-19T08.30": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "our annual outlook implies total sales growth of 13% to 14.5%, which includes the extra fiscal week",
+      "raw_label_or_claim": "total sales growth",
+      "source_id": "DRI_2026-03-19T08.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "We generated $3.3 billion of total sales, 5.9% higher than last year",
+      "raw_label_or_claim": "total sales",
+      "source_id": "DRI_2026-03-19T08.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "At Longhorn, total sales increased 11.2%",
+      "raw_label_or_claim": "total sales",
+      "source_id": "DRI_2026-03-19T08.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "DRI_2026-03-19T08.30",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "DRI_2026-03-19T08.30#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DRI_2026-03-19T08.30#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DRI_2026-03-19T08.30#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DRI_2026-03-19T08.30#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DRI_2026-03-19T08.30#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DRI_2026-03-19T08.30#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "DRI_2026-03-19T08.30#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "MCD_2026-02-11T16.30": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "expect our full year effective tax rate to be between 21% and 23%, with some volatility quarter to quarter that may cause the quarterly rate to be outside the annual range.",
+      "raw_label_or_claim": "full year effective tax rate",
+      "source_id": "MCD_2026-02-11T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "we target approximately 2,600 gross restaurant openings in 2026, which keeps us on track to achieve 50,000 restaurants by the end of 2027.",
+      "raw_label_or_claim": "approximately 2,600 gross restaurant openings in 2026",
+      "source_id": "MCD_2026-02-11T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Overall, we anticipate about 4.5 percent unit growth from the approximately 2,100 net restaurant additions in 2026.",
+      "raw_label_or_claim": "about 4.5 percent unit growth",
+      "source_id": "MCD_2026-02-11T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "MCD_2026-02-11T16.30",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P007",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P008",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P009",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "MCD_2026-02-11T16.30#P010",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "ULTA_2026-03-12T16.30": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Gross margin increased 30 basis points to 39.1% of sales",
+      "raw_label_or_claim": "Gross margin increased 30 basis points to 39.1% of sales",
+      "source_id": "ULTA_2026-03-12T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "delivered operating income of $1.5 billion, or 12.4% of sales",
+      "raw_label_or_claim": "operating income of $1.5 billion",
+      "source_id": "ULTA_2026-03-12T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "measurement_wording"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Our team's relentless focus on reducing inventory shrink has delivered meaningful benefits every quarter this year. Our investments in fixtures and process improvements, targeted efforts in high-risk markets, and focused associate training have resulted in shrink reductions across every category.",
+      "raw_label_or_claim": "reducing inventory shrink",
+      "source_id": "ULTA_2026-03-12T16.30"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "ULTA_2026-03-12T16.30",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P006",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "ULTA_2026-03-12T16.30#P007",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "YUM_2026-02-04T08.15": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "measurement_wording",
+       "favourable_unfavourable_direction"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "We expect our tax rate to be in the range of 22 to 24 percent.",
+      "raw_label_or_claim": "our tax rate",
+      "source_id": "YUM_2026-02-04T08.15"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "favourable_unfavourable_direction",
+       "expectation_routing"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Yum X Special EPS for the year was $6.05, up 10%.",
+      "raw_label_or_claim": "Yum X Special EPS",
+      "source_id": "YUM_2026-02-04T08.15"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "prepared_remarks",
+      "proposed_hard_classes": [
+       "expectation_routing",
+       "slices_and_unknown_axes"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Taco Bell entered five new markets in 2025 and opened 155 gross units internationally, up almost 40% from the prior year.",
+      "raw_label_or_claim": "Taco Bell",
+      "source_id": "YUM_2026-02-04T08.15"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "YUM_2026-02-04T08.15",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "YUM_2026-02-04T08.15#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "YUM_2026-02-04T08.15#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "YUM_2026-02-04T08.15#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "YUM_2026-02-04T08.15#P003",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "YUM_2026-02-04T08.15#P004",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "YUM_2026-02-04T08.15#P005",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "bzNews_42014391": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "body",
+      "proposed_hard_classes": [
+       "slices_and_unknown_axes",
+       "portion_versus_whole"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "McDonald's Corp. is spending $100 million in an effort to revive sales and support franchisees",
+      "raw_label_or_claim": "spending $100 million in an effort to revive sales and support franchisees",
+      "source_id": "bzNews_42014391"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "title",
+      "proposed_hard_classes": [
+       "portion_versus_whole",
+       "ambiguous_menus"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "More Than 100 In 14 States Were Sickened By The Outbreak",
+      "raw_label_or_claim": "More Than 100 In 14 States Were Sickened By The Outbreak",
+      "source_id": "bzNews_42014391"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "bzNews_42014391",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "bzNews_42014391#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "bzNews_42014391#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "bzNews_49256211": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "title",
+      "proposed_hard_classes": [
+       "ambiguous_menus",
+       "corrections_and_amendments"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Chipotle Mexican Grill Authorizes Additional $1.8B For Share Repurchases",
+      "raw_label_or_claim": "Authorizes Additional $1.8B For Share Repurchases",
+      "source_id": "bzNews_49256211"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "bzNews_49256211",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "bzNews_49256211#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "bzNews_50877032": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "teaser",
+      "proposed_hard_classes": [
+       "corrections_and_amendments",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "American Airlines will invest $1 billion in Miami International Airport to build a new concourse D, with the project starting in 2027.",
+      "raw_label_or_claim": "invest $1 billion in Miami International Airport to build a new concourse D, with the project starting in 2027.",
+      "source_id": "bzNews_50877032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "body",
+      "proposed_hard_classes": [
+       "sequential_comparison",
+       "point_range_floor_ceiling"
+      ],
+      "proposed_record_kind": "negative_control",
+      "quote": "Benzinga Edge Rankings show that American Airlines scores poorly on the Momentum and Growth metrics, but offers a positive price trend in the Long term.",
+      "raw_label_or_claim": "scores poorly on the Momentum and Growth metrics, but offers a positive price trend in the Long term.",
+      "source_id": "bzNews_50877032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    },
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "body",
+      "proposed_hard_classes": [
+       "point_range_floor_ceiling",
+       "losses_and_sign"
+      ],
+      "proposed_record_kind": "real_item",
+      "quote": "Jet fuel costs are one of the most volatile expenses for the airline as uncertainty over crude oil prices continues to loom amid rising tensions between Washington and Tehran.",
+      "raw_label_or_claim": "Jet fuel costs are one of the most volatile expenses for the airline",
+      "source_id": "bzNews_50877032"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "bzNews_50877032",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "bzNews_50877032#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "bzNews_50877032#P001",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    },
+    {
+     "decision": "exclude",
+     "proposal_id": "bzNews_50877032#P002",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  },
+  "bzNews_51962983": {
+   "additions": [
+    {
+     "row": {
+      "occurrence_in_part": null,
+      "part_ref": "title",
+      "proposed_hard_classes": [
+       "losses_and_sign",
+       "sequential_comparison"
+      ],
+      "proposed_record_kind": "lawful_abstention_control",
+      "quote": "Best Buy Appoints Jason Bonfig As CEO, Effective At End Of Q3",
+      "raw_label_or_claim": "Best Buy Appoints Jason Bonfig As CEO, Effective At End Of Q3",
+      "source_id": "bzNews_51962983"
+     },
+     "why": "TEST rehearsal addition: mechanical handling only"
+    }
+   ],
+   "blocked": null,
+   "exclusions_considered": [],
+   "open_issues": [],
+   "source_id": "bzNews_51962983",
+   "verdicts": [
+    {
+     "decision": "exclude",
+     "proposal_id": "bzNews_51962983#P000",
+     "row": null,
+     "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here"
+    }
+   ]
+  }
+ }
+}

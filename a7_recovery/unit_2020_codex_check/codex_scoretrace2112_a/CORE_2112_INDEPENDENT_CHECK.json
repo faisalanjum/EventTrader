@@ -1,0 +1,55 @@
+{
+  "scope": "Independent structural reconciliation; not source adjudication or acceptance of Core conclusions",
+  "arm_match_union": 126,
+  "arm_match_intersection": 109,
+  "union_losses": 55,
+  "union_gains": 0,
+  "all55_loss_identities_equal_core_inventory": true,
+  "accounting": {
+    "P1": {
+      "matched": 121,
+      "produced": 173,
+      "groups": 0,
+      "group_sizes": {},
+      "unique_group_member_facts": 0,
+      "extras_duplicate_facts": 1,
+      "overlap": 0,
+      "extras_outside_groups": 1,
+      "reported_duplicate_violations": 1
+    },
+    "P2": {
+      "matched": 114,
+      "produced": 176,
+      "groups": 2,
+      "group_sizes": {
+        "2": 2
+      },
+      "unique_group_member_facts": 4,
+      "extras_duplicate_facts": 1,
+      "overlap": 1,
+      "extras_outside_groups": 0,
+      "reported_duplicate_violations": 3
+    },
+    "UNION": {
+      "matched": 71,
+      "produced": 211,
+      "groups": 54,
+      "group_sizes": {
+        "2": 52,
+        "3": 2
+      },
+      "unique_group_member_facts": 110,
+      "extras_duplicate_facts": 90,
+      "overlap": 72,
+      "extras_outside_groups": 18,
+      "reported_duplicate_violations": 144
+    }
+  },
+  "core_claims_not_accepted": [
+    "Every UNION group has exactly one member from each arm: false;52 groups have2 members and2 have3",
+    "Every differing item field proves at most one valid reading: unsupported; lawful name/date representations can differ",
+    "Observed recall below the bar needs owner relief: false; retain the bar and report the measured outcome",
+    "Non-bijection proves final semantic cause: incomplete; it proves current no-credit accounting, not truth or final group adjudication"
+  ],
+  "verification_command": "node - <<'NODE'\nconst fs=require('fs'),assert=require('assert/strict'),h=require('crypto');const root='a7_recovery/';const t=JSON.parse(fs.readFileSync(root+'unit_2020_codex_check/codex_scoretrace2112_a/SCORER_TRACE.json')),c=JSON.parse(fs.readFileSync(root+'unit_2020_codex_check/codex_g23partial2098_fit/G2/a7_g1_candidate.json')),core=JSON.parse(fs.readFileSync(root+'unit_2112_union_diagnosis/GOLD_ACCOUNTING_2112.json'));const sets={P1:new Set(),P2:new Set(),UNION:new Set()};for(const [k,prs]of Object.entries(c.population)){const j=k.indexOf('|'),leg=k.slice(0,j),sid=k.slice(j+1);for(const [gi]of prs)sets[leg].add(JSON.stringify([sid,gi]));}const both=new Set([...sets.P1,...sets.P2]),lost=[...both].filter(k=>!sets.UNION.has(k)).sort(),gained=[...sets.UNION].filter(k=>!both.has(k)),coreLost=core.rows.filter(r=>r.kind==='union_loss').map(r=>JSON.stringify([r.source_id,r.gold_idx])).sort();assert.deepEqual(lost,coreLost);assert.equal(both.size,core.arm_union_of_matches);assert.equal([...sets.P1].filter(k=>sets.P2.has(k)).length,core.arm_intersection_of_matches);const accounting={};for(const [leg,r]of Object.entries(t.records)){assert.equal(sets[leg].size,r.result.matched);const groups=r.inputs.safety_findings.confirmed_duplicate_groups,members=new Set(groups.flatMap(g=>g.produced_idxs.map(pi=>JSON.stringify([g.source_id,pi])))),dups=new Set(r.inputs.extras_verdicts.filter(v=>v.value==='duplicate').map(v=>JSON.stringify(v.key))),overlap=[...dups].filter(k=>members.has(k)).length;accounting[leg]={matched:sets[leg].size,produced:Object.values(r.inputs.arm_by_event).reduce((n,v)=>n+v.facts.length,0),groups:groups.length,group_sizes:groups.reduce((d,g)=>(d[g.produced_idxs.length]=(d[g.produced_idxs.length]||0)+1,d),{}),unique_group_member_facts:members.size,extras_duplicate_facts:dups.size,overlap,extras_outside_groups:dups.size-overlap,reported_duplicate_violations:r.result.duplicate_violations};}console.log(JSON.stringify({scope:'Independent structural reconciliation; not source adjudication or acceptance of Core conclusions',arm_match_union:both.size,arm_match_intersection:[...sets.P1].filter(k=>sets.P2.has(k)).length,union_losses:lost.length,union_gains:gained.length,all55_loss_identities_equal_core_inventory:true,accounting,core_claims_not_accepted:['Every UNION group has exactly one member from each arm: false;52 groups have2 members and2 have3','Every differing item field proves at most one valid reading: unsupported; lawful name/date representations can differ','Observed recall below the bar needs owner relief: false; retain the bar and report the measured outcome','Non-bijection proves final semantic cause: incomplete; it proves current no-credit accounting, not truth or final group adjudication']},null,2));\nNODE"
+}

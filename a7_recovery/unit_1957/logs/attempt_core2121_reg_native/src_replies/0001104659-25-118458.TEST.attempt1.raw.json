@@ -1,0 +1,81 @@
+```json
+{
+ "source_id": "0001104659-25-118458",
+ "verdicts": [
+  {
+   "proposal_id": "0001104659-25-118458#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-118458#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-118458#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001104659-25-118458#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-25-118458",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Interest expense, net was $4.1 million for the 13 weeks ended November 1, 2025, compared to interest income, net of $1.7 million for the 13 weeks ended November 2, 2024.",
+    "raw_label_or_claim": "Interest expense, net",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-25-118458",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Gross profit as a percentage of net sales increased to 39.6% for the 39 weeks ended November 1, 2025, compared to 39.1% for the 39 weeks ended November 2, 2024.",
+    "raw_label_or_claim": "Gross profit as a percentage of net sales",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001104659-25-118458",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "The Loan Agreement requires the Company to maintain a minimum fixed charge coverage ratio of 1.0 whenever availability under the Loan Agreement falls below the specified threshold.",
+    "raw_label_or_claim": "minimum fixed charge coverage ratio of 1.0",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

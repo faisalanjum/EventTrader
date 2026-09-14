@@ -1,0 +1,10 @@
+{
+  "scope": "Inventory coverage only; dispositions are model/source review, not replacement grading evidence",
+  "trace_sha256": "0b4a3f624a4024fb071fff1740f04b186027b2c91bcade2aaba4ce6bb05f7ee4",
+  "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+  "review_sha256": "30842fef2c63e6607d62402d8ffe7890386a92469b14bfd91118b9243e82559f",
+  "expected": 28,
+  "documented": 28,
+  "missing": [],
+  "extra": []
+}

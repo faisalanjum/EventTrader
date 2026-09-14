@@ -1,0 +1,35 @@
+{
+ "lanes": {
+  "G3-000/G1a": {
+   "chars": 54,
+   "sha256": "aa8440a51485024ee6dc7c6cbd094bdb7bbefb3f7b8a646b9579656efcf35b64",
+   "text": "[{\"question_id\": \"Xb9a2aa75d8cb7b83\", \"bucket\": null}]"
+  },
+  "G3-000/G1b": {
+   "chars": 54,
+   "sha256": "aa8440a51485024ee6dc7c6cbd094bdb7bbefb3f7b8a646b9579656efcf35b64",
+   "text": "[{\"question_id\": \"Xb9a2aa75d8cb7b83\", \"bucket\": null}]"
+  },
+  "G3-001/G1a": {
+   "chars": 54,
+   "sha256": "0b93693435f73d4493ce65b23fdf3c17e1c3d081c02e37705915f2037d9534cd",
+   "text": "[{\"question_id\": \"Xc184e531b378ed1d\", \"bucket\": null}]"
+  },
+  "G3-001/G1b": {
+   "chars": 54,
+   "sha256": "0b93693435f73d4493ce65b23fdf3c17e1c3d081c02e37705915f2037d9534cd",
+   "text": "[{\"question_id\": \"Xc184e531b378ed1d\", \"bucket\": null}]"
+  },
+  "G3-002/G1a": {
+   "chars": 54,
+   "sha256": "2bd4aa12483665f794fbc95916ad39bd13e6dab7dd091403a7c08e3e3c4b5a74",
+   "text": "[{\"question_id\": \"X86feb54326687022\", \"bucket\": null}]"
+  },
+  "G3-002/G1b": {
+   "chars": 54,
+   "sha256": "2bd4aa12483665f794fbc95916ad39bd13e6dab7dd091403a7c08e3e3c4b5a74",
+   "text": "[{\"question_id\": \"X86feb54326687022\", \"bucket\": null}]"
+  }
+ },
+ "segment": 1
+}

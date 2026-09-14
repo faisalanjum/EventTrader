@@ -1,0 +1,94 @@
+DERIVED_OWNERS ["a7_g1_build", "a7_g23_build", "a7_g23_run", "test_a7_g23_lifecycle_1464", "test_a7_input_binding"]
+AFFECTED_MODULES ["test_a7_corrections_1454.py", "test_a7_current_1473.py", "test_a7_current_postrun.py", "test_a7_g1_precall_freeze_1525.py", "test_a7_g23_lifecycle_1464.py", "test_a7_identity_relations.py", "test_a7_input_binding.py", "test_a7_interrupted_capture.py", "test_a7_publication.py", "test_a7_score_boundaries.py", "test_a7_trace_1471.py"]
+ENTERS_THE_SUCCESSOR_SCOPE ["test_correction_native_2118.py", "test_correction_rules_2118.py", "test_correction_mutations_2119.py"]
+
+===== test_a7_corrections_1454.py exit=0 ===== 47 passed in 33.49s
+
+===== test_a7_current_1473.py exit=0 ===== 14 passed in 9.24s
+
+===== test_a7_current_postrun.py exit=0 ===== 4 passed in 14.69s
+
+===== test_a7_g1_precall_freeze_1525.py exit=0 ===== 7 passed in 13.29s
+
+===== test_a7_g23_lifecycle_1464.py exit=0 ===== 79 passed in 8.94s
+
+===== test_a7_identity_relations.py exit=0 ===== 274 passed in 0.22s
+
+===== test_a7_input_binding.py exit=0 ===== 10 passed in 37.21s
+
+===== test_a7_interrupted_capture.py exit=0 ===== 7 passed in 5.88s
+
+===== test_a7_publication.py exit=0 ===== 12 passed in 26.55s
+
+===== test_a7_score_boundaries.py exit=0 ===== 94 passed in 1.43s
+
+===== test_a7_trace_1471.py exit=0 ===== 11 passed in 22.02s
+
+RESULT {
+ "kind": "affected regression of the historical modules; these do NOT enter the successor scope and running them is not a test of it",
+ "derived_owners": [
+  "a7_g1_build",
+  "a7_g23_build",
+  "a7_g23_run",
+  "test_a7_g23_lifecycle_1464",
+  "test_a7_input_binding"
+ ],
+ "modules": [
+  {
+   "module": "test_a7_corrections_1454.py",
+   "exit": 0,
+   "summary": "47 passed in 33.49s"
+  },
+  {
+   "module": "test_a7_current_1473.py",
+   "exit": 0,
+   "summary": "14 passed in 9.24s"
+  },
+  {
+   "module": "test_a7_current_postrun.py",
+   "exit": 0,
+   "summary": "4 passed in 14.69s"
+  },
+  {
+   "module": "test_a7_g1_precall_freeze_1525.py",
+   "exit": 0,
+   "summary": "7 passed in 13.29s"
+  },
+  {
+   "module": "test_a7_g23_lifecycle_1464.py",
+   "exit": 0,
+   "summary": "79 passed in 8.94s"
+  },
+  {
+   "module": "test_a7_identity_relations.py",
+   "exit": 0,
+   "summary": "274 passed in 0.22s"
+  },
+  {
+   "module": "test_a7_input_binding.py",
+   "exit": 0,
+   "summary": "10 passed in 37.21s"
+  },
+  {
+   "module": "test_a7_interrupted_capture.py",
+   "exit": 0,
+   "summary": "7 passed in 5.88s"
+  },
+  {
+   "module": "test_a7_publication.py",
+   "exit": 0,
+   "summary": "12 passed in 26.55s"
+  },
+  {
+   "module": "test_a7_score_boundaries.py",
+   "exit": 0,
+   "summary": "94 passed in 1.43s"
+  },
+  {
+   "module": "test_a7_trace_1471.py",
+   "exit": 0,
+   "summary": "11 passed in 22.02s"
+  }
+ ],
+ "exit": 0
+}

@@ -1,0 +1,7 @@
+attempt	codex_inputfit2122_a
+payload	../../unit_2020_codex_check/prove_grading_input_correction_2114.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1542074
+payload_pid	1542078
+started_utc	2026-09-14T01:32:49Z
+state	finished exit 0

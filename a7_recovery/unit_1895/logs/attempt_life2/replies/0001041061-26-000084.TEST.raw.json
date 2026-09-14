@@ -1,0 +1,111 @@
+```json
+{
+ "source_id": "0001041061-26-000084",
+ "verdicts": [
+  {
+   "proposal_id": "0001041061-26-000084#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P006",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P007",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0001041061-26-000084#P008",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001041061-26-000084",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "In September 2025, the FASB issued ASU 2025-06, Intangibles \u2014 Goodwill and Other \u2014 Internal-Use Software (Subtopic 350-40): Targeted Improvements to the Accounting for Internal-Use Software",
+    "raw_label_or_claim": "ASU 2025-06, Intangibles \u2014 Goodwill and Other \u2014 Internal-Use Software (Subtopic 350-40): Targeted Improvements to the Accounting for Internal-Use Software",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001041061-26-000084",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "Gross unit openings for the year were 4,567 units resulting in 1,939 net new units.",
+    "raw_label_or_claim": "Gross unit openings for the year were 4,567 units",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0001041061-26-000084",
+    "part_ref": "mdna",
+    "occurrence_in_part": null,
+    "quote": "The KFC Division has 33,897 units, 90% of which are located outside the U.S.",
+    "raw_label_or_claim": "The KFC Division has 33,897 units",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

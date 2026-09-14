@@ -1,0 +1,81 @@
+```json
+{
+ "source_id": "0000027904-26-000020",
+ "verdicts": [
+  {
+   "proposal_id": "0000027904-26-000020#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000020#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000020#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000027904-26-000020#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000020",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Guiding to low-teens revenue growth in the June quarter on flat capacity growth, reflecting strong demand momentum, meaningful capacity reductions, and rapid actions to recapture higher fuel",
+    "raw_label_or_claim": "low-teens revenue growth in the June quarter",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "corrections_and_amendments",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000020",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Non\u2011fuel unit costs grew 6 percent over prior year, reflecting lower than planned capacity growth and higher recovery costs.",
+    "raw_label_or_claim": "Non\u2011fuel unit costs grew 6 percent over prior year",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "point_range_floor_ceiling"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000027904-26-000020",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "The March quarter was the first full quarter of positive unit revenue growth in main cabin since the end of 2024, reflecting strong demand and continued supply rationalization.",
+    "raw_label_or_claim": "positive unit revenue growth in main cabin",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

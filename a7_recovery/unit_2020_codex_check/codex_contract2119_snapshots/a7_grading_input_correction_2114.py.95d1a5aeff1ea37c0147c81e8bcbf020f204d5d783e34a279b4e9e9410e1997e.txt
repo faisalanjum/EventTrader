@@ -1,0 +1,131 @@
+"""Versioned grading-input correction; no calls, scores or evidence rewrites.
+
+The frozen packet owner still supplies question identities, source cards and
+verified inputs. This explicit successor changes only the model-facing view.
+Historical packets keep their original renderer. A caller must freeze this
+version and its affected population before using it for new grading evidence.
+"""
+import copy
+
+import a1_reader as A
+import a7_g1_build as G
+import a7_g23_build as OLD
+from driver.core.driver_ids import IdLawError
+
+
+def _replace_once(text, old, new):
+    if text.count(old) != 1:
+        raise ValueError('the frozen grading instruction changed')
+    return text.replace(old, new, 1)
+
+
+def record_view(fact):
+    """Decode valid menu tokens with their existing owner; preserve all else."""
+    shown = copy.deepcopy(G._display(fact))
+    parts = shown['item'].get('slice_parts', [])
+    for i, token in enumerate(parts):
+        try:
+            display, _back = A.readable_menu([token])
+        except IdLawError:
+            # Off-menu source spans are allowed. Do not normalize, infer a
+            # population, or turn malformed evidence into a valid menu pick.
+            continue
+        parts[i] = display[0]
+    return shown
+
+
+def _output(rules, text):
+    before, tail = rules.split('[OUTPUT]\n', 1)
+    _old, boundary = tail.split(G.BOUNDARY, 1)
+    return before + '[OUTPUT]\n' + text + '\n\n' + G.BOUNDARY + boundary
+
+
+def meaning_rules():
+    rules = _replace_once(
+        OLD.meaning_rules(),
+        'bare reported level. Guidance: movement only where the source states it; a\n'
+        '   bare guide is unknown.',
+        'bare reported level. Direction follows the signed numerical axis, not\n'
+        '   whether the outcome improves. Guidance: source-stated introduction, revision, reaffirmation or withdrawal\n'
+        '   describes the guide itself. Compare revisions\n'
+        "   against the company's own prior guide, not projected business growth\n"
+        '   against an actual. Store movement only when the source states it; a\n'
+        '   bare guide is unknown.')
+    return _output(rules,
+        'Return ONLY a JSON array with one object per supplied question id.\n'
+        'Each object has exactly question_id (the supplied string) and verdicts\n'
+        '(an object containing every named aspect exactly once). Each aspect\n'
+        'value is an unquoted JSON true, false, or null, never a string.\n'
+        'No prose, extra fields or missing fields. Plain JSON or one fenced JSON block.')
+
+
+def extras_rules():
+    rules = _replace_once(
+        OLD.extras_rules(),
+        'different source claims and never applies. Within the block, source support\n'
+        '   is established by the `reference_cards` AND by the quote each produced\n'
+        '   record carries, which is the original bound source text.',
+        'different source claims and never applies. Read the full verified source\n'
+        '   in `event_context`, including relevant surrounding text and footnotes.\n'
+        '   The `reference_cards` identify reviewed claims; produced records are\n'
+        '   assertions to check against that source, not independent truth.')
+    return _output(rules,
+        'Return ONLY a JSON array with one object per supplied question id.\n'
+        'Each object has exactly question_id (the supplied string) and bucket\n'
+        '(one of the named bucket strings, or the unquoted JSON null).\n'
+        'No prose, extra fields or missing fields. Plain JSON or one fenced JSON block.')
+
+
+def _render(packet, kind, body):
+    result = dict(packet)
+    result['prompt'] = (meaning_rules() if kind == 'G2' else extras_rules()) + G._pretty(body) + '\n'
+    result['prompt_sha256'] = G._sha(result['prompt'])
+    result['input_correction_sha256'] = G._sha_file(__file__)
+    return result
+
+
+def meaning_packet(leg, source_id, pairs, gold_facts, produced_facts,
+                   run=None, inputs=None):
+    if not inputs:
+        raise ValueError('verified source inputs are required for grading')
+    packet = OLD.meaning_packet(leg, source_id, pairs, gold_facts,
+                                produced_facts, run, inputs=inputs)
+    for row in packet['questions']:
+        row['produced_record'] = record_view(row['produced_record'])
+    return _render(packet, 'G2', {
+        'event_context': OLD._required_context(packet, 0),
+        'questions': packet['questions']})
+
+
+def extras_packet(leg, source_id, produced_idxs, produced_facts,
+                  source_facts, run=None, inputs=None):
+    if not inputs:
+        raise ValueError('verified source inputs are required for grading')
+    context = dict(OLD.verified_event_context(inputs, source_id, run))
+    if context.pop('_source_id', None) != source_id:
+        raise ValueError('the verified context names a different source')
+    packet = OLD.extras_packet(leg, source_id, produced_idxs, produced_facts,
+                               source_facts, run)
+    packet['event_context'] = context
+    for row in packet['questions'] + packet['other_records']:
+        row['produced_record'] = record_view(row['produced_record'])
+    return _render(packet, 'G3', {k: packet[k] for k in (
+        'event_context', 'questions', 'other_records', 'reference_cards')})
+
+
+def batch_packet(kind, packets):
+    # Keep the original kind/id validation. Source context is required for
+    # both kinds; every event retains its own context, never another event's.
+    expected = G._sha_file(__file__)
+    if any(packet.get('input_correction_sha256') != expected for packet in packets):
+        raise ValueError('a packet uses a different or missing correction version')
+    result = OLD.batch_packet(kind, packets)
+    events = []
+    for n, packet in enumerate(packets):
+        event = {'event': 'E%d' % (n + 1),
+                 'event_context': OLD._required_context(packet, n),
+                 'questions': packet['questions']}
+        if kind == 'G3':
+            event.update({k: packet[k] for k in ('other_records', 'reference_cards')})
+        events.append(event)
+    return _render(result, kind, {'events': events})

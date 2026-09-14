@@ -1,0 +1,26 @@
+{
+  "scope": "All306 frozen G2 identities, native-agreement values and missing findings reach the actual scorer without relabeling",
+  "trace_sha256": "0b4a3f624a4024fb071fff1740f04b186027b2c91bcade2aaba4ce6bb05f7ee4",
+  "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+  "native_review_input_sha256": "59d54d9744dc43f922b8571322b238897f3c8f8aaa17ff6a4a25ef8d6ef39d16",
+  "by_leg": {
+    "P1": {
+      "questions": 121,
+      "partial": 54,
+      "agreed_false": 17
+    },
+    "P2": {
+      "questions": 114,
+      "partial": 47,
+      "agreed_false": 16
+    },
+    "UNION": {
+      "questions": 71,
+      "partial": 27,
+      "agreed_false": 9
+    }
+  },
+  "questions": 306,
+  "rows_sha256": "926a0dcf677c1dff538ed71063f8ee75c2515664006035d84adffd8b3fd94ae1",
+  "verification_command": "node - <<'NODE'\nconst fs=require('fs'),C=require('crypto'),assert=require('assert/strict');const base='a7_recovery/unit_2020_codex_check/';const sha=b=>C.createHash('sha256').update(b).digest('hex');const traw=fs.readFileSync(base+'codex_scoretrace2112_a/SCORER_TRACE.json'),craw=fs.readFileSync(base+'codex_g23partial2098_fit/G2/a7_g1_candidate.json'),iraw=fs.readFileSync(base+'G2_WHOLE_REVIEW_INPUT_2111.json');assert.equal(sha(traw),'0b4a3f624a4024fb071fff1740f04b186027b2c91bcade2aaba4ce6bb05f7ee4');assert.equal(sha(craw),'cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb');assert.equal(sha(iraw),'59d54d9744dc43f922b8571322b238897f3c8f8aaa17ff6a4a25ef8d6ef39d16');const t=JSON.parse(traw),c=JSON.parse(craw),i=JSON.parse(iraw),checks=new Map(i.question_checks.map(q=>[q.question_id,q]));const packetIds=new Set();let byLeg={};for(const b of c.batch_rows){const raw=fs.readFileSync(base+'codex_g23partial2098_fit/G2/'+b.prompt_path);assert.equal(sha(raw),b.prompt_sha256);let s=raw.toString('utf8'),doc=JSON.parse(s.slice(s.indexOf('[EVENT]\\n')+8));const ids=doc.events.flatMap(e=>e.questions.map(q=>q.question_id));assert.deepEqual([...ids].sort(),[...b.question_ids].sort());for(const id of ids){assert(!packetIds.has(id));packetIds.add(id);}}let rows=[];for(const [pop,pairs]of Object.entries(c.population)){const sep=pop.indexOf('|'),leg=pop.slice(0,sep),sid=pop.slice(sep+1),r=t.records[leg],got=new Map(r.inputs.grader_verdicts.map(x=>[JSON.stringify(x.key),x.value]));byLeg[leg]??={questions:0,partial:0,agreed_false:0};for(const [gi,pi]of pairs){const qid='M'+sha('G2|'+leg+'|'+sid+'|'+gi+'|'+pi).slice(0,16),q=checks.get(qid);assert(q,'unbound '+qid);assert(packetIds.has(qid));const v=got.get(JSON.stringify([sid,gi]));assert.deepEqual(v,q.established,leg+'/'+sid+'/'+gi);const missing=q.unresolved.length>0;const w=r.confirmed_wrong_accepted.find(x=>x.line===1130&&x.locals.sid===sid&&x.locals.gi===gi);const m=r.verdicts_missing.find(x=>x.locals.sid===sid&&x.locals.gi===gi);assert.equal(!!m,missing,qid);if(w){assert.equal(w.locals.pi,pi);assert.equal(w.locals.written,true);assert(Object.values(q.established).some(x=>x===false));}byLeg[leg].questions++;byLeg[leg].partial+=Number(missing);byLeg[leg].agreed_false+=Number(Object.values(q.established).some(x=>x===false));rows.push({leg,source_id:sid,gold_idx:gi,produced_idx:pi,question_id:qid,batch_id:q.batch_id,established:q.established,unresolved:q.unresolved,wrong_accept_counted:!!w});}}assert.equal(rows.length,306);assert.equal(packetIds.size,rows.length);console.log(JSON.stringify({scope:'All306 frozen G2 identities, native-agreement values and missing findings reach the actual scorer without relabeling',trace_sha256:sha(traw),candidate_sha256:sha(craw),native_review_input_sha256:sha(iraw),by_leg:byLeg,questions:rows.length,rows_sha256:sha(JSON.stringify(rows))},null,1));\nNODE"
+}

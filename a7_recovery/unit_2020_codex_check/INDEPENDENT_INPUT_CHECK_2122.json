@@ -1,0 +1,26 @@
+{
+ "current_proof_sha256": "4e3adcd02dcb8b037ba70fbd5e7efa80efce0a2540e451087b8cd352ce0dc9da",
+ "input_correction_sha256": "32e2f650f56cb77b20c89199bc8cf120181dbc7ff92bdd60014d7abc95a16a2d",
+ "kinds": {
+  "G2": {
+   "questions": 306,
+   "batches": 70,
+   "all_question_source_and_card_bytes_preserved": true,
+   "removed_comparison_records": 0
+  },
+  "G3": {
+   "questions": 117,
+   "batches": 30,
+   "all_question_source_and_card_bytes_preserved": true,
+   "removed_comparison_records": 526
+  }
+ },
+ "empty_comparator_groups": [
+  "P2|0001104659-25-118458",
+  "UNION|0000898173-26-000006",
+  "UNION|0001104659-25-118458",
+  "UNION|bzNews_50877032"
+ ],
+ "empty_comparator_questions": 21,
+ "model_calls": 0
+}

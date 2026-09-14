@@ -1,0 +1,9 @@
+attempt	core2121_reg_native
+payload	../../unit_2119_correction_finish/payload_regression_2119.py
+map	../unit_2121_g3_matched_comparators/map_g3_2121.tsv
+command	run_1957.sh ../unit_2121_g3_matched_comparators/map_g3_2121.tsv ../../unit_2119_correction_finish/payload_regression_2119.py core2121_reg_native 1800
+wrapper_pid	1485920
+payload_pid	1485924
+payload_pgid	1485920
+started_utc	2026-09-14T00:56:07Z
+state	finished exit 0

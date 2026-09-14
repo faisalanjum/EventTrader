@@ -1,0 +1,525 @@
+{
+ "baseline_sha256": "98a7a6ad3a346e5417dcc2120568c5ab1461ba41a160a0f800256102a2a5e19d",
+ "caller_sha256": "53a3cc140008a6299af37fd6461c6f7dc12654b2518dc2e7330a0bc1d57caf33",
+ "changes": {
+  "P1": {
+   "duplicate_violations": {
+    "after": 0,
+    "before": 1
+   }
+  },
+  "P2": {
+   "duplicate_violations": {
+    "after": 0,
+    "before": 3
+   },
+   "open_identity_findings": {
+    "after": 3,
+    "before": 1
+   }
+  },
+  "UNION": {
+   "duplicate_violations": {
+    "after": 0,
+    "before": 144
+   },
+   "open_identity_findings": {
+    "after": 55,
+    "before": 1
+   }
+  }
+ },
+ "correction_sha256": "375cc4830da12ba1728371e7a76a4d6932c6fb7fada545ce16c918eef4879ce4",
+ "decisions": {
+  "P1": false,
+  "P2": false
+ },
+ "g1": {
+  "candidate_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_gprep2086_a/g1_candidate",
+  "pins": {
+   "candidate_sha256": "24aab21b277cdc8c21df5da6d834b91bacd9e86734b1133902cc2badbe59b467",
+   "git_head": "2dc0ad39f30dba4756078573f5e80038465939cc",
+   "git_tree": "a45f8d0c2802e0d482ddefc5d330a4774d25a787",
+   "partial_grading_policy_sha256": "1a465b94ff57789bee9bc210b36e7b892768156975702160fe22cd46b16db959",
+   "partial_grading_rule_sha256": "05c9c8381063fcb436e560d1ad271e8ca8e64d7a2682b3a855fcacdc2404128b",
+   "prompt_tree_sha256": "75c879e9068074d025d79e8a0c8d37ad9432953a60df40c8db9daa3f82c15423",
+   "root_sha256": "013401e8151e12fb83df33ae5a50f4d160fbd2ef3a565d6a3f38bfa5f94307e8",
+   "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+   "run_file_count": 445,
+   "run_tree_sha256": "1b0f4e36c989cc3cee81d827dbc72a5de1a3118e9ad12018b149f49f67ca7a8c"
+  },
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2088/g1"
+ },
+ "key_identity": {
+  "accepted_rows": 163,
+  "acted_rows": 0,
+  "approved_lock_sha256": "dc9192271da3af0c3a0bb2fc2590c151073076f2893ac21136aee30424022e52",
+  "approved_receipt_sha256": "a52323e2ee08be81714109d7f743036c553ebe28f15b529f21dc9ef5e4fad991",
+  "base_owner": "a7_g1_build.gold_by_event",
+  "events": 33,
+  "key_digest": "396be2d6ff680ff5e4080f08c722163f2dc249c5bf4f73b32f040026de5c8b71",
+  "schema": "a7-current-key/approved"
+ },
+ "new_model_calls": 0,
+ "other_results_unchanged": true,
+ "owners": {
+  "a7_g1_build": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439",
+  "a7_g1_complete_v2": "168bca80ed108c451145c09571a6f957d21e734304ba8531a6e60321f36fd5c2",
+  "a7_g23_build": "3ca73c35163fdb3c39623711b78e9f0ea3a0c6ed30fdcec943d57ca1deaac79e",
+  "audit_worker_access": "53e6cba4cf4d243c1a6f7a95ff11776bfc45336cab3707ce8b0a219942d1c562",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "6d0a02285162a079a81615db6ae64fddaa43acef64214315339c8d78bfd7f43e",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "producer": {
+  "a4_lock_receipt_sha256": "a52323e2ee08be81714109d7f743036c553ebe28f15b529f21dc9ef5e4fad991",
+  "a4_lock_sha256": "dc9192271da3af0c3a0bb2fc2590c151073076f2893ac21136aee30424022e52",
+  "a6_freeze_sha256": "987289bf3a43c188d8b6c5b2ae0ea8ae4b82b987310e90243767f0ecd02b7e16",
+  "contract_suffix": null,
+  "corrected_inventory_sha256": "c24c2bfba94af4ca980090abcd6157e0f100cd853204311a03fcae9ca4484846",
+  "evaluation_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_gprep2086_a/evaluation",
+  "executed": {
+   "run_digest": "460c543b82ec3c69be70b2eebec3df1311263ecf885d3a1215ddc8627ad08034",
+   "run_files": 799
+  },
+  "finalizations": {
+   "primary": "2f15d98ffafe6b1b193fdb57e4b04de1158534499c126d4cc3dad495809c832f"
+  },
+  "receipt_sha256": "8760b52712ac233826e98486dce043f86ae007ffaa373504ac8f761a2bc7fd0e",
+  "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a3_run_1983",
+  "scheduled_calls": 382,
+  "schema": "a7_prepared_run/1",
+  "source_manifest_sha256": "ff259bac38c5b939f99aed05c026661b62af8d2c8ffedfe2fb6d91c3754409ce"
+ },
+ "results": {
+  "P1": {
+   "PASS": false,
+   "ambiguities_unresolved": 0,
+   "ambiguous_rows": [
+    {
+     "produced_idx": 4,
+     "reason": "extras_verdict_missing",
+     "sid": "0001104659-25-102611"
+    }
+   ],
+   "confirmed_wrong_accepted": 11,
+   "duplicate_violations": 0,
+   "error_table": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 41,
+    "extras:extras_verdict_missing": 1,
+    "mismatch:change_unit": 8,
+    "mismatch:comparison_baseline": 8,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 2,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 9,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 28,
+    "mismatch:period_start_date": 15,
+    "mismatch:slice": 21,
+    "mismatch:time_type": 10,
+    "mismatch:value:change_value": 7,
+    "mismatch:value:comparison_high": 8,
+    "mismatch:value:comparison_low": 8,
+    "mismatch:value:level_high": 18,
+    "mismatch:value:level_low": 20,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:PERIOD_UNRESOLVED": 19,
+    "rejected:CONFLICTING_DRIVER_NAME": 44,
+    "rejected:UNIT": 2,
+    "verdict:driver_name_meaning": 2,
+    "verdict:driver_state": 9,
+    "verdict:growth_basis": 3,
+    "verdict:slice_vs_menu": 2,
+    "wrong_lane:matched": 2,
+    "wrong_lane:missing_gold_twin": 14
+   },
+   "error_table_by_rule": {
+    "ISS-16": 24,
+    "OD-11": 3,
+    "OD-12": 61,
+    "OD-13": 0,
+    "OD-14": 10,
+    "OD-21": 3,
+    "OD-9": 21,
+    "other": 201,
+    "shapes": 10,
+    "slices": 23
+   },
+   "extras": {
+    "duplicate": 1,
+    "key_miss": 2,
+    "unsupported": 0
+   },
+   "gold_n": 163,
+   "matched": 121,
+   "name_spelling_differences": 46,
+   "open_identity_findings": 1,
+   "other_meaning_acc": 0.9839,
+   "recall": 0.7423,
+   "reliability": {
+    "applicable": true,
+    "bar": 0.02,
+    "invalid": 0,
+    "over_bar": false,
+    "rate": 0.0,
+    "total": 191,
+    "upper95": 0.015706806282722512
+   },
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "required_grading_unfinished": true,
+   "route_codes": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 41,
+    "extras:extras_verdict_missing": 1,
+    "mismatch:change_unit": 8,
+    "mismatch:comparison_baseline": 8,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 2,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 9,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 28,
+    "mismatch:period_start_date": 15,
+    "mismatch:slice": 21,
+    "mismatch:time_type": 10,
+    "mismatch:value:change_value": 7,
+    "mismatch:value:comparison_high": 8,
+    "mismatch:value:comparison_low": 8,
+    "mismatch:value:level_high": 18,
+    "mismatch:value:level_low": 20,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:PERIOD_UNRESOLVED": 19,
+    "rejected:CONFLICTING_DRIVER_NAME": 44,
+    "rejected:UNIT": 2,
+    "verdict:driver_name_meaning": 2,
+    "verdict:driver_state": 9,
+    "verdict:growth_basis": 3,
+    "verdict:slice_vs_menu": 2,
+    "wrong_lane:matched": 2,
+    "wrong_lane:missing_gold_twin": 14
+   },
+   "safety_result": "FAIL",
+   "state_acc": 0.9211,
+   "value_shape_acc": 0.8727,
+   "verdicts_missing": 54,
+   "would_park": 0.1371,
+   "wrong_lane": 16
+  },
+  "P2": {
+   "PASS": false,
+   "ambiguities_unresolved": 0,
+   "ambiguous_rows": [
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000027904-26-000022"
+    },
+    {
+     "gold_idx": 0,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 1,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 2,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 3,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    },
+    {
+     "gold_idx": 4,
+     "reason": "ruling_missing",
+     "sid": "0001104659-25-118458"
+    }
+   ],
+   "confirmed_wrong_accepted": 14,
+   "duplicate_violations": 0,
+   "error_table": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 40,
+    "extras:extras_verdict_missing": 1,
+    "grader_ruling:ruling_missing": 5,
+    "mismatch:change_unit": 10,
+    "mismatch:comparison_baseline": 10,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 3,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 7,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:month": 2,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 21,
+    "mismatch:period_start_date": 17,
+    "mismatch:sentinel_class": 2,
+    "mismatch:slice": 19,
+    "mismatch:time_type": 6,
+    "mismatch:value:change_value": 11,
+    "mismatch:value:comparison_high": 7,
+    "mismatch:value:comparison_low": 7,
+    "mismatch:value:level_high": 16,
+    "mismatch:value:level_low": 15,
+    "mismatch:value_text": 2,
+    "park:PERIOD_UNRESOLVED": 13,
+    "rejected:CONFLICTING_DRIVER_NAME": 48,
+    "rejected:UNIT": 3,
+    "verdict:driver_name_meaning": 2,
+    "verdict:driver_state": 7,
+    "verdict:growth_basis": 1,
+    "verdict:lane_routing": 1,
+    "verdict:slice_vs_menu": 2,
+    "wrong_lane:matched": 3,
+    "wrong_lane:missing_gold_twin": 16
+   },
+   "error_table_by_rule": {
+    "ISS-16": 30,
+    "OD-11": 1,
+    "OD-12": 56,
+    "OD-13": 0,
+    "OD-14": 9,
+    "OD-21": 0,
+    "OD-9": 21,
+    "other": 202,
+    "shapes": 8,
+    "slices": 21
+   },
+   "extras": {
+    "duplicate": 1,
+    "key_miss": 12,
+    "unsupported": 0
+   },
+   "gold_n": 163,
+   "matched": 114,
+   "name_spelling_differences": 40,
+   "open_identity_findings": 3,
+   "other_meaning_acc": 0.9896,
+   "recall": 0.6994,
+   "reliability": {
+    "applicable": true,
+    "bar": 0.02,
+    "invalid": 0,
+    "over_bar": false,
+    "rate": 0.0,
+    "total": 191,
+    "upper95": 0.015706806282722512
+   },
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "required_grading_unfinished": true,
+   "route_codes": {
+    "abstained_on_gold:READER_ABSTAINED": 2,
+    "abstention:diagnostic": 40,
+    "extras:extras_verdict_missing": 1,
+    "grader_ruling:ruling_missing": 5,
+    "mismatch:change_unit": 10,
+    "mismatch:comparison_baseline": 10,
+    "mismatch:comparison_shape_hint": 1,
+    "mismatch:fact_type": 3,
+    "mismatch:fiscal_quarter": 6,
+    "mismatch:fiscal_year": 10,
+    "mismatch:level_shape_hint": 7,
+    "mismatch:level_unit": 10,
+    "mismatch:measurement-OD-9": 21,
+    "mismatch:month": 2,
+    "mismatch:per_x": 1,
+    "mismatch:period_end_date": 21,
+    "mismatch:period_start_date": 17,
+    "mismatch:sentinel_class": 2,
+    "mismatch:slice": 19,
+    "mismatch:time_type": 6,
+    "mismatch:value:change_value": 11,
+    "mismatch:value:comparison_high": 7,
+    "mismatch:value:comparison_low": 7,
+    "mismatch:value:level_high": 16,
+    "mismatch:value:level_low": 15,
+    "mismatch:value_text": 2,
+    "park:PERIOD_UNRESOLVED": 13,
+    "rejected:CONFLICTING_DRIVER_NAME": 48,
+    "rejected:UNIT": 3,
+    "verdict:driver_name_meaning": 2,
+    "verdict:driver_state": 7,
+    "verdict:growth_basis": 1,
+    "verdict:lane_routing": 1,
+    "verdict:slice_vs_menu": 2,
+    "wrong_lane:matched": 3,
+    "wrong_lane:missing_gold_twin": 16
+   },
+   "safety_result": "FAIL",
+   "state_acc": 0.9375,
+   "value_shape_acc": 0.8704,
+   "verdicts_missing": 47,
+   "would_park": 0.0843,
+   "wrong_lane": 20
+  },
+  "UNION": {
+   "PASS": false,
+   "ambiguities_unresolved": 0,
+   "ambiguous_rows": [
+    {
+     "produced_idx": 1,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 2,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000006201-26-000032"
+    },
+    {
+     "produced_idx": 3,
+     "reason": "extras_verdict_missing",
+     "sid": "0000898173-26-000006"
+    },
+    {
+     "produced_idx": 5,
+     "reason": "extras_verdict_missing",
+     "sid": "0000898173-26-000006"
+    }
+   ],
+   "confirmed_wrong_accepted": 8,
+   "duplicate_violations": 0,
+   "error_table": {
+    "extras:extras_verdict_missing": 5,
+    "mismatch:change_unit": 5,
+    "mismatch:comparison_baseline": 4,
+    "mismatch:fiscal_quarter": 3,
+    "mismatch:fiscal_year": 3,
+    "mismatch:level_shape_hint": 6,
+    "mismatch:level_unit": 7,
+    "mismatch:measurement-OD-9": 8,
+    "mismatch:period_end_date": 11,
+    "mismatch:period_start_date": 9,
+    "mismatch:slice": 7,
+    "mismatch:time_type": 2,
+    "mismatch:value:change_value": 6,
+    "mismatch:value:comparison_high": 2,
+    "mismatch:value:comparison_low": 2,
+    "mismatch:value:level_high": 9,
+    "mismatch:value:level_low": 7,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:FUSION_AMBIGUOUS": 6,
+    "park:PERIOD_UNRESOLVED": 28,
+    "park:UNFUSED_PAIR": 2,
+    "rejected:CONFLICTING_DRIVER_NAME": 2,
+    "rejected:UNIT": 4,
+    "rejected:VALUE_TEXT": 2,
+    "verdict:driver_state": 3,
+    "verdict:growth_basis": 2,
+    "verdict:slice_vs_menu": 2,
+    "wrong_lane:missing_gold_twin": 15
+   },
+   "error_table_by_rule": {
+    "ISS-16": 19,
+    "OD-11": 2,
+    "OD-12": 26,
+    "OD-13": 0,
+    "OD-14": 6,
+    "OD-21": 3,
+    "OD-9": 8,
+    "other": 87,
+    "shapes": 6,
+    "slices": 9
+   },
+   "extras": {
+    "duplicate": 90,
+    "key_miss": 2,
+    "unsupported": 2
+   },
+   "gold_n": 163,
+   "matched": 71,
+   "name_spelling_differences": 21,
+   "open_identity_findings": 55,
+   "other_meaning_acc": 0.9787,
+   "recall": 0.4356,
+   "reliability": {
+    "applicable": false,
+    "over_bar": null,
+    "rate": null,
+    "upper95": null,
+    "why": "no responses observed \u2014 Step 3 makes no model call"
+   },
+   "reliability_failed": false,
+   "reliability_unobserved": false,
+   "required_grading_unfinished": true,
+   "route_codes": {
+    "extras:extras_verdict_missing": 5,
+    "mismatch:change_unit": 5,
+    "mismatch:comparison_baseline": 4,
+    "mismatch:fiscal_quarter": 3,
+    "mismatch:fiscal_year": 3,
+    "mismatch:level_shape_hint": 6,
+    "mismatch:level_unit": 7,
+    "mismatch:measurement-OD-9": 8,
+    "mismatch:period_end_date": 11,
+    "mismatch:period_start_date": 9,
+    "mismatch:slice": 7,
+    "mismatch:time_type": 2,
+    "mismatch:value:change_value": 6,
+    "mismatch:value:comparison_high": 2,
+    "mismatch:value:comparison_low": 2,
+    "mismatch:value:level_high": 9,
+    "mismatch:value:level_low": 7,
+    "mismatch:value_text": 1,
+    "park:F9": 3,
+    "park:FUSION_AMBIGUOUS": 6,
+    "park:PERIOD_UNRESOLVED": 28,
+    "park:UNFUSED_PAIR": 2,
+    "rejected:CONFLICTING_DRIVER_NAME": 2,
+    "rejected:UNIT": 4,
+    "rejected:VALUE_TEXT": 2,
+    "verdict:driver_state": 3,
+    "verdict:growth_basis": 2,
+    "verdict:slice_vs_menu": 2,
+    "wrong_lane:missing_gold_twin": 15
+   },
+   "safety_result": "FAIL",
+   "state_acc": 0.9552,
+   "value_shape_acc": 0.9062,
+   "verdicts_missing": 27,
+   "would_park": 0.1848,
+   "wrong_lane": 15
+  }
+ },
+ "route_count": 99,
+ "scope": "REAL counter-only corrected replay; semantic grading corrections remain open",
+ "sources": {
+  "G2": {
+   "completion_sha256": "d29d85386313068d1ba14ebd748e68d289aed2e340faf5d82fc88025e11a5a60",
+   "root_sha256": "1ee010cf06a9a726c5e12c4893031dbdad075f4f39a09c0f92298bbafa8a6a18",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G2/run"
+  },
+  "G3": {
+   "completion_sha256": "ad57566129ff658d4fb7a1e1d2176105f2cd73ab24027ca8cb543f463547194f",
+   "root_sha256": "56eeda65fd0863823531410aeb05b2a54486eda9c44663222e6af86941e44c6e",
+   "run_dir": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/a7_grading_2103/G3/run"
+  }
+ }
+}

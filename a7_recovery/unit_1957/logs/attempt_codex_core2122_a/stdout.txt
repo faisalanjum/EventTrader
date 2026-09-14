@@ -1,0 +1,108 @@
+SERVED {
+ "a7_correction_candidate_2118.py": "50f9298c9bf9b0ff256f3faae6e227260c4e5fac10113bc9252c2cb45cf8f40f",
+ "a7_grading_input_correction_2114.py": "32e2f650f56cb77b20c89199bc8cf120181dbc7ff92bdd60014d7abc95a16a2d",
+ "a7_grading_revision_2115.py": "dd708431e2a106c4f711b89dfe8b9918a52ddf4f8616f5fefb94fa742783de76",
+ "test_correction_mutations_2119.py": "cab208e1c8c7a355830f9de16bdc4276616c9ca0dcce1923a3834b43617d4057",
+ "test_correction_native_2118.py": "5c2341b98a132533b0d727250c37767adf4f624a552d0de65e21fc42f8a5ac8b",
+ "test_correction_rules_2118.py": "1667a46d3ace39dc1ee741a2693bc73aa5fd7d737e7851343d97e39edda58508"
+}
+ENVIRONMENT {"A7_APPROVED_KEY_DIR": "/tmp/a7_logs_1781/life_native5/candidate_owed_002", "A7_DRIVER_VALIDATORS_SHA": "4b90aa83595c48e530914c748c00c6c93036559782d7479138cce6eeb7a5dff5", "A7_FIXTURE_PROJECTS": "/tmp/a7_logs_1781/life_native5/TEST_projects", "A7_RUN_BINDING": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1957/../unit_2020_codex_check/map_core2122_review.tsv", "A7_TAG": "codex_core2122_a", "A7_TRACE_FIXTURE": "/tmp/a7_logs_1781/attempt_grader_path7"}
+
+===== MODULE test_correction_rules_2118.py exit=0 =====
+..                                                                       [100%]
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_rules_2118.py::test_candidate_rules_are_the_actual_corrected_prompt_rules[G2]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_rules_2118.py::test_candidate_rules_are_the_actual_corrected_prompt_rules[G3]
+2 passed in 9.63s
+
+----- stderr -----
+
+
+===== MODULE test_correction_native_2118.py exit=0 =====
+..........................                                               [100%]
+==================================== PASSES ====================================
+__________ test_question_scoped_preservation_in_the_actual_population __________
+----------------------------- Captured stdout call -----------------------------
+POPULATION_SHAPE {"groups": 3, "sources": 1, "questions_per_group": {"1": 3}, "max_items_per_call": 10, "fitted_batches": 1}
+_____ test_many_questions_in_one_group_across_several_fitted_batches[some] _____
+----------------------------- Captured stdout call -----------------------------
+BIG_SHAPE {"case": "some", "group": "P1|0000006201-26-000031", "questions": 2, "base_batches": 2, "base_credited": 2, "corrected": 1, "kept": 1, "correction_batches": 1, "correction_credited": 1}
+_____ test_many_questions_in_one_group_across_several_fitted_batches[all] ______
+----------------------------- Captured stdout call -----------------------------
+BIG_SHAPE {"case": "all", "group": "P1|0000006201-26-000031", "questions": 2, "base_batches": 2, "base_credited": 2, "corrected": 2, "kept": 0, "correction_batches": 2, "correction_credited": 2}
+=========================== short test summary info ============================
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_the_prepared_candidate_is_the_subset_and_names_its_input_version
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_an_unapproved_subset_refuses_with_a_valid_control[empty]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_an_unapproved_subset_refuses_with_a_valid_control[unknown_group]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_an_unapproved_subset_refuses_with_a_valid_control[extra_question]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_an_unapproved_subset_refuses_with_a_valid_control[repeated_question]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_corrected_judgment_replaces_only_its_own_questions
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_an_unresolved_replacement_cannot_inherit_the_superseded_credit
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_tampered_correction_refuses_with_a_valid_control[population]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_tampered_correction_refuses_with_a_valid_control[version]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_tampered_correction_refuses_with_a_valid_control[completion]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_corrected_judgment_changes_only_its_own_scorer_result
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_the_seam_handles_G3_and_the_other_leg_keeps_its_base_evidence
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_tampered_root_refuses_with_a_valid_control
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_corrected_G3_bucket_changes_only_its_own_result
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_partially_unresolved_reply_cannot_regain_the_superseded_aspects
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_question_scoped_preservation_in_the_actual_population
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_many_questions_in_one_group_across_several_fitted_batches[some]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_many_questions_in_one_group_across_several_fitted_batches[all]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_g3_comparison_records_are_only_this_events_matched_records
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool[sparse]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool[explicit_empty]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[absent]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[wrong_event]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[unknown_index]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_a_broken_matched_inventory_refuses_with_a_valid_control[repeated_index]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_native_2118.py::test_the_bound_matched_population_is_checked_by_the_consumer
+26 passed in 34.14s
+
+----- stderr -----
+
+
+===== MODULE test_correction_mutations_2119.py exit=0 =====
+..........                                                               [100%]
+==================================== PASSES ====================================
+_ test_a_mutation_of_the_boundary_is_killed[kind, B.pack_batches(subset),-kind, B.pack_batches(subset)[:1],-test_correction_native_2118-test_many_questions_in_one_group_across_several_fitted_batches-all-PREP] _
+----------------------------- Captured stdout call -----------------------------
+BIG_SHAPE {"case": "all", "group": "P1|0000006201-26-000031", "questions": 2, "base_batches": 2, "base_credited": 2, "corrected": 2, "kept": 0, "correction_batches": 2, "correction_credited": 2}
+=========================== short test summary info ============================
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_removing_the_consumers_matched_population_check_is_detected
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[R.KIND_RULES = dict(CORRECTED_RULES)-pass-test_correction_rules_2118-test_candidate_rules_are_the_actual_corrected_prompt_rules-G2-PREP]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[R.KIND_RULES = dict(CORRECTED_RULES)-pass-test_correction_rules_2118-test_candidate_rules_are_the_actual_corrected_prompt_rules-G3-PREP]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[built['input_correction_sha256'] = pin-pass-test_correction_native_2118-test_the_prepared_candidate_is_the_subset_and_names_its_input_version-None-PREP]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[('g2_pairs', subset if kind == 'G2' else {}),-('g2_pairs', full_population if kind == 'G2' else {}),-test_correction_native_2118-test_the_prepared_candidate_is_the_subset_and_names_its_input_version-None-PREP]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[if key not in offered:-if False:-test_correction_native_2118-test_an_unapproved_subset_refuses_with_a_valid_control-extra_question-PREP]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[kind, B.pack_batches(subset),-kind, B.pack_batches(subset)[:1],-test_correction_native_2118-test_many_questions_in_one_group_across_several_fitted_batches-all-PREP]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[if idx in pool]-if True]-test_correction_native_2118-test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool-sparse-V]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[if produced in seen:-if False:-test_correction_native_2118-test_a_broken_matched_inventory_refuses_with_a_valid_control-repeated_index-V]
+PASSED ../../../../../../../../../../a7_corr2118/test_correction_mutations_2119.py::test_a_mutation_of_the_boundary_is_killed[        view[group] = [list(row) for row in rows]-        view[group] = [list(row) for row in rows] if rows else None\n        if not rows:\n            view.pop(group)-test_correction_native_2118-test_a_group_with_no_matched_pair_gets_an_explicitly_empty_pool-sparse-V]
+10 passed in 19.44s
+
+----- stderr -----
+
+
+RESULT {
+ "modules": [
+  {
+   "module": "test_correction_rules_2118.py",
+   "exit": 0,
+   "summary": "2 passed in 9.63s"
+  },
+  {
+   "module": "test_correction_native_2118.py",
+   "exit": 0,
+   "summary": "26 passed in 34.14s"
+  },
+  {
+   "module": "test_correction_mutations_2119.py",
+   "exit": 0,
+   "summary": "10 passed in 19.44s"
+  }
+ ],
+ "exit": 0,
+ "used_a_consumer_double": false
+}

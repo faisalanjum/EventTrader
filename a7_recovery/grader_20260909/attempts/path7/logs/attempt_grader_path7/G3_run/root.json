@@ -1,0 +1,75 @@
+{
+ "candidate_dir": "/tmp/a7_logs_1781/attempt_grader_path7/G3_candidate",
+ "candidate_sha256": "8713fbea5a8cfcdcea9ea1d6219d48125a49d4a2b54b573e7dc8e7e72ba546c8",
+ "lane": {
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "max_output_tokens": "128000",
+  "model": "sonnet",
+  "runtime_model_id": "claude-sonnet-5"
+ },
+ "max_attempts": 2,
+ "max_output_tokens": "128000",
+ "owners": {
+  "a7_g1_build": "1fef8789ae0d0392b4c50d8c22b81feb6dbe97cbc3d2e5a66ff35964df24f7d7",
+  "a7_g1_complete_v2": "7a284f30296e698948155923c9ff1cc040eeba8b79dd0c3d22bbfade3a93250d",
+  "a7_g23_build": "4fce0781e770ce48ca51b6d2b0a412b3357a49ba668160604a88eb39dc738b40",
+  "audit_worker_access": "dda9db0440a764711739fb533c8af65bce2a854da967b197b05067dd68026314",
+  "grade_batch_owner": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "grading_scorer": "0f769167dcac0bb634e57e6d30a030f569264f8be1c14cd6f83cab0385268e52",
+  "lean_probe_agent": "28736c63efd7d2ffb9066a02b47dc69751f8c0c867fa42d6546db812c7c8e515",
+  "raw_transport": "4d51412261aa9a496ca9a0c85d62547152f841e05a2b6fc484aa66af9e07ba0a",
+  "score_exp5": "dfe6b5ae3a215856d22ed1d15b49bbc2c1044e1352c046c1f1ae0da3391709c6"
+ },
+ "prompt_tree_sha256": "c5469b0a6cc67f1b59a2686d2ff2f988a5c60b48c57285d76b3c1dda7577abd4",
+ "rows": [
+  {
+   "batch_id": "G3-000",
+   "expected_input": null,
+   "lane_id": "G3-000/G1a",
+   "ordinal": 0,
+   "prompt_sha256": "9fabb8ef9af9076b9ae60784d03aa22d7626d9c960abba014678ccf820259a38"
+  },
+  {
+   "batch_id": "G3-000",
+   "expected_input": null,
+   "lane_id": "G3-000/G1b",
+   "ordinal": 1,
+   "prompt_sha256": "9fabb8ef9af9076b9ae60784d03aa22d7626d9c960abba014678ccf820259a38"
+  },
+  {
+   "batch_id": "G3-001",
+   "expected_input": null,
+   "lane_id": "G3-001/G1a",
+   "ordinal": 2,
+   "prompt_sha256": "0f6dd8c383299d1a1955c554e3711a3385ac3175de663c2a721f8c8f8e392a68"
+  },
+  {
+   "batch_id": "G3-001",
+   "expected_input": null,
+   "lane_id": "G3-001/G1b",
+   "ordinal": 3,
+   "prompt_sha256": "0f6dd8c383299d1a1955c554e3711a3385ac3175de663c2a721f8c8f8e392a68"
+  },
+  {
+   "batch_id": "G3-002",
+   "expected_input": null,
+   "lane_id": "G3-002/G1a",
+   "ordinal": 4,
+   "prompt_sha256": "c3ac3d2694300be72a0a7c78f47b0647b31767e4f234521665953d6d700cdb98"
+  },
+  {
+   "batch_id": "G3-002",
+   "expected_input": null,
+   "lane_id": "G3-002/G1b",
+   "ordinal": 5,
+   "prompt_sha256": "c3ac3d2694300be72a0a7c78f47b0647b31767e4f234521665953d6d700cdb98"
+  }
+ ],
+ "rules_block_sha256": "6333ed9b90d74d4aaa7ca9cedede9f6de744aa3a3a8b4a147da0543306ad2fd4",
+ "run_id": "G3_run",
+ "schema": "a7_g1_event_candidate/3"
+}

@@ -1,0 +1,52 @@
+Command: env PYTHONDONTWRITEBYTECODE=1 /home/faisal/EventMarketDB/venv/bin/python3 -B -m pytest -q -p no:cacheprovider a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py
+Working directory: /home/faisal/EventMarketDB-driver-recovery
+Exit: 1
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_______________ test_closed_operand_change_precedence_is_served ________________
+
+source = ({'event_date': '2026-02-15', 'fye_month': 8, 'menu_tokens': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e... units.', 'slice_parts': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e6e656c41786973__new_channel']}, ...})
+
+    def test_closed_operand_change_precedence_is_served(source):
+        rules = SUBJECT.meaning_rules()
+        assert 'A change the source states differs from one merely' in OLD.meaning_contract()
+>       assert ('Leave change_value null when derivable from closed level and comparison '
+                'shapes; derive it at read time.') in ' '.join(rules.split())
+E       AssertionError: assert 'Leave change_value null when derivable from closed level and comparison shapes; derive it at read time.' in '[ROLE] For each question below, judge ONE produced record against the reviewed record of the SAME claim, using only t... JSON or one fenced JSON block. ---------------------------------- BOUNDARY ---------------------------------- [EVENT]'
+E        +  where '[ROLE] For each question below, judge ONE produced record against the reviewed record of the SAME claim, using only t... JSON or one fenced JSON block. ---------------------------------- BOUNDARY ---------------------------------- [EVENT]' = <built-in method join of str object at 0x55e5f6af5a68>(['[ROLE]', 'For', 'each', 'question', 'below,', 'judge', ...])
+E        +    where <built-in method join of str object at 0x55e5f6af5a68> = ' '.join
+E        +    and   ['[ROLE]', 'For', 'each', 'question', 'below,', 'judge', ...] = <built-in method split of str object at 0x55e60ad45dd0>()
+E        +      where <built-in method split of str object at 0x55e60ad45dd0> = '[ROLE]\nFor each question below, judge ONE produced record against the reviewed record\nof the SAME claim, using only...or one fenced JSON block.\n\n---------------------------------- BOUNDARY ----------------------------------\n[EVENT]\n'.split
+
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:13: AssertionError
+________ test_percent_guidance_and_its_own_revision_use_distinct_slots _________
+
+source = ({'event_date': '2026-02-15', 'fye_month': 8, 'menu_tokens': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e... units.', 'slice_parts': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e6e656c41786973__new_channel']}, ...})
+
+    def test_percent_guidance_and_its_own_revision_use_distinct_slots(source):
+        rules = ' '.join(SUBJECT.meaning_rules().split())
+        assert "against the company's own prior guide" in rules
+>       assert ('Percent-only guidance stores its growth basis in level_unit; only '
+                "the guide's own revision size belongs in change_value.") in rules
+E       assert "Percent-only guidance stores its growth basis in level_unit; only the guide's own revision size belongs in change_value." in '[ROLE] For each question below, judge ONE produced record against the reviewed record of the SAME claim, using only t... JSON or one fenced JSON block. ---------------------------------- BOUNDARY ---------------------------------- [EVENT]'
+
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:20: AssertionError
+____________ test_extras_gets_the_same_existing_field_contract_once ____________
+
+source = ({'event_date': '2026-02-15', 'fye_month': 8, 'menu_tokens': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e... units.', 'slice_parts': ['unknown:xbrlaxis_637573746f6d3a437573746f6d65724368616e6e656c41786973__new_channel']}, ...})
+
+    def test_extras_gets_the_same_existing_field_contract_once(source):
+        rules = SUBJECT.extras_rules()
+        contract = '[CONTRACT] - the conventions this judgment enforces'
+        assert contract in OLD.meaning_contract()
+>       assert rules.count(contract) == 1
+E       AssertionError: assert 0 == 1
+E        +  where 0 = <built-in method count of str object at 0x55e60ad49100>('[CONTRACT] - the conventions this judgment enforces')
+E        +    where <built-in method count of str object at 0x55e60ad49100> = '[ROLE]\nFor each question below, decide what ONE produced record is, given the source\nevidence for its event. Judge ...or one fenced JSON block.\n\n---------------------------------- BOUNDARY ----------------------------------\n[EVENT]\n'.count
+
+a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py:28: AssertionError
+=========================== short test summary info ============================
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_closed_operand_change_precedence_is_served
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_percent_guidance_and_its_own_revision_use_distinct_slots
+FAILED a7_recovery/unit_2020_codex_check/test_grading_contract_gaps_2118.py::test_extras_gets_the_same_existing_field_contract_once
+3 failed in 0.14s

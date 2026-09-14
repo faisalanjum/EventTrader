@@ -1,0 +1,103 @@
+{
+  "core_mailbox_sha256": "ad0bd264dad10dd5455d399a95ceeb5eec951a3bd760bd967bd02950cd53c489",
+  "identity_check": "all original prompt bytes, record/context/reference combinations, question ids, source spans, native verdicts and reported arithmetic verified; semantic conclusions are not accepted by this check",
+  "questions": 40,
+  "combinations": 22,
+  "events": 14,
+  "cells": {
+    "agrees_with_review": 242,
+    "review_unresolved_source_settles_it": 22,
+    "review_decided_the_other_way": 16
+  },
+  "classification_counts_as_reported_not_accepted": {
+    "correctly_judged_producer_error": 7,
+    "correctly_judged_no_defect": 8,
+    "grading_error": 4,
+    "producer_error_not_established": 1,
+    "justified_uncertainty": 2
+  },
+  "numeric_checks": [
+    {
+      "combination": 1,
+      "source_id": "0000006201-26-000031",
+      "question_ids": [
+        "M35df46a5d2795d66"
+      ],
+      "slot": "change_value",
+      "unit": "m_usd",
+      "raw": {
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion",
+        "value": 4
+      },
+      "converted": "4000",
+      "independent_source_magnitude_in_m_usd": 4000,
+      "magnitude_matches": true,
+      "scope": "magnitude only; not a whole-record acceptance"
+    },
+    {
+      "combination": 4,
+      "source_id": "0000006201-26-000031",
+      "question_ids": [
+        "M63a211408d38ee40"
+      ],
+      "slot": "change_value",
+      "unit": "m_usd",
+      "raw": {
+        "scale_multiplier": 1000000000,
+        "unit_scale_evidence": "billion",
+        "value": 4000
+      },
+      "converted": "4000000",
+      "independent_source_magnitude_in_m_usd": 4000,
+      "magnitude_matches": false,
+      "scope": "magnitude only; not a whole-record acceptance"
+    },
+    {
+      "combination": 7,
+      "source_id": "DAL_2026-04-08T10.00",
+      "question_ids": [
+        "Md537d4751f505235"
+      ],
+      "slot": "level_low",
+      "unit": "m_usd",
+      "raw": {
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million",
+        "value": -300000000
+      },
+      "converted": "-300000000",
+      "independent_source_magnitude_in_m_usd": -300,
+      "magnitude_matches": false,
+      "scope": "magnitude only; not a whole-record acceptance"
+    },
+    {
+      "combination": 9,
+      "source_id": "DAL_2026-04-08T10.00",
+      "question_ids": [
+        "M2631bbcafac8881d"
+      ],
+      "slot": "level_low",
+      "unit": "m_usd",
+      "raw": {
+        "scale_multiplier": 1000000,
+        "unit_scale_evidence": "million",
+        "value": -300
+      },
+      "converted": "-300",
+      "independent_source_magnitude_in_m_usd": -300,
+      "magnitude_matches": true,
+      "scope": "magnitude only; not a whole-record acceptance"
+    }
+  ],
+  "inputs": {
+    "a7_recovery/unit_2114_guidance_source_review/COMBINATIONS_2114.json": "97abadce372ac0f636ba18c9e84d98d832647ee79721b04dbd88749ff327bfd2",
+    "a7_recovery/unit_2114_guidance_source_review/FINDINGS_CORRECTION_2114.json": "986222d0e8ac961575fe3a2048de2414ce0a9f7a6d4a1ae2937ae7b17bb52fae",
+    "a7_recovery/unit_2114_guidance_source_review/SOURCE_REVIEW_2114.json": "9b594e0e1fbaacf69a9f15e7e93edcf85c0a1a680e59792b4374d3123cce7725",
+    "a7_recovery/unit_2114_guidance_source_review/build_combinations_2114.py": "c40f10be736b2c9977f5291a332905beedea4e75dab3c94427a0cfa4b84546a5",
+    "a7_recovery/unit_2114_guidance_source_review/build_correction_2114.py": "2fdaece93724353576c707ff9ddcf777ee481bce751149e89255c07cca7a00e3",
+    "a7_recovery/unit_2114_guidance_source_review/build_source_review_2114.py": "eb5c567285e61e64bef75d61a7178db40931ee5ee21be79016ce3bf5b0265753",
+    "driver/core/slot_convert.py": "1e831b09b255b5653b23b729de6952e187e6923caff2c1e83330ef5ddfcddbc2",
+    ".claude/plans/Drivers/FinalDesign/FINAL_DESIGN.md": "4218d73abe6b98ef2ecd325aef8b5e49985101b122e457b39784dee677f32a0b"
+  }
+}

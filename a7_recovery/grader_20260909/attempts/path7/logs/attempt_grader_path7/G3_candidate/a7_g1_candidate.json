@@ -1,0 +1,203 @@
+{
+ "batch_rows": [
+  {
+   "batch_id": "G3-000",
+   "items": 1,
+   "produced_idxs": [],
+   "prompt_bytes": 5233,
+   "prompt_path": "prompts/G3-000.prompt.txt",
+   "prompt_sha256": "9fabb8ef9af9076b9ae60784d03aa22d7626d9c960abba014678ccf820259a38",
+   "question_ids": [
+    "Xb9a2aa75d8cb7b83"
+   ],
+   "source_ids": [
+    "0000006201-26-000031"
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "items": 1,
+   "produced_idxs": [],
+   "prompt_bytes": 5233,
+   "prompt_path": "prompts/G3-001.prompt.txt",
+   "prompt_sha256": "0f6dd8c383299d1a1955c554e3711a3385ac3175de663c2a721f8c8f8e392a68",
+   "question_ids": [
+    "Xc184e531b378ed1d"
+   ],
+   "source_ids": [
+    "0000006201-26-000031"
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "items": 1,
+   "produced_idxs": [],
+   "prompt_bytes": 5233,
+   "prompt_path": "prompts/G3-002.prompt.txt",
+   "prompt_sha256": "c3ac3d2694300be72a0a7c78f47b0647b31767e4f234521665953d6d700cdb98",
+   "question_ids": [
+    "X86feb54326687022"
+   ],
+   "source_ids": [
+    "0000006201-26-000031"
+   ]
+  }
+ ],
+ "batching": {
+  "batches": 3,
+  "max_items_per_call": 10
+ },
+ "g1_identity": {
+  "candidate_sha256": "40665d48e440cbb3ce25737151e0bc27eebb9b7362e65abf2cea159b383fc6b0",
+  "git_head": "5f81248e3c1070b8343aa26473865e749ba0d5a0",
+  "git_tree": "cd80e3b85238b69ab609519d7e9ea655530a4711",
+  "prompt_tree_sha256": "c40296ca4b68846b9a51a61a006d025d1e5af5e10a692ef8ffae5f5386c15f74",
+  "root_sha256": "605b9c1dd3e4f40b57e1f34cf3709e90587ebab883c2171a41d1a7d8e5218715",
+  "rules_block_sha256": "7445ee71f3629f826bb4c63b4a4ea9a6ffa9902781ba9070dfff43611a346d32",
+  "run_file_count": 417,
+  "run_tree_sha256": "67e23d1312e6b2fea5caeb8aa7ace9942c58c749224a1f299864eb31c1bbd7be"
+ },
+ "key_identity": {
+  "accepted_rows": 35,
+  "acted_rows": 0,
+  "approved_lock_sha256": "f1d8e080eeb7327f0123a4d1f811825befeaac3dc81c74f95c0b61a8db7a5ac2",
+  "approved_receipt_sha256": "25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7",
+  "base_owner": "a7_g1_build.gold_by_event",
+  "events": 36,
+  "key_digest": "601c56f60a5c80d02364646a2a9721fc87ecb039cce8cd3e18cc0d371406bc0e",
+  "schema": "a7-current-key/approved"
+ },
+ "launchers": {
+  "count": 6,
+  "lanes_per_batch": 2,
+  "owner_sha256": "806a7560002a14ed5f3a4c79a78d85be0fac8abf773f8fdf9457c3d902e8abd6",
+  "rows": [
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G3-000",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G3-000/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "9fabb8ef9af9076b9ae60784d03aa22d7626d9c960abba014678ccf820259a38",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G3-000",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G3-000/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "9fabb8ef9af9076b9ae60784d03aa22d7626d9c960abba014678ccf820259a38",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G3-001",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G3-001/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "0f6dd8c383299d1a1955c554e3711a3385ac3175de663c2a721f8c8f8e392a68",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G3-001",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G3-001/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "0f6dd8c383299d1a1955c554e3711a3385ac3175de663c2a721f8c8f8e392a68",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G3-002",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G3-002/G1a",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "c3ac3d2694300be72a0a7c78f47b0647b31767e4f234521665953d6d700cdb98",
+    "runtime_model_id": "claude-sonnet-5"
+   },
+   {
+    "agentType": "lean-probe",
+    "batch_id": "G3-002",
+    "disallowedTools": [
+     "Read"
+    ],
+    "effort": "high",
+    "lane_id": "G3-002/G1b",
+    "max_output_tokens": "128000",
+    "model": "sonnet",
+    "prompt_sha256": "c3ac3d2694300be72a0a7c78f47b0647b31767e4f234521665953d6d700cdb98",
+    "runtime_model_id": "claude-sonnet-5"
+   }
+  ]
+ },
+ "made_calls": 0,
+ "population": {
+  "P1|0000006201-26-000031": [
+   1
+  ],
+  "P2|0000006201-26-000031": [
+   1
+  ],
+  "UNION|0000006201-26-000031": [
+   1
+  ]
+ },
+ "population_counts": {
+  "batches": 3,
+  "largest_batch": 1,
+  "legs_scored": [
+   "P1",
+   "P2",
+   "UNION"
+  ],
+  "questions": 3,
+  "unroutable": [],
+  "unroutable_event_legs": 0
+ },
+ "producer_identity": {
+  "a4_lock_receipt_sha256": "25e2b35c130d73af7a9e749ac117cdb8b18f9a020538be26a5fe09170e479cc7",
+  "a4_lock_sha256": "f1d8e080eeb7327f0123a4d1f811825befeaac3dc81c74f95c0b61a8db7a5ac2",
+  "a5_bundle_sha256": "c520bd4f0f3cf98316da836d2935d956a49c706b6d98a8a96de4e51a19325150",
+  "a5_manifest_sha256": "fff7d52aada7feb900755102afc318d0c9705346439582ea0a877c7a5370e5ac",
+  "a6_freeze_sha256": "7854e925b1c53da9f1dadc25efad7bd6788e21a10da25934c7050595378b42dc",
+  "contract_suffix": ".v3",
+  "corrected_inventory_sha256": "5636373c6bfbe2559762fc82465f98851d312caa5e3621f3ee2819ed3434d812",
+  "executed": {
+   "run_digest": "0669390d9615fe179771ca7ba7ca48cb45dd4dea07e2fd9e94703eb132a71a09",
+   "run_files": 485
+  },
+  "finalizations": {
+   "primary": "d9b9f1bab69a7a455544460bb0480105312c5fc2dc90d3fbc4a699f6f38ed87b"
+  },
+  "receipt_sha256": "eb14d5ab7473f4e63d1ff89512c23978283b810a5881e8248354ebcdc785114b",
+  "run_dir": "/tmp/a7_logs_1781/attempt_grader_path7/producer",
+  "scheduled_calls": 204,
+  "schema": "a7_prepared_run/1"
+ },
+ "questions": 3,
+ "rules_block_sha256": "6333ed9b90d74d4aaa7ca9cedede9f6de744aa3a3a8b4a147da0543306ad2fd4",
+ "schema": "a7_g23_candidate/1",
+ "task_kind": "G3"
+}

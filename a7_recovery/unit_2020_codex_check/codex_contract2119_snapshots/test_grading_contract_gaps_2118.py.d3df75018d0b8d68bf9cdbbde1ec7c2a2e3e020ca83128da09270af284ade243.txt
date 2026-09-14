@@ -1,0 +1,31 @@
+"""Prompt-contract completeness checks for observed A7 grading defects.
+
+These assert what instructions are served, not a model's semantic accuracy.
+The expected clauses come from FINAL_DESIGN 7.1 and the existing field owner.
+No example answer, company name or desired judgment enters a prompt.
+"""
+from test_grading_input_correction_2114 import source, SUBJECT, OLD
+
+
+def test_closed_operand_change_precedence_is_served(source):
+    rules = SUBJECT.meaning_rules()
+    assert 'A change the source states differs from one merely' in OLD.meaning_contract()
+    assert ('Leave change_value null when derivable from closed level and comparison '
+            'shapes; derive it at read time.') in ' '.join(rules.split())
+
+
+def test_percent_guidance_and_its_own_revision_use_distinct_slots(source):
+    rules = ' '.join(SUBJECT.meaning_rules().split())
+    assert "against the company's own prior guide" in rules
+    assert ('Percent-only guidance stores its growth basis in level_unit; only '
+            "the guide's own revision size belongs in change_value.") in rules
+
+
+def test_extras_gets_the_same_existing_field_contract_once(source):
+    rules = SUBJECT.extras_rules()
+    contract = '[CONTRACT] - the conventions this judgment enforces'
+    assert contract in OLD.meaning_contract()
+    assert rules.count(contract) == 1
+    assert 'STATED AND OMITTED' in rules and 'THE NUMBERS' in rules
+    assert 'POPULATION AND MEASUREMENT' in rules
+    assert 'SURPRISE PROOF AND FAVORABILITY' in rules

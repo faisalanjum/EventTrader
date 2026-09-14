@@ -1,0 +1,24 @@
+{
+  "scope": "Independent actual-population prompt-body preservation and fit check; zero calls",
+  "old_proof_sha256": "051c7d22a8abbdb637a1f2f0c97579470b02b24c35c1fac265feede396419936",
+  "current_proof_sha256": "c826c6942cb11dc067d3ac5f08608ffc8a63b1d5e04a8f65e13ce1b5bcaec6eb",
+  "input_sha256": "e52c932a7d5006379681735ed922e7b53eb6a97f10c360b1b78ed6a409abdd14",
+  "questions_preserved": 423,
+  "key_source_owners_unchanged": true,
+  "counts": {
+    "G2": {
+      "questions": 306,
+      "batches": 70,
+      "max_bound_bytes": 516575,
+      "bound_variants": 280,
+      "limit": 524288
+    },
+    "G3": {
+      "questions": 117,
+      "batches": 31,
+      "max_bound_bytes": 502262,
+      "bound_variants": 124,
+      "limit": 524288
+    }
+  }
+}

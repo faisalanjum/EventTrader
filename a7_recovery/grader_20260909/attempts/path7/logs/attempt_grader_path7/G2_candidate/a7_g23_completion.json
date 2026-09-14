@@ -1,0 +1,53 @@
+{
+ "batches": 3,
+ "credited": {
+  "M199529593ebb98bf": {
+   "batch_id": "G2-002",
+   "verdict": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  "M385b2882c2290e64": {
+   "batch_id": "G2-000",
+   "verdict": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  },
+  "M6a891be7b76ba91e": {
+   "batch_id": "G2-001",
+   "verdict": {
+    "driver_name_meaning": true,
+    "driver_state": true,
+    "favorability": true,
+    "growth_basis": true,
+    "lane_routing": true,
+    "record_matches_source": true,
+    "slice_vs_menu": true
+   }
+  }
+ },
+ "credited_questions": 3,
+ "questions": 3,
+ "run_identity": {
+  "root_sha256": "d5ab254b507df38101bacae46c1c8e487323761c3310f2715d7aea5e319e8714",
+  "run_digest": "de23506c08737f57e97a9602226aa74a9ba1c6448dab9b69e8f07d1fba88cfb4",
+  "run_dir": "/tmp/a7_logs_1781/attempt_grader_path7/G2_run",
+  "run_files": 21
+ },
+ "schema": "a7_g23_whole_run_completion/1",
+ "task_kind": "G2",
+ "unresolved": [],
+ "unresolved_questions": 0
+}

@@ -1,0 +1,58 @@
+{
+  "all_questions": 306,
+  "guidance_rows": 40,
+  "source_events": 14,
+  "unique_record_context_reference_groups": 22,
+  "repeated_groups": 10,
+  "repeatability": {
+    "cells": 70,
+    "consistent": 57,
+    "hard": 1,
+    "soft": 12
+  },
+  "contradictions": [
+    [
+      {
+        "qid": "Mc7890bf18242f3ee",
+        "aspect": "record_matches_source"
+      },
+      {
+        "qid": "Me41517754e358a49",
+        "aspect": "record_matches_source",
+        "value": false
+      },
+      {
+        "qid": "M6221427dec8dc14b",
+        "aspect": "record_matches_source",
+        "value": true
+      }
+    ]
+  ],
+  "counts": {
+    "driver_state|cannot_establish": 37,
+    "driver_name_meaning|cannot_establish": 40,
+    "lane_routing|agree": 40,
+    "favorability|agree": 40,
+    "growth_basis|cannot_establish": 40,
+    "record_matches_source|cannot_establish": 40,
+    "slice_vs_menu|agree": 27,
+    "slice_vs_menu|cannot_establish": 13,
+    "driver_state|disagree": 3
+  },
+  "all_frozen_bindings_verified": true,
+  "rows_digest": "e3ff2ac28adb7f48b43d9b083a8b27837f8bf2f56f16c7f496bb38880f5cea86",
+  "scope": "Read-only independent check of Core2113 extraction and repeatability; semantic conclusions not accepted by this calculation.",
+  "core_mailbox_sha256": "165137deeb1b6438e68c5552c717dcdf4e66bcda6419764c055945fa331d20ee",
+  "inputs": {
+    "candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+    "native_review_sha256": "59d54d9744dc43f922b8571322b238897f3c8f8aaa17ff6a4a25ef8d6ef39d16",
+    "population_sha256": "0fb5d26d7215a4bf450cabe3283ec9e5f624eb3a44da3c3c013295419b1eaa20",
+    "review_sha256": "0ab9ff7f6fcc8fcf7f10199dee26c8b58d1abce7a6276dcf3c4613507331c100"
+  },
+  "limitations": [
+    "Question ids and surrounding batches differ: repeated record/context/reference is not a byte-identical call.",
+    "170 generic cannot_establish cells are not source-based uncertainty adjudication.",
+    "A producer company_confirmed flag and empty slice do not independently prove source confirmation or company-wide population.",
+    "F4 is refuted by exact midpoint calculation 10.60 to 10.62 and the original qa stating that the midpoint is higher."
+  ]
+}

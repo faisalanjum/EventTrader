@@ -1,0 +1,9 @@
+attempt	codex_core2122_a
+payload	../../unit_2122_sparse_match_groups/payload_sparse_2122.py
+map	../unit_2020_codex_check/map_core2122_review.tsv
+command	run_1957.sh ../unit_2020_codex_check/map_core2122_review.tsv ../../unit_2122_sparse_match_groups/payload_sparse_2122.py codex_core2122_a 900
+wrapper_pid	1541804
+payload_pid	1541808
+payload_pgid	1541804
+started_utc	2026-09-14T01:32:48Z
+state	finished exit 0

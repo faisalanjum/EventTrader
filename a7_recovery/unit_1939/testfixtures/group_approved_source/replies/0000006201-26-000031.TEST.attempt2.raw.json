@@ -1,0 +1,126 @@
+```json
+{
+ "source_id": "0000006201-26-000031",
+ "verdicts": [
+  {
+   "proposal_id": "0000006201-26-000031#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P006",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P007",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "0000006201-26-000031#P008",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000006201-26-000031",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+    "raw_label_or_claim": "total revenue growth",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000006201-26-000031",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Net loss excluding net special items $ (267) $ (386) (30.8%)",
+    "raw_label_or_claim": "Net loss excluding net special items",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "losses_and_sign",
+     "sequential_comparison"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "0000006201-26-000031",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "Total unit revenue was 7.6% higher year over year",
+    "raw_label_or_claim": "Total unit revenue",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "sequential_comparison",
+     "measurement_wording"
+    ]
+   }
+  },
+  {
+   "why": "unit_1925 SOFTWARE TEST FIXTURE: a second lawful label over the same inseparable quote, so the locator-conflict path can be DERIVED. Not source truth, never a benchmark denominator.",
+   "row": {
+    "source_id": "0000006201-26-000031",
+    "part_ref": "exhibit_99_1",
+    "occurrence_in_part": null,
+    "quote": "American expects total revenue growth between 13.5% and 16.5% in the second quarter",
+    "raw_label_or_claim": "second quarter",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "point_range_floor_ceiling",
+     "losses_and_sign"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

@@ -1,0 +1,93 @@
+```json
+{
+ "source_id": "YUM_2026-02-04T08.15",
+ "verdicts": [
+  {
+   "proposal_id": "YUM_2026-02-04T08.15#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "YUM_2026-02-04T08.15#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "YUM_2026-02-04T08.15#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "YUM_2026-02-04T08.15#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "YUM_2026-02-04T08.15#P004",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "YUM_2026-02-04T08.15#P005",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "YUM_2026-02-04T08.15",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "We expect our tax rate to be in the range of 22 to 24 percent.",
+    "raw_label_or_claim": "our tax rate",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "measurement_wording",
+     "favourable_unfavourable_direction"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "YUM_2026-02-04T08.15",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "Yum X Special EPS for the year was $6.05, up 10%.",
+    "raw_label_or_claim": "Yum X Special EPS",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "YUM_2026-02-04T08.15",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "Taco Bell entered five new markets in 2025 and opened 155 gross units internationally, up almost 40% from the prior year.",
+    "raw_label_or_claim": "Taco Bell",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```

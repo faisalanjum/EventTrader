@@ -1,0 +1,244 @@
+{
+  "scope": "Actual display and existing reversible decoder; no semantic verdict changed",
+  "owners": {
+    "a7_g1_build": {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2006/harness_g1v3/a7_g1_build.py",
+      "sha256": "5523c5b6b8fdc4701730c21e5022693eab0a7f8384c81efdcddf4539e5cf1439"
+    },
+    "a1_reader": {
+      "path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/grader_20260909/harness_g1v3/a1_reader.py",
+      "sha256": "98055e556fdb0324c022f8f14db5ec463b4486914df48bda72b6c519e731e649"
+    }
+  },
+  "encoded_occurrences_by_leg": {
+    "P1": 5,
+    "P2": 7,
+    "UNION": 12
+  },
+  "rows": [
+    {
+      "leg": "P1",
+      "source_id": "0000764478-25-000057",
+      "produced_idx": 0,
+      "gold_idx": 0,
+      "raw": "unknown:xbrlaxis_75732d676161703a5265706f7274696e67556e697441786973__bestbuyhealth",
+      "shown": "unknown:us-gaap:ReportingUnitAxis__bestbuyhealth",
+      "display_decodes": false
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 0,
+      "gold_idx": 0,
+      "raw": "unknown:xbrlaxis_75732d676161703a427573696e6573734163717569736974696f6e41786973__spacenk",
+      "shown": "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+      "display_decodes": false
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 4,
+      "gold_idx": 4,
+      "raw": "unknown:xbrlaxis_75732d676161703a437265646974466163696c69747941786973__revolvingcreditfacility",
+      "shown": "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+      "display_decodes": false
+    },
+    {
+      "leg": "P1",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 4,
+      "gold_idx": 4,
+      "raw": "unknown:xbrlaxis_75732d676161703a5661726961626c655261746541786973__securedovernightfinancingratesofrovernightindexswaprate",
+      "shown": "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate",
+      "display_decodes": false
+    },
+    {
+      "leg": "P1",
+      "source_id": "ULTA_2026-03-12T16.30",
+      "produced_idx": 3,
+      "gold_idx": 3,
+      "raw": "unknown:xbrlaxis_75732d676161703a427573696e6573734163717569736974696f6e41786973__spacenk",
+      "shown": "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+      "display_decodes": false
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 1,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a4c696e654f66437265646974466163696c69747941786973__nationalwestminsterbankplc",
+      "shown": "unknown:us-gaap:LineOfCreditFacilityAxis__nationalwestminsterbankplc",
+      "display_decodes": false
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 2,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a5661726961626c655261746541786973__baserate",
+      "shown": "unknown:us-gaap:VariableRateAxis__baserate",
+      "display_decodes": false
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 2,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a437265646974466163696c69747941786973__revolvingcreditfacility",
+      "shown": "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+      "display_decodes": false
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 3,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_7372743a53686172655265707572636861736550726f6772616d41786973__march2024sharerepurchaseprogram",
+      "shown": "unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram",
+      "display_decodes": false
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 4,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a437265646974466163696c69747941786973__revolvingcreditfacility",
+      "shown": "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+      "display_decodes": false
+    },
+    {
+      "leg": "P2",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 4,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a5661726961626c655261746541786973__securedovernightfinancingratesofrovernightindexswaprate",
+      "shown": "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate",
+      "display_decodes": false
+    },
+    {
+      "leg": "P2",
+      "source_id": "ULTA_2026-03-12T16.30",
+      "produced_idx": 3,
+      "gold_idx": 3,
+      "raw": "unknown:xbrlaxis_75732d676161703a427573696e6573734163717569736974696f6e41786973__spacenk",
+      "shown": "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0000764478-25-000057",
+      "produced_idx": 0,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a5265706f7274696e67556e697441786973__bestbuyhealth",
+      "shown": "unknown:us-gaap:ReportingUnitAxis__bestbuyhealth",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 0,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a427573696e6573734163717569736974696f6e41786973__spacenk",
+      "shown": "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 4,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a437265646974466163696c69747941786973__revolvingcreditfacility",
+      "shown": "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 4,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a5661726961626c655261746541786973__securedovernightfinancingratesofrovernightindexswaprate",
+      "shown": "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 6,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a4c696e654f66437265646974466163696c69747941786973__nationalwestminsterbankplc",
+      "shown": "unknown:us-gaap:LineOfCreditFacilityAxis__nationalwestminsterbankplc",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 7,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a5661726961626c655261746541786973__baserate",
+      "shown": "unknown:us-gaap:VariableRateAxis__baserate",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 7,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a437265646974466163696c69747941786973__revolvingcreditfacility",
+      "shown": "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 8,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_7372743a53686172655265707572636861736550726f6772616d41786973__march2024sharerepurchaseprogram",
+      "shown": "unknown:srt:ShareRepurchaseProgramAxis__march2024sharerepurchaseprogram",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 9,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a437265646974466163696c69747941786973__revolvingcreditfacility",
+      "shown": "unknown:us-gaap:CreditFacilityAxis__revolvingcreditfacility",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "0001104659-25-118458",
+      "produced_idx": 9,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a5661726961626c655261746541786973__securedovernightfinancingratesofrovernightindexswaprate",
+      "shown": "unknown:us-gaap:VariableRateAxis__securedovernightfinancingratesofrovernightindexswaprate",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "ULTA_2026-03-12T16.30",
+      "produced_idx": 3,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a427573696e6573734163717569736974696f6e41786973__spacenk",
+      "shown": "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+      "display_decodes": false
+    },
+    {
+      "leg": "UNION",
+      "source_id": "ULTA_2026-03-12T16.30",
+      "produced_idx": 5,
+      "gold_idx": null,
+      "raw": "unknown:xbrlaxis_75732d676161703a427573696e6573734163717569736974696f6e41786973__spacenk",
+      "shown": "unknown:us-gaap:BusinessAcquisitionAxis__spacenk",
+      "display_decodes": false
+    }
+  ],
+  "encoded_occurrences_in_G2": 6,
+  "distinct_affected_G2_questions": 5,
+  "trace_sha256": "0b4a3f624a4024fb071fff1740f04b186027b2c91bcade2aaba4ce6bb05f7ee4",
+  "g2_candidate_sha256": "cc9d51f526e69ff29361f9b620d6ad6085abdc2aa802035f605a1cb261052feb",
+  "limitations": [
+    "Reversible code/display mismatch is proved, not which semantic verdict it caused.",
+    "Do not decode arbitrary off-menu unknown strings as an encoded axis; use the existing decoder/map and preserve raw evidence."
+  ]
+}

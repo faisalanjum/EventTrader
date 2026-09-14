@@ -1,0 +1,47 @@
+{
+ "batches": 3,
+ "credited": {},
+ "credited_questions": 0,
+ "questions": 3,
+ "run_identity": {
+  "root_sha256": "b1e22e98da942b1406122a25265421ffab9b9c81bcf05af6704242014ed6b95a",
+  "run_digest": "034efff4d1260f09b06c838837049ba30cb6c8f00c44d9642ca13cd77e8698bc",
+  "run_dir": "/tmp/a7_logs_1781/attempt_grader_path7/G3_run",
+  "run_files": 21
+ },
+ "schema": "a7_g23_whole_run_completion/1",
+ "task_kind": "G3",
+ "unresolved": [
+  {
+   "batch_id": "G3-000",
+   "question_id": "Xb9a2aa75d8cb7b83",
+   "reasons": [
+    {
+     "question_id": "Xb9a2aa75d8cb7b83",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-001",
+   "question_id": "Xc184e531b378ed1d",
+   "reasons": [
+    {
+     "question_id": "Xc184e531b378ed1d",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  },
+  {
+   "batch_id": "G3-002",
+   "question_id": "X86feb54326687022",
+   "reasons": [
+    {
+     "question_id": "X86feb54326687022",
+     "reason": "a reading could not establish it"
+    }
+   ]
+  }
+ ],
+ "unresolved_questions": 3
+}

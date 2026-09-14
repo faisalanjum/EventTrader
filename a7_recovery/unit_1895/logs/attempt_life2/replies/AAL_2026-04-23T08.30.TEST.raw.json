@@ -1,0 +1,81 @@
+```json
+{
+ "source_id": "AAL_2026-04-23T08.30",
+ "verdicts": [
+  {
+   "proposal_id": "AAL_2026-04-23T08.30#P000",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "AAL_2026-04-23T08.30#P001",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "AAL_2026-04-23T08.30#P002",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  },
+  {
+   "proposal_id": "AAL_2026-04-23T08.30#P003",
+   "decision": "exclude",
+   "why": "TEST rehearsal: already-tested proposal, excluded from the fresh sample; no meaning is decided here",
+   "row": null
+  }
+ ],
+ "additions": [
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "Second quarter CASMX is anticipated to be up 2% to 4% year over year",
+    "raw_label_or_claim": "CASMX",
+    "proposed_record_kind": "lawful_abstention_control",
+    "proposed_hard_classes": [
+     "favourable_unfavourable_direction",
+     "expectation_routing"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "We expect domestic unit revenue to grow more than 10% in the second quarter.",
+    "raw_label_or_claim": "domestic unit revenue",
+    "proposed_record_kind": "negative_control",
+    "proposed_hard_classes": [
+     "expectation_routing",
+     "slices_and_unknown_axes"
+    ]
+   }
+  },
+  {
+   "why": "TEST rehearsal addition: mechanical handling only",
+   "row": {
+    "source_id": "AAL_2026-04-23T08.30",
+    "part_ref": "prepared_remarks",
+    "occurrence_in_part": null,
+    "quote": "This is the first time our total debt has been below $35 billion since mid-2015.",
+    "raw_label_or_claim": "total debt",
+    "proposed_record_kind": "real_item",
+    "proposed_hard_classes": [
+     "slices_and_unknown_axes",
+     "portion_versus_whole"
+    ]
+   }
+  }
+ ],
+ "exclusions_considered": [],
+ "open_issues": [],
+ "blocked": null
+}
+```
