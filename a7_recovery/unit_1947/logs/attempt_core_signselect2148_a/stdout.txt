@@ -1,0 +1,13 @@
+{
+ "decision": "launch",
+ "run_id": null,
+ "reason": null,
+ "manifest_sha256": "a9f4705d47cc0da501788c570fceb5d27775a1a7bfd9dae94146f52eb4b00c7a",
+ "prompt_sha256": "6caba0e128fbf287a2e94a898e0336135eb4254fc751552ef11425463c2196d6",
+ "script_sha256": "cbf1d2a69dbee3aa4e006cc1cb99c1b9ae5a7f03e5de6cb5af78e636e3611196",
+ "expected_input_source": {
+  "path": "/tmp/a7_input_profile_2068.json",
+  "sha256": "78b58fe7fd5ba60b9199ada86fe27d90101ceb57cd7617db158e2ea724e2da18"
+ },
+ "model_calls": 0
+}

@@ -1,0 +1,7 @@
+attempt	codex_keygrading2150_a
+payload	../../unit_2020_codex_check/prepare_key_grading_2150.py
+map	../unit_2020_codex_check/map_current_key_2148.tsv
+wrapper_pid	2990515
+payload_pid	2990519
+started_utc	2026-09-14T19:02:18Z
+state	finished exit 0

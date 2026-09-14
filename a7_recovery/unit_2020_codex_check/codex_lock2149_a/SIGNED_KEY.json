@@ -1,0 +1,138 @@
+{
+ "call_accounting": {
+  "attempts": [
+   {
+    "attempt": 1,
+    "kind": "evidence",
+    "outcome": "signed",
+    "record_sha256": "4b9731a56ed4f1c4fac58ec0da75a79863fc9e53f156ac811d5c0e2b9369fc9f"
+   }
+  ],
+  "ceiling": 6000,
+  "lawful_attempts": [
+   1,
+   2
+  ],
+  "ledger_after": 687,
+  "ledger_before": 686,
+  "retries": 0,
+  "retry_law": {
+   "owner": "build_kfields_final.RETRYABLE",
+   "retryable": [
+    "invalid_response"
+   ]
+  },
+  "signer_calls": 1
+ },
+ "caller_sha256": "a3cfd338801553c6fdf6e7e58b16b884ebe57fda5d8c152523e2344b0e2cfc5c",
+ "candidate": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/candidate",
+ "candidate_identity_sha256": "b337dbc172e875749073fdc262796b338d52aeed5c8154efa613d1d784d57beb",
+ "context_sha256": "e5a75572522b69c5c266995ab26e7d6433902c041f10cb17b79cf492f8bb75e8",
+ "counts": {
+  "abstentions": 44,
+  "accepted_facts": 165,
+  "controls": 34,
+  "distinct_rows_per_tag": {
+   "ambiguous_menus": 36,
+   "corrections_and_amendments": 8,
+   "expectation_routing": 18,
+   "favourable_unfavourable_direction": 16,
+   "losses_and_sign": 28,
+   "measurement_wording": 61,
+   "point_range_floor_ceiling": 136,
+   "portion_versus_whole": 37,
+   "sequential_comparison": 41,
+   "slices_and_unknown_axes": 67
+  },
+  "du_worthy_facts": 165,
+  "duplicate_gold_facts": 0,
+  "events_accounted": 33,
+  "exclusions": 10,
+  "open_issues": 0,
+  "phase1_ambiguities": 0,
+  "record_kind_conflicts": 11,
+  "rows_accounted": 191,
+  "sequential_rows": 41,
+  "tag_floor": 5,
+  "tags_below_floor": []
+ },
+ "identity_collisions": [
+  0,
+  0,
+  0,
+  0
+ ],
+ "lock": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/candidate/a4_final_key_lock.json",
+ "lock_sha256": "68270f4fd33f342e1b562dd700f789fb442fa0b4bbb1ec2b8cd83a6c1cb19737",
+ "mode": "lock",
+ "model_calls": 0,
+ "mutations": {
+  "artifact:attempt1_launcher": "refused",
+  "artifact:attempt1_raw": "refused",
+  "artifact:attempt1_record": "refused",
+  "artifact:attempt1_state": "refused",
+  "artifact:attempt1_transcript": "refused",
+  "artifact:key_identity": "refused",
+  "artifact:provenance": "refused",
+  "artifact:sidecar": "refused",
+  "artifact:signer_evidence": "refused",
+  "artifact:signer_launcher": "refused",
+  "artifact:signer_manifest": "refused",
+  "artifact:signer_prompt": "refused",
+  "artifact:signer_raw": "refused",
+  "artifact:signer_reply": "refused",
+  "artifact:validator_receipt": "refused",
+  "block:authority": "refused",
+  "block:call_accounting": "refused",
+  "block:counts": "refused",
+  "block:key": "refused",
+  "block:validator": "refused",
+  "signer:agent_id": "refused",
+  "signer:agent_type": "refused",
+  "signer:blocked": "refused",
+  "signer:effort": "refused",
+  "signer:model": "refused",
+  "signer:parent_session_id": "refused",
+  "signer:prompt_sha256": "refused",
+  "signer:raw_sha256": "refused",
+  "signer:run_id": "refused",
+  "signer:script_sha256": "refused",
+  "signer:signed": "refused",
+  "signer:state_sha256": "refused",
+  "signer:transcript_sha256": "refused"
+ },
+ "ordinary": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/ordinary_bound.json",
+ "ordinary_sha256": "37e47f7d1bc57982af5b7b4bc197488f75caadaf5ceb4f13b06cae1f6a27c87f",
+ "preparation": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/CANDIDATE_PREPARATION.json",
+ "preparation_sha256": "7d0d9a6f94fa7d97a0d3347ad581ae39ea94a4c573916c973942b035c750fef7",
+ "prior_identity_counts": [
+  304,
+  304,
+  303,
+  303
+ ],
+ "prior_runs": [
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2035_input_bound_resume/corrections",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/recovery_v2",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/proof_codex_in2068_e/closeout",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/candidate/signer",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2136_source_questions/packet_2136",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2143_source_authority/packet_2143",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2004/retry",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/review_2015",
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/source_only_1997_collect"
+ ],
+ "receipt": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/candidate/a4_final_key_lock_receipt.json",
+ "receipt_sha256": "a54b8db1546c639801f60a7655e4eb6e867a3144a5ed88d6734288e98bd4671a",
+ "scope": "Real current key signature/lock; no model call or grading score",
+ "signer_proof_sha256": "5972df5495e9bc250b96911ec1b8b363180b2aeffa6e05bc5c29648f5e8e065b"
+}

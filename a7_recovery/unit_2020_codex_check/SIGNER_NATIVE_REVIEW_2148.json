@@ -1,0 +1,45 @@
+{
+  "scope": "Independent live-byte signer identity/raw audit; official proof/harvest/lock still required",
+  "run_id": "wf_22b11df3-59a",
+  "agent_id": "ac64ce4dfd9b2c806",
+  "request_id": "req_011Cf3okr2DENr8nyRAEt2Ag",
+  "message_id": "msg_011Cf3okrXUvRZAdD34vW9Gt",
+  "raw_sha256": "00d80a4962811758d0d48be707d3fa5bc6f4bebabaac8b5fae645d003a664784",
+  "state_sha256": "2a410616e1439e6a47ea1ff017cedfa0ad4e0f52e448ab5742629695721161ee",
+  "transcript_sha256": "b539991eae7900168235d87b744b83cea574f511ebe0e6bc7d9e75848723c6df",
+  "prompt_sha256": "6caba0e128fbf287a2e94a898e0336135eb4254fc751552ef11425463c2196d6",
+  "script_sha256": "cbf1d2a69dbee3aa4e006cc1cb99c1b9ae5a7f03e5de6cb5af78e636e3611196",
+  "authority_sha256": "a7d57b22044c7667b781f9eb97055ce42218abaa901a18c1af5733876d54a27d",
+  "collection_sha256": "5928bfeeed292bae52231b0f87e2040328ccd33bb6d67702c92b0d1608f24974",
+  "native_records": 4,
+  "assistant_records": 2,
+  "one_response_group": true,
+  "tool_calls": 0,
+  "transport": {
+    "model_alias": "opus",
+    "runtime_model_id": "claude-opus-5",
+    "workflow_row_model": "claude-opus-5[1m]",
+    "effort": "high",
+    "agentType": "lean-probe",
+    "disallowedTools": [
+      "Read"
+    ],
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+    "transport": "Claude Code Workflow agent(), subscription",
+    "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+  },
+  "signer_verdict": {
+    "signed": true,
+    "blocked": [],
+    "why": "I recomputed every count directly from the 33 shards and each one reproduces exactly — 33 events, 191 rows (7+5+7+9+5+5+7+5+6+4+6+6+5+5+6+6+6+5+7+6+5+5+4+10+8+7+7+5+6+7+7+1+1), 165 accepted facts each carrying a matching review entry with hard_classes, du_worthy (all true, giving 165 du-worthy) and gold_extra, 34 control rows, 10 exclusion rows, 44 abstentions (one per control or exclusion), 11 record-kind conflicts (the 10 real_item→exclusion rows plus the DAL row-6 control→fact mismatch, each explained in its record_kind_note and therefore resolved), and per-tag distinct-row tallies I verified independently for sequential_comparison (41, matching sequential_rows), measurement_wording (61), losses_and_sign (28), expectation_routing (18), favourable_unfavourable_direction (16) and corrections_and_amendments (8, the floor-critical minimum, above the floor of 5); every shard reports open_issues: [], all five group records state a settled members_are_one_fact judgment with a reason, no slice or tag mapping is left unsettled, and full_counts is byte-for-byte identical to counts."
+  },
+  "durable_copies_exact": true,
+  "timestamps": [
+    "2026-09-14T18:29:45.197Z",
+    "2026-09-14T18:29:45.200Z",
+    "2026-09-14T18:31:57.369Z",
+    "2026-09-14T18:32:03.361Z"
+  ],
+  "model_calls": 0
+}

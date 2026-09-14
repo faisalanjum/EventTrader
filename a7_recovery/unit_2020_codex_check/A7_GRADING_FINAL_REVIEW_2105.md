@@ -4,7 +4,48 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision202: the REAL corrected candidate build
+Current checkpoint,work-order Revision205: real new-key preparation VERIFIED,
+codex_keygrading2150_a exit0/empty stderr, KEY_GRADING_INPUTS.json/d7571670.
+Existing owners prove the new saved evaluation,382 unchanged answers/trace,
+reference inventory and424 current G1 questions against165 signed key facts.
+Native source/lock proof remains intact. This is NOT verdict reuse or a score.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | One externally pinned key-input boundary reaches the real reader and complete Bound; no model-answer edits or semantic hardcoding. |
+| Complete workflow | Original lifecycle and actual new evaluation/materializer/reference/G1 preparation pass. 81 same prompts,15 changed prompts; meaning/extras still require their actual downstream comparison. |
+| One owner and organization | Existing A6/PR, key/materializer, reference and event writers; one historical context/input provider. Saved-judgment connection remains OPEN; no second parser or verdict provider. |
+| Simplicity | Do not repeat12 blind-lane calls merely because hidden meaning fields changed while the6 G1 event prompts stayed identical. New G1 primary work is bounded to30 calls, subject to verified preparation. |
+| Verification and limits | 22 focused tests pass;4 mutation classes caught, including3 real wrong-file accepts under a disabled hash reader. Native connection and33 lock mutations pass. One existing exhausted-invalid lane stays uncredited. Corrected score/causes/offline setup OPEN. |
+
+Previous checkpoint,work-order Revision204: actual signature/lock VERIFIED,
+codex_lock2149_a exit0/empty stderr, SIGNED_KEY.json4474bd7a. Existing native
+proof, harvest, key/lock rederivation and33 lock mutations pass. Role admission
+was moved before the existing candidate context after an actual refusal;
+the validator is unchanged. New-key consumer preparation is running as
+codex_keygrading2150_a; its actual affected population is still OPEN.
+
+| Requirement | Status, change and verification |
+|---|---|
+| Generality and legitimate rules | Historical candidate/input identities and3 approved aliases, not semantic special cases. Same A5 hash/lock readers;7 focused positive/negative/restoration controls pass. |
+| Complete workflow | Real signer/lock verified with165 facts and687 source/key calls; original382 answers unchanged. Actual new evaluation/reference/G1 connection OPEN until native result. |
+| One owner and organization | Existing A6/PR, materializer and reference/question owners. Shared historical context and one input provider; no second validator/cache. |
+| Simplicity | One role-admission ordering fix,2 controls. Reuse every successful call; only measure affected grading inputs before deciding necessary next work. |
+| Verification and limits | 33 native lock mutations refused, zero signer identity collisions;6 full-input comparison controls pass. Corrected score/every error cause/END-only offline model setup OPEN; no universal reliability or perfect model score claimed. |
+
+Previous checkpoint,work-order Revision203: preparation publishedced2e901b,
+remote exact. One independent signer returned signed:true, no retry; root's
+native/state/raw/transport audit agrees (SIGNER_NATIVE_REVIEW_2148.json).
+Existing SP.prove/harvest/lock runs now in codex_lock2148_b. The first invocation
+refused before execution because one generated pyc changed a frozen directory;
+its source bytes never changed and preserving the cache elsewhere restored
+the exact original pin. All helpers must use -B; no pin or check was weakened.
+The shared historical-input boundary has3 additional passing controls.
+Next, reuse A6.reuse_freeze/PR.reuse for the new signed evaluation rather than
+mixing new facts with old cached metadata. Actual new-key consumer/reuse and
+corrected score/every finding cause/END-only model setup are still OPEN.
+
+Previous checkpoint,work-order Revision202: the REAL corrected candidate build
 and full verification pass, exit0/empty stderr, report7d0d9a6f. The historical
 input fix at the existing callable boundary is sufficient without changing a
 validator. Full current gate:33 events/191 rows/165 facts,0 open issues or

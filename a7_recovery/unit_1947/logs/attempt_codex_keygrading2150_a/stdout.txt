@@ -1,0 +1,2 @@
+New evaluation proved; original answers/launch/finalization unchanged
+Actual current G1 questions: 424 event comparison: {'unchanged': 75, 'changed': 21, 'added': 0, 'removed': 0}

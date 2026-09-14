@@ -1,0 +1,7 @@
+attempt	codex_lock2149_a
+payload	../../unit_2020_codex_check/lock_current_key_2149.py
+map	../unit_2020_codex_check/map_current_key_2148.tsv
+wrapper_pid	2938706
+payload_pid	2938710
+started_utc	2026-09-14T18:47:10Z
+state	finished exit 0

@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 202, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 205, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -61,7 +61,95 @@ bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
 
-CURRENT,Revision202: CURRENT KEY AND UNSIGNED CANDIDATE PREPARATION VERIFIED.
+CURRENT,Revision205: REAL NEW-KEY GRADING PREPARATION PASSES, exit0/empty
+stderr, codex_keygrading2150_a. KEY_GRADING_INPUTS.json/d7571670fc3ae38a4dc
+732a7e377f23c385a0ee59aad3eb38d52151cd590e9f7 binds evaluation72850446,
+reference113b55aa and G1 candidate48d01dce. Original382 answers, whole trace,
+source/launch/finalization identities are unchanged; only the independently
+signed lock/receipt and evaluation hashes differ. Actual current key165 facts,
+33 key events; original schedule36 events/191 packets. Old413 vs new424 G1
+questions, both96 event batches. All22 affected focused controls pass and4
+in-memory mutation classes are caught for their real input errors; exact
+results and the failed diagnostic-command attempts are preserved in
+KEY_CONNECTION_CHECKS_2150.json. Signature lock4474bd7a remains verified.
+
+Actual G1 reuse frontier:75 fully identical events plus6 with identical
+MODEL PROMPTS/full row bindings and only changed hidden _gold meaning data.
+Those6 are P1/P2/UNION of0000027904-26-000020 andBBY_2026-03-03T08.00;
+driver_state/comparison_baseline/polarity_proof changes belong to G2, not a
+repeat of the identical G1 task. Thus81 same prompts,15 genuinely changed
+prompts, at most30 primary G1 calls plus existing invalid-only retries. No
+new grading call is authorized yet. Among the75 full-identical events one
+old lane G1-050/G1a (P2,0001104659-25-118458) is exhausted-invalid; retain
+both failures and the existing zero-credit partial accounting. Do not fake
+a valid result. Input equivalence alone does not yet prove verdict transfer.
+
+Root publishes this verified signed-key/preparation checkpoint, then owns
+the minimum G1 saved-judgment connection. Core task2151/88ca8363 is read-only
+independent analysis of that exact boundary and the15-event native subset,
+using existing lifecycle/parser/reconciliation owners. No speculative generic
+framework or G23 redesign. New meaning/extras inputs are derived AFTER actual
+G1 completion. Corrected score/every error cause/END-only offline supported-
+model setup remain OPEN; A7 only, then STOP/WAIT. Provisional target5–6p.m.
+Eastern remains uncertain; the actual G23 changed population is not known yet.
+
+HISTORY,Revision204: the real independent signature AND FINAL LOCK pass.
+codex_lock2149_a exited0 with empty stderr; existing SP.prove, harvest,
+candidate/lock owners and all33 recorded lock mutations ran successfully.
+SIGNED_KEY.json/4474bd7a330a0cb5c03aef09883053ce34d138bfd43ff4046671580b65591ee4
+binds lock68270f4f, receipta54b8db1,165 facts/33 key events/191 source rows,
+zero open issues, all floors met, source/key ledger687 and zero identity
+collisions. One successful signer, NO retry. No corrected score yet.
+
+The2148_b invocation had a real admission-order mistake: role_problems ran
+after candidate_scope bound K to the independent role, comparing it to itself.
+Caller2149/a3cfd338 moves that unchanged check before the context;2 focused
+controls and the full native lock pass. Older caller remains failure evidence.
+The frozen-source pyc incident is separately preserved; use Python -B always.
+
+Root runs only codex_keygrading2150_a, caller0d080066: original G1 lifecycle
+proof, then existing A6.reuse_freeze/PR.reuse, actual materializer/reference
+inventory and new G1 questions/prompts. No AI calls or verdict transfer.
+Three approved input aliases use the existing hash/lock readers with independent
+pins;7 focused input controls pass. Full event-input comparison has6 passing
+controls; a matching question id alone cannot establish reuse. The native
+new-key connection and actual affected counts remain OPEN. A changed binding
+alone is not permission to rerun an identical successful model-facing task.
+Core task2150/f21e7c88 is one read-only review of completed lock evidence and
+that input boundary; no overlapping job or edit. Preparation remains published
+ced2e901b, signed-key checkpoint publication next. Scope remains A7 errors,
+END-only offline supported-model setup, then STOP/WAIT. ETA target5–6p.m.
+Eastern is provisional; actual changed grading population is not yet measured.
+
+HISTORY,Revision203: verified preparation COMMITTED/PUSHEDced2e901b1ca30583e
+25472dbbdc0c4632f11f08, tree001e642a45f93874beae3796294abe4d52df2a4f;
+normal push/exact remote verified. Core2146/25c3aae6 answers2148/a7d57b22:
+ONE signer callwf_22b11df3-59a returned signed:true/blocked:[], no retry,
+source/key ledger686->687. Root independently matched original/durable state
+2a410616, nativeb539991e, raw00d80a49, exact prompt/script, actual transport,
+one request/message and zero tools. SIGNER_NATIVE_REVIEW_2148.json records it.
+This does not yet replace the existing SP.prove, harvest or final-lock checks.
+
+Root owns actual codex_lock2148_b, using unchanged signer/lock owners and
+a7_current_key_context_2148.py/e5a75572, the shared version of the already
+native-proved signature input boundary. Its3 additional all-input/unknown/
+nested-exception controls pass. First attempt2148_a stopped BEFORE the payload:
+Core's capture generated one ignored raw_transport.pyc inside a frozen tree.
+All sources unchanged; moving that one cache to bytecode_incident_2148 exactly
+restored the original directory pin. Preserved, not deleted. Use Python -B or
+PYTHONDONTWRITEBYTECODE=1 on every collection helper; do not weaken the pin.
+
+Next connection MUST use existing A6.reuse_freeze/PR.reuse for a separately
+pinned evaluation against the corrected key. Do not reuse old materialization
+metadata with new facts: its identity is tied to its old key. Original producer
+proof/old grading validation stay in their ORIGINAL evaluation; actual new-key
+questions/pools determine which judgments can transfer with full input proof.
+No new materialization cache or manually edited facts is needed. New signed
+evaluation, actual changed population and any necessary reuse boundary remain
+OPEN pending native measurement. A7 only; each-error causes, END-only offline
+model setup, then STOP/WAIT. Core finished collection and waits for one task.
+
+HISTORY,Revision202: CURRENT KEY AND UNSIGNED CANDIDATE PREPARATION VERIFIED.
 Actual codex_candidate2148_a finishes exit0 with empty stderr. Existing
 C.build and full C.verify rederive every candidate byte; CANDIDATE_PREPARATION
 .json/7d0d9a6f94fa7d97a0d3347ad581ae39ea94a4c573916c973942b035c750fef7.

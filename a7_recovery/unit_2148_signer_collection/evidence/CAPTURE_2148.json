@@ -1,0 +1,92 @@
+{
+ "run_id": "wf_22b11df3-59a",
+ "official_state_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/workflows/wf_22b11df3-59a.json",
+ "official_state_exists": true,
+ "official_state_sha256": "2a410616e1439e6a47ea1ff017cedfa0ad4e0f52e448ab5742629695721161ee",
+ "state": {
+  "runId": "wf_22b11df3-59a",
+  "status": "completed",
+  "totalToolCalls": 0,
+  "agentCount": 1,
+  "durationMs": 144629,
+  "totalTokens": 148316,
+  "defaultModel": "claude-opus-5[1m]",
+  "script_sha256": "cbf1d2a69dbee3aa4e006cc1cb99c1b9ae5a7f03e5de6cb5af78e636e3611196",
+  "scriptPath": "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/signer_2148/final_sign.attempt1.js",
+  "workflow_agent_rows": 1
+ },
+ "row": {
+  "label": "a4-final-signer",
+  "state": "done",
+  "agentId": "ac64ce4dfd9b2c806",
+  "model": "claude-opus-5[1m]",
+  "effort": null,
+  "agentType": "lean-probe",
+  "toolCalls": 0,
+  "lastToolName": null,
+  "status": null
+ },
+ "returned_object_keys": [
+  "agentType",
+  "attempt",
+  "effort",
+  "model",
+  "role",
+  "text"
+ ],
+ "returned": {
+  "task_id": null,
+  "kind": null,
+  "blind": null,
+  "attempt": 1,
+  "model": "opus",
+  "effort": "high",
+  "agentType": "lean-probe"
+ },
+ "returned_text_is_string": true,
+ "returned_text_bytes": 1139,
+ "returned_text_sha256": "00d80a4962811758d0d48be707d3fa5bc6f4bebabaac8b5fae645d003a664784",
+ "transcript_path": "/home/faisal/.claude/projects/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/subagents/workflows/wf_22b11df3-59a/agent-ac64ce4dfd9b2c806.jsonl",
+ "transcript_sha256": "b539991eae7900168235d87b744b83cea574f511ebe0e6bc7d9e75848723c6df",
+ "transcript_bytes": 436034,
+ "transcript": {
+  "records": 4,
+  "record_types": [
+   "user",
+   "attachment",
+   "assistant",
+   "assistant"
+  ],
+  "assistant_records": 2,
+  "models_named": [
+   "claude-opus-5"
+  ],
+  "efforts_named": [
+   "high"
+  ],
+  "continuation_groups": 1,
+  "tool_blocks": 0,
+  "first_record_type": "user",
+  "first_prompt_sha256": "6caba0e128fbf287a2e94a898e0336135eb4254fc751552ef11425463c2196d6"
+ },
+ "expected_transport": {
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+ },
+ "row_model_matches_expected": false,
+ "preserved_files": [
+  "wf_22b11df3-59a.returned.txt",
+  "wf_22b11df3-59a.state.json",
+  "wf_22b11df3-59a.transcript.jsonl"
+ ]
+}

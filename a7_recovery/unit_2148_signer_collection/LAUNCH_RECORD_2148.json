@@ -1,0 +1,61 @@
+{
+ "authority": "Codex SEQ 2148",
+ "authority_sha256": "a7d57b22044c7667b781f9eb97055ce42218abaa901a18c1af5733876d54a27d",
+ "phase": "a7 REAL current-key signature, attempt 1",
+ "label": "a4-final-signer",
+ "role": "signer",
+ "candidate": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/candidate",
+ "candidate_preparation_sha256": "7d0d9a6f94fa7d97a0d3347ad581ae39ea94a4c573916c973942b035c750fef7",
+ "ordinary_binding": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/ordinary_bound.json",
+ "ordinary_sha256": "37e47f7d1bc57982af5b7b4bc197488f75caadaf5ceb4f13b06cae1f6a27c87f",
+ "key_identity_sha256": "b337dbc172e875749073fdc262796b338d52aeed5c8154efa613d1d784d57beb",
+ "manifest_sha256": "a9f4705d47cc0da501788c570fceb5d27775a1a7bfd9dae94146f52eb4b00c7a",
+ "prompt_sha256": "6caba0e128fbf287a2e94a898e0336135eb4254fc751552ef11425463c2196d6",
+ "script_path": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/candidate/signer/final_sign.attempt1.js",
+ "script_sha256": "cbf1d2a69dbee3aa4e006cc1cb99c1b9ae5a7f03e5de6cb5af78e636e3611196",
+ "script_bytes": 394213,
+ "transport_limit_bytes": 524288,
+ "expected_input": {
+  "record_index": 1,
+  "record_type": "attachment",
+  "payload_field": "attachment",
+  "payload_sha256": "a755758d83a70125d6b68725462e3c82548432a6ccc612eb846cbf77d9f9e8e1"
+ },
+ "expected_input_source": {
+  "path": "/tmp/a7_input_profile_2068.json",
+  "sha256": "78b58fe7fd5ba60b9199ada86fe27d90101ceb57cd7617db158e2ea724e2da18"
+ },
+ "transport": {
+  "model_alias": "opus",
+  "runtime_model_id": "claude-opus-5",
+  "workflow_row_model": "claude-opus-5[1m]",
+  "effort": "high",
+  "agentType": "lean-probe",
+  "disallowedTools": [
+   "Read"
+  ],
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call"
+ },
+ "runtime_observed_before_launch": "2.1.268 (Claude Code)",
+ "parent_session_observed": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+ "attempt": 1,
+ "authorized_calls": 1,
+ "ledger_before": 686,
+ "ledger_at_most": 687,
+ "retry_not_authorized": true,
+ "attempt2_is_accounting_only": true,
+ "invocations": [
+  {
+   "label": "a4-final-signer",
+   "attempt": 1,
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_candidate2148_a/candidate/signer/final_sign.attempt1.js",
+   "script_sha256": "cbf1d2a69dbee3aa4e006cc1cb99c1b9ae5a7f03e5de6cb5af78e636e3611196",
+   "script_bytes": 394213,
+   "prompt_sha256": "6caba0e128fbf287a2e94a898e0336135eb4254fc751552ef11425463c2196d6"
+  }
+ ],
+ "launched": 0
+}

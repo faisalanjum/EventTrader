@@ -1,0 +1,43 @@
+Independent signer proved; no prior response identity reused
+  raw final_sign.attempt1.raw.json sha 00d80a4962811758d0d48be707d3fa5bc6f4bebabaac8b5fae645d003a664784 (1133 chars)
+  run wf_22b11df3-59a | agent ac64ce4dfd9b2c806 | model opus | effort high | lean-probe | tools 0 | runtime ['claude-opus-5']
+  OUTCOME: signed=True blocked=[]
+  why: I recomputed every count directly from the 33 shards and each one reproduces exactly — 33 events, 191 rows (7+5+7+9+5+5+7+5+6+4+6+6+5+5+6+6+6+5+7+6+5+5+4+10+8+7+7+5+6+7+7+1+1), 165 accepted facts each carrying a matching review entry with hard_classes, du_worthy (all true, giving 165 du-worthy) and 
+a4_final_key_lock.json 68270f4fd33f342e1b562dd700f789fb442fa0b4bbb1ec2b8cd83a6c1cb19737
+  signed=True blocked=[]  ledger 686 -> 687 of 6000
+  artifact:key_identity              refused
+  artifact:sidecar                   refused
+  artifact:validator_receipt         refused
+  artifact:provenance                refused
+  artifact:signer_prompt             refused
+  artifact:signer_launcher           refused
+  artifact:signer_manifest           refused
+  artifact:signer_raw                refused
+  artifact:signer_evidence           refused
+  artifact:signer_reply              refused
+  artifact:attempt1_record           refused
+  artifact:attempt1_launcher         refused
+  artifact:attempt1_raw              refused
+  artifact:attempt1_state            refused
+  artifact:attempt1_transcript       refused
+  signer:run_id                      refused
+  signer:agent_id                    refused
+  signer:raw_sha256                  refused
+  signer:transcript_sha256           refused
+  signer:state_sha256                refused
+  signer:parent_session_id           refused
+  signer:model                       refused
+  signer:effort                      refused
+  signer:agent_type                  refused
+  signer:prompt_sha256               refused
+  signer:script_sha256               refused
+  signer:signed                      refused
+  signer:blocked                     refused
+  block:counts                       refused
+  block:validator                    refused
+  block:call_accounting              refused
+  block:key                          refused
+  block:authority                    refused
+a4_final_key_lock_receipt.json a54b8db1546c639801f60a7655e4eb6e867a3144a5ed88d6734288e98bd4671a
+RESULT EVERY BOUND VALUE REFUSES WHEN MUTATED
+Current signed key locked and all recorded mutations refused
