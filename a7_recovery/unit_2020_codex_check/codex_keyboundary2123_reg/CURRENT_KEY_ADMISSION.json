@@ -1,0 +1,9 @@
+{
+ "caller_sha256": "64322322cbb883cab3aec5ee71b0bf7a02c08bd7c2611a27612336199544c67c",
+ "current_key_sources": 33,
+ "last_phase_sources": 2,
+ "model_calls": 0,
+ "owner_sha256": "2210a3eed623de9c3a53ebde529eb34d3e79643510977b50ef635c4807ba715a",
+ "positive_control": "0000027904-26-000013",
+ "refused_current_sources": []
+}

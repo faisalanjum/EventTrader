@@ -1,0 +1,155 @@
+{
+ "scope": "Two source-key rechecks prepared through the existing owners; armed and UNRUN. No model call.",
+ "rows": [
+  {
+   "name": "recheck2123_h",
+   "tag": "core_recheck2123_h",
+   "exit": 0,
+   "stdout_sha256": "03644a7fb225e2cf2b0b46c712eec8f697e8ad2a7a73e96ffdb9bc7b79d470c3",
+   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_tail": ""
+  },
+  {
+   "name": "mut2123h_signature_dropped_from_ledger",
+   "tag": "core_mut2123h_signature_dropped_from_ledger",
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_sha256": "a8565d33970af58f7727dc1b3ea11a40addec90096f3dde2ca030826dc61596f",
+   "stderr_tail": "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError"
+  },
+  {
+   "name": "mut2123h_signature_not_pinned",
+   "tag": "core_mut2123h_signature_not_pinned",
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_sha256": "1abc9535183219e106abfdf10694449923a0c15081da6363f8197c28bffedb2a",
+   "stderr_tail": "    ~~~~^^^^^^^^^^^^^ KeyError: 'signature'"
+  },
+  {
+   "name": "mut2123h_signature_not_a_prior_run",
+   "tag": "core_mut2123h_signature_not_a_prior_run",
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_sha256": "72d65dc24bbe7483f85cedbabfebc1b43ce2150055acd521ffe9baa690c4b5db",
+   "stderr_tail": "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError"
+  },
+  {
+   "name": "mut2123h_signature_identities_ignored",
+   "tag": "core_mut2123h_signature_identities_ignored",
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_sha256": "bc471dafd4b23fea72a77407ebe84141b9376493a8910b908d12aa0b2da87163",
+   "stderr_tail": "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError"
+  },
+  {
+   "name": "mut2123h_budget_cross_check_removed",
+   "tag": "core_mut2123h_budget_cross_check_removed",
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_sha256": "fe55970330bc5d4a497844ab6b92b87f5a5c0e979665d0056a6c9e03b71bae96",
+   "stderr_tail": "    raise AssertionError('failed to reject ' + name) AssertionError: failed to reject signature_budgeted_against_another_history"
+  },
+  {
+   "name": "mut2123h_signature_verification_skipped",
+   "tag": "core_mut2123h_signature_verification_skipped",
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_sha256": "f442fc8c89fa6719ea9b6861da85c8f41b3c37e97e6f89f49983a360e630f1d9",
+   "stderr_tail": "    raise AssertionError('failed to reject ' + name) AssertionError: failed to reject tampered_prior_signature"
+  },
+  {
+   "name": "mut2123h_signature_cached_per_directory",
+   "tag": "core_mut2123h_signature_cached_per_directory",
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_sha256": "ab3626c00a9bfc682dbfcbfd89a38194d46ada1994b8d717e48892b9917d5d0a",
+   "stderr_tail": "    raise AssertionError('failed to reject ' + name) AssertionError: failed to reject same_path_tampered_after_a_clean_read"
+  }
+ ],
+ "green": {
+  "packet": "a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/RECHECK_PACKET_2123.json",
+  "packet_sha256": "532c0a741bc5a6f2acc287dd295c296f024ca6e4f805e5ba7abedb54c1ca286a",
+  "inventory": "a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/TEST_INVENTORY_2123.json",
+  "inventory_sha256": "bc2193dc066f6e7b288d64a44fb074a1294a71f1a70daeb4a4271bccbea3b76c",
+  "caller": "a7_recovery/unit_2123_post_signature_key/prepare_two_source_rechecks_2123.py",
+  "caller_sha256": "e7458e74381df43d71939d4c4eb52a1e719493503bc2b03856136f5acf38aca8",
+  "owner": "a7_recovery/unit_2121_current_key/a4_v6_successor_chain.py",
+  "owner_sha256": "2210a3eed623de9c3a53ebde529eb34d3e79643510977b50ef635c4807ba715a",
+  "events": [
+   "0000898173-26-000006",
+   "0001104659-26-017090"
+  ],
+  "ledger_before": 668,
+  "history_pin_tags": [
+   "v1",
+   "v2",
+   "v3",
+   "v4",
+   "v5",
+   "v2_recovery",
+   "v6",
+   "v6_round1",
+   "v6_round2",
+   "signature"
+  ],
+  "checks": 14,
+  "negative_controls": [
+   "missing_prior_signature",
+   "tampered_prior_signature",
+   "same_path_tampered_after_a_clean_read",
+   "source_id",
+   "raw_sha256",
+   "row",
+   "signature_budgeted_against_another_history"
+  ],
+  "receipt_sha256": "ef16bf579e354ef9758b6f6b4465d7cf90e3aae6da39ced9015ae6cfb8ca2537",
+  "scripts": [
+   {
+    "file": "0000898173-26-000006.attempt1.js",
+    "sha256": "84ee6efb1e440fbec3af994cf12353b9b4cd8931928d19e57169d2fe2c1299c8"
+   },
+   {
+    "file": "0001104659-26-017090.attempt1.js",
+    "sha256": "686b3931700d80712ed278f1e54a9bf0e48ff20ca08e24d72e2a9f6197f2e8ad"
+   }
+  ],
+  "packet_has_no_finalization": true,
+  "packet_states": 0,
+  "sources_not_touched": 31
+ },
+ "mutations": [
+  {
+   "file": "a7_recovery/unit_2123_post_signature_key/mutation_budget_cross_check_removed.txt",
+   "sha256": "2e4797028ae05faad48f789b0a830ec89c5b265069e227add68e8d5e922a414c"
+  },
+  {
+   "file": "a7_recovery/unit_2123_post_signature_key/mutation_signature_cached_per_directory.txt",
+   "sha256": "64946b89921938a3caedfe378c986d46b72e5a719002b7456a311c65b6f0cafa"
+  },
+  {
+   "file": "a7_recovery/unit_2123_post_signature_key/mutation_signature_dropped_from_ledger.txt",
+   "sha256": "206268df2b22d94bb6ef5d58532254fde5816f1b6cb8ce433584d7dc558bfbcf"
+  },
+  {
+   "file": "a7_recovery/unit_2123_post_signature_key/mutation_signature_identities_ignored.txt",
+   "sha256": "b059f387fa2dd99a182afeae55b322b154bba6220aab25004ae49aeee346b9bf"
+  },
+  {
+   "file": "a7_recovery/unit_2123_post_signature_key/mutation_signature_not_a_prior_run.txt",
+   "sha256": "f1ce406c900dff4e894213695a9de37c829c4017266dbdd1ff628fb724436ae5"
+  },
+  {
+   "file": "a7_recovery/unit_2123_post_signature_key/mutation_signature_not_pinned.txt",
+   "sha256": "070c07a501370c9a477a92e08218749087a18066aa3300d84485be8ebf697115"
+  },
+  {
+   "file": "a7_recovery/unit_2123_post_signature_key/mutation_signature_verification_skipped.txt",
+   "sha256": "db636fcb016e17d9f9ef11127b16c613744576eaadd9dfd813f3ce467a82bcec"
+  }
+ ],
+ "predecessor": {
+  "path": "a7_recovery/unit_2123_post_signature_key/a4_v6_successor_chain.reported_fe3ac02c.py",
+  "sha256": "fe3ac02cbd125feb1916b1d8a8f56ce9f2ba70231a2dd9e3733db371696ef8d0"
+ },
+ "model_calls": 0
+}

@@ -1,0 +1,320 @@
+{
+ "checks": [
+  {
+   "check": "the completed signature verifies and proves",
+   "result": {
+    "agent_ids": [
+     "aded04e635e6e4aed"
+    ],
+    "calls": 1,
+    "directory": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/candidate/signer",
+    "ledger_after": 668,
+    "ledger_before": 667,
+    "pinned_artifacts": 15,
+    "response_message_ids": 1,
+    "response_request_ids": 1,
+    "run_ids": [
+     "wf_cf398299-777"
+    ]
+   },
+   "seam": "signature_accounting"
+  },
+  {
+   "check": "both events bind their six ORIGINAL targets",
+   "result": {
+    "0000898173-26-000006": 6,
+    "0001104659-26-017090": 6
+   },
+   "seam": "successor_entries"
+  },
+  {
+   "check": "the packet is prepared by F.prepare_v6 for two events",
+   "result": {
+    "allowed": [
+     "0000898173-26-000006",
+     "0001104659-26-017090"
+    ],
+    "invocations": 2,
+    "largest_script_bytes": 134157,
+    "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_recheck2123_a/packet_proof/recheck_packet",
+    "transport_limit": 524288
+   },
+   "seam": "prepare_v6"
+  },
+  {
+   "check": "the served body carries no evaluated or output-informed content",
+   "result": [
+    {
+     "finding_fields_served": [
+      "raw_sha256",
+      "row",
+      "source_id"
+     ],
+     "finding_fields_withheld": [
+      "affected_rows",
+      "decision",
+      "event_row_indexes",
+      "fact_index",
+      "field",
+      "owning_clause",
+      "question",
+      "question_key",
+      "review_note",
+      "source_evidence"
+     ],
+     "prior_key_body": {
+      "is_the_signed_source_derived_key": true,
+      "now": "prior_key_shard",
+      "raw_sha256": "3c23be441a171ece9cc217c1e812252ef346a2d79c6ab8fe3fb76f0a5e705fdd",
+      "was": "v4_shard"
+     },
+     "served_body_keys": [
+      "menu",
+      "event",
+      "rows",
+      "groups",
+      "leads",
+      "prior_key_shard",
+      "reviewer_finding"
+     ],
+     "source_blocks_identical_to_the_original": [
+      "menu",
+      "event",
+      "rows",
+      "groups",
+      "leads"
+     ],
+     "source_id": "0000898173-26-000006"
+    },
+    {
+     "finding_fields_served": [
+      "raw_sha256",
+      "row",
+      "source_id"
+     ],
+     "finding_fields_withheld": [
+      "affected_rows",
+      "decision",
+      "event_row_indexes",
+      "fact_index",
+      "field",
+      "owning_clause",
+      "question",
+      "question_key",
+      "review_note",
+      "source_evidence"
+     ],
+     "prior_key_body": {
+      "is_the_signed_source_derived_key": true,
+      "now": "prior_key_shard",
+      "raw_sha256": "cead92e11f8c597f5a1cdef38ed20310d2ccd66c411dd6eb4b75c16561a5aedf",
+      "was": "v4_shard"
+     },
+     "served_body_keys": [
+      "menu",
+      "event",
+      "rows",
+      "groups",
+      "leads",
+      "prior_key_shard",
+      "reviewer_finding"
+     ],
+     "source_blocks_identical_to_the_original": [
+      "menu",
+      "event",
+      "rows",
+      "groups",
+      "leads"
+     ],
+     "source_id": "0001104659-26-017090"
+    }
+   ],
+   "seam": "successor_prompt"
+  },
+  {
+   "check": "the ledger carries every completed call incl. the signature",
+   "result": {
+    "ledger_before_next_round": 668,
+    "lock_ledger_after": 668,
+    "phase_chain_before_signature": 667
+   },
+   "seam": "v6_ledger_before"
+  },
+  {
+   "check": "the signature is pinned into this run's history",
+   "result": {
+    "history_pin_tags": [
+     "v1",
+     "v2",
+     "v3",
+     "v4",
+     "v5",
+     "v2_recovery",
+     "v6",
+     "v6_round1",
+     "v6_round2",
+     "signature"
+    ],
+    "receipt_carries_the_same_pins": true,
+    "signature_pin_matches_lock_artifacts": true
+   },
+   "seam": "_phase_history"
+  },
+  {
+   "check": "the signature is reachable as a spent-identity source",
+   "result": {
+    "prior_run_dirs": 10,
+    "signature_is_in_prior_run_dirs": true
+   },
+   "seam": "_prior_runs"
+  },
+  {
+   "check": "the signature's identities are no longer empty",
+   "result": {
+    "counts_under_the_scope": [
+     1,
+     1,
+     1,
+     1
+    ],
+    "counts_without_the_scope": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "seam": "_spent_identities"
+  },
+  {
+   "check": "without a signature the seams are unchanged",
+   "result": {
+    "history_pin_tags": [
+     "v1",
+     "v2",
+     "v3",
+     "v4",
+     "v5",
+     "v2_recovery",
+     "v6",
+     "v6_round1",
+     "v6_round2"
+    ],
+    "ledger_before": 667,
+    "prior_run_dirs": 9
+   },
+   "seam": "successor_scope"
+  },
+  {
+   "check": "every completed round still reconstructs cold",
+   "result": [
+    {
+     "finalization_sha256": "0e1908172761d67f82b557e554ef4e212ec747e1356f471fcf68c628794e0bbb",
+     "prompts": 6,
+     "receipt_sha256": "558cf2fe03c5c036a1af1143ac65fe9f5bc852dadbcd3982b7cb77fc1b48e064",
+     "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6"
+    },
+    {
+     "finalization_sha256": "313edfa0efe49c2be43b54a3754b01def19f48a2319e76f52a1a7de11196d9c3",
+     "prompts": 2,
+     "receipt_sha256": "d8c49666610fcfa84592f5aa9d54e5e3d3272558f549797e80d10f8c4fe67f5e",
+     "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2"
+    },
+    {
+     "finalization_sha256": "39ab87acf58e9c0805bf7739e1384be4b92967220fc257ff18145809818688fc",
+     "prompts": 2,
+     "receipt_sha256": "1ae011e63691af74b1f663bff7decfa91a47567653cc30d8a61f71d72c968564",
+     "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3"
+    }
+   ],
+   "seam": "first_round_scope"
+  },
+  {
+   "check": "a second preparation is byte-identical and resumes",
+   "result": {
+    "cold_receipt_problems": [],
+    "receipt_identical_but_run_id": true,
+    "scripts_identical": true
+   },
+   "seam": "receipt_problems"
+  },
+  {
+   "check": "record and finalization reach the packet, on the twin",
+   "result": {
+    "outcomes": [
+     [
+      "0000898173-26-000006",
+      "missing"
+     ],
+     [
+      "0001104659-26-017090",
+      "missing"
+     ]
+    ],
+    "packet_has_no_finalization": true,
+    "packet_receipt_untouched": true,
+    "phase_complete": false,
+    "recorded_states": 1,
+    "retry_offered": [],
+    "scheduled_on_the_twin": 2,
+    "twin": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_recheck2123_a/packet_proof/resume_twin"
+   },
+   "seam": "record_state/finalize"
+  },
+  {
+   "check": "a missing, tampered, or mis-bound input refuses",
+   "result": [
+    {
+     "case": "missing_prior_signature",
+     "reason": "there is no published signature lock at /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/codex_recheck2123_a/packet_proof/signature_with_no_lock/a4_final_key_lock.json"
+    },
+    {
+     "case": "tampered_prior_signature",
+     "reason": "the completed signature does not verify: ['signer run_id does not re-derive']"
+    },
+    {
+     "case": "same_path_tampered_after_a_clean_read",
+     "reason": "the completed signature does not verify: ['call_accounting does not re-derive']"
+    },
+    {
+     "case": "source_id",
+     "reason": "a finding does not bind the exact source/raw/row: 0000898173-26-000006"
+    },
+    {
+     "case": "raw_sha256",
+     "reason": "a finding does not bind the exact source/raw/row: 0000898173-26-000006"
+    },
+    {
+     "case": "row",
+     "reason": "a finding does not bind the exact source/raw/row: 0000898173-26-000006"
+    },
+    {
+     "case": "signature_budgeted_against_another_history",
+     "reason": "the completed signature was budgeted after 667 calls but this phase counts 665"
+    }
+   ],
+   "seam": "signature_accounting/successor_entries/v6_ledger_before"
+  },
+  {
+   "check": "reusing the signature's run identity is refused",
+   "result": {
+    "fresh_problems": 4,
+    "only_difference_is_the_reuse": [
+     "0000898173-26-000006: run id 'wf_cf398299-777' was already spent"
+    ],
+    "reused_identity": "wf_cf398299-777",
+    "reused_problems": 5
+   },
+   "seam": "_spent_identities"
+  }
+ ],
+ "model_calls": 0,
+ "scope": "the checks the touched seams require, and nothing else",
+ "touched_seams": [
+  "signature_accounting",
+  "v6_ledger_before",
+  "_phase_history",
+  "_prior_runs",
+  "_spent_identities"
+ ]
+}

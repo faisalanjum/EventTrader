@@ -1,0 +1,27 @@
+{
+ "history_pin_tags": [
+  "v1",
+  "v2",
+  "v3",
+  "v4",
+  "v5",
+  "v2_recovery",
+  "v6",
+  "v6_round1",
+  "v6_round2"
+ ],
+ "model_calls": 0,
+ "native_signature_identity_count": 1,
+ "previous_signature_budget_before": 667,
+ "proved_completed_signature": "wf_cf398299-777",
+ "scope": "Post-signature accounting observation; no new call or approval",
+ "signature_evidence_sha256": "90bbc0366549441d19d3e8681648e832569df2104d73acc58420afa84953bbcf",
+ "signature_has_legacy_spent_identity_counts": [
+  0,
+  0,
+  0,
+  0
+ ],
+ "signature_is_in_prior_run_dirs": false,
+ "source_key_ledger_before_next_round": 667
+}

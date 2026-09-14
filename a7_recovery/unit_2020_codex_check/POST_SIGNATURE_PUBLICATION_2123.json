@@ -1,0 +1,459 @@
+{
+ "scope": "VERIFIED two-source preparation, source-only call-history handoff and independent proof. No new source decision or corrected A7 score claimed.",
+ "base_head": "2ac64a76c0474bcd8ae4faa84bf177a778c58214",
+ "core_reply": {
+  "seq": 2123,
+  "sha256": "d71f060d79c505a18efec3bd24f6e63ab7c9111f8ece151be2aa8d2c24f1088d"
+ },
+ "codex_reply": {
+  "seq": 2123,
+  "sha256": "009959688713bf99b5102ac689ca076a34c5c9c9bd21660d91bd9cfdfa0df5a7"
+ },
+ "excluded": [
+  "active Core receipt, calls, raw outputs and new collection helper",
+  "unrelated build_inventory_review.py",
+  "all main and database/production changes"
+ ],
+ "rows": [
+  {
+   "path": "a7_recovery/A7_PREGRADING_WORK_ORDER.md",
+   "bytes": 176222,
+   "sha256": "d2e962596262815769b9370beac79b868f6f402983b4fe817363a4137f986e8e"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_keyboundary2123_reg/exit",
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_keyboundary2123_reg/owner.tsv",
+   "bytes": 257,
+   "sha256": "ffc8a52c74452ecba0850cfddfc24d29f0e0a32d04831908c4049ceb730220f6"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_keyboundary2123_reg/stderr.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_keyboundary2123_reg/stdout.txt",
+   "bytes": 931,
+   "sha256": "070d9b711dc582c222d1833c92823ec522829c1006d9f35e9af95160a343dcb9"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_recheck2123_a/exit",
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_recheck2123_a/owner.tsv",
+   "bytes": 258,
+   "sha256": "99efc67f67b5723152f011e8aed931c2e11a3cd0d8f9e3a84bfcdd046c60aabb"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_recheck2123_a/stderr.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_recheck2123_a/stdout.txt",
+   "bytes": 436,
+   "sha256": "61943f75f32984d90a310555423714f676623564f494a6383a5c5f55f98c9eed"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_green/exit",
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_green/owner.tsv",
+   "bytes": 257,
+   "sha256": "510f2438ea0a989134e597db23e52fe410dba8677045ca12fa6f7b4d587ca433"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_green/stderr.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_green/stdout.txt",
+   "bytes": 3383,
+   "sha256": "293dd31e4487f191a712cc2fbe53360d8545d2b821db5106751bb9bcba765208"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red/owner.tsv",
+   "bytes": 255,
+   "sha256": "5edfaa7fce46370011d953a4fceb174c9e9b21fa9b86815ce0969a31827cd71f"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red/stderr.txt",
+   "bytes": 1146,
+   "sha256": "13f1c21d08e407cd7f0a22312b03dabce57ffdcc6fcc8215bdc7cc648aab3235"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red_b/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red_b/owner.tsv",
+   "bytes": 257,
+   "sha256": "7fbc78c14cd8c550eaa9ec77c23656af5d4ab1e12b49e811af41956dbcaeebba"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red_b/stderr.txt",
+   "bytes": 429,
+   "sha256": "76f78604fbfe1d916b7c829cf35786aeb4e8d2c391c880923c9ce33e4df2b740"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_codex_sigcache2123_red_b/stdout.txt",
+   "bytes": 2543,
+   "sha256": "283ce0696e9a72d9742fba139ba7888bb44a6b09164ffacaba6d2e6aede6be59"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_budget_cross_check_removed/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_budget_cross_check_removed/owner.tsv",
+   "bytes": 279,
+   "sha256": "ec9e6b176b6d565492fbf2dfe5e751c159bb6d3aeafdf1ece9439cc047673b91"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_budget_cross_check_removed/stderr.txt",
+   "bytes": 1270,
+   "sha256": "fe55970330bc5d4a497844ab6b92b87f5a5c0e979665d0056a6c9e03b71bae96"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_budget_cross_check_removed/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_cached_per_directory/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_cached_per_directory/owner.tsv",
+   "bytes": 283,
+   "sha256": "e81a8fffe5e5dd4b756ce6fdd2ce911fc340a696b112f1128de941d191734e9a"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_cached_per_directory/stderr.txt",
+   "bytes": 1260,
+   "sha256": "ab3626c00a9bfc682dbfcbfd89a38194d46ada1994b8d717e48892b9917d5d0a"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_cached_per_directory/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_dropped_from_ledger/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_dropped_from_ledger/owner.tsv",
+   "bytes": 282,
+   "sha256": "a7b08b3413e3576e3c475fa57ed3af2e2369d119925050990a983990a19fec0b"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_dropped_from_ledger/stderr.txt",
+   "bytes": 1066,
+   "sha256": "a8565d33970af58f7727dc1b3ea11a40addec90096f3dde2ca030826dc61596f"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_dropped_from_ledger/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_identities_ignored/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_identities_ignored/owner.tsv",
+   "bytes": 281,
+   "sha256": "26cd9755d625a4f2f65371cc7c6b24b757d71121e14764a0fd6931b52745bf95"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_identities_ignored/stderr.txt",
+   "bytes": 1080,
+   "sha256": "bc471dafd4b23fea72a77407ebe84141b9376493a8910b908d12aa0b2da87163"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_identities_ignored/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_a_prior_run/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_a_prior_run/owner.tsv",
+   "bytes": 278,
+   "sha256": "9507174629ff49dac1ef4e60b29fb0d4b6087a5bb4a2f31d43f62b8d96232c15"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_a_prior_run/stderr.txt",
+   "bytes": 1006,
+   "sha256": "72d65dc24bbe7483f85cedbabfebc1b43ce2150055acd521ffe9baa690c4b5db"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_a_prior_run/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_pinned/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_pinned/owner.tsv",
+   "bytes": 273,
+   "sha256": "43398c1d1a9bdc3ffbda1f57a00ef638dd2629d88fed7b6845a33fab671ce7c0"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_pinned/stderr.txt",
+   "bytes": 998,
+   "sha256": "1abc9535183219e106abfdf10694449923a0c15081da6363f8197c28bffedb2a"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_not_pinned/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_verification_skipped/exit",
+   "bytes": 2,
+   "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_verification_skipped/owner.tsv",
+   "bytes": 283,
+   "sha256": "0b2ffd06b085f45bee5d4260a1fd9619df87dbc1c3d03a4af50f171bfd378ad3"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_verification_skipped/stderr.txt",
+   "bytes": 1234,
+   "sha256": "f442fc8c89fa6719ea9b6861da85c8f41b3c37e97e6f89f49983a360e630f1d9"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_mut2123h_signature_verification_skipped/stdout.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_recheck2123_h/exit",
+   "bytes": 2,
+   "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_recheck2123_h/owner.tsv",
+   "bytes": 257,
+   "sha256": "6f6c0564a10946032174fc33c1801fdc66bf26f0777e4f66e159af05e66c1491"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_recheck2123_h/stderr.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "a7_recovery/unit_1947/logs/attempt_core_recheck2123_h/stdout.txt",
+   "bytes": 436,
+   "sha256": "03644a7fb225e2cf2b0b46c712eec8f697e8ad2a7a73e96ffdb9bc7b79d470c3"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/A7_GRADING_FINAL_REVIEW_2105.md",
+   "bytes": 40158,
+   "sha256": "eee27e5a5dc5ca6f2132105387ce569fd6426d91bce0c3eea56662c132f41bbe"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/CORE_PRECALL_RECEIPT_2123.json",
+   "bytes": 7244,
+   "sha256": "ef16bf579e354ef9758b6f6b4465d7cf90e3aae6da39ced9015ae6cfb8ca2537"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/POST_SIGNATURE_COMMANDS_2123.txt",
+   "bytes": 17638,
+   "sha256": "d2d4eca816e52a8fa3bf16b4603805234cc1425badbd7e87fd140795e95a59e2"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/POST_SIGNATURE_REVIEW_2123.md",
+   "bytes": 5457,
+   "sha256": "4e11a30a8534e4fa65c38b5802e9770d54e3e3561d98ae3f16e9b8853e80951f"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/SIGNATURE_REVALIDATION_COMMAND_2123.txt",
+   "bytes": 3494,
+   "sha256": "6a0f03244f82102f8c33eb0c49cfa2a32f3118a6b4ec447438f32681d29b3448"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2123.py",
+   "bytes": 23161,
+   "sha256": "a7074e1ffe3bed305ae827d7a6371985593f3cfd13bf43808fb7c8b4a1ac8c0e"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/a4_v6_successor_chain.review_2123_uncached.py",
+   "bytes": 23089,
+   "sha256": "2210a3eed623de9c3a53ebde529eb34d3e79643510977b50ef635c4807ba715a"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_keyboundary2123_reg/CURRENT_KEY_ADMISSION.json",
+   "bytes": 324,
+   "sha256": "a3c0393e24316850c255b0e460856627957df91879ead28e2c8ddc5ddfb8e7d7"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_keyboundary2123_reg/CURRENT_KEY_BOUNDARY_PROOF.json",
+   "bytes": 9910,
+   "sha256": "713bee39ffdbbd03d4f7d52f67b167fd761ca81fe5505cc6367c304157ad21d9"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_keyboundary2123_reg/POST_SIGNATURE_ACCOUNTING_PROBE.json",
+   "bytes": 607,
+   "sha256": "3b8e9375fe359203dc247e9d9f5278a6e937a2ce1b95c5be91836833f7f64467"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_recheck2123_a/packet_proof/RECHECK_PACKET_2123.json",
+   "bytes": 9872,
+   "sha256": "e307a1bd3eb67875ecd2d670e788c14c4a40a217467155b211ee8d942cdd8222"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_recheck2123_a/packet_proof/TEST_INVENTORY_2123.json",
+   "bytes": 8355,
+   "sha256": "cde31604ca1a3b592b2ceb93d8b0373b1d5147808331a44afb356ce162c075e3"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_sigcache2123_green/SIGNATURE_REVALIDATION_2123.json",
+   "bytes": 3607,
+   "sha256": "9270386e39a873b8bcda2d547fcc082d82d6c9e0bb22ff4046713557ccd93336"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_sigcache2123_red/EVALUATION_DIFFERENCE.json",
+   "bytes": 2296,
+   "sha256": "306b8718b79379847932c251a1638319dbed50416793ee7bc8a71284a32020c0"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/codex_sigcache2123_red_b/SIGNATURE_REVALIDATION_2123.json",
+   "bytes": 2817,
+   "sha256": "cb00f10c59a72e97c5586d246018191b7401458f8357f6c8eca767b13d5c0742"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/prepare_two_source_rechecks.review_2123.py",
+   "bytes": 27964,
+   "sha256": "32746578aa432a94cf8e5e6bb5d5f5d3780c42d3afb4ffb3a4af5d6a1b03e757"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/prove_signature_revalidation_2123.py",
+   "bytes": 5310,
+   "sha256": "86242c952e8200fb861baa3b25c744c6a27aacc19858f2e67722ae0db26b012f"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/prove_signature_revalidation_2123.red.py.txt",
+   "bytes": 5037,
+   "sha256": "823cef29f13a33b220606522e34e6ea5b80ed9d90cb2953c1b31b2a0c2e1bf80"
+  },
+  {
+   "path": "a7_recovery/unit_2020_codex_check/prove_signature_revalidation_2123.setup_failure.py.txt",
+   "bytes": 4608,
+   "sha256": "8e12a78aee670425c1baded5662681655a3232c92be7be9b8829d17dffb49a30"
+  },
+  {
+   "path": "a7_recovery/unit_2121_current_key/a4_v6_successor_chain.py",
+   "bytes": 23089,
+   "sha256": "2210a3eed623de9c3a53ebde529eb34d3e79643510977b50ef635c4807ba715a"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/COMMANDS_2123.txt",
+   "bytes": 28655,
+   "sha256": "d2222a238af104858e51d7bd8c87235b1040657f37970ec41f52a83ef3bd4a11"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/VERIFICATION_2123.json",
+   "bytes": 6545,
+   "sha256": "ac79f8e968b03afbd93fbf91cc15ef20b0dfa1956ce7b002f9fd575f6563d9d7"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/a4_v6_successor_chain.reported_fe3ac02c.py",
+   "bytes": 14676,
+   "sha256": "fe3ac02cbd125feb1916b1d8a8f56ce9f2ba70231a2dd9e3733db371696ef8d0"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/RECHECK_PACKET_2123.json",
+   "bytes": 9837,
+   "sha256": "532c0a741bc5a6f2acc287dd295c296f024ca6e4f805e5ba7abedb54c1ca286a"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/TEST_INVENTORY_2123.json",
+   "bytes": 8334,
+   "sha256": "bc2193dc066f6e7b288d64a44fb074a1294a71f1a70daeb4a4271bccbea3b76c"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet/scripts/0000898173-26-000006.attempt1.js",
+   "bytes": 134157,
+   "sha256": "84ee6efb1e440fbec3af994cf12353b9b4cd8931928d19e57169d2fe2c1299c8"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet/scripts/0001104659-26-017090.attempt1.js",
+   "bytes": 120598,
+   "sha256": "686b3931700d80712ed278f1e54a9bf0e48ff20ca08e24d72e2a9f6197f2e8ad"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/mutation_budget_cross_check_removed.txt",
+   "bytes": 22837,
+   "sha256": "2e4797028ae05faad48f789b0a830ec89c5b265069e227add68e8d5e922a414c"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/mutation_signature_cached_per_directory.txt",
+   "bytes": 23270,
+   "sha256": "64946b89921938a3caedfe378c986d46b72e5a719002b7456a311c65b6f0cafa"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/mutation_signature_dropped_from_ledger.txt",
+   "bytes": 23108,
+   "sha256": "206268df2b22d94bb6ef5d58532254fde5816f1b6cb8ce433584d7dc558bfbcf"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/mutation_signature_identities_ignored.txt",
+   "bytes": 23053,
+   "sha256": "b059f387fa2dd99a182afeae55b322b154bba6220aab25004ae49aeee346b9bf"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/mutation_signature_not_a_prior_run.txt",
+   "bytes": 23041,
+   "sha256": "f1ce406c900dff4e894213695a9de37c829c4017266dbdd1ff628fb724436ae5"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/mutation_signature_not_pinned.txt",
+   "bytes": 23079,
+   "sha256": "070c07a501370c9a477a92e08218749087a18066aa3300d84485be8ebf697115"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/mutation_signature_verification_skipped.txt",
+   "bytes": 23073,
+   "sha256": "db636fcb016e17d9f9ef11127b16c613744576eaadd9dfd813f3ce467a82bcec"
+  },
+  {
+   "path": "a7_recovery/unit_2123_post_signature_key/prepare_two_source_rechecks_2123.py",
+   "bytes": 28002,
+   "sha256": "e7458e74381df43d71939d4c4eb52a1e719493503bc2b03856136f5acf38aca8"
+  }
+ ]
+}

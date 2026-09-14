@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2020_codex_check/prove_signature_revalidation_2123.py", line 106, in <module>
+    assert not report['failed_cases'], 'signature cache credits changed evidence after a fresh operation'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: signature cache credits changed evidence after a fresh operation

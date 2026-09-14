@@ -1,0 +1,99 @@
+"""Check the new signature handoff across operations; no model calls.
+
+All mutations affect a test copy under this run's durable output directory.
+The original signed key and Core's candidate are read-only inputs.
+"""
+import importlib.util
+from importlib.machinery import SourceFileLoader
+import json
+import os
+from pathlib import Path
+import shutil
+
+import prepare_g23_partial_2097 as E
+
+candidate = os.environ['A7_KEY_SUCCESSOR_CANDIDATE']
+assert E.G._sha_file(candidate) == os.environ['A7_KEY_SUCCESSOR_CANDIDATE_SHA256']
+spec = importlib.util.spec_from_file_location(
+    'review_signature_candidate_2123', candidate,
+    loader=SourceFileLoader('review_signature_candidate_2123', candidate))
+E.X = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(E.X)
+X, G, F = E.X, E.G, E.F
+copy_dir = E.out / 'signed_candidate_copy'
+report = {'model_calls': 0, 'candidate_sha256': G._sha_file(candidate),
+          'caller_sha256': G._sha_file(__file__), 'checks': []}
+
+
+def prime(_producer, _inputs):
+    original = Path(E.result['notes']['candidate'])
+    shutil.copytree(str(original), str(copy_dir))
+    before = os.environ.get('A7_CANDIDATE_DIR')
+    signature = X.signature_accounting(str(copy_dir))
+    lock = G._read(str(copy_dir / X._LOCK_NAME))
+    assert signature.calls == lock['call_accounting']['signer_calls'] > 0
+    assert signature.ledger_after == lock['call_accounting']['ledger_after']
+    assert signature.identities[0] == {lock['signer']['run_id']}
+    report['positive_control'] = {
+        'calls': signature.calls, 'ledger_after': signature.ledger_after,
+        'lock_sha256': G._sha_file(str(copy_dir / X._LOCK_NAME)),
+        'original_lock_sha256': G._sha_file(str(original / X._LOCK_NAME)),
+        'environment_before': before,
+        'environment_after': os.environ.get('A7_CANDIDATE_DIR')}
+    # Derive the finite local mutation population from the authoritative
+    # owner's bound files. Never modify its external states or transcripts.
+    owner = X._lock_owner(str(copy_dir))
+    local = sorted({str(Path(p).relative_to(copy_dir))
+                    for p in owner.BOUND.values()
+                    if Path(p).is_relative_to(copy_dir)})
+    report['local_bound_files'] = local
+    return signature
+
+
+def recheck(_producer, _inputs):
+    # E's outer operation has ended and a fresh one now owns the review.
+    # The ordinary owner has cleared its caches; the new cache must not let
+    # stale signature evidence survive that required boundary.
+    assert X.signature_accounting(str(copy_dir)).ledger_after == baseline.ledger_after
+    for relative in [X._LOCK_NAME] + report['local_bound_files']:
+        path = copy_dir / relative
+        original = path.read_bytes()
+        assert X.signature_accounting(str(copy_dir)).calls == baseline.calls
+        if relative == X._LOCK_NAME:
+            changed = json.loads(original)
+            changed['signer']['signed'] = False
+            changed_bytes = json.dumps(changed).encode('utf-8')
+        else:
+            changed_bytes = original + b'\n'
+        try:
+            path.write_bytes(changed_bytes)
+            try:
+                got = X.signature_accounting(str(copy_dir))
+            except Exception as exc:
+                outcome = {'refused': True, 'reason': type(exc).__name__ + ': ' + str(exc)[:200]}
+            else:
+                outcome = {'refused': False, 'credited_calls': got.calls,
+                           'credited_ledger': got.ledger_after}
+            if relative == X._LOCK_NAME:
+                # The actual existing verifier must reject this exact
+                # mutation; a mocked reader is not the negative control.
+                try:
+                    X._read_signature(str(copy_dir))
+                except ValueError as exc:
+                    report['cold_negative'] = str(exc)[:300]
+                else:
+                    raise AssertionError('the independent cold negative did not refuse')
+            report['checks'].append(dict(file=relative, **outcome))
+        finally:
+            path.write_bytes(original)
+        assert G._sha_file(str(path)) == __import__('hashlib').sha256(original).hexdigest()
+    return report
+
+
+baseline = E.with_prepared_inputs(prime)
+assert F._OP_DEPTH[0] == 0
+E.with_prepared_inputs(recheck)
+report['failed_cases'] = [row['file'] for row in report['checks'] if not row['refused']]
+G._write_new(str(E.out / 'SIGNATURE_REVALIDATION_2123.json'), G._pretty(report) + '\n')
+print(json.dumps(report, sort_keys=True), flush=True)
+assert not report['failed_cases'], 'signature cache credits changed evidence after a fresh operation'

@@ -1,0 +1,7 @@
+attempt	codex_recheck2123_a
+payload	../../unit_2020_codex_check/prepare_two_source_rechecks.review_2123.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1642152
+payload_pid	1642156
+started_utc	2026-09-14T02:40:36Z
+state	finished exit 0

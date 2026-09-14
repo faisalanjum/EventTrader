@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2123_post_signature_key/prepare_two_source_rechecks_2123.py", line 533, in <module>
+    E.with_prepared_inputs(prepare)
+  File "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/harness_g1v3/build_kfields_final.py", line 81, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2020_codex_check/prepare_g23_partial_2097.py", line 92, in with_prepared_inputs
+    result = action(producer, inputs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_1947/ledger/../../unit_2123_post_signature_key/prepare_two_source_rechecks_2123.py", line 228, in prepare
+    assert budget['before'] == lock['call_accounting']['ledger_after']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

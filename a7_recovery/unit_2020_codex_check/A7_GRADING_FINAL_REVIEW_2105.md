@@ -4,7 +4,21 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current pass,work-order Revision164: verified repair checkpoint and original
+Current checkpoint,work-order Revision166: two-source preparation VERIFIED;
+Core is authorized to collect only the two independent source reviews, with
+one invalid-only retry each. Detailed five-item checklist, exact raw proof
+and limitations: POST_SIGNATURE_REVIEW_2123.md. Own14-check preparation,
+11-file cache RED/GREEN, full33-source/31-prompt regression and7 inspected
+Core mutations passed at successor2210a3ee. No new key or final score yet.
+The382 evaluated answers and frozen grading repair remain unchanged.
+
+Previous checkpoint,work-order Revision165: verified repair and its exact
+evidence published normally as2ac64a76, treef9da5eab. Fresh remote matches.
+No behavior changed after the Revision164 checks. The old-key reuse proof is
+published; new-key handoff, source decisions, corrective grading/final score
+and END-only local setup remain OPEN. Main and unrelated user work untouched.
+
+Previous pass,work-order Revision164: verified repair checkpoint and original
 key-to-grading reuse baseline. No new source truth or corrected score.
 
 | Requirement | Status, change and verification |

@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 164, 2026-09-13 Eastern. Maintainer: Codex.
+Revision 166, 2026-09-13 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -60,6 +60,46 @@ main; main is not edited during this task. This does not waive coverage, pass
 bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
+
+SOURCE COLLECTION AUTHORIZED,Revision166: Core2123/d71f060d and its exact
+2210a3ee successor/e7458e74 preparer/532c0a74 packet are independently VERIFIED
+for the TWO source-only reviews, not new truth or a final score. Codex2123
+009959688713bf99b5102ac689ca076a34c5c9c9bd21660d91bd9cfdfa0df5a7
+is delivered and byte-identically archived. It permits two primary calls plus
+one invalid_response-only retry each, maximum FOUR new source calls, ledger
+668 to at most672. No signer or grading call yet; preserve382 evaluated replies.
+Core alone owns collection and one exact report, then waits. Do not send a
+second task or edit its current packet/receipt while collection is active.
+
+Own codex_recheck2123_a passes14 checks/7 negatives and matches both Core
+scripts byte-for-byte, receipt except run_id; packete307a1bd, inventorycde31604.
+Own current-owner regression713bee39 admits/carries all33 sources, renders31
+phase-supported sources, preserves3 historical rounds/10 prompts,7 negatives.
+Own cache REDcb00f10c reproduced11 changed-artifact acceptances; Core removed
+the cache, and current2210a3ee GREEN9270386e refuses all11 with real controls.
+All raw exits checked. Seven Core mutations inspected and raw failures proved.
+Details/limits: unit_2020_codex_check/POST_SIGNATURE_REVIEW_2123.md.
+F4 was retracted in Core2114 and stays closed; the guidance-state clarification
+is already in the published renderer32e2f650. No extra general audit is owed.
+Next: actual two source decisions, any required new key/signature with its
+old-signature history retained, affected-only grading and final verification;
+END-only offline local setup, then STOP. The grading repair remains pushed2ac64a76.
+
+PUBLICATION COMPLETE,Revision165: grading-repair commit
+2ac64a76c0474bcd8ae4faa84bf177a778c58214, tree
+f9da5eabdfa3b7e2d7287a88ae9dc10fdfb8d79c, single parent86e742ee.
+Normal push succeeded; fresh remote recovery/a3-a7-verified is exactly2ac64a76.
+GRADING_REPAIR_PUBLICATION_2123.json/e8e865c7 pins the exact2439 reviewed
+staged paths (code, real proof and necessary restored test dependencies).
+No new AI call, new answer key, final corrected score or A7 PASS is claimed.
+The unverified current-key/post-signature candidates were excluded. Index
+is empty; main2dc0ad39 and unrelated user file2ec3bd33 remain unchanged.
+The commit message records Codex VERIFIED on the exact staged tree;
+GRADING_REPAIR_STAGE_REVIEW_2123.txt records the independent checks and two
+resolved publication diagnostics. This status-only update follows the commit.
+Core2122 is still the latest reply; Codex2122 remains its one bounded task.
+Core PID1037924 is live and its transcript advanced02:13:53UTC; no new task
+or interrupt was sent. Reuse the existing watcher handle85562. A7 then STOP.
 
 CURRENT SPLIT,Revision164: current grading modules remain frozen at the
 Revision163 identities. Fresh focused verification including the counter:

@@ -1,0 +1,7 @@
+attempt	codex_sigcache2123_red
+payload	../../unit_2020_codex_check/prove_signature_revalidation_2123.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1621650
+payload_pid	1621654
+started_utc	2026-09-14T02:29:29Z
+state	finished exit 1
