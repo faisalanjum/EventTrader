@@ -1,0 +1,479 @@
+{
+ "allowed": [
+  "0000027904-26-000020",
+  "0000092380-26-000044",
+  "0000898173-26-000006",
+  "0001041061-26-000003",
+  "0001104659-25-102611",
+  "0001104659-26-017090",
+  "BBY_2026-03-03T08.00"
+ ],
+ "binding": {
+  "affected_sources": [
+   "0000027904-26-000020",
+   "0000092380-26-000044",
+   "0000898173-26-000006",
+   "0001041061-26-000003",
+   "0001104659-25-102611",
+   "0001104659-26-017090",
+   "BBY_2026-03-03T08.00"
+  ],
+  "frozen_event_order_positions": [
+   3,
+   6,
+   8,
+   13,
+   16,
+   19,
+   24
+  ],
+  "predecessor_events": [
+   "0000898173-26-000006",
+   "0001104659-26-017090"
+  ],
+  "predecessor_finalization_sha256": "c8e2bd22d380ed138997d0d3df1d7842cfdffda078b6f888989370f94399f87e",
+  "predecessor_receipt_sha256": "472a4b7f6905bf68084ff253fb3de3870afed446fd78288633052ebcd634a80d",
+  "predecessor_run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet",
+  "prior_rounds": [
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2",
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3"
+  ],
+  "signatures": {
+   "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/candidate"
+  }
+ },
+ "binding_sha256": "81374968402367c38b7600782a69d2aede505fca80f1848918c1ede5e0606564",
+ "call_accounting": {
+  "after_planned": 678,
+  "before": 670,
+  "global_ceiling": 6000,
+  "max_attempts_per_call": 2,
+  "planned_corrections": 7,
+  "planned_signer": 1,
+  "retryable_outcomes": [
+   "invalid_response"
+  ],
+  "worst_case_after": 686
+ },
+ "caller_sha256": "f71efd9561ddf893f69aa108a93f6525cb181913eeda675e8cfe42d71a61d7aa",
+ "historical_rounds": [
+  {
+   "byte_exact": true,
+   "prompts": 6,
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6"
+  },
+  {
+   "byte_exact": true,
+   "prompts": 2,
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2"
+  },
+  {
+   "byte_exact": true,
+   "prompts": 2,
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3"
+  },
+  {
+   "byte_exact": true,
+   "prompts": 2,
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet"
+  }
+ ],
+ "input_declarations": [
+  {
+   "clarification_occurrences": 1,
+   "event_index": 4,
+   "exactly_the_approved_prefix_delta": true,
+   "finding_fields": [
+    "raw_sha256",
+    "row",
+    "source_id"
+   ],
+   "origin": "a4_final_v5_correction",
+   "original_rows": [
+    "0000027904-26-000020#019",
+    "0000027904-26-000020#020",
+    "0000027904-26-000020#021",
+    "0000027904-26-000020#022",
+    "0000027904-26-000020#023",
+    "0000027904-26-000020#024",
+    "0000027904-26-000020#025",
+    "0000027904-26-000020#026",
+    "0000027904-26-000020#027"
+   ],
+   "prior_body_key": "prior_key_shard",
+   "prior_reply_is_the_current_source_key": true,
+   "prompt_bytes": 151976,
+   "prompt_sha256": "bf12457cf4ef193cc53eb2ca41a1567cc38c53dd705252b3049d4ef212fbfa3d",
+   "rows_served": 9,
+   "script_bytes": 161141,
+   "script_sha256": "a89c4c1e086287773d3275545facf953a082dfe37e38efa33ccd20b00155b83c",
+   "served_body_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "prior_key_shard",
+    "reviewer_finding"
+   ],
+   "source_id": "0000027904-26-000020",
+   "source_view_matches_the_payload_owner": true
+  },
+  {
+   "clarification_occurrences": 1,
+   "event_index": 7,
+   "exactly_the_approved_prefix_delta": true,
+   "finding_fields": [
+    "raw_sha256",
+    "row",
+    "source_id"
+   ],
+   "origin": "a4_final_v6_correction",
+   "original_rows": [
+    "0000092380-26-000044#038",
+    "0000092380-26-000044#039",
+    "0000092380-26-000044#040",
+    "0000092380-26-000044#041",
+    "0000092380-26-000044#042",
+    "0000092380-26-000044#043",
+    "0000092380-26-000044#044"
+   ],
+   "prior_body_key": "v6_shard",
+   "prior_reply_is_the_current_source_key": true,
+   "prompt_bytes": 148019,
+   "prompt_sha256": "9f6e01a3219c890d4397aa1b38960a4ebdc5654c460993544423fc12a7a85771",
+   "rows_served": 7,
+   "script_bytes": 157773,
+   "script_sha256": "5ae839615f48f9a1e32909fe5c87945cf3d1e9e12da7fd07570fe241577719f0",
+   "served_body_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v6_shard",
+    "reviewer_finding"
+   ],
+   "source_id": "0000092380-26-000044",
+   "source_view_matches_the_payload_owner": true
+  },
+  {
+   "clarification_occurrences": 1,
+   "event_index": 9,
+   "exactly_the_approved_prefix_delta": true,
+   "finding_fields": [
+    "raw_sha256",
+    "row",
+    "source_id"
+   ],
+   "origin": "a4_final_v6_correction",
+   "original_rows": [
+    "0000898173-26-000006#050",
+    "0000898173-26-000006#051",
+    "0000898173-26-000006#052",
+    "0000898173-26-000006#053",
+    "0000898173-26-000006#054",
+    "0000898173-26-000006#055"
+   ],
+   "prior_body_key": "v6_shard",
+   "prior_reply_is_the_current_source_key": true,
+   "prompt_bytes": 126211,
+   "prompt_sha256": "33ab5c74972e1b8fa991190182bd3afc6ae4bbec6afc11cc69fd3f72acb0c90a",
+   "rows_served": 6,
+   "script_bytes": 134568,
+   "script_sha256": "e21cb130659dd4f4a8a701436834ce889bcd2866edb6bc7ff0725f77d4bee555",
+   "served_body_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v6_shard",
+    "reviewer_finding"
+   ],
+   "source_id": "0000898173-26-000006",
+   "source_view_matches_the_payload_owner": true
+  },
+  {
+   "clarification_occurrences": 1,
+   "event_index": 14,
+   "exactly_the_approved_prefix_delta": true,
+   "finding_fields": [
+    "raw_sha256",
+    "row",
+    "source_id"
+   ],
+   "origin": "a4_final_v5_correction",
+   "original_rows": [
+    "0001041061-26-000003#077",
+    "0001041061-26-000003#078",
+    "0001041061-26-000003#079",
+    "0001041061-26-000003#080",
+    "0001041061-26-000003#081"
+   ],
+   "prior_body_key": "prior_key_shard",
+   "prior_reply_is_the_current_source_key": true,
+   "prompt_bytes": 145740,
+   "prompt_sha256": "c4177ebf1cefece95027d081cfc91e978320161b3738e84618ec40da51d89085",
+   "rows_served": 5,
+   "script_bytes": 152546,
+   "script_sha256": "7d31f496e2993b887849e00969ce07171787cbd6bea57da72f84caeb0785fad4",
+   "served_body_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "prior_key_shard",
+    "reviewer_finding"
+   ],
+   "source_id": "0001041061-26-000003",
+   "source_view_matches_the_payload_owner": true
+  },
+  {
+   "clarification_occurrences": 1,
+   "event_index": 17,
+   "exactly_the_approved_prefix_delta": true,
+   "finding_fields": [
+    "raw_sha256",
+    "row",
+    "source_id"
+   ],
+   "origin": "a4_final_v5_correction",
+   "original_rows": [
+    "0001104659-25-102611#094",
+    "0001104659-25-102611#095",
+    "0001104659-25-102611#096",
+    "0001104659-25-102611#097",
+    "0001104659-25-102611#098",
+    "0001104659-25-102611#099"
+   ],
+   "prior_body_key": "prior_key_shard",
+   "prior_reply_is_the_current_source_key": true,
+   "prompt_bytes": 240694,
+   "prompt_sha256": "834f83ac664349c84b599d77045ec5f32808a715302fa423fb48c8a87eb87d09",
+   "rows_served": 6,
+   "script_bytes": 254870,
+   "script_sha256": "daee971fa28a08c6a2f250cff986c01290c0690f026147b2dc2bf55159d638a3",
+   "served_body_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "prior_key_shard",
+    "reviewer_finding"
+   ],
+   "source_id": "0001104659-25-102611",
+   "source_view_matches_the_payload_owner": true
+  },
+  {
+   "clarification_occurrences": 1,
+   "event_index": 20,
+   "exactly_the_approved_prefix_delta": true,
+   "finding_fields": [
+    "raw_sha256",
+    "row",
+    "source_id"
+   ],
+   "origin": "a4_final_v6_correction",
+   "original_rows": [
+    "0001104659-26-017090#112",
+    "0001104659-26-017090#113",
+    "0001104659-26-017090#114",
+    "0001104659-26-017090#115",
+    "0001104659-26-017090#116",
+    "0001104659-26-017090#117"
+   ],
+   "prior_body_key": "v6_shard",
+   "prior_reply_is_the_current_source_key": true,
+   "prompt_bytes": 113714,
+   "prompt_sha256": "f89336b449040fde7f5520071412d3c1a114a04b69d9db740ba7e63cd73497ae",
+   "rows_served": 6,
+   "script_bytes": 120660,
+   "script_sha256": "77e5382790dc9a0f2eaa4661cdd62f28fc1898bd5e0ec49873a70f10c224bb5d",
+   "served_body_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "v6_shard",
+    "reviewer_finding"
+   ],
+   "source_id": "0001104659-26-017090",
+   "source_view_matches_the_payload_owner": true
+  },
+  {
+   "clarification_occurrences": 1,
+   "event_index": 25,
+   "exactly_the_approved_prefix_delta": true,
+   "finding_fields": [
+    "raw_sha256",
+    "row",
+    "source_id"
+   ],
+   "origin": "a4_final_v5_correction",
+   "original_rows": [
+    "BBY_2026-03-03T08.00#142",
+    "BBY_2026-03-03T08.00#143",
+    "BBY_2026-03-03T08.00#144",
+    "BBY_2026-03-03T08.00#145",
+    "BBY_2026-03-03T08.00#146",
+    "BBY_2026-03-03T08.00#147",
+    "BBY_2026-03-03T08.00#148",
+    "BBY_2026-03-03T08.00#149"
+   ],
+   "prior_body_key": "prior_key_shard",
+   "prior_reply_is_the_current_source_key": true,
+   "prompt_bytes": 158658,
+   "prompt_sha256": "e5e0ed51282a421880e2104c738c23420ae6d17b3becfcef46b7e081a30a692b",
+   "rows_served": 8,
+   "script_bytes": 167954,
+   "script_sha256": "be213c49fd2569448c017506e6de5fa3d28a157db3cea243b69c79d04b806564",
+   "served_body_keys": [
+    "menu",
+    "event",
+    "rows",
+    "groups",
+    "leads",
+    "prior_key_shard",
+    "reviewer_finding"
+   ],
+   "source_id": "BBY_2026-03-03T08.00",
+   "source_view_matches_the_payload_owner": true
+  }
+ ],
+ "invocations": [
+  {
+   "args": null,
+   "attempt": 1,
+   "label": "0000027904-26-000020",
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000027904-26-000020.attempt1.js",
+   "script_sha256": "a89c4c1e086287773d3275545facf953a082dfe37e38efa33ccd20b00155b83c"
+  },
+  {
+   "args": null,
+   "attempt": 1,
+   "label": "0000092380-26-000044",
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000092380-26-000044.attempt1.js",
+   "script_sha256": "5ae839615f48f9a1e32909fe5c87945cf3d1e9e12da7fd07570fe241577719f0"
+  },
+  {
+   "args": null,
+   "attempt": 1,
+   "label": "0000898173-26-000006",
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0000898173-26-000006.attempt1.js",
+   "script_sha256": "e21cb130659dd4f4a8a701436834ce889bcd2866edb6bc7ff0725f77d4bee555"
+  },
+  {
+   "args": null,
+   "attempt": 1,
+   "label": "0001041061-26-000003",
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001041061-26-000003.attempt1.js",
+   "script_sha256": "7d31f496e2993b887849e00969ce07171787cbd6bea57da72f84caeb0785fad4"
+  },
+  {
+   "args": null,
+   "attempt": 1,
+   "label": "0001104659-25-102611",
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-25-102611.attempt1.js",
+   "script_sha256": "daee971fa28a08c6a2f250cff986c01290c0690f026147b2dc2bf55159d638a3"
+  },
+  {
+   "args": null,
+   "attempt": 1,
+   "label": "0001104659-26-017090",
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/0001104659-26-017090.attempt1.js",
+   "script_sha256": "77e5382790dc9a0f2eaa4661cdd62f28fc1898bd5e0ec49873a70f10c224bb5d"
+  },
+  {
+   "args": null,
+   "attempt": 1,
+   "label": "BBY_2026-03-03T08.00",
+   "scriptPath": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet/scripts/BBY_2026-03-03T08.00.attempt1.js",
+   "script_sha256": "be213c49fd2569448c017506e6de5fa3d28a157db3cea243b69c79d04b806564"
+  }
+ ],
+ "key": {
+  "asked_again": [
+   "0000027904-26-000020",
+   "0000092380-26-000044",
+   "0000898173-26-000006",
+   "0001041061-26-000003",
+   "0001104659-25-102611",
+   "0001104659-26-017090",
+   "BBY_2026-03-03T08.00"
+  ],
+  "sources": 33,
+  "untouched": 26,
+  "untouched_origins_unchanged": true,
+  "untouched_raws_unchanged": true
+ },
+ "largest_script_bytes": 254870,
+ "model_calls": 0,
+ "negative_controls": [
+  {
+   "case": "omitted_signature",
+   "reason": "the current merged key does not read cleanly: ['receipt.v1_evidence is not the expected value', \"2 events have no accepted shard: ['0000898173-26-000006', '0001104659-26-017090']\"]"
+  },
+  {
+   "case": "misplaced_signature",
+   "reason": "the completed signature does not verify: ['the candidate no longer re-derives: the candidate cannot be re-derived (SystemExit: the signing gate is not clean: receipt.v1_evidence is not the expected va"
+  },
+  {
+   "case": "signature_outside_this_history",
+   "reason": "a signature names a round outside this history"
+  },
+  {
+   "case": "stale_current_raw",
+   "reason": "a finding does not bind the exact source/raw/row: 0000027904-26-000020"
+  },
+  {
+   "case": "changed_history",
+   "reason": "the completed signature does not verify: ['the candidate no longer re-derives: the candidate cannot be re-derived (SystemExit: the signing gate is not clean: receipt.v1_evidence is not the expected va"
+  }
+ ],
+ "owner_sha256": "36a58cfac6f547375fa1861dda0467cf27c9f11922da224b67df71db2437d23e",
+ "receipt_sha256": "ca0bb6507cbb57fd02e4fb62471a7867ce8e78ddae5bbab65713e368a0da0ef2",
+ "renderer_sha256": "002001473da073b21dfa6e5db7aed620d0da7da96d787a5127b292e7014d7c33",
+ "resume_uses_the_same_binding": {
+  "labels": [
+   "0000027904-26-000020",
+   "0000092380-26-000044",
+   "0000898173-26-000006",
+   "0001041061-26-000003",
+   "0001104659-25-102611",
+   "0001104659-26-017090",
+   "BBY_2026-03-03T08.00"
+  ],
+  "prompt_hashes_identical": true,
+  "receipt_problems": []
+ },
+ "role_and_runtime": {
+  "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+  "agentType": "lean-probe",
+  "declared_only": "a requested configuration; the runtime identity is observed only from a completed call",
+  "disallowedTools": [
+   "Read"
+  ],
+  "effort": "high",
+  "model_alias": "opus",
+  "parent_session_id": "5ae9b86b-f0f6-4449-beee-9cac7cfa7200",
+  "runtime_model_id": "claude-opus-5",
+  "transport": "Claude Code Workflow agent(), subscription",
+  "workflow_row_model": "claude-opus-5[1m]"
+ },
+ "role_and_runtime_matches_the_predecessor": true,
+ "root_gate_exit": "0",
+ "run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_pkt2128_d/seven_source_packet",
+ "scope": "PRE-CALL packet for the seven affected source events; armed and unrun. No model call, no key change, no publication.",
+ "states": [],
+ "tasks": 47,
+ "transport_limit": 524288,
+ "unrun_packet_refuses_as_a_merged_key": [
+  "7 events have no accepted shard: ['0000027904-26-000020', '0000092380-26-000044', '0000898173-26-000006']",
+  "7 named events have no accepted v6 correction: ['0000027904-26-000020', '0000092380-26-000044', '0000898173-26-000006']"
+ ]
+}

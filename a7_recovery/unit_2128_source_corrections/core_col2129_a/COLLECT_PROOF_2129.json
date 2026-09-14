@@ -1,0 +1,96 @@
+{
+ "caller_sha256": "e5df5509198aff6d894378050afcc0c179ca04f709fe959ee76a61f52b33a6d4",
+ "entry": "collect_seven_2128.collect",
+ "entry_sha256": "44d5faa38dbeb75a6d0fb61cf7aacf68c7004dc8fa07cdaed59b6aa131f0cad9",
+ "first_collection": {
+  "finalization_sha256": "505e6f4c1068d2e4e572175967d9ea9392979e3e488ba74566a377e16c0c8412",
+  "ledger": {
+   "invalid_response": 0,
+   "missing": 7,
+   "scheduled": 7,
+   "transport_no_answer": 0,
+   "unproved": 0,
+   "valid": 0
+  },
+  "outcomes": [
+   [
+    "0000027904-26-000020",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0000092380-26-000044",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0000898173-26-000006",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0001041061-26-000003",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0001104659-25-102611",
+    "missing",
+    "no official state"
+   ],
+   [
+    "0001104659-26-017090",
+    "missing",
+    "no official state"
+   ],
+   [
+    "BBY_2026-03-03T08.00",
+    "missing",
+    "no official state"
+   ]
+  ],
+  "phase_complete": false,
+  "problems": [],
+  "retry": []
+ },
+ "model_calls": 0,
+ "negative_controls": [
+  {
+   "case": "wrong_report_hash",
+   "reason": "the packet report is 16eb47c02e4cbf848870c4c81104bb4cb493de8a6609616813b4112b1bd2f8e1, not the expected 0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+   "case": "drifted_binding_identity",
+   "reason": "renderer_sha256 drifted: /home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2127_source_context/a7_source_context_2127.py is 002001473da073b21dfa6e5db7aed620d0da7da96d787a5127b292e7014d7c33, "
+  }
+ ],
+ "probe_events": [
+  "0000027904-26-000020",
+  "0000092380-26-000044",
+  "0000898173-26-000006",
+  "0001041061-26-000003",
+  "0001104659-25-102611",
+  "0001104659-26-017090",
+  "BBY_2026-03-03T08.00"
+ ],
+ "probe_largest_script_bytes": 254870,
+ "probe_report_sha256": "16eb47c02e4cbf848870c4c81104bb4cb493de8a6609616813b4112b1bd2f8e1",
+ "probe_run_dir": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2128_source_corrections/core_col2129_a/zero_call_probe_packet",
+ "real_packet_files": 8,
+ "real_packet_has_no_finalization": true,
+ "real_packet_states": [],
+ "real_packet_unchanged": true,
+ "real_report_sha256": "032d7265675c3f85ddf3d23add3c31af041249662d3221bad5ff189135b7c362",
+ "required_inputs": [
+  "A7_COLLECT_REPORT",
+  "A7_COLLECT_REPORT_SHA256",
+  "A7_COLLECT_STATES"
+ ],
+ "resume_is_idempotent": {
+  "finalization_identical": true,
+  "outcomes_identical": true,
+  "states_still_empty": true
+ },
+ "root_gate_exit": "0",
+ "scope": "focused proof of the collection entry on an isolated zero-call probe; no model call, no faked response"
+}

@@ -1,0 +1,7 @@
+attempt	core_ctx2127_c
+payload	../../unit_2127_source_context/prove_source_context_2127.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1890088
+payload_pid	1890092
+started_utc	2026-09-14T06:01:10Z
+state	finished exit 0

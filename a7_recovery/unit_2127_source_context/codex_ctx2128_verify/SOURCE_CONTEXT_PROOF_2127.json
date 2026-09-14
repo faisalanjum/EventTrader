@@ -1,0 +1,97 @@
+{
+ "builds_on": "a7-source-context/2127",
+ "caller_sha256": "69bcb454a3525285e2ab572676870162aed9393783c21d9f2d554344f3650e5a",
+ "clarification": "The target fixes which fact you review. For each permitted field, use the complete supplied source unless that field's rule restricts it to the quote, then apply the governing rules in their stated order.",
+ "clarification_block": "The target fixes which fact you review. For each permitted field, use the complete\nsupplied source unless that field's rule restricts it to the quote, then apply the\ngoverning rules in their stated order.",
+ "focused_test_sha256": "ec7b46409ba6a3a19b67dcd2916f64b20473d2ac7e5c157cd41689311b94812b",
+ "historical_rounds_byte_exact_with_the_install_held": [
+  {
+   "byte_exact": true,
+   "prompts": 6,
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6"
+  },
+  {
+   "byte_exact": true,
+   "prompts": 2,
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2"
+  },
+  {
+   "byte_exact": true,
+   "prompts": 2,
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3"
+  }
+ ],
+ "model_calls": 0,
+ "packet_receipt_sha256": "472a4b7f6905bf68084ff253fb3de3870afed446fd78288633052ebcd634a80d",
+ "prompts": [
+  {
+   "bytes_added": 205,
+   "clarification_occurrences_after": 1,
+   "exactly_one_span_changed": true,
+   "input_body_identical": true,
+   "prompt_sha256_after": "a47ce23a92d402b6f72669770da4815d279c07453cc418dc9073ffe3706805d8",
+   "prompt_sha256_before": "c9008c82550214e4907176b3f1b9174fb714506ddaf152f3eba2361eb588d632",
+   "served_today_has_the_clarification": false,
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "bytes_added": 205,
+   "clarification_occurrences_after": 1,
+   "exactly_one_span_changed": true,
+   "input_body_identical": true,
+   "prompt_sha256_after": "adde5a3413b7ca8d76ae0e6c60a4f4efaa8aa8f9fff1791726d53630f47f731e",
+   "prompt_sha256_before": "c718049bc6480b5430766fb07121c605712e5edd52a9cffed7871d07bcccb191",
+   "served_today_has_the_clarification": false,
+   "source_id": "0001104659-26-017090"
+  }
+ ],
+ "recorded_raws": {
+  "0000898173-26-000006.attempt1.proved.json": "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7",
+  "0001104659-26-017090.attempt1.proved.json": "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa",
+  "wf_084b6ebc-b70.raw.json": "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7",
+  "wf_1fe45543-565.raw.json": "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa"
+ },
+ "recorded_raws_unchanged": true,
+ "renderer_sha256": "002001473da073b21dfa6e5db7aed620d0da7da96d787a5127b292e7014d7c33",
+ "scope": "the source-context renderer proved at the real v6_prefix seam; no call, no key or answer mutation",
+ "span_new": "Interpret those targets only.\nThe target fixes which fact you review. For each permitted field, use the complete\nsupplied source unless that field's rule restricts it to the quote, then apply the\ngoverning rules in their stated order.\nAny one of them may yield more than one fact only\n",
+ "span_old": "Interpret those targets only. Any one of them may yield more than one fact only\n",
+ "tests": [
+  {
+   "env": {},
+   "exit": 1,
+   "module": "test_source_context_2127",
+   "stderr_sha256": "746bf28daab916b016216b41cd7c9a1f717794af25e94554b48f55bb75c51e70",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "summary": "FAILED (failures=1)"
+  },
+  {
+   "env": {
+    "A7_CONTEXT_OWNER": "new"
+   },
+   "exit": 0,
+   "module": "test_source_context_2127",
+   "stderr_sha256": "7ca60dd5dbcc08f5a1cb726d5ff72c246cce0b56b99626792d85c6515fc73ee9",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "summary": "OK"
+  },
+  {
+   "env": {},
+   "exit": 1,
+   "module": "test_prefix_spans_2063",
+   "stderr_sha256": "7e039a6bb91b55aa1c23310f43697ee7905ca131e13a7ae44ee7a9717a0c3f6c",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "summary": "FAILED (failures=3)"
+  },
+  {
+   "env": {
+    "A7_PREFIX_OWNER": "new"
+   },
+   "exit": 0,
+   "module": "test_prefix_spans_2063",
+   "stderr_sha256": "f2df7261443ae226c195b04716fd51c1bd5f60b43024c2b98a93c6956627641b",
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "summary": "OK"
+  }
+ ]
+}

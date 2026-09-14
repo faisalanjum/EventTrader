@@ -1,0 +1,2 @@
+SOURCE_DEFECT_INVENTORY_2125 {"rows": 191, "facts": 163, "rows_by_outcome": {"control": 34, "exclusion": 10, "fact": 147}, "facts_by_type": {"action_event": 22, "guidance": 18, "metric": 107, "surprise": 16}, "metric_states": {"decreased": 14, "increased": 52, "persists": 1, "reported": 35, "unchanged": 1, "unknown": 4}, "rows_with_a_reported_metric": 35, "rows_with_more_numerals_than_facts": 106, "quotes_not_found_in_their_part": 0}
+sha256 16fa94663269fdcab94b2c15de43cb236234328120c5de4d12d84cff93f18e26

@@ -1,0 +1,52 @@
+{
+ "scope": "addendum to SOURCE_STATE_DISPOSITIONS_2126.json: one row moves on Codex SEQ 2127, nothing else changes",
+ "amends": "unit_2123_post_signature_key/core_full2126_c/SOURCE_STATE_DISPOSITIONS_2126.json",
+ "amends_sha256": "b0f1c6ad0e1133f5cecb201a56c7fc23ec9ade73debda211817e57c9a7d98a91",
+ "row": "0000027904-26-000020#021",
+ "source_id": "0000027904-26-000020",
+ "driver_name": "earnings_per_share",
+ "measurement_raw_spans": [],
+ "period": {
+  "fiscal_quarter": 1,
+  "fiscal_year": 2026,
+  "time_type": "duration"
+ },
+ "disposition_before": "current_state_supported",
+ "disposition_after": "needs_independent_source_correction",
+ "state_required_by_the_source": "increased",
+ "evidence_kind": "prior_value",
+ "supporting_occurrence": "Adjusted $ Change % Change ($ in millions except per share and unit costs) 1Q26 1Q25 ... Diluted earnings per share 0.64 0.45 0.19 44 %",
+ "supporting_occurrence_sentence_index": 42,
+ "second_independent_occurrence_sentence_index": [
+  100
+ ],
+ "why": "My 2126 note said the part states a per-share prior only for the GAAP measure. That was wrong and my own full-part evidence contains the refutation: the Adjusted 1Q26/1Q25 table states the same driver at the same adjusted measurement with its prior and its change, and the non-GAAP reconciliation states both quarters and the same change independently. The comparison is NOT a different measurement, so reported is not supported.",
+ "how_i_missed_it": "The occurrence was inside my own emitted evidence; my targeted probe pattern required the measurement word within a fixed distance of \"per share\", and the table header carries it far earlier, so my READING was truncated - the search was not.",
+ "dispositions_after": {
+  "current_state_supported": 25,
+  "needs_independent_source_correction": 10
+ },
+ "affected_source_set_after": [
+  "0000027904-26-000020",
+  "0000092380-26-000044",
+  "0000898173-26-000006",
+  "0001041061-26-000003",
+  "0001104659-25-102611",
+  "0001104659-26-017090",
+  "BBY_2026-03-03T08.00"
+ ],
+ "affected_source_count_after": 7,
+ "correction_rows_after": [
+  "0000027904-26-000020#019",
+  "0000027904-26-000020#021",
+  "0000092380-26-000044#038",
+  "0000092380-26-000044#039",
+  "0000898173-26-000006#052",
+  "0000898173-26-000006#053",
+  "0001041061-26-000003#077",
+  "0001104659-25-102611#096",
+  "0001104659-26-017090#112",
+  "BBY_2026-03-03T08.00#142"
+ ],
+ "model_calls": 0
+}

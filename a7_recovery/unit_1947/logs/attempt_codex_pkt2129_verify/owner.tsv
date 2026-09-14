@@ -1,0 +1,7 @@
+attempt	codex_pkt2129_verify
+payload	../../unit_2128_source_corrections/prepare_seven_2128.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1939051
+payload_pid	1939055
+started_utc	2026-09-14T06:38:25Z
+state	finished exit 0

@@ -1,0 +1,849 @@
+{
+ "scope": "final state dispositions for every reported metric fact, judged over the COMPLETE supplied source parts",
+ "supersedes": "core_inv2125_a/SOURCE_DEFECT_DISPOSITIONS_2125.json, which judged inside a 700-character window",
+ "search_input": "unit_2123_post_signature_key/core_full2126_c/FULL_PART_SEARCH_2126.json",
+ "search_input_sha256": "4ccce0d1cc86f373902c361adbdc249fdb6d5f8ac41d48f5d2da7be596fd859b",
+ "population": 35,
+ "dispositions": {
+  "current_state_supported": 26,
+  "needs_independent_source_correction": 9
+ },
+ "affected_source_set": [
+  "0000027904-26-000020",
+  "0000092380-26-000044",
+  "0000898173-26-000006",
+  "0001041061-26-000003",
+  "0001104659-25-102611",
+  "0001104659-26-017090",
+  "BBY_2026-03-03T08.00"
+ ],
+ "correction_rows": [
+  "0000027904-26-000020#019",
+  "0000092380-26-000044#038",
+  "0000092380-26-000044#039",
+  "0000898173-26-000006#052",
+  "0000898173-26-000006#053",
+  "0001041061-26-000003#077",
+  "0001104659-25-102611#096",
+  "0001104659-26-017090#112",
+  "BBY_2026-03-03T08.00#142"
+ ],
+ "evidence_kinds": {
+  "prior_value": 7,
+  "stated_direction": 2
+ },
+ "rows": [
+  {
+   "source_id": "0000027904-26-000013",
+   "row": "0000027904-26-000013#016",
+   "row_index": 5,
+   "part_ref": "business",
+   "part_chars": 61639,
+   "raw_label_or_claim": "19% equity stake in Grupo Aeroméxico",
+   "driver_name": "equity_stake",
+   "measurement_raw_spans": [
+    "approximately"
+   ],
+   "slice_parts": [
+    "entity_ownership:grupoaeromexico"
+   ],
+   "period": {
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "row": "0000027904-26-000020#019",
+   "row_index": 1,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 41356,
+   "raw_label_or_claim": "Pre-tax loss of $214 million",
+   "driver_name": "pretax_income",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 1,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "decreased",
+   "evidence_kind": "prior_value",
+   "supporting_occurrence": "GAAP $ Change % Change ($ in millions except per share and unit costs) 1Q26 1Q25 ... Pre-tax (loss)/income (214) 320 (534) NM",
+   "why": "same GAAP measurement the located quote is listed under, same quarter, prior 320 stated beside"
+  },
+  {
+   "source_id": "0000027904-26-000020",
+   "row": "0000027904-26-000020#021",
+   "row_index": 3,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 41356,
+   "raw_label_or_claim": "Earnings per share of $0.64",
+   "driver_name": "earnings_per_share",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 1,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period.",
+   "apparent_comparison_outside_the_facts_meaning": "The part states a per-share prior only for the GAAP measure (\"Diluted (loss)/earnings per share (0.44) 0.37\"); this fact is the non-GAAP $0.64 listed under March Quarter 2026 Non-GAAP Financial Results, so that prior is a different measurement and outside this fact's meaning. No adjusted per-share prior is stated anywhere in the part."
+  },
+  {
+   "source_id": "0000063908-26-000032",
+   "row": "0000063908-26-000032#037",
+   "row_index": 5,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 15950,
+   "raw_label_or_claim": "Approximately 95% of McDonald’s restaurants worldwide are owned and operated by independent local business owners.",
+   "driver_name": "franchised_restaurant_share",
+   "measurement_raw_spans": [
+    "Approximately"
+   ],
+   "slice_parts": [],
+   "period": {
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "row": "0000092380-26-000044#038",
+   "row_index": 1,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 31950,
+   "raw_label_or_claim": "$0.45 EPS, in line with guidance",
+   "driver_name": "earnings_per_share",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 1,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "increased",
+   "evidence_kind": "prior_value",
+   "supporting_occurrence": "NET INCOME (LOSS) PER SHARE: Basic $ 0.45 $ (0.26) n.m. / Diluted $ 0.45 $ (0.26) n.m.",
+   "why": "same driver and measurement, same quarter, prior (0.26) stated beside"
+  },
+  {
+   "source_id": "0000092380-26-000044",
+   "row": "0000092380-26-000044#039",
+   "row_index": 2,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 31950,
+   "raw_label_or_claim": "fuel costs were $2.73 per gallon, above prior guidance of approximately $2.40",
+   "driver_name": "fuel_cost_per_gallon",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 1,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "increased",
+   "evidence_kind": "prior_value",
+   "supporting_occurrence": "Fuel costs per gallon, including fuel tax $ 2.73 $ 2.49 9.6",
+   "why": "same driver and measurement, same quarter, prior 2.49 and the stated change beside"
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "row": "0000898173-26-000006#052",
+   "row_index": 3,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 25841,
+   "raw_label_or_claim": "Ending domestic store count",
+   "driver_name": "store_count",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "geography:domestic"
+   ],
+   "period": {
+    "period_end_date": "2025-12-31",
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "increased",
+   "evidence_kind": "prior_value",
+   "supporting_occurrence": "Ending domestic store count 6,447 6,265 6,447 6,265 under For the Three Months Ended / For the Year Ended, December 31, 2025 and 2024",
+   "why": "same driver and slice, adjacent cell of the same table line"
+  },
+  {
+   "source_id": "0000898173-26-000006",
+   "row": "0000898173-26-000006#053",
+   "row_index": 4,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 25841,
+   "raw_label_or_claim": "Total shareholders’ deficit",
+   "driver_name": "shareholders_equity",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "period_end_date": "2025-12-31",
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "increased",
+   "evidence_kind": "prior_value",
+   "supporting_occurrence": "Total shareholders' deficit (763,352) (1,370,961) under December 31, 2025 / December 31, 2024",
+   "why": "same driver, adjacent cell; OD-12 signed axis makes -763,352 against -1,370,961 an increase"
+  },
+  {
+   "source_id": "0000940944-25-000038",
+   "row": "0000940944-25-000038#059",
+   "row_index": 4,
+   "part_ref": "mdna",
+   "part_chars": 40371,
+   "raw_label_or_claim": "adjusted debt to EBITDAR ratio",
+   "driver_name": "debt_to_ebitdar_ratio",
+   "measurement_raw_spans": [
+    "adjusted"
+   ],
+   "slice_parts": [],
+   "period": {
+    "period_end_date": "2025-05-25",
+    "period_start_date": "2025-05-25",
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0000940944-26-000009",
+   "row": "0000940944-26-000009#069",
+   "row_index": 4,
+   "part_ref": "mdna",
+   "part_chars": 40999,
+   "raw_label_or_claim": "87 franchised restaurants",
+   "driver_name": "restaurant_count",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "channel:franchisedunits",
+    "geography:united states"
+   ],
+   "period": {
+    "fiscal_quarter": 3,
+    "fiscal_year": 2026,
+    "period_end_date": "2026-02-22",
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001041061-25-000109",
+   "row": "0001041061-25-000109#073",
+   "row_index": 2,
+   "part_ref": "mdna",
+   "part_chars": 49559,
+   "raw_label_or_claim": "pre-tax investment losses of $20 million",
+   "driver_name": "investment_income",
+   "measurement_raw_spans": [
+    "pre-tax"
+   ],
+   "slice_parts": [
+    "entity_ownership:devyani"
+   ],
+   "period": {
+    "period_end_date": "2024-09-30",
+    "period_scope": "ytd",
+    "period_start_date": "2024-01-01",
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "row": "0001041061-26-000003#077",
+   "row_index": 1,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 52196,
+   "raw_label_or_claim": "EPS excluding Special Items was $1.73",
+   "driver_name": "earnings_per_share",
+   "measurement_raw_spans": [
+    "excluding Special Items"
+   ],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 4,
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "increased",
+   "evidence_kind": "prior_value",
+   "supporting_occurrence": "SUMMARY FINANCIAL TABLE Fourth-Quarter ... EPS Excluding Special Items $1.73 $1.61 +8",
+   "why": "same driver and the same excluding-Special-Items measurement, same quarter, prior 1.61 and stated change"
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "row": "0001041061-26-000003#079",
+   "row_index": 3,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 52196,
+   "raw_label_or_claim": "digital system sales exceeding $11 billion",
+   "driver_name": "system_sales",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "channel:digital"
+   ],
+   "period": {
+    "fiscal_quarter": 4,
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001041061-26-000003",
+   "row": "0001041061-26-000003#080",
+   "row_index": 4,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 52196,
+   "raw_label_or_claim": "digital mix nearly 60%",
+   "driver_name": "system_sales_mix",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "channel:digital"
+   ],
+   "period": {
+    "fiscal_quarter": 4,
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "row": "0001041061-26-000084#083",
+   "row_index": 2,
+   "part_ref": "mdna",
+   "part_chars": 79998,
+   "raw_label_or_claim": "net Operating Loss of $11 million for the year ended December 31, 2023",
+   "driver_name": "operating_profit",
+   "measurement_raw_spans": [
+    "Special Item"
+   ],
+   "slice_parts": [
+    "geography:ru"
+   ],
+   "period": {
+    "fiscal_year": 2023,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001041061-26-000084",
+   "row": "0001041061-26-000084#086",
+   "row_index": 5,
+   "part_ref": "mdna",
+   "part_chars": 79998,
+   "raw_label_or_claim": "The Company owned 79% of the Habit Burger & Grill units in the U.S.",
+   "driver_name": "company_owned_unit_share",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "segment:thehabitburgergrillglobaldivision",
+    "geography:us"
+   ],
+   "period": {
+    "fiscal_year": 2025,
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "row": "0001104659-25-102611#095",
+   "row_index": 2,
+   "part_ref": "business",
+   "part_chars": 34258,
+   "raw_label_or_claim": "one individual vendor provided 13 percent of our total purchases",
+   "driver_name": "vendor_concentration",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "row": "0001104659-25-102611#096",
+   "row_index": 3,
+   "part_ref": "mdna",
+   "part_chars": 53315,
+   "raw_label_or_claim": "failure and maintenance related categories represented the largest portion of our sales mix, at approximately 85% of total sales",
+   "driver_name": "sales_mix",
+   "measurement_raw_spans": [
+    "approximately"
+   ],
+   "slice_parts": [
+    "product:failure and maintenance related categories"
+   ],
+   "period": {
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "increased",
+   "evidence_kind": "stated_direction",
+   "supporting_occurrence": "we have seen a slight decrease in mix of sales of the accessories category and a slight increase in the maintenance and failure categories compared to the previous two years",
+   "why": "your 2126 ruling: first match wins and stated direction is first; \"no fundamental shifts\" does not deny a slight increase. The older-than-prior-year window may force a null comparison_baseline under 7.1; that does not discard the direction."
+  },
+  {
+   "source_id": "0001104659-25-102611",
+   "row": "0001104659-25-102611#098",
+   "row_index": 5,
+   "part_ref": "mdna",
+   "part_chars": 53315,
+   "raw_label_or_claim": "represents 31.7% of our total Domestic sales",
+   "driver_name": "sales_mix",
+   "measurement_raw_spans": [
+    "of our total Domestic sales"
+   ],
+   "slice_parts": [
+    "geography:us",
+    "unknown:commercial"
+   ],
+   "period": {
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-25-105631",
+   "row": "0001104659-25-105631#102",
+   "row_index": 3,
+   "part_ref": "mdna",
+   "part_chars": 48743,
+   "raw_label_or_claim": "366 restaurants",
+   "driver_name": "company_operated_restaurant_count",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "row": "0001104659-25-118458#105",
+   "row_index": 1,
+   "part_ref": "mdna",
+   "part_chars": 37098,
+   "raw_label_or_claim": "84 stores in the U.K. and Ireland operated by Space NK",
+   "driver_name": "store_count",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "entity_ownership:space nk",
+    "geography:u.k. and ireland"
+   ],
+   "period": {
+    "period_end_date": "2025-11-01",
+    "period_start_date": "2025-11-01",
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "row": "0001104659-25-118458#107",
+   "row_index": 3,
+   "part_ref": "mdna",
+   "part_chars": 37098,
+   "raw_label_or_claim": "interest coverage ratio not less than 4.0 to 1.0",
+   "driver_name": "interest_coverage_ratio_covenant",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "entity_ownership:space nk"
+   ],
+   "period": {},
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "row": "0001104659-25-118458#109",
+   "row_index": 5,
+   "part_ref": "mdna",
+   "part_chars": 37098,
+   "raw_label_or_claim": "a base rate plus a margin of 0.5% to 1.0%",
+   "driver_name": "credit_facility_base_rate_margin",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {},
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-25-118458",
+   "row": "0001104659-25-118458#111",
+   "row_index": 7,
+   "part_ref": "mdna",
+   "part_chars": 37098,
+   "raw_label_or_claim": "the Term Secured Overnight Financing Rate plus a margin of 1.5% to 2.0%",
+   "driver_name": "credit_facility_term_secured_overnight_financing_rate_margin",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {},
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-26-017090",
+   "row": "0001104659-26-017090#112",
+   "row_index": 1,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 22759,
+   "raw_label_or_claim": "adjusted net income",
+   "driver_name": "net_income",
+   "measurement_raw_spans": [
+    "adjusted"
+   ],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 4,
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "decreased",
+   "evidence_kind": "prior_value",
+   "supporting_occurrence": "Adjusted net income (non-GAAP) $ 48,305 $ 51,785 $ 182,961 $ 168,679",
+   "why": "same driver and the same adjusted measurement, quarter column against its prior-year quarter column, prior 51,785"
+  },
+  {
+   "source_id": "0001104659-26-027061",
+   "row": "0001104659-26-027061#121",
+   "row_index": 4,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 20415,
+   "raw_label_or_claim": "International (Company-operated)",
+   "driver_name": "company_operated_store_count",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "geography:international"
+   ],
+   "period": {
+    "fiscal_year": 2025,
+    "period_end_date": "2026-01-31",
+    "period_start_date": "2026-01-31",
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001104659-26-032757",
+   "row": "0001104659-26-032757#125",
+   "row_index": 3,
+   "part_ref": "mdna",
+   "part_chars": 34749,
+   "raw_label_or_claim": "6,709 stores in the U.S.",
+   "driver_name": "store_count",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "geography:us"
+   ],
+   "period": {
+    "period_end_date": "2026-02-14",
+    "period_start_date": "2026-02-14",
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "0001171843-26-001288",
+   "row": "0001171843-26-001288#129",
+   "row_index": 2,
+   "part_ref": "exhibit_99_1",
+   "part_chars": 16735,
+   "raw_label_or_claim": "138 basis point non-cash LIFO charge",
+   "driver_name": "lifo_charge",
+   "measurement_raw_spans": [
+    "non-cash"
+   ],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 2,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "AAL_2026-04-23T08.30",
+   "row": "AAL_2026-04-23T08.30#134",
+   "row_index": 3,
+   "part_ref": "prepared_remarks",
+   "part_chars": 17865,
+   "raw_label_or_claim": "adjusted loss per diluted share of 40 cents",
+   "driver_name": "earnings_per_share",
+   "measurement_raw_spans": [
+    "Excluding net special items",
+    "adjusted",
+    "diluted"
+   ],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 1,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period.",
+   "apparent_comparison_outside_the_facts_meaning": "The only adjusted per-diluted-share comparison in the part is forward guidance for the next quarter, which is a guidance expectation and not a temporal prior."
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "row": "BBY_2026-03-03T08.00#142",
+   "row_index": 1,
+   "part_ref": "prepared_remarks",
+   "part_chars": 25278,
+   "raw_label_or_claim": "was better than planned",
+   "driver_name": "operating_margin",
+   "measurement_raw_spans": [
+    "adjusted"
+   ],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 4,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "needs_independent_source_correction",
+   "state_required_by_the_source": "increased",
+   "evidence_kind": "stated_direction",
+   "supporting_occurrence": "On revenue of $13.8 billion, we delivered an adjusted operating income rate of 5% and adjusted earnings per share of $2.61, both of which are slightly up to last year.",
+   "why": "same driver, same adjusted measurement, same quarter, direction stated outright; a second occurrence states the magnitude, \"Our adjusted operating income rate increased 10 basis points compared to last year.\""
+  },
+  {
+   "source_id": "BBY_2026-03-03T08.00",
+   "row": "BBY_2026-03-03T08.00#145",
+   "row_index": 4,
+   "part_ref": "prepared_remarks",
+   "part_chars": 25278,
+   "raw_label_or_claim": "Best Buy business team generated more than $1.1 billion",
+   "driver_name": "revenue",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "unknown:best buy business"
+   ],
+   "period": {
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "CMG_2026-02-03T16.30",
+   "row": "CMG_2026-02-03T16.30#152",
+   "row_index": 3,
+   "part_ref": "prepared_remarks",
+   "part_chars": 25023,
+   "raw_label_or_claim": "these two group occasions represent less than 3% of combined sales",
+   "driver_name": "sales_mix",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "unknown:group occasions"
+   ],
+   "period": {
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "DAL_2026-04-08T10.00",
+   "row": "DAL_2026-04-08T10.00#157",
+   "row_index": 1,
+   "part_ref": "prepared_remarks",
+   "part_chars": 17190,
+   "raw_label_or_claim": "earnings of 64 cents per share",
+   "driver_name": "earnings_per_share",
+   "measurement_raw_spans": [],
+   "slice_parts": [],
+   "period": {
+    "fiscal_quarter": 1,
+    "fiscal_year": 2026,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  },
+  {
+   "source_id": "MCD_2026-02-11T16.30",
+   "row": "MCD_2026-02-11T16.30#171",
+   "row_index": 3,
+   "part_ref": "prepared_remarks",
+   "part_chars": 24361,
+   "raw_label_or_claim": "total adjusted operating margin for the full year was 46.9% in line with our expectations",
+   "driver_name": "operating_margin",
+   "measurement_raw_spans": [
+    "adjusted"
+   ],
+   "slice_parts": [],
+   "period": {
+    "fiscal_year": 2025,
+    "time_type": "duration"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period.",
+   "apparent_comparison_outside_the_facts_meaning": "The 46.9% is referenced again only in a forward statement about expanding from it in the next year; that is a guidance expectation, not a prior value of this fact."
+  },
+  {
+   "source_id": "ULTA_2026-03-12T16.30",
+   "row": "ULTA_2026-03-12T16.30#178",
+   "row_index": 4,
+   "part_ref": "prepared_remarks",
+   "part_chars": 28778,
+   "raw_label_or_claim": "more than 80 stores in the UK and Ireland",
+   "driver_name": "store_count",
+   "measurement_raw_spans": [],
+   "slice_parts": [
+    "unknown:xbrlaxis_75732d676161703a427573696e6573734163717569736974696f6e41786973__spacenk"
+   ],
+   "period": {
+    "time_type": "instant"
+   },
+   "current_state": "reported",
+   "disposition": "current_state_supported",
+   "state_required_by_the_source": null,
+   "evidence_kind": "no_same_driver_same_measurement_prior_in_the_complete_part",
+   "supporting_occurrence": null,
+   "why": "The complete supplied part states no prior-period value and no direction for this fact's exact driver, measurement, population and period."
+  }
+ ],
+ "model_calls": 0
+}

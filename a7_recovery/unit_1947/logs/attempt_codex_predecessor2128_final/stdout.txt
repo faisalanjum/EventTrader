@@ -1,0 +1,2 @@
+SIGNED_PREDECESSOR_OBSERVATION the current merged key does not read cleanly: ['receipt.v1_evidence is not the expected value', "2 events have no accepted shard: ['0000898173-26-000006', '0001104659-26-017090']"]
+SIGNED_PREDECESSOR_PROVED 33 2 670

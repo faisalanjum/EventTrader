@@ -1,6 +1,6 @@
 # A7 pre-grading work order — shared resume point
 
-Revision 168, 2026-09-14 Eastern. Maintainer: Codex.
+Revision 174, 2026-09-14 Eastern. Maintainer: Codex.
 Working root: /home/faisal/EventMarketDB-driver-recovery/a7_recovery.
 All relative paths below start there. Core proposes updates by mailbox; no
 concurrent edits to this file. The latest valid mailbox authorizes one task.
@@ -60,6 +60,156 @@ main; main is not edited during this task. This does not waive coverage, pass
 bars or later entry gates.
 
 ## 2. Current checkpoint — read this before history
+
+CURRENT,Revision174: Core2130/bd02bdf2 answers Codex2129/3606aea5;
+both current messages match their archives and sessions. The preparation
+and actual collection/resume command are independently VERIFIED for launch.
+Root codex_col2130_verify exits0, proof2409b0bc54625fd1c85ab7c2268995e34e028a91153d5d665c9a9f36921e6e86:
+seven missing/zero valid, no paid result or retry, identical resume, wrong
+report and drifted binding refuse after intact controls. Root also ran the
+ACTUAL CLI as codex_col2130_cli, exit0/empty stderr, report
+e75c4ed5274be4c8d40fd62f00cdd4c63c17bd0905f2972a7b374b6ffa60784c.
+It returns the same seven missing/zero valid and false phase completion;
+no model result was fabricated or launched. Collector44d5faa3 and shared
+binding81374968 use the existing record_state/finalize owners unchanged.
+
+Freeze/publish this verified preparation, then authorize ONLY seven source
+reviews from core_pkt2128_d (report032d7265, receiptca0bb650), not either
+root verification packet or zero-call probe. All47 original rows, all26
+unaffected sources and all382 evaluated replies stay preserved. The first
+real collection must still prove actual valid outcomes under this binding;
+source meaning, new signature/lock, affected grading and corrected score
+are NOT closed. Core is waiting until the next exact mailbox task. Native
+candidate checks remain serial, not protected by new runtime machinery.
+Exact commands: unit_2020_codex_check/SOURCE_CONTEXT_VERIFICATION_COMMANDS_2130.json.
+Five-pass checklist and remaining limits:
+unit_2020_codex_check/SOURCE_CONTEXT_REVIEW_2130.md.
+
+CURRENT,Revision173: Core2129/3146b3bd and Codex2129/3606aea5 are both
+verified and byte-identically archived. The seven-source preparation is
+independently reproduced: codex_pkt2129_verify raw exit0/empty stderr,
+proofd12116ef811964087a6fb512f72857301966488dd255d05402f6902a1f50bfbd,
+stdout0ef845ff. Core's actual frozen packet stays core_pkt2128_d,
+report032d7265 and receiptca0bb650, unrun/empty states. Root compared all7
+declarations and all14 Core/root launcher files exactly:47 original rows,
+same source views/current raws, only the approved prefix span changed,
+unchanged transport;4 historical rounds/12 prompts,33 source carry and26
+unchanged others; all5 packet-specific history/pointer negatives refuse.
+Budget owner:670 before,7 corrections plus1 planned signer,678 planned,
+686 worst case. No signature or model call is authorized by these numbers.
+
+The ONE Core task now is only the thin executable collection/resume command
+and its focused proof, using shared binding81374968 and the existing
+record_state/finalize owners. The shared scope is proved, but no actual
+seven-source collector existed in the reported package. Core may test after
+the root preparation's now-passed exit gate; root will not overlap native
+candidate checks until Core replies. Its isolated zero-call probe must count
+all7 missing events, never change the real frozen packet or fabricate an
+answer. Then root reviews/freezes/publishes preparation and authorizes the
+7 clarified source reviews. Original382 replies and every successful past
+review remain untouched. New truth/signature, affected grading, corrected
+score and END-only offline local setup are still OPEN.
+
+CURRENT,Revision172: Codex2128/c203ba42 is delivered and byte-identically
+archived, replying to Core2128/552ca49f. Its ONE Core task is the seven-source
+packet and shared collection/resume binding, NO model calls or publication.
+Root's clean final test now PASSES: codex_predecessor2128_final, raw exit0,
+empty stderr, stdout1d741a37, proof0ba63617b5b7b778511fcf417faf031926461647dc582946b0903189201ea0c3.
+Caller095d604e, owner36a58cfa. It proves33 sources,4 historical rounds/12 exact
+prompts, call count670, and all7 specified history/pointer input mutations
+refuse after fresh positive controls. The separate11 artifact-mutation proof
+and both other affected native regressions are still valid at the same owner.
+The history/role code and pure prefix are individually verified. Their
+seven-source packet integration, new independent truth, signature, affected
+grading and corrected final score remain OPEN. Root will run no overlapping
+candidate verifier while Core performs this serial packet preparation.
+
+CURRENT,Revision171: Core2128/552ca49f and its exact archive are verified;
+it confirms the tenth state error and returns only the approved pure prefix.
+Root independently reran its real proof as codex_ctx2128_verify, raw exit0,
+proof32d036f9: both current prompts change exactly one205-byte span, their
+body inputs stay byte-identical, all3 older rounds keep their10 prompt hashes,
+and focused/regression RED/GREEN exits are1/0/1/0. Renderer00200147, caller69bcb454,
+tests ec7b4640. No source or grading call occurred.
+
+Root36a58cfa passes the extended cold/history test, codex_predecessor2128_serial,
+raw exit0/proof a512aed2: all33 source results,4 historical rounds/12 prompts,
+ledger670 and7 real positive-controlled invalid-history cases. The diagnostic
+wrapper only printed full exceptions; after removing it the exact clean test
+is rerunning as codex_predecessor2128_final. The earlier full_b failure
+overlapped Core's core_ctx2127_b verification of the same candidate; the
+candidate owner uses one _verify_tmp directory. SERIALIZE those native checks,
+not a new runtime lock or framework. Root's previous full affected history,
+collection and11-artifact mutation regressions remain valid at36a58cfa.
+
+Next bounded work is the seven-source pre-call packet through existing owners:
+carry the completed2123 round and its preceding signature at their actual
+boundaries, install the approved wording for ONLY the new round, keep all
+original targets of the7 events and all other26 source results. The latest
+382 evaluated answers remain unchanged. No launch until exact packet and
+collection/resume bindings are independently reviewed and frozen. The final
+key, its signature, affected grading and corrected final score remain OPEN.
+
+CURRENT,Revision170: Core2127/f45a66c0 and Codex2127/139163ed are verified
+and byte-identically archived. The one Core task is ONLY a small versioned
+source-context prefix renderer and its focused proof in unit_2127_source_context;
+no source call or call packet yet. Root re-executed the complete-part reading
+aid, codex_full2126_verify raw exit0, exact4ccce0d1 output. The bounded affected
+source set is SEVEN, not33. Core proposed9 state corrections; root found a
+tenth in already-affected Delta#021: the same source explicitly gives adjusted
+EPS0.64 against0.45 and44%, contrary to Core's "GAAP only" claim. Core's
+seven-source set is unchanged. None of these review conclusions is inserted
+as an expected answer into the future independent worker. Whole-event source
+corrections retain all original targets and preserve other26 key sources.
+
+Root's mechanical candidate is unit_2020_codex_check/a4_v6_successor_chain.review_2126.py,
+SHA36a58cfac6f547375fa1861dda0467cf27c9f11922da224b67df71db2437d23e.
+The accepted2121 owner remains2210a3ee. Two actual cold issues were reproduced:
+missing chronological signature context refuses the two valid saved reviews;
+and re-deriving the old candidate inside the signer's model-role scope falsely
+treats the key owner as the tested model. The minimal candidate carries the
+existing signature at its exact round boundary, verifies its old candidate in
+its own predecessor context/ordinary role, and reuses the unchanged published
+lock/native proof owners. No native evidence is invented or edited.
+
+codex_predecessor2126_green_c passes the actual cold key/receipt/prompt path:
+all33 sources, both completed new raws, both original prompt hashes, old
+signature retained, next source-call ledger670. Raw exit0. Full affected
+regressions also pass: codex_history2126_reg (33 sources/31 prompts/7 negatives/
+3 historical rounds), codex_sources2126_reg (2 real native results/8 identity
+negatives), codex_sigproof2126_reg (all11 local-artifact changes refused).
+The extended fresh-operation failure controls in codex_predecessor2126_full
+are currently running; mutation proof and the new prefix integration remain
+OPEN. Do not publish or call from this candidate until those checks finish.
+The latest pushed checkpoint remainsc6815253. Original382 replies unchanged.
+The CAKE period question has no approved new rule or expected fact count;
+it must not be settled by analogy between percent-level and percent_yoy fields.
+CAKE is already in the seven-source correction set for its independently
+proved net-income state error, so no separate period call is required.
+
+CURRENT,Revision169: verified collection is committed/pushed c6815253ddb08245d1af36fdb32461ea42d556df,
+tree5e03139456c504aa13d996277689c18dc54ba266, parentad3861e1. Core2126/f22383d3
+returned the bounded source inventory. Root independently reran the real
+enumerator, raw exit0; its16fa9466 inventory is byte-identical:191 rows,
+163 facts,35 reported metrics, all191 quotes located. All35 source windows
+were independently read. ORLY#052/#053 and BBY#142 have source-supported
+state corrections; AutoZone#096's claimed rule conflict overlooks4.3's
+first-match order. No key is manually changed and no new semantic call is
+yet authorized. Codex2126 asks Core to finish ONLY that same35-fact state
+population without treating a700-character window as law, and draft a small
+generic target/context clarification. Core replies once and waits.
+
+Root separately tests the actual cold predecessor after the two completed
+post-signature calls. The first attempt codex_predecessor2125_red exited1
+at a TEST assumption: first_round_key returned instead of raising. It does
+not prove a production defect; investigate operation-local cached evidence
+and compare the actual receipt/history/count before changing the owner.
+The original caller hash was a335ae4dbc470826a92f2e7a500d86cb71380ef2e2ce64620f97ce863ac4a8e3.
+The accepted2210a3ee owner is untouched. The final key, signature, affected
+grading and corrected score remain OPEN. Original382 replies stay unchanged.
+CAKE's period-emission question is not settled by copying another key example;
+the percent_yoy fields are not the same as prior/current percent-level operands.
+No new product period rule or period-related AI call is approved.
 
 COLLECTION REVIEW COMPLETE,Revision168: Core2124/hash524d8ab5 is independently
 verified for collection and the exact unchanged-value comparison. Own

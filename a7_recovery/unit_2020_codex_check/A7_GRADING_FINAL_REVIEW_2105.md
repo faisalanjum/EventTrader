@@ -4,7 +4,69 @@ Purpose: finish a trustworthy A7 measurement over the unchanged saved answers.
 This is the shared review checklist, not a new product requirement. The latest
 mailbox owns Core's one task. Update evidence/status after each affected pass.
 
-Current checkpoint,work-order Revision168: owner confirmation received and
+Current checkpoint,work-order Revision174: preparation plus actual collection
+entry VERIFIED for launch. Own zero-call/resume proof2409b0bc and actual
+CLI reporte75c4ed5 both exit0 with empty stderr; seven missing/zero valid,
+no raw answer, no retry, false completion and idempotent finalization505e6f4c.
+The real packet stays unchanged/unrun. Detailed five-item checklist:
+SOURCE_CONTEXT_REVIEW_2130.md; exact commands are preserved beside it.
+Freeze/publish, then only seven clarified source reviews. Actual new results,
+source meaning, signature/key, affected grading, corrected final score and
+END-only offline model setup remain open. No A7 completion claim.
+
+Previous checkpoint,work-order Revision173: seven-source packet preparation
+independently reproduced, proofd12116ef, exit0/empty stderr. All7 declarations,
+14 Core/root launchers,47 original rows, unchanged source/prior views and
+model pins,4 rounds/12 prompts,33-source carry/26 unchanged, ledger670 and5
+negative controls verified. Core's frozen report032d7265/receiptca0bb650 is
+unrun. The only remaining pre-call command is the actual collector/resume
+entry and its isolated no-answer proof, now assigned as Codex2129/3606aea5.
+No extra grading framework or broad source audit is required. Final source
+truth, key/signature, affected grading, corrected score and offline setup
+remain open; this is not A7 completion or a new score.
+
+Previous checkpoint,work-order Revision172: clean final proof0ba63617 passes
+at caller095d604e/owner36a58cfa, exit0/empty stderr:33 sources,4 rounds/12
+unchanged prompt hashes, ledger670 and7 history/pointer mutation refusals.
+Core now owns only the seven-source packet/shared collection binding,
+Codex2128/c203ba42. Root will not overlap its candidate verification. Prefix
+and history fixes are individually verified; combined packet, independent
+source truth, signature, grading/score and END-only local setup remain OPEN.
+
+Previous checkpoint,work-order Revision171: Core2128 prefix independently
+reproduced, real proof32d036f9 at renderer00200147. Exactly one span changes;
+body, rules and old prompts remain intact; both focused/regression pairs pass
+their expected RED/GREEN pattern. Extended root36a58cfa cold proofa512aed2
+passes33 sources,4 historical rounds/12 prompts, ledger670 and7 invalid-history
+cases. Existing3 affected native regressions remain green, including11 actual
+artifact mutations. Diagnostic-free rerun is in flight; use serial candidate
+verification because the existing verifier shares its _verify_tmp directory.
+Next is only seven-source packet preparation and connection proof, then
+reviewed source corrections, key/signature and affected grading. No new model
+call, key approval, final score or publication is claimed.
+
+Previous checkpoint,work-order Revision170: seven sources need independent
+correction; root confirms a tenth reported-state error within that same set,
+Delta#021. Exact full-part aid4ccce0d1 reproduced, raw exit0. Core2127 is
+implementing ONLY the generic source-context prefix and focused proof.
+Root's36a58cfa chronology/role candidate passes cold33-source carry-forward
+and ledger670; old33/31/7/3 regression, actual2/8 native collection regression
+and11 changed-artifact refusals also pass. Extended fresh-operation controls,
+meaningful mutations, prefix integration, frozen calls/new key and corrected
+score remain OPEN. Accepted2210 owner and original382 replies are untouched.
+
+Previous checkpoint,work-order Revision169: collection checkpoint pushedc6815253.
+Core2126's mechanical inventory is independently reproduced byte-for-byte at
+16fa9466 (191 rows/163 facts/35 reported metrics; raw exit0). State meaning
+review remains OPEN: ORLY and BBY have concrete errors, AutoZone's claimed
+ambiguity overlooks the existing first-match order. Codex2126 assigns Core
+only completion of that state population and a generic clarification draft.
+Root's first cold-predecessor test failed at its own assumed exception; no
+mechanical repair is yet proved necessary. Accepted owner2210a3ee unchanged.
+Next: actual receipt/history/count diagnosis, frozen source corrections and
+only affected grading. No new call or final key/score is authorized yet.
+
+Previous checkpoint,work-order Revision168: owner confirmation received and
 both exact subscription calls completed, with all12 original rows and no
 retry. Receipt472a4b7f, existing finalization2 valid/0 invalid/0 missing.
 Own native proofd8052182 is VERIFIED: both actual results, all8 identity reuse

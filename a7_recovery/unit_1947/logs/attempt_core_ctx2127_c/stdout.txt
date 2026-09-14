@@ -1,0 +1,2 @@
+SOURCE_CONTEXT_PROOF_2127 {"red": [false, false], "after": [1, 1], "one_span": [true, true], "input_identical": [true, true], "historical": [true, true, true], "raws_unchanged": true, "tests": [["test_source_context_2127", false, 1], ["test_source_context_2127", true, 0], ["test_prefix_spans_2063", false, 1], ["test_prefix_spans_2063", true, 0]]}
+sha256 5a584fc1408a29060987118075c226c5bc02e86c053f537d221acef878961528

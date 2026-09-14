@@ -1,0 +1,1 @@
+SEVEN_SOURCE_PACKET_2128 {"events": 7, "tasks": 47, "before": 670, "after_planned": 678, "largest_script": 254870, "historical": [6, 2, 2, 2], "negatives": ["omitted_signature", "misplaced_signature", "signature_outside_this_history", "stale_current_raw", "changed_history"], "packet_sha256": "d12116ef811964087a6fb512f72857301966488dd255d05402f6902a1f50bfbd"}

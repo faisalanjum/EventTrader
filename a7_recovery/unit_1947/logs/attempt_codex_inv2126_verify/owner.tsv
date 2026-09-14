@@ -1,0 +1,7 @@
+attempt	codex_inv2126_verify
+payload	../../unit_2123_post_signature_key/inventory_source_defect_class_2125.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1843942
+payload_pid	1843946
+started_utc	2026-09-14T05:29:02Z
+state	finished exit 0

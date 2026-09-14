@@ -1,0 +1,107 @@
+{
+ "caller_sha256": "095d604e4740d6c539b396962ad88e16f0228f52c3b38820de860cd390fd155e",
+ "cold_sources": 33,
+ "historical_rounds": [
+  {
+   "prompts": {
+    "0000027904-26-000013": "1108166f6fa8914f0a08657811be67848d5f0e0efd3dc71ccebc635a424ff501",
+    "0000092380-26-000044": "31f6a77544740dcc0dbb6c233b7dc8e08755d8563ab56ae1da0cf7f82a996c56",
+    "0000764478-25-000057": "c9aa5c23498449e8f035fe2cf6c6c3eb78f2864212bbdf1b60f4670a38af4463",
+    "0001041061-25-000109": "5ef908d928d740159200081be8f240a70203a8df7e62901a54c479a1637a815b",
+    "0001104659-25-118458": "be0d9d3929c978ef0f860ee9dd071fac0d8d9a5d679aa7fb242cf367fc5a208d",
+    "DAL_2026-04-08T10.00": "8420eaa0f293a55a3d60d54a6a72e1b79e1ad798d5671ba3a0c4e53dfbfa1c86"
+   },
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6"
+  },
+  {
+   "prompts": {
+    "0000027904-26-000013": "2e2fdc1860ff33d70b5324058cedd6bddb2994960019fa14aae5845723093b75",
+    "DAL_2026-04-08T10.00": "acfa45b51f6930e756dcebf1afaa4dc3201a9fadb12044db78355c3ec18829e7"
+   },
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2"
+  },
+  {
+   "prompts": {
+    "0000027904-26-000013": "2601735f24bc64f888269e05ea302a1c5ab8b35cd05a7667b50013099cf9b6f4",
+    "DAL_2026-04-08T10.00": "98fb97ad8967d62fd4783d4b6a88f100770aa4fbe50ae55a8ac33b988a9aa338"
+   },
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3"
+  },
+  {
+   "prompts": {
+    "0000898173-26-000006": "c9008c82550214e4907176b3f1b9174fb714506ddaf152f3eba2361eb588d632",
+    "0001104659-26-017090": "c718049bc6480b5430766fb07121c605712e5edd52a9cffed7871d07bcccb191"
+   },
+   "run": "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet"
+  }
+ ],
+ "history_keys": [
+  "v1",
+  "v2",
+  "v3",
+  "v4",
+  "v5",
+  "v2_recovery",
+  "v6",
+  "v6_round1",
+  "v6_round2",
+  "v6_round3",
+  "signature"
+ ],
+ "model_calls": 0,
+ "negative_controls": [
+  {
+   "case": "omitted_signature",
+   "reason": "the current merged key does not read cleanly: ['receipt.v1_evidence is not the expected value', \"2 events have no accepted shard: ['0000898173-26-000006', '0001104659-26-017090']\"]"
+  },
+  {
+   "case": "outside_history",
+   "reason": "a signature names a round outside this history"
+  },
+  {
+   "case": "wrong_earlier_boundary",
+   "reason": "the completed signature does not verify: ['the candidate no longer re-derives: the candidate cannot be re-derived (SystemExit: the signing gate is not clean: receipt.v1_evidence is not the expected value; receipt.prompts is not the expected value;); the ordinary binding it was built from must be served as A7_ORDINARY_BOUND']"
+  },
+  {
+   "case": "wrong_later_boundary",
+   "reason": "the completed signature does not verify: ['the candidate no longer re-derives: the candidate cannot be re-derived (SystemExit: the signing gate is not clean: receipt.allowed is not the expected value; receipt.v1_evidence is not the expected value;); the ordinary binding it was built from must be served as A7_ORDINARY_BOUND']"
+  },
+  {
+   "case": "same_signature_twice",
+   "reason": "a completed signature cannot be counted twice"
+  },
+  {
+   "case": "conflicting_shorthand",
+   "reason": "two signatures name the same round boundary"
+  },
+  {
+   "case": "stale_current_raw",
+   "reason": "a finding does not bind the exact source/raw/row: 0000898173-26-000006"
+  }
+ ],
+ "next_before": 670,
+ "next_prompt_hashes": {
+  "0000898173-26-000006": "255c700a6265644ed1c31daec8102e76f9dcb787a66af2e1c3fd263550dca384",
+  "0001104659-26-017090": "0a2941298e86397a079af9a0eda45bf2779efb7855564fe2d4f209a2d2a2674b"
+ },
+ "omitted_signature_refusal": "the current merged key does not read cleanly: ['receipt.v1_evidence is not the expected value', \"2 events have no accepted shard: ['0000898173-26-000006', '0001104659-26-017090']\"]",
+ "original_prompt_hashes": {
+  "0000898173-26-000006": "c9008c82550214e4907176b3f1b9174fb714506ddaf152f3eba2361eb588d632",
+  "0001104659-26-017090": "c718049bc6480b5430766fb07121c605712e5edd52a9cffed7871d07bcccb191"
+ },
+ "owner_sha256": "36a58cfac6f547375fa1861dda0467cf27c9f11922da224b67df71db2437d23e",
+ "positive_sources": 33,
+ "prior_runs": [
+  "/tmp/claude-1000/-home-faisal-EventMarketDB/5ae9b86b-f0f6-4449-beee-9cac7cfa7200/scratchpad/bench_1306/.claude/plans/Drivers/experiments/kfields_key_a4/key_run_2017",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2035_input_bound_resume/corrections",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2056_decision_packet/packet_core_pkt2056_c/decision",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2062_settlement_packet/packet_core_pkt2062_c/settlement",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2068_input_recovery/proof_codex_in2068_e/closeout",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2053_owner_retry/recovery_v2",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2069_targeted_source/packet_codex_tarpkt2069_b/v6",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2072_two_event_closeout/packet_codex_succpkt2073_b/v6r2",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2076_latest_source_decisions/packet_core_pkt2078_a/v6r3",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2123_post_signature_key/core_recheck2123_h/recheck_packet",
+  "/home/faisal/EventMarketDB-driver-recovery/a7_recovery/unit_2081_final_key_candidate/codex_cand2082_a/candidate/signer"
+ ]
+}

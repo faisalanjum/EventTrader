@@ -1,0 +1,7 @@
+attempt	codex_col2130_cli
+payload	../../unit_2128_source_corrections/collect_seven_2128.py
+map	../unit_2020_codex_check/map_g23_transport_2103.tsv
+wrapper_pid	1962032
+payload_pid	1962038
+started_utc	2026-09-14T06:56:57Z
+state	finished exit 0

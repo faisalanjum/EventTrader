@@ -1,0 +1,2 @@
+FULL_PART_SEARCH_2126 {"part_chars": 1319850, "sentences_in_parts": 10632, "sentences_sharing_a_term": 4696, "max_hits_for_one_row": 469, "lines_carrying_the_value": 598}
+sha256 4ccce0d1cc86f373902c361adbdc249fdb6d5f8ac41d48f5d2da7be596fd859b

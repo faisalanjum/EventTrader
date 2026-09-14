@@ -1,0 +1,162 @@
+{
+ "caller_sha256": "bb979dd4d6738f3bbb8d4c5e137effb547ad0873eb968e7cdd17a2e746c37607",
+ "collision_controls": [
+  {
+   "reasons": [
+    "0000898173-26-000006: run id 'wf_084b6ebc-b70' was already spent"
+   ],
+   "reused": "run",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "reasons": [
+    "0000898173-26-000006: agent id 'afc3282938bfb89df' was already spent"
+   ],
+   "reused": "agent",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "reasons": [
+    "0000898173-26-000006: a response id was already spent"
+   ],
+   "reused": "response",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "reasons": [
+    "0000898173-26-000006: a request id was already spent"
+   ],
+   "reused": "request",
+   "source_id": "0000898173-26-000006"
+  },
+  {
+   "reasons": [
+    "0001104659-26-017090: run id 'wf_1fe45543-565' was already spent"
+   ],
+   "reused": "run",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "reasons": [
+    "0001104659-26-017090: agent id 'a6ebf582b56a25dbc' was already spent"
+   ],
+   "reused": "agent",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "reasons": [
+    "0001104659-26-017090: a response id was already spent"
+   ],
+   "reused": "response",
+   "source_id": "0001104659-26-017090"
+  },
+  {
+   "reasons": [
+    "0001104659-26-017090: a request id was already spent"
+   ],
+   "reused": "request",
+   "source_id": "0001104659-26-017090"
+  }
+ ],
+ "complete_key_sources": 33,
+ "finalization_sha256": "c8e2bd22d380ed138997d0d3df1d7842cfdffda078b6f888989370f94399f87e",
+ "identities": [
+  {
+   "ids": [
+    [
+     "wf_084b6ebc-b70"
+    ],
+    [
+     "afc3282938bfb89df"
+    ],
+    [
+     "msg_011Cf2iRjs2SMZMYB92Ujucd"
+    ],
+    [
+     "req_011Cf2iRjKmeG2cHBEhiK482"
+    ]
+   ],
+   "observed_models": [
+    "claude-opus-5"
+   ],
+   "run_id": "wf_084b6ebc-b70",
+   "source_id": "0000898173-26-000006",
+   "state_sha256": "743bd4e647c9c15d66267d38aac6ccf64a9a9ab40a93e0b431b1f0adbb506f9c",
+   "transcript_sha256": "46d2d4c212e610edd01aa4c6e1e15d04c06fed303c117624442a37fa56dd4d05"
+  },
+  {
+   "ids": [
+    [
+     "wf_1fe45543-565"
+    ],
+    [
+     "a6ebf582b56a25dbc"
+    ],
+    [
+     "msg_011Cf2iS2AYgHycKmyfLmwD2"
+    ],
+    [
+     "req_011Cf2iS1pD2GAt6GzaCu5Zh"
+    ]
+   ],
+   "observed_models": [
+    "claude-opus-5"
+   ],
+   "run_id": "wf_1fe45543-565",
+   "source_id": "0001104659-26-017090",
+   "state_sha256": "ebacc3ab858adf2983544fa3797cb219e7a2a13d7cacf2e14641581ca8eb320e",
+   "transcript_sha256": "85efd09b2cf6e8784e2f4b39d4b7d1e703acf9cc15d18d040d6907c078a5d902"
+  }
+ ],
+ "limitation": "Collection and identity proof only; source meaning requires independent review.",
+ "mechanical_gate": {
+  "counts": {
+   "abstentions": 44,
+   "accepted_facts": 163,
+   "controls": 34,
+   "distinct_rows_per_tag": {
+    "ambiguous_menus": 35,
+    "corrections_and_amendments": 7,
+    "expectation_routing": 18,
+    "favourable_unfavourable_direction": 16,
+    "losses_and_sign": 27,
+    "measurement_wording": 60,
+    "point_range_floor_ceiling": 136,
+    "portion_versus_whole": 38,
+    "sequential_comparison": 41,
+    "slices_and_unknown_axes": 67
+   },
+   "du_worthy_facts": 163,
+   "duplicate_gold_facts": 0,
+   "events_accounted": 33,
+   "exclusions": 10,
+   "open_issues": 0,
+   "phase1_ambiguities": 0,
+   "record_kind_conflicts": 11,
+   "rows_accounted": 191,
+   "sequential_rows": 41,
+   "tag_floor": 5,
+   "tags_below_floor": []
+  },
+  "ok": true,
+  "stops": []
+ },
+ "model_calls_started": 0,
+ "other_sources_unchanged": 31,
+ "owner_sha256": "36a58cfac6f547375fa1861dda0467cf27c9f11922da224b67df71db2437d23e",
+ "receipt_sha256": "472a4b7f6905bf68084ff253fb3de3870afed446fd78288633052ebcd634a80d",
+ "source_calls_after": 670,
+ "source_calls_before": 668,
+ "source_calls_this_round": 2,
+ "source_meaning_approval": false,
+ "source_raws": {
+  "0000898173-26-000006": {
+   "after": "0af3b8414deb6454877c69cb4037cb8c84851b8a968416c6a23270d8abed81a7",
+   "before": "3c23be441a171ece9cc217c1e812252ef346a2d79c6ab8fe3fb76f0a5e705fdd"
+  },
+  "0001104659-26-017090": {
+   "after": "a80610a41f14978bf0bd5052805c8e1ed6eaf5f2f7b9a1af9b65e7b101a742fa",
+   "before": "cead92e11f8c597f5a1cdef38ed20310d2ccd66c411dd6eb4b75c16561a5aedf"
+  }
+ }
+}

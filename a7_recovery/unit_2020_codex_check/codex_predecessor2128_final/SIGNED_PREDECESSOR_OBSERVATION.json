@@ -1,0 +1,7 @@
+{
+ "caller_sha256": "095d604e4740d6c539b396962ad88e16f0228f52c3b38820de860cd390fd155e",
+ "model_calls": 0,
+ "omitted_signature_refusal": "the current merged key does not read cleanly: ['receipt.v1_evidence is not the expected value', \"2 events have no accepted shard: ['0000898173-26-000006', '0001104659-26-017090']\"]",
+ "owner_sha256": "36a58cfac6f547375fa1861dda0467cf27c9f11922da224b67df71db2437d23e",
+ "positive_sources": 33
+}

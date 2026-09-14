@@ -1,0 +1,1 @@
+COLLECT_PROOF_2129 {"probe_outcomes": ["missing"], "ledger": {"scheduled": 7, "valid": 0, "invalid_response": 0, "transport_no_answer": 0, "unproved": 0, "missing": 7}, "resume_identical": true, "negatives": ["wrong_report_hash", "drifted_binding_identity"], "real_packet_unchanged": true, "proof_sha256": "2392ef861d92241ad670460437fb634199757da2141dc160497dbeb810953e92"}
